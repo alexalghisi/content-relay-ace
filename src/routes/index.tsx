@@ -176,6 +176,11 @@ function HomePage() {
         </div>
       </section>
 
+      {/* AD: banner responsive după materii */}
+      <div className="container-page">
+        <AdsterraBannerResponsive />
+      </div>
+
       {/* HOW IT WORKS */}
       <section className="container-page py-16">
         <div className="text-center">
