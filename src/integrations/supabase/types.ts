@@ -14,6 +14,152 @@ export type Database = {
   }
   public: {
     Tables: {
+      ads: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_online: boolean | null
+          is_promoted: boolean | null
+          location: string | null
+          phone_reveals_count: number | null
+          price_per_hour: number | null
+          promoted_until: string | null
+          seo_slug: string | null
+          session_duration: number | null
+          status: string
+          subcategories: string | null
+          subject_name: string | null
+          subject_slug: string | null
+          teacher_id: string | null
+          title: string
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_online?: boolean | null
+          is_promoted?: boolean | null
+          location?: string | null
+          phone_reveals_count?: number | null
+          price_per_hour?: number | null
+          promoted_until?: string | null
+          seo_slug?: string | null
+          session_duration?: number | null
+          status?: string
+          subcategories?: string | null
+          subject_name?: string | null
+          subject_slug?: string | null
+          teacher_id?: string | null
+          title: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_online?: boolean | null
+          is_promoted?: boolean | null
+          location?: string | null
+          phone_reveals_count?: number | null
+          price_per_hour?: number | null
+          promoted_until?: string | null
+          seo_slug?: string | null
+          session_duration?: number | null
+          status?: string
+          subcategories?: string | null
+          subject_name?: string | null
+          subject_slug?: string | null
+          teacher_id?: string | null
+          title?: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ads_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_teachers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_posts: {
+        Row: {
+          category: string | null
+          clasa: string | null
+          content: string | null
+          created_at: string
+          difficulty: string | null
+          duration_minutes: number | null
+          education_level: string | null
+          exam_session: string | null
+          exam_type: string | null
+          exam_year: number | null
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          is_published: boolean | null
+          profil: string | null
+          published_at: string | null
+          slug: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          category?: string | null
+          clasa?: string | null
+          content?: string | null
+          created_at?: string
+          difficulty?: string | null
+          duration_minutes?: number | null
+          education_level?: string | null
+          exam_session?: string | null
+          exam_type?: string | null
+          exam_year?: number | null
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          is_published?: boolean | null
+          profil?: string | null
+          published_at?: string | null
+          slug: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          category?: string | null
+          clasa?: string | null
+          content?: string | null
+          created_at?: string
+          difficulty?: string | null
+          duration_minutes?: number | null
+          education_level?: string | null
+          exam_session?: string | null
+          exam_type?: string | null
+          exam_year?: number | null
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          is_published?: boolean | null
+          profil?: string | null
+          published_at?: string | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       cities: {
         Row: {
           county: string | null
@@ -38,6 +184,120 @@ export type Database = {
           name?: string
           slug?: string
           sort_order?: number | null
+        }
+        Relationships: []
+      }
+      contact_messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          phone: string | null
+          sender_email: string
+          sender_name: string
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          phone?: string | null
+          sender_email: string
+          sender_name: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          phone?: string | null
+          sender_email?: string
+          sender_name?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      feedback: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          is_approved: boolean | null
+          message: string
+          name: string
+          rating: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_approved?: boolean | null
+          message: string
+          name: string
+          rating?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_approved?: boolean | null
+          message?: string
+          name?: string
+          rating?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      legacy_teachers: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          education: string | null
+          email: string | null
+          experience_years: number | null
+          full_name: string
+          id: string
+          is_teacher: boolean | null
+          location: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          education?: string | null
+          email?: string | null
+          experience_years?: number | null
+          full_name: string
+          id: string
+          is_teacher?: boolean | null
+          location?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          education?: string | null
+          email?: string | null
+          experience_years?: number | null
+          full_name?: string
+          id?: string
+          is_teacher?: boolean | null
+          location?: string | null
+          phone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -76,6 +336,54 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      reviews: {
+        Row: {
+          ad_id: string | null
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number | null
+          reviewer_email: string | null
+          reviewer_name: string | null
+          teacher_id: string | null
+        }
+        Insert: {
+          ad_id?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number | null
+          reviewer_email?: string | null
+          reviewer_name?: string | null
+          teacher_id?: string | null
+        }
+        Update: {
+          ad_id?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number | null
+          reviewer_email?: string | null
+          reviewer_name?: string | null
+          teacher_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "ads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_teacher_id_fkey"
+            columns: ["teacher_id"]
+            isOneToOne: false
+            referencedRelation: "legacy_teachers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subjects: {
         Row: {
