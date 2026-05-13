@@ -45,6 +45,7 @@ export function SiteHeader() {
         <div className="hidden items-center gap-2 lg:flex">
           {user ? (
             <>
+              <Link to="/mesaje" className="btn-pill text-sm text-foreground/80 hover:text-foreground hover:bg-muted">Mesaje</Link>
               <Link to="/cont" className="btn-outline">Contul meu</Link>
               <button onClick={() => signOut()} className="btn-pill text-sm text-muted-foreground hover:text-foreground">
                 Ieșire
@@ -74,7 +75,8 @@ export function SiteHeader() {
             <div className="mt-2 flex gap-2">
               {user ? (
                 <>
-                  <Link to="/cont" className="btn-outline flex-1" onClick={() => setOpen(false)}>Contul meu</Link>
+                  <Link to="/mesaje" className="btn-outline flex-1" onClick={() => setOpen(false)}>Mesaje</Link>
+                  <Link to="/cont" className="btn-outline flex-1" onClick={() => setOpen(false)}>Cont</Link>
                   <button onClick={() => signOut()} className="btn-outline flex-1">Ieșire</button>
                 </>
               ) : (
