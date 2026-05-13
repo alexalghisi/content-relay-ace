@@ -242,6 +242,11 @@ function HomePage() {
         </div>
       </section>
 
+      {/* AD: native banner între secțiuni */}
+      <div className="container-page">
+        <AdsterraNativeBanner />
+      </div>
+
       {/* FOR TEACHERS */}
       <section className="container-page py-16">
         <div className="grid gap-6 lg:grid-cols-2">
