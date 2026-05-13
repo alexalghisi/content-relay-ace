@@ -50,10 +50,16 @@ export const Route = createFileRoute("/")({
 
 interface Subject { id: string; slug: string; name: string; icon: string | null; }
 interface City { id: string; slug: string; name: string; }
+interface FeaturedAd {
+  id: string; title: string; price_per_hour: number | null; location: string | null;
+  is_online: boolean; is_promoted: boolean; subject_name: string | null; seo_slug: string | null;
+  legacy_teachers: { full_name: string; avatar_url: string | null } | null;
+}
 
 function HomePage() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [featured, setFeatured] = useState<FeaturedAd[]>([]);
   const [subject, setSubject] = useState("");
   const [city, setCity] = useState("");
   const navigate = useNavigate();
@@ -61,6 +67,14 @@ function HomePage() {
   useEffect(() => {
     supabase.from("subjects").select("id,slug,name,icon").order("sort_order").then(({ data }) => setSubjects(data ?? []));
     supabase.from("cities").select("id,slug,name").order("sort_order").then(({ data }) => setCities(data ?? []));
+    supabase
+      .from("ads")
+      .select("id,title,price_per_hour,location,is_online,is_promoted,subject_name,seo_slug,legacy_teachers(full_name,avatar_url)")
+      .eq("status", "active")
+      .order("is_promoted", { ascending: false })
+      .order("views_count", { ascending: false })
+      .limit(6)
+      .then(({ data }) => setFeatured((data ?? []) as unknown as FeaturedAd[]));
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
