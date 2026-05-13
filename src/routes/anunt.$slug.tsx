@@ -51,7 +51,10 @@ function AdPage() {
       }
       setAd(data as unknown as AdDetail);
       setLoading(false);
-      if (data?.id) supabase.rpc("increment_ad_views", { ad_id_param: data.id }).then(() => {});
+      if (data?.id) {
+        const newCount = ((data as { views_count?: number }).views_count ?? 0) + 1;
+        supabase.from("ads").update({ views_count: newCount }).eq("id", data.id).then(() => {});
+      }
     })();
   }, [slug]);
 
