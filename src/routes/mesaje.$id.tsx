@@ -44,8 +44,8 @@ function ChatThreadPage() {
       setMsgs((ms ?? []) as Msg[]);
 
       // mark read
-      const field = c.student_id === user.id ? "student_unread" : "teacher_unread";
-      await supabase.from("conversations").update({ [field]: 0 }).eq("id", id);
+      const update = c.student_id === user.id ? { student_unread: 0 } : { teacher_unread: 0 };
+      await supabase.from("conversations").update(update).eq("id", id);
     })();
 
     const ch = supabase.channel("chat-" + id)
@@ -55,8 +55,8 @@ function ChatThreadPage() {
           if (user) {
             const n = payload.new as Msg;
             if (n.sender_id !== user.id && conv) {
-              const field = conv.student_id === user.id ? "student_unread" : "teacher_unread";
-              supabase.from("conversations").update({ [field]: 0 }).eq("id", id);
+              const update = conv.student_id === user.id ? { student_unread: 0 } : { teacher_unread: 0 };
+              supabase.from("conversations").update(update).eq("id", id);
             }
           }
         })
