@@ -1,0 +1,75 @@
+import { createFileRoute } from "@tanstack/react-router";
+import type {} from "@tanstack/react-start";
+
+const BASE_URL = "https://meditatiidirect.ro";
+
+const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
+  { path: "/", priority: "1.0", changefreq: "daily" },
+  { path: "/meditatii", priority: "0.9", changefreq: "daily" },
+  { path: "/profesori", priority: "0.8", changefreq: "daily" },
+  { path: "/materii", priority: "0.8", changefreq: "weekly" },
+  { path: "/meditatii-online", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-matematica", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-romana", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-engleza", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-bac", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-evaluare-nationala", priority: "0.9", changefreq: "weekly" },
+  { path: "/admitere", priority: "0.8", changefreq: "weekly" },
+  { path: "/subiecte-bac", priority: "0.8", changefreq: "weekly" },
+  { path: "/subiecte-admitere", priority: "0.8", changefreq: "weekly" },
+  { path: "/variante-bacalaureat", priority: "0.7", changefreq: "weekly" },
+  { path: "/simulare-bacalaureat", priority: "0.7", changefreq: "weekly" },
+  { path: "/grile-medicina", priority: "0.7", changefreq: "weekly" },
+  { path: "/grile-upb", priority: "0.7", changefreq: "weekly" },
+  { path: "/preturi-meditatii", priority: "0.6", changefreq: "monthly" },
+  { path: "/cum-functioneaza", priority: "0.6", changefreq: "monthly" },
+  { path: "/pentru-profesori", priority: "0.7", changefreq: "monthly" },
+  { path: "/blog", priority: "0.7", changefreq: "weekly" },
+  { path: "/tutoriale", priority: "0.6", changefreq: "weekly" },
+  { path: "/despre", priority: "0.4", changefreq: "monthly" },
+  { path: "/contact", priority: "0.4", changefreq: "monthly" },
+  { path: "/termeni", priority: "0.2", changefreq: "yearly" },
+  { path: "/confidentialitate", priority: "0.2", changefreq: "yearly" },
+];
+
+export const Route = createFileRoute("/sitemap.xml")({
+  server: {
+    handlers: {
+      GET: async () => {
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const today = new Date().toISOString().slice(0, 10);
+
+        const urls: string[] = STATIC_PATHS.map(
+          (e) =>
+            `  <url>\n    <loc>${BASE_URL}${e.path}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority}</priority>\n  </url>`,
+        );
+
+        try {
+          const { data: subjects } = await supabaseAdmin.from("subjects").select("slug");
+          for (const s of subjects ?? []) {
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/meditatii?materie=${s.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+            );
+          }
+          const { data: cities } = await supabaseAdmin.from("cities").select("slug");
+          for (const c of cities ?? []) {
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/meditatii?oras=${c.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+            );
+          }
+        } catch (err) {
+          console.error("sitemap dynamic fetch failed", err);
+        }
+
+        const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>`;
+
+        return new Response(xml, {
+          headers: {
+            "Content-Type": "application/xml; charset=utf-8",
+            "Cache-Control": "public, max-age=3600",
+          },
+        });
+      },
+    },
+  },
+});
