@@ -136,8 +136,8 @@
 @layer components {
   .container-page { @apply mx-auto w-full max-w-6xl px-4 sm:px-6; }
   .btn-pill { @apply inline-flex items-center justify-center rounded-full px-5 h-11 text-sm font-medium transition-colors; }
-  .btn-primary { @apply btn-pill bg-primary text-primary-foreground hover:bg-primary/90 shadow-[var(--shadow-pop)]; }
-  .btn-outline { @apply btn-pill border border-border bg-background hover:bg-muted; }
+  .btn-primary { @apply inline-flex items-center justify-center rounded-full px-5 h-11 text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 shadow-[var(--shadow-pop)]; }
+  .btn-outline { @apply inline-flex items-center justify-center rounded-full px-5 h-11 text-sm font-medium transition-colors border border-border bg-background hover:bg-muted; }
   .check-row { @apply inline-flex items-center gap-2 text-sm text-muted-foreground; }
   .card-soft { @apply rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]; }
 }
