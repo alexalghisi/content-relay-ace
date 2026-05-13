@@ -3,6 +3,31 @@ import { Link } from "@tanstack/react-router";
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-muted/40 mt-24">
+      {/* Cross-promo: GrileAdmitere.ro (același owner) */}
+      <div className="border-b border-border bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 text-white">
+        <div className="container-page py-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+          <div className="inline-flex items-center gap-2 rounded-full bg-yellow-300 text-indigo-900 px-3 py-1 text-[11px] font-bold tracking-wide shrink-0">
+            GRILE ADMITERE
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-sm sm:text-base leading-snug">
+              Pregătire pentru admitere la toate facultățile din România
+            </p>
+            <p className="text-xs sm:text-sm text-white/85 mt-0.5">
+              UMF, ASE, Politehnica, Drept, Poliție + 100 universități. Testează-te gratuit pe GrileAdmitere.ro
+            </p>
+          </div>
+          <a
+            href="https://grileadmitere.ro"
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-1 rounded-full bg-white text-indigo-700 px-4 py-2 text-sm font-semibold hover:bg-white/90 shrink-0"
+          >
+            Vezi grilele →
+          </a>
+        </div>
+      </div>
+
       <div className="container-page py-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 text-sm">
         <div>
           <div className="font-bold text-base mb-3">MeditatiiDirect.ro</div>
