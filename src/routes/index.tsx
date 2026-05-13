@@ -3,14 +3,46 @@ import { useEffect, useState } from "react";
 import { Search, Check, MessageCircle, ShieldCheck, Wifi, UserPlus, Star, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-tutoring.jpg";
+import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Meditații Online și Acasă — Profesori Verificați | MeditatiiDirect.ro" },
       { name: "description", content: "Găsește meditații la matematică, română, engleză cu profesori verificați. Online sau față în față, BAC 2026, admitere și Evaluare Națională. De la 30 lei/oră." },
+      { name: "keywords", content: "meditatii, meditatii online, profesori, meditatii matematica, meditatii romana, meditatii engleza, BAC 2026, admitere facultate, evaluare nationala, meditatii bucuresti, meditatii cluj, meditatii iasi" },
       { property: "og:title", content: "Meditații cu Profesori Verificați în România" },
       { property: "og:description", content: "Chat direct cu profesorul, fără intermediari. 20+ materii, toată România." },
+    ],
+    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "MeditatiiDirect.ro",
+          url: "https://meditatiidirect.ro/",
+          inLanguage: "ro-RO",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://meditatiidirect.ro/meditatii?materie={search_term_string}",
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "MeditatiiDirect.ro",
+          url: "https://meditatiidirect.ro/",
+          logo: "https://meditatiidirect.ro/favicon.ico",
+          areaServed: "RO",
+          sameAs: ["https://meditatiidirect.ro/"],
+        }),
+      },
     ],
   }),
   component: HomePage,
