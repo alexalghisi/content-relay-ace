@@ -39,6 +39,7 @@ import { Route as ConfidentialitateRouteImport } from './routes/confidentialitat
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
 
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
   id: '/variante-bacalaureat',
@@ -191,6 +192,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnuntSlugRoute = AnuntSlugRouteImport.update({
+  id: '/anunt/$slug',
+  path: '/anunt/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -223,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/anunt/$slug': typeof AnuntSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -255,6 +262,7 @@ export interface FileRoutesByTo {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/anunt/$slug': typeof AnuntSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -288,6 +296,7 @@ export interface FileRoutesById {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/anunt/$slug': typeof AnuntSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -322,6 +331,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/anunt/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/anunt/$slug'
   id:
     | '__root__'
     | '/'
@@ -386,6 +397,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/anunt/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -419,6 +431,7 @@ export interface RootRouteChildren {
   TermeniRoute: typeof TermeniRoute
   TutorialeRoute: typeof TutorialeRoute
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
+  AnuntSlugRoute: typeof AnuntSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -633,6 +646,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/anunt/$slug': {
+      id: '/anunt/$slug'
+      path: '/anunt/$slug'
+      fullPath: '/anunt/$slug'
+      preLoaderRoute: typeof AnuntSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -667,6 +687,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermeniRoute: TermeniRoute,
   TutorialeRoute: TutorialeRoute,
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
+  AnuntSlugRoute: AnuntSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

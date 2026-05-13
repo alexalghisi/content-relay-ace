@@ -50,10 +50,16 @@ export const Route = createFileRoute("/")({
 
 interface Subject { id: string; slug: string; name: string; icon: string | null; }
 interface City { id: string; slug: string; name: string; }
+interface FeaturedAd {
+  id: string; title: string; price_per_hour: number | null; location: string | null;
+  is_online: boolean; is_promoted: boolean; subject_name: string | null; seo_slug: string | null;
+  legacy_teachers: { full_name: string; avatar_url: string | null } | null;
+}
 
 function HomePage() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [featured, setFeatured] = useState<FeaturedAd[]>([]);
   const [subject, setSubject] = useState("");
   const [city, setCity] = useState("");
   const navigate = useNavigate();
@@ -61,6 +67,14 @@ function HomePage() {
   useEffect(() => {
     supabase.from("subjects").select("id,slug,name,icon").order("sort_order").then(({ data }) => setSubjects(data ?? []));
     supabase.from("cities").select("id,slug,name").order("sort_order").then(({ data }) => setCities(data ?? []));
+    supabase
+      .from("ads")
+      .select("id,title,price_per_hour,location,is_online,is_promoted,subject_name,seo_slug,legacy_teachers(full_name,avatar_url)")
+      .eq("status", "active")
+      .order("is_promoted", { ascending: false })
+      .order("views_count", { ascending: false })
+      .limit(6)
+      .then(({ data }) => setFeatured((data ?? []) as unknown as FeaturedAd[]));
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -176,7 +190,54 @@ function HomePage() {
         </div>
       </section>
 
-      {/* AD: banner responsive după materii */}
+      {/* FEATURED ADS — real teachers from DB */}
+      {featured.length > 0 && (
+        <section className="container-page py-12">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold sm:text-3xl">Profesori populari acum</h2>
+              <p className="mt-2 text-muted-foreground">Cele mai vizitate anunțuri săptămâna asta.</p>
+            </div>
+            <Link to="/meditatii" className="hidden sm:inline-flex text-sm font-medium text-primary hover:underline">
+              Toate anunțurile <ArrowRight className="ml-1 inline h-4 w-4" />
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((a) => (
+              <Link
+                key={a.id}
+                to="/anunt/$slug"
+                params={{ slug: a.seo_slug || a.id }}
+                className="card-soft p-5 hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition flex flex-col"
+              >
+                <div className="flex items-center gap-3">
+                  {a.legacy_teachers?.avatar_url ? (
+                    <img src={a.legacy_teachers.avatar_url} alt={a.legacy_teachers.full_name} className="h-11 w-11 rounded-full object-cover" loading="lazy" />
+                  ) : (
+                    <div className="grid h-11 w-11 place-items-center rounded-full bg-primary-soft text-primary font-semibold">
+                      {(a.legacy_teachers?.full_name ?? "P").charAt(0)}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold truncate">{a.legacy_teachers?.full_name ?? "Profesor"}</p>
+                    <p className="text-xs text-muted-foreground">{a.subject_name}</p>
+                  </div>
+                  {a.is_promoted && (
+                    <span className="ml-auto rounded-full bg-primary-soft px-2 py-0.5 text-[10px] font-medium text-primary">Top</span>
+                  )}
+                </div>
+                <p className="mt-3 text-sm font-medium line-clamp-2">{a.title}</p>
+                <div className="mt-4 flex items-end justify-between">
+                  <span className="text-xs text-muted-foreground">{a.is_online ? "Online" : a.location}</span>
+                  {a.price_per_hour && <span className="text-base font-bold">{a.price_per_hour} lei/h</span>}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* AD: banner responsive după featured */}
       <div className="container-page">
         <AdsterraBannerResponsive />
       </div>

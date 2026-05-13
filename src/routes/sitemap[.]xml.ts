@@ -57,6 +57,18 @@ export const Route = createFileRoute("/sitemap.xml")({
               `  <url>\n    <loc>${BASE_URL}/meditatii?oras=${c.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
             );
           }
+          // Per-ad pages — primary long-tail SEO surface
+          const { data: ads } = await supabaseAdmin
+            .from("ads")
+            .select("id,seo_slug,updated_at")
+            .eq("status", "active");
+          for (const a of ads ?? []) {
+            const slug = a.seo_slug || a.id;
+            const last = (a.updated_at ?? today).toString().slice(0, 10);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/anunt/${slug}</loc>\n    <lastmod>${last}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+            );
+          }
         } catch (err) {
           console.error("sitemap dynamic fetch failed", err);
         }
