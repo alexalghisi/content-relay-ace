@@ -223,6 +223,53 @@ export type Database = {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          ad_id: string | null
+          created_at: string
+          id: string
+          last_message: string | null
+          last_message_at: string
+          legacy_teacher_id: string | null
+          student_id: string
+          student_unread: number
+          teacher_id: string
+          teacher_unread: number
+        }
+        Insert: {
+          ad_id?: string | null
+          created_at?: string
+          id?: string
+          last_message?: string | null
+          last_message_at?: string
+          legacy_teacher_id?: string | null
+          student_id: string
+          student_unread?: number
+          teacher_id: string
+          teacher_unread?: number
+        }
+        Update: {
+          ad_id?: string | null
+          created_at?: string
+          id?: string
+          last_message?: string | null
+          last_message_at?: string
+          legacy_teacher_id?: string | null
+          student_id?: string
+          student_unread?: number
+          teacher_id?: string
+          teacher_unread?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_ad_id_fkey"
+            columns: ["ad_id"]
+            isOneToOne: false
+            referencedRelation: "ads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedback: {
         Row: {
           created_at: string
@@ -258,6 +305,7 @@ export type Database = {
       }
       legacy_teachers: {
         Row: {
+          auth_user_id: string | null
           avatar_url: string | null
           bio: string | null
           created_at: string
@@ -272,6 +320,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          auth_user_id?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -286,6 +335,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          auth_user_id?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -300,6 +350,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          read_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
