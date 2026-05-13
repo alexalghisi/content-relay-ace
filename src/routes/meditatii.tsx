@@ -25,7 +25,7 @@ interface Subject { slug: string; name: string; icon: string | null; }
 type SearchParams = { materie?: string; oras?: string; q?: string };
 
 export const Route = createFileRoute("/meditatii")({
-  validateSearch: (s: Record<string, unknown>): Search => ({
+  validateSearch: (s: Record<string, unknown>): SearchParams => ({
     materie: typeof s.materie === "string" ? s.materie : undefined,
     oras: typeof s.oras === "string" ? s.oras : undefined,
     q: typeof s.q === "string" ? s.q : undefined,
