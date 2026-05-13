@@ -1,10 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, Mail } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, Mail, MessageCircle } from "lucide-react";
 import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
+import { toast } from "sonner";
 
-interface Teacher { id: string; full_name: string; avatar_url: string | null; experience_years: number | null; education: string | null; phone: string | null; email: string | null; bio: string | null; }
+interface Teacher { id: string; full_name: string; avatar_url: string | null; experience_years: number | null; education: string | null; phone: string | null; email: string | null; bio: string | null; auth_user_id: string | null; }
 interface AdDetail {
   id: string; title: string; description: string | null; location: string | null;
   is_online: boolean; price_per_hour: number | null; session_duration: number | null;
@@ -15,23 +17,33 @@ interface AdDetail {
 
 export const Route = createFileRoute("/anunt/$slug")({
   component: AdPage,
-  head: ({ params }) => ({
-    meta: [
-      { title: `Meditații — ${decodeURIComponent(params.slug).replace(/-/g, " ")} | MeditatiiDirect.ro` },
-      { name: "description", content: "Detalii anunț meditații cu profesor verificat. Contact direct, preț, recenzii și locație. Fără comision." },
-    ],
-  }),
+  head: ({ params }) => {
+    const human = decodeURIComponent(params.slug).replace(/-/g, " ");
+    return {
+      meta: [
+        { title: `Meditații ${human} | Profesor verificat | MeditatiiDirect.ro` },
+        { name: "description", content: `Anunț meditații cu profesor verificat: ${human}. Contact direct, preț per oră, recenzii reale. Fără comision, fără intermediari.` },
+        { property: "og:title", content: `Meditații ${human} — MeditatiiDirect.ro` },
+        { property: "og:description", content: `Profesor verificat. Contact direct, fără comision.` },
+        { property: "og:type", content: "article" },
+      ],
+      links: [{ rel: "canonical", href: `https://meditatiidirect.ro/anunt/${params.slug}` }],
+    };
+  },
 });
 
 function AdPage() {
   const { slug } = Route.useParams();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [ad, setAd] = useState<AdDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [showContact, setShowContact] = useState(false);
+  const [starting, setStarting] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const sel = "id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(id,full_name,avatar_url,experience_years,education,phone,email,bio)";
+      const sel = "id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(id,full_name,avatar_url,experience_years,education,phone,email,bio,auth_user_id)";
       let { data } = await supabase.from("ads").select(sel).eq("seo_slug", slug).maybeSingle();
       if (!data) {
         const r = await supabase.from("ads").select(sel).eq("id", slug).maybeSingle();
@@ -39,8 +51,27 @@ function AdPage() {
       }
       setAd(data as unknown as AdDetail);
       setLoading(false);
+      if (data?.id) supabase.rpc("increment_ad_views", { ad_id_param: data.id }).then(() => {});
     })();
   }, [slug]);
+
+  const startChat = async () => {
+    if (!user) { toast.info("Conectează-te ca să trimiți mesaj"); navigate({ to: "/login" }); return; }
+    if (!ad?.legacy_teachers?.auth_user_id) { toast.info("Acest profesor nu are încă chat activ. Folosește datele de contact."); setShowContact(true); return; }
+    if (ad.legacy_teachers.auth_user_id === user.id) { toast.info("Nu îți poți trimite mesaj ție însuți."); return; }
+    setStarting(true);
+    const teacherUserId = ad.legacy_teachers.auth_user_id;
+    const { data: existing } = await supabase.from("conversations")
+      .select("id").eq("ad_id", ad.id).eq("student_id", user.id).eq("teacher_id", teacherUserId).maybeSingle();
+    if (existing) { navigate({ to: "/mesaje/$id", params: { id: existing.id } }); return; }
+    const { data: created, error } = await supabase.from("conversations").insert({
+      ad_id: ad.id, student_id: user.id, teacher_id: teacherUserId,
+      legacy_teacher_id: ad.legacy_teachers.id,
+    }).select("id").single();
+    setStarting(false);
+    if (error || !created) { toast.error(error?.message ?? "Eroare"); return; }
+    navigate({ to: "/mesaje/$id", params: { id: created.id } });
+  };
 
   if (loading) return <div className="container-page py-16 text-center text-muted-foreground">Se încarcă...</div>;
   if (!ad) return (
@@ -53,8 +84,38 @@ function AdPage() {
   const t = ad.legacy_teachers;
   const subcats = (ad.subcategories ?? "").split(",").map(s => s.trim()).filter(Boolean);
 
+  // JSON-LD
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Meditații private",
+    "name": ad.title,
+    "description": ad.description ?? undefined,
+    "provider": t ? {
+      "@type": "Person", "name": t.full_name,
+      "image": t.avatar_url ?? undefined,
+      "address": ad.location ? { "@type": "PostalAddress", "addressLocality": ad.location, "addressCountry": "RO" } : undefined,
+    } : undefined,
+    "areaServed": ad.is_online ? "Online" : ad.location ?? "România",
+    "offers": ad.price_per_hour ? {
+      "@type": "Offer", "price": ad.price_per_hour, "priceCurrency": "RON",
+      "url": `https://meditatiidirect.ro/anunt/${ad.seo_slug ?? ad.id}`,
+    } : undefined,
+  };
+  const breadcrumbLd = {
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Acasă", "item": "https://meditatiidirect.ro/" },
+      { "@type": "ListItem", "position": 2, "name": "Meditații", "item": "https://meditatiidirect.ro/meditatii" },
+      { "@type": "ListItem", "position": 3, "name": ad.title },
+    ],
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+
       <div className="container-page pt-4"><AdsterraBannerResponsive /></div>
 
       <article className="container-page py-8">
@@ -77,9 +138,7 @@ function AdPage() {
                   <BadgeCheck className="h-4 w-4 text-primary" /> Profesor verificat
                 </p>
                 <h1 className="mt-1 text-2xl font-bold sm:text-3xl">{t?.full_name ?? "Profesor"}</h1>
-                {ad.subject_name && (
-                  <p className="mt-1 text-sm text-muted-foreground">{ad.subject_name}</p>
-                )}
+                {ad.subject_name && <p className="mt-1 text-sm text-muted-foreground">{ad.subject_name}</p>}
               </div>
             </div>
 
@@ -124,10 +183,10 @@ function AdPage() {
                   <p className="text-sm text-muted-foreground">per oră</p>
                 </div>
               )}
-              <button
-                onClick={() => setShowContact(true)}
-                className="btn-primary mt-5 w-full h-12"
-              >
+              <button onClick={startChat} disabled={starting} className="btn-primary mt-5 w-full h-12 inline-flex items-center justify-center gap-2 disabled:opacity-60">
+                <MessageCircle className="h-4 w-4" /> {starting ? "Se deschide..." : "Trimite mesaj"}
+              </button>
+              <button onClick={() => setShowContact(true)} className="btn-outline mt-2 w-full h-11">
                 Vezi datele de contact
               </button>
               {showContact && t && (
@@ -144,9 +203,7 @@ function AdPage() {
                   )}
                 </div>
               )}
-              <p className="mt-4 text-xs text-muted-foreground">
-                Contact direct, fără intermediari și fără comision.
-              </p>
+              <p className="mt-4 text-xs text-muted-foreground">Contact direct, fără intermediari și fără comision.</p>
             </div>
           </aside>
         </div>
