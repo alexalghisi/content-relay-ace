@@ -14,6 +14,7 @@ import { Route as TutorialeRouteImport } from './routes/tutoriale'
 import { Route as TermeniRouteImport } from './routes/termeni'
 import { Route as SubiecteBacRouteImport } from './routes/subiecte-bac'
 import { Route as SubiecteAdmitereRouteImport } from './routes/subiecte-admitere'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SimulareBacalaureatRouteImport } from './routes/simulare-bacalaureat'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ProfesoriRouteImport } from './routes/profesori'
@@ -62,6 +63,11 @@ const SubiecteBacRoute = SubiecteBacRouteImport.update({
 const SubiecteAdmitereRoute = SubiecteAdmitereRouteImport.update({
   id: '/subiecte-admitere',
   path: '/subiecte-admitere',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SimulareBacalaureatRoute = SimulareBacalaureatRouteImport.update({
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/profesori': typeof ProfesoriRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subiecte-admitere': typeof SubiecteAdmitereRoute
   '/subiecte-bac': typeof SubiecteBacRoute
   '/termeni': typeof TermeniRoute
@@ -242,6 +249,7 @@ export interface FileRoutesByTo {
   '/profesori': typeof ProfesoriRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subiecte-admitere': typeof SubiecteAdmitereRoute
   '/subiecte-bac': typeof SubiecteBacRoute
   '/termeni': typeof TermeniRoute
@@ -274,6 +282,7 @@ export interface FileRoutesById {
   '/profesori': typeof ProfesoriRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subiecte-admitere': typeof SubiecteAdmitereRoute
   '/subiecte-bac': typeof SubiecteBacRoute
   '/termeni': typeof TermeniRoute
@@ -307,6 +316,7 @@ export interface FileRouteTypes {
     | '/profesori'
     | '/signup'
     | '/simulare-bacalaureat'
+    | '/sitemap.xml'
     | '/subiecte-admitere'
     | '/subiecte-bac'
     | '/termeni'
@@ -338,6 +348,7 @@ export interface FileRouteTypes {
     | '/profesori'
     | '/signup'
     | '/simulare-bacalaureat'
+    | '/sitemap.xml'
     | '/subiecte-admitere'
     | '/subiecte-bac'
     | '/termeni'
@@ -369,6 +380,7 @@ export interface FileRouteTypes {
     | '/profesori'
     | '/signup'
     | '/simulare-bacalaureat'
+    | '/sitemap.xml'
     | '/subiecte-admitere'
     | '/subiecte-bac'
     | '/termeni'
@@ -401,6 +413,7 @@ export interface RootRouteChildren {
   ProfesoriRoute: typeof ProfesoriRoute
   SignupRoute: typeof SignupRoute
   SimulareBacalaureatRoute: typeof SimulareBacalaureatRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubiecteAdmitereRoute: typeof SubiecteAdmitereRoute
   SubiecteBacRoute: typeof SubiecteBacRoute
   TermeniRoute: typeof TermeniRoute
@@ -443,6 +456,13 @@ declare module '@tanstack/react-router' {
       path: '/subiecte-admitere'
       fullPath: '/subiecte-admitere'
       preLoaderRoute: typeof SubiecteAdmitereRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/simulare-bacalaureat': {
@@ -641,6 +661,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfesoriRoute: ProfesoriRoute,
   SignupRoute: SignupRoute,
   SimulareBacalaureatRoute: SimulareBacalaureatRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubiecteAdmitereRoute: SubiecteAdmitereRoute,
   SubiecteBacRoute: SubiecteBacRoute,
   TermeniRoute: TermeniRoute,
