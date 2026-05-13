@@ -22,7 +22,7 @@ interface Ad {
 
 interface Subject { slug: string; name: string; icon: string | null; }
 
-type Search = { materie?: string; oras?: string; q?: string };
+type SearchParams = { materie?: string; oras?: string; q?: string };
 
 export const Route = createFileRoute("/meditatii")({
   validateSearch: (s: Record<string, unknown>): Search => ({
