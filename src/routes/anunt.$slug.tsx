@@ -197,8 +197,6 @@ function AdPage() {
                   )}
                 </div>
               )}
-                </div>
-              )}
               <p className="mt-4 text-xs text-muted-foreground">Contact direct, fără intermediari și fără comision.</p>
             </div>
           </aside>
