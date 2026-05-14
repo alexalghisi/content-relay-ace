@@ -612,12 +612,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_profile_private: {
+        Args: never
+        Returns: {
+          bio: string
+          city: string
+          display_name: string
+          phone: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      mark_conversation_read: {
+        Args: { _conversation_id: string }
+        Returns: undefined
       }
     }
     Enums: {
