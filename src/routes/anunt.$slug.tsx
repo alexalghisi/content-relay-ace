@@ -195,11 +195,8 @@ function AdPage() {
                       <Phone className="h-4 w-4 text-primary" /> {t.phone}
                     </a>
                   )}
-                  {t.email && (
-                    <a href={`mailto:${t.email}`} className="flex items-center gap-2 rounded-lg border border-border p-3 hover:bg-muted truncate">
-                      <Mail className="h-4 w-4 text-primary" /> {t.email}
-                    </a>
-                  )}
+                </div>
+              )}
                 </div>
               )}
               <p className="mt-4 text-xs text-muted-foreground">Contact direct, fără intermediari și fără comision.</p>
