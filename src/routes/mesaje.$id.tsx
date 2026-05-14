@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { markConversationRead } from "@/lib/security.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Send } from "lucide-react";
 import { toast } from "sonner";
@@ -20,6 +22,7 @@ function ChatThreadPage() {
   const { id } = Route.useParams();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const markRead = useServerFn(markConversationRead);
   const [conv, setConv] = useState<Conv | null>(null);
   const [otherName, setOtherName] = useState<string>("Utilizator");
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -43,9 +46,7 @@ function ChatThreadPage() {
       const { data: ms } = await supabase.from("messages").select("id,sender_id,body,created_at").eq("conversation_id", id).order("created_at");
       setMsgs((ms ?? []) as Msg[]);
 
-      // mark read
-      const update = c.student_id === user.id ? { student_unread: 0 } : { teacher_unread: 0 };
-      await supabase.from("conversations").update(update).eq("id", id);
+      await markRead({ data: { conversationId: id } }).catch(() => undefined);
     })();
 
     const ch = supabase.channel("chat-" + id)
@@ -54,15 +55,14 @@ function ChatThreadPage() {
           setMsgs((prev) => [...prev, payload.new as Msg]);
           if (user) {
             const n = payload.new as Msg;
-            if (n.sender_id !== user.id && conv) {
-              const update = conv.student_id === user.id ? { student_unread: 0 } : { teacher_unread: 0 };
-              supabase.from("conversations").update(update).eq("id", id);
+            if (n.sender_id !== user.id) {
+              markRead({ data: { conversationId: id } }).catch(() => undefined);
             }
           }
         })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, [id, user, loading, navigate, conv]);
+  }, [id, user, loading, navigate, markRead]);
 
   useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }); }, [msgs]);
 
