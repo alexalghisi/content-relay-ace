@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, Mail, MessageCircle } from "lucide-react";
+import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, MessageCircle } from "lucide-react";
 import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { toast } from "sonner";
 
