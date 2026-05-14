@@ -6,7 +6,7 @@ import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, Messa
 import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { toast } from "sonner";
 
-interface Teacher { id: string; full_name: string; avatar_url: string | null; experience_years: number | null; education: string | null; phone: string | null; email: string | null; bio: string | null; auth_user_id: string | null; }
+interface Teacher { id: string; full_name: string; avatar_url: string | null; experience_years: number | null; education: string | null; phone: string | null; bio: string | null; auth_user_id: string | null; }
 interface AdDetail {
   id: string; title: string; description: string | null; location: string | null;
   is_online: boolean; price_per_hour: number | null; session_duration: number | null;
