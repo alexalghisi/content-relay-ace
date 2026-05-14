@@ -11,7 +11,6 @@ export const Route = createFileRoute("/login")({
       { title: "Autentificare — MeditatiiDirect.ro" },
       { name: "description", content: "Conectează-te în contul MeditatiiDirect.ro cu email sau Google. Acces rapid la mesajele cu profesorii." },
       { name: "robots", content: "noindex, follow" },
-      { name: "robots", content: "noindex,nofollow" },
     ],
   }),
   component: LoginPage,
