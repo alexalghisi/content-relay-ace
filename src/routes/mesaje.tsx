@@ -8,8 +8,6 @@ export const Route = createFileRoute("/mesaje")({
   head: () => ({ meta: [
     { title: "Mesaje — MeditatiiDirect.ro" },
     { name: "robots", content: "noindex, nofollow" },
-  ,
-      { name: "robots", content: "noindex,nofollow" },
     ]}),
   component: MessagesListPage,
 });
