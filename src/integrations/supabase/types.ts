@@ -273,7 +273,6 @@ export type Database = {
       feedback: {
         Row: {
           created_at: string
-          email: string | null
           id: string
           is_approved: boolean | null
           message: string
@@ -283,7 +282,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          email?: string | null
           id?: string
           is_approved?: boolean | null
           message: string
@@ -293,7 +291,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          email?: string | null
           id?: string
           is_approved?: boolean | null
           message?: string
@@ -310,7 +307,6 @@ export type Database = {
           bio: string | null
           created_at: string
           education: string | null
-          email: string | null
           experience_years: number | null
           full_name: string
           id: string
@@ -325,7 +321,6 @@ export type Database = {
           bio?: string | null
           created_at?: string
           education?: string | null
-          email?: string | null
           experience_years?: number | null
           full_name: string
           id: string
@@ -340,7 +335,6 @@ export type Database = {
           bio?: string | null
           created_at?: string
           education?: string | null
-          email?: string | null
           experience_years?: number | null
           full_name?: string
           id?: string
@@ -429,7 +423,6 @@ export type Database = {
           created_at: string
           id: string
           rating: number | null
-          reviewer_email: string | null
           reviewer_name: string | null
           teacher_id: string | null
         }
@@ -439,7 +432,6 @@ export type Database = {
           created_at?: string
           id?: string
           rating?: number | null
-          reviewer_email?: string | null
           reviewer_name?: string | null
           teacher_id?: string | null
         }
@@ -449,7 +441,6 @@ export type Database = {
           created_at?: string
           id?: string
           rating?: number | null
-          reviewer_email?: string | null
           reviewer_name?: string | null
           teacher_id?: string | null
         }

@@ -2,11 +2,11 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, Mail, MessageCircle } from "lucide-react";
+import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, MessageCircle } from "lucide-react";
 import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { toast } from "sonner";
 
-interface Teacher { id: string; full_name: string; avatar_url: string | null; experience_years: number | null; education: string | null; phone: string | null; email: string | null; bio: string | null; auth_user_id: string | null; }
+interface Teacher { id: string; full_name: string; avatar_url: string | null; experience_years: number | null; education: string | null; phone: string | null; bio: string | null; auth_user_id: string | null; }
 interface AdDetail {
   id: string; title: string; description: string | null; location: string | null;
   is_online: boolean; price_per_hour: number | null; session_duration: number | null;
@@ -43,7 +43,7 @@ function AdPage() {
 
   useEffect(() => {
     (async () => {
-      const sel = "id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(id,full_name,avatar_url,experience_years,education,phone,email,bio,auth_user_id)";
+      const sel = "id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(id,full_name,avatar_url,experience_years,education,phone,bio,auth_user_id)";
       let { data } = await supabase.from("ads").select(sel).eq("seo_slug", slug).maybeSingle();
       if (!data) {
         const r = await supabase.from("ads").select(sel).eq("id", slug).maybeSingle();
@@ -193,11 +193,6 @@ function AdPage() {
                   {t.phone && (
                     <a href={`tel:${t.phone}`} className="flex items-center gap-2 rounded-lg border border-border p-3 hover:bg-muted">
                       <Phone className="h-4 w-4 text-primary" /> {t.phone}
-                    </a>
-                  )}
-                  {t.email && (
-                    <a href={`mailto:${t.email}`} className="flex items-center gap-2 rounded-lg border border-border p-3 hover:bg-muted truncate">
-                      <Mail className="h-4 w-4 text-primary" /> {t.email}
                     </a>
                   )}
                 </div>
