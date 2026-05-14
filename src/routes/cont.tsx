@@ -12,7 +12,7 @@ export const Route = createFileRoute("/cont")({
   head: () => ({ meta: [
     { title: "Contul meu — MeditatiiDirect.ro" },
     { name: "robots", content: "noindex, nofollow" },
-  ]}),
+    ]}),
   component: AccountPage,
 });
 

@@ -8,7 +8,8 @@ import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meditații Online și Acasă — Profesori Verificați | MeditatiiDirect.ro" },
+      { title: "Meditații Online cu Profesori Verificați | MeditatiiDirect" },
+      { property: "og:url", content: "https://meditatiidirect.ro/" },
       { name: "description", content: "Găsește meditații la matematică, română, engleză cu profesori verificați. Online sau față în față, BAC 2026, admitere și Evaluare Națională. De la 30 lei/oră." },
       { name: "keywords", content: "meditatii, meditatii online, profesori, meditatii matematica, meditatii romana, meditatii engleza, BAC 2026, admitere facultate, evaluare nationala, meditatii bucuresti, meditatii cluj, meditatii iasi" },
       { property: "og:title", content: "Meditații cu Profesori Verificați în România" },
@@ -156,6 +157,9 @@ function HomePage() {
                 alt="Elev și profesor verificat în meditație online"
                 width={1280}
                 height={960}
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
                 className="rounded-3xl border border-border shadow-[var(--shadow-card)]"
               />
             </div>
