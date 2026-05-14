@@ -8,7 +8,6 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Ia legătura cu echipa MeditatiiDirect." },
       { property: "og:title", content: "Contact — MeditatiiDirect.ro" },
       { property: "og:description", content: "Ia legătura cu echipa MeditatiiDirect." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/contact" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/contact" }],

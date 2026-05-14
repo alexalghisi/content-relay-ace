@@ -8,7 +8,6 @@ export const Route = createFileRoute("/grile-upb")({
       { name: "description", content: "Grile Politehnica: matematică, fizică, informatică." },
       { property: "og:title", content: "Grile pentru admiterea la UPB — MeditatiiDirect.ro" },
       { property: "og:description", content: "Grile Politehnica: matematică, fizică, informatică." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/grile-upb" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/grile-upb" }],

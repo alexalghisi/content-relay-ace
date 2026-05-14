@@ -8,7 +8,6 @@ export const Route = createFileRoute("/tutoriale")({
       { name: "description", content: "Tutoriale video și scrise pentru elevi, părinți și profesori." },
       { property: "og:title", content: "Tutoriale — MeditatiiDirect.ro" },
       { property: "og:description", content: "Tutoriale video și scrise pentru elevi, părinți și profesori." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/tutoriale" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/tutoriale" }],

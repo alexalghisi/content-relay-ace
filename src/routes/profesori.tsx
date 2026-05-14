@@ -8,7 +8,6 @@ export const Route = createFileRoute("/profesori")({
       { name: "description", content: "1000+ profesori verificați la 20+ materii, în toată România." },
       { property: "og:title", content: "Profesori verificați — MeditatiiDirect.ro" },
       { property: "og:description", content: "1000+ profesori verificați la 20+ materii, în toată România." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/profesori" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/profesori" }],

@@ -8,7 +8,6 @@ export const Route = createFileRoute("/meditatii-evaluare-nationala")({
       { name: "description", content: "Pregătire intensivă pentru Evaluarea Națională la matematică și română." },
       { property: "og:title", content: "Meditații Evaluare Națională — MeditatiiDirect.ro" },
       { property: "og:description", content: "Pregătire intensivă pentru Evaluarea Națională la matematică și română." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/meditatii-evaluare-nationala" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii-evaluare-nationala" }],

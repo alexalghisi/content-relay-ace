@@ -8,7 +8,6 @@ export const Route = createFileRoute("/meditatii-online")({
       { name: "description", content: "Profesori verificați care țin lecții online prin Zoom, Google Meet sau Whiteboard." },
       { property: "og:title", content: "Meditații online — MeditatiiDirect.ro" },
       { property: "og:description", content: "Profesori verificați care țin lecții online prin Zoom, Google Meet sau Whiteboard." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/meditatii-online" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii-online" }],

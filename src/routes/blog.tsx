@@ -8,7 +8,6 @@ export const Route = createFileRoute("/blog")({
       { name: "description", content: "Articole, sfaturi și ghiduri despre educație, examene și carieră." },
       { property: "og:title", content: "Blog MeditatiiDirect — MeditatiiDirect.ro" },
       { property: "og:description", content: "Articole, sfaturi și ghiduri despre educație, examene și carieră." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/blog" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/blog" }],

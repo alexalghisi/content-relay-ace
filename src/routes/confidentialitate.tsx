@@ -8,7 +8,6 @@ export const Route = createFileRoute("/confidentialitate")({
       { name: "description", content: "Cum colectăm, folosim și protejăm datele tale personale." },
       { property: "og:title", content: "Politica de confidențialitate — MeditatiiDirect.ro" },
       { property: "og:description", content: "Cum colectăm, folosim și protejăm datele tale personale." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/confidentialitate" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/confidentialitate" }],

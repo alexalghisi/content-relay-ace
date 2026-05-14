@@ -8,7 +8,6 @@ export const Route = createFileRoute("/preturi-meditatii")({
       { name: "description", content: "Prețuri meditații în România: de la 30 lei/oră. Compară tarifele profesorilor." },
       { property: "og:title", content: "Prețuri meditații — MeditatiiDirect.ro" },
       { property: "og:description", content: "Prețuri meditații în România: de la 30 lei/oră. Compară tarifele profesorilor." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/preturi-meditatii" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/preturi-meditatii" }],

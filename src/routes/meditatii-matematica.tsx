@@ -8,7 +8,6 @@ export const Route = createFileRoute("/meditatii-matematica")({
       { name: "description", content: "Profesori verificați de matematică pentru gimnaziu, liceu, BAC și admitere." },
       { property: "og:title", content: "Meditații matematică — MeditatiiDirect.ro" },
       { property: "og:description", content: "Profesori verificați de matematică pentru gimnaziu, liceu, BAC și admitere." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/meditatii-matematica" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii-matematica" }],

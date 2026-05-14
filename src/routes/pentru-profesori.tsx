@@ -8,7 +8,6 @@ export const Route = createFileRoute("/pentru-profesori")({
       { name: "description", content: "Publică-ți profilul gratuit, primește mesaje direct de la elevi, păstrează 100% din tarif." },
       { property: "og:title", content: "Pentru profesori — MeditatiiDirect.ro" },
       { property: "og:description", content: "Publică-ți profilul gratuit, primește mesaje direct de la elevi, păstrează 100% din tarif." },
-    ,
       { property: "og:url", content: "https://meditatiidirect.ro/pentru-profesori" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/pentru-profesori" }],
