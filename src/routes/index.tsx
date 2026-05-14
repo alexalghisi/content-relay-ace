@@ -157,6 +157,9 @@ function HomePage() {
                 alt="Elev și profesor verificat în meditație online"
                 width={1280}
                 height={960}
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
                 className="rounded-3xl border border-border shadow-[var(--shadow-card)]"
               />
             </div>
