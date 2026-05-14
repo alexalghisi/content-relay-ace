@@ -1,0 +1,46 @@
+# MeditatiiDirect.ro
+
+> Marketplace românesc de meditații: profesori verificați la matematică, română, engleză, BAC, admitere și 20+ alte materii. Online sau acasă, contact direct cu profesorul, fără intermediari.
+
+MeditatiiDirect.ro conectează elevi și părinți cu peste 1000 de meditatori verificați din România. Căutare după materie și oraș, recenzii reale, chat direct și prețuri de la 30 lei/oră.
+
+## Pagini principale
+
+- [Acasă](/): Caută meditații după materie și oraș.
+- [Toate meditațiile](/meditatii): Listă completă cu anunțuri active.
+- [Profesori](/profesori): Profile de meditatori verificați.
+- [Materii](/materii): Toate materiile disponibile.
+- [Cum funcționează](/cum-functioneaza): Pașii pentru a găsi un profesor.
+- [Prețuri meditații](/preturi-meditatii): Tarife orientative pe materie.
+- [Pentru profesori](/pentru-profesori): Cum publici un anunț.
+
+## Materii populare
+
+- [Meditații matematică](/meditatii-matematica): Algebră, geometrie, analiză.
+- [Meditații română](/meditatii-romana): Limba și literatura română.
+- [Meditații engleză](/meditatii-engleza): Conversație, gramatică, examene.
+- [Meditații online](/meditatii-online): Sesiuni la distanță prin video.
+
+## Examene
+
+- [Meditații BAC](/meditatii-bac): Pregătire bacalaureat 2026.
+- [Meditații Evaluare Națională](/meditatii-evaluare-nationala): Clasa a 8-a.
+- [Admitere facultate](/admitere): Medicină, Politehnică, Drept, ASE.
+- [Subiecte BAC](/subiecte-bac): Arhivă subiecte rezolvate.
+- [Subiecte admitere](/subiecte-admitere): Modele admitere.
+- [Variante bacalaureat](/variante-bacalaureat): Variante oficiale.
+- [Simulare bacalaureat](/simulare-bacalaureat): Teste de antrenament.
+- [Grile medicină](/grile-medicina): Grile UMF.
+- [Grile UPB](/grile-upb): Grile Politehnică București.
+
+## Resurse
+
+- [Blog](/blog): Articole, sfaturi și ghiduri educaționale.
+- [Tutoriale](/tutoriale): Materiale de învățare.
+
+## Optional
+
+- [Despre](/despre): Despre echipă și misiune.
+- [Contact](/contact): Cum ne contactezi.
+- [Termeni](/termeni): Termeni și condiții.
+- [Confidențialitate](/confidentialitate): Politica de confidențialitate.
