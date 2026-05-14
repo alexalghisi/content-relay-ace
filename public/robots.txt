@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /cont
+Disallow: /login
+Disallow: /signup
+Disallow: /mesaje
 
 Sitemap: https://meditatiidirect.ro/sitemap.xml
