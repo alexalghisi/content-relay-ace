@@ -43,7 +43,7 @@ function AdPage() {
 
   useEffect(() => {
     (async () => {
-      const sel = "id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(id,full_name,avatar_url,experience_years,education,phone,email,bio,auth_user_id)";
+      const sel = "id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(id,full_name,avatar_url,experience_years,education,phone,bio,auth_user_id)";
       let { data } = await supabase.from("ads").select(sel).eq("seo_slug", slug).maybeSingle();
       if (!data) {
         const r = await supabase.from("ads").select(sel).eq("id", slug).maybeSingle();
