@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
+import { getMyPrivateProfile } from "@/lib/security.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -25,6 +27,7 @@ const profileSchema = z.object({
 
 function AccountPage() {
   const { user, loading, signOut } = useAuth();
+  const loadPrivateProfile = useServerFn(getMyPrivateProfile);
   const [profile, setProfile] = useState<Profile>({ display_name: "", phone: "", city: "", bio: "" });
   const [saving, setSaving] = useState(false);
   const [newEmail, setNewEmail] = useState("");
@@ -38,18 +41,21 @@ function AccountPage() {
   useEffect(() => {
     if (!loading && !user) { window.location.href = "/login"; return; }
     if (user) {
-      supabase.from("profiles").select("display_name,phone,city,bio").eq("user_id", user.id).maybeSingle()
-        .then(({ data }) => {
+      loadPrivateProfile()
+        .then((data) => {
           if (data) setProfile({
             display_name: data.display_name ?? "",
             phone: data.phone ?? "",
             city: data.city ?? "",
             bio: data.bio ?? "",
           });
+        })
+        .catch(() => {
+          toast.error("Nu am putut încărca profilul.");
         });
       setNewEmail(user.email ?? "");
     }
-  }, [user, loading]);
+  }, [user, loading, loadPrivateProfile]);
 
   if (loading || !user) return <div className="container-page py-16 text-muted-foreground">Se încarcă...</div>;
 
