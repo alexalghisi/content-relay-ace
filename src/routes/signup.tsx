@@ -11,6 +11,8 @@ export const Route = createFileRoute("/signup")({
       { title: "Înscriere gratuită — MeditatiiDirect.ro" },
       { name: "description", content: "Creează un cont gratuit pe MeditatiiDirect.ro cu email sau Google și contactează profesori verificați în câteva secunde." },
       { name: "robots", content: "noindex, follow" },
+    ,
+      { name: "robots", content: "noindex,nofollow" },
     ],
   }),
   component: SignupPage,

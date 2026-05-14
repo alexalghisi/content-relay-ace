@@ -8,7 +8,10 @@ export const Route = createFileRoute("/subiecte-bac")({
       { name: "description", content: "Subiecte de bacalaureat rezolvate complet, pe ani și sesiuni, la toate materiile." },
       { property: "og:title", content: "Subiecte BAC rezolvate — MeditatiiDirect.ro" },
       { property: "og:description", content: "Subiecte de bacalaureat rezolvate complet, pe ani și sesiuni, la toate materiile." },
+    ,
+      { property: "og:url", content: "https://meditatiidirect.ro/subiecte-bac" },
     ],
+    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/subiecte-bac" }],
   }),
   component: () => <PageShell title="Subiecte BAC rezolvate" description="Subiecte de bacalaureat rezolvate complet, pe ani și sesiuni, la toate materiile." />,
 });

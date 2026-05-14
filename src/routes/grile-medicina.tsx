@@ -8,7 +8,10 @@ export const Route = createFileRoute("/grile-medicina")({
       { name: "description", content: "Grile UMF: biologie, chimie organică, fizică. Antrenament pentru admiterea la Medicină." },
       { property: "og:title", content: "Grile pentru admiterea la Medicină — MeditatiiDirect.ro" },
       { property: "og:description", content: "Grile UMF: biologie, chimie organică, fizică. Antrenament pentru admiterea la Medicină." },
+    ,
+      { property: "og:url", content: "https://meditatiidirect.ro/grile-medicina" },
     ],
+    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/grile-medicina" }],
   }),
   component: () => <PageShell title="Grile pentru admiterea la Medicină" description="Grile UMF: biologie, chimie organică, fizică. Antrenament pentru admiterea la Medicină." />,
 });

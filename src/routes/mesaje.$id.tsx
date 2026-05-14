@@ -11,7 +11,9 @@ export const Route = createFileRoute("/mesaje/$id")({
   head: () => ({ meta: [
     { title: "Conversație — MeditatiiDirect.ro" },
     { name: "robots", content: "noindex, nofollow" },
-  ]}),
+  ,
+      { name: "robots", content: "noindex,nofollow" },
+    ]}),
   component: ChatThreadPage,
 });
 

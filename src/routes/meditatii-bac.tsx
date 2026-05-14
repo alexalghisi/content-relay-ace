@@ -8,7 +8,10 @@ export const Route = createFileRoute("/meditatii-bac")({
       { name: "description", content: "Meditații specializate pentru Bacalaureat: matematică, română, istorie, biologie, chimie, fizică, informatică." },
       { property: "og:title", content: "Pregătire BAC 2026 — MeditatiiDirect.ro" },
       { property: "og:description", content: "Meditații specializate pentru Bacalaureat: matematică, română, istorie, biologie, chimie, fizică, informatică." },
+    ,
+      { property: "og:url", content: "https://meditatiidirect.ro/meditatii-bac" },
     ],
+    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii-bac" }],
   }),
   component: () => <PageShell title="Pregătire BAC 2026" description="Meditații specializate pentru Bacalaureat: matematică, română, istorie, biologie, chimie, fizică, informatică." />,
 });
