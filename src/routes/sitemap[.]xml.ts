@@ -84,6 +84,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           console.error("sitemap dynamic fetch failed", err);
         }
 
+        const PDFS = [
+          "simulare-bac-2026-matematica-m1","simulare-bac-2026-barem-matematica","simulare-bac-2026-romana",
+          "simulare-bac-2026-biologie","simulare-bac-2026-fizica","simulare-bac-2026-informatica","simulare-bac-2026-istorie",
+          "admitere-2026-grile-medicina","admitere-2026-upb-matematica-fizica","admitere-2026-utcn-matematica","admitere-2026-drept-simulare",
+        ];
+        for (const f of PDFS) {
+          urls.push(`  <url>\n    <loc>${BASE_URL}/pdfs/${f}.pdf</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
+        }
+
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>`;
 
         return new Response(xml, {
