@@ -21,8 +21,24 @@ export interface SeoLandingProps {
 }
 
 export function SeoLanding(p: SeoLandingProps) {
+  const breadcrumbLd = p.pageUrl
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Acasă", item: "https://meditatiidirect.ro/" },
+          ...(p.breadcrumbParent
+            ? [{ "@type": "ListItem", position: 2, name: p.breadcrumbParent.name, item: p.breadcrumbParent.url }]
+            : []),
+          { "@type": "ListItem", position: p.breadcrumbParent ? 3 : 2, name: p.h1, item: p.pageUrl },
+        ],
+      }
+    : null;
   return (
     <article className="container-page py-10 lg:py-14">
+      {breadcrumbLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      )}
       <header className="max-w-3xl">
         <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">
           <BadgeCheck className="h-4 w-4" /> Profesori verificați • Fără comision
