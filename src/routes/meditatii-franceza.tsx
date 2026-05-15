@@ -25,6 +25,7 @@ export const Route = createFileRoute("/meditatii-franceza")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Meditații limba franceză"
       intro="Învață franceza cu profesori verificați — de la primele cuvinte și până la examenele DELF/DALF. Conversație, gramatică, pregătire BAC sau franceză pentru afaceri."
       bullets={[

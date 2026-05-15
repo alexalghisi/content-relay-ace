@@ -24,6 +24,7 @@ export const Route = createFileRoute("/grile-upb")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Grile admitere UPB 2026"
       intro="Pregătire pentru admiterea la Universitatea Politehnică din București în 2026. Grile model la matematică și fizică conform programei oficiale."
       bullets={[

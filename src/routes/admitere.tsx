@@ -33,6 +33,7 @@ function Page() {
   return (
     <>
       <SeoLanding
+      pageUrl={URL}
         h1="Admitere facultate 2010 – 2026"
         intro="Pregătire completă pentru admiterea la facultățile de top din România: Medicină, Politehnică, UTCN, Drept, ASE, Informatică. Profesori specializați pe fiecare profil + arhivă subiecte de admitere din 2010 până în 2026, gratis în PDF."
         bullets={[

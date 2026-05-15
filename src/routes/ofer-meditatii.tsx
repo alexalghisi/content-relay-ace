@@ -25,6 +25,7 @@ export const Route = createFileRoute("/ofer-meditatii")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Ofer meditații — publică anunț gratuit"
       intro="Ești profesor sau student avansat și vrei să oferi meditații? Publică gratuit anunțul tău pe MeditatiiDirect.ro și ajungi în fața a mii de elevi care caută activ profesori."
       bullets={[

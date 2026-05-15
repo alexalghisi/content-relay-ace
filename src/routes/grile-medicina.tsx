@@ -24,6 +24,7 @@ export const Route = createFileRoute("/grile-medicina")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Grile Medicină 2026"
       intro="Pregătire completă pentru admiterea la Medicină în 2026 — biologie clasa XI (Corpul uman), chimie organică, grile model elaborate după programa UMF."
       bullets={[

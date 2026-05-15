@@ -25,6 +25,7 @@ export const Route = createFileRoute("/meditatii-bac")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Meditații BAC 2026"
       intro="Pregătire completă pentru bacalaureatul 2026 cu profesori verificați. Toate materiile, toate filierele — real, uman, tehnologic. Online sau la domiciliu."
       bullets={[

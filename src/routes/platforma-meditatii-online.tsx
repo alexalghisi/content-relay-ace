@@ -25,6 +25,7 @@ export const Route = createFileRoute("/platforma-meditatii-online")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Platforma de meditații online #1 din România"
       intro="Învață cu profesori verificați din toată țara, direct de acasă. Chat integrat, plată directă către profesor, fără comision. Începi în 5 minute, fără abonament."
       bullets={[

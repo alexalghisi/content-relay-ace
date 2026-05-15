@@ -25,6 +25,7 @@ export const Route = createFileRoute("/grile-admitere-medicina-2026")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Grile admitere Medicină 2026"
       intro="Pregătirea pentru admiterea la Medicină 2026 — UMF Carol Davila, UMF Cluj, UMF Iași, UMF Timișoara. Grile model la biologie și chimie organică, plus meditatori specializați care antrenează viitorii studenți la Medicină."
       bullets={[

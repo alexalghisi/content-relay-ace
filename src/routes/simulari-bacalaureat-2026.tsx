@@ -25,6 +25,7 @@ export const Route = createFileRoute("/simulari-bacalaureat-2026")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Simulări BAC 2026 — subiecte și bareme"
       intro="Pregătește-te eficient pentru bacalaureatul 2026 cu variantele de simulare elaborate după modelul oficial. Toate PDF-urile sunt gratuite și conțin rezolvări complete plus barem de corectare."
       bullets={[

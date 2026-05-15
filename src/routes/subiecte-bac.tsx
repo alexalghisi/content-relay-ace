@@ -24,6 +24,7 @@ export const Route = createFileRoute("/subiecte-bac")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Subiecte BAC rezolvate"
       intro="Arhivă cu subiecte de bacalaureat rezolvate complet: itemi după modelul oficial pentru 2026, plus rezolvări detaliate la matematică, română, biologie, fizică, informatică, istorie."
       bullets={[
