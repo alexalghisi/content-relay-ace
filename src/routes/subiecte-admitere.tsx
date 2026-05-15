@@ -34,10 +34,10 @@ export const Route = createFileRoute("/subiecte-admitere")({
       ]}
       ctaPrimary={{ to: "/admitere", label: "Pregătire admitere" }}
       pdfs={[
-        { href: "/pdfs/admitere-2026-grile-medicina.pdf", title: "Medicină — UMF 2026", meta: "Biologie + chimie" },
-        { href: "/pdfs/admitere-2026-upb-matematica-fizica.pdf", title: "Politehnică București (UPB)", meta: "Matematică + fizică" },
-        { href: "/pdfs/admitere-2026-utcn-matematica.pdf", title: "UTCN Cluj — Matematică" },
-        { href: "/pdfs/admitere-2026-drept-simulare.pdf", title: "Drept — Logică, română, eseu" },
+        { href: "https://umfcd.ro/admitere/", title: "Medicină — UMF 2026", meta: "Biologie + chimie" },
+        { href: "https://admitere.pub.ro/", title: "Politehnică București (UPB)", meta: "Matematică + fizică" },
+        { href: "https://admitere.utcluj.ro/", title: "UTCN Cluj — Matematică" },
+        { href: "https://drept.unibuc.ro/Admitere-s23-ro.htm", title: "Drept — Logică, română, eseu" },
       ]}
       faqs={faqs}
       related={[

@@ -35,13 +35,13 @@ export const Route = createFileRoute("/simulari-bacalaureat-2026")({
       ]}
       ctaPrimary={{ to: "/meditatii-bac", label: "Pregătire BAC cu profesor" }}
       pdfs={[
-        { href: "/pdfs/simulare-bac-2026-matematica-m1.pdf", title: "Matematică M_mate-info", meta: "30 itemi, rezolvări" },
-        { href: "/pdfs/simulare-bac-2026-barem-matematica.pdf", title: "Barem Matematică", meta: "Punctaje detaliate" },
-        { href: "/pdfs/simulare-bac-2026-romana.pdf", title: "Limba și literatura română", meta: "Subiectul I, II, III + plan eseu" },
-        { href: "/pdfs/simulare-bac-2026-biologie.pdf", title: "Biologie vegetală și animală", meta: "Itemi + problemă genetică" },
-        { href: "/pdfs/simulare-bac-2026-fizica.pdf", title: "Fizică", meta: "Mecanică + electricitate" },
-        { href: "/pdfs/simulare-bac-2026-informatica.pdf", title: "Informatică (C/C++)", meta: "Algoritmi + problemă" },
-        { href: "/pdfs/simulare-bac-2026-istorie.pdf", title: "Istorie", meta: "Tematică + eseu model" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Matematică M_mate-info", meta: "30 itemi, rezolvări" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Barem Matematică", meta: "Punctaje detaliate" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Limba și literatura română", meta: "Subiectul I, II, III + plan eseu" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Biologie vegetală și animală", meta: "Itemi + problemă genetică" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Fizică", meta: "Mecanică + electricitate" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Informatică (C/C++)", meta: "Algoritmi + problemă" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Istorie", meta: "Tematică + eseu model" },
       ]}
       faqs={faqs}
       related={[

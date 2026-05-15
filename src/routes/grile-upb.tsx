@@ -34,7 +34,7 @@ export const Route = createFileRoute("/grile-upb")({
       ]}
       ctaPrimary={{ to: "/admitere", label: "Pregătire admitere" }}
       pdfs={[
-        { href: "/pdfs/admitere-2026-upb-matematica-fizica.pdf", title: "Admitere UPB 2026 — Matematică + Fizică", meta: "Grile model" },
+        { href: "https://admitere.pub.ro/", title: "Admitere UPB 2026 — Matematică + Fizică", meta: "Grile model" },
       ]}
       faqs={faqs}
       related={[

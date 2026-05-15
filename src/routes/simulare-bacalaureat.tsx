@@ -35,13 +35,13 @@ export const Route = createFileRoute("/simulare-bacalaureat")({
       ]}
       ctaPrimary={{ to: "/meditatii-bac", label: "Caută profesor BAC" }}
       pdfs={[
-        { href: "/pdfs/simulare-bac-2026-matematica-m1.pdf", title: "Matematică M_mate-info" },
-        { href: "/pdfs/simulare-bac-2026-barem-matematica.pdf", title: "Barem matematică" },
-        { href: "/pdfs/simulare-bac-2026-romana.pdf", title: "Limba română" },
-        { href: "/pdfs/simulare-bac-2026-biologie.pdf", title: "Biologie" },
-        { href: "/pdfs/simulare-bac-2026-fizica.pdf", title: "Fizică" },
-        { href: "/pdfs/simulare-bac-2026-informatica.pdf", title: "Informatică (C/C++)" },
-        { href: "/pdfs/simulare-bac-2026-istorie.pdf", title: "Istorie" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Matematică M_mate-info" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Barem matematică" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Limba română" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Biologie" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Fizică" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Informatică (C/C++)" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Istorie" },
       ]}
       faqs={faqs}
       related={[
