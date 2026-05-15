@@ -24,6 +24,7 @@ export const Route = createFileRoute("/meditatii-fizica")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Meditații fizică"
       intro="Profesori verificați de fizică pentru toate nivelurile: gimnaziu, liceu, pregătire BAC și admitere la Politehnică sau Medicină. Mecanică, termodinamică, electricitate, optică, fizică modernă."
       bullets={[

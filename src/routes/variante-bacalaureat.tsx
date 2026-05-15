@@ -33,6 +33,7 @@ function Page() {
   return (
     <>
       <SeoLanding
+      pageUrl={URL}
         h1="Variante bacalaureat 2010 – 2026"
         intro="Cea mai mare arhivă online de variante bacalaureat din România: subiecte și bareme oficiale la toate materiile, pentru fiecare sesiune din 2010 până în 2026. Peste 370 de PDF-uri gratuite, optimizate pentru pregătire individuală sau cu meditator."
         bullets={[

@@ -24,6 +24,7 @@ export const Route = createFileRoute("/subiecte-admitere")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Subiecte admitere 2026"
       intro="Modele de subiecte de admitere la principalele facultăți din România în 2026 — Medicină, Politehnică București, UTCN Cluj, Drept. Cu rezolvări și recomandări de pregătire."
       bullets={[

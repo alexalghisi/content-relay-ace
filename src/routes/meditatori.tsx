@@ -25,6 +25,7 @@ export const Route = createFileRoute("/meditatori")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Meditatori verificați în România"
       intro="Cei mai buni meditatori din România într-un singur loc. Profile complete cu CV, materii predate, ani de experiență, prețuri și recenzii reale de la elevi."
       bullets={[

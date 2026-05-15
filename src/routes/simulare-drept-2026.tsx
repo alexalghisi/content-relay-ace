@@ -24,6 +24,7 @@ export const Route = createFileRoute("/simulare-drept-2026")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Simulare admitere Drept 2026"
       intro="Pregătire completă pentru admiterea la Facultatea de Drept în 2026. Itemi de logică juridică, gramatică română și eseu argumentativ — cu rezolvări și plan de eseu."
       bullets={[

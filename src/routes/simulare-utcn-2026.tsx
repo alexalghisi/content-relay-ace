@@ -24,6 +24,7 @@ export const Route = createFileRoute("/simulare-utcn-2026")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Simulare admitere UTCN 2026"
       intro="Pregătire pentru admiterea la Universitatea Tehnică din Cluj-Napoca în 2026. Subiecte tip grilă la matematică și fizică, conform modelului oficial."
       bullets={[

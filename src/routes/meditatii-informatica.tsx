@@ -25,6 +25,7 @@ export const Route = createFileRoute("/meditatii-informatica")({
   }),
   component: () => (
     <SeoLanding
+      pageUrl={URL}
       h1="Meditații informatică"
       intro="Profesori verificați de informatică pentru gimnaziu, liceu, BAC și admitere la Politehnică. C/C++, Python, algoritmi, structuri de date, programare orientată obiect."
       bullets={[
