@@ -16,35 +16,6 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Chat direct cu profesorul, fără intermediari. 20+ materii, toată România." },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "MeditatiiDirect.ro",
-          url: "https://meditatiidirect.ro/",
-          inLanguage: "ro-RO",
-          potentialAction: {
-            "@type": "SearchAction",
-            target: "https://meditatiidirect.ro/meditatii?materie={search_term_string}",
-            "query-input": "required name=search_term_string",
-          },
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "MeditatiiDirect.ro",
-          url: "https://meditatiidirect.ro/",
-          logo: "https://meditatiidirect.ro/favicon.ico",
-          areaServed: "RO",
-          sameAs: ["https://meditatiidirect.ro/"],
-        }),
-      },
-    ],
   }),
   component: HomePage,
 });
