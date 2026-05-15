@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucide-react";
+import { Download, ExternalLink, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 export interface FaqItem { q: string; a: string; }
@@ -65,21 +65,29 @@ export function SeoLanding(p: SeoLandingProps) {
       {p.pdfs && p.pdfs.length > 0 && (
         <section className="mt-12">
           <h2 className="text-2xl font-bold">Materiale gratuite (PDF)</h2>
-          <p className="mt-2 text-muted-foreground">Descarcă variante, grile și bareme — pregătite de profesori, complet gratuite.</p>
+          <p className="mt-2 text-muted-foreground">
+            Subiecte oficiale și materiale de pregătire — direct din arhivele Ministerului Educației și ale facultăților.
+          </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {p.pdfs.map((d) => (
-              <a key={d.href} href={d.href} target="_blank" rel="noopener" download
-                 className="card-soft p-4 flex items-start gap-3 hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
-                  <FileText className="h-5 w-5" />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold">{d.title}</p>
-                  {d.meta && <p className="text-xs text-muted-foreground">{d.meta}</p>}
-                  <p className="mt-1 inline-flex items-center gap-1 text-xs text-primary"><Download className="h-3 w-3" /> Descarcă PDF</p>
-                </div>
-              </a>
-            ))}
+            {p.pdfs.map((d) => {
+              const ext = /^https?:\/\//.test(d.href);
+              return (
+                <a key={d.href} href={d.href} target="_blank" rel={ext ? "noopener nofollow" : "noopener"}
+                   className="card-soft p-4 flex items-start gap-3 hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
+                    <FileText className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold">{d.title}</p>
+                    {d.meta && <p className="text-xs text-muted-foreground">{d.meta}</p>}
+                    <p className="mt-1 inline-flex items-center gap-1 text-xs text-primary">
+                      {ext ? <ExternalLink className="h-3 w-3" /> : <Download className="h-3 w-3" />}
+                      {ext ? "Sursa oficială" : "Descarcă PDF"}
+                    </p>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </section>
       )}
