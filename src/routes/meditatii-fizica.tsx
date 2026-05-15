@@ -34,8 +34,8 @@ export const Route = createFileRoute("/meditatii-fizica")({
       ]}
       ctaPrimary={{ to: "/meditatii", label: "Vezi profesori fizică" }}
       pdfs={[
-        { href: "/pdfs/simulare-bac-2026-fizica.pdf", title: "Simulare BAC 2026 — Fizică", meta: "Mecanică, electricitate, exemple rezolvate" },
-        { href: "/pdfs/admitere-2026-upb-matematica-fizica.pdf", title: "Admitere UPB 2026 — Matematică și Fizică", meta: "Grile model" },
+        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Simulare BAC 2026 — Fizică", meta: "Mecanică, electricitate, exemple rezolvate" },
+        { href: "https://admitere.pub.ro/", title: "Admitere UPB 2026 — Matematică și Fizică", meta: "Grile model" },
       ]}
       faqs={faqs}
       related={[

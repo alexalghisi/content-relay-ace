@@ -34,7 +34,7 @@ export const Route = createFileRoute("/grile-medicina")({
       ]}
       ctaPrimary={{ to: "/admitere", label: "Pregătire admitere Medicină" }}
       pdfs={[
-        { href: "/pdfs/admitere-2026-grile-medicina.pdf", title: "Grile Medicină 2026 (UMF)", meta: "Biologie + chimie organică" },
+        { href: "https://umfcd.ro/admitere/", title: "Grile Medicină 2026 (UMF)", meta: "Biologie + chimie organică" },
       ]}
       faqs={faqs}
       related={[
