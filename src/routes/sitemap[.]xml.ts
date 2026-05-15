@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { CITIES } from "@/data/cities";
 
 const BASE_URL = "https://meditatiidirect.ro";
 
@@ -78,6 +79,21 @@ export const Route = createFileRoute("/sitemap.xml")({
             const last = (a.updated_at ?? today).toString().slice(0, 10);
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/anunt/${slug}</loc>\n    <lastmod>${last}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+            );
+          }
+          // City landing pages
+          for (const c of CITIES) {
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,
+            );
+          }
+          // Blog posts
+          const { data: posts } = await supabaseAdmin
+            .from("blog_posts").select("slug,updated_at").eq("is_published", true);
+          for (const p of posts ?? []) {
+            const last = (p.updated_at ?? today).toString().slice(0, 10);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/blog/${p.slug}</loc>\n    <lastmod>${last}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
             );
           }
         } catch (err) {

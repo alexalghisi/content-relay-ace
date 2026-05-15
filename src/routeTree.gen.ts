@@ -52,6 +52,8 @@ import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditat
 import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
+import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
 
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
@@ -272,6 +274,16 @@ const MesajeIdRoute = MesajeIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => MesajeRoute,
 } as any)
+const MeditatiiInOrasRoute = MeditatiiInOrasRouteImport.update({
+  id: '/meditatii-in/$oras',
+  path: '/meditatii-in/$oras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 const AnuntSlugRoute = AnuntSlugRouteImport.update({
   id: '/anunt/$slug',
   path: '/anunt/$slug',
@@ -282,7 +294,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -322,13 +334,15 @@ export interface FileRoutesByFullPath {
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -368,6 +382,8 @@ export interface FileRoutesByTo {
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
 }
 export interface FileRoutesById {
@@ -375,7 +391,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
-  '/blog': typeof BlogRoute
+  '/blog': typeof BlogRouteWithChildren
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -415,6 +431,8 @@ export interface FileRoutesById {
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
 }
 export interface FileRouteTypes {
@@ -463,6 +481,8 @@ export interface FileRouteTypes {
     | '/tutoriale'
     | '/variante-bacalaureat'
     | '/anunt/$slug'
+    | '/blog/$slug'
+    | '/meditatii-in/$oras'
     | '/mesaje/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -509,6 +529,8 @@ export interface FileRouteTypes {
     | '/tutoriale'
     | '/variante-bacalaureat'
     | '/anunt/$slug'
+    | '/blog/$slug'
+    | '/meditatii-in/$oras'
     | '/mesaje/$id'
   id:
     | '__root__'
@@ -555,6 +577,8 @@ export interface FileRouteTypes {
     | '/tutoriale'
     | '/variante-bacalaureat'
     | '/anunt/$slug'
+    | '/blog/$slug'
+    | '/meditatii-in/$oras'
     | '/mesaje/$id'
   fileRoutesById: FileRoutesById
 }
@@ -562,7 +586,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdmitereRoute: typeof AdmitereRoute
   AnunturiMeditatiiRoute: typeof AnunturiMeditatiiRoute
-  BlogRoute: typeof BlogRoute
+  BlogRoute: typeof BlogRouteWithChildren
   ConfidentialitateRoute: typeof ConfidentialitateRoute
   ContRoute: typeof ContRoute
   ContactRoute: typeof ContactRoute
@@ -602,6 +626,7 @@ export interface RootRouteChildren {
   TutorialeRoute: typeof TutorialeRoute
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
+  MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -907,6 +932,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MesajeIdRouteImport
       parentRoute: typeof MesajeRoute
     }
+    '/meditatii-in/$oras': {
+      id: '/meditatii-in/$oras'
+      path: '/meditatii-in/$oras'
+      fullPath: '/meditatii-in/$oras'
+      preLoaderRoute: typeof MeditatiiInOrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
     '/anunt/$slug': {
       id: '/anunt/$slug'
       path: '/anunt/$slug'
@@ -916,6 +955,16 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface MesajeRouteChildren {
   MesajeIdRoute: typeof MesajeIdRoute
@@ -932,7 +981,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdmitereRoute: AdmitereRoute,
   AnunturiMeditatiiRoute: AnunturiMeditatiiRoute,
-  BlogRoute: BlogRoute,
+  BlogRoute: BlogRouteWithChildren,
   ConfidentialitateRoute: ConfidentialitateRoute,
   ContRoute: ContRoute,
   ContactRoute: ContactRoute,
@@ -972,17 +1021,8 @@ const rootRouteChildren: RootRouteChildren = {
   TutorialeRoute: TutorialeRoute,
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
   AnuntSlugRoute: AnuntSlugRoute,
+  MeditatiiInOrasRoute: MeditatiiInOrasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
