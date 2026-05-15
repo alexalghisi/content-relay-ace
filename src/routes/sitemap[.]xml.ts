@@ -21,6 +21,17 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/simulare-bacalaureat", priority: "0.7", changefreq: "weekly" },
   { path: "/grile-medicina", priority: "0.7", changefreq: "weekly" },
   { path: "/grile-upb", priority: "0.7", changefreq: "weekly" },
+  { path: "/anunturi-meditatii", priority: "0.95", changefreq: "daily" },
+  { path: "/meditatori", priority: "0.9", changefreq: "daily" },
+  { path: "/platforma-meditatii-online", priority: "0.85", changefreq: "weekly" },
+  { path: "/ofer-meditatii", priority: "0.8", changefreq: "weekly" },
+  { path: "/meditatii-franceza", priority: "0.8", changefreq: "weekly" },
+  { path: "/meditatii-informatica", priority: "0.8", changefreq: "weekly" },
+  { path: "/meditatii-fizica", priority: "0.8", changefreq: "weekly" },
+  { path: "/simulari-bacalaureat-2026", priority: "0.85", changefreq: "weekly" },
+  { path: "/grile-admitere-medicina-2026", priority: "0.85", changefreq: "weekly" },
+  { path: "/simulare-utcn-2026", priority: "0.8", changefreq: "weekly" },
+  { path: "/simulare-drept-2026", priority: "0.8", changefreq: "weekly" },
   { path: "/preturi-meditatii", priority: "0.6", changefreq: "monthly" },
   { path: "/cum-functioneaza", priority: "0.6", changefreq: "monthly" },
   { path: "/pentru-profesori", priority: "0.7", changefreq: "monthly" },
@@ -71,6 +82,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           }
         } catch (err) {
           console.error("sitemap dynamic fetch failed", err);
+        }
+
+        const PDFS = [
+          "simulare-bac-2026-matematica-m1","simulare-bac-2026-barem-matematica","simulare-bac-2026-romana",
+          "simulare-bac-2026-biologie","simulare-bac-2026-fizica","simulare-bac-2026-informatica","simulare-bac-2026-istorie",
+          "admitere-2026-grile-medicina","admitere-2026-upb-matematica-fizica","admitere-2026-utcn-matematica","admitere-2026-drept-simulare",
+        ];
+        for (const f of PDFS) {
+          urls.push(`  <url>\n    <loc>${BASE_URL}/pdfs/${f}.pdf</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
         }
 
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>`;

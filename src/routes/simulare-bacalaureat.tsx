@@ -1,16 +1,55 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageShell } from "@/components/page-shell";
+import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
+
+const URL = "https://meditatiidirect.ro/simulare-bacalaureat";
+const TITLE = "Simulare bacalaureat 2026 — Subiecte și bareme | MeditatiiDirect.ro";
+const DESC = "Simulări bacalaureat 2026 cu subiecte după modelul oficial: matematică, română, biologie, fizică, informatică, istorie. PDF gratuit cu rezolvări.";
+
+const faqs = [
+  { q: "Când are loc simularea bacalaureatului 2026?", a: "Simularea națională a bacalaureatului 2026 se desfășoară în luna martie 2026, pe perioada unei săptămâni, cu probe identice ca structură celor de la examenul oficial din iunie." },
+  { q: "Contează nota de la simulare?", a: "Nu contează la admiterea la facultate, dar este cel mai bun indicator al nivelului tău cu 3 luni înainte de BAC. Identifică lacunele și concentrează-te pe ele." },
+  { q: "Ce timp de lucru am la simulare?", a: "Trei ore la fiecare probă scrisă, cu 10 puncte din oficiu. La proba orală la limba română aproximativ 15 minute, la limba modernă 10–15 minute." },
+];
 
 export const Route = createFileRoute("/simulare-bacalaureat")({
   head: () => ({
     meta: [
-      { title: "Simulare bacalaureat — MeditatiiDirect.ro" },
-      { name: "description", content: "Simulări BAC oficiale și de antrenament cu rezolvări detaliate." },
-      { property: "og:title", content: "Simulare bacalaureat — MeditatiiDirect.ro" },
-      { property: "og:description", content: "Simulări BAC oficiale și de antrenament cu rezolvări detaliate." },
-      { property: "og:url", content: "https://meditatiidirect.ro/simulare-bacalaureat" },
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:url", content: URL },
     ],
-    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/simulare-bacalaureat" }],
+    links: [{ rel: "canonical", href: URL }],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
   }),
-  component: () => <PageShell title="Simulare bacalaureat" description="Simulări BAC oficiale și de antrenament cu rezolvări detaliate." />,
+  component: () => (
+    <SeoLanding
+      h1="Simulare bacalaureat 2026"
+      intro="Antrenează-te pentru BAC 2026 cu simulări complete: subiecte de antrenament la toate materiile principale, rezolvări detaliate și bareme oficiale."
+      bullets={[
+        "Toate materiile principale — real, uman, tehnologic",
+        "Subiecte după modelul Ministerului Educației",
+        "Rezolvări complete + barem pe punctaje",
+        "Strategii de gestionare a timpului în 3 ore",
+      ]}
+      ctaPrimary={{ to: "/meditatii-bac", label: "Caută profesor BAC" }}
+      pdfs={[
+        { href: "/pdfs/simulare-bac-2026-matematica-m1.pdf", title: "Matematică M_mate-info" },
+        { href: "/pdfs/simulare-bac-2026-barem-matematica.pdf", title: "Barem matematică" },
+        { href: "/pdfs/simulare-bac-2026-romana.pdf", title: "Limba română" },
+        { href: "/pdfs/simulare-bac-2026-biologie.pdf", title: "Biologie" },
+        { href: "/pdfs/simulare-bac-2026-fizica.pdf", title: "Fizică" },
+        { href: "/pdfs/simulare-bac-2026-informatica.pdf", title: "Informatică (C/C++)" },
+        { href: "/pdfs/simulare-bac-2026-istorie.pdf", title: "Istorie" },
+      ]}
+      faqs={faqs}
+      related={[
+        { to: "/simulari-bacalaureat-2026", label: "Simulări BAC 2026" },
+        { to: "/variante-bacalaureat", label: "Variante BAC" },
+        { to: "/subiecte-bac", label: "Subiecte BAC" },
+        { to: "/meditatii-bac", label: "Meditații BAC" },
+      ]}
+    />
+  ),
 });
