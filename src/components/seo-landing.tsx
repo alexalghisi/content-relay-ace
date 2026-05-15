@@ -14,6 +14,10 @@ export interface SeoLandingProps {
   pdfs?: PdfItem[];
   faqs?: FaqItem[];
   related?: { to: string; label: string }[];
+  /** Full URL of the current page; if set, a BreadcrumbList JSON-LD is emitted (Acasă → h1). */
+  pageUrl?: string;
+  /** Optional intermediate breadcrumb between Acasă and the current page (e.g. { name: "Meditații", url: "https://meditatiidirect.ro/meditatii" }). */
+  breadcrumbParent?: { name: string; url: string };
 }
 
 export function SeoLanding(p: SeoLandingProps) {
