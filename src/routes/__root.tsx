@@ -146,7 +146,7 @@ function RootComponent() {
           <SiteFooter />
         </div>
         <Toaster />
-        <AdsterraSocialBar />
+        
       </AuthProvider>
     </QueryClientProvider>
   );
