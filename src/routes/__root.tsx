@@ -68,7 +68,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         ...(ADSENSE_CLIENT
           ? [{
               async: true,
-              src: `https://pagead2.googlesvc.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
+              src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
               crossOrigin: "anonymous",
             } as never]
           : []),
