@@ -65,6 +65,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
       links: [{ rel: "stylesheet", href: appCss }],
       scripts: [
+        ...(ADSENSE_CLIENT
+          ? [{
+              async: true,
+              src: `https://pagead2.googlesvc.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
+              crossOrigin: "anonymous",
+            } as never]
+          : []),
         {
           type: "application/ld+json",
           children: JSON.stringify({
