@@ -13,7 +13,7 @@ import { AuthProvider } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
-import { AdsterraSocialBar } from "@/components/ads/adsterra";
+import { ADSENSE_CLIENT } from "@/components/ads/adsense";
 
 function NotFoundComponent() {
   return (
