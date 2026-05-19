@@ -13,7 +13,7 @@ import { AuthProvider } from "@/lib/auth";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
-import { AdsterraSocialBar } from "@/components/ads/adsterra";
+import { ADSENSE_CLIENT } from "@/components/ads/adsense";
 
 function NotFoundComponent() {
   return (
@@ -65,6 +65,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
       links: [{ rel: "stylesheet", href: appCss }],
       scripts: [
+        ...(ADSENSE_CLIENT
+          ? [{
+              async: true,
+              src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
+              crossOrigin: "anonymous",
+            } as never]
+          : []),
         {
           type: "application/ld+json",
           children: JSON.stringify({
@@ -139,7 +146,7 @@ function RootComponent() {
           <SiteFooter />
         </div>
         <Toaster />
-        <AdsterraSocialBar />
+        
       </AuthProvider>
     </QueryClientProvider>
   );
