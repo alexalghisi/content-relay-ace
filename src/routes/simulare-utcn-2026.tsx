@@ -34,7 +34,7 @@ export const Route = createFileRoute("/simulare-utcn-2026")({
       ]}
       ctaPrimary={{ to: "/admitere", label: "Vezi pregătire admitere" }}
       pdfs={[
-        { href: "https://admitere.utcluj.ro/", title: "Simulare UTCN 2026 — Matematică", meta: "Itemi tip grilă cu răspunsuri" },
+        { href: "/resurse/admitere/utcn-inginerie/2026", title: "Simulare UTCN 2026 — Matematică", meta: "Itemi tip grilă cu răspunsuri" },
       ]}
       faqs={faqs}
       related={[

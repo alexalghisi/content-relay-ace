@@ -36,7 +36,7 @@ export const Route = createFileRoute("/meditatii-informatica")({
       ]}
       ctaPrimary={{ to: "/meditatii", label: "Vezi profesori informatică" }}
       pdfs={[
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Simulare BAC 2026 — Informatică (C/C++)", meta: "Algoritmi, exerciții, model rezolvat" },
+        { href: "/resurse/bac/informatica/2026", title: "Simulare BAC 2026 — Informatică (C/C++)", meta: "Algoritmi, exerciții, model rezolvat" },
       ]}
       faqs={faqs}
       related={[

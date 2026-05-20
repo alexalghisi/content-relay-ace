@@ -35,7 +35,7 @@ export const Route = createFileRoute("/simulare-drept-2026")({
       ]}
       ctaPrimary={{ to: "/admitere", label: "Pregătire admitere" }}
       pdfs={[
-        { href: "https://drept.unibuc.ro/Admitere-s23-ro.htm", title: "Simulare admitere Drept 2026", meta: "Logică, română, eseu" },
+        { href: "/resurse/admitere/drept-bucuresti/2026", title: "Simulare admitere Drept 2026", meta: "Logică, română, eseu" },
       ]}
       faqs={faqs}
       related={[
