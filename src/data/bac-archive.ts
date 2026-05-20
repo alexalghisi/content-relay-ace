@@ -1,14 +1,19 @@
-// Linkuri către SURSELE OFICIALE pentru subiectele și baremele de bacalaureat.
-// Subiectele oficiale BAC sunt publicate de Ministerul Educației pe subiecte.edu.ro,
-// arhivate per sesiune. Direcționăm userul către arhiva oficială a anului respectiv,
-// unde poate descărca PDF-ul real al fiecărei materii și varianta (M1/M2/special).
+// Subiecte și bareme BAC — GĂZDUITE PE PLATFORMA NOASTRĂ.
+// Fiecare item are o rută internă pe MeditatiiDirect.ro și URL-uri directe către
+// PDF-urile noastre din bucket-ul `bac-pdfs` (Lovable Cloud Storage).
+
+import { bacPdfUrl, bacResursaPath } from "@/lib/pdf-urls";
 
 export interface BacItem {
   slug: string;
   name: string;
   year: number;
-  /** URL oficial către arhiva sesiunii (subiecte.edu.ro) */
-  official: string;
+  /** Ruta internă pentru pagina cu subiect + barem (vizualizare + download). */
+  internal: string;
+  /** URL direct către PDF-ul subiectului (găzduit la noi). */
+  subjectPdf: string;
+  /** URL direct către PDF-ul baremului (găzduit la noi). */
+  baremPdf: string;
 }
 
 const SUBJECTS: { slug: string; name: string }[] = [
@@ -31,11 +36,15 @@ const SUBJECTS: { slug: string; name: string }[] = [
 
 const YEARS = Array.from({ length: 17 }, (_, i) => 2010 + i); // 2010 → 2026
 
-// Pagina oficială de arhivă a sesiunilor BAC (toate materiile + bareme):
-const officialFor = (year: number) => `https://subiecte.edu.ro/${year}/bacalaureat/`;
-
 export const BAC_ARCHIVE: BacItem[] = SUBJECTS.flatMap((s) =>
-  YEARS.map((year) => ({ slug: s.slug, name: s.name, year, official: officialFor(year) })),
+  YEARS.map((year) => ({
+    slug: s.slug,
+    name: s.name,
+    year,
+    internal: bacResursaPath(s.slug, year),
+    subjectPdf: bacPdfUrl(s.slug, year, "subiect"),
+    baremPdf: bacPdfUrl(s.slug, year, "barem"),
+  })),
 );
 
 export const BAC_SUBJECTS = SUBJECTS;

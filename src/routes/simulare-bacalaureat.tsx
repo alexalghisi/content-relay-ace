@@ -36,13 +36,13 @@ export const Route = createFileRoute("/simulare-bacalaureat")({
       ]}
       ctaPrimary={{ to: "/meditatii-bac", label: "Caută profesor BAC" }}
       pdfs={[
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Matematică M_mate-info" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Barem matematică" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Limba română" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Biologie" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Fizică" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Informatică (C/C++)" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Istorie" },
+        { href: "/resurse/bac/matematica-m1/2026", title: "Matematică M_mate-info" },
+        { href: "/resurse/bac/matematica-m2/2026", title: "Matematică M_științe (M2)" },
+        { href: "/resurse/bac/romana/2026", title: "Limba română" },
+        { href: "/resurse/bac/biologie/2026", title: "Biologie" },
+        { href: "/resurse/bac/fizica/2026", title: "Fizică" },
+        { href: "/resurse/bac/informatica/2026", title: "Informatică (C/C++)" },
+        { href: "/resurse/bac/istorie/2026", title: "Istorie" },
       ]}
       faqs={faqs}
       related={[

@@ -35,13 +35,13 @@ export const Route = createFileRoute("/subiecte-bac")({
       ]}
       ctaPrimary={{ to: "/meditatii-bac", label: "Caută profesor BAC" }}
       pdfs={[
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Matematică M_mate-info — model + rezolvări" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Barem matematică (model)" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Română — text suport + plan eseu Ion" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Biologie + problemă genetică" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Fizică" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Informatică (C/C++)" },
-        { href: "https://subiecte.edu.ro/2026/bacalaureat/", title: "Istorie + eseu interbelic" },
+        { href: "/resurse/bac/matematica-m1/2026", title: "Matematică M_mate-info — subiect + barem" },
+        { href: "/resurse/bac/matematica-m2/2026", title: "Matematică M_științe (M2) — subiect + barem" },
+        { href: "/resurse/bac/romana/2026", title: "Limba și literatura română" },
+        { href: "/resurse/bac/biologie/2026", title: "Biologie + problemă genetică" },
+        { href: "/resurse/bac/fizica/2026", title: "Fizică" },
+        { href: "/resurse/bac/informatica/2026", title: "Informatică (C/C++)" },
+        { href: "/resurse/bac/istorie/2026", title: "Istorie + eseu interbelic" },
       ]}
       faqs={faqs}
       related={[

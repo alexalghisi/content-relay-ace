@@ -56,6 +56,8 @@ import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
+import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
+import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
 
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
   id: '/variante-bacalaureat',
@@ -295,6 +297,17 @@ const AnuntSlugRoute = AnuntSlugRouteImport.update({
   path: '/anunt/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResurseBacMaterieAnRoute = ResurseBacMaterieAnRouteImport.update({
+  id: '/resurse/bac/$materie/$an',
+  path: '/resurse/bac/$materie/$an',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResurseAdmitereFacultateAnRoute =
+  ResurseAdmitereFacultateAnRouteImport.update({
+    id: '/resurse/admitere/$facultate/$an',
+    path: '/resurse/admitere/$facultate/$an',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -344,6 +357,8 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
+  '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -393,6 +408,8 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
+  '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -443,6 +460,8 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
+  '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -494,6 +513,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/resurse/admitere/$facultate/$an'
+    | '/resurse/bac/$materie/$an'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -543,6 +564,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/resurse/admitere/$facultate/$an'
+    | '/resurse/bac/$materie/$an'
   id:
     | '__root__'
     | '/'
@@ -592,6 +615,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/resurse/admitere/$facultate/$an'
+    | '/resurse/bac/$materie/$an'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -640,6 +665,8 @@ export interface RootRouteChildren {
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
+  ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
+  ResurseBacMaterieAnRoute: typeof ResurseBacMaterieAnRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -973,6 +1000,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnuntSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resurse/bac/$materie/$an': {
+      id: '/resurse/bac/$materie/$an'
+      path: '/resurse/bac/$materie/$an'
+      fullPath: '/resurse/bac/$materie/$an'
+      preLoaderRoute: typeof ResurseBacMaterieAnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resurse/admitere/$facultate/$an': {
+      id: '/resurse/admitere/$facultate/$an'
+      path: '/resurse/admitere/$facultate/$an'
+      fullPath: '/resurse/admitere/$facultate/$an'
+      preLoaderRoute: typeof ResurseAdmitereFacultateAnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1043,6 +1084,8 @@ const rootRouteChildren: RootRouteChildren = {
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
   AnuntSlugRoute: AnuntSlugRoute,
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
+  ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
+  ResurseBacMaterieAnRoute: ResurseBacMaterieAnRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
