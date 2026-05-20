@@ -100,9 +100,19 @@ export const Route = createFileRoute("/sitemap.xml")({
           console.error("sitemap dynamic fetch failed", err);
         }
 
-        // PDF-urile au fost înlocuite cu linkuri către sursele oficiale (subiecte.edu.ro,
-        // paginile universităților). Nu le indexăm în sitemap — Google trebuie să indexeze
-        // doar URL-urile noastre, nu URL-uri terțe.
+        // Pagini-resursă pentru fiecare PDF găzduit la noi (BAC + admitere)
+        try {
+          const { BAC_ARCHIVE } = await import("@/data/bac-archive");
+          for (const it of BAC_ARCHIVE) {
+            urls.push(`  <url>\n    <loc>${BASE_URL}${it.internal}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
+          }
+          const { ADM_ARCHIVE } = await import("@/data/admitere-archive");
+          for (const it of ADM_ARCHIVE) {
+            urls.push(`  <url>\n    <loc>${BASE_URL}${it.internal}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
+          }
+        } catch (err) {
+          console.error("sitemap resurse fetch failed", err);
+        }
 
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>`;
 
