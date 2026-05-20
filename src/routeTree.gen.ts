@@ -49,6 +49,7 @@ import { Route as ContRouteImport } from './routes/cont'
 import { Route as ConfidentialitateRouteImport } from './routes/confidentialitate'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditatii'
+import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
@@ -259,6 +260,11 @@ const AnunturiMeditatiiRoute = AnunturiMeditatiiRouteImport.update({
   path: '/anunturi-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdsDottxtRoute = AdsDottxtRouteImport.update({
+  id: '/ads.txt',
+  path: '/ads.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdmitereRoute = AdmitereRouteImport.update({
   id: '/admitere',
   path: '/admitere',
@@ -293,6 +299,7 @@ const AnuntSlugRoute = AnuntSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
+  '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/blog': typeof BlogRouteWithChildren
   '/confidentialitate': typeof ConfidentialitateRoute
@@ -341,6 +348,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
+  '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/blog': typeof BlogRouteWithChildren
   '/confidentialitate': typeof ConfidentialitateRoute
@@ -390,6 +398,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
+  '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/blog': typeof BlogRouteWithChildren
   '/confidentialitate': typeof ConfidentialitateRoute
@@ -440,6 +449,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admitere'
+    | '/ads.txt'
     | '/anunturi-meditatii'
     | '/blog'
     | '/confidentialitate'
@@ -488,6 +498,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admitere'
+    | '/ads.txt'
     | '/anunturi-meditatii'
     | '/blog'
     | '/confidentialitate'
@@ -536,6 +547,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admitere'
+    | '/ads.txt'
     | '/anunturi-meditatii'
     | '/blog'
     | '/confidentialitate'
@@ -585,6 +597,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdmitereRoute: typeof AdmitereRoute
+  AdsDottxtRoute: typeof AdsDottxtRoute
   AnunturiMeditatiiRoute: typeof AnunturiMeditatiiRoute
   BlogRoute: typeof BlogRouteWithChildren
   ConfidentialitateRoute: typeof ConfidentialitateRoute
@@ -911,6 +924,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnunturiMeditatiiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ads.txt': {
+      id: '/ads.txt'
+      path: '/ads.txt'
+      fullPath: '/ads.txt'
+      preLoaderRoute: typeof AdsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admitere': {
       id: '/admitere'
       path: '/admitere'
@@ -980,6 +1000,7 @@ const MesajeRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdmitereRoute: AdmitereRoute,
+  AdsDottxtRoute: AdsDottxtRoute,
   AnunturiMeditatiiRoute: AnunturiMeditatiiRoute,
   BlogRoute: BlogRouteWithChildren,
   ConfidentialitateRoute: ConfidentialitateRoute,
