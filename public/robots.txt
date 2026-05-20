@@ -4,5 +4,19 @@ Disallow: /cont
 Disallow: /login
 Disallow: /signup
 Disallow: /mesaje
+Disallow: /api/
 
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+Host: meditatiidirect.ro
 Sitemap: https://meditatiidirect.ro/sitemap.xml
