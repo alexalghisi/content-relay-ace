@@ -119,7 +119,9 @@ export const Route = createFileRoute("/sitemap.xml")({
         return new Response(xml, {
           headers: {
             "Content-Type": "application/xml; charset=utf-8",
-            "Cache-Control": "public, max-age=3600",
+            // Refresh frecvent ca paginile de resurse nou-adăugate să intre rapid în sitemap
+            "Cache-Control": "public, max-age=300, s-maxage=300, stale-while-revalidate=600",
+            "X-Robots-Tag": "noindex",
           },
         });
       },
