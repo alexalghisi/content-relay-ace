@@ -32,13 +32,38 @@ export const Route = createFileRoute("/meditatii")({
   }),
   head: () => ({
     meta: [
-      { title: "Meditații în România — Profesori Verificați | MeditatiiDirect.ro" },
-      { name: "description", content: "Toate anunțurile de meditații cu profesori verificați. Filtrează după materie, oraș, online sau acasă. Contact direct, fără comision. De la 30 lei/oră." },
-      { name: "keywords", content: "meditatii, anunturi meditatii, profesori meditatii, meditatii online, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii bac, meditatii admitere" },
-      { property: "og:title", content: "Meditații în România — Profesori Verificați" },
-      { property: "og:description", content: "Anunțuri reale, profesori verificați, contact direct fără comision." },
+      { title: "Meditații 2026 — 1000+ Anunțuri Profesori Verificați în România | MeditatiiDirect.ro" },
+      { name: "description", content: "Peste 1000 de anunțuri meditații cu profesori verificați din toată România: matematică, română, engleză, fizică, informatică. Online sau acasă, în București, Cluj, Iași, Timișoara. Contact direct, fără comision, de la 30 lei/oră." },
+      { name: "keywords", content: "meditatii, anunturi meditatii, profesori meditatii, meditatii online, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii bac, meditatii admitere, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii informatica, meditatii acasa, profesori particulari, ore particulare" },
+      { property: "og:title", content: "Meditații în România — 1000+ Profesori Verificați" },
+      { property: "og:description", content: "Anunțuri reale, profesori verificați, contact direct fără comision. De la 30 lei/oră." },
+      { property: "og:url", content: "https://meditatiidirect.ro/meditatii" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "Meditații în România — 1000+ Profesori Verificați" },
+      { name: "twitter:description", content: "Anunțuri reale, profesori verificați, contact direct fără comision." },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Meditații în România",
+          url: "https://meditatiidirect.ro/meditatii",
+          description: "Toate anunțurile de meditații cu profesori verificați din România.",
+          isPartOf: { "@id": "https://meditatiidirect.ro/#website" },
+          about: { "@type": "Service", serviceType: "Meditații / ore particulare", areaServed: { "@type": "Country", name: "România" } },
+          breadcrumb: {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Acasă", item: "https://meditatiidirect.ro/" },
+              { "@type": "ListItem", position: 2, name: "Meditații", item: "https://meditatiidirect.ro/meditatii" },
+            ],
+          },
+        }),
+      },
+    ],
   }),
   component: ListingPage,
 });
