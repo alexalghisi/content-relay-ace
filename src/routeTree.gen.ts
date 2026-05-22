@@ -25,6 +25,7 @@ import { Route as ProfesoriRouteImport } from './routes/profesori'
 import { Route as PreturiMeditatiiRouteImport } from './routes/preturi-meditatii'
 import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
 import { Route as PentruProfesoriRouteImport } from './routes/pentru-profesori'
+import { Route as OreOnlineRouteImport } from './routes/ore-online'
 import { Route as OferMeditatiiRouteImport } from './routes/ofer-meditatii'
 import { Route as MesajeRouteImport } from './routes/mesaje'
 import { Route as MeditatoriRouteImport } from './routes/meditatori'
@@ -49,6 +50,7 @@ import { Route as CumFunctioneazaRouteImport } from './routes/cum-functioneaza'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ContRouteImport } from './routes/cont'
 import { Route as ConfidentialitateRouteImport } from './routes/confidentialitate'
+import { Route as CautProfesorRouteImport } from './routes/caut-profesor'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditatii'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
@@ -140,6 +142,11 @@ const PlatformaMeditatiiOnlineRoute =
 const PentruProfesoriRoute = PentruProfesoriRouteImport.update({
   id: '/pentru-profesori',
   path: '/pentru-profesori',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OreOnlineRoute = OreOnlineRouteImport.update({
+  id: '/ore-online',
+  path: '/ore-online',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OferMeditatiiRoute = OferMeditatiiRouteImport.update({
@@ -264,6 +271,11 @@ const ConfidentialitateRoute = ConfidentialitateRouteImport.update({
   path: '/confidentialitate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CautProfesorRoute = CautProfesorRouteImport.update({
+  id: '/caut-profesor',
+  path: '/caut-profesor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -327,6 +339,7 @@ export interface FileRoutesByFullPath {
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/blog': typeof BlogRouteWithChildren
+  '/caut-profesor': typeof CautProfesorRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -351,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/meditatori': typeof MeditatoriRoute
   '/mesaje': typeof MesajeRouteWithChildren
   '/ofer-meditatii': typeof OferMeditatiiRoute
+  '/ore-online': typeof OreOnlineRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRoute
@@ -380,6 +394,7 @@ export interface FileRoutesByTo {
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/blog': typeof BlogRouteWithChildren
+  '/caut-profesor': typeof CautProfesorRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -404,6 +419,7 @@ export interface FileRoutesByTo {
   '/meditatori': typeof MeditatoriRoute
   '/mesaje': typeof MesajeRouteWithChildren
   '/ofer-meditatii': typeof OferMeditatiiRoute
+  '/ore-online': typeof OreOnlineRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRoute
@@ -434,6 +450,7 @@ export interface FileRoutesById {
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/blog': typeof BlogRouteWithChildren
+  '/caut-profesor': typeof CautProfesorRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -458,6 +475,7 @@ export interface FileRoutesById {
   '/meditatori': typeof MeditatoriRoute
   '/mesaje': typeof MesajeRouteWithChildren
   '/ofer-meditatii': typeof OferMeditatiiRoute
+  '/ore-online': typeof OreOnlineRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRoute
@@ -489,6 +507,7 @@ export interface FileRouteTypes {
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/blog'
+    | '/caut-profesor'
     | '/confidentialitate'
     | '/cont'
     | '/contact'
@@ -513,6 +532,7 @@ export interface FileRouteTypes {
     | '/meditatori'
     | '/mesaje'
     | '/ofer-meditatii'
+    | '/ore-online'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
@@ -542,6 +562,7 @@ export interface FileRouteTypes {
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/blog'
+    | '/caut-profesor'
     | '/confidentialitate'
     | '/cont'
     | '/contact'
@@ -566,6 +587,7 @@ export interface FileRouteTypes {
     | '/meditatori'
     | '/mesaje'
     | '/ofer-meditatii'
+    | '/ore-online'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
@@ -595,6 +617,7 @@ export interface FileRouteTypes {
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/blog'
+    | '/caut-profesor'
     | '/confidentialitate'
     | '/cont'
     | '/contact'
@@ -619,6 +642,7 @@ export interface FileRouteTypes {
     | '/meditatori'
     | '/mesaje'
     | '/ofer-meditatii'
+    | '/ore-online'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
@@ -649,6 +673,7 @@ export interface RootRouteChildren {
   AdsDottxtRoute: typeof AdsDottxtRoute
   AnunturiMeditatiiRoute: typeof AnunturiMeditatiiRoute
   BlogRoute: typeof BlogRouteWithChildren
+  CautProfesorRoute: typeof CautProfesorRoute
   ConfidentialitateRoute: typeof ConfidentialitateRoute
   ContRoute: typeof ContRoute
   ContactRoute: typeof ContactRoute
@@ -673,6 +698,7 @@ export interface RootRouteChildren {
   MeditatoriRoute: typeof MeditatoriRoute
   MesajeRoute: typeof MesajeRouteWithChildren
   OferMeditatiiRoute: typeof OferMeditatiiRoute
+  OreOnlineRoute: typeof OreOnlineRoute
   PentruProfesoriRoute: typeof PentruProfesoriRoute
   PlatformaMeditatiiOnlineRoute: typeof PlatformaMeditatiiOnlineRoute
   PreturiMeditatiiRoute: typeof PreturiMeditatiiRoute
@@ -807,6 +833,13 @@ declare module '@tanstack/react-router' {
       path: '/pentru-profesori'
       fullPath: '/pentru-profesori'
       preLoaderRoute: typeof PentruProfesoriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ore-online': {
+      id: '/ore-online'
+      path: '/ore-online'
+      fullPath: '/ore-online'
+      preLoaderRoute: typeof OreOnlineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ofer-meditatii': {
@@ -977,6 +1010,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfidentialitateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/caut-profesor': {
+      id: '/caut-profesor'
+      path: '/caut-profesor'
+      fullPath: '/caut-profesor'
+      preLoaderRoute: typeof CautProfesorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog': {
       id: '/blog'
       path: '/blog'
@@ -1084,6 +1124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdsDottxtRoute: AdsDottxtRoute,
   AnunturiMeditatiiRoute: AnunturiMeditatiiRoute,
   BlogRoute: BlogRouteWithChildren,
+  CautProfesorRoute: CautProfesorRoute,
   ConfidentialitateRoute: ConfidentialitateRoute,
   ContRoute: ContRoute,
   ContactRoute: ContactRoute,
@@ -1108,6 +1149,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatoriRoute: MeditatoriRoute,
   MesajeRoute: MesajeRouteWithChildren,
   OferMeditatiiRoute: OferMeditatiiRoute,
+  OreOnlineRoute: OreOnlineRoute,
   PentruProfesoriRoute: PentruProfesoriRoute,
   PlatformaMeditatiiOnlineRoute: PlatformaMeditatiiOnlineRoute,
   PreturiMeditatiiRoute: PreturiMeditatiiRoute,

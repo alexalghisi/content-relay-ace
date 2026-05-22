@@ -28,6 +28,8 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/ofer-meditatii", priority: "0.8", changefreq: "weekly" },
   { path: "/meditatii-la-domiciliu", priority: "0.95", changefreq: "weekly" },
   { path: "/profesori-meditatii", priority: "0.95", changefreq: "weekly" },
+  { path: "/caut-profesor", priority: "0.95", changefreq: "weekly" },
+  { path: "/ore-online", priority: "0.95", changefreq: "weekly" },
   { path: "/meditatii-franceza", priority: "0.8", changefreq: "weekly" },
   { path: "/meditatii-informatica", priority: "0.8", changefreq: "weekly" },
   { path: "/meditatii-fizica", priority: "0.8", changefreq: "weekly" },
