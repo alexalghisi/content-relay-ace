@@ -20,6 +20,7 @@ import { Route as SimulareUtcn2026RouteImport } from './routes/simulare-utcn-202
 import { Route as SimulareDrept2026RouteImport } from './routes/simulare-drept-2026'
 import { Route as SimulareBacalaureatRouteImport } from './routes/simulare-bacalaureat'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ProfesoriMeditatiiRouteImport } from './routes/profesori-meditatii'
 import { Route as ProfesoriRouteImport } from './routes/profesori'
 import { Route as PreturiMeditatiiRouteImport } from './routes/preturi-meditatii'
 import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
@@ -30,6 +31,7 @@ import { Route as MeditatoriRouteImport } from './routes/meditatori'
 import { Route as MeditatiiRomanaRouteImport } from './routes/meditatii-romana'
 import { Route as MeditatiiOnlineRouteImport } from './routes/meditatii-online'
 import { Route as MeditatiiMatematicaRouteImport } from './routes/meditatii-matematica'
+import { Route as MeditatiiLaDomiciliuRouteImport } from './routes/meditatii-la-domiciliu'
 import { Route as MeditatiiInformaticaRouteImport } from './routes/meditatii-informatica'
 import { Route as MeditatiiFrancezaRouteImport } from './routes/meditatii-franceza'
 import { Route as MeditatiiFizicaRouteImport } from './routes/meditatii-fizica'
@@ -114,6 +116,11 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfesoriMeditatiiRoute = ProfesoriMeditatiiRouteImport.update({
+  id: '/profesori-meditatii',
+  path: '/profesori-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfesoriRoute = ProfesoriRouteImport.update({
   id: '/profesori',
   path: '/profesori',
@@ -163,6 +170,11 @@ const MeditatiiOnlineRoute = MeditatiiOnlineRouteImport.update({
 const MeditatiiMatematicaRoute = MeditatiiMatematicaRouteImport.update({
   id: '/meditatii-matematica',
   path: '/meditatii-matematica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiLaDomiciliuRoute = MeditatiiLaDomiciliuRouteImport.update({
+  id: '/meditatii-la-domiciliu',
+  path: '/meditatii-la-domiciliu',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeditatiiInformaticaRoute = MeditatiiInformaticaRouteImport.update({
@@ -332,6 +344,7 @@ export interface FileRoutesByFullPath {
   '/meditatii-fizica': typeof MeditatiiFizicaRoute
   '/meditatii-franceza': typeof MeditatiiFrancezaRoute
   '/meditatii-informatica': typeof MeditatiiInformaticaRoute
+  '/meditatii-la-domiciliu': typeof MeditatiiLaDomiciliuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
   '/meditatii-romana': typeof MeditatiiRomanaRoute
@@ -342,6 +355,7 @@ export interface FileRoutesByFullPath {
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRoute
   '/profesori': typeof ProfesoriRoute
+  '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
@@ -383,6 +397,7 @@ export interface FileRoutesByTo {
   '/meditatii-fizica': typeof MeditatiiFizicaRoute
   '/meditatii-franceza': typeof MeditatiiFrancezaRoute
   '/meditatii-informatica': typeof MeditatiiInformaticaRoute
+  '/meditatii-la-domiciliu': typeof MeditatiiLaDomiciliuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
   '/meditatii-romana': typeof MeditatiiRomanaRoute
@@ -393,6 +408,7 @@ export interface FileRoutesByTo {
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRoute
   '/profesori': typeof ProfesoriRoute
+  '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
@@ -435,6 +451,7 @@ export interface FileRoutesById {
   '/meditatii-fizica': typeof MeditatiiFizicaRoute
   '/meditatii-franceza': typeof MeditatiiFrancezaRoute
   '/meditatii-informatica': typeof MeditatiiInformaticaRoute
+  '/meditatii-la-domiciliu': typeof MeditatiiLaDomiciliuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
   '/meditatii-romana': typeof MeditatiiRomanaRoute
@@ -445,6 +462,7 @@ export interface FileRoutesById {
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRoute
   '/profesori': typeof ProfesoriRoute
+  '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
@@ -488,6 +506,7 @@ export interface FileRouteTypes {
     | '/meditatii-fizica'
     | '/meditatii-franceza'
     | '/meditatii-informatica'
+    | '/meditatii-la-domiciliu'
     | '/meditatii-matematica'
     | '/meditatii-online'
     | '/meditatii-romana'
@@ -498,6 +517,7 @@ export interface FileRouteTypes {
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
     | '/profesori'
+    | '/profesori-meditatii'
     | '/signup'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
@@ -539,6 +559,7 @@ export interface FileRouteTypes {
     | '/meditatii-fizica'
     | '/meditatii-franceza'
     | '/meditatii-informatica'
+    | '/meditatii-la-domiciliu'
     | '/meditatii-matematica'
     | '/meditatii-online'
     | '/meditatii-romana'
@@ -549,6 +570,7 @@ export interface FileRouteTypes {
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
     | '/profesori'
+    | '/profesori-meditatii'
     | '/signup'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
@@ -590,6 +612,7 @@ export interface FileRouteTypes {
     | '/meditatii-fizica'
     | '/meditatii-franceza'
     | '/meditatii-informatica'
+    | '/meditatii-la-domiciliu'
     | '/meditatii-matematica'
     | '/meditatii-online'
     | '/meditatii-romana'
@@ -600,6 +623,7 @@ export interface FileRouteTypes {
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
     | '/profesori'
+    | '/profesori-meditatii'
     | '/signup'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
@@ -642,6 +666,7 @@ export interface RootRouteChildren {
   MeditatiiFizicaRoute: typeof MeditatiiFizicaRoute
   MeditatiiFrancezaRoute: typeof MeditatiiFrancezaRoute
   MeditatiiInformaticaRoute: typeof MeditatiiInformaticaRoute
+  MeditatiiLaDomiciliuRoute: typeof MeditatiiLaDomiciliuRoute
   MeditatiiMatematicaRoute: typeof MeditatiiMatematicaRoute
   MeditatiiOnlineRoute: typeof MeditatiiOnlineRoute
   MeditatiiRomanaRoute: typeof MeditatiiRomanaRoute
@@ -652,6 +677,7 @@ export interface RootRouteChildren {
   PlatformaMeditatiiOnlineRoute: typeof PlatformaMeditatiiOnlineRoute
   PreturiMeditatiiRoute: typeof PreturiMeditatiiRoute
   ProfesoriRoute: typeof ProfesoriRoute
+  ProfesoriMeditatiiRoute: typeof ProfesoriMeditatiiRoute
   SignupRoute: typeof SignupRoute
   SimulareBacalaureatRoute: typeof SimulareBacalaureatRoute
   SimulareDrept2026Route: typeof SimulareDrept2026Route
@@ -748,6 +774,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profesori-meditatii': {
+      id: '/profesori-meditatii'
+      path: '/profesori-meditatii'
+      fullPath: '/profesori-meditatii'
+      preLoaderRoute: typeof ProfesoriMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profesori': {
       id: '/profesori'
       path: '/profesori'
@@ -816,6 +849,13 @@ declare module '@tanstack/react-router' {
       path: '/meditatii-matematica'
       fullPath: '/meditatii-matematica'
       preLoaderRoute: typeof MeditatiiMatematicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-la-domiciliu': {
+      id: '/meditatii-la-domiciliu'
+      path: '/meditatii-la-domiciliu'
+      fullPath: '/meditatii-la-domiciliu'
+      preLoaderRoute: typeof MeditatiiLaDomiciliuRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-informatica': {
@@ -1061,6 +1101,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiFizicaRoute: MeditatiiFizicaRoute,
   MeditatiiFrancezaRoute: MeditatiiFrancezaRoute,
   MeditatiiInformaticaRoute: MeditatiiInformaticaRoute,
+  MeditatiiLaDomiciliuRoute: MeditatiiLaDomiciliuRoute,
   MeditatiiMatematicaRoute: MeditatiiMatematicaRoute,
   MeditatiiOnlineRoute: MeditatiiOnlineRoute,
   MeditatiiRomanaRoute: MeditatiiRomanaRoute,
@@ -1071,6 +1112,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlatformaMeditatiiOnlineRoute: PlatformaMeditatiiOnlineRoute,
   PreturiMeditatiiRoute: PreturiMeditatiiRoute,
   ProfesoriRoute: ProfesoriRoute,
+  ProfesoriMeditatiiRoute: ProfesoriMeditatiiRoute,
   SignupRoute: SignupRoute,
   SimulareBacalaureatRoute: SimulareBacalaureatRoute,
   SimulareDrept2026Route: SimulareDrept2026Route,
@@ -1090,13 +1132,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
