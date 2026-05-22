@@ -63,10 +63,25 @@ export const Route = createFileRoute("/meditatii")({
           },
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            { "@type": "Question", name: "Ce sunt meditațiile pe MeditatiiDirect.ro?", acceptedAnswer: { "@type": "Answer", text: "Sunt anunțuri publicate de profesori verificați din toată România, care oferă ore particulare la diverse materii — online sau față în față. Contactezi profesorul direct prin chat, fără intermediari și fără comision." } },
+            { "@type": "Question", name: "Cât costă o meditație în România?", acceptedAnswer: { "@type": "Answer", text: "Tarifele încep de la 30 lei/oră pentru gimnaziu și pot ajunge la 200 lei/oră pentru pregătire de admitere la facultăți competitive (Medicină, UPB, ASE)." } },
+            { "@type": "Question", name: "Pot găsi anunțuri meditații în orașul meu?", acceptedAnswer: { "@type": "Answer", text: "Da. Avem anunțuri în București, Cluj-Napoca, Iași, Timișoara, Brașov, Constanța, Sibiu, Oradea, Craiova și restul județelor. Pentru localități mici recomandăm filtrul doar online." } },
+            { "@type": "Question", name: "Trebuie să plătesc ceva pentru a contacta profesorul?", acceptedAnswer: { "@type": "Answer", text: "Nu. Contactarea profesorilor este 100% gratuită. Plătești doar tariful afișat de profesor, direct la el. MeditatiiDirect nu percepe comision." } },
+            { "@type": "Question", name: "Profesorii sunt verificați?", acceptedAnswer: { "@type": "Answer", text: "Da, fiecare profesor este verificat manual: identitate, experiență didactică și recenzii reale de la elevi anteriori." } },
+          ],
+        }),
+      },
     ],
   }),
   component: ListingPage,
 });
+
 
 function ListingPage() {
   const search = Route.useSearch();
