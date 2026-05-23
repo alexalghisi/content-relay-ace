@@ -16,9 +16,13 @@ export const Route = createFileRoute("/grile-admitere-medicina-2026")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "grile admitere medicina 2026, grile admitere medicina online, grile medicina 2026 pdf, admitere medicina 2026, grile UMF 2026, grile biologie admitere, grile chimie organica admitere, grile Carol Davila, grile UMF Cluj, grile UMF Iasi, grile UMF Timisoara, simulare admitere medicina 2026" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
