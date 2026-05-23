@@ -12,6 +12,16 @@ function ogImageFor(slug: string) {
   return `https://meditatiidirect.ro/og/admitere/${slug}.jpg`;
 }
 
+function buildAdmFaqs(fac: { name: string; subject: string; city: string }, year: number) {
+  return [
+    { q: `De unde descarc subiectul de admitere la ${fac.name} din ${year}?`, a: `Folosește butonul „Vezi subiectul oficial" de pe această pagină — te ducem direct la varianta publicată oficial pentru admiterea ${year} la ${fac.name}.` },
+    { q: `Ce probe are admiterea la ${fac.name}?`, a: `Probele pentru admiterea la ${fac.name} sunt: ${fac.subject}. Subiectele se regăsesc în arhiva oficială a facultății.` },
+    { q: `Pot lua meditații pentru admiterea la ${fac.name}?`, a: `Da. Pe MeditatiiDirect.ro găsești profesori verificați specializați în pregătire admitere ${fac.name}, cu experiență pe probele ${fac.subject}.` },
+    { q: `Cât costă o ședință de pregătire admitere?`, a: `Tarifele pornesc de la 30 RON/oră și ajung la 200 RON/oră, în funcție de profesor, experiență și format (online sau la domiciliu).` },
+    { q: `Cum mă pregătesc eficient pentru admiterea ${year}?`, a: `Rezolvă subiecte din anii anteriori (vezi cross-linking-ul cu ceilalți ani de mai jos), verifică-te cu baremele oficiale și lucrează săptămânal cu un profesor specializat pe admiterea la ${fac.name}.` },
+  ];
+}
+
 export const Route = createFileRoute("/resurse/admitere/$facultate/$an")({
   loader: ({ params }) => {
     const fac = ADM_FACULTIES.find((f) => f.slug === params.facultate);
