@@ -6,6 +6,16 @@ import { faqJsonLd } from "@/components/seo-landing";
 
 const ogImageForBac = (slug: string) => `https://meditatiidirect.ro/og/bac/${slug}.jpg`;
 
+function buildBacFaqs(subjectName: string, year: number) {
+  return [
+    { q: `De unde descarc subiectul ${subjectName} BAC ${year}?`, a: `Subiectul oficial ${subjectName} de la sesiunea Bacalaureat ${year} se descarcă direct de pe această pagină, folosind butonul „Descarcă subiectul". PDF gratuit, găzduit pe MeditatiiDirect.ro.` },
+    { q: `Există baremul de corectare pentru ${subjectName} ${year}?`, a: `Da. Pe lângă subiect, găsești și baremul oficial publicat de Ministerul Educației pentru ${subjectName} BAC ${year}, în format PDF descărcabil separat.` },
+    { q: `Cum mă pregătesc eficient pentru ${subjectName} la BAC?`, a: `Rezolvă subiecte din anii anteriori (2021–2025), verifică-te cu baremul oficial și lucrează săptămânal cu un profesor verificat. Pe MeditatiiDirect.ro găsești profesori ${subjectName} cu rating de la elevii lor.` },
+    { q: `Cât costă meditațiile pentru BAC la ${subjectName}?`, a: `Tarifele variază între 30 și 200 RON/oră, în funcție de experiența profesorului și formatul (online sau la domiciliu). Mulți profesori oferă prima oră gratuit sau reducere la pachet.` },
+    { q: `Sunt subiectele de pe această pagină cele oficiale?`, a: `Da. Toate subiectele și baremele sunt cele publicate de Ministerul Educației și de Centrul Național de Evaluare și Examinare (CNEE / edu.ro).` },
+  ];
+}
+
 export const Route = createFileRoute("/resurse/bac/$materie/$an")({
   loader: ({ params }) => {
     const subject = BAC_SUBJECTS.find((s) => s.slug === params.materie);
@@ -25,13 +35,7 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
     const desc = yearAvailable
       ? `Subiect oficial și barem ${subject.name}, Bacalaureat ${year}. Vizualizare + descărcare PDF gratuit. Plus profesori verificați pentru pregătire BAC.`
       : `Pregătire ${subject.name} pentru BAC ${year}: rezolvă subiectele oficiale din 2021–2025 și lucrează cu profesori verificați pe MeditatiiDirect.ro.`;
-    const faqs = [
-      { q: `De unde descarc subiectul ${subject.name} BAC ${year}?`, a: `Subiectul oficial ${subject.name} de la sesiunea Bacalaureat ${year} se descarcă direct de pe această pagină, butonul „Descarcă subiectul". PDF gratuit, găzduit pe MeditatiiDirect.ro.` },
-      { q: `Există baremul de corectare pentru ${subject.name} ${year}?`, a: `Da. Pe lângă subiect, găsești și baremul oficial publicat de Ministerul Educației pentru ${subject.name} BAC ${year}, în format PDF.` },
-      { q: `Cum mă pregătesc eficient pentru ${subject.name} la BAC?`, a: `Rezolvă subiecte din anii anteriori (2021–2025), verifică-te cu baremul oficial și lucrează cu un profesor verificat. Pe MeditatiiDirect.ro găsești profesori ${subject.name} cu rating de la elevii lor.` },
-      { q: `Cât costă meditațiile pentru BAC la ${subject.name}?`, a: `Tarifele variază între 30 și 200 RON/oră în funcție de experiența profesorului și formatul (online sau la domiciliu). Mulți profesori oferă prima oră gratuit sau reducere.` },
-      { q: `Sunt subiectele de pe această pagină cele oficiale?`, a: `Da. Toate subiectele și baremele sunt cele publicate de Ministerul Educației și de Centrul Național de Evaluare și Examinare (CNEE / edu.ro).` },
-    ];
+    const faqs = buildBacFaqs(subject.name, year);
     return {
       meta: [
         { title }, { name: "description", content: desc },
@@ -292,24 +296,14 @@ function ResursaBacPage() {
       </section>
 
       <section className="mt-12 max-w-3xl">
-        <h2 className="text-2xl font-semibold">Întrebări frecvente</h2>
+        <h2 className="text-2xl font-semibold">Întrebări frecvente — {subject.name} BAC {year}</h2>
         <div className="mt-4 space-y-4">
-          <details className="rounded-lg border border-border bg-card p-4">
-            <summary className="cursor-pointer font-medium">De unde descarc subiectul {subject.name} BAC {year}?</summary>
-            <p className="mt-2 text-sm text-muted-foreground">Direct de pe această pagină, butonul „Descarcă subiectul". PDF oficial, gratuit, găzduit pe MeditatiiDirect.ro.</p>
-          </details>
-          <details className="rounded-lg border border-border bg-card p-4">
-            <summary className="cursor-pointer font-medium">Există baremul de corectare?</summary>
-            <p className="mt-2 text-sm text-muted-foreground">Da, baremul oficial este disponibil în PDF separat, descărcabil de pe această pagină.</p>
-          </details>
-          <details className="rounded-lg border border-border bg-card p-4">
-            <summary className="cursor-pointer font-medium">Cât costă o ședință de meditații pentru {subject.name}?</summary>
-            <p className="mt-2 text-sm text-muted-foreground">Între 30 și 200 RON/oră, în funcție de profesor. Mulți oferă prima oră gratuit sau reducere.</p>
-          </details>
-          <details className="rounded-lg border border-border bg-card p-4">
-            <summary className="cursor-pointer font-medium">Sunt subiectele oficiale?</summary>
-            <p className="mt-2 text-sm text-muted-foreground">Da. Toate subiectele și baremele sunt cele publicate de Ministerul Educației și CNEE (edu.ro).</p>
-          </details>
+          {buildBacFaqs(subject.name, year).map((f) => (
+            <details key={f.q} className="rounded-lg border border-border bg-card p-4">
+              <summary className="cursor-pointer font-medium">{f.q}</summary>
+              <p className="mt-2 text-sm text-muted-foreground">{f.a}</p>
+            </details>
+          ))}
         </div>
       </section>
     </article>
