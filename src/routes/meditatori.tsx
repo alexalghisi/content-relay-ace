@@ -16,9 +16,13 @@ export const Route = createFileRoute("/meditatori")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "meditatori, meditatori verificati, meditatori bucuresti, meditatori cluj, meditatori iasi, meditatori online, profesori particulari, meditatori matematica, meditatori romana, meditatori bac, meditatori admitere, profesori meditatii, lista meditatori, catalog meditatori" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
