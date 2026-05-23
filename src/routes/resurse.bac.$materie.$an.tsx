@@ -127,7 +127,7 @@ function ResursaBacPage() {
           <h2 className="text-2xl font-semibold">Subiecte oficiale {subject.name} — anii disponibili</h2>
           <p className="mt-2 text-sm text-muted-foreground">PDF gratuit, găzduit pe MeditatiiDirect.ro.</p>
           <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {BAC_YEARS.slice().reverse().map((y) => (
+            {BAC_AVAILABLE_YEARS.slice().reverse().map((y) => (
               <Link key={y} to="/resurse/bac/$materie/$an" params={{ materie: subject.slug, an: String(y) }}
                 className="card-soft p-4 hover:border-primary/40 transition">
                 <p className="font-semibold">{subject.name} — BAC {y}</p>
