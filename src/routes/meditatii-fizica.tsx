@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-fizica";
-const TITLE = "Meditații fizică 2026 — BAC, admitere UPB, UMF | MeditatiiDirect.ro";
-const DESC = "Meditații fizică pentru gimnaziu, liceu, BAC, admitere Politehnică și Medicină. Mecanică, termodinamică, electricitate, optică. Online sau la domiciliu.";
+const TITLE = "Meditații Fizică 2026 — Online | BAC, Admitere UPB, UMF | București, Cluj, Iași";
+const DESC = "★ Meditații fizică online sau acasă: BAC, admitere Politehnică (UPB, UTCN) și Medicină. Mecanică, electricitate, optică. Profesori verificați în București, Cluj, Iași, Timișoara.";
 
 const faqs = [
   { q: "Ce capitole de fizică sunt acoperite?", a: "Toate capitolele din programa școlară: mecanică, termodinamică, electricitate și magnetism, optică, fizică modernă (atomică și nucleară)." },
@@ -15,9 +15,13 @@ export const Route = createFileRoute("/meditatii-fizica")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "meditatii fizica, meditatii fizica online, meditatii fizica cluj, meditatii fizica bucuresti, meditatii fizica iasi, meditatii fizica bac, meditatii fizica admitere, meditatii fizica UPB, profesor fizica, meditatii mecanica, meditatii electricitate, meditatii fizica liceu" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],

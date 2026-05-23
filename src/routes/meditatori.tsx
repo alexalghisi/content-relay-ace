@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatori";
-const TITLE = "Meditatori verificați în România 2026 | MeditatiiDirect.ro";
-const DESC = "Catalog cu peste 1000 de meditatori verificați: matematică, română, engleză, BAC, admitere Medicină, Drept, Politehnică. Vezi profil, prețuri și recenzii.";
+const TITLE = "Meditatori Verificați 2026 — 1000+ Profesori în România | MeditatiiDirect.ro";
+const DESC = "★ Catalog cu peste 1000 de meditatori verificați: matematică, română, engleză, fizică, BAC, admitere Medicină, Drept, Politehnică. Profil, prețuri, recenzii. Contact direct.";
 
 const faqs = [
   { q: "Ce înseamnă „meditator verificat\"?", a: "Înseamnă că am verificat manual identitatea, diploma și experiența profesorului înainte ca acesta să poată publica anunțuri. Profilul afișează badge-ul „Verificat\"." },
@@ -16,9 +16,13 @@ export const Route = createFileRoute("/meditatori")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "meditatori, meditatori verificati, meditatori bucuresti, meditatori cluj, meditatori iasi, meditatori online, profesori particulari, meditatori matematica, meditatori romana, meditatori bac, meditatori admitere, profesori meditatii, lista meditatori, catalog meditatori" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],

@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-franceza";
-const TITLE = "Meditații limba franceză 2026 — Profesori verificați | MeditatiiDirect.ro";
-const DESC = "Meditații franceză pentru toate nivelurile: A1–C2, DELF, DALF, BAC. Profesori nativi și români verificați, online sau la domiciliu. De la 50 lei/oră.";
+const TITLE = "Meditații Franceză 2026 — Online & Acasă | A1-C2, DELF, BAC | De la 50 lei";
+const DESC = "★ Meditații limba franceză online sau la domiciliu: A1–C2, DELF, DALF, BAC, conversație. Profesori nativi și români verificați, contact direct, FĂRĂ comision.";
 
 const faqs = [
   { q: "Ce niveluri acoperă meditațiile de franceză?", a: "De la începător absolut (A1) până la nivel avansat (C2), inclusiv pregătire pentru examenele DELF, DALF, TCF și BAC." },
@@ -16,9 +16,13 @@ export const Route = createFileRoute("/meditatii-franceza")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "meditatii franceza, meditatii limba franceza, meditatii franceza online, profesor franceza, meditatii franceza bucuresti, meditatii franceza cluj, meditatii franceza copii, meditatii DELF, meditatii DALF, profesor nativ franceza, meditatii franceza bac, meditatii franceza incepatori" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],

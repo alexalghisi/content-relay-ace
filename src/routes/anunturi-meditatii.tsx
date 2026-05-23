@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/anunturi-meditatii";
-const TITLE = "Anunțuri meditații 2026 — Profesori verificați | MeditatiiDirect.ro";
-const DESC = "Mii de anunțuri reale de meditații în România: matematică, română, engleză, BAC, admitere. Filtrează după oraș, contactează direct profesorul. De la 30 lei/oră.";
+const TITLE = "Anunțuri Meditații 2026 — 1000+ Profesori Verificați GRATIS | MeditatiiDirect.ro";
+const DESC = "★ Anunțuri meditații reale în toată România: matematică, română, engleză, BAC, admitere. Contactezi profesorul DIRECT, fără comision, de la 30 lei/oră. Răspuns în 24h.";
 
 const faqs = [
   { q: "Cum public un anunț de meditații?", a: "Creezi cont gratuit pe MeditatiiDirect.ro, completezi profilul de profesor (CV, materii, experiență) și publici primul anunț în mai puțin de 5 minute. Verificarea durează în medie 24 de ore." },
@@ -18,13 +18,23 @@ export const Route = createFileRoute("/anunturi-meditatii")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "anunturi meditatii, anunturi de meditatii, anunturi meditatii bucuresti, anunturi meditatii cluj, anunturi meditatii iasi, anunturi meditatii online, anunturi profesori, anunturi meditatii matematica, anunturi meditatii romana, anunturi meditatii bac, anunturi meditatii 2026, meditatori, profesori particulari, ore particulare, meditatii ieftine" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
+      { type: "application/ld+json", children: JSON.stringify({
+        "@context": "https://schema.org", "@type": "ItemList", name: "Anunțuri meditații România",
+        description: DESC, url: URL, numberOfItems: 1000,
+      }) },
+    ],
   }),
   component: () => (
     <SeoLanding
