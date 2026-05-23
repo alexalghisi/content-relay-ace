@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-franceza";
-const TITLE = "Meditații limba franceză 2026 — Profesori verificați | MeditatiiDirect.ro";
-const DESC = "Meditații franceză pentru toate nivelurile: A1–C2, DELF, DALF, BAC. Profesori nativi și români verificați, online sau la domiciliu. De la 50 lei/oră.";
+const TITLE = "Meditații Franceză 2026 — Online & Acasă | A1-C2, DELF, BAC | De la 50 lei";
+const DESC = "★ Meditații limba franceză online sau la domiciliu: A1–C2, DELF, DALF, BAC, conversație. Profesori nativi și români verificați, contact direct, FĂRĂ comision.";
 
 const faqs = [
   { q: "Ce niveluri acoperă meditațiile de franceză?", a: "De la începător absolut (A1) până la nivel avansat (C2), inclusiv pregătire pentru examenele DELF, DALF, TCF și BAC." },
