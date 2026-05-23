@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-informatica";
-const TITLE = "Meditații informatică 2026 — C++, Python, BAC, admitere | MeditatiiDirect.ro";
-const DESC = "Meditații informatică pentru gimnaziu, liceu, BAC și admitere Politehnică. C/C++, Python, algoritmi, structuri de date. Online sau la domiciliu.";
+const TITLE = "Meditații Informatică 2026 — C++, Python Online | BAC, Admitere UPB";
+const DESC = "★ Meditații informatică online sau acasă: C/C++, Python, Java, algoritmi, BAC, admitere Politehnică (UPB, UTCN, Info Iași). Profesori cu olimpiadă. De la 50 lei/oră.";
 
 const faqs = [
   { q: "Ce limbaje sunt acoperite la meditațiile de informatică?", a: "C/C++ (limba oficială pentru BAC și olimpiade), Python, Java, JavaScript, plus algoritmi, structuri de date și baze de date." },
