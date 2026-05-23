@@ -16,9 +16,13 @@ export const Route = createFileRoute("/platforma-meditatii-online")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "platforma meditatii online, platforma meditatii, meditatii online romania, site meditatii, aplicatie meditatii, platforma profesori online, platforma ore particulare, meditatii pe internet, lectii online, profesori online romania" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
