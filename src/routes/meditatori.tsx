@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatori";
-const TITLE = "Meditatori verificați în România 2026 | MeditatiiDirect.ro";
-const DESC = "Catalog cu peste 1000 de meditatori verificați: matematică, română, engleză, BAC, admitere Medicină, Drept, Politehnică. Vezi profil, prețuri și recenzii.";
+const TITLE = "Meditatori Verificați 2026 — 1000+ Profesori în România | MeditatiiDirect.ro";
+const DESC = "★ Catalog cu peste 1000 de meditatori verificați: matematică, română, engleză, fizică, BAC, admitere Medicină, Drept, Politehnică. Profil, prețuri, recenzii. Contact direct.";
 
 const faqs = [
   { q: "Ce înseamnă „meditator verificat\"?", a: "Înseamnă că am verificat manual identitatea, diploma și experiența profesorului înainte ca acesta să poată publica anunțuri. Profilul afișează badge-ul „Verificat\"." },
