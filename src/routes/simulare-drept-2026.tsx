@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/simulare-drept-2026";
-const TITLE = "Simulare admitere Drept 2026 — Subiecte logică, română | MeditatiiDirect.ro";
-const DESC = "Pregătire admitere la Facultatea de Drept 2026: logică juridică, gramatică română, eseu argumentativ. Subiecte simulare PDF gratuit.";
+const TITLE = "Simulare Drept 2026 — Subiecte + Barem Oficial PDF GRATIS | Logică, Română";
+const DESC = "★ Simulare admitere Drept 2026: subiecte oficiale + barem PDF GRATUIT. Logică juridică, gramatică română, eseu argumentativ. Plus profesori verificați pentru pregătire.";
 
 const faqs = [
   { q: "Cum se intră la Facultatea de Drept în 2026?", a: "În funcție de universitate: pe baza mediei de BAC, prin probă scrisă (Logică juridică, Limba română, Istorie) sau printr-o combinație. Verifică regulamentul facultății alese." },
