@@ -63,6 +63,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "geo.region", content: "RO" },
       { name: "geo.placename", content: "România" },
       { name: "rating", content: "general" },
+      { name: "google-site-verification", content: "0ffO5lotmxwkEENDzoH1pVYFDx96xfPwo6XpohLNn_E" },
       { property: "og:site_name", content: "MeditatiiDirect.ro" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "ro_RO" },
