@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Download, FileText, ArrowLeft, GraduationCap } from "lucide-react";
+import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2 } from "lucide-react";
 import { BAC_SUBJECTS, BAC_YEARS } from "@/data/bac-archive";
 import { bacPdfUrl } from "@/lib/pdf-urls";
 import { faqJsonLd } from "@/components/seo-landing";
@@ -15,22 +15,47 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
     if (!loaderData) return {};
     const { subject, year } = loaderData;
     const url = `https://meditatiidirect.ro/resurse/bac/${subject.slug}/${year}`;
-    const title = `${subject.name} — BAC ${year} (subiect + barem PDF) | MeditatiiDirect.ro`;
-    const desc = `Descarcă subiectul și baremul oficial pentru ${subject.name} — Bacalaureat ${year}. PDF gratuit, găzduit pe MeditatiiDirect.ro.`;
+    const title = `${subject.name} BAC ${year} — Subiect + Barem PDF oficial | MeditatiiDirect.ro`;
+    const desc = `Subiect și barem oficial ${subject.name}, Bacalaureat ${year}. Vizualizare și descărcare PDF gratuit. Plus profesori verificați pentru pregătire BAC.`;
+    const faqs = [
+      { q: `De unde descarc subiectul ${subject.name} BAC ${year}?`, a: `Subiectul oficial ${subject.name} de la sesiunea Bacalaureat ${year} se descarcă direct de pe această pagină, butonul „Descarcă subiectul". PDF gratuit, găzduit pe MeditatiiDirect.ro.` },
+      { q: `Există baremul de corectare pentru ${subject.name} ${year}?`, a: `Da. Pe lângă subiect, găsești și baremul oficial publicat de Ministerul Educației pentru ${subject.name} BAC ${year}, în format PDF.` },
+      { q: `Cum mă pregătesc eficient pentru ${subject.name} la BAC?`, a: `Rezolvă subiecte din anii anteriori (2021–2025), verifică-te cu baremul oficial și lucrează cu un profesor verificat. Pe MeditatiiDirect.ro găsești profesori ${subject.name} cu rating de la elevii lor.` },
+      { q: `Cât costă meditațiile pentru BAC la ${subject.name}?`, a: `Tarifele variază între 30 și 200 RON/oră în funcție de experiența profesorului și formatul (online sau la domiciliu). Mulți profesori oferă prima oră gratuit sau reducere.` },
+      { q: `Sunt subiectele de pe această pagină cele oficiale?`, a: `Da. Toate subiectele și baremele sunt cele publicate de Ministerul Educației și de Centrul Național de Evaluare și Examinare (CNEE / edu.ro).` },
+    ];
     return {
       meta: [
         { title }, { name: "description", content: desc },
+        { name: "keywords", content: `subiecte bac ${year}, ${subject.name} bac ${year}, barem ${subject.name} ${year}, bacalaureat ${year} pdf, variante bac ${subject.name}, meditatii ${subject.name} bac` },
         { property: "og:title", content: title }, { property: "og:description", content: desc },
-        { property: "og:url", content: url },
+        { property: "og:url", content: url }, { property: "og:type", content: "article" },
       ],
       links: [{ rel: "canonical", href: url }],
-      scripts: [{
-        type: "application/ld+json",
-        children: JSON.stringify(faqJsonLd([
-          { q: `Cum descarc subiectul de la ${subject.name} (BAC ${year})?`, a: "Apasă butonul „Descarcă subiectul” de mai sus — PDF-ul este găzduit pe MeditatiiDirect.ro și se descarcă instant." },
-          { q: "Există și baremul de corectare?", a: "Da, ai buton separat de descărcare pentru baremul oficial." },
-        ])),
-      }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
+        { type: "application/ld+json", children: JSON.stringify({
+          "@context": "https://schema.org", "@type": "LearningResource",
+          name: `${subject.name} — Subiect BAC ${year}`,
+          description: desc, url,
+          inLanguage: "ro-RO",
+          learningResourceType: "Exam",
+          educationalLevel: "Bacalaureat",
+          about: subject.name,
+          datePublished: `${year}-07-01`,
+          isAccessibleForFree: true,
+          provider: { "@type": "Organization", name: "MeditatiiDirect.ro", url: "https://meditatiidirect.ro" },
+        }) },
+        { type: "application/ld+json", children: JSON.stringify({
+          "@context": "https://schema.org", "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Acasă", item: "https://meditatiidirect.ro/" },
+            { "@type": "ListItem", position: 2, name: "Variante Bacalaureat", item: "https://meditatiidirect.ro/variante-bacalaureat" },
+            { "@type": "ListItem", position: 3, name: subject.name, item: `https://meditatiidirect.ro/resurse/bac/${subject.slug}/${BAC_YEARS[BAC_YEARS.length-1]}` },
+            { "@type": "ListItem", position: 4, name: `BAC ${year}`, item: url },
+          ],
+        }) },
+      ],
     };
   },
   errorComponent: () => <div className="container-page py-20 text-center">A apărut o eroare. <Link to="/variante-bacalaureat" className="text-primary">Înapoi la arhivă</Link></div>,
@@ -42,17 +67,39 @@ function ResursaBacPage() {
   const { subject, year } = Route.useLoaderData();
   const subjectPdf = bacPdfUrl(subject.slug, year, "subiect");
   const baremPdf = bacPdfUrl(subject.slug, year, "barem");
+  const otherSubjects = BAC_SUBJECTS.filter((s) => s.slug !== subject.slug);
+
   return (
     <article className="container-page py-10 lg:py-14">
-      <Link to="/variante-bacalaureat" className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
-        <ArrowLeft className="h-4 w-4" /> Arhivă BAC
+      {/* Breadcrumbs */}
+      <nav aria-label="breadcrumb" className="text-xs text-muted-foreground">
+        <ol className="flex flex-wrap items-center gap-1">
+          <li><Link to="/" className="hover:text-primary">Acasă</Link></li>
+          <li>›</li>
+          <li><Link to="/variante-bacalaureat" className="hover:text-primary">Variante Bacalaureat</Link></li>
+          <li>›</li>
+          <li className="text-foreground">{subject.name} BAC {year}</li>
+        </ol>
+      </nav>
+
+      <Link to="/variante-bacalaureat" className="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:underline">
+        <ArrowLeft className="h-4 w-4" /> Înapoi la arhivă BAC
       </Link>
+
       <header className="mt-4 max-w-3xl">
-        <h1 className="text-3xl font-bold sm:text-4xl">{subject.name} — BAC {year}</h1>
+        <h1 className="text-3xl font-bold sm:text-4xl">
+          {subject.name} — Subiect BAC {year} (PDF oficial + barem)
+        </h1>
         <p className="mt-3 text-lg text-muted-foreground">
-          Subiectul și baremul oficial de la sesiunea de Bacalaureat {year} pentru {subject.name}. PDF-urile
-          sunt găzduite pe MeditatiiDirect.ro — apasă pentru vizualizare sau descărcare.
+          Subiectul oficial și baremul de corectare publicate de Ministerul Educației
+          pentru <strong>{subject.name}</strong> la sesiunea de <strong>Bacalaureat {year}</strong>.
+          Descarcă PDF-ul gratuit sau previzualizează direct în browser — fără cont, fără reclame.
         </p>
+        <ul className="mt-4 grid gap-1.5 text-sm">
+          <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Subiect oficial CNEE / edu.ro</li>
+          <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Barem complet de evaluare și notare</li>
+          <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> PDF găzduit pe serverele noastre — descărcare instant</li>
+        </ul>
       </header>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -60,7 +107,7 @@ function ResursaBacPage() {
           <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary"><FileText className="h-6 w-6" /></span>
           <div>
             <p className="font-semibold">Subiect — {subject.name}</p>
-            <p className="text-xs text-muted-foreground">BAC {year} · PDF</p>
+            <p className="text-xs text-muted-foreground">BAC {year} · PDF oficial</p>
             <p className="mt-2 inline-flex items-center gap-1 text-sm text-primary"><Download className="h-4 w-4" /> Descarcă subiectul</p>
           </div>
         </a>
@@ -68,17 +115,34 @@ function ResursaBacPage() {
           <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary"><FileText className="h-6 w-6" /></span>
           <div>
             <p className="font-semibold">Barem de corectare</p>
-            <p className="text-xs text-muted-foreground">BAC {year} · PDF</p>
+            <p className="text-xs text-muted-foreground">BAC {year} · PDF oficial</p>
             <p className="mt-2 inline-flex items-center gap-1 text-sm text-primary"><Download className="h-4 w-4" /> Descarcă baremul</p>
           </div>
         </a>
       </div>
 
       <section className="mt-10">
-        <h2 className="text-xl font-semibold">Previzualizare subiect</h2>
+        <h2 className="text-2xl font-semibold">Previzualizare subiect {subject.name} BAC {year}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Vizualizează subiectul direct în pagină. Pentru descărcare folosește butonul de mai sus.
+        </p>
         <div className="mt-3 overflow-hidden rounded-xl border border-border bg-card">
           <iframe src={subjectPdf} title={`${subject.name} BAC ${year} — subiect`} className="h-[80vh] w-full" loading="lazy" />
         </div>
+      </section>
+
+      <section className="mt-12 max-w-3xl">
+        <h2 className="text-2xl font-semibold">Cum folosești eficient subiectele de BAC {year} la {subject.name}</h2>
+        <p className="mt-3 text-muted-foreground">
+          Rezolvarea subiectelor din anii anteriori este cel mai eficient mod de pregătire pentru
+          Bacalaureat la <strong>{subject.name}</strong>. Iată cum recomandăm să le folosești:
+        </p>
+        <ol className="mt-4 space-y-3 text-muted-foreground list-decimal pl-5">
+          <li><strong>Cronometrează-te.</strong> Rezolvă subiectul ca la examen, în timpul oficial (3 ore pentru BAC).</li>
+          <li><strong>Verifică-te cu baremul.</strong> Notează-te singur folosind baremul oficial și identifică unde pierzi puncte.</li>
+          <li><strong>Reia subiectele rezolvate greșit.</strong> Înțelegerea greșelilor contează mai mult decât numărul de subiecte.</li>
+          <li><strong>Lucrează cu un profesor.</strong> Un profesor verificat de {subject.name} îți poate explica în câteva minute ce ai studia singur ore în șir.</li>
+        </ol>
       </section>
 
       <section className="mt-10 rounded-2xl border border-primary/20 bg-primary-soft/40 p-6 sm:p-8">
@@ -87,9 +151,10 @@ function ResursaBacPage() {
             <GraduationCap className="h-6 w-6" />
           </span>
           <div>
-            <h2 className="text-xl font-semibold">Vrei să iei notă mare la {subject.name}?</h2>
+            <h2 className="text-xl font-semibold">Vrei notă mare la {subject.name} la BAC?</h2>
             <p className="mt-2 text-muted-foreground">
-              Lucrează cu un profesor verificat care îți explică subiectul și îți face plan personalizat pentru BAC.
+              Lucrează cu un profesor verificat de {subject.name} care îți explică subiectele,
+              îți face plan personalizat de pregătire și te ajută să iei nota dorită la Bacalaureat.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Link to="/meditatii" className="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
@@ -103,9 +168,12 @@ function ResursaBacPage() {
         </div>
       </section>
 
-      <section className="mt-10">
-        <h2 className="text-xl font-semibold">Alți ani pentru {subject.name}</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
+      <section className="mt-12">
+        <h2 className="text-2xl font-semibold">Subiecte {subject.name} de la alți ani</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Arhivă completă cu subiectele oficiale de Bacalaureat la {subject.name}:
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
           {BAC_YEARS.slice().reverse().map((y) => (
             <Link
               key={y}
@@ -113,9 +181,50 @@ function ResursaBacPage() {
               params={{ materie: subject.slug, an: String(y) }}
               className={`rounded-full border px-3 py-1.5 text-sm transition ${y === year ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary/40"}`}
             >
-              {y}
+              {subject.slug.startsWith("matematica") ? "Matematică" : subject.name.split(" ")[0]} BAC {y}
             </Link>
           ))}
+        </div>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-2xl font-semibold">Subiecte BAC {year} la alte materii</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Explorează subiectele oficiale și de la celelalte materii de la sesiunea Bacalaureat {year}:
+        </p>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {otherSubjects.map((s) => (
+            <Link
+              key={s.slug}
+              to="/resurse/bac/$materie/$an"
+              params={{ materie: s.slug, an: String(year) }}
+              className="rounded-lg border border-border bg-card px-3 py-2 text-sm hover:border-primary/40 hover:text-primary transition"
+            >
+              {s.name} — BAC {year}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-12 max-w-3xl">
+        <h2 className="text-2xl font-semibold">Întrebări frecvente</h2>
+        <div className="mt-4 space-y-4">
+          <details className="rounded-lg border border-border bg-card p-4">
+            <summary className="cursor-pointer font-medium">De unde descarc subiectul {subject.name} BAC {year}?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Direct de pe această pagină, butonul „Descarcă subiectul". PDF oficial, gratuit, găzduit pe MeditatiiDirect.ro.</p>
+          </details>
+          <details className="rounded-lg border border-border bg-card p-4">
+            <summary className="cursor-pointer font-medium">Există baremul de corectare?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Da, baremul oficial este disponibil în PDF separat, descărcabil de pe această pagină.</p>
+          </details>
+          <details className="rounded-lg border border-border bg-card p-4">
+            <summary className="cursor-pointer font-medium">Cât costă o ședință de meditații pentru {subject.name}?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Între 30 și 200 RON/oră, în funcție de profesor. Mulți oferă prima oră gratuit sau reducere.</p>
+          </details>
+          <details className="rounded-lg border border-border bg-card p-4">
+            <summary className="cursor-pointer font-medium">Sunt subiectele oficiale?</summary>
+            <p className="mt-2 text-sm text-muted-foreground">Da. Toate subiectele și baremele sunt cele publicate de Ministerul Educației și CNEE (edu.ro).</p>
+          </details>
         </div>
       </section>
     </article>
