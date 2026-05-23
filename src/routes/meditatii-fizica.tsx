@@ -15,9 +15,13 @@ export const Route = createFileRoute("/meditatii-fizica")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "meditatii fizica, meditatii fizica online, meditatii fizica cluj, meditatii fizica bucuresti, meditatii fizica iasi, meditatii fizica bac, meditatii fizica admitere, meditatii fizica UPB, profesor fizica, meditatii mecanica, meditatii electricitate, meditatii fizica liceu" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
