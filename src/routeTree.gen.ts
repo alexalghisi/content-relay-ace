@@ -62,6 +62,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
 import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
+import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
 
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
   id: '/variante-bacalaureat',
@@ -332,6 +333,12 @@ const ResurseAdmitereFacultateAnRoute =
     path: '/resurse/admitere/$facultate/$an',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksAutoBlogPostRoute =
+  ApiPublicHooksAutoBlogPostRouteImport.update({
+    id: '/api/public/hooks/auto-blog-post',
+    path: '/api/public/hooks/auto-blog-post',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -385,6 +392,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
 }
@@ -440,6 +448,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
 }
@@ -496,6 +505,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
 }
@@ -553,6 +563,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/api/public/hooks/auto-blog-post'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
   fileRoutesByTo: FileRoutesByTo
@@ -608,6 +619,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/api/public/hooks/auto-blog-post'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
   id:
@@ -663,6 +675,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/api/public/hooks/auto-blog-post'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
   fileRoutesById: FileRoutesById
@@ -717,6 +730,7 @@ export interface RootRouteChildren {
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
+  ApiPublicHooksAutoBlogPostRoute: typeof ApiPublicHooksAutoBlogPostRoute
   ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
   ResurseBacMaterieAnRoute: typeof ResurseBacMaterieAnRoute
 }
@@ -1094,6 +1108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResurseAdmitereFacultateAnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/auto-blog-post': {
+      id: '/api/public/hooks/auto-blog-post'
+      path: '/api/public/hooks/auto-blog-post'
+      fullPath: '/api/public/hooks/auto-blog-post'
+      preLoaderRoute: typeof ApiPublicHooksAutoBlogPostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1168,6 +1189,7 @@ const rootRouteChildren: RootRouteChildren = {
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
   AnuntSlugRoute: AnuntSlugRoute,
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
+  ApiPublicHooksAutoBlogPostRoute: ApiPublicHooksAutoBlogPostRoute,
   ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
   ResurseBacMaterieAnRoute: ResurseBacMaterieAnRoute,
 }
