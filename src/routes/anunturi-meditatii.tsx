@@ -18,13 +18,23 @@ export const Route = createFileRoute("/anunturi-meditatii")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "anunturi meditatii, anunturi de meditatii, anunturi meditatii bucuresti, anunturi meditatii cluj, anunturi meditatii iasi, anunturi meditatii online, anunturi profesori, anunturi meditatii matematica, anunturi meditatii romana, anunturi meditatii bac, anunturi meditatii 2026, meditatori, profesori particulari, ore particulare, meditatii ieftine" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
+      { type: "application/ld+json", children: JSON.stringify({
+        "@context": "https://schema.org", "@type": "ItemList", name: "Anunțuri meditații România",
+        description: DESC, url: URL, numberOfItems: 1000,
+      }) },
+    ],
   }),
   component: () => (
     <SeoLanding
