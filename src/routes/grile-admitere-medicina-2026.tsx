@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/grile-admitere-medicina-2026";
-const TITLE = "Grile admitere Medicină 2026 — UMF București, Cluj, Iași | MeditatiiDirect.ro";
-const DESC = "Grile model admitere Medicină 2026 (UMF Carol Davila, Iuliu Hațieganu, Grigore T. Popa): biologie, chimie organică. PDF gratuit + meditatori specializați.";
+const TITLE = "Grile Admitere Medicină 2026 — ONLINE GRATIS | UMF București, Cluj, Iași, Timișoara";
+const DESC = "★ Grile model admitere Medicină 2026 ONLINE și PDF GRATIS: biologie clasa XI, chimie organică. UMF Carol Davila, Iuliu Hațieganu, Grigore T. Popa. Plus meditatori specializați.";
 
 const faqs = [
   { q: "Câte grile sunt la admiterea la Medicină în 2026?", a: "În general 100 de grile (50 biologie + 50 chimie sau 60+40, după universitate), cu durata de 3 ore. Verifică regulamentul fiecărei UMF pentru detalii." },
