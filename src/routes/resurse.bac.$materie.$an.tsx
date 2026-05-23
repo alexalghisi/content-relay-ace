@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, CalendarDays } from "lucide-react";
-import { BAC_SUBJECTS, BAC_YEARS } from "@/data/bac-archive";
+import { BAC_SUBJECTS, BAC_YEARS, BAC_AVAILABLE_YEARS } from "@/data/bac-archive";
 import { bacPdfUrl } from "@/lib/pdf-urls";
 import { faqJsonLd } from "@/components/seo-landing";
 
@@ -11,7 +11,8 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
     const subject = BAC_SUBJECTS.find((s) => s.slug === params.materie);
     if (!subject) throw notFound();
     const year = Number(params.an);
-    const yearAvailable = BAC_YEARS.includes(year);
+    if (!BAC_YEARS.includes(year)) throw notFound();
+    const yearAvailable = BAC_AVAILABLE_YEARS.includes(year);
     return { subject, year, yearAvailable };
   },
   head: ({ loaderData }) => {
