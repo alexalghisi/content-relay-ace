@@ -4,7 +4,7 @@ import { BAC_SUBJECTS, BAC_YEARS, BAC_AVAILABLE_YEARS } from "@/data/bac-archive
 import { bacPdfUrl } from "@/lib/pdf-urls";
 import { faqJsonLd } from "@/components/seo-landing";
 
-const OG_IMAGE = "https://meditatiidirect.ro/og-bac.jpg";
+const ogImageForBac = (slug: string) => `https://meditatiidirect.ro/og/bac/${slug}.jpg`;
 
 export const Route = createFileRoute("/resurse/bac/$materie/$an")({
   loader: ({ params }) => {
