@@ -88,7 +88,7 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
 function ResursaBacPage() {
   const { subject, year, yearAvailable } = Route.useLoaderData();
   const otherSubjects = BAC_SUBJECTS.filter((s) => s.slug !== subject.slug);
-  const latestYear = BAC_YEARS[BAC_YEARS.length - 1];
+  const latestYear = BAC_AVAILABLE_YEARS[BAC_AVAILABLE_YEARS.length - 1];
 
   if (!yearAvailable) {
     return (
