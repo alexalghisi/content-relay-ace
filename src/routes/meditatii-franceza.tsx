@@ -16,9 +16,13 @@ export const Route = createFileRoute("/meditatii-franceza")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "meditatii franceza, meditatii limba franceza, meditatii franceza online, profesor franceza, meditatii franceza bucuresti, meditatii franceza cluj, meditatii franceza copii, meditatii DELF, meditatii DALF, profesor nativ franceza, meditatii franceza bac, meditatii franceza incepatori" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
