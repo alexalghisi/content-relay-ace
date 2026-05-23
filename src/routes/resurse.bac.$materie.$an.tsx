@@ -67,7 +67,7 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Acasă", item: "https://meditatiidirect.ro/" },
             { "@type": "ListItem", position: 2, name: "Variante Bacalaureat", item: "https://meditatiidirect.ro/variante-bacalaureat" },
-            { "@type": "ListItem", position: 3, name: subject.name, item: `https://meditatiidirect.ro/resurse/bac/${subject.slug}/${BAC_YEARS[BAC_YEARS.length-1]}` },
+            { "@type": "ListItem", position: 3, name: subject.name, item: `https://meditatiidirect.ro/resurse/bac/${subject.slug}/${BAC_AVAILABLE_YEARS[BAC_AVAILABLE_YEARS.length-1]}` },
             { "@type": "ListItem", position: 4, name: `BAC ${year}`, item: url },
           ],
         }) },
