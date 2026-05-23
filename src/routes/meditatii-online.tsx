@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-online";
-const TITLE = "Meditații Online 2026 — Profesori Verificați pe Zoom & Meet | MeditatiiDirect.ro";
-const DESCRIPTION = "Meditații online cu profesori verificați din toată România: matematică, română, engleză, fizică, informatică, BAC, admitere. Lecții pe Zoom, Google Meet sau Whiteboard. Contact direct, fără comision, de la 30 lei/oră.";
+const TITLE = "Meditații Online 2026 — 1000+ Profesori Verificați pe Zoom & Meet | De la 30 lei";
+const DESCRIPTION = "★ Meditații online cu profesori verificați din toată România: matematică, română, engleză, fizică, informatică, BAC, admitere. Zoom/Meet, contact direct, FĂRĂ comision, de la 30 lei/oră.";
 
 const FAQS: FaqItem[] = [
   { q: "Cât costă o meditație online?", a: "Tarifele pentru meditații online încep de la 30 lei/oră pentru gimnaziu, 50–100 lei/oră pentru liceu și BAC, și 100–200 lei/oră pentru pregătire de admitere la Medicină, UPB, ASE sau Drept. Plătești direct profesorului — fără comision." },
