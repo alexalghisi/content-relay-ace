@@ -34,7 +34,7 @@ const SUBJECTS: { slug: string; name: string }[] = [
   { slug: "filosofie", name: "Filosofie" },
 ];
 
-const YEARS = Array.from({ length: 17 }, (_, i) => 2010 + i); // 2010 → 2026
+const YEARS = [2021, 2022, 2023, 2024, 2025]; // ani disponibili în arhivă
 
 export const BAC_ARCHIVE: BacItem[] = SUBJECTS.flatMap((s) =>
   YEARS.map((year) => ({
