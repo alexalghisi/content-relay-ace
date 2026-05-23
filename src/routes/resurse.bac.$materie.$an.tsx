@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, CalendarDays } from "lucide-react";
-import { BAC_SUBJECTS, BAC_YEARS } from "@/data/bac-archive";
+import { BAC_SUBJECTS, BAC_YEARS, BAC_AVAILABLE_YEARS } from "@/data/bac-archive";
 import { bacPdfUrl } from "@/lib/pdf-urls";
 import { faqJsonLd } from "@/components/seo-landing";
 
@@ -11,7 +11,8 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
     const subject = BAC_SUBJECTS.find((s) => s.slug === params.materie);
     if (!subject) throw notFound();
     const year = Number(params.an);
-    const yearAvailable = BAC_YEARS.includes(year);
+    if (!BAC_YEARS.includes(year)) throw notFound();
+    const yearAvailable = BAC_AVAILABLE_YEARS.includes(year);
     return { subject, year, yearAvailable };
   },
   head: ({ loaderData }) => {
@@ -66,7 +67,7 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Acasă", item: "https://meditatiidirect.ro/" },
             { "@type": "ListItem", position: 2, name: "Variante Bacalaureat", item: "https://meditatiidirect.ro/variante-bacalaureat" },
-            { "@type": "ListItem", position: 3, name: subject.name, item: `https://meditatiidirect.ro/resurse/bac/${subject.slug}/${BAC_YEARS[BAC_YEARS.length-1]}` },
+            { "@type": "ListItem", position: 3, name: subject.name, item: `https://meditatiidirect.ro/resurse/bac/${subject.slug}/${BAC_AVAILABLE_YEARS[BAC_AVAILABLE_YEARS.length-1]}` },
             { "@type": "ListItem", position: 4, name: `BAC ${year}`, item: url },
           ],
         }) },
@@ -87,7 +88,7 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
 function ResursaBacPage() {
   const { subject, year, yearAvailable } = Route.useLoaderData();
   const otherSubjects = BAC_SUBJECTS.filter((s) => s.slug !== subject.slug);
-  const latestYear = BAC_YEARS[BAC_YEARS.length - 1];
+  const latestYear = BAC_AVAILABLE_YEARS[BAC_AVAILABLE_YEARS.length - 1];
 
   if (!yearAvailable) {
     return (
@@ -126,7 +127,7 @@ function ResursaBacPage() {
           <h2 className="text-2xl font-semibold">Subiecte oficiale {subject.name} — anii disponibili</h2>
           <p className="mt-2 text-sm text-muted-foreground">PDF gratuit, găzduit pe MeditatiiDirect.ro.</p>
           <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {BAC_YEARS.slice().reverse().map((y) => (
+            {BAC_AVAILABLE_YEARS.slice().reverse().map((y) => (
               <Link key={y} to="/resurse/bac/$materie/$an" params={{ materie: subject.slug, an: String(y) }}
                 className="card-soft p-4 hover:border-primary/40 transition">
                 <p className="font-semibold">{subject.name} — BAC {y}</p>

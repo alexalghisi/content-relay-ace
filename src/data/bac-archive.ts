@@ -34,10 +34,15 @@ const SUBJECTS: { slug: string; name: string }[] = [
   { slug: "filosofie", name: "Filosofie" },
 ];
 
-const YEARS = [2021, 2022, 2023, 2024, 2025]; // ani disponibili în arhivă
+// Ani disponibili cu PDF efectiv în storage (subiecte oficiale găzduite la noi).
+const AVAILABLE_YEARS = [2021, 2022, 2023, 2024, 2025];
+// Toți anii pe care îi indexăm SEO (chiar dacă PDF-ul nu e încă disponibil pentru toți).
+// Acoperim toată istoria Bacalaureatului modern, plus sesiunea viitoare 2026.
+const ALL_YEARS: number[] = [];
+for (let y = 2001; y <= 2026; y++) ALL_YEARS.push(y);
 
 export const BAC_ARCHIVE: BacItem[] = SUBJECTS.flatMap((s) =>
-  YEARS.map((year) => ({
+  ALL_YEARS.map((year) => ({
     slug: s.slug,
     name: s.name,
     year,
@@ -48,4 +53,7 @@ export const BAC_ARCHIVE: BacItem[] = SUBJECTS.flatMap((s) =>
 );
 
 export const BAC_SUBJECTS = SUBJECTS;
-export const BAC_YEARS = YEARS;
+/** Toți anii indexați SEO (2001–2026). */
+export const BAC_YEARS = ALL_YEARS;
+/** Ani cu PDF efectiv în storage. */
+export const BAC_AVAILABLE_YEARS = AVAILABLE_YEARS;
