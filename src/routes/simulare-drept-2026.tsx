@@ -15,9 +15,13 @@ export const Route = createFileRoute("/simulare-drept-2026")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "simulare drept 2026, subiecte simulare drept 2026, barem simulare drept 2026, simulare admitere drept, simulare drept bucuresti, simulare drept cluj, admitere drept 2026, logica juridica, subiecte drept pdf, barem drept 2026, simulare facultatea de drept" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
