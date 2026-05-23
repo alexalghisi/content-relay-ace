@@ -16,9 +16,13 @@ export const Route = createFileRoute("/meditatii-informatica")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
+      { name: "keywords", content: "meditatii informatica, meditatii informatica online, meditatii c++, meditatii python, meditatii programare, meditatii informatica bac, meditatii informatica admitere, meditatii algoritmi, profesor informatica, meditatii informatica bucuresti, meditatii informatica cluj, meditatii UPB, meditatii informatica copii" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
