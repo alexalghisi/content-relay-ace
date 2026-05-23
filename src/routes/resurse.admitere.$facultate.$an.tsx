@@ -210,26 +210,16 @@ function ResursaAdmiterePage() {
         )}
       </section>
 
-      {/* FAQ vizibil + sincronizat cu JSON-LD */}
+      {/* FAQ vizibil — IDENTIC cu FAQPage JSON-LD (acelaşi array, aceeaşi ordine) */}
       <section className="mt-12 max-w-3xl">
-        <h2 className="text-2xl font-semibold">Întrebări frecvente — admitere {fac.name}</h2>
+        <h2 className="text-2xl font-semibold">Întrebări frecvente — admitere {fac.name} {year}</h2>
         <div className="mt-4 space-y-4">
-          <details className="rounded-lg border border-border bg-card p-4">
-            <summary className="cursor-pointer font-medium">De unde descarc subiectul de admitere la {fac.name} din {year}?</summary>
-            <p className="mt-2 text-sm text-muted-foreground">Folosește butonul „Vezi subiectul oficial" — te ducem direct la varianta publicată oficial.</p>
-          </details>
-          <details className="rounded-lg border border-border bg-card p-4">
-            <summary className="cursor-pointer font-medium">Ce probe are admiterea la {fac.name}?</summary>
-            <p className="mt-2 text-sm text-muted-foreground">Probele sunt: {fac.subject}.</p>
-          </details>
-          <details className="rounded-lg border border-border bg-card p-4">
-            <summary className="cursor-pointer font-medium">Pot lua meditații pentru admiterea la {fac.name}?</summary>
-            <p className="mt-2 text-sm text-muted-foreground">Da, profesorii noștri sunt specializați în pregătire pentru admiterea la {fac.name}, cu experiență pe probele {fac.subject}.</p>
-          </details>
-          <details className="rounded-lg border border-border bg-card p-4">
-            <summary className="cursor-pointer font-medium">Cât costă o ședință de pregătire admitere?</summary>
-            <p className="mt-2 text-sm text-muted-foreground">Între 30 și 200 RON/oră, în funcție de profesor și format (online / la domiciliu).</p>
-          </details>
+          {buildAdmFaqs(fac, year).map((f) => (
+            <details key={f.q} className="rounded-lg border border-border bg-card p-4">
+              <summary className="cursor-pointer font-medium">{f.q}</summary>
+              <p className="mt-2 text-sm text-muted-foreground">{f.a}</p>
+            </details>
+          ))}
         </div>
       </section>
     </article>
