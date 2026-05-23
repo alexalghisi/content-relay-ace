@@ -19,13 +19,18 @@ export const Route = createFileRoute("/resurse/admitere/$facultate/$an")({
     if (!loaderData) return {};
     const { fac, year } = loaderData;
     const url = `https://meditatiidirect.ro/resurse/admitere/${fac.slug}/${year}`;
-    const title = `${fac.name} — Subiect admitere ${year} | MeditatiiDirect.ro`;
-    const desc = `Subiect și barem oficial pentru admiterea la ${fac.name} (${year}). Acces direct la varianta oficială + meditații cu profesori verificați.`;
+    const title = `${fac.name} — Subiect admitere ${year} + barem PDF | MeditatiiDirect.ro`;
+    const desc = `Subiect și barem oficial pentru admiterea la ${fac.name} (${year}). Probă: ${fac.subject}. Plus profesori verificați pentru pregătire admitere.`;
+    const OG = "https://meditatiidirect.ro/og-admitere.jpg";
     return {
       meta: [
         { title }, { name: "description", content: desc },
+        { name: "keywords", content: `admitere ${fac.name} ${year}, subiect admitere ${year}, barem admitere ${fac.city}, pregatire admitere ${fac.name}` },
         { property: "og:title", content: title }, { property: "og:description", content: desc },
-        { property: "og:url", content: url },
+        { property: "og:url", content: url }, { property: "og:type", content: "article" },
+        { property: "og:image", content: OG },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: OG },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [{
