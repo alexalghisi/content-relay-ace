@@ -110,12 +110,36 @@ export const Route = createFileRoute("/sitemap.xml")({
           for (const it of BAC_ARCHIVE) {
             urls.push(`  <url>\n    <loc>${BASE_URL}${it.internal}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
           }
-          const { ADM_ARCHIVE } = await import("@/data/admitere-archive");
-          for (const it of ADM_ARCHIVE) {
-            urls.push(`  <url>\n    <loc>${BASE_URL}${it.internal}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
+        } catch (err) {
+          console.error("sitemap bac fetch failed", err);
+        }
+
+        // Noua arhivă /subiecte-admitere/* — generată din tabelul admission_papers
+        try {
+          urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+          const { data: papers } = await supabaseAdmin
+            .from("admission_papers")
+            .select("university_slug, subject_slug, year, updated_at")
+            .eq("is_published", true);
+          const unis = new Set<string>();
+          const unisSub = new Set<string>();
+          const unisSubYear = new Set<string>();
+          for (const p of papers ?? []) {
+            unis.add(p.university_slug);
+            unisSub.add(`${p.university_slug}/${p.subject_slug}`);
+            unisSubYear.add(`${p.university_slug}/${p.subject_slug}/${p.year}`);
+          }
+          for (const u of unis) {
+            urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${u}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
+          }
+          for (const us of unisSub) {
+            urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${us}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
+          }
+          for (const usy of unisSubYear) {
+            urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${usy}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
           }
         } catch (err) {
-          console.error("sitemap resurse fetch failed", err);
+          console.error("sitemap admission_papers fetch failed", err);
         }
 
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>`;
