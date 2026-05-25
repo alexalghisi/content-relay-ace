@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { ExternalLink, FileText, ArrowLeft, GraduationCap, CheckCircle2 } from "lucide-react";
 import { ADM_FACULTIES, ADM_YEARS } from "@/data/admitere-archive";
 import { faqJsonLd } from "@/components/seo-landing";
