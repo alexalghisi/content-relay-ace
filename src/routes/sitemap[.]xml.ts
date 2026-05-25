@@ -134,9 +134,6 @@ export const Route = createFileRoute("/sitemap.xml")({
           for (const s of subjects) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/materie/${s}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
           }
-            unisSub.add(`${p.university_slug}/${p.subject_slug}`);
-            unisSubYear.add(`${p.university_slug}/${p.subject_slug}/${p.year}`);
-          }
           for (const u of unis) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${u}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
           }
