@@ -151,9 +151,7 @@ function PaperPage() {
         <section className="mt-10">
           <h2 className="text-2xl font-semibold">Previzualizare subiect {subjectName} — admitere {universityName} {an}</h2>
           <p className="mt-2 text-sm text-muted-foreground">Vizualizează subiectul direct în pagină. Pentru descărcare folosește butoanele de mai sus.</p>
-          <div className="mt-3 overflow-hidden rounded-xl border border-border bg-card">
-            <iframe src={previewUrl} title={`${subjectName} admitere ${universityName} ${an}`} className="h-[80vh] w-full" loading="lazy" />
-          </div>
+          <LazyPdfPreview src={previewUrl} title={`${subjectName} admitere ${universityName} ${an}`} />
         </section>
       )}
       <section className="mt-12 rounded-2xl border border-primary/20 bg-primary-soft/40 p-6 sm:p-8">
