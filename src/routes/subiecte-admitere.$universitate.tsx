@@ -40,7 +40,7 @@ export const Route = createFileRoute("/subiecte-admitere/$universitate")({
 function UniversityPage() {
   const { universitate, universityName, subjects } = Route.useLoaderData();
   // SSR fallback: also try client-side fetch in case route was prerendered before data existed.
-  const [list, setList] = useState(subjects);
+  const [list, setList] = useState<typeof subjects>(subjects);
   useEffect(() => { if (subjects.length === 0) listSubjectsForUni(universitate).then((r) => setList(r.subjects)); }, [universitate, subjects.length]);
   return (
     <main className="container-page py-10 lg:py-14">
