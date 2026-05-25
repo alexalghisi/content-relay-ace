@@ -78,13 +78,13 @@ function SubjectAggregatorPage() {
           <p className="mt-4 text-sm text-muted-foreground">Arhiva pentru {subjectName} se populează.</p>
         ) : (
           <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {universities.map((u) => (
+            {universities.map((u: { slug: string; name: string; years: number[] }) => (
               <li key={u.slug} className="card-soft p-4">
                 <Link to="/subiecte-admitere/$universitate/$materie" params={{ universitate: u.slug, materie }}
                   className="font-semibold hover:text-primary">{u.name}</Link>
                 <p className="mt-1 text-xs text-muted-foreground">{u.years.length} {u.years.length === 1 ? "an" : "ani"} disponibili</p>
                 <div className="mt-2 flex flex-wrap gap-1">
-                  {u.years.slice(0, 6).map((y) => (
+                  {u.years.slice(0, 6).map((y: number) => (
                     <Link key={y} to="/subiecte-admitere/$universitate/$materie/$an" params={{ universitate: u.slug, materie, an: String(y) }}
                       className="rounded-md border border-border bg-card px-2 py-0.5 text-xs hover:border-primary/40 hover:text-primary">{y}</Link>
                   ))}
