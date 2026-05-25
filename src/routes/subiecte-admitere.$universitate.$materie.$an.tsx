@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, Link2 } from "lucide-react";
 import { getPapersForYear, paperPublicUrl, listRelatedUnisForSubject, listYearsForUniSubject, type AdmissionPaper } from "@/lib/admission-papers";
+import { LazyPdfPreview } from "@/components/lazy-pdf-preview";
 
 type LoaderData = {
   universitate: string; materie: string; an: number;
