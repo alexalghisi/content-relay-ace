@@ -88,9 +88,9 @@ function downloadBlob(url: string, filename: string) {
 
 function PaperPage() {
   const { universitate, materie, an, papers, universityName, subjectName } = Route.useLoaderData();
-  const subjectPaper = papers.find((p) => p.document_type === "subiect");
-  const baremPaper = papers.find((p) => p.document_type === "barem");
-  const rezolvarePaper = papers.find((p) => p.document_type === "rezolvare");
+  const subjectPaper = papers.find((p: AdmissionPaper) => p.document_type === "subiect");
+  const baremPaper = papers.find((p: AdmissionPaper) => p.document_type === "barem");
+  const rezolvarePaper = papers.find((p: AdmissionPaper) => p.document_type === "rezolvare");
   const previewUrl = subjectPaper ? paperPublicUrl(subjectPaper.storage_path) : null;
   return (
     <article className="container-page py-10 lg:py-14">
