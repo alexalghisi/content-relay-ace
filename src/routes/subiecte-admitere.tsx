@@ -85,6 +85,22 @@ function HubPage() {
             </ul>
           )}
       </section>
+      {subjects.length > 0 && (
+        <section className="mt-12">
+          <h2 className="text-xl font-semibold flex items-center gap-2"><BookOpen className="h-5 w-5" /> Caută după materie</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Compară subiecte la aceeași materie pe toate universitățile.</p>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {subjects.map((s) => (
+              <li key={s.slug}>
+                <Link to="/subiecte-admitere/materie/$materie" params={{ materie: s.slug }}
+                  className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary">
+                  {s.name} <span className="text-xs text-muted-foreground">· {s.count}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <section className="mt-12 max-w-3xl">
         <h2 className="text-2xl font-semibold">Cum folosești arhiva</h2>
         <ol className="mt-3 space-y-2 list-decimal pl-5 text-muted-foreground">
