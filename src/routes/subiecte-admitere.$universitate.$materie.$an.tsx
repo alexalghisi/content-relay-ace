@@ -168,6 +168,44 @@ function PaperPage() {
           </div>
         </div>
       </section>
+
+      {(otherYears.length > 0 || relatedUnis.length > 0) && (
+        <section className="mt-12 grid gap-6 lg:grid-cols-2">
+          {otherYears.length > 0 && (
+            <div className="card-soft p-6">
+              <h2 className="text-lg font-semibold flex items-center gap-2"><Link2 className="h-5 w-5 text-primary" /> Alți ani — {subjectName} la {universityName}</h2>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {otherYears.map((y: number) => (
+                  <li key={y}>
+                    <Link to="/subiecte-admitere/$universitate/$materie/$an" params={{ universitate, materie, an: String(y) }}
+                      className="rounded-md border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary">
+                      {subjectName} {y}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {relatedUnis.length > 0 && (
+            <div className="card-soft p-6">
+              <h2 className="text-lg font-semibold flex items-center gap-2"><Link2 className="h-5 w-5 text-primary" /> Aceeași materie la alte universități</h2>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {relatedUnis.map((u: { slug: string; name: string }) => (
+                  <li key={u.slug}>
+                    <Link to="/subiecte-admitere/$universitate/$materie" params={{ universitate: u.slug, materie }}
+                      className="rounded-md border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary">
+                      {subjectName} — {u.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link to="/subiecte-admitere/materie/$materie" params={{ materie }} className="mt-3 inline-flex text-sm text-primary hover:underline">
+                Vezi toate universitățile cu {subjectName} →
+              </Link>
+            </div>
+          )}
+        </section>
+      )}
     </article>
   );
 }
