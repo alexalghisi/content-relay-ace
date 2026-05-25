@@ -1,20 +1,31 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2 } from "lucide-react";
-import { getPapersForYear, paperPublicUrl, type AdmissionPaper } from "@/lib/admission-papers";
+import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, Link2 } from "lucide-react";
+import { getPapersForYear, paperPublicUrl, listRelatedUnisForSubject, listYearsForUniSubject, type AdmissionPaper } from "@/lib/admission-papers";
 
-type LoaderData = { universitate: string; materie: string; an: number; papers: AdmissionPaper[]; universityName: string; subjectName: string };
+type LoaderData = {
+  universitate: string; materie: string; an: number;
+  papers: AdmissionPaper[]; universityName: string; subjectName: string;
+  relatedUnis: { slug: string; name: string }[];
+  otherYears: number[];
+};
 
 export const Route = createFileRoute("/subiecte-admitere/$universitate/$materie/$an")({
   loader: async ({ params }): Promise<LoaderData> => {
     const an = Number(params.an);
     if (!Number.isFinite(an)) throw notFound();
-    const papers = await getPapersForYear(params.universitate, params.materie, an);
+    const [papers, relatedUnis, yearsRes] = await Promise.all([
+      getPapersForYear(params.universitate, params.materie, an),
+      listRelatedUnisForSubject(params.materie, params.universitate),
+      listYearsForUniSubject(params.universitate, params.materie),
+    ]);
     if (papers.length === 0) throw notFound();
     return {
       universitate: params.universitate, materie: params.materie, an,
       papers,
       universityName: papers[0].university_name,
       subjectName: papers[0].subject_name,
+      relatedUnis,
+      otherYears: yearsRes.years.filter((y) => y !== an),
     };
   },
   head: ({ loaderData }) => {
