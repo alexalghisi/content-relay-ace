@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Search, Library } from "lucide-react";
-import { listUniversities } from "@/lib/admission-papers";
+import { Search, Library, BookOpen } from "lucide-react";
+import { listUniversities, listAllSubjects } from "@/lib/admission-papers";
 
 const URL_BASE = "https://meditatiidirect.ro/subiecte-admitere";
 const TITLE = "Subiecte Admitere Facultate 2026 — Arhivă PDF oficială | MeditatiiDirect.ro";
@@ -29,9 +29,14 @@ export const Route = createFileRoute("/subiecte-admitere")({
 
 function HubPage() {
   const [unis, setUnis] = useState<{ slug: string; name: string; count: number }[]>([]);
+  const [subjects, setSubjects] = useState<{ slug: string; name: string; count: number }[]>([]);
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
-  useEffect(() => { listUniversities().then((r) => { setUnis(r); setLoading(false); }).catch(() => setLoading(false)); }, []);
+  useEffect(() => {
+    Promise.all([listUniversities(), listAllSubjects()])
+      .then(([u, s]) => { setUnis(u); setSubjects(s); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
   const filtered = q ? unis.filter((u) => u.name.toLowerCase().includes(q.toLowerCase())) : unis;
   return (
     <main className="container-page py-10 lg:py-14">
@@ -80,6 +85,22 @@ function HubPage() {
             </ul>
           )}
       </section>
+      {subjects.length > 0 && (
+        <section className="mt-12">
+          <h2 className="text-xl font-semibold flex items-center gap-2"><BookOpen className="h-5 w-5" /> Caută după materie</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Compară subiecte la aceeași materie pe toate universitățile.</p>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {subjects.map((s) => (
+              <li key={s.slug}>
+                <Link to="/subiecte-admitere/materie/$materie" params={{ materie: s.slug }}
+                  className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary">
+                  {s.name} <span className="text-xs text-muted-foreground">· {s.count}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <section className="mt-12 max-w-3xl">
         <h2 className="text-2xl font-semibold">Cum folosești arhiva</h2>
         <ol className="mt-3 space-y-2 list-decimal pl-5 text-muted-foreground">

@@ -107,3 +107,59 @@ export async function getPapersForYear(universitySlug: string, subjectSlug: stri
   if (error) throw error;
   return (data ?? []) as AdmissionPaper[];
 }
+
+/** Toate materiile distincte din arhivă, pentru agregator-ul cross-universitate. */
+export async function listAllSubjects() {
+  const { data, error } = await supabase
+    .from("admission_papers")
+    .select("subject_slug, subject_name")
+    .eq("is_published", true);
+  if (error) throw error;
+  const map = new Map<string, { slug: string; name: string; count: number }>();
+  for (const r of data ?? []) {
+    const cur = map.get(r.subject_slug);
+    if (cur) cur.count += 1;
+    else map.set(r.subject_slug, { slug: r.subject_slug, name: r.subject_name, count: 1 });
+  }
+  return Array.from(map.values()).sort((a, b) => b.count - a.count);
+}
+
+/** Universități + ani disponibili pentru o materie (pagina agregator /materie/$materie). */
+export async function listUnisForSubject(subjectSlug: string) {
+  const { data, error } = await supabase
+    .from("admission_papers")
+    .select("university_slug, university_name, subject_name, year")
+    .eq("subject_slug", subjectSlug)
+    .eq("is_published", true);
+  if (error) throw error;
+  const map = new Map<string, { slug: string; name: string; years: Set<number> }>();
+  let subjectName = "";
+  for (const r of data ?? []) {
+    subjectName = r.subject_name;
+    const cur = map.get(r.university_slug);
+    if (cur) cur.years.add(r.year);
+    else map.set(r.university_slug, { slug: r.university_slug, name: r.university_name, years: new Set([r.year]) });
+  }
+  return {
+    subjectName,
+    universities: Array.from(map.values())
+      .map((u) => ({ slug: u.slug, name: u.name, years: Array.from(u.years).sort((a, b) => b - a) }))
+      .sort((a, b) => b.years.length - a.years.length),
+  };
+}
+
+/** Alte universități care au aceeași materie — pentru cross-link pe pagina anuală. */
+export async function listRelatedUnisForSubject(subjectSlug: string, excludeUniSlug: string) {
+  const { data, error } = await supabase
+    .from("admission_papers")
+    .select("university_slug, university_name")
+    .eq("subject_slug", subjectSlug)
+    .eq("is_published", true)
+    .neq("university_slug", excludeUniSlug);
+  if (error) throw error;
+  const map = new Map<string, { slug: string; name: string }>();
+  for (const r of data ?? []) {
+    if (!map.has(r.university_slug)) map.set(r.university_slug, { slug: r.university_slug, name: r.university_name });
+  }
+  return Array.from(map.values());
+}

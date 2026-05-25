@@ -124,10 +124,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           const unis = new Set<string>();
           const unisSub = new Set<string>();
           const unisSubYear = new Set<string>();
+          const subjects = new Set<string>();
           for (const p of papers ?? []) {
             unis.add(p.university_slug);
             unisSub.add(`${p.university_slug}/${p.subject_slug}`);
             unisSubYear.add(`${p.university_slug}/${p.subject_slug}/${p.year}`);
+            subjects.add(p.subject_slug);
+          }
+          for (const s of subjects) {
+            urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/materie/${s}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
           }
           for (const u of unis) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${u}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
