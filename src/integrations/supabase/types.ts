@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      admission_papers: {
+        Row: {
+          created_at: string
+          description: string | null
+          document_type: string
+          id: string
+          is_published: boolean
+          session: string | null
+          slug: string
+          storage_path: string
+          subject_name: string
+          subject_slug: string
+          title: string
+          university_name: string
+          university_slug: string
+          updated_at: string
+          views_count: number
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          document_type: string
+          id?: string
+          is_published?: boolean
+          session?: string | null
+          slug: string
+          storage_path: string
+          subject_name: string
+          subject_slug: string
+          title: string
+          university_name: string
+          university_slug: string
+          updated_at?: string
+          views_count?: number
+          year: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          document_type?: string
+          id?: string
+          is_published?: boolean
+          session?: string | null
+          slug?: string
+          storage_path?: string
+          subject_name?: string
+          subject_slug?: string
+          title?: string
+          university_name?: string
+          university_slug?: string
+          updated_at?: string
+          views_count?: number
+          year?: number
+        }
+        Relationships: []
+      }
       ads: {
         Row: {
           created_at: string

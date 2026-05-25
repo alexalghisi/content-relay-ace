@@ -56,10 +56,13 @@ import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditat
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SubiecteAdmitereUniversitateRouteImport } from './routes/subiecte-admitere.$universitate'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
+import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './routes/subiecte-admitere.$universitate.$materie'
+import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
 import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
 import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
@@ -302,6 +305,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubiecteAdmitereUniversitateRoute =
+  SubiecteAdmitereUniversitateRouteImport.update({
+    id: '/$universitate',
+    path: '/$universitate',
+    getParentRoute: () => SubiecteAdmitereRoute,
+  } as any)
 const MesajeIdRoute = MesajeIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -322,6 +331,18 @@ const AnuntSlugRoute = AnuntSlugRouteImport.update({
   path: '/anunt/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubiecteAdmitereUniversitateMaterieRoute =
+  SubiecteAdmitereUniversitateMaterieRouteImport.update({
+    id: '/$materie',
+    path: '/$materie',
+    getParentRoute: () => SubiecteAdmitereUniversitateRoute,
+  } as any)
+const SubiecteAdmitereUniversitateMaterieAnRoute =
+  SubiecteAdmitereUniversitateMaterieAnRouteImport.update({
+    id: '/$an',
+    path: '/$an',
+    getParentRoute: () => SubiecteAdmitereUniversitateMaterieRoute,
+  } as any)
 const ResurseBacMaterieAnRoute = ResurseBacMaterieAnRouteImport.update({
   id: '/resurse/bac/$materie/$an',
   path: '/resurse/bac/$materie/$an',
@@ -383,7 +404,7 @@ export interface FileRoutesByFullPath {
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/subiecte-admitere': typeof SubiecteAdmitereRoute
+  '/subiecte-admitere': typeof SubiecteAdmitereRouteWithChildren
   '/subiecte-bac': typeof SubiecteBacRoute
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
@@ -392,9 +413,12 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
+  '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -439,7 +463,7 @@ export interface FileRoutesByTo {
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/subiecte-admitere': typeof SubiecteAdmitereRoute
+  '/subiecte-admitere': typeof SubiecteAdmitereRouteWithChildren
   '/subiecte-bac': typeof SubiecteBacRoute
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
@@ -448,9 +472,12 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
+  '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -496,7 +523,7 @@ export interface FileRoutesById {
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/subiecte-admitere': typeof SubiecteAdmitereRoute
+  '/subiecte-admitere': typeof SubiecteAdmitereRouteWithChildren
   '/subiecte-bac': typeof SubiecteBacRoute
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
@@ -505,9 +532,12 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
+  '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -563,9 +593,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/subiecte-admitere/$universitate'
+    | '/subiecte-admitere/$universitate/$materie'
     | '/api/public/hooks/auto-blog-post'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/subiecte-admitere/$universitate/$materie/$an'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -619,9 +652,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/subiecte-admitere/$universitate'
+    | '/subiecte-admitere/$universitate/$materie'
     | '/api/public/hooks/auto-blog-post'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/subiecte-admitere/$universitate/$materie/$an'
   id:
     | '__root__'
     | '/'
@@ -675,9 +711,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/subiecte-admitere/$universitate'
+    | '/subiecte-admitere/$universitate/$materie'
     | '/api/public/hooks/auto-blog-post'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/subiecte-admitere/$universitate/$materie/$an'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -723,7 +762,7 @@ export interface RootRouteChildren {
   SimulareUtcn2026Route: typeof SimulareUtcn2026Route
   SimulariBacalaureat2026Route: typeof SimulariBacalaureat2026Route
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  SubiecteAdmitereRoute: typeof SubiecteAdmitereRoute
+  SubiecteAdmitereRoute: typeof SubiecteAdmitereRouteWithChildren
   SubiecteBacRoute: typeof SubiecteBacRoute
   TermeniRoute: typeof TermeniRoute
   TutorialeRoute: typeof TutorialeRoute
@@ -1066,6 +1105,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subiecte-admitere/$universitate': {
+      id: '/subiecte-admitere/$universitate'
+      path: '/$universitate'
+      fullPath: '/subiecte-admitere/$universitate'
+      preLoaderRoute: typeof SubiecteAdmitereUniversitateRouteImport
+      parentRoute: typeof SubiecteAdmitereRoute
+    }
     '/mesaje/$id': {
       id: '/mesaje/$id'
       path: '/$id'
@@ -1093,6 +1139,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/anunt/$slug'
       preLoaderRoute: typeof AnuntSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/subiecte-admitere/$universitate/$materie': {
+      id: '/subiecte-admitere/$universitate/$materie'
+      path: '/$materie'
+      fullPath: '/subiecte-admitere/$universitate/$materie'
+      preLoaderRoute: typeof SubiecteAdmitereUniversitateMaterieRouteImport
+      parentRoute: typeof SubiecteAdmitereUniversitateRoute
+    }
+    '/subiecte-admitere/$universitate/$materie/$an': {
+      id: '/subiecte-admitere/$universitate/$materie/$an'
+      path: '/$an'
+      fullPath: '/subiecte-admitere/$universitate/$materie/$an'
+      preLoaderRoute: typeof SubiecteAdmitereUniversitateMaterieAnRouteImport
+      parentRoute: typeof SubiecteAdmitereUniversitateMaterieRoute
     }
     '/resurse/bac/$materie/$an': {
       id: '/resurse/bac/$materie/$an'
@@ -1139,6 +1199,48 @@ const MesajeRouteChildren: MesajeRouteChildren = {
 const MesajeRouteWithChildren =
   MesajeRoute._addFileChildren(MesajeRouteChildren)
 
+interface SubiecteAdmitereUniversitateMaterieRouteChildren {
+  SubiecteAdmitereUniversitateMaterieAnRoute: typeof SubiecteAdmitereUniversitateMaterieAnRoute
+}
+
+const SubiecteAdmitereUniversitateMaterieRouteChildren: SubiecteAdmitereUniversitateMaterieRouteChildren =
+  {
+    SubiecteAdmitereUniversitateMaterieAnRoute:
+      SubiecteAdmitereUniversitateMaterieAnRoute,
+  }
+
+const SubiecteAdmitereUniversitateMaterieRouteWithChildren =
+  SubiecteAdmitereUniversitateMaterieRoute._addFileChildren(
+    SubiecteAdmitereUniversitateMaterieRouteChildren,
+  )
+
+interface SubiecteAdmitereUniversitateRouteChildren {
+  SubiecteAdmitereUniversitateMaterieRoute: typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
+}
+
+const SubiecteAdmitereUniversitateRouteChildren: SubiecteAdmitereUniversitateRouteChildren =
+  {
+    SubiecteAdmitereUniversitateMaterieRoute:
+      SubiecteAdmitereUniversitateMaterieRouteWithChildren,
+  }
+
+const SubiecteAdmitereUniversitateRouteWithChildren =
+  SubiecteAdmitereUniversitateRoute._addFileChildren(
+    SubiecteAdmitereUniversitateRouteChildren,
+  )
+
+interface SubiecteAdmitereRouteChildren {
+  SubiecteAdmitereUniversitateRoute: typeof SubiecteAdmitereUniversitateRouteWithChildren
+}
+
+const SubiecteAdmitereRouteChildren: SubiecteAdmitereRouteChildren = {
+  SubiecteAdmitereUniversitateRoute:
+    SubiecteAdmitereUniversitateRouteWithChildren,
+}
+
+const SubiecteAdmitereRouteWithChildren =
+  SubiecteAdmitereRoute._addFileChildren(SubiecteAdmitereRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdmitereRoute: AdmitereRoute,
@@ -1182,7 +1284,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimulareUtcn2026Route: SimulareUtcn2026Route,
   SimulariBacalaureat2026Route: SimulariBacalaureat2026Route,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  SubiecteAdmitereRoute: SubiecteAdmitereRoute,
+  SubiecteAdmitereRoute: SubiecteAdmitereRouteWithChildren,
   SubiecteBacRoute: SubiecteBacRoute,
   TermeniRoute: TermeniRoute,
   TutorialeRoute: TutorialeRoute,
@@ -1196,13 +1298,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
