@@ -23,6 +23,11 @@ function buildAdmFaqs(fac: { name: string; subject: string; city: string }, year
 }
 
 export const Route = createFileRoute("/resurse/admitere/$facultate/$an")({
+  beforeLoad: ({ params }) => {
+    // 301 redirect către noua structură /subiecte-admitere/[uni]/[mat]/[an].
+    // Slug-ul vechi combina universitate+materie (ex: umf-cluj-medicina) — redirect către pagina universității, unde utilizatorul alege materia.
+    throw redirect({ to: "/subiecte-admitere/$universitate", params: { universitate: params.facultate }, code: 301 });
+  },
   loader: ({ params }) => {
     const fac = ADM_FACULTIES.find((f) => f.slug === params.facultate);
     const year = Number(params.an);
