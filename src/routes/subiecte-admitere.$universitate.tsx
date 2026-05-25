@@ -70,7 +70,7 @@ function UniversityPage() {
           <p className="mt-4 text-sm text-muted-foreground">Arhiva pentru această universitate se populează. Vezi <Link to="/admitere" className="text-primary hover:underline">ghidul de admitere</Link> sau alte universități.</p>
         ) : (
           <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {list.map((s) => (
+            {list.map((s: SubjectRow) => (
               <li key={s.slug}>
                 <Link to="/subiecte-admitere/$universitate/$materie" params={{ universitate, materie: s.slug }}
                   className="card-soft block p-4 hover:border-primary/40 transition">
