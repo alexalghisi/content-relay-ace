@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { BookOpen, ArrowLeft } from "lucide-react";
 import { listSubjectsForUni } from "@/lib/admission-papers";
 
+type SubjectRow = { slug: string; name: string; count: number };
+
 export const Route = createFileRoute("/subiecte-admitere/$universitate")({
-  loader: async ({ params }) => {
+  loader: async ({ params }): Promise<{ universitate: string; universityName: string; subjects: SubjectRow[] }> => {
     const { universityName, subjects } = await listSubjectsForUni(params.universitate);
     return { universitate: params.universitate, universityName: universityName || params.universitate, subjects };
   },
