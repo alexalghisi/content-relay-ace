@@ -98,7 +98,7 @@ function downloadBlob(url: string, filename: string) {
 }
 
 function PaperPage() {
-  const { universitate, materie, an, papers, universityName, subjectName } = Route.useLoaderData();
+  const { universitate, materie, an, papers, universityName, subjectName, relatedUnis, otherYears } = Route.useLoaderData();
   const subjectPaper = papers.find((p: AdmissionPaper) => p.document_type === "subiect");
   const baremPaper = papers.find((p: AdmissionPaper) => p.document_type === "barem");
   const rezolvarePaper = papers.find((p: AdmissionPaper) => p.document_type === "rezolvare");
