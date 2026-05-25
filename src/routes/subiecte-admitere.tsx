@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Search, Library } from "lucide-react";
-import { listUniversities } from "@/lib/admission-papers";
+import { Search, Library, BookOpen } from "lucide-react";
+import { listUniversities, listAllSubjects } from "@/lib/admission-papers";
 
 const URL_BASE = "https://meditatiidirect.ro/subiecte-admitere";
 const TITLE = "Subiecte Admitere Facultate 2026 — Arhivă PDF oficială | MeditatiiDirect.ro";
