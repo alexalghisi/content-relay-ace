@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, Link2 } from "lucide-react";
 import { getPapersForYear, paperPublicUrl, listRelatedUnisForSubject, listYearsForUniSubject, type AdmissionPaper } from "@/lib/admission-papers";
+import { LazyPdfPreview } from "@/components/lazy-pdf-preview";
 
 type LoaderData = {
   universitate: string; materie: string; an: number;
@@ -150,9 +151,7 @@ function PaperPage() {
         <section className="mt-10">
           <h2 className="text-2xl font-semibold">Previzualizare subiect {subjectName} — admitere {universityName} {an}</h2>
           <p className="mt-2 text-sm text-muted-foreground">Vizualizează subiectul direct în pagină. Pentru descărcare folosește butoanele de mai sus.</p>
-          <div className="mt-3 overflow-hidden rounded-xl border border-border bg-card">
-            <iframe src={previewUrl} title={`${subjectName} admitere ${universityName} ${an}`} className="h-[80vh] w-full" loading="lazy" />
-          </div>
+          <LazyPdfPreview src={previewUrl} title={`${subjectName} admitere ${universityName} ${an}`} />
         </section>
       )}
       <section className="mt-12 rounded-2xl border border-primary/20 bg-primary-soft/40 p-6 sm:p-8">
