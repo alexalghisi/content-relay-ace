@@ -29,9 +29,14 @@ export const Route = createFileRoute("/subiecte-admitere")({
 
 function HubPage() {
   const [unis, setUnis] = useState<{ slug: string; name: string; count: number }[]>([]);
+  const [subjects, setSubjects] = useState<{ slug: string; name: string; count: number }[]>([]);
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
-  useEffect(() => { listUniversities().then((r) => { setUnis(r); setLoading(false); }).catch(() => setLoading(false)); }, []);
+  useEffect(() => {
+    Promise.all([listUniversities(), listAllSubjects()])
+      .then(([u, s]) => { setUnis(u); setSubjects(s); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
   const filtered = q ? unis.filter((u) => u.name.toLowerCase().includes(q.toLowerCase())) : unis;
   return (
     <main className="container-page py-10 lg:py-14">
