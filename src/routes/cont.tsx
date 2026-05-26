@@ -135,6 +135,32 @@ function AccountPage() {
         </div>
       </div>
 
+      {/* Avatar */}
+      <div className="card-soft mt-6 p-5 sm:p-6">
+        <h2 className="text-lg font-semibold inline-flex items-center gap-2"><Camera className="h-4 w-4 text-primary" /> Fotografie de profil</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Este afișată pe anunțuri și mesaje. JPG/PNG/WEBP, max 3 MB.</p>
+        <div className="mt-4 flex items-center gap-4">
+          {profile.avatar_url ? (
+            <img src={profile.avatar_url} alt="Avatar" className="h-20 w-20 rounded-full object-cover border border-border" />
+          ) : (
+            <div className="h-20 w-20 rounded-full bg-muted grid place-items-center text-muted-foreground">
+              <User className="h-8 w-8" />
+            </div>
+          )}
+          <div className="flex flex-wrap gap-2">
+            <label className="btn-primary h-10 inline-flex items-center gap-2 cursor-pointer">
+              <Camera className="h-4 w-4" /> {profile.avatar_url ? "Schimbă" : "Încarcă"}
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={onAvatarFile} />
+            </label>
+            {profile.avatar_url && (
+              <button onClick={removeAvatar} className="btn-outline h-10 inline-flex items-center gap-2 text-sm">
+                <Trash2 className="h-4 w-4" /> Elimină
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Profile */}
       <form onSubmit={saveProfile} className="card-soft mt-6 p-5 sm:p-6 space-y-4">
         <h2 className="text-lg font-semibold inline-flex items-center gap-2"><User className="h-4 w-4 text-primary" /> Date personale</h2>
