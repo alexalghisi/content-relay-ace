@@ -28,7 +28,7 @@ const profileSchema = z.object({
 function AccountPage() {
   const { user, loading, signOut } = useAuth();
   const loadPrivateProfile = useServerFn(getMyPrivateProfile);
-  const [profile, setProfile] = useState<Profile>({ display_name: "", phone: "", city: "", bio: "" });
+  const [profile, setProfile] = useState<Profile>({ display_name: "", phone: "", city: "", bio: "", avatar_url: null });
   const [saving, setSaving] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -48,6 +48,7 @@ function AccountPage() {
             phone: data.phone ?? "",
             city: data.city ?? "",
             bio: data.bio ?? "",
+            avatar_url: data.avatar_url ?? null,
           });
         })
         .catch(() => {
