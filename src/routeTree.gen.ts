@@ -66,6 +66,7 @@ import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './route
 import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
 import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
 
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
@@ -361,6 +362,12 @@ const ResurseAdmitereFacultateAnRoute =
     path: '/resurse/admitere/$facultate/$an',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksAutoBlogPostRoute =
   ApiPublicHooksAutoBlogPostRouteImport.update({
     id: '/api/public/hooks/auto-blog-post',
@@ -424,6 +431,7 @@ export interface FileRoutesByFullPath {
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
@@ -484,6 +492,7 @@ export interface FileRoutesByTo {
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
@@ -545,6 +554,7 @@ export interface FileRoutesById {
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
+  '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
@@ -607,6 +617,7 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
     | '/api/public/hooks/auto-blog-post'
+    | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
     | '/subiecte-admitere/$universitate/$materie/$an'
@@ -667,6 +678,7 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
     | '/api/public/hooks/auto-blog-post'
+    | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
     | '/subiecte-admitere/$universitate/$materie/$an'
@@ -727,6 +739,7 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
     | '/api/public/hooks/auto-blog-post'
+    | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
     | '/subiecte-admitere/$universitate/$materie/$an'
@@ -783,6 +796,7 @@ export interface RootRouteChildren {
   AnuntSlugRoute: typeof AnuntSlugRoute
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
   ApiPublicHooksAutoBlogPostRoute: typeof ApiPublicHooksAutoBlogPostRoute
+  LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
   ResurseBacMaterieAnRoute: typeof ResurseBacMaterieAnRoute
 }
@@ -1188,6 +1202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResurseAdmitereFacultateAnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/auto-blog-post': {
       id: '/api/public/hooks/auto-blog-post'
       path: '/api/public/hooks/auto-blog-post'
@@ -1314,6 +1335,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnuntSlugRoute: AnuntSlugRoute,
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
   ApiPublicHooksAutoBlogPostRoute: ApiPublicHooksAutoBlogPostRoute,
+  LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
   ResurseBacMaterieAnRoute: ResurseBacMaterieAnRoute,
 }
