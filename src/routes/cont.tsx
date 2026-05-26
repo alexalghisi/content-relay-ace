@@ -97,6 +97,31 @@ function AccountPage() {
     else { toast.success("Parolă schimbată!"); setNewPassword(""); }
   };
 
+  const onAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!/^image\/(jpeg|png|webp|gif)$/.test(file.type)) { toast.error("Format invalid. Folosește JPG, PNG, WEBP."); return; }
+    if (file.size > 3 * 1024 * 1024) { toast.error("Fișierul depășește 3 MB."); return; }
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `${user.id}/avatar-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage.from("avatars").upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+    if (upErr) { toast.error(upErr.message); return; }
+    const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
+    const url = pub.publicUrl;
+    const { error: dbErr } = await supabase.from("profiles").upsert({ user_id: user.id, avatar_url: url }, { onConflict: "user_id" });
+    if (dbErr) { toast.error(dbErr.message); return; }
+    setProfile((p) => ({ ...p, avatar_url: url }));
+    toast.success("Fotografie actualizată!");
+  };
+
+  const removeAvatar = async () => {
+    const { error } = await supabase.from("profiles").update({ avatar_url: null }).eq("user_id", user.id);
+    if (error) { toast.error(error.message); return; }
+    setProfile((p) => ({ ...p, avatar_url: null }));
+    toast.success("Fotografie eliminată.");
+  };
+
   return (
     <section className="container-page py-8 sm:py-12 max-w-3xl">
       <div className="flex items-start justify-between gap-4 flex-wrap">
