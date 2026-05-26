@@ -6,7 +6,7 @@ import { getMyPrivateProfile } from "@/lib/security.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
-import { User, Phone, MapPin, Mail, Lock, MessageCircle, LogOut, Save } from "lucide-react";
+import { User, Phone, MapPin, Mail, Lock, MessageCircle, LogOut, Save, Camera, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/cont")({
   head: () => ({ meta: [
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/cont")({
   component: AccountPage,
 });
 
-interface Profile { display_name: string | null; phone: string | null; city: string | null; bio: string | null; }
+interface Profile { display_name: string | null; phone: string | null; city: string | null; bio: string | null; avatar_url: string | null; }
 
 const profileSchema = z.object({
   display_name: z.string().trim().min(2, "Nume prea scurt").max(80),
