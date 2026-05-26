@@ -6,7 +6,7 @@ import { getMyPrivateProfile } from "@/lib/security.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
-import { User, Phone, MapPin, Mail, Lock, MessageCircle, LogOut, Save } from "lucide-react";
+import { User, Phone, MapPin, Mail, Lock, MessageCircle, LogOut, Save, Camera, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/cont")({
   head: () => ({ meta: [
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/cont")({
   component: AccountPage,
 });
 
-interface Profile { display_name: string | null; phone: string | null; city: string | null; bio: string | null; }
+interface Profile { display_name: string | null; phone: string | null; city: string | null; bio: string | null; avatar_url: string | null; }
 
 const profileSchema = z.object({
   display_name: z.string().trim().min(2, "Nume prea scurt").max(80),
@@ -28,7 +28,7 @@ const profileSchema = z.object({
 function AccountPage() {
   const { user, loading, signOut } = useAuth();
   const loadPrivateProfile = useServerFn(getMyPrivateProfile);
-  const [profile, setProfile] = useState<Profile>({ display_name: "", phone: "", city: "", bio: "" });
+  const [profile, setProfile] = useState<Profile>({ display_name: "", phone: "", city: "", bio: "", avatar_url: null });
   const [saving, setSaving] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -48,6 +48,7 @@ function AccountPage() {
             phone: data.phone ?? "",
             city: data.city ?? "",
             bio: data.bio ?? "",
+            avatar_url: data.avatar_url ?? null,
           });
         })
         .catch(() => {
@@ -96,6 +97,31 @@ function AccountPage() {
     else { toast.success("Parolă schimbată!"); setNewPassword(""); }
   };
 
+  const onAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!/^image\/(jpeg|png|webp|gif)$/.test(file.type)) { toast.error("Format invalid. Folosește JPG, PNG, WEBP."); return; }
+    if (file.size > 3 * 1024 * 1024) { toast.error("Fișierul depășește 3 MB."); return; }
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `${user.id}/avatar-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage.from("avatars").upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+    if (upErr) { toast.error(upErr.message); return; }
+    const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
+    const url = pub.publicUrl;
+    const { error: dbErr } = await supabase.from("profiles").upsert({ user_id: user.id, avatar_url: url }, { onConflict: "user_id" });
+    if (dbErr) { toast.error(dbErr.message); return; }
+    setProfile((p) => ({ ...p, avatar_url: url }));
+    toast.success("Fotografie actualizată!");
+  };
+
+  const removeAvatar = async () => {
+    const { error } = await supabase.from("profiles").update({ avatar_url: null }).eq("user_id", user.id);
+    if (error) { toast.error(error.message); return; }
+    setProfile((p) => ({ ...p, avatar_url: null }));
+    toast.success("Fotografie eliminată.");
+  };
+
   return (
     <section className="container-page py-8 sm:py-12 max-w-3xl">
       <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -106,6 +132,32 @@ function AccountPage() {
         <div className="flex gap-2">
           <Link to="/mesaje" className="btn-outline h-10 text-sm gap-2 inline-flex"><MessageCircle className="h-4 w-4" /> Mesaje</Link>
           <button onClick={() => signOut().then(() => (window.location.href = "/"))} className="btn-outline h-10 text-sm gap-2 inline-flex"><LogOut className="h-4 w-4" /> Ieșire</button>
+        </div>
+      </div>
+
+      {/* Avatar */}
+      <div className="card-soft mt-6 p-5 sm:p-6">
+        <h2 className="text-lg font-semibold inline-flex items-center gap-2"><Camera className="h-4 w-4 text-primary" /> Fotografie de profil</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Este afișată pe anunțuri și mesaje. JPG/PNG/WEBP, max 3 MB.</p>
+        <div className="mt-4 flex items-center gap-4">
+          {profile.avatar_url ? (
+            <img src={profile.avatar_url} alt="Avatar" className="h-20 w-20 rounded-full object-cover border border-border" />
+          ) : (
+            <div className="h-20 w-20 rounded-full bg-muted grid place-items-center text-muted-foreground">
+              <User className="h-8 w-8" />
+            </div>
+          )}
+          <div className="flex flex-wrap gap-2">
+            <label className="btn-primary h-10 inline-flex items-center gap-2 cursor-pointer">
+              <Camera className="h-4 w-4" /> {profile.avatar_url ? "Schimbă" : "Încarcă"}
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={onAvatarFile} />
+            </label>
+            {profile.avatar_url && (
+              <button onClick={removeAvatar} className="btn-outline h-10 inline-flex items-center gap-2 text-sm">
+                <Trash2 className="h-4 w-4" /> Elimină
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
