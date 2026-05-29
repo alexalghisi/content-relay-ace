@@ -131,6 +131,21 @@ export const Route = createFileRoute("/sitemap.xml")({
           console.error("sitemap bac fetch failed", err);
         }
 
+        // Combo materie × oraș (top 6 orașe × toate materiile SEO) + prețuri pe materie
+        try {
+          const { SUBJECTS_SEO } = await import("@/data/subjects-seo");
+          const TOP_CITY_SLUGS = ["bucuresti","cluj-napoca","timisoara","iasi","constanta","brasov"];
+          for (const s of SUBJECTS_SEO) {
+            urls.push(`  <url>\n    <loc>${BASE_URL}/preturi-meditatii/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+            for (const c of TOP_CITY_SLUGS) {
+              urls.push(`  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+            }
+          }
+        } catch (err) {
+          console.error("sitemap combo fetch failed", err);
+        }
+
+
         // Noua arhivă /subiecte-admitere/* — generată din tabelul admission_papers
         try {
           urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
