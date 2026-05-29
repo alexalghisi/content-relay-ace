@@ -89,6 +89,7 @@ import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './rou
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
 import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
 import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
 
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
@@ -502,6 +503,12 @@ const LovableEmailQueueProcessRoute =
     path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksBacCrawlTickRoute =
+  ApiPublicHooksBacCrawlTickRouteImport.update({
+    id: '/api/public/hooks/bac-crawl-tick',
+    path: '/api/public/hooks/bac-crawl-tick',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksAutoBlogPostRoute =
   ApiPublicHooksAutoBlogPostRouteImport.update({
     id: '/api/public/hooks/auto-blog-post',
@@ -587,6 +594,7 @@ export interface FileRoutesByFullPath {
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
+  '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
@@ -670,6 +678,7 @@ export interface FileRoutesByTo {
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
+  '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
@@ -754,6 +763,7 @@ export interface FileRoutesById {
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
+  '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
@@ -839,6 +849,7 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
     | '/api/public/hooks/auto-blog-post'
+    | '/api/public/hooks/bac-crawl-tick'
     | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
@@ -922,6 +933,7 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
     | '/api/public/hooks/auto-blog-post'
+    | '/api/public/hooks/bac-crawl-tick'
     | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
@@ -1005,6 +1017,7 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
     | '/api/public/hooks/auto-blog-post'
+    | '/api/public/hooks/bac-crawl-tick'
     | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
@@ -1081,6 +1094,7 @@ export interface RootRouteChildren {
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
   BacIndexRoute: typeof BacIndexRoute
   ApiPublicHooksAutoBlogPostRoute: typeof ApiPublicHooksAutoBlogPostRoute
+  ApiPublicHooksBacCrawlTickRoute: typeof ApiPublicHooksBacCrawlTickRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
   ResurseBacMaterieAnRoute: typeof ResurseBacMaterieAnRoute
@@ -1648,6 +1662,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/bac-crawl-tick': {
+      id: '/api/public/hooks/bac-crawl-tick'
+      path: '/api/public/hooks/bac-crawl-tick'
+      fullPath: '/api/public/hooks/bac-crawl-tick'
+      preLoaderRoute: typeof ApiPublicHooksBacCrawlTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/auto-blog-post': {
       id: '/api/public/hooks/auto-blog-post'
       path: '/api/public/hooks/auto-blog-post'
@@ -1828,6 +1849,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
   BacIndexRoute: BacIndexRoute,
   ApiPublicHooksAutoBlogPostRoute: ApiPublicHooksAutoBlogPostRoute,
+  ApiPublicHooksBacCrawlTickRoute: ApiPublicHooksBacCrawlTickRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
   ResurseBacMaterieAnRoute: ResurseBacMaterieAnRoute,
@@ -1835,13 +1857,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

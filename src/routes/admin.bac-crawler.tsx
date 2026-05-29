@@ -1,79 +1,130 @@
-// Admin: trigger crawl Firecrawl pentru PDF-uri BAC.
+// Admin: status & control crawler PDF-uri BAC.
+// Procesarea rulează automat în background (pg_cron lovește
+// /api/public/hooks/bac-crawl-tick în fiecare minut). Această pagină
+// arată doar progresul și permite trigger manual / reset.
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { crawlBacPdfs } from "@/lib/bac-crawler.functions";
-import { BAC_SUBJECTS, BAC_YEARS } from "@/data/bac-catalog";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/bac-crawler")({
   head: () => ({ meta: [{ title: "Admin — BAC crawler" }, { name: "robots", content: "noindex,nofollow" }] }),
   component: AdminBacCrawler,
 });
 
+type Row = {
+  materie: string; an: number; status: string;
+  attempts: number; uploaded: number;
+  last_error: string | null; last_attempt_at: string | null;
+};
+
 function AdminBacCrawler() {
-  const fn = useServerFn(crawlBacPdfs);
-  const [materie, setMaterie] = useState(BAC_SUBJECTS[0].slug);
-  const [an, setAn] = useState(2024);
-  const [maxPdfs, setMaxPdfs] = useState(8);
-  const [batch, setBatch] = useState(false);
-  const [log, setLog] = useState<string[]>([]);
+  const qc = useQueryClient();
 
-  const single = useMutation({ mutationFn: () => fn({ data: { materie, an, maxPdfs } }) });
+  const { data: rows, isLoading } = useQuery({
+    queryKey: ["bac_crawl_progress"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("bac_crawl_progress")
+        .select("*")
+        .order("materie")
+        .order("an");
+      if (error) throw error;
+      return data as Row[];
+    },
+    refetchInterval: 10_000,
+  });
 
-  const runBatch = async () => {
-    setBatch(true); setLog([]);
-    for (const s of BAC_SUBJECTS) {
-      for (const y of BAC_YEARS) {
-        try {
-          const r = await fn({ data: { materie: s.slug, an: y, maxPdfs } });
-          setLog((l) => [...l, `${s.slug} ${y}: ${r.downloaded}/${r.found}`]);
-        } catch (e: unknown) {
-          setLog((l) => [...l, `${s.slug} ${y}: EROARE ${(e as Error).message}`]);
-        }
-      }
-    }
-    setBatch(false);
-  };
+  const tick = useMutation({
+    mutationFn: async () => {
+      const r = await fetch("/api/public/hooks/bac-crawl-tick", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
+        },
+        body: "{}",
+      });
+      return { status: r.status, body: await r.text() };
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["bac_crawl_progress"] }),
+  });
+
+  const counts = (rows ?? []).reduce(
+    (acc, r) => { acc[r.status] = (acc[r.status] ?? 0) + 1; return acc; },
+    {} as Record<string, number>,
+  );
+  const totalUploaded = (rows ?? []).reduce((s, r) => s + (r.uploaded || 0), 0);
 
   return (
     <main className="container-page py-10">
-      <h1 className="text-2xl font-bold">Admin · Crawler PDF-uri BAC</h1>
+      <h1 className="text-2xl font-bold">Admin · Crawler PDF-uri BAC (auto)</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Caută cu Firecrawl pe subiecte.edu.ro / edu.ro, descarcă PDF-urile și le salvează în storage la calea <code>bac-pdfs/{"{"}materie{"}"}/{"{"}an{"}"}/{"{"}sesiune{"}"}-{"{"}tip{"}"}.pdf</code>. Necesită rol <strong>admin</strong>.
+        Jobul rulează automat în background (1 combinație / minut, ~4–5 ore pentru toate cele 272 combinații).
+        Filtru strict pe URL: trebuie să conțină materia + anul + cuvinte BAC; blacklist pe OMEC/legislație.
       </p>
 
-      <section className="mt-6 grid gap-3 sm:grid-cols-[1fr_120px_120px_auto]">
-        <select value={materie} onChange={(e) => setMaterie(e.target.value)} className="rounded border border-border bg-background px-3 py-2">
-          {BAC_SUBJECTS.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
-        </select>
-        <select value={an} onChange={(e) => setAn(Number(e.target.value))} className="rounded border border-border bg-background px-3 py-2">
-          {BAC_YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
-        </select>
-        <input type="number" min={1} max={20} value={maxPdfs} onChange={(e) => setMaxPdfs(Number(e.target.value))}
-          className="rounded border border-border bg-background px-3 py-2" />
-        <button onClick={() => single.mutate()} disabled={single.isPending}
-          className="rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
-          {single.isPending ? "Rulez…" : "Crawl 1 (materie+an)"}
-        </button>
+      <section className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
+        {(["pending", "in_progress", "done", "failed"] as const).map((s) => (
+          <div key={s} className="card-soft p-4">
+            <p className="text-xs uppercase text-muted-foreground">{s}</p>
+            <p className="mt-1 text-2xl font-bold">{counts[s] ?? 0}</p>
+          </div>
+        ))}
+        <div className="card-soft p-4">
+          <p className="text-xs uppercase text-muted-foreground">PDF-uri urcate</p>
+          <p className="mt-1 text-2xl font-bold">{totalUploaded}</p>
+        </div>
       </section>
 
-      {single.data && (
-        <pre className="mt-4 max-h-80 overflow-auto rounded bg-muted p-3 text-xs">{JSON.stringify(single.data, null, 2)}</pre>
-      )}
-      {single.error && <p className="mt-3 text-sm text-destructive">{(single.error as Error).message}</p>}
-
-      <section className="mt-10 border-t border-border pt-6">
-        <h2 className="text-lg font-semibold">Batch complet (toate materiile × toți anii)</h2>
-        <p className="mt-1 text-xs text-muted-foreground">
-          {BAC_SUBJECTS.length} materii × {BAC_YEARS.length} ani = {BAC_SUBJECTS.length * BAC_YEARS.length} runde × până la {maxPdfs} PDF-uri. Consumă credite Firecrawl semnificativ.
-        </p>
-        <button onClick={runBatch} disabled={batch}
-          className="mt-3 rounded border border-destructive/40 bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive disabled:opacity-50">
-          {batch ? "Rulez batch…" : "Rulează batch complet"}
+      <section className="mt-6 flex flex-wrap gap-3">
+        <button onClick={() => tick.mutate()} disabled={tick.isPending}
+          className="rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
+          {tick.isPending ? "Rulez tick…" : "Trigger manual (1 combo)"}
         </button>
-        {log.length > 0 && (
-          <pre className="mt-4 max-h-96 overflow-auto rounded bg-muted p-3 text-xs">{log.join("\n")}</pre>
+        {tick.data && (
+          <pre className="max-h-40 flex-1 overflow-auto rounded bg-muted p-2 text-xs">
+            HTTP {tick.data.status}: {tick.data.body}
+          </pre>
+        )}
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold">Progres detaliat</h2>
+        {isLoading ? (
+          <p className="mt-2 text-sm text-muted-foreground">Încarc…</p>
+        ) : (
+          <div className="mt-3 overflow-auto rounded border border-border">
+            <table className="w-full text-sm">
+              <thead className="bg-muted">
+                <tr className="text-left">
+                  <th className="px-3 py-2">Materie</th>
+                  <th className="px-3 py-2">An</th>
+                  <th className="px-3 py-2">Status</th>
+                  <th className="px-3 py-2">Încercări</th>
+                  <th className="px-3 py-2">Urcate</th>
+                  <th className="px-3 py-2">Ultima eroare</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(rows ?? []).map((r) => (
+                  <tr key={`${r.materie}-${r.an}`} className="border-t border-border">
+                    <td className="px-3 py-1.5">{r.materie}</td>
+                    <td className="px-3 py-1.5">{r.an}</td>
+                    <td className="px-3 py-1.5">
+                      <span className={
+                        r.status === "done" ? "text-emerald-600" :
+                        r.status === "failed" ? "text-destructive" :
+                        r.status === "in_progress" ? "text-amber-600" : "text-muted-foreground"
+                      }>{r.status}</span>
+                    </td>
+                    <td className="px-3 py-1.5">{r.attempts}</td>
+                    <td className="px-3 py-1.5">{r.uploaded}</td>
+                    <td className="px-3 py-1.5 max-w-xs truncate text-xs text-muted-foreground">{r.last_error}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </section>
     </main>
