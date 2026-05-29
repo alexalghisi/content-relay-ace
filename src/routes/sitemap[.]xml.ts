@@ -130,7 +130,8 @@ export const Route = createFileRoute("/sitemap.xml")({
         } catch (err) {
           console.error("sitemap bac fetch failed", err);
         }
-        }
+
+
 
         // Combo materie × oraș (top 6 orașe × toate materiile SEO) + prețuri pe materie
         try {
