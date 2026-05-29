@@ -145,6 +145,39 @@ export type Database = {
           },
         ]
       }
+      bac_crawl_progress: {
+        Row: {
+          an: number
+          attempts: number
+          last_attempt_at: string | null
+          last_error: string | null
+          materie: string
+          status: string
+          updated_at: string
+          uploaded: number
+        }
+        Insert: {
+          an: number
+          attempts?: number
+          last_attempt_at?: string | null
+          last_error?: string | null
+          materie: string
+          status?: string
+          updated_at?: string
+          uploaded?: number
+        }
+        Update: {
+          an?: number
+          attempts?: number
+          last_attempt_at?: string | null
+          last_error?: string | null
+          materie?: string
+          status?: string
+          updated_at?: string
+          uploaded?: number
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           category: string | null
