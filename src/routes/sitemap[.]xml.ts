@@ -130,6 +130,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         } catch (err) {
           console.error("sitemap bac fetch failed", err);
         }
+        }
 
         // Combo materie × oraș (top 6 orașe × toate materiile SEO) + prețuri pe materie
         try {
@@ -144,6 +145,21 @@ export const Route = createFileRoute("/sitemap.xml")({
         } catch (err) {
           console.error("sitemap combo fetch failed", err);
         }
+
+        // Arhivă BAC: /bac, /bac/{materie}, /bac/{materie}/{an} — 16 × 17 = 272 pagini
+        try {
+          const { BAC_SUBJECTS, BAC_YEARS } = await import("@/data/bac-catalog");
+          urls.push(`  <url>\n    <loc>${BASE_URL}/bac</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+          for (const s of BAC_SUBJECTS) {
+            urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+            for (const y of BAC_YEARS) {
+              urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+            }
+          }
+        } catch (err) {
+          console.error("sitemap bac catalog fetch failed", err);
+        }
+
 
 
         // Noua arhivă /subiecte-admitere/* — generată din tabelul admission_papers

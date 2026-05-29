@@ -72,15 +72,18 @@ import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditat
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BacIndexRouteImport } from './routes/bac.index'
 import { Route as SubiecteAdmitereUniversitateRouteImport } from './routes/subiecte-admitere.$universitate'
 import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as BacMaterieRouteImport } from './routes/bac.$materie'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
 import { Route as SubiecteAdmitereMaterieMaterieRouteImport } from './routes/subiecte-admitere.materie.$materie'
 import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './routes/subiecte-admitere.$universitate.$materie'
 import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
+import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
 import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
 import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
@@ -407,6 +410,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BacIndexRoute = BacIndexRouteImport.update({
+  id: '/bac/',
+  path: '/bac/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SubiecteAdmitereUniversitateRoute =
   SubiecteAdmitereUniversitateRouteImport.update({
     id: '/$universitate',
@@ -433,6 +441,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const BacMaterieRoute = BacMaterieRouteImport.update({
+  id: '/bac/$materie',
+  path: '/bac/$materie',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AnuntSlugRoute = AnuntSlugRouteImport.update({
   id: '/anunt/$slug',
   path: '/anunt/$slug',
@@ -454,6 +467,11 @@ const MeditatiiMaterieOrasRoute = MeditatiiMaterieOrasRouteImport.update({
   id: '/$materie/$oras',
   path: '/$materie/$oras',
   getParentRoute: () => MeditatiiRoute,
+} as any)
+const BacMaterieAnRoute = BacMaterieAnRouteImport.update({
+  id: '/$an',
+  path: '/$an',
+  getParentRoute: () => BacMaterieRoute,
 } as any)
 const SubiecteAdmitereUniversitateMaterieAnRoute =
   SubiecteAdmitereUniversitateMaterieAnRouteImport.update({
@@ -550,11 +568,14 @@ export interface FileRoutesByFullPath {
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
+  '/bac/': typeof BacIndexRoute
+  '/bac/$materie/$an': typeof BacMaterieAnRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -629,11 +650,14 @@ export interface FileRoutesByTo {
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
+  '/bac': typeof BacIndexRoute
+  '/bac/$materie/$an': typeof BacMaterieAnRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -709,11 +733,14 @@ export interface FileRoutesById {
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
+  '/bac/': typeof BacIndexRoute
+  '/bac/$materie/$an': typeof BacMaterieAnRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -790,11 +817,14 @@ export interface FileRouteTypes {
     | '/tutoriale'
     | '/variante-bacalaureat'
     | '/anunt/$slug'
+    | '/bac/$materie'
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
     | '/subiecte-admitere/$universitate'
+    | '/bac/'
+    | '/bac/$materie/$an'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
@@ -869,11 +899,14 @@ export interface FileRouteTypes {
     | '/tutoriale'
     | '/variante-bacalaureat'
     | '/anunt/$slug'
+    | '/bac/$materie'
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
     | '/subiecte-admitere/$universitate'
+    | '/bac'
+    | '/bac/$materie/$an'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
@@ -948,11 +981,14 @@ export interface FileRouteTypes {
     | '/tutoriale'
     | '/variante-bacalaureat'
     | '/anunt/$slug'
+    | '/bac/$materie'
     | '/blog/$slug'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
     | '/subiecte-admitere/$universitate'
+    | '/bac/'
+    | '/bac/$materie/$an'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
@@ -1028,7 +1064,9 @@ export interface RootRouteChildren {
   TutorialeRoute: typeof TutorialeRoute
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
+  BacMaterieRoute: typeof BacMaterieRouteWithChildren
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
+  BacIndexRoute: typeof BacIndexRoute
   ApiPublicHooksAutoBlogPostRoute: typeof ApiPublicHooksAutoBlogPostRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
@@ -1478,6 +1516,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bac/': {
+      id: '/bac/'
+      path: '/bac'
+      fullPath: '/bac/'
+      preLoaderRoute: typeof BacIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/subiecte-admitere/$universitate': {
       id: '/subiecte-admitere/$universitate'
       path: '/$universitate'
@@ -1513,6 +1558,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/bac/$materie': {
+      id: '/bac/$materie'
+      path: '/bac/$materie'
+      fullPath: '/bac/$materie'
+      preLoaderRoute: typeof BacMaterieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/anunt/$slug': {
       id: '/anunt/$slug'
       path: '/anunt/$slug'
@@ -1540,6 +1592,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/meditatii/$materie/$oras'
       preLoaderRoute: typeof MeditatiiMaterieOrasRouteImport
       parentRoute: typeof MeditatiiRoute
+    }
+    '/bac/$materie/$an': {
+      id: '/bac/$materie/$an'
+      path: '/$an'
+      fullPath: '/bac/$materie/$an'
+      preLoaderRoute: typeof BacMaterieAnRouteImport
+      parentRoute: typeof BacMaterieRoute
     }
     '/subiecte-admitere/$universitate/$materie/$an': {
       id: '/subiecte-admitere/$universitate/$materie/$an'
@@ -1667,6 +1726,18 @@ const SubiecteAdmitereRouteChildren: SubiecteAdmitereRouteChildren = {
 const SubiecteAdmitereRouteWithChildren =
   SubiecteAdmitereRoute._addFileChildren(SubiecteAdmitereRouteChildren)
 
+interface BacMaterieRouteChildren {
+  BacMaterieAnRoute: typeof BacMaterieAnRoute
+}
+
+const BacMaterieRouteChildren: BacMaterieRouteChildren = {
+  BacMaterieAnRoute: BacMaterieAnRoute,
+}
+
+const BacMaterieRouteWithChildren = BacMaterieRoute._addFileChildren(
+  BacMaterieRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdmitereRoute: AdmitereRoute,
@@ -1732,7 +1803,9 @@ const rootRouteChildren: RootRouteChildren = {
   TutorialeRoute: TutorialeRoute,
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
   AnuntSlugRoute: AnuntSlugRoute,
+  BacMaterieRoute: BacMaterieRouteWithChildren,
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
+  BacIndexRoute: BacIndexRoute,
   ApiPublicHooksAutoBlogPostRoute: ApiPublicHooksAutoBlogPostRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
