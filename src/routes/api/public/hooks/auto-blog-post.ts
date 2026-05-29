@@ -38,10 +38,10 @@ export const Route = createFileRoute("/api/public/hooks/auto-blog-post")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        // Basic auth via Supabase anon key (apikey header pattern)
-        const apiKey = request.headers.get("apikey") ?? request.headers.get("x-api-key");
-        const expected = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
-        if (!apiKey || !expected || apiKey !== expected) {
+        // Auth via dedicated server-only secret (NOT the public anon key)
+        const apiKey = request.headers.get("x-webhook-secret") ?? request.headers.get("x-api-key");
+        const expected = process.env.BLOG_HOOK_SECRET;
+        if (!expected || !apiKey || apiKey.length !== expected.length || apiKey !== expected) {
           return new Response(JSON.stringify({ error: "Unauthorized" }), {
             status: 401,
             headers: { "Content-Type": "application/json" },
