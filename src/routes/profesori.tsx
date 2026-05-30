@@ -23,9 +23,9 @@ interface TopTeacher {
   full_name: string;
   avatar_url: string | null;
   experience_years: number | null;
-  rating: number | null;
-  city: string | null;
+  location: string | null;
 }
+
 
 export const Route = createFileRoute("/profesori")({
   head: () => ({
@@ -60,11 +60,14 @@ function ProfesoriPage() {
   useEffect(() => {
     supabase
       .from("legacy_teachers")
-      .select("id,full_name,avatar_url,experience_years,rating,city")
-      .order("rating", { ascending: false, nullsFirst: false })
+      .select("id,full_name,avatar_url,experience_years,location")
+      .eq("is_teacher", true)
+      .not("avatar_url", "is", null)
+      .order("experience_years", { ascending: false, nullsFirst: false })
       .limit(12)
       .then(({ data }) => setTeachers((data ?? []) as TopTeacher[]));
   }, []);
+
 
   return (
     <>
@@ -102,18 +105,19 @@ function ProfesoriPage() {
                     <p className="font-semibold truncate">{t.full_name}</p>
                     <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
                       <BadgeCheck className="h-3 w-3 text-primary" /> Verificat
-                      {t.city && <> · {t.city}</>}
+                      {t.location && <> · {t.location}</>}
                     </p>
                   </div>
                 </div>
-                {t.rating !== null && (
+                {t.experience_years !== null && t.experience_years > 0 && (
                   <p className="mt-3 text-sm inline-flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" /> {t.rating.toFixed(1)}
-                    {t.experience_years && <span className="text-muted-foreground"> · {t.experience_years} ani experiență</span>}
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <span className="text-muted-foreground">{t.experience_years} ani experiență</span>
                   </p>
                 )}
               </div>
             ))}
+
           </div>
         </section>
       )}
