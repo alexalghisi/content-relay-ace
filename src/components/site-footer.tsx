@@ -65,6 +65,49 @@ export function SiteFooter() {
           </ul>
         </div>
       </div>
+
+      {/* Silos SEO: matrix materii × orașe top — internal linking puternic */}
+      <div className="border-t border-border">
+        <div className="container-page py-10">
+          <div className="font-semibold text-sm mb-4">Meditații populare după oraș</div>
+          <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3 text-xs text-muted-foreground">
+            {([
+              ["matematica", "Matematică"],
+              ["romana", "Română"],
+              ["engleza", "Engleză"],
+              ["informatica", "Informatică"],
+              ["fizica", "Fizică"],
+              ["chimie", "Chimie"],
+              ["biologie", "Biologie"],
+              ["istorie", "Istorie"],
+            ] as const).map(([slug, name]) => (
+              <div key={slug} className="leading-relaxed">
+                <span className="font-medium text-foreground">{name}:</span>{" "}
+                {([
+                  ["bucuresti", "București"],
+                  ["cluj-napoca", "Cluj"],
+                  ["timisoara", "Timișoara"],
+                  ["iasi", "Iași"],
+                  ["brasov", "Brașov"],
+                  ["constanta", "Constanța"],
+                ] as const).map(([city, cityName], i, arr) => (
+                  <span key={city}>
+                    <Link
+                      to="/meditatii/$materie/$oras"
+                      params={{ materie: slug, oras: city }}
+                      className="hover:text-foreground hover:underline"
+                    >
+                      {cityName}
+                    </Link>
+                    {i < arr.length - 1 && " · "}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="border-t border-border">
         <div className="container-page py-5 text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-2">
           <span>© {new Date().getFullYear()} MeditatiiDirect.ro — Toate drepturile rezervate.</span>

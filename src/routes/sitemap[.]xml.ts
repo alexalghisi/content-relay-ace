@@ -133,14 +133,15 @@ export const Route = createFileRoute("/sitemap.xml")({
 
 
 
-        // Combo materie × oraș (top 6 orașe × toate materiile SEO) + prețuri pe materie
+        // Combo materie × oraș — TOATE combinațiile (14 orașe × 11 materii = 154 pagini)
+        // + pagini preț pe materie
         try {
           const { SUBJECTS_SEO } = await import("@/data/subjects-seo");
-          const TOP_CITY_SLUGS = ["bucuresti","cluj-napoca","timisoara","iasi","constanta","brasov"];
+          const { CITIES } = await import("@/data/cities");
           for (const s of SUBJECTS_SEO) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/preturi-meditatii/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
-            for (const c of TOP_CITY_SLUGS) {
-              urls.push(`  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+            for (const c of CITIES) {
+              urls.push(`  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
             }
           }
         } catch (err) {
