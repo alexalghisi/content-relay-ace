@@ -161,7 +161,7 @@ function ComboPage() {
             Profesori de {subject.nameLower} disponibili în {city.name}
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {ads.map((a) => (
+            {ads.map((a: LocalAd) => (
               <Link
                 key={a.id}
                 to="/anunt/$slug"
