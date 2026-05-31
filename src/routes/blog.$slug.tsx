@@ -21,14 +21,58 @@ export const Route = createFileRoute("/blog/$slug")({
     if (!post) return { meta: [] };
     const url = `https://meditatiidirect.ro/blog/${params.slug}`;
     const articleLd = {
-      "@context": "https://schema.org", "@type": "Article",
-      headline: post.title, description: post.excerpt ?? undefined,
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: post.title,
+      description: post.excerpt ?? undefined,
       datePublished: post.published_at ?? undefined,
-      author: { "@type": "Organization", name: "MeditatiiDirect" },
-      publisher: { "@type": "Organization", name: "MeditatiiDirect", logo: { "@type": "ImageObject", url: "https://meditatiidirect.ro/favicon.ico" } },
-      mainEntityOfPage: url,
-      image: post.featured_image ?? undefined,
+      dateModified: post.published_at ?? undefined,
+      author: { "@type": "Organization", name: "MeditatiiDirect", url: "https://meditatiidirect.ro" },
+      publisher: {
+        "@type": "Organization",
+        name: "MeditatiiDirect",
+        logo: { "@type": "ImageObject", url: "https://meditatiidirect.ro/favicon.ico" },
+      },
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+      image: post.featured_image ?? "https://meditatiidirect.ro/favicon.ico",
+      inLanguage: "ro-RO",
+      articleSection: post.category ?? undefined,
+      keywords: (post.tags ?? []).join(", ") || undefined,
     };
+
+    // Extract Q&A pairs from a "## Întrebări frecvente" (or FAQ) section.
+    const faqs: { q: string; a: string }[] = [];
+    const content = post.content ?? "";
+    const faqMatch = content.match(/##\s*(?:Întrebări frecvente|Intrebari frecvente|FAQ|Întrebări|Q&A)[^\n]*\n([\s\S]+?)(?=\n##\s|$)/i);
+    if (faqMatch) {
+      const re = /###\s+(.+?)\n+([\s\S]+?)(?=\n###\s|\n##\s|$)/g;
+      let m: RegExpExecArray | null;
+      while ((m = re.exec(faqMatch[1])) !== null) {
+        const q = m[1].trim();
+        const a = m[2].replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\s+/g, " ").trim();
+        if (q && a) faqs.push({ q, a });
+      }
+    }
+    const faqLd = faqs.length >= 2 ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    } : null;
+
+    const breadcrumbLd = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Acasă", item: "https://meditatiidirect.ro/" },
+        { "@type": "ListItem", position: 2, name: "Blog", item: "https://meditatiidirect.ro/blog" },
+        { "@type": "ListItem", position: 3, name: post.title, item: url },
+      ],
+    };
+
     return {
       meta: [
         { title: `${post.title} | MeditatiiDirect.ro` },
@@ -37,10 +81,17 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:description", content: post.excerpt ?? "" },
         { property: "og:url", content: url },
         { property: "og:type", content: "article" },
+        ...(post.published_at ? [{ property: "article:published_time", content: post.published_at }] : []),
+        ...(post.category ? [{ property: "article:section", content: post.category }] : []),
+        ...((post.tags ?? []).map((t) => ({ property: "article:tag", content: t }))),
         ...(post.featured_image ? [{ property: "og:image", content: post.featured_image }] : []),
       ],
       links: [{ rel: "canonical", href: url }],
-      scripts: [{ type: "application/ld+json", children: JSON.stringify(articleLd) }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(articleLd) },
+        { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
+        ...(faqLd ? [{ type: "application/ld+json", children: JSON.stringify(faqLd) }] : []),
+      ],
     };
   },
   component: PostPage,
