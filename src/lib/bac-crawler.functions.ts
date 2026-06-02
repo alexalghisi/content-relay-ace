@@ -4,6 +4,18 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { runBacCrawlTick } from "@/lib/bac-tick.server";
+
+// Admin-only trigger for the same tick logic that pg_cron executes via the public hook.
+// Eliminates the need for the browser to call the public endpoint with a shared secret.
+export const triggerBacCrawlTick = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: roleRow } = await context.supabase
+      .from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (!roleRow) throw new Response("Forbidden", { status: 403 });
+    return await runBacCrawlTick();
+  });
 
 const InputSchema = z.object({
   materie: z.string().min(1).max(40).regex(/^[a-z-]+$/),
