@@ -54,9 +54,7 @@ function AdminBacCrawler() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["bac_crawl_progress"] }),
   });
 
-  const [bulkProgress, setBulkProgress] = useState<{ done: number; total: number; running: boolean; lastBody?: string }>({
-    done: 0, total: 0, running: false,
-  });
+  const [bulkProgress, setBulkProgress] = useState<BulkProgress>({ done: 0, total: 0, running: false });
   const bulkAbort = useRef(false);
 
   const runAll = async () => {
