@@ -4,7 +4,10 @@
 // arată doar progresul și permite trigger manual / reset.
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+
+type BulkProgress = { done: number; total: number; running: boolean; lastBody?: string };
 
 export const Route = createFileRoute("/admin/bac-crawler")({
   head: () => ({ meta: [{ title: "Admin — BAC crawler" }, { name: "robots", content: "noindex,nofollow" }] }),
@@ -34,20 +37,46 @@ function AdminBacCrawler() {
     refetchInterval: 10_000,
   });
 
+  const callTick = async () => {
+    const r = await fetch("/api/public/hooks/bac-crawl-tick", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
+      },
+      body: "{}",
+    });
+    return { status: r.status, body: await r.text() };
+  };
+
   const tick = useMutation({
-    mutationFn: async () => {
-      const r = await fetch("/api/public/hooks/bac-crawl-tick", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
-        },
-        body: "{}",
-      });
-      return { status: r.status, body: await r.text() };
-    },
+    mutationFn: callTick,
     onSuccess: () => qc.invalidateQueries({ queryKey: ["bac_crawl_progress"] }),
   });
+
+  const [bulkProgress, setBulkProgress] = useState<BulkProgress>({ done: 0, total: 0, running: false });
+  const bulkAbort = useRef(false);
+
+  const runAll = async () => {
+    const pendingCount = (rows ?? []).filter((r) => r.status === "pending" || r.status === "in_progress").length;
+    if (!pendingCount) return;
+    bulkAbort.current = false;
+    setBulkProgress({ done: 0, total: pendingCount, running: true });
+    for (let i = 0; i < pendingCount + 5; i++) {
+      if (bulkAbort.current) break;
+      try {
+        const res = await callTick();
+        setBulkProgress((p) => ({ ...p, done: p.done + 1, lastBody: res.body.slice(0, 200) }));
+        if (res.body.includes("no pending combos")) break;
+      } catch (e) {
+        setBulkProgress((p) => ({ ...p, lastBody: "err: " + String(e) }));
+      }
+      qc.invalidateQueries({ queryKey: ["bac_crawl_progress"] });
+      await new Promise((r) => setTimeout(r, 800));
+    }
+    setBulkProgress((p) => ({ ...p, running: false }));
+    qc.invalidateQueries({ queryKey: ["bac_crawl_progress"] });
+  };
 
   const counts = (rows ?? []).reduce(
     (acc, r) => { acc[r.status] = (acc[r.status] ?? 0) + 1; return acc; },
@@ -76,11 +105,23 @@ function AdminBacCrawler() {
         </div>
       </section>
 
-      <section className="mt-6 flex flex-wrap gap-3">
-        <button onClick={() => tick.mutate()} disabled={tick.isPending}
+      <section className="mt-6 flex flex-wrap items-center gap-3">
+        <button onClick={() => tick.mutate()} disabled={tick.isPending || bulkProgress.running}
           className="rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
           {tick.isPending ? "Rulez tick…" : "Trigger manual (1 combo)"}
         </button>
+        <button onClick={() => (bulkProgress.running ? (bulkAbort.current = true) : runAll())}
+          disabled={tick.isPending}
+          className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50">
+          {bulkProgress.running
+            ? `Oprește (${bulkProgress.done}/${bulkProgress.total})`
+            : "Procesează TOATE materiile acum"}
+        </button>
+        {bulkProgress.running && (
+          <span className="text-xs text-muted-foreground">
+            Rulez secvențial toate combinațiile pending… {bulkProgress.done}/{bulkProgress.total}
+          </span>
+        )}
         {tick.data && (
           <pre className="max-h-40 flex-1 overflow-auto rounded bg-muted p-2 text-xs">
             HTTP {tick.data.status}: {tick.data.body}
