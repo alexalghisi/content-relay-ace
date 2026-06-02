@@ -35,7 +35,12 @@ const SUBJECTS: { slug: string; name: string }[] = [
 ];
 
 // Ani disponibili cu PDF efectiv în storage (subiecte oficiale găzduite la noi).
-const AVAILABLE_YEARS = [2021, 2022, 2023, 2024, 2025];
+// Crawler-ul nostru aduce automat PDF-urile pentru anii 2010-2025; 2001-2009 sunt
+// în curs de procesare prin job-ul resumable `bac-crawl-tick`.
+const AVAILABLE_YEARS = [
+  2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
+  2021, 2022, 2023, 2024, 2025,
+];
 // Toți anii pe care îi indexăm SEO (chiar dacă PDF-ul nu e încă disponibil pentru toți).
 // Acoperim toată istoria Bacalaureatului modern, plus sesiunea viitoare 2026.
 const ALL_YEARS: number[] = [];
