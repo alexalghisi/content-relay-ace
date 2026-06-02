@@ -4,7 +4,10 @@
 // arată doar progresul și permite trigger manual / reset.
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+
+type BulkProgress = { done: number; total: number; running: boolean; lastBody?: string };
 
 export const Route = createFileRoute("/admin/bac-crawler")({
   head: () => ({ meta: [{ title: "Admin — BAC crawler" }, { name: "robots", content: "noindex,nofollow" }] }),
