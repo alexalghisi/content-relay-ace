@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-type BulkProgress = { done: number; total: number; running: boolean; lastBody?: string };
+type BulkProgress = { done: number; total?: number; running: boolean; lastBody?: string };
 
 export const Route = createFileRoute("/admin/bac-crawler")({
   head: () => ({ meta: [{ title: "Admin — BAC crawler" }, { name: "robots", content: "noindex,nofollow" }] }),
@@ -59,10 +59,10 @@ function AdminBacCrawler() {
 
   const runAll = async () => {
     const pendingCount = (rows ?? []).filter((r) => r.status === "pending" || r.status === "in_progress").length;
-    if (!pendingCount) return;
     bulkAbort.current = false;
-    setBulkProgress({ done: 0, total: pendingCount, running: true });
-    for (let i = 0; i < pendingCount + 5; i++) {
+    setBulkProgress({ done: 0, total: pendingCount || undefined, running: true });
+    const maxRuns = pendingCount ? pendingCount + 5 : 500;
+    for (let i = 0; i < maxRuns; i++) {
       if (bulkAbort.current) break;
       try {
         const res = await callTick();
@@ -114,13 +114,16 @@ function AdminBacCrawler() {
           disabled={tick.isPending}
           className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50">
           {bulkProgress.running
-            ? `Oprește (${bulkProgress.done}/${bulkProgress.total})`
+            ? `Oprește (${bulkProgress.done}${bulkProgress.total ? `/${bulkProgress.total}` : ""})`
             : "Procesează TOATE materiile acum"}
         </button>
         {bulkProgress.running && (
           <span className="text-xs text-muted-foreground">
-            Rulez secvențial toate combinațiile pending… {bulkProgress.done}/{bulkProgress.total}
+            Rulez secvențial combinațiile pending… {bulkProgress.done}{bulkProgress.total ? `/${bulkProgress.total}` : ""}
           </span>
+        )}
+        {bulkProgress.lastBody && !bulkProgress.running && (
+          <span className="text-xs text-muted-foreground">Ultimul răspuns: {bulkProgress.lastBody}</span>
         )}
         {tick.data && (
           <pre className="max-h-40 flex-1 overflow-auto rounded bg-muted p-2 text-xs">
