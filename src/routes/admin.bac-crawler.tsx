@@ -5,7 +5,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { triggerBacCrawlTick } from "@/lib/bac-crawler.functions";
 
 type BulkProgress = { done: number; total?: number; running: boolean; lastBody?: string };
 
@@ -22,6 +24,7 @@ type Row = {
 
 function AdminBacCrawler() {
   const qc = useQueryClient();
+  const triggerTick = useServerFn(triggerBacCrawlTick);
 
   const { data: rows, isLoading } = useQuery({
     queryKey: ["bac_crawl_progress"],
@@ -38,16 +41,14 @@ function AdminBacCrawler() {
   });
 
   const callTick = async () => {
-    const r = await fetch("/api/public/hooks/bac-crawl-tick", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
-      },
-      body: "{}",
-    });
-    return { status: r.status, body: await r.text() };
+    try {
+      const res = await triggerTick();
+      return { status: res.status, body: JSON.stringify(res.body) };
+    } catch (e) {
+      return { status: 500, body: e instanceof Error ? e.message : String(e) };
+    }
   };
+
 
   const tick = useMutation({
     mutationFn: callTick,
