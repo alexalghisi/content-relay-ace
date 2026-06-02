@@ -105,11 +105,23 @@ function AdminBacCrawler() {
         </div>
       </section>
 
-      <section className="mt-6 flex flex-wrap gap-3">
-        <button onClick={() => tick.mutate()} disabled={tick.isPending}
+      <section className="mt-6 flex flex-wrap items-center gap-3">
+        <button onClick={() => tick.mutate()} disabled={tick.isPending || bulkProgress.running}
           className="rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
           {tick.isPending ? "Rulez tick…" : "Trigger manual (1 combo)"}
         </button>
+        <button onClick={() => (bulkProgress.running ? (bulkAbort.current = true) : runAll())}
+          disabled={tick.isPending}
+          className="rounded bg-emerald-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-50">
+          {bulkProgress.running
+            ? `Oprește (${bulkProgress.done}/${bulkProgress.total})`
+            : "Procesează TOATE materiile acum"}
+        </button>
+        {bulkProgress.running && (
+          <span className="text-xs text-muted-foreground">
+            Rulez secvențial toate combinațiile pending… {bulkProgress.done}/{bulkProgress.total}
+          </span>
+        )}
         {tick.data && (
           <pre className="max-h-40 flex-1 overflow-auto rounded bg-muted p-2 text-xs">
             HTTP {tick.data.status}: {tick.data.body}
