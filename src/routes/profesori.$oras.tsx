@@ -119,7 +119,7 @@ function ProfesoriOrasPage() {
         <section className="container-page py-8">
           <h2 className="text-2xl font-bold mb-6">Profesori disponibili în {city.name}</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {teachers.map((t) => (
+            {teachers.map((t: LocalTeacher) => (
               <div key={t.id} className="card-soft p-5">
                 <div className="flex items-center gap-3">
                   {t.avatar_url ? (
