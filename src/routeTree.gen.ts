@@ -74,6 +74,7 @@ import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BacIndexRouteImport } from './routes/bac.index'
 import { Route as SubiecteAdmitereUniversitateRouteImport } from './routes/subiecte-admitere.$universitate'
+import { Route as ProfesoriOrasRouteImport } from './routes/profesori.$oras'
 import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
@@ -423,6 +424,11 @@ const SubiecteAdmitereUniversitateRoute =
     path: '/$universitate',
     getParentRoute: () => SubiecteAdmitereRoute,
   } as any)
+const ProfesoriOrasRoute = ProfesoriOrasRouteImport.update({
+  id: '/$oras',
+  path: '/$oras',
+  getParentRoute: () => ProfesoriRoute,
+} as any)
 const PreturiMeditatiiMaterieRoute = PreturiMeditatiiMaterieRouteImport.update({
   id: '/$materie',
   path: '/$materie',
@@ -567,7 +573,7 @@ export interface FileRoutesByFullPath {
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
   '/profesor-particular': typeof ProfesorParticularRoute
-  '/profesori': typeof ProfesoriRoute
+  '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
@@ -587,6 +593,7 @@ export interface FileRoutesByFullPath {
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesori/$oras': typeof ProfesoriOrasRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
   '/bac/': typeof BacIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRoute
@@ -651,7 +658,7 @@ export interface FileRoutesByTo {
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
   '/profesor-particular': typeof ProfesorParticularRoute
-  '/profesori': typeof ProfesoriRoute
+  '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
@@ -671,6 +678,7 @@ export interface FileRoutesByTo {
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesori/$oras': typeof ProfesoriOrasRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
   '/bac': typeof BacIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRoute
@@ -736,7 +744,7 @@ export interface FileRoutesById {
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
   '/profesor-particular': typeof ProfesorParticularRoute
-  '/profesori': typeof ProfesoriRoute
+  '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
@@ -756,6 +764,7 @@ export interface FileRoutesById {
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesori/$oras': typeof ProfesoriOrasRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
   '/bac/': typeof BacIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRoute
@@ -842,6 +851,7 @@ export interface FileRouteTypes {
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
+    | '/profesori/$oras'
     | '/subiecte-admitere/$universitate'
     | '/bac/'
     | '/bac/$materie/$an'
@@ -926,6 +936,7 @@ export interface FileRouteTypes {
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
+    | '/profesori/$oras'
     | '/subiecte-admitere/$universitate'
     | '/bac'
     | '/bac/$materie/$an'
@@ -1010,6 +1021,7 @@ export interface FileRouteTypes {
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
+    | '/profesori/$oras'
     | '/subiecte-admitere/$universitate'
     | '/bac/'
     | '/bac/$materie/$an'
@@ -1075,7 +1087,7 @@ export interface RootRouteChildren {
   PlatformaMeditatiiOnlineRoute: typeof PlatformaMeditatiiOnlineRoute
   PreturiMeditatiiRoute: typeof PreturiMeditatiiRouteWithChildren
   ProfesorParticularRoute: typeof ProfesorParticularRoute
-  ProfesoriRoute: typeof ProfesoriRoute
+  ProfesoriRoute: typeof ProfesoriRouteWithChildren
   ProfesoriMeditatiiRoute: typeof ProfesoriMeditatiiRoute
   SignupRoute: typeof SignupRoute
   SimulareBacalaureatRoute: typeof SimulareBacalaureatRoute
@@ -1557,6 +1569,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubiecteAdmitereUniversitateRouteImport
       parentRoute: typeof SubiecteAdmitereRoute
     }
+    '/profesori/$oras': {
+      id: '/profesori/$oras'
+      path: '/$oras'
+      fullPath: '/profesori/$oras'
+      preLoaderRoute: typeof ProfesoriOrasRouteImport
+      parentRoute: typeof ProfesoriRoute
+    }
     '/preturi-meditatii/$materie': {
       id: '/preturi-meditatii/$materie'
       path: '/$materie'
@@ -1723,6 +1742,18 @@ const PreturiMeditatiiRouteChildren: PreturiMeditatiiRouteChildren = {
 const PreturiMeditatiiRouteWithChildren =
   PreturiMeditatiiRoute._addFileChildren(PreturiMeditatiiRouteChildren)
 
+interface ProfesoriRouteChildren {
+  ProfesoriOrasRoute: typeof ProfesoriOrasRoute
+}
+
+const ProfesoriRouteChildren: ProfesoriRouteChildren = {
+  ProfesoriOrasRoute: ProfesoriOrasRoute,
+}
+
+const ProfesoriRouteWithChildren = ProfesoriRoute._addFileChildren(
+  ProfesoriRouteChildren,
+)
+
 interface SubiecteAdmitereUniversitateMaterieRouteChildren {
   SubiecteAdmitereUniversitateMaterieAnRoute: typeof SubiecteAdmitereUniversitateMaterieAnRoute
 }
@@ -1830,7 +1861,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlatformaMeditatiiOnlineRoute: PlatformaMeditatiiOnlineRoute,
   PreturiMeditatiiRoute: PreturiMeditatiiRouteWithChildren,
   ProfesorParticularRoute: ProfesorParticularRoute,
-  ProfesoriRoute: ProfesoriRoute,
+  ProfesoriRoute: ProfesoriRouteWithChildren,
   ProfesoriMeditatiiRoute: ProfesoriMeditatiiRoute,
   SignupRoute: SignupRoute,
   SimulareBacalaureatRoute: SimulareBacalaureatRoute,

@@ -18,17 +18,22 @@ export const Route = createFileRoute("/ads.txt")({
           "") as string;
         const pubId = client.replace(/^ca-/, "").trim();
 
+        // Returnăm întotdeauna text/plain cu o linie validă când publisher-ul e setat,
+        // altfel un placeholder util pentru crawlerul AdSense (nu 404, nu HTML).
         const body = pubId
           ? `google.com, ${pubId}, DIRECT, f08c47fec0942fa0\n`
-          : `# ads.txt placeholder — setează VITE_ADSENSE_CLIENT în env pentru a activa\n`;
+          : `# MeditatiiDirect.ro ads.txt\n# Setează secretul VITE_ADSENSE_CLIENT (ca-pub-XXXXXXXXXXXXXXXX) pentru a publica linia DIRECT.\n# Vezi: https://support.google.com/adsense/answer/7532444\n`;
 
         return new Response(body, {
+          status: 200,
           headers: {
             "Content-Type": "text/plain; charset=utf-8",
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": "public, max-age=3600, s-maxage=3600",
+            "X-Robots-Tag": "noindex",
           },
         });
       },
+
     },
   },
 });

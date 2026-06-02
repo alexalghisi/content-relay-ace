@@ -102,12 +102,16 @@ export const Route = createFileRoute("/sitemap.xml")({
               `  <url>\n    <loc>${BASE_URL}/anunt/${slug}</loc>\n    <lastmod>${last}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
             );
           }
-          // City landing pages
+          // City landing pages + profesori per oraș (nou — 14 pagini SEO)
           for (const c of CITIES) {
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,
             );
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/profesori/${c.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
+            );
           }
+
           // Blog posts
           const { data: posts } = await supabaseAdmin
             .from("blog_posts").select("slug,updated_at").eq("is_published", true);
