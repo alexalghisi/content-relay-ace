@@ -63,16 +63,26 @@ async function fcSearch(query: string, key: string): Promise<string[]> {
   }
 }
 
+// Pentru "matematica" expandăm la slug-urile folosite în UI (m1/m2/m3).
+// Pentru anii vechi (pre-2014) BAC-ul avea o singură matematică, deci scriem
+// același PDF la toate variantele ca să fie accesibil din orice rută.
+function uiSlugsFor(materie: string): string[] {
+  if (materie === "matematica") return ["matematica-m1", "matematica-m2", "matematica-m3"];
+  return [materie];
+}
+
 async function processCombo(materie: string, an: number, fcKey: string, budgetMs: number) {
   const start = Date.now();
   const left = () => budgetMs - (Date.now() - start);
 
-  // Skip dacă folderul are deja ≥4 PDF-uri (iunie/simulare × subiect/barem).
+  // Skip dacă deja există PDF-uri canonice (subiect+barem) pentru această combinație.
   const { data: existing } = await supabaseAdmin.storage
     .from("bac-pdfs")
-    .list(`${materie}/${an}`, { limit: 100 });
-  const existingFiles = (existing ?? []).filter((f) => f.id).map((f) => f.name);
-  if (existingFiles.length >= 4) {
+    .list(`${an}`, { limit: 200 });
+  const existingFiles = new Set((existing ?? []).filter((f) => f.id).map((f) => f.name));
+  const slugs = uiSlugsFor(materie);
+  const needed = slugs.flatMap((s) => [`${s}-subiect.pdf`, `${s}-barem.pdf`]);
+  if (needed.every((n) => existingFiles.has(n))) {
     return { uploaded: 0, found: 0, skipped: "already_populated" as const };
   }
 
@@ -81,7 +91,7 @@ async function processCombo(materie: string, an: number, fcKey: string, budgetMs
     `barem bacalaureat ${materie} ${an} filetype:pdf site:subiecte.edu.ro`,
     `subiecte bac ${materie} ${an} filetype:pdf site:edu.ro`,
     `bac ${materie} ${an} barem subiect filetype:pdf`,
-    `simulare bacalaureat ${materie} ${an} filetype:pdf`,
+    `variante bacalaureat ${materie} ${an} filetype:pdf`,
   ];
 
   const urls = new Set<string>();
@@ -92,12 +102,19 @@ async function processCombo(materie: string, an: number, fcKey: string, budgetMs
   }
 
   let uploaded = 0;
-  for (const url of urls) {
+  // Preferăm sesiunea iunie; ignorăm simulările la prima trecere.
+  const sortedUrls = Array.from(urls).sort((a, b) => {
+    const sa = /simulare|simulari/i.test(a) ? 1 : 0;
+    const sb = /simulare|simulari/i.test(b) ? 1 : 0;
+    return sa - sb;
+  });
+
+  for (const url of sortedUrls) {
     if (left() < 4000) break;
     const c = classify(url, materie, an);
     if (!c) continue;
-    const fileName = `${c.sesiune}-${c.tip}.pdf`;
-    if (existingFiles.includes(fileName)) continue;
+    // Skip dacă toate slug-urile UI au deja fișierul pentru acest tip.
+    if (slugs.every((s) => existingFiles.has(`${s}-${c.tip}.pdf`))) continue;
     try {
       const r = await fetch(url, { redirect: "follow", signal: AbortSignal.timeout(12000) });
       if (!r.ok) continue;
@@ -105,15 +122,17 @@ async function processCombo(materie: string, an: number, fcKey: string, budgetMs
       const buf = new Uint8Array(ab);
       if (buf.byteLength < 5000) continue;
       if (buf[0] !== 0x25 || buf[1] !== 0x50) continue; // "%P" magic
-      const { error } = await supabaseAdmin.storage
-        .from("bac-pdfs")
-        .upload(`${materie}/${an}/${fileName}`, buf, {
-          contentType: "application/pdf",
-          upsert: false,
-        });
-      if (!error) {
-        uploaded++;
-        existingFiles.push(fileName);
+      // Scriem la calea canonică așteptată de UI: bac-pdfs/{an}/{slug}-{tip}.pdf
+      for (const slug of slugs) {
+        const path = `${an}/${slug}-${c.tip}.pdf`;
+        if (existingFiles.has(`${slug}-${c.tip}.pdf`)) continue;
+        const { error } = await supabaseAdmin.storage
+          .from("bac-pdfs")
+          .upload(path, buf, { contentType: "application/pdf", upsert: false });
+        if (!error) {
+          uploaded++;
+          existingFiles.add(`${slug}-${c.tip}.pdf`);
+        }
       }
     } catch {
       /* ignore single-url errors */
