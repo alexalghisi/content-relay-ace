@@ -8,14 +8,34 @@ import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meditații Online cu Profesori Verificați | MeditatiiDirect" },
+      { title: "Meditații Online & Acasă 2026 — 1000+ Profesori Verificați | MeditatiiDirect.ro" },
       { property: "og:url", content: "https://meditatiidirect.ro/" },
-      { name: "description", content: "Găsește meditații la matematică, română, engleză cu profesori verificați. Online sau față în față, BAC 2026, admitere și Evaluare Națională. De la 30 lei/oră." },
-      { name: "keywords", content: "meditatii, meditatii online, profesori, meditatii matematica, meditatii romana, meditatii engleza, BAC 2026, admitere facultate, evaluare nationala, meditatii bucuresti, meditatii cluj, meditatii iasi" },
-      { property: "og:title", content: "Meditații cu Profesori Verificați în România" },
-      { property: "og:description", content: "Chat direct cu profesorul, fără intermediari. 20+ materii, toată România." },
+      { name: "description", content: "★ Meditații cu profesori verificați: matematică, română, engleză, fizică, BAC 2026, admitere, Evaluare Națională. Online sau acasă în București, Cluj, Iași, Timișoara. Contact direct, FĂRĂ comision, de la 30 lei/oră." },
+      { name: "keywords", content: "meditatii, meditatii online, profesori, profesori particulari, anunturi meditatii, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii chimie, meditatii informatica, meditatii bac, meditatii bac 2026, meditatii admitere, meditatii evaluare nationala, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii brasov, meditatii constanta, ore particulare, profesor particular, meditatii acasa, meditatii ieftine" },
+      { property: "og:title", content: "Meditații cu Profesori Verificați în România — MeditatiiDirect.ro" },
+      { property: "og:description", content: "1000+ profesori verificați, 20+ materii, toată România. Chat direct cu profesorul, fără intermediari. De la 30 lei/oră." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "Meditații cu Profesori Verificați în România" },
+      { name: "twitter:description", content: "1000+ profesori verificați, 20+ materii, contact direct fără comision." },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/" }],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          { "@type": "Question", name: "Cât costă o oră de meditații în România?",
+            acceptedAnswer: { "@type": "Answer", text: "Tarifele pornesc de la 30 lei/oră în provincie pentru gimnaziu și ajung la 150–200 lei/oră pentru pregătire intensivă BAC sau admitere la Medicină în București. Prețul mediu național este 60–80 lei/oră." } },
+          { "@type": "Question", name: "Cum găsesc un profesor de meditații verificat?",
+            acceptedAnswer: { "@type": "Answer", text: "Pe MeditatiiDirect.ro filtrezi după materie, oraș și online/față-în-față. Toți profesorii sunt verificați manual (identitate, diplomă, experiență) și au badge „Verificat\". Contactul este direct, fără comision." } },
+          { "@type": "Question", name: "Pot face meditații online?",
+            acceptedAnswer: { "@type": "Answer", text: "Da. Majoritatea profesorilor oferă meditații online prin Zoom, Google Meet sau Skype — la fel de eficient ca față-în-față, cu materiale partajate digital și economie de timp pe drum." } },
+          { "@type": "Question", name: "Care sunt cele mai cerute materii?",
+            acceptedAnswer: { "@type": "Answer", text: "Top cereri: meditații matematică, română, engleză, fizică, chimie, informatică și biologie — în special pentru BAC, Evaluare Națională și admitere la facultate (Medicină, Politehnică, Drept, ASE)." } },
+        ],
+      }),
+    }],
   }),
   component: HomePage,
 });
