@@ -69,8 +69,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:locale", content: "ro_RO" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@meditatiidirect" },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/595a298f-0e96-42e8-8bd2-03820d4b8a6c/id-preview-377c4ecf--df47450a-a5d2-435d-86cc-507a4b01c196.lovable.app-1778666401576.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/595a298f-0e96-42e8-8bd2-03820d4b8a6c/id-preview-377c4ecf--df47450a-a5d2-435d-86cc-507a4b01c196.lovable.app-1778666401576.png" },
     ],
       links: [
         { rel: "stylesheet", href: appCss },
