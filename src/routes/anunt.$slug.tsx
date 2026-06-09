@@ -51,8 +51,9 @@ function AdPage() {
       if (!data) {
         const r = await supabase.from("ads").select(sel).eq("id", slug).maybeSingle();
         data = r.data;
-        if (data && (data as { seo_slug: string | null }).seo_slug && (data as { seo_slug: string }).seo_slug !== slug) {
-          navigate({ to: "/anunt/$slug", params: { slug: (data as { seo_slug: string }).seo_slug }, replace: true });
+        const d = data as unknown as { seo_slug: string | null } | null;
+        if (d?.seo_slug && d.seo_slug !== slug) {
+          navigate({ to: "/anunt/$slug", params: { slug: d.seo_slug }, replace: true });
           return;
         }
       }
