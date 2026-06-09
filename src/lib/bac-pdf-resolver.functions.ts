@@ -13,15 +13,16 @@ export const resolveBacPdfs = createServerFn({ method: "GET" })
   .inputValidator((input: { materie: string; an: number }) => input)
   .handler(async ({ data }) => {
     const { materie, an } = data;
-    // Pull all object names for this subject/year combination across both layouts.
-    const { data: rows } = await supabaseAdmin
-      .schema("storage")
-      .from("objects")
-      .select("name")
-      .eq("bucket_id", "bac-pdfs")
-      .or(`name.like.${materie}/${an}/%,name.like.${an}/${materie}-%,name.like.${an}/${materie}.%`);
-
-    const names = (rows ?? []).map((r) => r.name as string);
+    // List both possible layouts via the storage API.
+    const bucket = supabaseAdmin.storage.from("bac-pdfs");
+    const [a, b] = await Promise.all([
+      bucket.list(`${materie}/${an}`, { limit: 100 }),
+      bucket.list(`${an}`, { limit: 100, search: materie }),
+    ]);
+    const names: string[] = [
+      ...(a.data ?? []).map((f) => `${materie}/${an}/${f.name}`),
+      ...(b.data ?? []).map((f) => `${an}/${f.name}`),
+    ];
     const pick = (kind: "subiect" | "barem"): string | null => {
       // Prefer new-layout, iunie session first
       for (const sess of SESSION_PRIORITY) {
