@@ -845,6 +845,7 @@ export type Database = {
           read_ct: number
         }[]
       }
+      slugify_ro: { Args: { input: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "teacher" | "student"
