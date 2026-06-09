@@ -601,6 +601,7 @@ export type Database = {
           id: string
           rating: number | null
           reviewer_name: string | null
+          reviewer_user_id: string | null
           teacher_id: string | null
         }
         Insert: {
@@ -610,6 +611,7 @@ export type Database = {
           id?: string
           rating?: number | null
           reviewer_name?: string | null
+          reviewer_user_id?: string | null
           teacher_id?: string | null
         }
         Update: {
@@ -619,6 +621,7 @@ export type Database = {
           id?: string
           rating?: number | null
           reviewer_name?: string | null
+          reviewer_user_id?: string | null
           teacher_id?: string | null
         }
         Relationships: [
