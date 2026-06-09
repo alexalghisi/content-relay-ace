@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, CalendarDays } from "lucide-react";
 import { BAC_SUBJECTS, BAC_YEARS, BAC_AVAILABLE_YEARS } from "@/data/bac-archive";
-import { bacPdfUrl } from "@/lib/pdf-urls";
+import { resolveBacPdfs } from "@/lib/bac-pdf-resolver.functions";
 import { faqJsonLd } from "@/components/seo-landing";
 
 const ogImageForBac = (slug: string) => `https://meditatiidirect.ro/og/bac/${slug}.jpg`;
@@ -17,13 +17,14 @@ function buildBacFaqs(subjectName: string, year: number) {
 }
 
 export const Route = createFileRoute("/resurse/bac/$materie/$an")({
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     const subject = BAC_SUBJECTS.find((s) => s.slug === params.materie);
     if (!subject) throw notFound();
     const year = Number(params.an);
     if (!BAC_YEARS.includes(year)) throw notFound();
-    const yearAvailable = BAC_AVAILABLE_YEARS.includes(year);
-    return { subject, year, yearAvailable };
+    const pdfs = await resolveBacPdfs({ data: { materie: subject.slug, an: year } });
+    const yearAvailable = !!pdfs.subiect;
+    return { subject, year, yearAvailable, pdfs };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return {};
@@ -155,8 +156,9 @@ function ResursaBacPage() {
     );
   }
 
-  const subjectPdf = bacPdfUrl(subject.slug, year, "subiect");
-  const baremPdf = bacPdfUrl(subject.slug, year, "barem");
+  const { pdfs } = Route.useLoaderData();
+  const subjectPdf = pdfs.subiect!;
+  const baremPdf = pdfs.barem ?? pdfs.subiect!;
 
   return (
     <article className="container-page py-10 lg:py-14">
