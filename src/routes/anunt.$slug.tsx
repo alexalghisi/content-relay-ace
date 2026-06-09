@@ -43,12 +43,14 @@ function AdPage() {
 
   useEffect(() => {
     (async () => {
-      const sel = "id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(id,full_name,avatar_url,experience_years,education,phone,bio,auth_user_id)";
+      const teacherCols = user
+        ? "id,full_name,avatar_url,experience_years,education,phone,bio,auth_user_id"
+        : "id,full_name,avatar_url,experience_years,education,bio,auth_user_id";
+      const sel = `id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(${teacherCols})`;
       let { data } = await supabase.from("ads").select(sel).eq("seo_slug", slug).maybeSingle();
       if (!data) {
         const r = await supabase.from("ads").select(sel).eq("id", slug).maybeSingle();
         data = r.data;
-        // If accessed via raw UUID but ad has a real SEO slug, redirect 301-style to the canonical URL.
         if (data && (data as { seo_slug: string | null }).seo_slug && (data as { seo_slug: string }).seo_slug !== slug) {
           navigate({ to: "/anunt/$slug", params: { slug: (data as { seo_slug: string }).seo_slug }, replace: true });
           return;
@@ -57,7 +59,7 @@ function AdPage() {
       setAd(data as unknown as AdDetail);
       setLoading(false);
     })();
-  }, [slug, navigate]);
+  }, [slug, navigate, user]);
 
   const startChat = async () => {
     if (!user) { toast.info("Conectează-te ca să trimiți mesaj"); navigate({ to: "/login" }); return; }
