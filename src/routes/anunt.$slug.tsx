@@ -48,11 +48,16 @@ function AdPage() {
       if (!data) {
         const r = await supabase.from("ads").select(sel).eq("id", slug).maybeSingle();
         data = r.data;
+        // If accessed via raw UUID but ad has a real SEO slug, redirect 301-style to the canonical URL.
+        if (data && (data as { seo_slug: string | null }).seo_slug && (data as { seo_slug: string }).seo_slug !== slug) {
+          navigate({ to: "/anunt/$slug", params: { slug: (data as { seo_slug: string }).seo_slug }, replace: true });
+          return;
+        }
       }
       setAd(data as unknown as AdDetail);
       setLoading(false);
     })();
-  }, [slug]);
+  }, [slug, navigate]);
 
   const startChat = async () => {
     if (!user) { toast.info("Conectează-te ca să trimiți mesaj"); navigate({ to: "/login" }); return; }
