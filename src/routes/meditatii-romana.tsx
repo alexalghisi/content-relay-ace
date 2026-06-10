@@ -57,7 +57,7 @@ export const Route = createFileRoute("/meditatii-romana")({
       ctaPrimary={{ to: "/meditatii", label: "Vezi profesori română" }}
       ctaSecondary={{ to: "/meditatii-bac", label: "Pregătire BAC română" }}
       pdfs={[
-        { href: "/resurse/bac/romana/2026", title: "Subiect BAC 2026 — Limba română", meta: "Subiect oficial + barem PDF gratuit" },
+        { href: "/resurse/bac/romana/2025", title: "Subiect BAC 2026 — Limba română", meta: "Subiect oficial + barem PDF gratuit" },
       ]}
       faqs={faqs}
       related={[
