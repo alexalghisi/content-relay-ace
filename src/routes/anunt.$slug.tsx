@@ -15,18 +15,26 @@ interface AdDetail {
   legacy_teachers: Teacher | null;
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export const Route = createFileRoute("/anunt/$slug")({
   component: AdPage,
   head: ({ params }) => {
+    const isUuid = UUID_RE.test(params.slug);
     const human = decodeURIComponent(params.slug).replace(/-/g, " ");
+    const meta = [
+      { title: `Meditații ${human} | Profesor verificat | MeditatiiDirect.ro` },
+      { name: "description", content: `Anunț meditații cu profesor verificat: ${human}. Contact direct, preț per oră, recenzii reale. Fără comision, fără intermediari.` },
+      { property: "og:title", content: `Meditații ${human} — MeditatiiDirect.ro` },
+      { property: "og:description", content: `Profesor verificat. Contact direct, fără comision.` },
+      { property: "og:type", content: "article" },
+    ];
+    if (isUuid) {
+      meta.push({ name: "robots", content: "noindex, follow" });
+      return { meta };
+    }
     return {
-      meta: [
-        { title: `Meditații ${human} | Profesor verificat | MeditatiiDirect.ro` },
-        { name: "description", content: `Anunț meditații cu profesor verificat: ${human}. Contact direct, preț per oră, recenzii reale. Fără comision, fără intermediari.` },
-        { property: "og:title", content: `Meditații ${human} — MeditatiiDirect.ro` },
-        { property: "og:description", content: `Profesor verificat. Contact direct, fără comision.` },
-        { property: "og:type", content: "article" },
-      ],
+      meta,
       links: [{ rel: "canonical", href: `https://meditatiidirect.ro/anunt/${params.slug}` }],
     };
   },

@@ -40,7 +40,7 @@ export const Route = createFileRoute("/meditatii-informatica")({
       ]}
       ctaPrimary={{ to: "/meditatii", label: "Vezi profesori informatică" }}
       pdfs={[
-        { href: "/resurse/bac/informatica/2026", title: "Simulare BAC 2026 — Informatică (C/C++)", meta: "Algoritmi, exerciții, model rezolvat" },
+        { href: "/resurse/bac/informatica/2025", title: "Simulare BAC 2026 — Informatică (C/C++)", meta: "Algoritmi, exerciții, model rezolvat" },
       ]}
       faqs={faqs}
       related={[

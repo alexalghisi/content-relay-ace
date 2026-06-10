@@ -37,12 +37,12 @@ export const Route = createFileRoute("/meditatii-bac")({
       ]}
       ctaPrimary={{ to: "/meditatii", label: "Caută profesor BAC" }}
       pdfs={[
-        { href: "/resurse/bac/matematica-m1/2026", title: "Simulare Matematică M_mate-info" },
-        { href: "/resurse/bac/romana/2026", title: "Simulare Română" },
-        { href: "/resurse/bac/biologie/2026", title: "Simulare Biologie" },
-        { href: "/resurse/bac/fizica/2026", title: "Simulare Fizică" },
-        { href: "/resurse/bac/informatica/2026", title: "Simulare Informatică" },
-        { href: "/resurse/bac/istorie/2026", title: "Simulare Istorie" },
+        { href: "/resurse/bac/matematica-m1/2025", title: "Simulare Matematică M_mate-info" },
+        { href: "/resurse/bac/romana/2025", title: "Simulare Română" },
+        { href: "/resurse/bac/biologie/2025", title: "Simulare Biologie" },
+        { href: "/resurse/bac/fizica/2025", title: "Simulare Fizică" },
+        { href: "/resurse/bac/informatica/2025", title: "Simulare Informatică" },
+        { href: "/resurse/bac/istorie/2025", title: "Simulare Istorie" },
       ]}
       faqs={faqs}
       related={[
