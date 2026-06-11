@@ -23,6 +23,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ProfesoriMeditatiiRouteImport } from './routes/profesori-meditatii'
 import { Route as ProfesoriRouteImport } from './routes/profesori'
 import { Route as ProfesorParticularRouteImport } from './routes/profesor-particular'
+import { Route as ProfesorMeditatiiRouteImport } from './routes/profesor-meditatii'
 import { Route as PreturiMeditatiiRouteImport } from './routes/preturi-meditatii'
 import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
 import { Route as PentruProfesoriRouteImport } from './routes/pentru-profesori'
@@ -31,13 +32,18 @@ import { Route as OferMeditatiiRouteImport } from './routes/ofer-meditatii'
 import { Route as MesajeRouteImport } from './routes/mesaje'
 import { Route as MeditatoriRouteImport } from './routes/meditatori'
 import { Route as MeditatiiTitularizareRouteImport } from './routes/meditatii-titularizare'
+import { Route as MeditatiiScoalaRouteImport } from './routes/meditatii-scoala'
 import { Route as MeditatiiRomanaRouteImport } from './routes/meditatii-romana'
+import { Route as MeditatiiPrivateRouteImport } from './routes/meditatii-private'
+import { Route as MeditatiiParticulareRouteImport } from './routes/meditatii-particulare'
 import { Route as MeditatiiOnlineRouteImport } from './routes/meditatii-online'
 import { Route as MeditatiiMatematicaRouteImport } from './routes/meditatii-matematica'
+import { Route as MeditatiiLiceuRouteImport } from './routes/meditatii-liceu'
 import { Route as MeditatiiLaDomiciliuRouteImport } from './routes/meditatii-la-domiciliu'
 import { Route as MeditatiiIstorieRouteImport } from './routes/meditatii-istorie'
 import { Route as MeditatiiInformaticaRouteImport } from './routes/meditatii-informatica'
 import { Route as MeditatiiIeftineRouteImport } from './routes/meditatii-ieftine'
+import { Route as MeditatiiGimnaziuRouteImport } from './routes/meditatii-gimnaziu'
 import { Route as MeditatiiGermanaRouteImport } from './routes/meditatii-germana'
 import { Route as MeditatiiGeografieRouteImport } from './routes/meditatii-geografie'
 import { Route as MeditatiiFrancezaRouteImport } from './routes/meditatii-franceza'
@@ -163,6 +169,11 @@ const ProfesorParticularRoute = ProfesorParticularRouteImport.update({
   path: '/profesor-particular',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfesorMeditatiiRoute = ProfesorMeditatiiRouteImport.update({
+  id: '/profesor-meditatii',
+  path: '/profesor-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PreturiMeditatiiRoute = PreturiMeditatiiRouteImport.update({
   id: '/preturi-meditatii',
   path: '/preturi-meditatii',
@@ -204,9 +215,24 @@ const MeditatiiTitularizareRoute = MeditatiiTitularizareRouteImport.update({
   path: '/meditatii-titularizare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeditatiiScoalaRoute = MeditatiiScoalaRouteImport.update({
+  id: '/meditatii-scoala',
+  path: '/meditatii-scoala',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MeditatiiRomanaRoute = MeditatiiRomanaRouteImport.update({
   id: '/meditatii-romana',
   path: '/meditatii-romana',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiPrivateRoute = MeditatiiPrivateRouteImport.update({
+  id: '/meditatii-private',
+  path: '/meditatii-private',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiParticulareRoute = MeditatiiParticulareRouteImport.update({
+  id: '/meditatii-particulare',
+  path: '/meditatii-particulare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeditatiiOnlineRoute = MeditatiiOnlineRouteImport.update({
@@ -217,6 +243,11 @@ const MeditatiiOnlineRoute = MeditatiiOnlineRouteImport.update({
 const MeditatiiMatematicaRoute = MeditatiiMatematicaRouteImport.update({
   id: '/meditatii-matematica',
   path: '/meditatii-matematica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiLiceuRoute = MeditatiiLiceuRouteImport.update({
+  id: '/meditatii-liceu',
+  path: '/meditatii-liceu',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeditatiiLaDomiciliuRoute = MeditatiiLaDomiciliuRouteImport.update({
@@ -237,6 +268,11 @@ const MeditatiiInformaticaRoute = MeditatiiInformaticaRouteImport.update({
 const MeditatiiIeftineRoute = MeditatiiIeftineRouteImport.update({
   id: '/meditatii-ieftine',
   path: '/meditatii-ieftine',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiGimnaziuRoute = MeditatiiGimnaziuRouteImport.update({
+  id: '/meditatii-gimnaziu',
+  path: '/meditatii-gimnaziu',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeditatiiGermanaRoute = MeditatiiGermanaRouteImport.update({
@@ -557,13 +593,18 @@ export interface FileRoutesByFullPath {
   '/meditatii-franceza': typeof MeditatiiFrancezaRoute
   '/meditatii-geografie': typeof MeditatiiGeografieRoute
   '/meditatii-germana': typeof MeditatiiGermanaRoute
+  '/meditatii-gimnaziu': typeof MeditatiiGimnaziuRoute
   '/meditatii-ieftine': typeof MeditatiiIeftineRoute
   '/meditatii-informatica': typeof MeditatiiInformaticaRoute
   '/meditatii-istorie': typeof MeditatiiIstorieRoute
   '/meditatii-la-domiciliu': typeof MeditatiiLaDomiciliuRoute
+  '/meditatii-liceu': typeof MeditatiiLiceuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
+  '/meditatii-particulare': typeof MeditatiiParticulareRoute
+  '/meditatii-private': typeof MeditatiiPrivateRoute
   '/meditatii-romana': typeof MeditatiiRomanaRoute
+  '/meditatii-scoala': typeof MeditatiiScoalaRoute
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
   '/meditatori': typeof MeditatoriRoute
   '/mesaje': typeof MesajeRouteWithChildren
@@ -572,6 +613,7 @@ export interface FileRoutesByFullPath {
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
+  '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
@@ -642,13 +684,18 @@ export interface FileRoutesByTo {
   '/meditatii-franceza': typeof MeditatiiFrancezaRoute
   '/meditatii-geografie': typeof MeditatiiGeografieRoute
   '/meditatii-germana': typeof MeditatiiGermanaRoute
+  '/meditatii-gimnaziu': typeof MeditatiiGimnaziuRoute
   '/meditatii-ieftine': typeof MeditatiiIeftineRoute
   '/meditatii-informatica': typeof MeditatiiInformaticaRoute
   '/meditatii-istorie': typeof MeditatiiIstorieRoute
   '/meditatii-la-domiciliu': typeof MeditatiiLaDomiciliuRoute
+  '/meditatii-liceu': typeof MeditatiiLiceuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
+  '/meditatii-particulare': typeof MeditatiiParticulareRoute
+  '/meditatii-private': typeof MeditatiiPrivateRoute
   '/meditatii-romana': typeof MeditatiiRomanaRoute
+  '/meditatii-scoala': typeof MeditatiiScoalaRoute
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
   '/meditatori': typeof MeditatoriRoute
   '/mesaje': typeof MesajeRouteWithChildren
@@ -657,6 +704,7 @@ export interface FileRoutesByTo {
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
+  '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
@@ -728,13 +776,18 @@ export interface FileRoutesById {
   '/meditatii-franceza': typeof MeditatiiFrancezaRoute
   '/meditatii-geografie': typeof MeditatiiGeografieRoute
   '/meditatii-germana': typeof MeditatiiGermanaRoute
+  '/meditatii-gimnaziu': typeof MeditatiiGimnaziuRoute
   '/meditatii-ieftine': typeof MeditatiiIeftineRoute
   '/meditatii-informatica': typeof MeditatiiInformaticaRoute
   '/meditatii-istorie': typeof MeditatiiIstorieRoute
   '/meditatii-la-domiciliu': typeof MeditatiiLaDomiciliuRoute
+  '/meditatii-liceu': typeof MeditatiiLiceuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
+  '/meditatii-particulare': typeof MeditatiiParticulareRoute
+  '/meditatii-private': typeof MeditatiiPrivateRoute
   '/meditatii-romana': typeof MeditatiiRomanaRoute
+  '/meditatii-scoala': typeof MeditatiiScoalaRoute
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
   '/meditatori': typeof MeditatoriRoute
   '/mesaje': typeof MesajeRouteWithChildren
@@ -743,6 +796,7 @@ export interface FileRoutesById {
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
+  '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
@@ -815,13 +869,18 @@ export interface FileRouteTypes {
     | '/meditatii-franceza'
     | '/meditatii-geografie'
     | '/meditatii-germana'
+    | '/meditatii-gimnaziu'
     | '/meditatii-ieftine'
     | '/meditatii-informatica'
     | '/meditatii-istorie'
     | '/meditatii-la-domiciliu'
+    | '/meditatii-liceu'
     | '/meditatii-matematica'
     | '/meditatii-online'
+    | '/meditatii-particulare'
+    | '/meditatii-private'
     | '/meditatii-romana'
+    | '/meditatii-scoala'
     | '/meditatii-titularizare'
     | '/meditatori'
     | '/mesaje'
@@ -830,6 +889,7 @@ export interface FileRouteTypes {
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
+    | '/profesor-meditatii'
     | '/profesor-particular'
     | '/profesori'
     | '/profesori-meditatii'
@@ -900,13 +960,18 @@ export interface FileRouteTypes {
     | '/meditatii-franceza'
     | '/meditatii-geografie'
     | '/meditatii-germana'
+    | '/meditatii-gimnaziu'
     | '/meditatii-ieftine'
     | '/meditatii-informatica'
     | '/meditatii-istorie'
     | '/meditatii-la-domiciliu'
+    | '/meditatii-liceu'
     | '/meditatii-matematica'
     | '/meditatii-online'
+    | '/meditatii-particulare'
+    | '/meditatii-private'
     | '/meditatii-romana'
+    | '/meditatii-scoala'
     | '/meditatii-titularizare'
     | '/meditatori'
     | '/mesaje'
@@ -915,6 +980,7 @@ export interface FileRouteTypes {
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
+    | '/profesor-meditatii'
     | '/profesor-particular'
     | '/profesori'
     | '/profesori-meditatii'
@@ -985,13 +1051,18 @@ export interface FileRouteTypes {
     | '/meditatii-franceza'
     | '/meditatii-geografie'
     | '/meditatii-germana'
+    | '/meditatii-gimnaziu'
     | '/meditatii-ieftine'
     | '/meditatii-informatica'
     | '/meditatii-istorie'
     | '/meditatii-la-domiciliu'
+    | '/meditatii-liceu'
     | '/meditatii-matematica'
     | '/meditatii-online'
+    | '/meditatii-particulare'
+    | '/meditatii-private'
     | '/meditatii-romana'
+    | '/meditatii-scoala'
     | '/meditatii-titularizare'
     | '/meditatori'
     | '/mesaje'
@@ -1000,6 +1071,7 @@ export interface FileRouteTypes {
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
+    | '/profesor-meditatii'
     | '/profesor-particular'
     | '/profesori'
     | '/profesori-meditatii'
@@ -1071,13 +1143,18 @@ export interface RootRouteChildren {
   MeditatiiFrancezaRoute: typeof MeditatiiFrancezaRoute
   MeditatiiGeografieRoute: typeof MeditatiiGeografieRoute
   MeditatiiGermanaRoute: typeof MeditatiiGermanaRoute
+  MeditatiiGimnaziuRoute: typeof MeditatiiGimnaziuRoute
   MeditatiiIeftineRoute: typeof MeditatiiIeftineRoute
   MeditatiiInformaticaRoute: typeof MeditatiiInformaticaRoute
   MeditatiiIstorieRoute: typeof MeditatiiIstorieRoute
   MeditatiiLaDomiciliuRoute: typeof MeditatiiLaDomiciliuRoute
+  MeditatiiLiceuRoute: typeof MeditatiiLiceuRoute
   MeditatiiMatematicaRoute: typeof MeditatiiMatematicaRoute
   MeditatiiOnlineRoute: typeof MeditatiiOnlineRoute
+  MeditatiiParticulareRoute: typeof MeditatiiParticulareRoute
+  MeditatiiPrivateRoute: typeof MeditatiiPrivateRoute
   MeditatiiRomanaRoute: typeof MeditatiiRomanaRoute
+  MeditatiiScoalaRoute: typeof MeditatiiScoalaRoute
   MeditatiiTitularizareRoute: typeof MeditatiiTitularizareRoute
   MeditatoriRoute: typeof MeditatoriRoute
   MesajeRoute: typeof MesajeRouteWithChildren
@@ -1086,6 +1163,7 @@ export interface RootRouteChildren {
   PentruProfesoriRoute: typeof PentruProfesoriRoute
   PlatformaMeditatiiOnlineRoute: typeof PlatformaMeditatiiOnlineRoute
   PreturiMeditatiiRoute: typeof PreturiMeditatiiRouteWithChildren
+  ProfesorMeditatiiRoute: typeof ProfesorMeditatiiRoute
   ProfesorParticularRoute: typeof ProfesorParticularRoute
   ProfesoriRoute: typeof ProfesoriRouteWithChildren
   ProfesoriMeditatiiRoute: typeof ProfesoriMeditatiiRoute
@@ -1212,6 +1290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfesorParticularRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profesor-meditatii': {
+      id: '/profesor-meditatii'
+      path: '/profesor-meditatii'
+      fullPath: '/profesor-meditatii'
+      preLoaderRoute: typeof ProfesorMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/preturi-meditatii': {
       id: '/preturi-meditatii'
       path: '/preturi-meditatii'
@@ -1268,11 +1353,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeditatiiTitularizareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/meditatii-scoala': {
+      id: '/meditatii-scoala'
+      path: '/meditatii-scoala'
+      fullPath: '/meditatii-scoala'
+      preLoaderRoute: typeof MeditatiiScoalaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/meditatii-romana': {
       id: '/meditatii-romana'
       path: '/meditatii-romana'
       fullPath: '/meditatii-romana'
       preLoaderRoute: typeof MeditatiiRomanaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-private': {
+      id: '/meditatii-private'
+      path: '/meditatii-private'
+      fullPath: '/meditatii-private'
+      preLoaderRoute: typeof MeditatiiPrivateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-particulare': {
+      id: '/meditatii-particulare'
+      path: '/meditatii-particulare'
+      fullPath: '/meditatii-particulare'
+      preLoaderRoute: typeof MeditatiiParticulareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-online': {
@@ -1287,6 +1393,13 @@ declare module '@tanstack/react-router' {
       path: '/meditatii-matematica'
       fullPath: '/meditatii-matematica'
       preLoaderRoute: typeof MeditatiiMatematicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-liceu': {
+      id: '/meditatii-liceu'
+      path: '/meditatii-liceu'
+      fullPath: '/meditatii-liceu'
+      preLoaderRoute: typeof MeditatiiLiceuRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-la-domiciliu': {
@@ -1315,6 +1428,13 @@ declare module '@tanstack/react-router' {
       path: '/meditatii-ieftine'
       fullPath: '/meditatii-ieftine'
       preLoaderRoute: typeof MeditatiiIeftineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-gimnaziu': {
+      id: '/meditatii-gimnaziu'
+      path: '/meditatii-gimnaziu'
+      fullPath: '/meditatii-gimnaziu'
+      preLoaderRoute: typeof MeditatiiGimnaziuRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-germana': {
@@ -1845,13 +1965,18 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiFrancezaRoute: MeditatiiFrancezaRoute,
   MeditatiiGeografieRoute: MeditatiiGeografieRoute,
   MeditatiiGermanaRoute: MeditatiiGermanaRoute,
+  MeditatiiGimnaziuRoute: MeditatiiGimnaziuRoute,
   MeditatiiIeftineRoute: MeditatiiIeftineRoute,
   MeditatiiInformaticaRoute: MeditatiiInformaticaRoute,
   MeditatiiIstorieRoute: MeditatiiIstorieRoute,
   MeditatiiLaDomiciliuRoute: MeditatiiLaDomiciliuRoute,
+  MeditatiiLiceuRoute: MeditatiiLiceuRoute,
   MeditatiiMatematicaRoute: MeditatiiMatematicaRoute,
   MeditatiiOnlineRoute: MeditatiiOnlineRoute,
+  MeditatiiParticulareRoute: MeditatiiParticulareRoute,
+  MeditatiiPrivateRoute: MeditatiiPrivateRoute,
   MeditatiiRomanaRoute: MeditatiiRomanaRoute,
+  MeditatiiScoalaRoute: MeditatiiScoalaRoute,
   MeditatiiTitularizareRoute: MeditatiiTitularizareRoute,
   MeditatoriRoute: MeditatoriRoute,
   MesajeRoute: MesajeRouteWithChildren,
@@ -1860,6 +1985,7 @@ const rootRouteChildren: RootRouteChildren = {
   PentruProfesoriRoute: PentruProfesoriRoute,
   PlatformaMeditatiiOnlineRoute: PlatformaMeditatiiOnlineRoute,
   PreturiMeditatiiRoute: PreturiMeditatiiRouteWithChildren,
+  ProfesorMeditatiiRoute: ProfesorMeditatiiRoute,
   ProfesorParticularRoute: ProfesorParticularRoute,
   ProfesoriRoute: ProfesoriRouteWithChildren,
   ProfesoriMeditatiiRoute: ProfesoriMeditatiiRoute,
@@ -1888,13 +2014,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
