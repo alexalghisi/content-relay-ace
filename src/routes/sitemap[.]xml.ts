@@ -48,6 +48,12 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/meditatii-definitivat", priority: "0.8", changefreq: "weekly" },
   { path: "/meditatii-ieftine", priority: "0.85", changefreq: "weekly" },
   { path: "/profesor-particular", priority: "0.9", changefreq: "weekly" },
+  { path: "/profesor-meditatii", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-scoala", priority: "0.95", changefreq: "weekly" },
+  { path: "/meditatii-gimnaziu", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-liceu", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-private", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditatii-particulare", priority: "0.95", changefreq: "weekly" },
   { path: "/anunturi-meditatii-bac", priority: "0.9", changefreq: "daily" },
 
   { path: "/simulari-bacalaureat-2026", priority: "0.85", changefreq: "weekly" },
