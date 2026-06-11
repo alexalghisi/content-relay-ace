@@ -40,6 +40,7 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
     return {
       meta: [
         { title }, { name: "description", content: desc },
+        ...(yearAvailable ? [] : [{ name: "robots", content: "noindex, follow" }]),
         { name: "keywords", content: `subiecte bac ${year}, ${subject.name} bac ${year}, barem ${subject.name} ${year}, bacalaureat ${year} pdf, variante bac ${subject.name}, meditatii ${subject.name} bac, simulare bac ${year}` },
         { property: "og:title", content: title }, { property: "og:description", content: desc },
         { property: "og:url", content: url }, { property: "og:type", content: "article" },

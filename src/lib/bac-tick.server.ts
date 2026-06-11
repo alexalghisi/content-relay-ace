@@ -24,10 +24,17 @@ const SUBJ_RE: Record<string, RegExp> = {
 
 const BAD_RE = /(omec|omen|rofuip|procedur|inscriere|raport|legislatie|metodologie|calendar|comunicat|anexa|starea|ordin_|ordine|hot.r.re|cadru.metodologic)/i;
 const BAC_RE = /(bac|bacalaureat|simulare|examen)/i;
+// Officially-trusted hosts. Anything else is rejected to avoid scraping
+// student forums that rehost barems under "subiect"-looking URLs.
+const OFFICIAL_HOST_RE = /(^|\.)((subiecte\.edu\.ro)|(edu\.ro)|(rocnee\.eu)|(variante-bac\.ro))$/i;
 
 function classify(url: string, materie: string, an: number) {
   const u = url.toLowerCase();
   if (!/\.pdf(\?|$)/.test(u)) return null;
+  try {
+    const host = new URL(url).hostname;
+    if (!OFFICIAL_HOST_RE.test(host)) return null;
+  } catch { return null; }
   if (!u.includes(String(an))) return null;
   if (!SUBJ_RE[materie]?.test(u)) return null;
   if (BAD_RE.test(u)) return null;
@@ -40,6 +47,24 @@ function classify(url: string, materie: string, an: number) {
   else if (/special/.test(u)) sesiune = "speciala";
   return { tip, sesiune };
 }
+
+// Verify a downloaded PDF actually matches (year + materie + correct kind)
+// by sniffing the first ~32KB of raw text. Cheap, no pdf parser needed: the
+// PDF text streams contain readable ASCII for the metadata we care about.
+function verifyPdfContent(
+  buf: Uint8Array,
+  materie: string,
+  an: number,
+  tip: "subiect" | "barem",
+): boolean {
+  const head = new TextDecoder("latin1").decode(buf.subarray(0, Math.min(buf.byteLength, 32768)));
+  if (!/BACALAUREAT|Bacalaureat/.test(head)) return false;
+  if (!head.includes(String(an))) return false;
+  if (!SUBJ_RE[materie]?.test(head)) return false;
+  const isBaremDoc = /Barem de evaluare|BAREM DE EVALUARE|Barem de notare/.test(head);
+  return tip === "barem" ? isBaremDoc : !isBaremDoc;
+}
+
 
 async function fcSearch(query: string, key: string): Promise<string[]> {
   try {
@@ -111,6 +136,7 @@ async function processCombo(materie: string, an: number, fcKey: string, budgetMs
       const buf = new Uint8Array(ab);
       if (buf.byteLength < 5000) continue;
       if (buf[0] !== 0x25 || buf[1] !== 0x50) continue;
+      if (!verifyPdfContent(buf, materie, an, c.tip)) continue;
       for (const slug of slugs) {
         const path = `${an}/${slug}-${c.tip}.pdf`;
         if (existingFiles.has(`${slug}-${c.tip}.pdf`)) continue;
