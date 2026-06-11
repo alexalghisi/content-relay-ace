@@ -2,6 +2,7 @@
 // by querying storage.objects directly. Handles both legacy layout
 // `{year}/{slug}-{kind}.pdf` and new crawler layout `{slug}/{year}/{session}-{kind}.pdf`.
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const BASE = () =>
@@ -9,8 +10,13 @@ const BASE = () =>
 
 const SESSION_PRIORITY = ["iunie", "speciala", "august", "simulare"];
 
+const InputSchema = z.object({
+  materie: z.string().min(1).max(40).regex(/^[a-z][a-z0-9-]*$/),
+  an: z.coerce.number().int().min(2000).max(2035),
+});
+
 export const resolveBacPdfs = createServerFn({ method: "GET" })
-  .inputValidator((input: { materie: string; an: number }) => input)
+  .inputValidator((input: unknown) => InputSchema.parse(input))
   .handler(async ({ data }) => {
     const { materie, an } = data;
     // List both possible layouts via the storage API.
