@@ -136,6 +136,7 @@ async function processCombo(materie: string, an: number, fcKey: string, budgetMs
       const buf = new Uint8Array(ab);
       if (buf.byteLength < 5000) continue;
       if (buf[0] !== 0x25 || buf[1] !== 0x50) continue;
+      if (!verifyPdfContent(buf, materie, an, c.tip)) continue;
       for (const slug of slugs) {
         const path = `${an}/${slug}-${c.tip}.pdf`;
         if (existingFiles.has(`${slug}-${c.tip}.pdf`)) continue;
