@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
+import { AdSenseSlot } from "@/components/ads/adsense";
 
 export interface FaqItem { q: string; a: string; }
 export interface PdfItem { href: string; title: string; meta?: string; }
@@ -70,6 +71,8 @@ export function SeoLanding(p: SeoLandingProps) {
           )}
         </div>
       </header>
+
+      <AdSenseSlot format="auto" className="mt-10" />
 
       {p.sections && (
         <div className="mt-12 grid gap-10 lg:grid-cols-3">

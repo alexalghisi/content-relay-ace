@@ -5,6 +5,7 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 import { getSubjectSeo, SUBJECTS_SEO } from "@/data/subjects-seo";
 import { getCityBySlug, CITIES } from "@/data/cities";
 import { supabase } from "@/integrations/supabase/client";
+import { AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { BadgeCheck, MapPin, Wifi } from "lucide-react";
 
 const SITE = "https://meditatiidirect.ro";
@@ -198,6 +199,8 @@ function ComboPage() {
           </div>
         </section>
       )}
+
+      <div className="container-page"><AdsterraNativeBanner /></div>
 
       {/* Silos: link intern bidirecțional pentru autoritate */}
       <section className="container-page py-10 border-t border-border mt-6">

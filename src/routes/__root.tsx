@@ -14,6 +14,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ADSENSE_CLIENT } from "@/components/ads/adsense";
+import { StickyAnchorAd } from "@/components/ads/sticky-anchor";
 
 function NotFoundComponent() {
   return (
@@ -164,7 +165,7 @@ function RootComponent() {
           <SiteFooter />
         </div>
         <Toaster />
-        
+        <StickyAnchorAd />
       </AuthProvider>
     </QueryClientProvider>
   );
