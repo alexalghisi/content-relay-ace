@@ -32,8 +32,8 @@ export const Route = createFileRoute("/meditatii")({
   }),
   head: () => ({
     meta: [
-      { title: "Meditații 2026 — 1000+ Anunțuri Profesori Verificați în România | MeditatiiDirect.ro" },
-      { name: "description", content: "Peste 1000 de anunțuri meditații cu profesori verificați din toată România: matematică, română, engleză, fizică, informatică. Online sau acasă, în București, Cluj, Iași, Timișoara. Contact direct, fără comision, de la 30 lei/oră." },
+      { title: "Anunțuri Meditații 2026 — Profesori Verificați | MeditatiiDirect" },
+      { name: "description", content: "Anunțuri meditații cu profesori verificați: matematică, română, engleză, fizică. Online sau acasă, în toată România. Fără comision, de la 30 lei/oră." },
       { name: "keywords", content: "meditatii, anunturi meditatii, profesori meditatii, meditatii online, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii bac, meditatii admitere, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii informatica, meditatii acasa, profesori particulari, ore particulare" },
       { property: "og:title", content: "Meditații în România — 1000+ Profesori Verificați" },
       { property: "og:description", content: "Anunțuri reale, profesori verificați, contact direct fără comision. De la 30 lei/oră." },
@@ -148,7 +148,7 @@ function ListingPage() {
               className="h-11 w-full rounded-xl border border-border bg-background pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
-          <select value={materie} onChange={(e) => setMaterie(e.target.value)} className="h-11 rounded-xl border border-border bg-background px-3 text-sm">
+          <select value={materie} onChange={(e) => setMaterie(e.target.value)} aria-label="Filtrează anunțurile după materie" className="h-11 rounded-xl border border-border bg-background px-3 text-sm">
             <option value="">Toate materiile</option>
             {subjects.map((s) => (
               <option key={s.slug} value={s.slug}>{s.icon} {s.name}</option>
@@ -179,7 +179,7 @@ function ListingPage() {
                 )}
                 <div className="flex items-start gap-3">
                   {ad.legacy_teachers?.avatar_url ? (
-                    <img src={ad.legacy_teachers.avatar_url} alt={ad.legacy_teachers.full_name} className="h-12 w-12 rounded-full object-cover" loading="lazy" />
+                    <img src={ad.legacy_teachers.avatar_url} alt={`Profesor ${ad.legacy_teachers.full_name} — ${ad.subject_name ?? "meditații"}`} className="h-12 w-12 rounded-full object-cover" loading="lazy" />
                   ) : (
                     <div className="grid h-12 w-12 place-items-center rounded-full bg-primary-soft text-primary font-semibold">
                       {(ad.legacy_teachers?.full_name ?? "P").charAt(0)}

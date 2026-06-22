@@ -8,9 +8,9 @@ import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meditații Online & Acasă 2026 — 1000+ Profesori Verificați | MeditatiiDirect.ro" },
+      { title: "Meditații 2026 — Profesori Verificați | MeditatiiDirect" },
       { property: "og:url", content: "https://meditatiidirect.ro/" },
-      { name: "description", content: "★ Meditații cu profesori verificați: matematică, română, engleză, fizică, BAC 2026, admitere, Evaluare Națională. Online sau acasă în București, Cluj, Iași, Timișoara. Contact direct, FĂRĂ comision, de la 30 lei/oră." },
+      { name: "description", content: "Profesori verificați pentru matematică, română, engleză, BAC 2026 și admitere. Online sau acasă. Contact direct, fără comision, de la 30 lei/oră." },
       { name: "keywords", content: "meditatii, meditatii online, profesori, profesori particulari, anunturi meditatii, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii chimie, meditatii informatica, meditatii bac, meditatii bac 2026, meditatii admitere, meditatii evaluare nationala, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii brasov, meditatii constanta, ore particulare, profesor particular, meditatii acasa, meditatii ieftine" },
       { property: "og:title", content: "Meditații cu Profesori Verificați în România — MeditatiiDirect.ro" },
       { property: "og:description", content: "1000+ profesori verificați, 20+ materii, toată România. Chat direct cu profesorul, fără intermediari. De la 30 lei/oră." },
@@ -112,6 +112,7 @@ function HomePage() {
                 <select
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
+                  aria-label="Alege materia pentru meditații"
                   className="h-12 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option value="">Selectează materia</option>
@@ -122,6 +123,7 @@ function HomePage() {
                 <select
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
+                  aria-label="Alege orașul sau caută online"
                   className="h-12 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option value="">Toată România (online)</option>
@@ -215,7 +217,7 @@ function HomePage() {
               >
                 <div className="flex items-center gap-3">
                   {a.legacy_teachers?.avatar_url ? (
-                    <img src={a.legacy_teachers.avatar_url} alt={a.legacy_teachers.full_name} className="h-11 w-11 rounded-full object-cover" loading="lazy" />
+                    <img src={a.legacy_teachers.avatar_url} alt={`Profesor ${a.legacy_teachers.full_name} — ${a.subject_name ?? "meditații"}`} className="h-11 w-11 rounded-full object-cover" loading="lazy" />
                   ) : (
                     <div className="grid h-11 w-11 place-items-center rounded-full bg-primary-soft text-primary font-semibold">
                       {(a.legacy_teachers?.full_name ?? "P").charAt(0)}
