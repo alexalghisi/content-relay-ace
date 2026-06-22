@@ -3,8 +3,8 @@ import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-matematica";
 
-const TITLE = "Meditații Matematică 2026 — Profesori Verificați Online & Acasă | MeditatiiDirect.ro";
-const DESCRIPTION = "Meditații matematică pentru gimnaziu, liceu, BAC și admitere (UPB, ASE, Medicină, Politehnică). Peste 500 de profesori verificați de matematică în București, Cluj, Iași, Timișoara, Brașov și online. Contact direct, fără comision, de la 40 lei/oră.";
+const TITLE = "Meditații Matematică 2026 — Profesori Verificați";
+const DESCRIPTION = "Meditații matematică pentru gimnaziu, liceu, BAC și admitere (UPB, ASE, Medicină). Online sau acasă, profesori verificați. De la 40 lei/oră.";
 
 const FAQS: FaqItem[] = [
   { q: "Cât costă o meditație la matematică?", a: "Tarifele pentru meditații la matematică încep de la 40 lei/oră pentru gimnaziu, 60–100 lei/oră pentru liceu și BAC, și 100–200 lei/oră pentru pregătire de admitere la facultăți competitive (UPB, ASE, Medicină)." },
