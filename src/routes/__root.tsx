@@ -119,6 +119,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
                 },
               },
               {
+                "@type": "EducationalOrganization",
+                "@id": "https://meditatiidirect.ro/#edu",
+                name: "MeditatiiDirect",
+                url: "https://meditatiidirect.ro",
+                logo: "https://meditatiidirect.ro/favicon.ico",
+                description: "Platformă educațională cu profesori particulari verificați pentru meditații online și la domiciliu — gimnaziu, liceu, BAC 2026, admitere facultate.",
+                areaServed: { "@type": "Country", name: "România" },
+                knowsLanguage: ["ro", "en"],
+                sameAs: [],
+              },
+              {
                 "@type": "LocalBusiness",
                 "@id": "https://meditatiidirect.ro/#business",
                 name: "MeditatiiDirect — Meditații România",
