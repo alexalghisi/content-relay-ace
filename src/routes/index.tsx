@@ -25,14 +25,22 @@ export const Route = createFileRoute("/")({
         "@context": "https://schema.org",
         "@type": "FAQPage",
         mainEntity: [
-          { "@type": "Question", name: "Cât costă o oră de meditații în România?",
-            acceptedAnswer: { "@type": "Answer", text: "Tarifele pornesc de la 30 lei/oră în provincie pentru gimnaziu și ajung la 150–200 lei/oră pentru pregătire intensivă BAC sau admitere la Medicină în București. Prețul mediu național este 60–80 lei/oră." } },
-          { "@type": "Question", name: "Cum găsesc un profesor de meditații verificat?",
-            acceptedAnswer: { "@type": "Answer", text: "Pe MeditatiiDirect.ro filtrezi după materie, oraș și online/față-în-față. Toți profesorii sunt verificați manual (identitate, diplomă, experiență) și au badge „Verificat\". Contactul este direct, fără comision." } },
-          { "@type": "Question", name: "Pot face meditații online?",
-            acceptedAnswer: { "@type": "Answer", text: "Da. Majoritatea profesorilor oferă meditații online prin Zoom, Google Meet sau Skype — la fel de eficient ca față-în-față, cu materiale partajate digital și economie de timp pe drum." } },
-          { "@type": "Question", name: "Care sunt cele mai cerute materii?",
-            acceptedAnswer: { "@type": "Answer", text: "Top cereri: meditații matematică, română, engleză, fizică, chimie, informatică și biologie — în special pentru BAC, Evaluare Națională și admitere la facultate (Medicină, Politehnică, Drept, ASE)." } },
+          { "@type": "Question", name: "Cât costă o oră de meditații online în România?",
+            acceptedAnswer: { "@type": "Answer", text: "Tarifele pornesc de la 30 lei/oră în provincie pentru gimnaziu și ajung la 150–200 lei/oră pentru pregătire intensivă BAC sau admitere la Medicină în București. Prețul mediu național al unei ore de meditații este 60–80 lei." } },
+          { "@type": "Question", name: "Cum găsesc un profesor particular bun?",
+            acceptedAnswer: { "@type": "Answer", text: "Pe MeditatiiDirect.ro filtrezi după materie, oraș și online/față-în-față. Toți profesorii sunt verificați manual (identitate, diplomă, experiență) și au badge „Verificat\". Citești recenzii reale de la alți elevi și contactezi direct profesorul, fără comision." } },
+          { "@type": "Question", name: "Meditațiile online sunt eficiente?",
+            acceptedAnswer: { "@type": "Answer", text: "Da. Studiile arată că meditațiile online prin Zoom, Google Meet sau Whiteboard au aceeași eficiență ca cele față-în-față, cu economie de timp pe drum și materiale digitale partajate instant. Sunt ideale pentru BAC, Evaluare Națională și admitere." } },
+          { "@type": "Question", name: "Ce materii oferiți pentru BAC 2026?",
+            acceptedAnswer: { "@type": "Answer", text: "Pregătire completă BAC 2026 la matematică (M1/M2), română, istorie, biologie, chimie, fizică, informatică, geografie, engleză, franceză și logică. Avem profesori specializați pe fiecare profil — real, uman, vocațional." } },
+          { "@type": "Question", name: "Pot face meditații fără să plătesc comision?",
+            acceptedAnswer: { "@type": "Answer", text: "Da. MeditatiiDirect.ro NU percepe comision nici elevului, nici profesorului. Contactezi direct profesorul prin chat, iar plata se face integral către el, la tariful afișat (de la 30 lei/oră)." } },
+          { "@type": "Question", name: "Cum funcționează platforma MeditatiiDirect?",
+            acceptedAnswer: { "@type": "Answer", text: "1) Cauți după materie și oraș sau online. 2) Compari profesorii verificați după recenzii, preț și experiență. 3) Trimiți mesaj direct prin chat. 4) Stabiliți programul și începeți. Fără înregistrare obligatorie pentru a căuta, fără comisioane ascunse." } },
+          { "@type": "Question", name: "Există profesori verificați pentru Evaluare Națională?",
+            acceptedAnswer: { "@type": "Answer", text: "Da, avem sute de profesori specializați pe Evaluarea Națională clasa a 8-a — matematică și română — cu rezultate dovedite. Filtrează după „Evaluare Națională\" pentru a vedea doar profesorii cu experiență pe acest examen." } },
+          { "@type": "Question", name: "Pot găsi meditații ieftine în Cluj, București sau Iași?",
+            acceptedAnswer: { "@type": "Answer", text: "Da. În toate orașele mari (București, Cluj-Napoca, Iași, Timișoara, Brașov, Constanța) ai profesori cu tarife începând de la 40-50 lei/oră pentru gimnaziu și liceu. Filtrul „preț crescător\" îți arată cele mai ieftine meditații disponibile." } },
         ],
       }),
     }],
@@ -302,6 +310,34 @@ function HomePage() {
       <div className="container-page">
         <AdsterraNativeBanner />
       </div>
+
+      {/* FAQ vizibil — întrebări frecvente */}
+      <section className="container-page py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Întrebări frecvente despre meditații</h2>
+          <p className="mt-3 text-muted-foreground">Răspunsuri rapide pentru elevi și părinți care caută profesori particulari în România.</p>
+          <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-background">
+            {[
+              { q: "Cât costă o oră de meditații online în România?", a: "Tarifele pornesc de la 30 lei/oră în provincie pentru gimnaziu și ajung la 150–200 lei/oră pentru pregătire intensivă BAC sau admitere la Medicină în București. Prețul mediu național este 60–80 lei/oră." },
+              { q: "Cum găsesc un profesor particular bun?", a: "Filtrezi după materie, oraș și online/față-în-față. Toți profesorii sunt verificați manual (identitate, diplomă, experiență) și au badge „Verificat\". Citești recenzii reale și contactezi direct profesorul, fără comision." },
+              { q: "Meditațiile online sunt eficiente?", a: "Da. Au aceeași eficiență ca cele față-în-față, cu economie de timp pe drum și materiale digitale partajate instant. Sunt ideale pentru BAC, Evaluare Națională și admitere." },
+              { q: "Ce materii oferiți pentru BAC 2026?", a: "Pregătire completă BAC 2026 la matematică (M1/M2), română, istorie, biologie, chimie, fizică, informatică, geografie, engleză, franceză și logică." },
+              { q: "Pot face meditații fără să plătesc comision?", a: "Da. MeditatiiDirect.ro NU percepe comision nici elevului, nici profesorului. Plata se face integral către profesor, la tariful afișat (de la 30 lei/oră)." },
+              { q: "Cum funcționează platforma MeditatiiDirect?", a: "Cauți, compari profesorii verificați după recenzii și preț, trimiți mesaj direct prin chat și stabiliți programul. Fără comisioane ascunse." },
+              { q: "Există profesori pentru Evaluare Națională?", a: "Da, sute de profesori specializați pe Evaluare Națională clasa a 8-a — matematică și română — cu rezultate dovedite." },
+              { q: "Pot găsi meditații ieftine în Cluj, București sau Iași?", a: "Da. În toate orașele mari ai profesori cu tarife de la 40-50 lei/oră. Filtrul „preț crescător\" arată cele mai ieftine meditații disponibile." },
+            ].map((item) => (
+              <details key={item.q} className="group px-6 py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
+                  {item.q}
+                  <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-open:rotate-90" />
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* FOR TEACHERS */}
       <section className="container-page py-16">
