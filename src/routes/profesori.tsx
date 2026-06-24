@@ -73,14 +73,14 @@ function ProfesoriPage() {
     <>
       <SeoLanding
         pageUrl={URL_}
-        h1="Profesori particulari verificați în România"
-        intro="Profesori particulari verificați, la 20+ materii, din toată țara. Vezi profilul complet, experiența, recenziile elevilor anteriori și tarifele înainte să iei legătura. Contact direct, fără cont obligatoriu și fără comision din ședință."
+        h1="Profesori particulari pentru meditații în România"
+        intro="Profesori particulari verificați care oferă meditații la matematică, română, engleză, fizică, chimie, biologie, informatică, BAC și admitere. Vezi profilul fiecărui profesor, experiența, recenziile reale și tariful înainte să contactezi profesorul. Meditații online sau acasă, în toată România, fără cont obligatoriu și fără comision."
         bullets={[
-          "profesori particulari activi cu identitate și diplomă verificate",
-          "Recenzii reale de la elevi și părinți",
-          "20+ materii: matematică, română, engleză, BAC, admitere",
-          "Online (Zoom / Meet) sau față în față în orașul tău",
-          "Tarife transparente, de la 30 lei/oră",
+          "Profesori particulari verificați manual: identitate, diplomă, experiență didactică",
+          "Recenzii reale de la elevi și părinți care au făcut meditații cu profesorul",
+          "Profesori pentru 20+ materii: matematică, română, engleză, fizică, BAC, admitere",
+          "Meditații online (Zoom / Google Meet) sau față în față cu profesorul în orașul tău",
+          "Tarife transparente pentru meditații, de la 30 lei/oră",
         ]}
         ctaPrimary={{ to: "/meditatii", label: "Vezi toți profesorii" }}
         ctaSecondary={{ to: "/caut-profesor", label: "Postează cerere" }}
