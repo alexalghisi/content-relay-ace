@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/profesori-meditatii";
-const TITLE = "Profesori meditații 2026 — 1000+ Meditatori Verificați | MeditatiiDirect.ro";
+const TITLE = "Profesori meditații 2026 — Meditatori Verificați | MeditatiiDirect.ro";
 const DESC = "Catalog profesori meditații verificați din România: matematică, română, engleză, fizică, informatică. Contact direct cu profesorul, recenzii reale, fără comision.";
 
 const faqs = [
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/profesori-meditatii")({
           "@context": "https://schema.org",
           "@type": "ItemList",
           name: "Profesori meditații verificați",
-          numberOfItems: 1000,
+          
           itemListOrder: "Unordered",
         }),
       },
@@ -46,7 +46,7 @@ export const Route = createFileRoute("/profesori-meditatii")({
     <SeoLanding
       pageUrl={URL}
       breadcrumbParent={{ name: "Meditații", url: "https://meditatiidirect.ro/meditatii" }}
-      h1="Profesori meditații — 1000+ meditatori verificați în România"
+      h1="Profesori meditații — meditatori particulari verificați în România"
       intro="Cauți un profesor de meditații serios? Pe MeditatiiDirect.ro găsești peste 1000 de profesori verificați manual: titulari cu experiență, studenți olimpici, masteranzi și doctoranzi. Contact direct, fără intermediari, fără comision platformă."
       bullets={[
         "Profesori verificați (identitate + studii + experiență)",

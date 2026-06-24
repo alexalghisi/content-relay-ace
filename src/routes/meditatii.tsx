@@ -35,11 +35,11 @@ export const Route = createFileRoute("/meditatii")({
       { title: "Anunțuri Meditații 2026 — Profesori Verificați | MeditatiiDirect" },
       { name: "description", content: "Anunțuri meditații cu profesori verificați: matematică, română, engleză, fizică. Online sau acasă, în toată România. Fără comision, de la 30 lei/oră." },
       { name: "keywords", content: "meditatii, anunturi meditatii, profesori meditatii, meditatii online, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii bac, meditatii admitere, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii informatica, meditatii acasa, profesori particulari, ore particulare" },
-      { property: "og:title", content: "Meditații în România — 1000+ Profesori Verificați" },
+      { property: "og:title", content: "Meditații în România — Profesori Particulari Verificați" },
       { property: "og:description", content: "Anunțuri reale, profesori verificați, contact direct fără comision. De la 30 lei/oră." },
       { property: "og:url", content: "https://meditatiidirect.ro/meditatii" },
       { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "Meditații în România — 1000+ Profesori Verificați" },
+      { name: "twitter:title", content: "Meditații în România — Profesori Particulari Verificați" },
       { name: "twitter:description", content: "Anunțuri reale, profesori verificați, contact direct fără comision." },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii" }],
@@ -131,9 +131,9 @@ function ListingPage() {
 
       <section className="container-page py-8">
         <header className="max-w-3xl">
-          <h1 className="text-3xl font-bold sm:text-4xl">Meditații în România</h1>
+          <h1 className="text-3xl font-bold sm:text-4xl">Meditații cu profesori particulari verificați în România</h1>
           <p className="mt-2 text-muted-foreground">
-            Anunțuri de la profesori verificați. Filtrează după materie, locație sau caută profesorul potrivit.
+            Anunțuri de meditații publicate de profesori verificați: meditații matematică, meditații română, meditații engleză, meditații fizică, meditații informatică și meditații BAC. Alege profesorul potrivit pe materie, oraș sau meditații online, contactezi profesorul direct, fără comision.
           </p>
         </header>
 

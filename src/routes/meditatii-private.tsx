@@ -6,7 +6,7 @@ export const Route = createFileRoute("/meditatii-private")(seoPage({
   title: "Meditații Private 1-la-1 — Profesori Verificați în România | MeditatiiDirect.ro",
   description: "★ Meditații private 1-la-1 cu profesori verificați manual. Lecții personalizate acasă sau online, fără comision. Toate materiile, toate clasele. De la 30 lei/oră.",
   h1: "Meditații private — lecții 1-la-1 cu profesori verificați",
-  intro: "Meditații private individuale, adaptate ritmului fiecărui elev. Contact direct cu profesorul, fără intermediari, fără comision. Peste 1000 de meditatori verificați în toată România.",
+  intro: "Meditații private individuale, adaptate ritmului fiecărui elev. Contact direct cu profesorul, fără intermediari, fără comision. Meditatori particulari verificați în toată România.",
   bullets: [
     "Lecții 1-la-1 — atenție 100% pentru elev",
     "Plan personalizat după nivel și obiectiv",

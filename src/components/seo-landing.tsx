@@ -145,7 +145,7 @@ export function SeoLanding(p: SeoLandingProps) {
         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-bold inline-flex items-center gap-2"><GraduationCap className="h-5 w-5 text-primary" /> Caută profesorul potrivit</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Peste 1000 de meditatori verificați. Contact direct, fără intermediari.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Meditatori particulari verificați. Contact direct, fără intermediari.</p>
           </div>
           <Link to="/meditatii" className="btn-primary h-11 px-5">Vezi anunțuri</Link>
         </div>
