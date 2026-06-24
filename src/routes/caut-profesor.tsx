@@ -3,7 +3,7 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/caut-profesor";
 const TITLE = "Caut profesor 2026 — Găsește profesorul potrivit în 2 minute | MeditatiiDirect.ro";
-const DESC = "Caut profesor de meditații? 1000+ profesori verificați: matematică, română, engleză, fizică, informatică. Online sau acasă, contact direct, fără comision. De la 30 lei/oră.";
+const DESC = "Caut profesor de meditații? profesori particulari verificați: matematică, română, engleză, fizică, informatică. Online sau acasă, contact direct, fără comision. De la 30 lei/oră.";
 
 const faqs = [
   { q: "Cum caut un profesor bun de meditații?", a: "Pe MeditatiiDirect.ro filtrezi după materie, oraș, online/la domiciliu și buget. Vezi profil complet, recenzii reale de la elevi anteriori, experiență (ani de predare) și rezultate (BAC, olimpiade, admitere). Contact direct prin chat — gratuit, fără intermediari." },
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/caut-profesor")({
       h1="Caut profesor — găsește profesorul potrivit în 2 minute"
       intro="Cauți un profesor de meditații serios? Pe MeditatiiDirect.ro alegi din peste 1000 de profesori verificați manual: titulari, olimpici, masteranzi, doctoranzi. Filtrezi după materie, oraș și buget, vezi recenzii reale și contactezi profesorul direct — gratuit, fără comision."
       bullets={[
-        "1000+ profesori verificați la toate materiile",
+        "profesori particulari verificați la toate materiile",
         "Filtrare după oraș, materie, online/domiciliu, buget",
         "Recenzii reale de la elevi anteriori",
         "Contact direct prin chat — 100% gratuit",

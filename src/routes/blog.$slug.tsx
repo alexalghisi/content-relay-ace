@@ -129,7 +129,7 @@ function PostPage() {
       </div>
       <div className="mt-12 card-soft p-6 bg-gradient-to-br from-primary-soft to-card">
         <h2 className="text-lg font-bold">Caută profesorul potrivit pentru tine</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Peste 1000 de meditatori verificați. Contact direct, fără comision.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Meditatori particulari verificați. Contact direct, fără comision.</p>
         <Link to="/meditatii" className="btn-primary mt-4 h-11 px-5 inline-flex">Vezi anunțuri meditații</Link>
       </div>
     </article>

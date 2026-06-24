@@ -6,7 +6,7 @@ export const Route = createFileRoute("/meditatii-scoala")(seoPage({
   title: "Meditații Școală — Profesori Verificați pentru Toate Clasele | MeditatiiDirect.ro",
   description: "★ Meditații pentru elevi de școală generală și liceu: matematică, română, engleză, fizică, chimie. Profesori și învățători verificați, acasă sau online, de la 30 lei/oră.",
   h1: "Meditații pentru școală — clasele I–XII",
-  intro: "Peste 1000 de profesori și învățători verificați oferă meditații pentru elevi de școală generală, gimnaziu și liceu. Caută după materie, oraș sau clasă și contactează direct profesorul potrivit școlii copilului tău.",
+  intro: "Profesori particulari și învățători verificați oferă meditații pentru elevi de școală generală, gimnaziu și liceu. Caută după materie, oraș sau clasă și contactează direct profesorul potrivit școlii copilului tău.",
   bullets: [
     "Învățători pentru clasele I–IV — pregătire temeinică",
     "Profesori gimnaziu (V–VIII) — toate materiile școlare",

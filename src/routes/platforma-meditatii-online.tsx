@@ -3,7 +3,7 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/platforma-meditatii-online";
 const TITLE = "Platformă Meditații Online #1 în România 2026 — Începe GRATIS în 5 min";
-const DESC = "★ Platforma #1 de meditații online din România: 1000+ profesori verificați, chat integrat, tarife transparente, FĂRĂ comision, fără abonament. Primul mesaj gratuit.";
+const DESC = "★ Platforma #1 de meditații online din România: profesori particulari verificați, chat integrat, tarife transparente, FĂRĂ comision, fără abonament. Primul mesaj gratuit.";
 
 const faqs = [
   { q: "Cum funcționează o ședință de meditații online?", a: "Stabilești cu profesorul ora și platforma video (Zoom, Google Meet, Microsoft Teams). Profesorul îți trimite link-ul, intri din browser sau aplicație și începi ședința." },

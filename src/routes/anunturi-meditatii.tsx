@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/anunturi-meditatii";
-const TITLE = "Anunțuri Meditații 2026 — 1000+ Profesori Verificați GRATIS | MeditatiiDirect.ro";
+const TITLE = "Anunțuri Meditații 2026 — Profesori Particulari Verificați GRATIS | MeditatiiDirect.ro";
 const DESC = "★ Anunțuri meditații reale în toată România: matematică, română, engleză, BAC, admitere. Contactezi profesorul DIRECT, fără comision, de la 30 lei/oră. Răspuns în 24h.";
 
 const faqs = [
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/anunturi-meditatii")({
       { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
       { type: "application/ld+json", children: JSON.stringify({
         "@context": "https://schema.org", "@type": "ItemList", name: "Anunțuri meditații România",
-        description: DESC, url: URL, numberOfItems: 1000,
+        description: DESC, url: URL, 
       }) },
     ],
   }),

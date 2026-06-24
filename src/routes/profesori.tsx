@@ -7,7 +7,7 @@ import { CITIES } from "@/data/cities";
 import { BadgeCheck, Star } from "lucide-react";
 
 const URL_ = "https://meditatiidirect.ro/profesori";
-const TITLE = "Profesori Particulari Verificați 2026 — 1000+ Meditatori în România | MeditatiiDirect";
+const TITLE = "Profesori Particulari Verificați 2026 — Meditatori Particulari în România | MeditatiiDirect";
 const DESC = "★ Profesori particulari verificați la 20+ materii: matematică, română, engleză, BAC, admitere. Contact direct, recenzii reale, tarife de la 30 lei/oră în toată România.";
 
 const faqs = [
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/profesori")({
       { type: "application/ld+json", children: JSON.stringify({
         "@context": "https://schema.org", "@type": "ItemList",
         name: "Profesori particulari verificați România",
-        description: DESC, url: URL_, numberOfItems: 1000,
+        description: DESC, url: URL_, 
       }) },
     ],
   }),
@@ -74,9 +74,9 @@ function ProfesoriPage() {
       <SeoLanding
         pageUrl={URL_}
         h1="Profesori particulari verificați în România"
-        intro="Peste 1000 de profesori particulari verificați, la 20+ materii, din toată țara. Vezi profilul complet, experiența, recenziile elevilor anteriori și tarifele înainte să iei legătura. Contact direct, fără cont obligatoriu și fără comision din ședință."
+        intro="Profesori particulari verificați, la 20+ materii, din toată țara. Vezi profilul complet, experiența, recenziile elevilor anteriori și tarifele înainte să iei legătura. Contact direct, fără cont obligatoriu și fără comision din ședință."
         bullets={[
-          "1000+ profesori activi cu identitate și diplomă verificate",
+          "profesori particulari activi cu identitate și diplomă verificate",
           "Recenzii reale de la elevi și părinți",
           "20+ materii: matematică, română, engleză, BAC, admitere",
           "Online (Zoom / Meet) sau față în față în orașul tău",

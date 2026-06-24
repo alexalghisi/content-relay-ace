@@ -13,10 +13,10 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Profesori verificați pentru matematică, română, engleză, BAC 2026 și admitere. Online sau acasă. Contact direct, fără comision, de la 30 lei/oră." },
       { name: "keywords", content: "meditatii, meditatii online, profesori, profesori particulari, anunturi meditatii, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii chimie, meditatii informatica, meditatii bac, meditatii bac 2026, meditatii admitere, meditatii evaluare nationala, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii brasov, meditatii constanta, ore particulare, profesor particular, meditatii acasa, meditatii ieftine" },
       { property: "og:title", content: "Meditații cu Profesori Verificați în România — MeditatiiDirect.ro" },
-      { property: "og:description", content: "1000+ profesori verificați, 20+ materii, toată România. Chat direct cu profesorul, fără intermediari. De la 30 lei/oră." },
+      { property: "og:description", content: "profesori particulari verificați, 20+ materii, toată România. Chat direct cu profesorul, fără intermediari. De la 30 lei/oră." },
       { property: "og:type", content: "website" },
       { name: "twitter:title", content: "Meditații cu Profesori Verificați în România" },
-      { name: "twitter:description", content: "1000+ profesori verificați, 20+ materii, contact direct fără comision." },
+      { name: "twitter:description", content: "profesori particulari verificați, 20+ materii, contact direct fără comision." },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/" }],
     scripts: [{

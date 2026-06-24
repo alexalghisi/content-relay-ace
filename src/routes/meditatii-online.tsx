@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-online";
-const TITLE = "Meditații Online 2026 — 1000+ Profesori Verificați pe Zoom & Meet | De la 30 lei";
+const TITLE = "Meditații Online 2026 — Profesori Particulari Verificați pe Zoom & Meet | De la 30 lei";
 const DESCRIPTION = "★ Meditații online cu profesori verificați din toată România: matematică, română, engleză, fizică, informatică, BAC, admitere. Zoom/Meet, contact direct, FĂRĂ comision, de la 30 lei/oră.";
 
 const FAQS: FaqItem[] = [
