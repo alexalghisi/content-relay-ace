@@ -60,6 +60,7 @@ export function SiteFooter() {
             <li><Link to="/despre" className="hover:text-foreground">Despre noi</Link></li>
             <li><Link to="/cum-functioneaza" className="hover:text-foreground">Cum funcționează</Link></li>
             <li><Link to="/contact" className="hover:text-foreground">Contact</Link></li>
+            <li><Link to="/parteneri" className="hover:text-foreground">Parteneri</Link></li>
             <li><Link to="/termeni" className="hover:text-foreground">Termeni</Link></li>
             <li><Link to="/confidentialitate" className="hover:text-foreground">Confidențialitate</Link></li>
           </ul>
