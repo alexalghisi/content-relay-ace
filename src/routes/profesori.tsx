@@ -7,8 +7,8 @@ import { CITIES } from "@/data/cities";
 import { BadgeCheck, Star } from "lucide-react";
 
 const URL_ = "https://meditatiidirect.ro/profesori";
-const TITLE = "Profesori Particulari Verificați 2026 — Meditatori Particulari în România | MeditatiiDirect";
-const DESC = "★ Profesori particulari verificați la 20+ materii: matematică, română, engleză, BAC, admitere. Contact direct, recenzii reale, tarife de la 30 lei/oră în toată România.";
+const TITLE = "Profesori Particulari Verificați — Meditații în România | MeditatiiDirect";
+const DESC = "Profesori particulari verificați pentru meditații: profesori de matematică, română, engleză, fizică, informatică, BAC și admitere. Contact direct cu profesorul, recenzii reale, fără comision, de la 30 lei/oră.";
 
 const faqs = [
   { q: "Sunt profesorii verificați?", a: "Da. Verificăm manual identitatea, diploma și experiența fiecărui profesor înainte ca profilul să fie publicat. Profesorii validați au badge „Verificat\" pe pagină." },
