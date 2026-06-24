@@ -131,9 +131,9 @@ function ListingPage() {
 
       <section className="container-page py-8">
         <header className="max-w-3xl">
-          <h1 className="text-3xl font-bold sm:text-4xl">Meditații în România</h1>
+          <h1 className="text-3xl font-bold sm:text-4xl">Meditații cu profesori particulari verificați în România</h1>
           <p className="mt-2 text-muted-foreground">
-            Anunțuri de la profesori verificați. Filtrează după materie, locație sau caută profesorul potrivit.
+            Anunțuri de meditații publicate de profesori verificați: meditații matematică, meditații română, meditații engleză, meditații fizică, meditații informatică și meditații BAC. Alege profesorul potrivit pe materie, oraș sau meditații online, contactezi profesorul direct, fără comision.
           </p>
         </header>
 
