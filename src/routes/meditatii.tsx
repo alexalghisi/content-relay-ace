@@ -133,7 +133,7 @@ function ListingPage() {
         <header className="max-w-3xl">
           <h1 className="text-3xl font-bold sm:text-4xl">Meditații în România</h1>
           <p className="mt-2 text-muted-foreground">
-            {ads.length} anunțuri active de la profesori verificați. Filtrează după materie, locație sau caută profesorul potrivit.
+            Anunțuri de la profesori verificați. Filtrează după materie, locație sau caută profesorul potrivit.
           </p>
         </header>
 

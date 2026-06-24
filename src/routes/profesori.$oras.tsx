@@ -42,11 +42,11 @@ export const Route = createFileRoute("/profesori/$oras")({
     const { city, teachers } = loaderData;
     const url = `${SITE}/profesori/${city.slug}`;
     const count = teachers.length;
-    const countLabel = count > 0 ? `${count}+ profesori` : "Profesori verificați";
+    const countLabel = "Profesori verificați";
     const title = `Profesori Particulari ${city.name} 2026 — ${countLabel} | MeditatiiDirect.ro`;
-    const desc = `${countLabel} particulari în ${city.name} (${city.county}). Matematică, română, engleză, fizică, BAC, admitere. Recenzii reale, tarife de la 30 lei/oră, contact direct fără comision.`;
+    const desc = `Profesori particulari verificați în ${city.name} (${city.county}). Matematică, română, engleză, fizică, BAC, admitere. Recenzii reale, tarife de la 30 lei/oră, contact direct fără comision.`;
     const faqs = [
-      { q: `Câți profesori particulari sunt în ${city.name}?`, a: `Avem ${count > 0 ? count : "zeci de"} profesori particulari activi în ${city.name} (${city.county}, ${city.population} locuitori), la toate materiile principale.` },
+      { q: `Cum găsesc un profesor particular în ${city.name}?`, a: `Pe MeditatiiDirect.ro filtrezi profesorii din ${city.name} (${city.county}) după materie și nivel, vezi recenziile reale și contactezi direct profesorul, fără intermediari.` },
       { q: `Cât costă un profesor particular în ${city.name}?`, a: `Tarifele în ${city.name} pornesc de la 30 lei/oră (gimnaziu) și ajung la 200 lei/oră pentru profesori titulari de BAC sau admitere. Media este 80–100 lei/oră.` },
       { q: `Pot face meditații online cu un profesor din ${city.name}?`, a: `Da, majoritatea profesorilor noștri din ${city.name} oferă atât meditații față în față cât și online prin Zoom sau Google Meet.` },
       { q: `Sunt profesorii din ${city.name} verificați?`, a: `Da. Fiecare profesor afișat pe MeditatiiDirect.ro are identitatea și diploma verificate manual de echipa noastră înainte de publicarea profilului.` },
@@ -103,7 +103,7 @@ function ProfesoriOrasPage() {
         pageUrl={`${SITE}/profesori/${city.slug}`}
         breadcrumbParent={{ name: "Profesori", url: `${SITE}/profesori` }}
         h1={`Profesori particulari în ${city.name}`}
-        intro={`${teachers.length > 0 ? `${teachers.length} profesori particulari activi` : "Profesori particulari verificați"} în ${city.name} (${city.county}, ${city.population} locuitori). Matematică, română, engleză, fizică, chimie, biologie, BAC, admitere. Contact direct, tarife transparente de la 30 lei/oră.`}
+        intro={`Profesori particulari verificați în ${city.name} (${city.county}, ${city.population} locuitori). Matematică, română, engleză, fizică, chimie, biologie, BAC, admitere. Contact direct, tarife transparente de la 30 lei/oră.`}
         bullets={[
           `Profesori titulari și doctoranzi verificați manual în ${city.name}`,
           `Toate materiile importante: BAC, Evaluare Națională, admitere`,

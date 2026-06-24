@@ -40,9 +40,9 @@ export const Route = createFileRoute("/anunturi-meditatii")({
     <SeoLanding
       pageUrl={URL}
       h1="Anunțuri meditații în România"
-      intro="Mii de anunțuri reale postate de profesori verificați, la toate materiile și pentru toate nivelurile — din gimnaziu și până la admiterea la facultate. Caută după materie, oraș sau profesor, contactează direct, fără intermediari și fără comision."
+      intro="Anunțuri reale postate de profesori verificați, la toate materiile și pentru toate nivelurile — din gimnaziu și până la admiterea la facultate. Caută după materie, oraș sau profesor, contactează direct, fără intermediari și fără comision."
       bullets={[
-        "1000+ anunțuri active actualizate zilnic",
+        "Anunțuri actualizate zilnic de profesori activi",
         "Profesori verificați cu identitate și diplomă",
         "Filtre după oraș, materie, online vs. la domiciliu",
         "Recenzii reale de la elevi și părinți",
