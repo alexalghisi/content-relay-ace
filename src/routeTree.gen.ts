@@ -27,6 +27,7 @@ import { Route as ProfesorMeditatiiRouteImport } from './routes/profesor-meditat
 import { Route as PreturiMeditatiiRouteImport } from './routes/preturi-meditatii'
 import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
 import { Route as PentruProfesoriRouteImport } from './routes/pentru-profesori'
+import { Route as ParteneriRouteImport } from './routes/parteneri'
 import { Route as OreOnlineRouteImport } from './routes/ore-online'
 import { Route as OferMeditatiiRouteImport } from './routes/ofer-meditatii'
 import { Route as MesajeRouteImport } from './routes/mesaje'
@@ -188,6 +189,11 @@ const PlatformaMeditatiiOnlineRoute =
 const PentruProfesoriRoute = PentruProfesoriRouteImport.update({
   id: '/pentru-profesori',
   path: '/pentru-profesori',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParteneriRoute = ParteneriRouteImport.update({
+  id: '/parteneri',
+  path: '/parteneri',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OreOnlineRoute = OreOnlineRouteImport.update({
@@ -610,6 +616,7 @@ export interface FileRoutesByFullPath {
   '/mesaje': typeof MesajeRouteWithChildren
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
+  '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
@@ -701,6 +708,7 @@ export interface FileRoutesByTo {
   '/mesaje': typeof MesajeRouteWithChildren
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
+  '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
@@ -793,6 +801,7 @@ export interface FileRoutesById {
   '/mesaje': typeof MesajeRouteWithChildren
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
+  '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
@@ -886,6 +895,7 @@ export interface FileRouteTypes {
     | '/mesaje'
     | '/ofer-meditatii'
     | '/ore-online'
+    | '/parteneri'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
@@ -977,6 +987,7 @@ export interface FileRouteTypes {
     | '/mesaje'
     | '/ofer-meditatii'
     | '/ore-online'
+    | '/parteneri'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
@@ -1068,6 +1079,7 @@ export interface FileRouteTypes {
     | '/mesaje'
     | '/ofer-meditatii'
     | '/ore-online'
+    | '/parteneri'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/preturi-meditatii'
@@ -1160,6 +1172,7 @@ export interface RootRouteChildren {
   MesajeRoute: typeof MesajeRouteWithChildren
   OferMeditatiiRoute: typeof OferMeditatiiRoute
   OreOnlineRoute: typeof OreOnlineRoute
+  ParteneriRoute: typeof ParteneriRoute
   PentruProfesoriRoute: typeof PentruProfesoriRoute
   PlatformaMeditatiiOnlineRoute: typeof PlatformaMeditatiiOnlineRoute
   PreturiMeditatiiRoute: typeof PreturiMeditatiiRouteWithChildren
@@ -1316,6 +1329,13 @@ declare module '@tanstack/react-router' {
       path: '/pentru-profesori'
       fullPath: '/pentru-profesori'
       preLoaderRoute: typeof PentruProfesoriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parteneri': {
+      id: '/parteneri'
+      path: '/parteneri'
+      fullPath: '/parteneri'
+      preLoaderRoute: typeof ParteneriRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ore-online': {
@@ -1982,6 +2002,7 @@ const rootRouteChildren: RootRouteChildren = {
   MesajeRoute: MesajeRouteWithChildren,
   OferMeditatiiRoute: OferMeditatiiRoute,
   OreOnlineRoute: OreOnlineRoute,
+  ParteneriRoute: ParteneriRoute,
   PentruProfesoriRoute: PentruProfesoriRoute,
   PlatformaMeditatiiOnlineRoute: PlatformaMeditatiiOnlineRoute,
   PreturiMeditatiiRoute: PreturiMeditatiiRouteWithChildren,

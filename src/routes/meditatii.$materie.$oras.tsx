@@ -71,9 +71,9 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
     const { subject, city, ads } = loaderData;
     const url = `${SITE}/meditatii/${subject.slug}/${city.slug}`;
     const count = ads.length;
-    const countLabel = count > 0 ? `${count}+ profesori` : "profesori verificați";
-    const title = `Meditații ${subject.name} ${city.name} 2026 — ${countLabel} | ${subject.pretMin}-${subject.pretMax} lei/oră`;
-    const desc = `${countLabel} de ${subject.nameLower} în ${city.name}. Tarife reale ${subject.pretMin}–${subject.pretMax} lei/oră, mediu ${subject.pretMediu} lei. Online sau acasă, contact direct, fără comision. Anunțuri actualizate zilnic.`;
+    const countLabel = "profesori particulari verificați";
+    const title = `Meditații ${subject.name} ${city.name} 2026 — Profesori Verificați | ${subject.pretMin}-${subject.pretMax} lei/oră`;
+    const desc = `Profesori particulari verificați de ${subject.nameLower} în ${city.name}. Meditații ${subject.nameLower} ${city.name} la tarife reale ${subject.pretMin}–${subject.pretMax} lei/oră (mediu ${subject.pretMediu} lei). Online sau acasă, contact direct cu profesorul, fără comision.`;
 
     const itemListLd = count > 0 ? {
       "@context": "https://schema.org",
