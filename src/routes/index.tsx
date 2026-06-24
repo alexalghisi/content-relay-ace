@@ -8,15 +8,15 @@ import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meditații 2026 — Profesori Verificați | MeditatiiDirect" },
+      { title: "Meditații cu Profesori Verificați 2026 | MeditatiiDirect" },
       { property: "og:url", content: "https://meditatiidirect.ro/" },
-      { name: "description", content: "Profesori verificați pentru matematică, română, engleză, BAC 2026 și admitere. Online sau acasă. Contact direct, fără comision, de la 30 lei/oră." },
-      { name: "keywords", content: "meditatii, meditatii online, profesori, profesori particulari, anunturi meditatii, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii chimie, meditatii informatica, meditatii bac, meditatii bac 2026, meditatii admitere, meditatii evaluare nationala, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii brasov, meditatii constanta, ore particulare, profesor particular, meditatii acasa, meditatii ieftine" },
+      { name: "description", content: "Meditații cu profesori particulari verificați: meditații matematică, română, engleză, fizică, BAC 2026 și admitere. Găsește profesorul potrivit online sau acasă, contact direct, fără comision, de la 30 lei/oră." },
+      { name: "keywords", content: "meditatii, meditatii online, profesori, profesori particulari, profesori meditatii, meditatori, anunturi meditatii, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii chimie, meditatii informatica, meditatii bac, meditatii bac 2026, meditatii admitere, meditatii evaluare nationala, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii brasov, meditatii constanta, ore particulare, profesor particular, meditatii acasa, meditatii ieftine, profesori verificati, profesor de matematica, profesor de romana, profesor de engleza" },
       { property: "og:title", content: "Meditații cu Profesori Verificați în România — MeditatiiDirect.ro" },
-      { property: "og:description", content: "profesori particulari verificați, 20+ materii, toată România. Chat direct cu profesorul, fără intermediari. De la 30 lei/oră." },
+      { property: "og:description", content: "Profesori particulari verificați pentru meditații la 20+ materii. Chat direct cu profesorul, fără intermediari, fără comision. De la 30 lei/oră." },
       { property: "og:type", content: "website" },
       { name: "twitter:title", content: "Meditații cu Profesori Verificați în România" },
-      { name: "twitter:description", content: "profesori particulari verificați, 20+ materii, contact direct fără comision." },
+      { name: "twitter:description", content: "Profesori particulari verificați pentru meditații, contact direct, fără comision." },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/" }],
     scripts: [{
