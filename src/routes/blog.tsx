@@ -35,6 +35,8 @@ function BlogIndex() {
         <h1 className="text-3xl font-bold sm:text-4xl">Blog Meditații — Ghiduri BAC, Admitere și Pregătire 2026</h1>
         <p className="mt-3 text-lg text-muted-foreground">Articole concrete despre cum alegi un meditator, cât costă meditațiile, cum te pregătești pentru BAC, admitere la medicină, UPB, Drept și evaluare națională.</p>
       </header>
+      <AdsterraBanner728 className="mt-8" />
+      <AdsterraNativeBanner className="mt-4" />
       {loading ? (
         <p className="mt-8 text-muted-foreground">Se încarcă articolele...</p>
       ) : (
