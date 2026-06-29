@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacalaureat'
 import { Route as TutorialeRouteImport } from './routes/tutoriale'
 import { Route as TermeniRouteImport } from './routes/termeni'
+import { Route as SubiecteBac2026RouteImport } from './routes/subiecte-bac-2026'
 import { Route as SubiecteBacRouteImport } from './routes/subiecte-bac'
 import { Route as SubiecteAdmitereRouteImport } from './routes/subiecte-admitere'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -20,6 +21,7 @@ import { Route as SimulareUtcn2026RouteImport } from './routes/simulare-utcn-202
 import { Route as SimulareDrept2026RouteImport } from './routes/simulare-drept-2026'
 import { Route as SimulareBacalaureatRouteImport } from './routes/simulare-bacalaureat'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as RezultateBac2026RouteImport } from './routes/rezultate-bac-2026'
 import { Route as ProfesoriMeditatiiRouteImport } from './routes/profesori-meditatii'
 import { Route as ProfesoriRouteImport } from './routes/profesori'
 import { Route as ProfesorParticularRouteImport } from './routes/profesor-particular'
@@ -77,6 +79,7 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AnunturiMeditatiiBacRouteImport } from './routes/anunturi-meditatii-bac'
 import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditatii'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
+import { Route as AdmitereFacultate2026RouteImport } from './routes/admitere-facultate-2026'
 import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BacIndexRouteImport } from './routes/bac.index'
@@ -113,6 +116,11 @@ const TutorialeRoute = TutorialeRouteImport.update({
 const TermeniRoute = TermeniRouteImport.update({
   id: '/termeni',
   path: '/termeni',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubiecteBac2026Route = SubiecteBac2026RouteImport.update({
+  id: '/subiecte-bac-2026',
+  path: '/subiecte-bac-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubiecteBacRoute = SubiecteBacRouteImport.update({
@@ -153,6 +161,11 @@ const SimulareBacalaureatRoute = SimulareBacalaureatRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RezultateBac2026Route = RezultateBac2026RouteImport.update({
+  id: '/rezultate-bac-2026',
+  path: '/rezultate-bac-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfesoriMeditatiiRoute = ProfesoriMeditatiiRouteImport.update({
@@ -445,6 +458,11 @@ const AdsDottxtRoute = AdsDottxtRouteImport.update({
   path: '/ads.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdmitereFacultate2026Route = AdmitereFacultate2026RouteImport.update({
+  id: '/admitere-facultate-2026',
+  path: '/admitere-facultate-2026',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdmitereRoute = AdmitereRouteImport.update({
   id: '/admitere',
   path: '/admitere',
@@ -567,6 +585,7 @@ const ApiPublicHooksAutoBlogPostRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
+  '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
@@ -624,6 +643,7 @@ export interface FileRoutesByFullPath {
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
+  '/rezultate-bac-2026': typeof RezultateBac2026Route
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
@@ -632,6 +652,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subiecte-admitere': typeof SubiecteAdmitereRouteWithChildren
   '/subiecte-bac': typeof SubiecteBacRoute
+  '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
@@ -659,6 +680,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
+  '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
@@ -716,6 +738,7 @@ export interface FileRoutesByTo {
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
+  '/rezultate-bac-2026': typeof RezultateBac2026Route
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
@@ -724,6 +747,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subiecte-admitere': typeof SubiecteAdmitereRouteWithChildren
   '/subiecte-bac': typeof SubiecteBacRoute
+  '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
@@ -752,6 +776,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admitere': typeof AdmitereRoute
+  '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
@@ -809,6 +834,7 @@ export interface FileRoutesById {
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori': typeof ProfesoriRouteWithChildren
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
+  '/rezultate-bac-2026': typeof RezultateBac2026Route
   '/signup': typeof SignupRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
@@ -817,6 +843,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subiecte-admitere': typeof SubiecteAdmitereRouteWithChildren
   '/subiecte-bac': typeof SubiecteBacRoute
+  '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
@@ -846,6 +873,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admitere'
+    | '/admitere-facultate-2026'
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
@@ -903,6 +931,7 @@ export interface FileRouteTypes {
     | '/profesor-particular'
     | '/profesori'
     | '/profesori-meditatii'
+    | '/rezultate-bac-2026'
     | '/signup'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
@@ -911,6 +940,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subiecte-admitere'
     | '/subiecte-bac'
+    | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
@@ -938,6 +968,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admitere'
+    | '/admitere-facultate-2026'
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
@@ -995,6 +1026,7 @@ export interface FileRouteTypes {
     | '/profesor-particular'
     | '/profesori'
     | '/profesori-meditatii'
+    | '/rezultate-bac-2026'
     | '/signup'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
@@ -1003,6 +1035,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subiecte-admitere'
     | '/subiecte-bac'
+    | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
@@ -1030,6 +1063,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admitere'
+    | '/admitere-facultate-2026'
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
@@ -1087,6 +1121,7 @@ export interface FileRouteTypes {
     | '/profesor-particular'
     | '/profesori'
     | '/profesori-meditatii'
+    | '/rezultate-bac-2026'
     | '/signup'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
@@ -1095,6 +1130,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subiecte-admitere'
     | '/subiecte-bac'
+    | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
@@ -1123,6 +1159,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdmitereRoute: typeof AdmitereRoute
+  AdmitereFacultate2026Route: typeof AdmitereFacultate2026Route
   AdsDottxtRoute: typeof AdsDottxtRoute
   AnunturiMeditatiiRoute: typeof AnunturiMeditatiiRoute
   AnunturiMeditatiiBacRoute: typeof AnunturiMeditatiiBacRoute
@@ -1180,6 +1217,7 @@ export interface RootRouteChildren {
   ProfesorParticularRoute: typeof ProfesorParticularRoute
   ProfesoriRoute: typeof ProfesoriRouteWithChildren
   ProfesoriMeditatiiRoute: typeof ProfesoriMeditatiiRoute
+  RezultateBac2026Route: typeof RezultateBac2026Route
   SignupRoute: typeof SignupRoute
   SimulareBacalaureatRoute: typeof SimulareBacalaureatRoute
   SimulareDrept2026Route: typeof SimulareDrept2026Route
@@ -1188,6 +1226,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubiecteAdmitereRoute: typeof SubiecteAdmitereRouteWithChildren
   SubiecteBacRoute: typeof SubiecteBacRoute
+  SubiecteBac2026Route: typeof SubiecteBac2026Route
   TermeniRoute: typeof TermeniRoute
   TutorialeRoute: typeof TutorialeRoute
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
@@ -1224,6 +1263,13 @@ declare module '@tanstack/react-router' {
       path: '/termeni'
       fullPath: '/termeni'
       preLoaderRoute: typeof TermeniRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subiecte-bac-2026': {
+      id: '/subiecte-bac-2026'
+      path: '/subiecte-bac-2026'
+      fullPath: '/subiecte-bac-2026'
+      preLoaderRoute: typeof SubiecteBac2026RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subiecte-bac': {
@@ -1280,6 +1326,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rezultate-bac-2026': {
+      id: '/rezultate-bac-2026'
+      path: '/rezultate-bac-2026'
+      fullPath: '/rezultate-bac-2026'
+      preLoaderRoute: typeof RezultateBac2026RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profesori-meditatii': {
@@ -1681,6 +1734,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admitere-facultate-2026': {
+      id: '/admitere-facultate-2026'
+      path: '/admitere-facultate-2026'
+      fullPath: '/admitere-facultate-2026'
+      preLoaderRoute: typeof AdmitereFacultate2026RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admitere': {
       id: '/admitere'
       path: '/admitere'
@@ -1953,6 +2013,7 @@ const BacMaterieRouteWithChildren = BacMaterieRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdmitereRoute: AdmitereRoute,
+  AdmitereFacultate2026Route: AdmitereFacultate2026Route,
   AdsDottxtRoute: AdsDottxtRoute,
   AnunturiMeditatiiRoute: AnunturiMeditatiiRoute,
   AnunturiMeditatiiBacRoute: AnunturiMeditatiiBacRoute,
@@ -2010,6 +2071,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfesorParticularRoute: ProfesorParticularRoute,
   ProfesoriRoute: ProfesoriRouteWithChildren,
   ProfesoriMeditatiiRoute: ProfesoriMeditatiiRoute,
+  RezultateBac2026Route: RezultateBac2026Route,
   SignupRoute: SignupRoute,
   SimulareBacalaureatRoute: SimulareBacalaureatRoute,
   SimulareDrept2026Route: SimulareDrept2026Route,
@@ -2018,6 +2080,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubiecteAdmitereRoute: SubiecteAdmitereRouteWithChildren,
   SubiecteBacRoute: SubiecteBacRoute,
+  SubiecteBac2026Route: SubiecteBac2026Route,
   TermeniRoute: TermeniRoute,
   TutorialeRoute: TutorialeRoute,
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
