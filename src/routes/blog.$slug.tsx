@@ -1,6 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { CalendarDays, ArrowLeft } from "lucide-react";
+import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
+import { AdSenseSlot } from "@/components/ads/adsense";
 
 interface Post {
   slug: string; title: string; excerpt: string | null; content: string | null;
@@ -124,9 +126,12 @@ function PostPage() {
           <p className="mt-3 text-sm text-muted-foreground inline-flex items-center gap-1"><CalendarDays className="h-3 w-3" />{new Date(post.published_at).toLocaleDateString("ro-RO")}</p>
         )}
       </header>
+      <AdsterraBanner728 className="mt-6" />
       <div className="mt-8 prose max-w-none">
         {renderContent(post.content ?? post.excerpt ?? "")}
       </div>
+      <AdsterraNativeBanner className="mt-8" />
+      <AdSenseSlot format="auto" className="mt-6" />
       <div className="mt-12 card-soft p-6 bg-gradient-to-br from-primary-soft to-card">
         <h2 className="text-lg font-bold">Caută profesorul potrivit pentru tine</h2>
         <p className="mt-1 text-sm text-muted-foreground">Meditatori particulari verificați. Contact direct, fără comision.</p>

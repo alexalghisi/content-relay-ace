@@ -3,6 +3,8 @@ import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, CalendarDay
 import { BAC_SUBJECTS, BAC_YEARS, BAC_AVAILABLE_YEARS } from "@/data/bac-archive";
 import { resolveBacPdfs } from "@/lib/bac-pdf-resolver.functions";
 import { faqJsonLd } from "@/components/seo-landing";
+import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
+import { AdSenseSlot } from "@/components/ads/adsense";
 
 const ogImageForBac = (slug: string) => `https://meditatiidirect.ro/og/bac/${slug}.jpg`;
 
@@ -260,6 +262,9 @@ function ResursaBacPage() {
         </div>
       </section>
 
+      <AdsterraBanner728 className="mt-10" />
+      <AdsterraNativeBanner className="mt-4" />
+
       <section className="mt-12">
         <h2 className="text-2xl font-semibold">Subiecte {subject.name} de la alți ani</h2>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -309,6 +314,7 @@ function ResursaBacPage() {
           ))}
         </div>
       </section>
+      <AdSenseSlot format="auto" className="mt-10" />
     </article>
   );
 }
