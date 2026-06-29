@@ -55,6 +55,7 @@ function BlogIndex() {
           ))}
         </div>
       )}
+      <AdSenseSlot format="auto" className="mt-10" />
     </article>
   );
 }
