@@ -3,6 +3,8 @@ import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, CalendarDay
 import { BAC_SUBJECTS, BAC_YEARS, BAC_AVAILABLE_YEARS } from "@/data/bac-archive";
 import { resolveBacPdfs } from "@/lib/bac-pdf-resolver.functions";
 import { faqJsonLd } from "@/components/seo-landing";
+import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
+import { AdSenseSlot } from "@/components/ads/adsense";
 
 const ogImageForBac = (slug: string) => `https://meditatiidirect.ro/og/bac/${slug}.jpg`;
 
