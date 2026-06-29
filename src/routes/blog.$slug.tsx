@@ -1,6 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { CalendarDays, ArrowLeft } from "lucide-react";
+import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
+import { AdSenseSlot } from "@/components/ads/adsense";
 
 interface Post {
   slug: string; title: string; excerpt: string | null; content: string | null;
