@@ -2,6 +2,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen } from "lucide-react";
 import { BAC_SUBJECTS, BAC_YEARS } from "@/data/bac-catalog";
+import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
+import { AdSenseSlot } from "@/components/ads/adsense";
 
 const SITE = "https://meditatiidirect.ro";
 
@@ -32,6 +34,7 @@ function BacHub() {
           {BAC_SUBJECTS.length} materii × {BAC_YEARS.length} ani de subiecte oficiale și bareme de bacalaureat. Toate sesiunile (iunie, august, specială, simulare națională). PDF gratuit, fără cont.
         </p>
       </header>
+      <AdsterraBanner728 className="mt-6" />
       <section className="mt-8">
         <h2 className="text-xl font-semibold flex items-center gap-2"><BookOpen className="h-5 w-5" /> Alege materia</h2>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -46,6 +49,8 @@ function BacHub() {
           ))}
         </ul>
       </section>
+      <AdsterraNativeBanner className="mt-10" />
+      <AdSenseSlot format="auto" className="mt-6" />
     </main>
   );
 }
