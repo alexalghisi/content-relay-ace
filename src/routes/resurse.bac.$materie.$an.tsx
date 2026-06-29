@@ -314,6 +314,7 @@ function ResursaBacPage() {
           ))}
         </div>
       </section>
+      <AdSenseSlot format="auto" className="mt-10" />
     </article>
   );
 }
