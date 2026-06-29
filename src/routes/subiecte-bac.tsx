@@ -1,54 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
-const URL = "https://meditatiidirect.ro/subiecte-bac";
-const TITLE = "Subiecte BAC 2026 rezolvate — Toate materiile | MeditatiiDirect.ro";
-const DESC = "Subiecte BAC 2026 și ani anteriori, rezolvate complet: matematică, română, biologie, fizică, informatică, istorie. Descarcă PDF gratuit.";
-
-const faqs = [
-  { q: "De unde sunt subiectele de BAC?", a: "Subiectele de antrenament publicate pe această pagină sunt elaborate după modelul oficial al Ministerului Educației pentru BAC 2026." },
-  { q: "Cum folosesc eficient subiectele rezolvate?", a: "Rezolvă întâi singur, fără să te uiți la rezolvare. Apoi compară cu baremul. Marchează itemii la care ai greșit și revino după o săptămână." },
-];
-
+// Pagina veche a fost unificată cu /variante-bacalaureat (același conținut).
+// Păstrăm ruta ca redirect permanent pentru SEO și backlink-uri externe.
 export const Route = createFileRoute("/subiecte-bac")({
+  beforeLoad: () => {
+    throw redirect({ to: "/variante-bacalaureat", statusCode: 301 });
+  },
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESC },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
-      { property: "og:url", content: URL },
+      { title: "Subiecte BAC — mutat pe Variante bacalaureat | MeditatiiDirect.ro" },
+      { name: "robots", content: "noindex, follow" },
     ],
-    links: [{ rel: "canonical", href: URL }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
+    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/variante-bacalaureat" }],
   }),
-  component: () => (
-    <SeoLanding
-      pageUrl={URL}
-      h1="Subiecte BAC rezolvate"
-      intro="Arhivă cu subiecte de bacalaureat rezolvate complet: itemi după modelul oficial pentru 2026, plus rezolvări detaliate la matematică, română, biologie, fizică, informatică, istorie."
-      bullets={[
-        "Subiecte după modelul oficial BAC 2026",
-        "Rezolvări pas cu pas, nu doar răspunsul final",
-        "Bareme oficiale de corectare",
-        "Strategii de gestionare a timpului",
-      ]}
-      ctaPrimary={{ to: "/meditatii-bac", label: "Caută profesor BAC" }}
-      pdfs={[
-        { href: "/resurse/bac/matematica-m1/2025", title: "Matematică M_mate-info — subiect + barem" },
-        { href: "/resurse/bac/matematica-m2/2025", title: "Matematică M_științe (M2) — subiect + barem" },
-        { href: "/resurse/bac/romana/2025", title: "Limba și literatura română" },
-        { href: "/resurse/bac/biologie/2025", title: "Biologie + problemă genetică" },
-        { href: "/resurse/bac/fizica/2025", title: "Fizică" },
-        { href: "/resurse/bac/informatica/2025", title: "Informatică (C/C++)" },
-        { href: "/resurse/bac/istorie/2025", title: "Istorie + eseu interbelic" },
-      ]}
-      faqs={faqs}
-      related={[
-        { to: "/variante-bacalaureat", label: "Variante BAC" },
-        { to: "/simulari-bacalaureat-2026", label: "Simulări BAC 2026" },
-        { to: "/meditatii-bac", label: "Meditații BAC" },
-      ]}
-    />
-  ),
+  component: () => null,
 });
