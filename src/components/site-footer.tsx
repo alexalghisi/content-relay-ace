@@ -47,8 +47,7 @@ export function SiteFooter() {
         <div>
           <div className="font-semibold mb-3">Examene</div>
           <ul className="space-y-2 text-muted-foreground">
-            <li><Link to="/meditatii-bac" className="hover:text-foreground">Pregătire BAC</Link></li>
-            <li><Link to="/variante-bacalaureat" className="hover:text-foreground">Subiecte și variante BAC</Link></li>
+            <li><Link to="/variante-bacalaureat" className="hover:text-foreground">Variante BAC (subiecte + bareme)</Link></li>
             <li><Link to="/admitere" className="hover:text-foreground">Admitere facultate</Link></li>
             <li><Link to="/meditatii-evaluare-nationala" className="hover:text-foreground">Evaluare Națională</Link></li>
           </ul>
