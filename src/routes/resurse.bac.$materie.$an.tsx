@@ -262,6 +262,9 @@ function ResursaBacPage() {
         </div>
       </section>
 
+      <AdsterraBanner728 className="mt-10" />
+      <AdsterraNativeBanner className="mt-4" />
+
       <section className="mt-12">
         <h2 className="text-2xl font-semibold">Subiecte {subject.name} de la alți ani</h2>
         <p className="mt-2 text-sm text-muted-foreground">
