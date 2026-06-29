@@ -8,8 +8,7 @@ const NAV = [
   { to: "/materii", label: "Materii" },
   { to: "/admitere", label: "Admitere" },
   { to: "/meditatii-bac", label: "Pregătire BAC" },
-  { to: "/subiecte-bac", label: "Subiecte BAC" },
-  { to: "/variante-bacalaureat", label: "Variante BAC" },
+  { to: "/variante-bacalaureat", label: "Subiecte & variante BAC" },
   { to: "/blog", label: "Blog" },
 ] as const;
 

@@ -289,8 +289,7 @@ function HomePage() {
             </div>
             <ul className="grid gap-3">
               {[
-                { t: "Subiecte BAC rezolvate", to: "/subiecte-bac" },
-                { t: "Variante BAC 2026", to: "/variante-bacalaureat" },
+                { t: "Subiecte & variante BAC 2010–2026", to: "/variante-bacalaureat" },
                 { t: "Simulare bacalaureat", to: "/simulare-bacalaureat" },
                 { t: "Grile medicină", to: "/grile-medicina" },
                 { t: "Grile UPB", to: "/grile-upb" },
