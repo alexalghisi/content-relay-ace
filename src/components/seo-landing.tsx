@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { AdSenseSlot } from "@/components/ads/adsense";
+import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 
 export interface FaqItem { q: string; a: string; }
 export interface PdfItem { href: string; title: string; meta?: string; }
@@ -73,6 +74,8 @@ export function SeoLanding(p: SeoLandingProps) {
       </header>
 
       <AdSenseSlot format="auto" className="mt-10" />
+      <AdsterraBanner728 className="mt-6" />
+      <AdsterraNativeBanner className="mt-6" />
 
       {p.sections && (
         <div className="mt-12 grid gap-10 lg:grid-cols-3">
