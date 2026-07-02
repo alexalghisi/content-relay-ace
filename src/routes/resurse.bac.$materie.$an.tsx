@@ -24,7 +24,12 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
     if (!subject) throw notFound();
     const year = Number(params.an);
     if (!BAC_YEARS.includes(year)) throw notFound();
-    const pdfs = await resolveBacPdfs({ data: { materie: subject.slug, an: year } });
+    let pdfs: { subiect: string | null; barem: string | null; available: boolean } = { subiect: null, barem: null, available: false };
+    try {
+      pdfs = await resolveBacPdfs({ data: { materie: subject.slug, an: year } });
+    } catch {
+      // resolver failure => treat as no PDFs, still render the fallback page instead of erroring.
+    }
     const yearAvailable = !!pdfs.subiect;
     return { subject, year, yearAvailable, pdfs };
   },
