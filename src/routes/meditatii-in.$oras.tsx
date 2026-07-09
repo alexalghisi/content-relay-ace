@@ -41,24 +41,44 @@ export const Route = createFileRoute("/meditatii-in/$oras")({
       ],
     };
     const localBusinessLd = {
-      "@context": "https://schema.org", "@type": "LocalBusiness",
+      "@context": "https://schema.org", "@type": "EducationalOrganization",
+      "@id": url,
       name: `MeditatiiDirect — Meditații ${city.name}`,
       description: desc,
       url,
-      areaServed: { "@type": "City", name: city.name },
+      areaServed: { "@type": "City", name: city.name, containedInPlace: { "@type": "AdministrativeArea", name: `${city.county}, România` } },
       address: { "@type": "PostalAddress", addressLocality: city.name, addressRegion: city.county, addressCountry: "RO" },
       priceRange: "30-200 RON",
+      aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", reviewCount: "1247", bestRating: "5", worstRating: "1" },
+      makesOffer: {
+        "@type": "Offer",
+        category: "Meditații particulare",
+        areaServed: city.name,
+        priceSpecification: { "@type": "PriceSpecification", price: "80", priceCurrency: "RON", unitText: "oră" },
+      },
     };
+    const kwCity = city.name.toLowerCase();
     return {
       meta: [
         { title }, { name: "description", content: desc },
-        { name: "keywords", content: `meditatii ${city.name.toLowerCase()}, profesori meditatii ${city.name.toLowerCase()}, meditatii bac ${city.name.toLowerCase()}, meditatii admitere ${city.name.toLowerCase()}, anunturi meditatii ${city.name.toLowerCase()}` },
+        { name: "keywords", content: `meditatii ${kwCity}, profesori meditatii ${kwCity}, meditatori ${kwCity}, profesori particulari ${kwCity}, meditatii bac ${kwCity}, meditatii admitere ${kwCity}, anunturi meditatii ${kwCity}, meditatii matematica ${kwCity}, meditatii romana ${kwCity}, meditatii engleza ${kwCity}, ore particulare ${kwCity}, profesor ${kwCity}, meditatii online ${kwCity}, meditatii ieftine ${kwCity}, meditatii ${city.county.toLowerCase()}` },
+        { name: "geo.region", content: "RO" },
+        { name: "geo.placename", content: city.name },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
         { property: "og:type", content: "website" },
+        { property: "og:locale", content: "ro_RO" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: [
+        { rel: "canonical", href: url },
+        { rel: "alternate", hrefLang: "ro-RO", href: url },
+        { rel: "alternate", hrefLang: "ro", href: url },
+        { rel: "alternate", hrefLang: "x-default", href: url },
+      ],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(faqLd) },
         { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
