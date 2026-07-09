@@ -20,8 +20,11 @@ export const Route = createFileRoute("/meditatii-in/$oras")({
     const city = getCityBySlug(params.oras);
     if (!city) return { meta: [] };
     const url = `https://meditatiidirect.ro/meditatii-in/${params.oras}`;
-    const title = `Meditații ${city.name} 2026 — Profesori verificați | MeditatiiDirect.ro`;
-    const desc = `Meditații în ${city.name} cu profesori verificați. Matematică, română, engleză, BAC, admitere. Contact direct, fără comision. De la 30 lei/oră.`;
+    const localMed = Math.round(80 * (city.priceIndex ?? 1));
+    const localMin = Math.round(40 * (city.priceIndex ?? 1));
+    const localMax = Math.round(200 * (city.priceIndex ?? 1));
+    const title = `Meditații ${city.name} 2026 — Profesori verificați ${city.county} | ${localMin}-${localMax} lei/oră`;
+    const desc = `Meditații ${city.name}: profesori particulari verificați din ${city.county} (reper ${city.landmark}). Matematică, română, engleză, BAC 2026 și admitere. Tarif mediu ${localMed} lei/oră, contact direct, fără comision.`;
     const faqLd = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -132,10 +135,10 @@ function CityPage() {
             <BadgeCheck className="h-4 w-4" /> Profesori verificați • Fără comision
           </p>
           <h1 className="mt-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-            Meditații {city.name} — Profesori verificați 2026
+            Meditații {city.name} — profesori verificați din {city.county} · 2026
           </h1>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-            Cauți un profesor de meditații în <strong>{city.name}</strong>? Pe MeditatiiDirect.ro găsești anunțuri cu profesori verificați din {city.county}, pentru toate materiile și nivelurile — de la clasele primare până la BAC, evaluare națională și admitere la facultate. Contact direct cu profesorul, fără intermediari și fără comision.
+            Cauți un profesor de meditații în <strong>{city.name}</strong>? Pe MeditatiiDirect.ro găsești anunțuri cu profesori verificați din {city.county} (reper: {city.landmark}), pentru toate materiile și nivelurile — de la clasele primare până la BAC 2026, evaluare națională și admitere la facultate. Contact direct cu profesorul, fără intermediari și fără comision.
           </p>
         </header>
 
