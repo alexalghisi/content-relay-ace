@@ -14,8 +14,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ADSENSE_CLIENT } from "@/components/ads/adsense";
-import { StickyAnchorAd } from "@/components/ads/sticky-anchor";
-import { AdsterraSocialBar } from "@/components/ads/adsterra";
+// Popunder/anchor Adsterra dezactivate până la aprobarea AdSense.
 
 function NotFoundComponent() {
   return (
@@ -176,8 +175,7 @@ function RootComponent() {
           <SiteFooter />
         </div>
         <Toaster />
-        <StickyAnchorAd />
-        <AdsterraSocialBar />
+        {/* Popunder / social bar dezactivate până la aprobarea AdSense (conflict de politici). */}
       </AuthProvider>
     </QueryClientProvider>
   );
