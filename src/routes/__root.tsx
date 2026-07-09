@@ -176,8 +176,7 @@ function RootComponent() {
           <SiteFooter />
         </div>
         <Toaster />
-        <StickyAnchorAd />
-        <AdsterraSocialBar />
+        {/* Popunder / social bar dezactivate până la aprobarea AdSense (conflict de politici). */}
       </AuthProvider>
     </QueryClientProvider>
   );
