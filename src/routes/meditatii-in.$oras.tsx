@@ -20,8 +20,11 @@ export const Route = createFileRoute("/meditatii-in/$oras")({
     const city = getCityBySlug(params.oras);
     if (!city) return { meta: [] };
     const url = `https://meditatiidirect.ro/meditatii-in/${params.oras}`;
-    const title = `Meditații ${city.name} 2026 — Profesori verificați | MeditatiiDirect.ro`;
-    const desc = `Meditații în ${city.name} cu profesori verificați. Matematică, română, engleză, BAC, admitere. Contact direct, fără comision. De la 30 lei/oră.`;
+    const localMed = Math.round(80 * (city.priceIndex ?? 1));
+    const localMin = Math.round(40 * (city.priceIndex ?? 1));
+    const localMax = Math.round(200 * (city.priceIndex ?? 1));
+    const title = `Meditații ${city.name} 2026 — Profesori verificați ${city.county} | ${localMin}-${localMax} lei/oră`;
+    const desc = `Meditații ${city.name}: profesori particulari verificați din ${city.county} (reper ${city.landmark}). Matematică, română, engleză, BAC 2026 și admitere. Tarif mediu ${localMed} lei/oră, contact direct, fără comision.`;
     const faqLd = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
