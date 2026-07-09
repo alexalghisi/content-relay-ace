@@ -174,18 +174,30 @@ function ComboPage() {
   const otherCities = CITIES.filter((c) => c.slug !== city.slug).slice(0, 8);
   const otherSubjects = SUBJECTS_SEO.filter((s) => s.slug !== subject.slug).slice(0, 8);
 
+  const seed = (subject.slug + city.slug).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  const variant = seed % 4;
+  const localMin = Math.round(subject.pretMin * city.priceIndex);
+  const localMax = Math.round(subject.pretMax * city.priceIndex);
+  const localMed = Math.round(subject.pretMediu * city.priceIndex);
+  const h1Options = [
+    `Meditații ${subject.name} în ${city.name}`,
+    `Profesori de ${subject.nameLower} în ${city.name}`,
+    `Meditații ${subject.nameLower} ${city.name} — ${city.county}`,
+    `${subject.name} particulară în ${city.name}: profesori verificați`,
+  ];
+
   return (
     <>
       <SeoLanding
         pageUrl={url}
         breadcrumbParent={{ name: "Meditații", url: `${SITE}/meditatii` }}
-        h1={`Meditații ${subject.name} în ${city.name}`}
-        intro={`Profesori verificați de ${subject.nameLower} în ${city.name} (${city.county}, ${city.population} locuitori). Tarife transparente ${subject.pretMin}–${subject.pretMax} lei/oră (mediu ${subject.pretMediu} lei), online prin Zoom/Meet sau față în față la domiciliu. Contactezi profesorul direct, fără cont obligatoriu și fără comision din ședință.`}
+        h1={h1Options[variant]}
+        intro={`Profesori verificați de ${subject.nameLower} în ${city.name} (${city.county}, ${city.population} locuitori — reper ${city.landmark}). Tarife locale ${localMin}–${localMax} lei/oră (medie ${localMed} lei), online prin Zoom/Meet sau la domiciliu. Contactezi profesorul direct, fără cont obligatoriu și fără comision.`}
         bullets={[
           `${subject.name} pentru toate nivelurile: clasele V–XII, BAC 2026, admitere`,
-          `Profesori titulari și absolvenți cu rezultate dovedite în ${city.name}`,
+          `Profesori titulari cu rezultate la ${city.landmark} și liceele din ${city.name}`,
           `Online (Zoom / Google Meet) sau la domiciliu în ${city.name}`,
-          `Preț mediu ${subject.pretMediu} lei/oră — comparabil cu piața locală din ${city.county}`,
+          `Preț mediu ${localMed} lei/oră — indice local ${city.priceIndex.toFixed(2)}× media națională`,
         ]}
         ctaPrimary={{ to: "/meditatii", label: `Vezi toți profesorii de ${subject.nameLower}` }}
         ctaSecondary={{ to: "/caut-profesor", label: "Postează cerere" }}
