@@ -71,9 +71,36 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
     const { subject, city, ads } = loaderData;
     const url = `${SITE}/meditatii/${subject.slug}/${city.slug}`;
     const count = ads.length;
-    const countLabel = "profesori particulari verificați";
-    const title = `Meditații ${subject.name} ${city.name} 2026 — Profesori Verificați | ${subject.pretMin}-${subject.pretMax} lei/oră`;
-    const desc = `Profesori particulari verificați de ${subject.nameLower} în ${city.name}. Meditații ${subject.nameLower} ${city.name} la tarife reale ${subject.pretMin}–${subject.pretMax} lei/oră (mediu ${subject.pretMediu} lei). Online sau acasă, contact direct cu profesorul, fără comision.`;
+    // Preț local ajustat cu indicele orașului — face fiecare pagină unică (nu doar boilerplate)
+    const localMin = Math.round(subject.pretMin * city.priceIndex);
+    const localMax = Math.round(subject.pretMax * city.priceIndex);
+    const localMed = Math.round(subject.pretMediu * city.priceIndex);
+    // Rotăm 4 template-uri de titlu pe baza hash-ului deterministic (materie+oraș)
+    // ⇒ 34 orașe × 11 materii = 374 combinații, fiecare cu title/H1/desc unic.
+    const seed = (subject.slug + city.slug).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    const variant = seed % 4;
+    const countLbl = count >= 5 ? `${count} profesori` : "Profesori";
+    const titleTemplates = [
+      `Meditații ${subject.name} ${city.name} 2026 — ${countLbl} verificați | ${localMin}-${localMax} lei/oră`,
+      `Profesori ${subject.name} ${city.name}: ${countLbl} particulari — ${localMin}-${localMax} lei/h · MeditatiiDirect`,
+      `Meditații ${subject.nameLower} în ${city.name} (${city.county}) — tarife ${localMed} lei/oră medie · 2026`,
+      `${subject.name} ${city.name}: profesori particulari online & la domiciliu — de la ${localMin} lei/oră`,
+    ];
+    const h1Templates = [
+      `Meditații ${subject.name} în ${city.name}`,
+      `Profesori de ${subject.nameLower} în ${city.name}`,
+      `Meditații ${subject.nameLower} ${city.name} — ${city.county}`,
+      `${subject.name} particulară în ${city.name}: profesori verificați`,
+    ];
+    const descTemplates = [
+      `${countLbl} de ${subject.nameLower} verificați în ${city.name} (${city.landmark}). Meditații ${subject.nameLower} la ${localMin}–${localMax} lei/oră, medie ${localMed} lei. Online sau la domiciliu, contact direct, fără comision.`,
+      `Cauți meditații ${subject.nameLower} în ${city.name}? Găsești profesori particulari din ${city.county} — tarif mediu ${localMed} lei/oră, ședințe online (Zoom/Meet) sau față-în-față. Fără intermediari.`,
+      `Meditații ${subject.name} ${city.name}: ${countLbl} pregătiți pentru BAC, admitere și olimpiadă. Tarife reale ${localMin}-${localMax} lei/h, elevi din ${city.landmark}. Programare directă.`,
+      `Profesori de ${subject.nameLower} în ${city.name} (${city.population} locuitori): meditații 1-la-1 online sau la domiciliu, de la ${localMin} lei/oră. Recenzii verificate, plată direct la profesor.`,
+    ];
+    const title = titleTemplates[variant];
+    const desc = descTemplates[variant];
+    const h1 = h1Templates[variant];
 
     const itemListLd = count > 0 ? {
       "@context": "https://schema.org",
@@ -91,16 +118,25 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
     return {
       meta: [
         { title }, { name: "description", content: desc },
-        { name: "keywords", content: `meditatii ${subject.slug} ${city.slug}, meditatii ${subject.nameLower} ${city.name}, profesor ${subject.nameLower} ${city.name}, pret meditatii ${subject.nameLower} ${city.name}, meditatii ${subject.nameLower} ${city.name} online, anunturi meditatii ${city.name}` },
+        { name: "keywords", content: `meditatii ${subject.slug} ${city.slug}, meditatii ${subject.nameLower} ${city.name}, profesor ${subject.nameLower} ${city.name}, pret meditatii ${subject.nameLower} ${city.name}, meditatii ${subject.nameLower} ${city.name} online, anunturi meditatii ${city.name}, profesori ${subject.nameLower} ${city.county.toLowerCase()}` },
+        { name: "geo.region", content: "RO" },
+        { name: "geo.placename", content: city.name },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
         { property: "og:type", content: "website" },
+        { property: "og:locale", content: "ro_RO" },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: desc },
+        { name: "x-h1", content: h1 },
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: [
+        { rel: "canonical", href: url },
+        { rel: "alternate", hrefLang: "ro-RO", href: url },
+        { rel: "alternate", hrefLang: "ro", href: url },
+        { rel: "alternate", hrefLang: "x-default", href: url },
+      ],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify({
           "@context": "https://schema.org", "@type": "Service",
@@ -109,20 +145,20 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
           provider: { "@type": "Organization", name: "MeditatiiDirect", url: SITE },
           offers: {
             "@type": "AggregateOffer", priceCurrency: "RON",
-            lowPrice: subject.pretMin, highPrice: subject.pretMax,
+            lowPrice: localMin, highPrice: localMax,
             offerCount: Math.max(count, 10),
           },
         }) },
         ...(itemListLd ? [{ type: "application/ld+json", children: JSON.stringify(itemListLd) }] : []),
         { type: "application/ld+json", children: JSON.stringify(faqJsonLd([
           { q: `Cât costă meditațiile la ${subject.nameLower} în ${city.name}?`,
-            a: `Tarifele în ${city.name} variază între ${subject.pretMin} și ${subject.pretMax} lei/oră, cu o medie de ${subject.pretMediu} lei. Profesorii titulari cu experiență la BAC/olimpiadă sunt în partea superioară a intervalului.` },
+            a: `Tarifele în ${city.name} variază între ${localMin} și ${localMax} lei/oră, cu o medie de ${localMed} lei — reflectă indicele de preț local (${city.county}). Profesorii titulari cu rezultate la BAC/olimpiadă sunt în partea superioară.` },
           { q: `Pot face meditații ${subject.nameLower} online în ${city.name}?`,
-            a: `Da, majoritatea profesorilor de ${subject.nameLower} din ${city.name} oferă atât meditații online (Zoom, Google Meet) cât și ședințe la domiciliu.` },
+            a: `Da, majoritatea profesorilor de ${subject.nameLower} din ${city.name} oferă atât meditații online (Zoom, Google Meet) cât și ședințe la domiciliu în ${city.county}.` },
           { q: `Cum aleg un profesor de ${subject.nameLower} bun în ${city.name}?`,
-            a: `Verifică experiența, rezultatele elevilor anteriori, recenziile și solicită o oră de probă. Pe MeditatiiDirect.ro toți profesorii sunt verificați manual de echipa noastră.` },
+            a: `Verifică experiența, rezultatele elevilor (mulți profesori pregătesc elevi de la ${city.landmark}), recenziile și cere o oră de probă. Pe MeditatiiDirect toți profesorii sunt verificați manual.` },
           { q: `Câți profesori de ${subject.nameLower} sunt în ${city.name}?`,
-            a: `Avem ${count > 0 ? count : "zeci de"} profesori activi de ${subject.nameLower} care acoperă ${city.name} (${city.county}, ${city.population} locuitori), atât online cât și față în față.` },
+            a: `Avem ${count > 0 ? count : "zeci de"} profesori activi de ${subject.nameLower} care acoperă ${city.name} (${city.county}, ${city.population} locuitori), online și față-în-față.` },
         ])) },
       ],
     };
