@@ -135,10 +135,10 @@ function CityPage() {
             <BadgeCheck className="h-4 w-4" /> Profesori verificați • Fără comision
           </p>
           <h1 className="mt-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-            Meditații {city.name} — Profesori verificați 2026
+            Meditații {city.name} — profesori verificați din {city.county} · 2026
           </h1>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-            Cauți un profesor de meditații în <strong>{city.name}</strong>? Pe MeditatiiDirect.ro găsești anunțuri cu profesori verificați din {city.county}, pentru toate materiile și nivelurile — de la clasele primare până la BAC, evaluare națională și admitere la facultate. Contact direct cu profesorul, fără intermediari și fără comision.
+            Cauți un profesor de meditații în <strong>{city.name}</strong>? Pe MeditatiiDirect.ro găsești anunțuri cu profesori verificați din {city.county} (reper: {city.landmark}), pentru toate materiile și nivelurile — de la clasele primare până la BAC 2026, evaluare națională și admitere la facultate. Contact direct cu profesorul, fără intermediari și fără comision.
           </p>
         </header>
 
