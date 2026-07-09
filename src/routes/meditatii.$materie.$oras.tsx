@@ -174,7 +174,7 @@ function ComboPage() {
   const otherCities = CITIES.filter((c) => c.slug !== city.slug).slice(0, 8);
   const otherSubjects = SUBJECTS_SEO.filter((s) => s.slug !== subject.slug).slice(0, 8);
 
-  const seed = (subject.slug + city.slug).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  const seed = (subject.slug + city.slug).split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
   const variant = seed % 4;
   const localMin = Math.round(subject.pretMin * city.priceIndex);
   const localMax = Math.round(subject.pretMax * city.priceIndex);
