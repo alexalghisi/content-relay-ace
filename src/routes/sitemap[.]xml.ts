@@ -80,24 +80,23 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const today = new Date().toISOString().slice(0, 10);
-
+        // No synthetic <lastmod>: only entries with a real content timestamp carry one.
         const urls: string[] = STATIC_PATHS.map(
           (e) =>
-            `  <url>\n    <loc>${BASE_URL}${e.path}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority}</priority>\n  </url>`,
+            `  <url>\n    <loc>${BASE_URL}${e.path}</loc>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority}</priority>\n  </url>`,
         );
 
         try {
           const { data: subjects } = await supabaseAdmin.from("subjects").select("slug");
           for (const s of subjects ?? []) {
             urls.push(
-              `  <url>\n    <loc>${BASE_URL}/meditatii?materie=${s.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+              `  <url>\n    <loc>${BASE_URL}/meditatii?materie=${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
             );
           }
           const { data: cities } = await supabaseAdmin.from("cities").select("slug");
           for (const c of cities ?? []) {
             urls.push(
-              `  <url>\n    <loc>${BASE_URL}/meditatii?oras=${c.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+              `  <url>\n    <loc>${BASE_URL}/meditatii?oras=${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
             );
           }
           // Per-ad pages — primary long-tail SEO surface
@@ -107,18 +106,18 @@ export const Route = createFileRoute("/sitemap.xml")({
             .eq("status", "active");
           for (const a of ads ?? []) {
             const slug = a.seo_slug || a.id;
-            const last = (a.updated_at ?? today).toString().slice(0, 10);
+            const last = a.updated_at ? new Date(a.updated_at).toISOString().slice(0, 10) : null;
             urls.push(
-              `  <url>\n    <loc>${BASE_URL}/anunt/${slug}</loc>\n    <lastmod>${last}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+              `  <url>\n    <loc>${BASE_URL}/anunt/${slug}</loc>\n${last ? `    <lastmod>${last}</lastmod>\n` : ""}    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
             );
           }
           // City landing pages + profesori per oraș (nou — 14 pagini SEO)
           for (const c of CITIES) {
             urls.push(
-              `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,
+              `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,
             );
             urls.push(
-              `  <url>\n    <loc>${BASE_URL}/profesori/${c.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
+              `  <url>\n    <loc>${BASE_URL}/profesori/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
             );
           }
 
@@ -126,9 +125,9 @@ export const Route = createFileRoute("/sitemap.xml")({
           const { data: posts } = await supabaseAdmin
             .from("blog_posts").select("slug,updated_at").eq("is_published", true);
           for (const p of posts ?? []) {
-            const last = (p.updated_at ?? today).toString().slice(0, 10);
+            const last = p.updated_at ? new Date(p.updated_at).toISOString().slice(0, 10) : null;
             urls.push(
-              `  <url>\n    <loc>${BASE_URL}/blog/${p.slug}</loc>\n    <lastmod>${last}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+              `  <url>\n    <loc>${BASE_URL}/blog/${p.slug}</loc>\n${last ? `    <lastmod>${last}</lastmod>\n` : ""}    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
             );
           }
         } catch (err) {
@@ -180,7 +179,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         // Noua arhivă /subiecte-admitere/* — generată din tabelul admission_papers
         try {
-          urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+          urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
           const { data: papers } = await supabaseAdmin
             .from("admission_papers")
             .select("university_slug, subject_slug, year, updated_at")
@@ -217,7 +216,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           headers: {
             "Content-Type": "application/xml; charset=utf-8",
             // Refresh frecvent ca paginile de resurse nou-adăugate să intre rapid în sitemap
-            "Cache-Control": "public, max-age=300, s-maxage=300, stale-while-revalidate=600",
+            "Cache-Control": "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
             "X-Robots-Tag": "noindex",
           },
         });
