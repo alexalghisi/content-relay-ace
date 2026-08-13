@@ -77,7 +77,7 @@ function TermsPage() {
 
       <h2 className="mt-8 text-2xl font-bold">9. Publicitate</h2>
       <p className="mt-2 text-foreground/90 leading-relaxed">
-        Platforma este susținută prin publicitate contextuală (Google AdSense, Adsterra). Anunțurile publicitare nu sunt selecționate manual de noi și nu implică o recomandare a produsului/serviciului promovat.
+        Platforma este susținută prin publicitate contextuală (Google AdSense). Anunțurile publicitare nu sunt selecționate manual de noi și nu implică o recomandare a produsului/serviciului promovat.
       </p>
 
       <h2 className="mt-8 text-2xl font-bold">10. Modificarea termenilor</h2>

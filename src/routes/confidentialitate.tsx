@@ -48,7 +48,7 @@ function PrivacyPage() {
         <li>Pentru verificarea manuală a profesorilor și prevenirea fraudei.</li>
         <li>Pentru trimiterea de notificări tranzacționale (mesaje noi, confirmări, actualizări cont).</li>
         <li>Pentru statistici agregate și îmbunătățirea platformei.</li>
-        <li>Pentru afișarea de reclame contextuale prin partenerii noștri (Google AdSense, Adsterra) — vezi secțiunea 6.</li>
+        <li>Pentru afișarea de reclame contextuale prin partenerii noștri (Google AdSense) — vezi secțiunea 6.</li>
       </ul>
 
       <h2 className="mt-8 text-2xl font-bold">4. Temeiul legal</h2>
@@ -68,7 +68,7 @@ function PrivacyPage() {
 
       <h2 className="mt-8 text-2xl font-bold">6. Cookie-uri și publicitate</h2>
       <p className="mt-2 text-foreground/90 leading-relaxed">
-        Folosim cookie-uri esențiale pentru funcționarea contului și cookie-uri de analiză pentru înțelegerea traficului. Partenerii publicitari (Google AdSense, Adsterra) pot seta propriile cookie-uri pentru afișarea de reclame relevante. Poți dezactiva personalizarea reclamelor din setările contului Google (adssettings.google.com) sau blocând cookie-urile din browser.
+        Folosim cookie-uri esențiale pentru funcționarea contului și cookie-uri de analiză pentru înțelegerea traficului. Partenerii publicitari (Google AdSense) pot seta propriile cookie-uri pentru afișarea de reclame relevante. Poți dezactiva personalizarea reclamelor din setările contului Google (adssettings.google.com) sau blocând cookie-urile din browser.
       </p>
 
       <h2 className="mt-8 text-2xl font-bold">7. Drepturile tale</h2>
