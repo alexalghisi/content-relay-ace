@@ -5,6 +5,7 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 import { getSubjectSeo, SUBJECTS_SEO } from "@/data/subjects-seo";
 import { getCityBySlug, CITIES } from "@/data/cities";
 import { supabase } from "@/integrations/supabase/client";
+import { EmptyResults } from "@/components/empty-results";
 import { AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { BadgeCheck, MapPin, Wifi } from "lucide-react";
 
