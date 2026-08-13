@@ -248,6 +248,17 @@ function ComboPage() {
         </section>
       )}
 
+      {ads.length === 0 && (
+        <div className="container-page">
+          <EmptyResults
+            title={`Încă nu avem anunțuri de ${subject.nameLower} în ${city.name}`}
+            description={`Profesorii de ${subject.nameLower} din ${city.name} (${city.county}) își publică anunțurile continuu, iar lista se actualizează zilnic. Până atunci ai două soluții rapide: alege meditații online la ${subject.nameLower} — profesorii predau din toată țara, la aceleași tarife sau mai mici — ori postează o cerere și te contactează profesorii interesați. Găsești mai jos și resursele gratuite de pregătire (variante de BAC, subiecte de admitere, ghiduri) pe care le poți folosi imediat.`}
+          />
+        </div>
+      )}
+
+
+
       <div className="container-page"><AdsterraNativeBanner /></div>
 
       {/* Silos: link intern bidirecțional pentru autoritate */}
