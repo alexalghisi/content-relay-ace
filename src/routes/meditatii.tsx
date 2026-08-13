@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { EmptyResults } from "@/components/empty-results";
 import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { MapPin, Wifi, Star, BadgeCheck, Search } from "lucide-react";
 
@@ -165,9 +166,10 @@ function ListingPage() {
         {loading ? (
           <div className="mt-8 text-center text-muted-foreground">Se încarcă anunțurile...</div>
         ) : filtered.length === 0 ? (
-          <div className="mt-12 text-center">
-            <p className="text-muted-foreground">Niciun anunț găsit. Încearcă alte filtre.</p>
-          </div>
+          <EmptyResults
+            title="Niciun anunț pentru filtrele alese"
+            description="Momentan nu avem anunțuri care să corespundă exact acestor criterii. Poți reseta filtrele, poți alege varianta online (profesorii predau din toată țara, deci disponibilitatea este mult mai mare) sau poți explora una dintre categoriile active de mai jos. Dacă ești profesor, publicarea unui anunț durează sub 2 minute și este gratuită — elevii te contactează direct, fără comision."
+          />
         ) : (
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((ad, i) => (

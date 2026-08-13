@@ -27,6 +27,7 @@ import { Route as ProfesoriRouteImport } from './routes/profesori'
 import { Route as ProfesorParticularRouteImport } from './routes/profesor-particular'
 import { Route as ProfesorMeditatiiRouteImport } from './routes/profesor-meditatii'
 import { Route as PreturiMeditatiiRouteImport } from './routes/preturi-meditatii'
+import { Route as PoliticaCookiesRouteImport } from './routes/politica-cookies'
 import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
 import { Route as PentruProfesoriRouteImport } from './routes/pentru-profesori'
 import { Route as ParteneriRouteImport } from './routes/parteneri'
@@ -193,6 +194,11 @@ const ProfesorMeditatiiRoute = ProfesorMeditatiiRouteImport.update({
 const PreturiMeditatiiRoute = PreturiMeditatiiRouteImport.update({
   id: '/preturi-meditatii',
   path: '/preturi-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliticaCookiesRoute = PoliticaCookiesRouteImport.update({
+  id: '/politica-cookies',
+  path: '/politica-cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlatformaMeditatiiOnlineRoute =
@@ -650,6 +656,7 @@ export interface FileRoutesByFullPath {
   '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
+  '/politica-cookies': typeof PoliticaCookiesRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
   '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
@@ -747,6 +754,7 @@ export interface FileRoutesByTo {
   '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
+  '/politica-cookies': typeof PoliticaCookiesRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
   '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
@@ -845,6 +853,7 @@ export interface FileRoutesById {
   '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
+  '/politica-cookies': typeof PoliticaCookiesRoute
   '/preturi-meditatii': typeof PreturiMeditatiiRouteWithChildren
   '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
@@ -944,6 +953,7 @@ export interface FileRouteTypes {
     | '/parteneri'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
+    | '/politica-cookies'
     | '/preturi-meditatii'
     | '/profesor-meditatii'
     | '/profesor-particular'
@@ -1041,6 +1051,7 @@ export interface FileRouteTypes {
     | '/parteneri'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
+    | '/politica-cookies'
     | '/preturi-meditatii'
     | '/profesor-meditatii'
     | '/profesor-particular'
@@ -1138,6 +1149,7 @@ export interface FileRouteTypes {
     | '/parteneri'
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
+    | '/politica-cookies'
     | '/preturi-meditatii'
     | '/profesor-meditatii'
     | '/profesor-particular'
@@ -1236,6 +1248,7 @@ export interface RootRouteChildren {
   ParteneriRoute: typeof ParteneriRoute
   PentruProfesoriRoute: typeof PentruProfesoriRoute
   PlatformaMeditatiiOnlineRoute: typeof PlatformaMeditatiiOnlineRoute
+  PoliticaCookiesRoute: typeof PoliticaCookiesRoute
   PreturiMeditatiiRoute: typeof PreturiMeditatiiRouteWithChildren
   ProfesorMeditatiiRoute: typeof ProfesorMeditatiiRoute
   ProfesorParticularRoute: typeof ProfesorParticularRoute
@@ -1394,6 +1407,13 @@ declare module '@tanstack/react-router' {
       path: '/preturi-meditatii'
       fullPath: '/preturi-meditatii'
       preLoaderRoute: typeof PreturiMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politica-cookies': {
+      id: '/politica-cookies'
+      path: '/politica-cookies'
+      fullPath: '/politica-cookies'
+      preLoaderRoute: typeof PoliticaCookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/platforma-meditatii-online': {
@@ -2106,6 +2126,7 @@ const rootRouteChildren: RootRouteChildren = {
   ParteneriRoute: ParteneriRoute,
   PentruProfesoriRoute: PentruProfesoriRoute,
   PlatformaMeditatiiOnlineRoute: PlatformaMeditatiiOnlineRoute,
+  PoliticaCookiesRoute: PoliticaCookiesRoute,
   PreturiMeditatiiRoute: PreturiMeditatiiRouteWithChildren,
   ProfesorMeditatiiRoute: ProfesorMeditatiiRoute,
   ProfesorParticularRoute: ProfesorParticularRoute,
