@@ -22,7 +22,7 @@ function TermsPage() {
   return (
     <article className="container-page py-12 max-w-3xl prose">
       <h1 className="text-3xl font-bold sm:text-4xl">Termeni și condiții</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Ultima actualizare: iulie 2026</p>
+      <p className="mt-2 text-sm text-muted-foreground">Ultima actualizare: august 2026</p>
 
       <p className="mt-6 text-foreground/90 leading-relaxed">
         Prin accesarea și utilizarea platformei MeditatiiDirect.ro, accepți în totalitate acești Termeni și condiții. Dacă nu ești de acord cu ei, te rugăm să nu utilizezi platforma.
@@ -31,6 +31,9 @@ function TermsPage() {
       <h2 className="mt-8 text-2xl font-bold">1. Descrierea serviciului</h2>
       <p className="mt-2 text-foreground/90 leading-relaxed">
         MeditatiiDirect.ro este o platformă online de intermediere care conectează elevii, studenții și părinții cu profesori particulari independenți. Nu suntem angajatorul profesorilor, nu emitem facturi în numele lor și nu garantăm rezultatele meditațiilor.
+      </p>
+      <p className="mt-4 text-foreground/90 leading-relaxed">
+        Platforma este administrată de <strong>AMATA IMPORT EXPORT SRL</strong>, înregistrată în România cu CUI <strong>232353</strong>. Email de contact oficial: <a href="mailto:alexalghisi@gmail.com" className="text-primary underline">alexalghisi@gmail.com</a>.
       </p>
 
       <h2 className="mt-8 text-2xl font-bold">2. Cont de utilizator</h2>

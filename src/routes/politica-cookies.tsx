@@ -101,9 +101,9 @@ function CookiesPage() {
             Prelucrarea datelor personale este descrisă pe larg în{" "}
             <Link to="/confidentialitate" className="text-primary hover:underline">Politica de Confidențialitate</Link>, iar
             regulile de utilizare a platformei în{" "}
-            <Link to="/termeni" className="text-primary hover:underline">Termeni și Condiții</Link>. Pentru orice
-            întrebare legată de cookie-uri sau de datele tale, scrie-ne prin pagina de{" "}
-            <Link to="/contact" className="text-primary hover:underline">Contact</Link>.
+            <Link to="/termeni" className="text-primary hover:underline">Termeni și Condiții</Link>. Platforma este administrată de{" "}
+            <strong>AMATA IMPORT EXPORT SRL</strong> (CUI 232353). Pentru orice întrebare legată de cookie-uri sau de datele tale, scrie-ne la{" "}
+            <a href="mailto:alexalghisi@gmail.com" className="text-primary hover:underline">alexalghisi@gmail.com</a>.
           </p>
         </section>
       </div>
