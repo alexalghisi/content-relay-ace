@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { MessageCircle } from "lucide-react";
 
-export const Route = createFileRoute("/mesaje")({
+export const Route = createFileRoute("/mesaje/")({
   head: () => ({ meta: [
     { title: "Mesaje — MeditatiiDirect.ro" },
     { name: "robots", content: "noindex, nofollow" },

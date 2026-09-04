@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/page-shell";
 
-export const Route = createFileRoute("/preturi-meditatii")({
+export const Route = createFileRoute("/preturi-meditatii/")({
   head: () => ({
     meta: [
       { title: "Prețuri meditații — MeditatiiDirect.ro" },
