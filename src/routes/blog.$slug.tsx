@@ -7,13 +7,13 @@ import { AdSenseSlot } from "@/components/ads/adsense";
 interface Post {
   slug: string; title: string; excerpt: string | null; content: string | null;
   category: string | null; published_at: string | null; tags: string[] | null;
-  featured_image: string | null;
+  featured_image: string | null; updated_at?: string | null;
 }
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
     const { data } = await supabase.from("blog_posts")
-      .select("slug,title,excerpt,content,category,published_at,tags,featured_image")
+      .select("slug,title,excerpt,content,category,published_at,tags,featured_image,updated_at")
       .eq("slug", params.slug).eq("is_published", true).maybeSingle();
     if (!data) throw notFound();
     return { post: data as Post };
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/blog/$slug")({
       headline: post.title,
       description: post.excerpt ?? undefined,
       datePublished: post.published_at ?? undefined,
-      dateModified: post.published_at ?? undefined,
+      dateModified: post.updated_at ?? post.published_at ?? undefined,
       author: { "@type": "Organization", name: "MeditatiiDirect", url: "https://meditatiidirect.ro" },
       publisher: {
         "@type": "Organization",
@@ -99,13 +99,23 @@ export const Route = createFileRoute("/blog/$slug")({
   component: PostPage,
 });
 
+const slugifyHeading = (t: string) =>
+  t.toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 function PostPage() {
   const { post } = Route.useLoaderData();
+  const content = post.content ?? post.excerpt ?? "";
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  const readingMinutes = Math.max(1, Math.round(words / 200));
+  const headings = Array.from(content.matchAll(/^## (.+)$/gm)).map((m) => m[1].trim());
+
   // Render markdown-light: ## headings + paragraphs + [link](url)
   const renderContent = (md: string) => {
     return md.split(/\n\n+/).map((block, i) => {
       const h2 = block.match(/^## (.+)/);
-      if (h2) return <h2 key={i} className="mt-8 text-xl font-bold">{h2[1]}</h2>;
+      if (h2) return <h2 key={i} id={slugifyHeading(h2[1])} className="mt-8 scroll-mt-24 text-xl font-bold">{h2[1]}</h2>;
       const linked = block.split(/(\[[^\]]+\]\([^)]+\))/g).map((part, j) => {
         const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
         if (m) return <Link key={j} to={m[2] as never} className="text-primary underline">{m[1]}</Link>;
@@ -116,22 +126,76 @@ function PostPage() {
   };
   return (
     <article className="container-page py-10 max-w-3xl">
-      <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground">
+        <ol className="flex flex-wrap items-center gap-1.5">
+          <li><a href="/" className="hover:text-primary">Acasă</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href="/blog" className="hover:text-primary">Blog</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page" className="text-foreground/80 line-clamp-1">{post.title}</li>
+        </ol>
+      </nav>
+      <Link to="/blog" className="mt-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Înapoi la blog
       </Link>
       <header className="mt-6">
         {post.category && <span className="text-xs text-primary uppercase tracking-wide">{post.category}</span>}
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">{post.title}</h1>
-        {post.published_at && (
-          <p className="mt-3 text-sm text-muted-foreground inline-flex items-center gap-1"><CalendarDays className="h-3 w-3" />{new Date(post.published_at).toLocaleDateString("ro-RO")}</p>
-        )}
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+          <span>
+            de <a href="/despre" className="text-foreground/80 hover:text-primary">Redacția MeditatiiDirect</a>
+          </span>
+          {post.published_at && (
+            <span className="inline-flex items-center gap-1">
+              <CalendarDays className="h-3 w-3" />
+              <time dateTime={post.published_at}>{new Date(post.published_at).toLocaleDateString("ro-RO")}</time>
+            </span>
+          )}
+          {post.updated_at && post.updated_at !== post.published_at && (
+            <span>Actualizat: <time dateTime={post.updated_at}>{new Date(post.updated_at).toLocaleDateString("ro-RO")}</time></span>
+          )}
+          <span>{readingMinutes} min citire</span>
+        </div>
       </header>
+
+      {headings.length >= 3 && (
+        <nav aria-label="Cuprins" className="mt-6 card-soft p-5">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Cuprins</h2>
+          <ol className="mt-3 space-y-1.5 text-sm">
+            {headings.map((h) => (
+              <li key={h}>
+                <a href={`#${slugifyHeading(h)}`} className="text-primary hover:underline">{h}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
       <AdsterraBanner728 className="mt-6" />
       <div className="mt-8 prose max-w-none">
-        {renderContent(post.content ?? post.excerpt ?? "")}
+        {renderContent(content)}
       </div>
       <AdsterraNativeBanner className="mt-8" />
       <AdSenseSlot format="auto" className="mt-6" />
+
+      <section className="mt-12">
+        <h2 className="text-lg font-bold">Continuă cu</h2>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {[
+            { to: "/meditatii-matematica", label: "Meditații matematică" },
+            { to: "/meditatii-romana", label: "Meditații română" },
+            { to: "/meditatii-engleza", label: "Meditații engleză" },
+            { to: "/meditatii-online", label: "Meditații online" },
+            { to: "/meditatii-bac", label: "Meditații BAC 2026" },
+            { to: "/preturi-meditatii", label: "Prețuri meditații" },
+          ].map((l) => (
+            <Link key={l.to} to={l.to} className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary">
+              {l.label}
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <div className="mt-12 card-soft p-6 bg-gradient-to-br from-primary-soft to-card">
         <h2 className="text-lg font-bold">Caută profesorul potrivit pentru tine</h2>
         <p className="mt-1 text-sm text-muted-foreground">Meditatori particulari verificați. Contact direct, fără comision.</p>

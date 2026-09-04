@@ -48,3 +48,37 @@ export const markConversationRead = createServerFn({ method: "POST" })
     if (updateError) throw new Error("Nu am putut marca mesajele ca citite.");
     return { ok: true };
   });
+
+/**
+ * GDPR — ștergere definitivă cont + date personale, inițiată de utilizator.
+ * Șterge anunțurile, conversațiile, mesajele, profilul și contul de autentificare.
+ */
+export const deleteMyAccount = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ confirm: z.literal("STERGE") }).parse(input),
+  )
+  .handler(async ({ context }) => {
+    const uid = context.userId;
+
+    // Conversații + mesaje
+    const { data: convs } = await supabaseAdmin
+      .from("conversations")
+      .select("id")
+      .or(`student_id.eq.${uid},teacher_id.eq.${uid}`);
+    const convIds = (convs ?? []).map((c) => c.id);
+    if (convIds.length > 0) {
+      await supabaseAdmin.from("messages").delete().in("conversation_id", convIds);
+      await supabaseAdmin.from("conversations").delete().in("id", convIds);
+    }
+
+    // Profil
+    await supabaseAdmin.from("profiles").delete().eq("user_id", uid);
+    await supabaseAdmin.from("user_roles").delete().eq("user_id", uid);
+
+    // Contul de autentificare
+    const { error } = await supabaseAdmin.auth.admin.deleteUser(uid);
+    if (error) throw new Error("Nu am putut șterge contul. Scrie-ne la alexalghisi@gmail.com.");
+
+    return { ok: true };
+  });

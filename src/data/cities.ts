@@ -45,6 +45,13 @@ export const CITIES: CityInfo[] = [
   { slug: "deva",            name: "Deva",            county: "Hunedoara",  population: "61.000",      matchLocation: ["deva"], landmark: "CN Decebal", priceIndex: 0.85 },
   { slug: "giurgiu",         name: "Giurgiu",         county: "Giurgiu",    population: "54.000",      matchLocation: ["giurgiu"], landmark: "CN Ion Maiorescu", priceIndex: 0.90 },
   { slug: "zalau",           name: "Zalău",           county: "Sălaj",      population: "56.000",      matchLocation: ["zalău", "zalau"], landmark: "CN Silvania", priceIndex: 0.85 },
+  { slug: "vaslui",          name: "Vaslui",          county: "Vaslui",     population: "55.000",      matchLocation: ["vaslui"], landmark: "CN Mihail Kogălniceanu", priceIndex: 0.80 },
+  { slug: "hunedoara",       name: "Hunedoara",       county: "Hunedoara",  population: "54.000",      matchLocation: ["hunedoara"], landmark: "CN Iancu de Hunedoara", priceIndex: 0.82 },
+  { slug: "calarasi",        name: "Călărași",        county: "Călărași",   population: "52.000",      matchLocation: ["călărași", "calarasi"], landmark: "CN Barbu Știrbei", priceIndex: 0.82 },
+  { slug: "medias",          name: "Mediaș",          county: "Sibiu",      population: "47.000",      matchLocation: ["mediaș", "medias"], landmark: "CN Stephan Ludwig Roth", priceIndex: 0.85 },
+  { slug: "slobozia",        name: "Slobozia",        county: "Ialomița",   population: "45.000",      matchLocation: ["slobozia"], landmark: "CN Mihai Viteazul", priceIndex: 0.80 },
+  { slug: "sfantu-gheorghe", name: "Sfântu Gheorghe", county: "Covasna",    population: "54.000",      matchLocation: ["sfântu gheorghe", "sfantu gheorghe", "sf. gheorghe"], landmark: "CN Mihai Viteazul", priceIndex: 0.82 },
+  { slug: "turda",           name: "Turda",           county: "Cluj",       population: "43.000",      matchLocation: ["turda"], landmark: "CN Mihai Viteazul", priceIndex: 0.88 },
 ];
 
 export const CITY_SLUGS = CITIES.map((c) => c.slug);
