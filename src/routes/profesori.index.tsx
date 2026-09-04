@@ -27,7 +27,7 @@ interface TopTeacher {
 }
 
 
-export const Route = createFileRoute("/profesori")({
+export const Route = createFileRoute("/profesori/")({
   head: () => ({
     meta: [
       { title: TITLE },

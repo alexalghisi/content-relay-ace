@@ -7,7 +7,7 @@ const URL_BASE = "https://meditatiidirect.ro/subiecte-admitere";
 const TITLE = "Subiecte Admitere Facultate 2026 — Arhivă PDF oficială | MeditatiiDirect.ro";
 const DESC = "Arhivă completă cu subiecte și bareme de admitere la facultățile din România: Medicină (UMF), Politehnică, Drept, ASE, Informatică. PDF oficial, descărcare gratuită.";
 
-export const Route = createFileRoute("/subiecte-admitere")({
+export const Route = createFileRoute("/subiecte-admitere/")({
   head: () => ({
     meta: [
       { title: TITLE }, { name: "description", content: DESC },

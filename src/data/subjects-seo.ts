@@ -7,21 +7,39 @@ export interface SubjectSeo {
   pretMin: number;    // lei/oră
   pretMax: number;
   pretMediu: number;
+  /** Slug-uri folosite în baza de date (ads.subject_slug) — includem variantele istorice. */
+  dbSlugs: string[];
 }
 
+const s = (
+  slug: string, name: string, nameLower: string,
+  pretMin: number, pretMax: number, pretMediu: number,
+  dbSlugs: string[] = [],
+): SubjectSeo => ({ slug, name, nameLower, pretMin, pretMax, pretMediu, dbSlugs: [slug, ...dbSlugs] });
+
 export const SUBJECTS_SEO: SubjectSeo[] = [
-  { slug: "matematica", name: "Matematică", nameLower: "matematică", pretMin: 50, pretMax: 150, pretMediu: 80 },
-  { slug: "romana",     name: "Română",     nameLower: "română",     pretMin: 40, pretMax: 130, pretMediu: 70 },
-  { slug: "engleza",    name: "Engleză",    nameLower: "engleză",    pretMin: 50, pretMax: 200, pretMediu: 90 },
-  { slug: "germana",    name: "Germană",    nameLower: "germană",    pretMin: 60, pretMax: 200, pretMediu: 100 },
-  { slug: "franceza",   name: "Franceză",   nameLower: "franceză",   pretMin: 50, pretMax: 180, pretMediu: 80 },
-  { slug: "fizica",     name: "Fizică",     nameLower: "fizică",     pretMin: 50, pretMax: 150, pretMediu: 80 },
-  { slug: "chimie",     name: "Chimie",     nameLower: "chimie",     pretMin: 50, pretMax: 150, pretMediu: 80 },
-  { slug: "biologie",   name: "Biologie",   nameLower: "biologie",   pretMin: 50, pretMax: 150, pretMediu: 80 },
-  { slug: "informatica",name: "Informatică",nameLower: "informatică",pretMin: 60, pretMax: 200, pretMediu: 100 },
-  { slug: "istorie",    name: "Istorie",    nameLower: "istorie",    pretMin: 40, pretMax: 130, pretMediu: 70 },
-  { slug: "geografie",  name: "Geografie",  nameLower: "geografie",  pretMin: 40, pretMax: 130, pretMediu: 70 },
+  s("matematica", "Matematică", "matematică", 50, 150, 80),
+  s("romana", "Română", "română", 40, 130, 70, ["limba-romana"]),
+  s("engleza", "Engleză", "engleză", 50, 200, 90, ["limba-engleza"]),
+  s("germana", "Germană", "germană", 60, 200, 100, ["limba-germana"]),
+  s("franceza", "Franceză", "franceză", 50, 180, 80, ["limba-franceza"]),
+  s("spaniola", "Spaniolă", "spaniolă", 50, 180, 80, ["limba-spaniola"]),
+  s("italiana", "Italiană", "italiană", 50, 170, 80, ["limba-italiana"]),
+  s("fizica", "Fizică", "fizică", 50, 150, 80),
+  s("chimie", "Chimie", "chimie", 50, 150, 80),
+  s("biologie", "Biologie", "biologie", 50, 150, 80),
+  s("informatica", "Informatică", "informatică", 60, 200, 100),
+  s("programare", "Programare", "programare", 70, 250, 120),
+  s("python", "Python", "Python", 70, 250, 120),
+  s("istorie", "Istorie", "istorie", 40, 130, 70),
+  s("geografie", "Geografie", "geografie", 40, 130, 70),
+  s("logica", "Logică", "logică", 40, 130, 70),
+  s("psihologie", "Psihologie", "psihologie", 40, 140, 70),
+  s("filosofie", "Filosofie", "filosofie", 40, 140, 70),
+  s("economie", "Economie", "economie", 45, 150, 75),
+  s("desen", "Desen", "desen", 45, 160, 80),
+  s("muzica", "Muzică", "muzică", 50, 180, 90),
 ];
 
-export const SUBJECT_SEO_SLUGS = SUBJECTS_SEO.map((s) => s.slug);
-export const getSubjectSeo = (slug: string) => SUBJECTS_SEO.find((s) => s.slug === slug);
+export const SUBJECT_SEO_SLUGS = SUBJECTS_SEO.map((x) => x.slug);
+export const getSubjectSeo = (slug: string) => SUBJECTS_SEO.find((x) => x.slug === slug);

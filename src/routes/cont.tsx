@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { getMyPrivateProfile } from "@/lib/security.functions";
+import { getMyPrivateProfile, deleteMyAccount } from "@/lib/security.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -28,12 +28,16 @@ const profileSchema = z.object({
 function AccountPage() {
   const { user, loading, signOut } = useAuth();
   const loadPrivateProfile = useServerFn(getMyPrivateProfile);
+  const removeAccount = useServerFn(deleteMyAccount);
   const [profile, setProfile] = useState<Profile>({ display_name: "", phone: "", city: "", bio: "", avatar_url: null });
   const [saving, setSaving] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [savingEmail, setSavingEmail] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleteText, setDeleteText] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   const isGoogleUser = (user?.app_metadata?.providers ?? user?.app_metadata?.provider ? 
     [user?.app_metadata?.provider, ...(user?.app_metadata?.providers ?? [])].includes("google") : false);
@@ -211,6 +215,51 @@ function AccountPage() {
           Te-ai conectat cu Google — parola se gestionează din contul tău Google.
         </p>
       )}
+
+      {/* Ștergere cont — GDPR art. 17 (dreptul la ștergere) */}
+      <div className="card-soft mt-6 p-5 sm:p-6 border-destructive/40">
+        <h2 className="text-lg font-semibold inline-flex items-center gap-2 text-destructive">
+          <Trash2 className="h-4 w-4" /> Șterge contul
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Acțiune permanentă. Îți ștergem definitiv contul, profilul, anunțurile și mesajele.
+          Conform GDPR (art. 17), datele nu mai pot fi recuperate.
+        </p>
+        {!confirmDelete ? (
+          <button onClick={() => setConfirmDelete(true)} className="btn-outline mt-4 h-10 text-sm text-destructive border-destructive/40">
+            Vreau să șterg contul
+          </button>
+        ) : (
+          <div className="mt-4 space-y-3">
+            <Field label={'Scrie STERGE pentru a confirma'}>
+              <input value={deleteText} onChange={(e) => setDeleteText(e.target.value)} placeholder="STERGE" className="field-input" />
+            </Field>
+            <div className="flex flex-wrap gap-2">
+              <button
+                disabled={deleteText !== "STERGE" || deleting}
+                onClick={async () => {
+                  setDeleting(true);
+                  try {
+                    await removeAccount({ data: { confirm: "STERGE" as const } });
+                    await signOut().catch(() => undefined);
+                    toast.success("Contul a fost șters definitiv.");
+                    window.location.href = "/";
+                  } catch (err) {
+                    setDeleting(false);
+                    toast.error(err instanceof Error ? err.message : "Ștergerea a eșuat.");
+                  }
+                }}
+                className="btn-primary h-10 text-sm bg-destructive hover:bg-destructive disabled:opacity-50"
+              >
+                {deleting ? "Se șterge..." : "Confirmă ștergerea definitivă"}
+              </button>
+              <button onClick={() => { setConfirmDelete(false); setDeleteText(""); }} className="btn-outline h-10 text-sm">
+                Anulează
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

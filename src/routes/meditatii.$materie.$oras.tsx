@@ -23,7 +23,7 @@ interface LocalAd {
   avatar_url: string | null;
 }
 
-async function fetchAdsForCombo(subjectSlug: string, city: { name: string; matchLocation: string[] }): Promise<LocalAd[]> {
+async function fetchAdsForCombo(subjectSlugs: string[], city: { name: string; matchLocation: string[] }): Promise<LocalAd[]> {
   // Filtrăm pe materie + locație: orice anunț al cărui `location` conține una din variantele orașului
   // sau e online. Limităm la 24 pentru indexare densă.
   const orFilter = city.matchLocation
@@ -35,7 +35,7 @@ async function fetchAdsForCombo(subjectSlug: string, city: { name: string; match
     .from("ads")
     .select("id,title,seo_slug,price_per_hour,location,is_online,is_promoted,legacy_teachers(full_name,avatar_url)")
     .eq("status", "active")
-    .eq("subject_slug", subjectSlug)
+    .in("subject_slug", subjectSlugs)
     .or(orFilter)
     .order("is_promoted", { ascending: false })
     .order("views_count", { ascending: false })
@@ -64,7 +64,7 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
     const subject = getSubjectSeo(params.materie);
     const city = getCityBySlug(params.oras);
     if (!subject || !city) throw notFound();
-    const ads = await fetchAdsForCombo(subject.slug, city);
+    const ads = await fetchAdsForCombo(subject.dbSlugs, city);
     return { subject, city, ads };
   },
   head: ({ loaderData }) => {
@@ -119,6 +119,8 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
     return {
       meta: [
         { title }, { name: "description", content: desc },
+        // Thin content guard: fără profesori listați, pagina nu intră în index (dar linkurile sunt urmate).
+        ...(count === 0 ? [{ name: "robots", content: "noindex, follow" }] : []),
         { name: "keywords", content: `meditatii ${subject.slug} ${city.slug}, meditatii ${subject.nameLower} ${city.name}, profesor ${subject.nameLower} ${city.name}, pret meditatii ${subject.nameLower} ${city.name}, meditatii ${subject.nameLower} ${city.name} online, anunturi meditatii ${city.name}, profesori ${subject.nameLower} ${city.county.toLowerCase()}` },
         { name: "geo.region", content: "RO" },
         { name: "geo.placename", content: city.name },

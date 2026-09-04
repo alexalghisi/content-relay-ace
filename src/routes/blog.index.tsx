@@ -7,7 +7,7 @@ import { AdSenseSlot } from "@/components/ads/adsense";
 
 interface Post { slug: string; title: string; excerpt: string | null; category: string | null; published_at: string | null; tags: string[] | null; }
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
       { title: "Blog Meditații — Ghiduri BAC, Admitere și Sfaturi 2026 | MeditatiiDirect.ro" },

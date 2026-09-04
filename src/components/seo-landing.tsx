@@ -41,6 +41,25 @@ export function SeoLanding(p: SeoLandingProps) {
       {breadcrumbLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       )}
+      {p.pageUrl && (
+        <nav aria-label="Breadcrumb" className="mb-5 text-xs text-muted-foreground">
+          <ol className="flex flex-wrap items-center gap-1.5">
+            <li><a href="/" className="hover:text-primary">Acasă</a></li>
+            <li aria-hidden="true">/</li>
+            {p.breadcrumbParent && (
+              <>
+                <li>
+                  <a href={new URL(p.breadcrumbParent.url).pathname} className="hover:text-primary">
+                    {p.breadcrumbParent.name}
+                  </a>
+                </li>
+                <li aria-hidden="true">/</li>
+              </>
+            )}
+            <li aria-current="page" className="text-foreground/80">{p.h1}</li>
+          </ol>
+        </nav>
+      )}
       <header className="max-w-3xl">
         <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">
           <BadgeCheck className="h-4 w-4" /> Profesori verificați • Fără comision
