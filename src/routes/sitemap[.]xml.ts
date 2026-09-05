@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { CITIES } from "@/data/cities";
+import { SUBJECTS_SEO } from "@/data/subjects-seo";
+
+const PRIORITY_SUBJECTS = ["engleza", "germana", "franceza", "matematica", "fizica", "romana"];
+const PRIORITY_CITIES = ["cluj-napoca", "bucuresti", "timisoara", "iasi", "brasov", "constanta", "sibiu", "craiova"];
 
 const BASE_URL = "https://meditatiidirect.ro";
 
@@ -63,7 +67,9 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/rezultate-bac-2026", priority: "0.98", changefreq: "daily" },
   { path: "/subiecte-bac-2026", priority: "0.98", changefreq: "daily" },
   { path: "/admitere-facultate-2026", priority: "0.95", changefreq: "daily" },
-  { path: "/preturi-meditatii", priority: "0.6", changefreq: "monthly" },
+  { path: "/preturi-meditatii", priority: "0.85", changefreq: "weekly" },
+  { path: "/pregatire-bacalaureat", priority: "0.9", changefreq: "weekly" },
+  { path: "/pregatire-admitere-medicina", priority: "0.9", changefreq: "weekly" },
   { path: "/cum-functioneaza", priority: "0.6", changefreq: "monthly" },
   { path: "/pentru-profesori", priority: "0.7", changefreq: "monthly" },
   { path: "/blog", priority: "0.7", changefreq: "weekly" },
@@ -111,6 +117,20 @@ export const Route = createFileRoute("/sitemap.xml")({
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/anunt/${slug}</loc>\n${last ? `    <lastmod>${last}</lastmod>\n` : ""}    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
             );
+          }
+          // Pagini materie online (SEO: "meditatii engleza online" etc.)
+          for (const sub of SUBJECTS_SEO) {
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/meditatii-${sub.slug}-online</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+            );
+          }
+          // Combinații prioritare materie × oraș
+          for (const ms of PRIORITY_SUBJECTS) {
+            for (const cs of PRIORITY_CITIES) {
+              urls.push(
+                `  <url>\n    <loc>${BASE_URL}/meditatii/${ms}/${cs}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+              );
+            }
           }
           // City landing pages + profesori per oraș (nou — 14 pagini SEO)
           for (const c of CITIES) {
