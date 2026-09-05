@@ -24,6 +24,9 @@ import { Route as RezultateBac2026RouteImport } from './routes/rezultate-bac-202
 import { Route as ProfesoriMeditatiiRouteImport } from './routes/profesori-meditatii'
 import { Route as ProfesorParticularRouteImport } from './routes/profesor-particular'
 import { Route as ProfesorMeditatiiRouteImport } from './routes/profesor-meditatii'
+import { Route as PretMeditatiiRouteImport } from './routes/pret-meditatii'
+import { Route as PregatireBacalaureatRouteImport } from './routes/pregatire-bacalaureat'
+import { Route as PregatireAdmitereMedicinaRouteImport } from './routes/pregatire-admitere-medicina'
 import { Route as PoliticaCookiesRouteImport } from './routes/politica-cookies'
 import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
 import { Route as PentruProfesoriRouteImport } from './routes/pentru-profesori'
@@ -182,6 +185,22 @@ const ProfesorMeditatiiRoute = ProfesorMeditatiiRouteImport.update({
   path: '/profesor-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PretMeditatiiRoute = PretMeditatiiRouteImport.update({
+  id: '/pret-meditatii',
+  path: '/pret-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PregatireBacalaureatRoute = PregatireBacalaureatRouteImport.update({
+  id: '/pregatire-bacalaureat',
+  path: '/pregatire-bacalaureat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PregatireAdmitereMedicinaRoute =
+  PregatireAdmitereMedicinaRouteImport.update({
+    id: '/pregatire-admitere-medicina',
+    path: '/pregatire-admitere-medicina',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const PoliticaCookiesRoute = PoliticaCookiesRouteImport.update({
   id: '/politica-cookies',
   path: '/politica-cookies',
@@ -661,6 +680,9 @@ export interface FileRoutesByFullPath {
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/politica-cookies': typeof PoliticaCookiesRoute
+  '/pregatire-admitere-medicina': typeof PregatireAdmitereMedicinaRoute
+  '/pregatire-bacalaureat': typeof PregatireBacalaureatRoute
+  '/pret-meditatii': typeof PretMeditatiiRoute
   '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
@@ -760,6 +782,9 @@ export interface FileRoutesByTo {
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/politica-cookies': typeof PoliticaCookiesRoute
+  '/pregatire-admitere-medicina': typeof PregatireAdmitereMedicinaRoute
+  '/pregatire-bacalaureat': typeof PregatireBacalaureatRoute
+  '/pret-meditatii': typeof PretMeditatiiRoute
   '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
@@ -860,6 +885,9 @@ export interface FileRoutesById {
   '/pentru-profesori': typeof PentruProfesoriRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/politica-cookies': typeof PoliticaCookiesRoute
+  '/pregatire-admitere-medicina': typeof PregatireAdmitereMedicinaRoute
+  '/pregatire-bacalaureat': typeof PregatireBacalaureatRoute
+  '/pret-meditatii': typeof PretMeditatiiRoute
   '/profesor-meditatii': typeof ProfesorMeditatiiRoute
   '/profesor-particular': typeof ProfesorParticularRoute
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
@@ -961,6 +989,9 @@ export interface FileRouteTypes {
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/politica-cookies'
+    | '/pregatire-admitere-medicina'
+    | '/pregatire-bacalaureat'
+    | '/pret-meditatii'
     | '/profesor-meditatii'
     | '/profesor-particular'
     | '/profesori-meditatii'
@@ -1060,6 +1091,9 @@ export interface FileRouteTypes {
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/politica-cookies'
+    | '/pregatire-admitere-medicina'
+    | '/pregatire-bacalaureat'
+    | '/pret-meditatii'
     | '/profesor-meditatii'
     | '/profesor-particular'
     | '/profesori-meditatii'
@@ -1159,6 +1193,9 @@ export interface FileRouteTypes {
     | '/pentru-profesori'
     | '/platforma-meditatii-online'
     | '/politica-cookies'
+    | '/pregatire-admitere-medicina'
+    | '/pregatire-bacalaureat'
+    | '/pret-meditatii'
     | '/profesor-meditatii'
     | '/profesor-particular'
     | '/profesori-meditatii'
@@ -1259,6 +1296,9 @@ export interface RootRouteChildren {
   PentruProfesoriRoute: typeof PentruProfesoriRoute
   PlatformaMeditatiiOnlineRoute: typeof PlatformaMeditatiiOnlineRoute
   PoliticaCookiesRoute: typeof PoliticaCookiesRoute
+  PregatireAdmitereMedicinaRoute: typeof PregatireAdmitereMedicinaRoute
+  PregatireBacalaureatRoute: typeof PregatireBacalaureatRoute
+  PretMeditatiiRoute: typeof PretMeditatiiRoute
   ProfesorMeditatiiRoute: typeof ProfesorMeditatiiRoute
   ProfesorParticularRoute: typeof ProfesorParticularRoute
   ProfesoriMeditatiiRoute: typeof ProfesoriMeditatiiRoute
@@ -1406,6 +1446,27 @@ declare module '@tanstack/react-router' {
       path: '/profesor-meditatii'
       fullPath: '/profesor-meditatii'
       preLoaderRoute: typeof ProfesorMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pret-meditatii': {
+      id: '/pret-meditatii'
+      path: '/pret-meditatii'
+      fullPath: '/pret-meditatii'
+      preLoaderRoute: typeof PretMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pregatire-bacalaureat': {
+      id: '/pregatire-bacalaureat'
+      path: '/pregatire-bacalaureat'
+      fullPath: '/pregatire-bacalaureat'
+      preLoaderRoute: typeof PregatireBacalaureatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pregatire-admitere-medicina': {
+      id: '/pregatire-admitere-medicina'
+      path: '/pregatire-admitere-medicina'
+      fullPath: '/pregatire-admitere-medicina'
+      preLoaderRoute: typeof PregatireAdmitereMedicinaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/politica-cookies': {
@@ -2082,6 +2143,9 @@ const rootRouteChildren: RootRouteChildren = {
   PentruProfesoriRoute: PentruProfesoriRoute,
   PlatformaMeditatiiOnlineRoute: PlatformaMeditatiiOnlineRoute,
   PoliticaCookiesRoute: PoliticaCookiesRoute,
+  PregatireAdmitereMedicinaRoute: PregatireAdmitereMedicinaRoute,
+  PregatireBacalaureatRoute: PregatireBacalaureatRoute,
+  PretMeditatiiRoute: PretMeditatiiRoute,
   ProfesorMeditatiiRoute: ProfesorMeditatiiRoute,
   ProfesorParticularRoute: ProfesorParticularRoute,
   ProfesoriMeditatiiRoute: ProfesoriMeditatiiRoute,
