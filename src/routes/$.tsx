@@ -1,6 +1,6 @@
 // Rute SEO "plate": /meditatii-{materie}-{oras} și /meditatii-{materie}-online
 // Orice alt URL necunoscut primește pagina 404 (noindex).
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 import { LeadCta } from "@/components/lead-cta";
 import { SUBJECTS_SEO, getSubjectSeo } from "@/data/subjects-seo";
@@ -13,6 +13,16 @@ type Parsed =
   | { kind: "online"; materie: string }
   | { kind: "none" };
 
+const CITY_ALIASES: Record<string, string> = {
+  cluj: "cluj-napoca",
+  "targu-mures": "targu-mures",
+  "tg-mures": "targu-mures",
+  "rm-valcea": "ramnicu-valcea",
+  severin: "drobeta-turnu-severin",
+};
+
+const resolveCity = (slug: string) => getCityBySlug(CITY_ALIASES[slug] ?? slug);
+
 function parse(pathname: string): Parsed {
   const seg = pathname.replace(/^\/+|\/+$/g, "");
   if (!seg.startsWith("meditatii-")) return { kind: "none" };
@@ -21,7 +31,8 @@ function parse(pathname: string): Parsed {
     if (rest === `${s.slug}-online`) return { kind: "online", materie: s.slug };
     if (rest.startsWith(`${s.slug}-`)) {
       const city = rest.slice(s.slug.length + 1);
-      if (getCityBySlug(city)) return { kind: "combo", materie: s.slug, oras: city };
+      const resolved = resolveCity(city);
+      if (resolved) return { kind: "combo", materie: s.slug, oras: resolved.slug };
     }
   }
   return { kind: "none" };
@@ -148,6 +159,15 @@ function build(parsed: Parsed) {
 export const Route = createFileRoute("/$")({
   loader: ({ params }) => {
     const path = "/" + ((params as { _splat?: string })._splat ?? "");
+    const parsed = parse(path);
+    // URL-urile "plate" materie+oraș redirecționează 301 către pagina canonică materie/oraș.
+    if (parsed.kind === "combo") {
+      throw redirect({
+        to: "/meditatii/$materie/$oras",
+        params: { materie: parsed.materie, oras: parsed.oras },
+        statusCode: 301,
+      });
+    }
     return { path };
   },
   head: ({ loaderData }) => {
