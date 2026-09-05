@@ -76,6 +76,7 @@ import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditat
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AdmitereFacultate2026RouteImport } from './routes/admitere-facultate-2026'
 import { Route as AdmitereRouteImport } from './routes/admitere'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubiecteAdmitereIndexRouteImport } from './routes/subiecte-admitere.index'
 import { Route as ProfesoriIndexRouteImport } from './routes/profesori.index'
@@ -446,6 +447,11 @@ const AdmitereRoute = AdmitereRouteImport.update({
   path: '/admitere',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -602,6 +608,7 @@ const ApiPublicHooksAutoBlogPostRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/admitere': typeof AdmitereRoute
   '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
   '/ads.txt': typeof AdsDottxtRoute
@@ -700,6 +707,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/admitere': typeof AdmitereRoute
   '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
   '/ads.txt': typeof AdsDottxtRoute
@@ -799,6 +807,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/admitere': typeof AdmitereRoute
   '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
   '/ads.txt': typeof AdsDottxtRoute
@@ -899,6 +908,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$'
     | '/admitere'
     | '/admitere-facultate-2026'
     | '/ads.txt'
@@ -997,6 +1007,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$'
     | '/admitere'
     | '/admitere-facultate-2026'
     | '/ads.txt'
@@ -1095,6 +1106,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$'
     | '/admitere'
     | '/admitere-facultate-2026'
     | '/ads.txt'
@@ -1194,6 +1206,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SplatRoute: typeof SplatRoute
   AdmitereRoute: typeof AdmitereRoute
   AdmitereFacultate2026Route: typeof AdmitereFacultate2026Route
   AdsDottxtRoute: typeof AdsDottxtRoute
@@ -1759,6 +1772,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdmitereRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -2009,6 +2029,7 @@ const SubiecteAdmitereUniversitateRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SplatRoute: SplatRoute,
   AdmitereRoute: AdmitereRoute,
   AdmitereFacultate2026Route: AdmitereFacultate2026Route,
   AdsDottxtRoute: AdsDottxtRoute,
