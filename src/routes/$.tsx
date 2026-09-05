@@ -1,6 +1,6 @@
 // Rute SEO "plate": /meditatii-{materie}-{oras} și /meditatii-{materie}-online
 // Orice alt URL necunoscut primește pagina 404 (noindex).
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 import { LeadCta } from "@/components/lead-cta";
 import { SUBJECTS_SEO, getSubjectSeo } from "@/data/subjects-seo";
@@ -168,6 +168,7 @@ export const Route = createFileRoute("/$")({
         statusCode: 301,
       });
     }
+    if (parsed.kind === "none") throw notFound();
     return { path };
   },
   head: ({ loaderData }) => {
