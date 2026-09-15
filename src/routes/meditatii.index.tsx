@@ -1,244 +1,62 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { EmptyResults } from "@/components/empty-results";
-import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
-import { MapPin, Wifi, Star, BadgeCheck, Search } from "lucide-react";
-
-interface Ad {
-  id: string;
-  title: string;
-  description: string | null;
-  location: string | null;
-  is_online: boolean;
-  price_per_hour: number | null;
-  is_promoted: boolean;
-  views_count: number;
-  subject_slug: string | null;
-  subject_name: string | null;
-  seo_slug: string | null;
-  teacher_id: string | null;
-  legacy_teachers?: { full_name: string; avatar_url: string | null; experience_years: number | null } | null;
-}
-
-interface Subject { slug: string; name: string; icon: string | null; }
+import { useMemo, useState } from "react";
+import { BadgeCheck, CalendarDays, ChevronDown, Filter, MapPin, Search, SlidersHorizontal, Star, Video } from "lucide-react";
+import { MOCK_TEACHERS, POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 
 type SearchParams = { materie?: string; oras?: string; q?: string };
-
 export const Route = createFileRoute("/meditatii/")({
-  validateSearch: (s: Record<string, unknown>): SearchParams => ({
-    materie: typeof s.materie === "string" ? s.materie : undefined,
-    oras: typeof s.oras === "string" ? s.oras : undefined,
-    q: typeof s.q === "string" ? s.q : undefined,
-  }),
-  head: () => ({
-    meta: [
-      { title: "Anunțuri Meditații 2026 — Profesori Verificați | MeditatiiDirect" },
-      { name: "description", content: "Anunțuri meditații cu profesori verificați: matematică, română, engleză, fizică. Online sau acasă, în toată România. Fără comision, de la 30 lei/oră." },
-      { name: "keywords", content: "meditatii, anunturi meditatii, profesori meditatii, meditatii online, meditatii bucuresti, meditatii cluj, meditatii iasi, meditatii timisoara, meditatii bac, meditatii admitere, meditatii matematica, meditatii romana, meditatii engleza, meditatii fizica, meditatii informatica, meditatii acasa, profesori particulari, ore particulare" },
-      { property: "og:title", content: "Meditații în România — Profesori Particulari Verificați" },
-      { property: "og:description", content: "Anunțuri reale, profesori verificați, contact direct fără comision. De la 30 lei/oră." },
-      { property: "og:url", content: "https://meditatiidirect.ro/meditatii" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "Meditații în România — Profesori Particulari Verificați" },
-      { name: "twitter:description", content: "Anunțuri reale, profesori verificați, contact direct fără comision." },
-    ],
-    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          name: "Meditații în România",
-          url: "https://meditatiidirect.ro/meditatii",
-          description: "Toate anunțurile de meditații cu profesori verificați din România.",
-          isPartOf: { "@id": "https://meditatiidirect.ro/#website" },
-          about: { "@type": "Service", serviceType: "Meditații / ore particulare", areaServed: { "@type": "Country", name: "România" } },
-          breadcrumb: {
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Acasă", item: "https://meditatiidirect.ro/" },
-              { "@type": "ListItem", position: 2, name: "Meditații", item: "https://meditatiidirect.ro/meditatii" },
-            ],
-          },
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: [
-            { "@type": "Question", name: "Ce sunt meditațiile pe MeditatiiDirect.ro?", acceptedAnswer: { "@type": "Answer", text: "Sunt anunțuri publicate de profesori verificați din toată România, care oferă ore particulare la diverse materii — online sau față în față. Contactezi profesorul direct prin chat, fără intermediari și fără comision." } },
-            { "@type": "Question", name: "Cât costă o meditație în România?", acceptedAnswer: { "@type": "Answer", text: "Tarifele încep de la 30 lei/oră pentru gimnaziu și pot ajunge la 200 lei/oră pentru pregătire de admitere la facultăți competitive (Medicină, UPB, ASE)." } },
-            { "@type": "Question", name: "Pot găsi anunțuri meditații în orașul meu?", acceptedAnswer: { "@type": "Answer", text: "Da. Avem anunțuri în București, Cluj-Napoca, Iași, Timișoara, Brașov, Constanța, Sibiu, Oradea, Craiova și restul județelor. Pentru localități mici recomandăm filtrul doar online." } },
-            { "@type": "Question", name: "Trebuie să plătesc ceva pentru a contacta profesorul?", acceptedAnswer: { "@type": "Answer", text: "Nu. Contactarea profesorilor este 100% gratuită. Plătești doar tariful afișat de profesor, direct la el. MeditatiiDirect nu percepe comision." } },
-            { "@type": "Question", name: "Profesorii sunt verificați?", acceptedAnswer: { "@type": "Answer", text: "Da, fiecare profesor este verificat manual: identitate, experiență didactică și recenzii reale de la elevi anteriori." } },
-          ],
-        }),
-      },
-    ],
-  }),
+  validateSearch: (search: Record<string, unknown>): SearchParams => ({ materie: typeof search.materie === "string" ? search.materie : undefined, oras: typeof search.oras === "string" ? search.oras : undefined, q: typeof search.q === "string" ? search.q : undefined }),
+  head: () => ({ meta: [
+    { title: "Profesori Meditații — Compară și rezervă | Meditații Direct" },
+    { name: "description", content: "Compară profesori pentru meditații după materie, preț, rating, disponibilitate și format. Profiluri verificate, online sau în orașul tău." },
+    { property: "og:title", content: "Profesori pentru meditații | Meditații Direct" },
+    { property: "og:description", content: "Găsește profesorul potrivit folosind filtre clare și profiluri verificate." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  ], links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii" }] }),
   component: ListingPage,
 });
 
+const DAYS = ["Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă", "Duminică"];
 
 function ListingPage() {
   const search = Route.useSearch();
-  const [ads, setAds] = useState<Ad[]>([]);
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [q, setQ] = useState(search.q ?? "");
-  const [materie, setMaterie] = useState(search.materie ?? "");
-  const [onlineOnly, setOnlineOnly] = useState(false);
+  const [query, setQuery] = useState(search.q ?? "");
+  const [subject, setSubject] = useState(search.materie ?? "");
+  const [price, setPrice] = useState(120);
+  const [rating, setRating] = useState(0);
+  const [format, setFormat] = useState("toate");
+  const [day, setDay] = useState("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  useEffect(() => {
-    setLoading(true);
-    supabase
-      .from("ads")
-      .select("id,title,description,location,is_online,price_per_hour,is_promoted,views_count,subject_slug,subject_name,seo_slug,teacher_id,legacy_teachers(full_name,avatar_url,experience_years)")
-      .eq("status", "active")
-      .order("is_promoted", { ascending: false })
-      .order("views_count", { ascending: false })
-      .limit(200)
-      .then(({ data }) => {
-        setAds((data ?? []) as unknown as Ad[]);
-        setLoading(false);
-      });
-    supabase.from("subjects").select("slug,name,icon").order("sort_order").then(({ data }) => setSubjects(data ?? []));
-  }, []);
+  const teachers = useMemo(() => MOCK_TEACHERS.filter((teacher) => {
+    const q = query.toLowerCase();
+    if (q && !`${teacher.name} ${teacher.subject} ${teacher.location}`.toLowerCase().includes(q)) return false;
+    if (subject && teacher.subjectSlug !== subject) return false;
+    if (teacher.price > price || teacher.rating < rating) return false;
+    if (format === "online" && !teacher.online) return false;
+    if (format === "fizic" && teacher.online) return false;
+    if (day && !teacher.availability.includes(day)) return false;
+    return true;
+  }), [query, subject, price, rating, format, day]);
 
-  const filtered = useMemo(() => {
-    return ads.filter((a) => {
-      if (materie) {
-        const slug = a.subject_slug ?? "";
-        if (!slug.includes(materie) && !materie.includes(slug)) return false;
-      }
-      if (onlineOnly && !a.is_online) return false;
-      if (q) {
-        const s = (a.title + " " + (a.description ?? "") + " " + (a.location ?? "") + " " + (a.legacy_teachers?.full_name ?? "")).toLowerCase();
-        if (!s.includes(q.toLowerCase())) return false;
-      }
-      return true;
-    });
-  }, [ads, materie, onlineOnly, q]);
+  const reset = () => { setQuery(""); setSubject(""); setPrice(120); setRating(0); setFormat("toate"); setDay(""); };
+  const filters = <div className="space-y-7">
+    <div><label className="text-sm font-bold" htmlFor="subject">Materie</label><select id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} className="mt-2 h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"><option value="">Toate materiile</option>{POPULAR_SUBJECTS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}</select></div>
+    <div><div className="flex justify-between text-sm"><label className="font-bold" htmlFor="price">Preț maxim</label><span className="font-semibold text-primary">{price} lei/oră</span></div><input id="price" type="range" min="50" max="150" step="5" value={price} onChange={(e) => setPrice(Number(e.target.value))} className="mt-3 w-full accent-primary" /><div className="flex justify-between text-xs text-muted-foreground"><span>50 lei</span><span>150 lei</span></div></div>
+    <fieldset><legend className="text-sm font-bold">Recenzii</legend><div className="mt-3 space-y-2">{[4.8,4.5,4].map((value) => <label key={value} className="flex cursor-pointer items-center gap-2 text-sm"><input type="radio" name="rating" checked={rating === value} onChange={() => setRating(value)} className="accent-primary" /><span className="inline-flex gap-0.5">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />)}</span><span>{value}+</span></label>)}</div></fieldset>
+    <fieldset><legend className="text-sm font-bold">Format</legend><div className="mt-3 grid grid-cols-3 gap-2">{[["toate","Toate"],["online","Online"],["fizic","Fizic"]].map(([value,label]) => <button type="button" key={value} onClick={() => setFormat(value)} className={`h-9 rounded-lg border text-xs font-medium transition-colors ${format === value ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background hover:bg-muted"}`}>{label}</button>)}</div></fieldset>
+    <div><label className="text-sm font-bold" htmlFor="day">Disponibilitate</label><select id="day" value={day} onChange={(e) => setDay(e.target.value)} className="mt-2 h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"><option value="">Orice zi</option>{DAYS.map((item) => <option key={item}>{item}</option>)}</select></div>
+    <button onClick={reset} className="btn-outline w-full">Resetează filtrele</button>
+  </div>;
 
-  return (
-    <>
-      <div className="container-page pt-4">
-        <AdsterraBannerResponsive />
+  return <section className="container-page py-8 sm:py-10">
+    <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><nav className="text-xs text-muted-foreground"><Link to="/">Acasă</Link> / Profesori</nav><h1 className="mt-3 text-3xl font-bold sm:text-4xl">Găsește profesorul potrivit</h1><p className="mt-2 max-w-2xl text-muted-foreground">Compară profiluri, tarife și disponibilitate. Toți profesorii afișați sunt exemple demonstrative.</p></div><button onClick={() => setFiltersOpen((open) => !open)} className="btn-outline md:hidden"><Filter className="mr-2 h-4 w-4" /> Filtre <ChevronDown className="ml-2 h-4 w-4" /></button></div>
+    <div className="mt-7 grid gap-7 md:grid-cols-[240px_minmax(0,1fr)] lg:grid-cols-[260px_minmax(0,1fr)]">
+      <aside className={`${filtersOpen ? "block" : "hidden"} rounded-xl border border-border bg-card p-5 md:block md:self-start md:sticky md:top-24`}><div className="mb-6 flex items-center gap-2"><SlidersHorizontal className="h-4 w-4 text-primary" /><h2 className="font-bold">Filtre</h2></div>{filters}</aside>
+      <div className="min-w-0"><div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3"><div className="relative"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Caută după nume, materie sau oraș" className="h-12 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-hidden focus:ring-2 focus:ring-ring" /></div><div className="grid h-12 place-items-center rounded-xl border border-border px-4 text-sm font-medium">{teachers.length} rezultate</div></div>
+        <div className="mt-5 grid gap-4 lg:grid-cols-2">{teachers.map((teacher) => <article key={teacher.id} className="flex min-w-0 flex-col rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-card)]"><div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3"><span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{teacher.initials}</span><div className="min-w-0"><div className="flex items-center gap-1"><h2 className="truncate font-bold">{teacher.name}</h2><BadgeCheck className="h-4 w-4 shrink-0 text-success" /></div><p className="text-sm text-muted-foreground">{teacher.subject}</p><span className="mt-1 inline-flex items-center gap-1 text-sm font-semibold"><Star className="h-4 w-4 fill-warning text-warning" /> {teacher.rating} <span className="font-normal text-muted-foreground">({teacher.reviews})</span></span></div><span className="text-right"><strong className="block text-lg">{teacher.price} lei</strong><span className="text-xs text-muted-foreground">/ oră</span></span></div><p className="mt-4 min-h-12 text-sm leading-6 text-muted-foreground">{teacher.tagline}</p><div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground"><span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {teacher.location}</span>{teacher.online && <span className="inline-flex items-center gap-1 text-primary"><Video className="h-3.5 w-3.5" /> Online</span>}<span className="inline-flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5" /> {teacher.availability.slice(0,2).join(", ")}</span></div><div className="mt-5 flex items-center justify-between border-t border-border pt-4"><span className="text-xs font-medium text-success">Disponibil săptămâna aceasta</span><Link to="/anunt/$slug" params={{ slug: teacher.slug }} className="btn-primary h-10 px-4">Vezi profil</Link></div></article>)}</div>
+        {teachers.length === 0 && <div className="mt-5 rounded-xl border border-dashed border-border p-10 text-center"><Search className="mx-auto h-8 w-8 text-muted-foreground" /><h2 className="mt-3 font-bold">Nu am găsit profesori</h2><p className="mt-1 text-sm text-muted-foreground">Încearcă să lărgești criteriile de căutare.</p><button onClick={reset} className="btn-primary mt-5">Resetează filtrele</button></div>}
       </div>
-
-      <section className="container-page py-8">
-        <header className="max-w-3xl">
-          <h1 className="text-3xl font-bold sm:text-4xl">Meditații cu profesori particulari verificați în România</h1>
-          <p className="mt-2 text-muted-foreground">
-            Anunțuri de meditații publicate de profesori verificați: meditații matematică, meditații română, meditații engleză, meditații fizică, meditații informatică și meditații BAC. Alege profesorul potrivit pe materie, oraș sau meditații online, contactezi profesorul direct, fără comision.
-          </p>
-        </header>
-
-        {/* FILTERS */}
-        <div className="card-soft mt-6 p-3 sm:p-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto_auto]">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Caută după nume, materie..."
-              className="h-11 w-full rounded-xl border border-border bg-background pl-9 pr-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
-          <select value={materie} onChange={(e) => setMaterie(e.target.value)} aria-label="Filtrează anunțurile după materie" className="h-11 rounded-xl border border-border bg-background px-3 text-sm">
-            <option value="">Toate materiile</option>
-            {subjects.map((s) => (
-              <option key={s.slug} value={s.slug}>{s.icon} {s.name}</option>
-            ))}
-          </select>
-          <label className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 h-11 text-sm cursor-pointer">
-            <input type="checkbox" checked={onlineOnly} onChange={(e) => setOnlineOnly(e.target.checked)} className="accent-primary" />
-            Doar online
-          </label>
-          <button onClick={() => { setQ(""); setMaterie(""); setOnlineOnly(false); }} className="btn-outline h-11">Resetează</button>
-        </div>
-
-        {/* RESULTS */}
-        {loading ? (
-          <div className="mt-8 text-center text-muted-foreground">Se încarcă anunțurile...</div>
-        ) : filtered.length === 0 ? (
-          <EmptyResults
-            title="Niciun anunț pentru filtrele alese"
-            description="Momentan nu avem anunțuri care să corespundă exact acestor criterii. Poți reseta filtrele, poți alege varianta online (profesorii predau din toată țara, deci disponibilitatea este mult mai mare) sau poți explora una dintre categoriile active de mai jos. Dacă ești profesor, publicarea unui anunț durează sub 2 minute și este gratuită — elevii te contactează direct, fără comision."
-          />
-        ) : (
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((ad, i) => (
-              <article key={ad.id} className="card-soft p-5 flex flex-col hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition">
-                {ad.is_promoted && (
-                  <span className="self-start mb-3 inline-flex items-center gap-1 rounded-full bg-primary-soft px-2 py-0.5 text-xs font-medium text-primary">
-                    <Star className="h-3 w-3" /> Promovat
-                  </span>
-                )}
-                <div className="flex items-start gap-3">
-                  {ad.legacy_teachers?.avatar_url ? (
-                    <img src={ad.legacy_teachers.avatar_url} alt={`Profesor ${ad.legacy_teachers.full_name} — ${ad.subject_name ?? "meditații"}`} className="h-12 w-12 rounded-full object-cover" loading="lazy" />
-                  ) : (
-                    <div className="grid h-12 w-12 place-items-center rounded-full bg-primary-soft text-primary font-semibold">
-                      {(ad.legacy_teachers?.full_name ?? "P").charAt(0)}
-                    </div>
-                  )}
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold truncate">{ad.legacy_teachers?.full_name ?? "Profesor"}</p>
-                    <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
-                      <BadgeCheck className="h-3.5 w-3.5 text-primary" /> Profesor verificat
-                    </p>
-                  </div>
-                </div>
-                <h2 className="mt-3 text-base font-semibold leading-snug line-clamp-2">{ad.title}</h2>
-                {ad.subject_name && (
-                  <span className="mt-2 self-start rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground">
-                    {ad.subject_name}
-                  </span>
-                )}
-                <p className="mt-3 text-sm text-muted-foreground line-clamp-3">{ad.description}</p>
-                <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                  {ad.location && (
-                    <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {ad.location}</span>
-                  )}
-                  {ad.is_online && (
-                    <span className="inline-flex items-center gap-1 text-primary"><Wifi className="h-3.5 w-3.5" /> Online</span>
-                  )}
-                </div>
-                <div className="mt-4 flex items-end justify-between">
-                  <div>
-                    {ad.price_per_hour && (
-                      <>
-                        <p className="text-xl font-bold text-foreground">{ad.price_per_hour} lei</p>
-                        <p className="text-xs text-muted-foreground">/ oră</p>
-                      </>
-                    )}
-                  </div>
-                  <Link
-                    to="/anunt/$slug"
-                    params={{ slug: ad.seo_slug || ad.id }}
-                    className="btn-primary h-10 px-4 text-sm"
-                  >
-                    Vezi detalii
-                  </Link>
-                </div>
-                {/* Insert native ad after every 6th card */}
-                {i > 0 && (i + 1) % 6 === 0 && (
-                  <div className="absolute" />
-                )}
-              </article>
-            ))}
-          </div>
-        )}
-      </section>
-
-      <div className="container-page">
-        <AdsterraNativeBanner />
-      </div>
-    </>
-  );
+    </div>
+  </section>;
 }

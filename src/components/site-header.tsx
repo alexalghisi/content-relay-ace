@@ -4,10 +4,9 @@ import { useState } from "react";
 import { Menu, X, GraduationCap } from "lucide-react";
 
 const NAV = [
-  { to: "/meditatii", label: "Meditatii" },
+  { to: "/meditatii", label: "Găsește profesori" },
   { to: "/materii", label: "Materii" },
-  { to: "/admitere", label: "Admitere" },
-  { to: "/variante-bacalaureat", label: "Variante BAC" },
+  { to: "/cum-functioneaza", label: "Cum funcționează" },
   { to: "/blog", label: "Blog" },
 ] as const;
 
@@ -16,10 +15,10 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/85 backdrop-blur">
-      <div className="container-page flex h-16 items-center justify-between gap-4">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-xl">
+      <div className="container-page grid h-18 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 lg:flex lg:justify-between">
         <Link to="/" className="flex items-center gap-2 font-bold">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[var(--shadow-pop)]">
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="text-lg leading-tight">
@@ -51,13 +50,14 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Link to="/login" className="btn-outline">Login</Link>
-              <Link to="/signup" className="btn-primary">Înscriere gratuită</Link>
+              <Link to="/login" className="btn-outline">Autentificare</Link>
+              <Link to="/signup" className="btn-primary">Creează cont</Link>
+              <Link to="/pentru-profesori" className="btn-outline border-primary text-primary">Devino profesor</Link>
             </>
           )}
         </div>
 
-        <button className="lg:hidden" onClick={() => setOpen((v) => !v)} aria-label="Meniu">
+          <button className="grid h-10 w-10 place-items-center rounded-lg border border-border lg:hidden" onClick={() => setOpen((v) => !v)} aria-label="Meniu">
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
@@ -79,11 +79,12 @@ export function SiteHeader() {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="btn-outline flex-1" onClick={() => setOpen(false)}>Login</Link>
-                  <Link to="/signup" className="btn-primary flex-1" onClick={() => setOpen(false)}>Înscriere</Link>
+                  <Link to="/login" className="btn-outline flex-1" onClick={() => setOpen(false)}>Autentificare</Link>
+                  <Link to="/signup" className="btn-primary flex-1" onClick={() => setOpen(false)}>Creează cont</Link>
                 </>
               )}
             </div>
+            {!user && <Link to="/pentru-profesori" className="btn-outline mt-2" onClick={() => setOpen(false)}>Devino profesor</Link>}
           </div>
         </div>
       )}
