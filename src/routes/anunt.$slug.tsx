@@ -2,9 +2,12 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, MessageCircle } from "lucide-react";
+import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, MessageCircle, Star, CalendarCheck, Video, CheckCircle2 } from "lucide-react";
 import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { toast } from "sonner";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { MOCK_TEACHERS, PROFILE_REVIEWS } from "@/data/marketplace-mock";
 
 interface Teacher { id: string; full_name: string; avatar_url: string | null; experience_years: number | null; education: string | null; phone: string | null; bio: string | null; auth_user_id: string | null; }
 interface AdDetail {
@@ -42,6 +45,7 @@ export const Route = createFileRoute("/anunt/$slug")({
 
 function AdPage() {
   const { slug } = Route.useParams();
+  const mockTeacher = MOCK_TEACHERS.find((teacher) => teacher.slug === slug);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [ad, setAd] = useState<AdDetail | null>(null);
@@ -50,6 +54,10 @@ function AdPage() {
   const [starting, setStarting] = useState(false);
 
   useEffect(() => {
+    if (mockTeacher) {
+      setLoading(false);
+      return;
+    }
     (async () => {
       const teacherCols = user
         ? "id,full_name,avatar_url,experience_years,education,phone,bio,auth_user_id"
@@ -68,7 +76,7 @@ function AdPage() {
       setAd(data as unknown as AdDetail);
       setLoading(false);
     })();
-  }, [slug, navigate, user]);
+  }, [slug, navigate, user, mockTeacher]);
 
   const startChat = async () => {
     if (!user) { toast.info("Conectează-te ca să trimiți mesaj"); navigate({ to: "/login" }); return; }
@@ -89,6 +97,7 @@ function AdPage() {
   };
 
   if (loading) return <div className="container-page py-16 text-center text-muted-foreground">Se încarcă...</div>;
+  if (mockTeacher) return <MockTeacherProfile teacher={mockTeacher} />;
   if (!ad) return (
     <div className="container-page py-16 text-center">
       <p className="text-muted-foreground">Anunțul nu a fost găsit.</p>
@@ -154,6 +163,7 @@ function AdPage() {
                 </p>
                 <h1 className="mt-1 text-2xl font-bold sm:text-3xl">{t?.full_name ?? "Profesor"}</h1>
                 {ad.subject_name && <p className="mt-1 text-sm text-muted-foreground">{ad.subject_name}</p>}
+                <p className="mt-2 inline-flex items-center gap-1 text-sm font-semibold"><Star className="h-4 w-4 fill-warning text-warning" /> Profil nou pe platformă</p>
               </div>
             </div>
 
@@ -186,6 +196,11 @@ function AdPage() {
               </div>
             )}
 
+            <div className="mt-8">
+              <h3 className="text-base font-semibold">Metodologie de predare</h3>
+              <p className="mt-2 leading-relaxed text-muted-foreground">Lecțiile sunt adaptate obiectivului elevului și includ explicații, exerciții aplicate și feedback la finalul fiecărei ședințe. Detaliile exacte se stabilesc direct cu profesorul.</p>
+            </div>
+
             <div className="mt-10"><AdsterraNativeBanner /></div>
           </div>
 
@@ -214,10 +229,42 @@ function AdPage() {
                 </div>
               )}
               <p className="mt-4 text-xs text-muted-foreground">Contact direct, fără intermediari și fără comision.</p>
+              <div className="mt-6 border-t border-border pt-5">
+                <p className="text-sm font-bold">Alege o dată</p>
+                <BookingWidget compact />
+              </div>
             </div>
           </aside>
         </div>
       </article>
     </>
   );
+}
+
+function BookingWidget({ compact = false }: { compact?: boolean }) {
+  const [date, setDate] = useState<Date>();
+  const [time, setTime] = useState("");
+  const times = ["09:00", "12:30", "16:00", "18:30"];
+  return <div className="mt-3">
+    <div className="pointer-events-auto overflow-x-auto"><Calendar mode="single" selected={date} onSelect={setDate} disabled={{ before: new Date() }} className={compact ? "p-0" : "mx-auto p-3"} /></div>
+    <div className="mt-4 grid grid-cols-2 gap-2">{times.map((slot) => <Button key={slot} type="button" variant={time === slot ? "default" : "outline"} onClick={() => setTime(slot)}>{slot}</Button>)}</div>
+    <Button className="mt-4 h-11 w-full" disabled={!date || !time} onClick={() => toast.success("Interval selectat. Conectează-te pentru a trimite cererea.")}><CalendarCheck /> Solicită rezervarea</Button>
+  </div>;
+}
+
+function MockTeacherProfile({ teacher }: { teacher: (typeof MOCK_TEACHERS)[number] }) {
+  return <article className="container-page py-8 sm:py-10">
+    <nav className="text-sm text-muted-foreground"><Link to="/meditatii" className="inline-flex items-center gap-1 hover:text-foreground"><ArrowLeft className="h-4 w-4" /> Înapoi la profesori</Link></nav>
+    <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_370px]">
+      <div className="min-w-0">
+        <header className="rounded-xl border border-border bg-card p-6 sm:p-8">
+          <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 sm:gap-6"><span className="grid h-20 w-20 shrink-0 place-items-center rounded-full bg-primary text-xl font-bold text-primary-foreground sm:h-24 sm:w-24">{teacher.initials}</span><div className="min-w-0"><p className="inline-flex items-center gap-1 text-sm font-semibold text-success"><BadgeCheck className="h-4 w-4" /> Profesor verificat</p><h1 className="mt-1 truncate text-2xl font-bold sm:text-3xl">{teacher.name}</h1><p className="mt-1 text-muted-foreground">Profesor de {teacher.subject}</p><div className="mt-3 flex flex-wrap items-center gap-4 text-sm"><span className="inline-flex items-center gap-1 font-bold"><Star className="h-4 w-4 fill-warning text-warning" /> {teacher.rating} <span className="font-normal text-muted-foreground">({teacher.reviews} recenzii)</span></span><span className="inline-flex items-center gap-1 text-muted-foreground"><GraduationCap className="h-4 w-4" /> {teacher.experience} ani experiență</span></div></div></div>
+          <div className="mt-6 flex flex-wrap gap-2"><span className="rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">{teacher.subject}</span><span className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs"><MapPin className="h-3.5 w-3.5" /> {teacher.location}</span>{teacher.online && <span className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-xs text-success"><Video className="h-3.5 w-3.5" /> Online</span>}</div>
+        </header>
+        <section className="mt-6 rounded-xl border border-border bg-card p-6 sm:p-8"><h2 className="text-xl font-bold">Despre mine</h2><p className="mt-3 leading-7 text-muted-foreground">Sunt profesor cu {teacher.experience} ani de experiență și îmi place să transform conceptele dificile în pași ușor de înțeles. Lucrez individual cu fiecare elev, pornind de la nivelul actual și de la obiectivul său: consolidare, examen sau performanță.</p><h2 className="mt-8 text-xl font-bold">Metodologie de predare</h2><div className="mt-4 grid gap-3 sm:grid-cols-2">{["Evaluare inițială și plan personalizat", "Explicații clare, urmate de exerciții", "Materiale adaptate nivelului", "Feedback după fiecare ședință"].map((item) => <div key={item} className="flex gap-2 rounded-lg bg-muted p-3 text-sm"><CheckCircle2 className="h-5 w-5 shrink-0 text-success" /> {item}</div>)}</div></section>
+        <section className="mt-6"><div className="flex items-end justify-between"><div><h2 className="text-xl font-bold">Recenzii de la elevi</h2><p className="mt-1 text-xs text-muted-foreground">Conținut demonstrativ pentru previzualizarea profilului.</p></div><span className="inline-flex items-center gap-1 font-bold"><Star className="h-4 w-4 fill-warning text-warning" /> {teacher.rating}</span></div><div className="mt-4 space-y-3">{PROFILE_REVIEWS.map((review) => <blockquote key={review.name} className="rounded-xl border border-border bg-card p-5"><div className="flex justify-between gap-3"><strong className="text-sm">{review.name}</strong><span className="text-xs text-muted-foreground">{review.date}</span></div><div className="mt-2 flex gap-0.5">{Array.from({ length: review.rating }).map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />)}</div><p className="mt-3 text-sm leading-6 text-muted-foreground">„{review.text}”</p></blockquote>)}</div></section>
+      </div>
+      <aside className="self-start lg:sticky lg:top-24"><div className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-card)]"><div className="flex items-end justify-between"><div><strong className="text-2xl">{teacher.price} lei</strong><span className="text-sm text-muted-foreground"> / oră</span></div><span className="text-xs font-medium text-success">Disponibil</span></div><h2 className="mt-5 font-bold">Rezervă o ședință</h2><p className="mt-1 text-xs text-muted-foreground">Alege data și intervalul preferat.</p><BookingWidget /></div></aside>
+    </div>
+  </article>;
 }
