@@ -35,7 +35,7 @@ function ListingPage() {
     if (teacher.price > price || teacher.rating < rating) return false;
     if (format === "online" && !teacher.online) return false;
     if (format === "fizic" && teacher.online) return false;
-    if (day && !teacher.availability.includes(day)) return false;
+    if (day && !teacher.availability.some((availableDay) => availableDay === day)) return false;
     return true;
   }), [query, subject, price, rating, format, day]);
 
