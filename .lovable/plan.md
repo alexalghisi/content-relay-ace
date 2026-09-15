@@ -1,45 +1,38 @@
-# Plan portare meditatiidirect.ro
+# Plan: Marketplace Meditații Direct
 
-Site-ul are zeci de pagini și funcționalități complexe (auth, profiluri profesori, chat, blog, BAC, admitere). Nu poate fi portat tot într-un singur mesaj — îl construim în iterații, începând cu fundația.
+## Obiectiv
+Transformarea interfeței actuale într-un marketplace modern și credibil pentru elevi, părinți și profesori, păstrând funcțiile și conținutul SEO existente.
 
-## Iterația 1 (acum) — Fundație + Homepage
+## Ce voi construi
 
-1. **Activez Lovable Cloud** (PostgreSQL + auth + storage + server functions) — necesar pentru profesori, chat, useri.
-2. **Conectez Firecrawl** ca să scrap-uiesc conținutul real de pe v0.
-3. **Map** + scrape homepage și 5–10 pagini cheie pentru a extrage texte + branding (culori, fonturi, logo).
-4. **Design system** în `src/styles.css`: verde principal (din site), tipografie sans modernă, raze, shadow-uri.
-5. **Layout global** (header cu nav: Meditatii / Materii / Admitere / Tutoriale / BAC / Subiecte / Variante / Blog + Login / Sign Up; footer).
-6. **Homepage** (`/`) cu hero, search bar (materie + oraș), bullets, secțiuni informative.
-7. **Schema DB inițială**: `profiles`, `user_roles` (student/teacher/admin), `subjects`, `cities`, `teachers`, `teacher_subjects`.
-8. **Auth pages**: `/login`, `/signup` (email/parolă + Google), `/reset-password`.
-9. **Pagini-shell** pentru rutele principale (`/meditatii`, `/materii`, `/admitere`, `/blog`, `/meditatii-bac`, etc.) — populăm conținutul în iterațiile următoare.
+### 1. Navigare comună
+- Refac bara fixă cu logo, navigare principală și acțiunile „Autentificare”, „Creează cont” și „Devino profesor”.
+- Păstrez stările pentru utilizatorii conectați și meniul mobil.
 
-## Iterația 2 — Listare profesori
-- `/meditatii` cu filtre (materie, oraș, preț, online/offline)
-- `/profesor/$slug` profil profesor cu bio, materii, recenzii, tarife
-- Onboarding profesor (formular completare profil)
-- Recenzii (read)
+### 2. Pagina principală
+- Hero cu mesajul cerut și căutare mare după materie, nivel și locație.
+- Categorii populare, profesori recomandați, trei pași „Caută, Rezervă, Învață” și trei testimoniale demonstrative marcate ca atare.
+- CTA-uri către căutare și înscrierea profesorilor, fără a elimina secțiunile SEO utile existente.
 
-## Iterația 3 — Chat direct cu profesor
-- Tabele `conversations`, `messages` cu Realtime
-- UI chat (listă conversații + thread)
-- Notificări nou mesaj
+### 3. Listarea profesorilor
+- Layout responsive cu filtre laterale pe desktop și panou compact pe mobil.
+- Filtre funcționale pentru materie/căutare, preț, rating, disponibilitate și format online/fizic.
+- Carduri moderne cu fotografie, verificare, materie, experiență, rating demonstrativ, locație, tarif și acces către profil.
+- Datele reale disponibile sunt folosite primele; date mock sunt afișate ca demonstrație când lista este goală.
 
-## Iterația 4 — Conținut educațional
-- Pagini BAC / Admitere / Evaluare cu subiecte, variante, tutoriale
-- Blog (read din DB sau MD)
-- SEO complet (sitemap, og:image per pagină, JSON-LD)
+### 4. Profilul profesorului
+- Header clar cu fotografie, verificare, rating, materii, locație și tarif.
+- Secțiuni „Despre mine”, „Metodologie” și recenzii demonstrative.
+- Widget de rezervare cu calendar, alegerea orei și confirmare vizuală; nu va crea o plată sau o rezervare reală în baza de date.
+- Păstrez contactul și chatul existente.
 
-## Iterația 5 — Polish
-- Plăți / abonamente (dacă e cazul)
-- Dashboard profesor (programări)
-- Recenzii (write)
-- Email-uri tranzacționale
+### 5. Design și verificare
+- Paletă albastru marin, alb și verde de validare, definită prin tokenii proiectului.
+- Componente shadcn/ui și iconițe Lucide pentru acțiuni, filtre și calendar.
+- Animații discrete, focus vizibil, dimensiuni stabile și adaptare completă mobil/desktop.
+- Verificare în browser pentru pagina principală, listare, profil și meniul mobil.
 
 ## Detalii tehnice
-- TanStack Start + Lovable Cloud (Supabase sub capotă, RLS pe toate tabelele, roluri în tabel separat `user_roles`).
-- Server functions cu `requireSupabaseAuth` pentru orice operație autentificată.
-- Firecrawl rulat doar la build/seed pentru a extrage conținutul; nu rulează în runtime client.
-- Imagini generate cu imagegen unde nu pot fi preluate (placeholder-uri profesori, hero illustrations).
-
-Confirmă să încep cu **Iterația 1**.
+- Păstrez TanStack Router, autentificarea, datele existente și URL-urile publice.
+- Modific în principal `site-header`, pagina principală, `/meditatii`, profilul `/anunt/$slug` și tokenii vizuali globali.
+- Metadatele existente rămân funcționale; fiecare pagină păstrează titlul, descrierea, Open Graph și canonical.
