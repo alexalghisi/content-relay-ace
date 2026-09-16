@@ -15,7 +15,7 @@ export function LeadCta({ defaultSubject, defaultCity }: { defaultSubject?: stri
     <section className="card-soft p-6 sm:p-8" id="cere-oferta">
       <h2 className="text-xl font-bold">Cere ofertă de la profesori</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Spune-ne ce cauți și îți arătăm imediat profesorii disponibili. Durează 10 secunde și este gratuit.
+        Spune-ne ce cauți și profesorii verificați îți trimit propuneri direct. Durează 2 minute și este gratuit.
       </p>
       <form
         className="mt-5 grid gap-3 sm:grid-cols-[1fr_1fr_1fr_auto]"
