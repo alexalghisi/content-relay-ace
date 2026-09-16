@@ -73,6 +73,7 @@ import { Route as CumFunctioneazaRouteImport } from './routes/cum-functioneaza'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ContRouteImport } from './routes/cont'
 import { Route as ConfidentialitateRouteImport } from './routes/confidentialitate'
+import { Route as CereriRouteImport } from './routes/cereri'
 import { Route as CautProfesorRouteImport } from './routes/caut-profesor'
 import { Route as AnunturiMeditatiiBacRouteImport } from './routes/anunturi-meditatii-bac'
 import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditatii'
@@ -436,6 +437,11 @@ const ConfidentialitateRoute = ConfidentialitateRouteImport.update({
   path: '/confidentialitate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CereriRoute = CereriRouteImport.update({
+  id: '/cereri',
+  path: '/cereri',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CautProfesorRoute = CautProfesorRouteImport.update({
   id: '/caut-profesor',
   path: '/caut-profesor',
@@ -634,6 +640,7 @@ export interface FileRoutesByFullPath {
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
   '/caut-profesor': typeof CautProfesorRoute
+  '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -736,6 +743,7 @@ export interface FileRoutesByTo {
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
   '/caut-profesor': typeof CautProfesorRoute
+  '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -839,6 +847,7 @@ export interface FileRoutesById {
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
   '/caut-profesor': typeof CautProfesorRoute
+  '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
@@ -943,6 +952,7 @@ export interface FileRouteTypes {
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
     | '/caut-profesor'
+    | '/cereri'
     | '/confidentialitate'
     | '/cont'
     | '/contact'
@@ -1045,6 +1055,7 @@ export interface FileRouteTypes {
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
     | '/caut-profesor'
+    | '/cereri'
     | '/confidentialitate'
     | '/cont'
     | '/contact'
@@ -1147,6 +1158,7 @@ export interface FileRouteTypes {
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
     | '/caut-profesor'
+    | '/cereri'
     | '/confidentialitate'
     | '/cont'
     | '/contact'
@@ -1250,6 +1262,7 @@ export interface RootRouteChildren {
   AnunturiMeditatiiRoute: typeof AnunturiMeditatiiRoute
   AnunturiMeditatiiBacRoute: typeof AnunturiMeditatiiBacRoute
   CautProfesorRoute: typeof CautProfesorRoute
+  CereriRoute: typeof CereriRoute
   ConfidentialitateRoute: typeof ConfidentialitateRoute
   ContRoute: typeof ContRoute
   ContactRoute: typeof ContactRoute
@@ -1791,6 +1804,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfidentialitateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cereri': {
+      id: '/cereri'
+      path: '/cereri'
+      fullPath: '/cereri'
+      preLoaderRoute: typeof CereriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/caut-profesor': {
       id: '/caut-profesor'
       path: '/caut-profesor'
@@ -2097,6 +2117,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnunturiMeditatiiRoute: AnunturiMeditatiiRoute,
   AnunturiMeditatiiBacRoute: AnunturiMeditatiiBacRoute,
   CautProfesorRoute: CautProfesorRoute,
+  CereriRoute: CereriRoute,
   ConfidentialitateRoute: ConfidentialitateRoute,
   ContRoute: ContRoute,
   ContactRoute: ContactRoute,
