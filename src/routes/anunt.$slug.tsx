@@ -91,7 +91,6 @@ function AdPage() {
   };
 
   if (loading) return <div className="container-page py-16 text-center text-muted-foreground">Se încarcă...</div>;
-  if (mockTeacher) return <MockTeacherProfile teacher={mockTeacher} />;
   if (!ad) return (
     <div className="container-page py-16 text-center">
       <p className="text-muted-foreground">Anunțul nu a fost găsit.</p>
