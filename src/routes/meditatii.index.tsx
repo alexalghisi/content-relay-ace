@@ -1,62 +1,176 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { BadgeCheck, CalendarDays, ChevronDown, Filter, MapPin, Search, SlidersHorizontal, Star, Video } from "lucide-react";
-import { MOCK_TEACHERS, POPULAR_SUBJECTS } from "@/data/marketplace-mock";
+import { useState, type FormEvent } from "react";
+import { Check, Megaphone, Send, ShieldCheck, Sparkles } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { SUBJECTS_SEO } from "@/data/subjects-seo";
+import { CITIES } from "@/data/cities";
 
 type SearchParams = { materie?: string; oras?: string; q?: string };
+
 export const Route = createFileRoute("/meditatii/")({
-  validateSearch: (search: Record<string, unknown>): SearchParams => ({ materie: typeof search.materie === "string" ? search.materie : undefined, oras: typeof search.oras === "string" ? search.oras : undefined, q: typeof search.q === "string" ? search.q : undefined }),
-  head: () => ({ meta: [
-    { title: "Profesori Meditații — Compară și rezervă | Meditații Direct" },
-    { name: "description", content: "Compară profesori pentru meditații după materie, preț, rating, disponibilitate și format. Profiluri verificate, online sau în orașul tău." },
-    { property: "og:title", content: "Profesori pentru meditații | Meditații Direct" },
-    { property: "og:description", content: "Găsește profesorul potrivit folosind filtre clare și profiluri verificate." },
-    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-  ], links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii" }] }),
-  component: ListingPage,
+  validateSearch: (search: Record<string, unknown>): SearchParams => ({
+    materie: typeof search.materie === "string" ? search.materie : undefined,
+    oras: typeof search.oras === "string" ? search.oras : undefined,
+    q: typeof search.q === "string" ? search.q : undefined,
+  }),
+  head: () => ({
+    meta: [
+      { title: "Cere ofertă de la profesori — gratuit, în 2 minute | Meditații Direct" },
+      { name: "description", content: "Descrie ce vrei să înveți și profesorii verificați îți trimit propuneri direct. Fără comision, fără intermediari. Online sau în orașul tău." },
+      { property: "og:title", content: "Cere ofertă de la profesori | Meditații Direct" },
+      { property: "og:description", content: "Postează cererea ta și primești propuneri de la profesori verificați." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/meditatii" }],
+  }),
+  component: RequestPage,
 });
 
-const DAYS = ["Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă", "Duminică"];
+const LEVELS = ["Gimnaziu", "Evaluare Națională", "Liceu", "Bacalaureat", "Admitere facultate", "Altele"];
 
-function ListingPage() {
+function RequestPage() {
   const search = Route.useSearch();
-  const [query, setQuery] = useState(search.q ?? "");
   const [subject, setSubject] = useState(search.materie ?? "");
-  const [price, setPrice] = useState(120);
-  const [rating, setRating] = useState(0);
-  const [format, setFormat] = useState("toate");
-  const [day, setDay] = useState("");
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [level, setLevel] = useState(search.q ?? "");
+  const [city, setCity] = useState(search.oras ?? "");
+  const [isOnline, setIsOnline] = useState(false);
+  const [budget, setBudget] = useState("");
+  const [details, setDetails] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [pending, setPending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState("");
 
-  const teachers = useMemo(() => MOCK_TEACHERS.filter((teacher) => {
-    const q = query.toLowerCase();
-    if (q && !`${teacher.name} ${teacher.subject} ${teacher.location}`.toLowerCase().includes(q)) return false;
-    if (subject && teacher.subjectSlug !== subject) return false;
-    if (teacher.price > price || teacher.rating < rating) return false;
-    if (format === "online" && !teacher.online) return false;
-    if (format === "fizic" && teacher.online) return false;
-    if (day && !teacher.availability.some((availableDay) => availableDay === day)) return false;
-    return true;
-  }), [query, subject, price, rating, format, day]);
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    setError("");
+    if (!subject || !name.trim() || !email.trim()) {
+      setError("Completează cel puțin materia, numele și adresa de email.");
+      return;
+    }
+    setPending(true);
+    const subjectName = SUBJECTS_SEO.find((s) => s.slug === subject)?.name ?? subject;
+    const cityName = CITIES.find((c) => c.slug === city)?.name ?? city;
+    const { error: insertError } = await supabase.from("student_requests").insert({
+      subject: subjectName,
+      level: level || null,
+      city: isOnline ? null : cityName || null,
+      is_online: isOnline,
+      budget_per_hour: budget ? Number(budget) : null,
+      details: details.trim() || null,
+      contact_name: name.trim(),
+      contact_email: email.trim(),
+      contact_phone: phone.trim() || null,
+    });
+    setPending(false);
+    if (insertError) {
+      setError("Nu am putut trimite cererea. Încearcă din nou sau scrie-ne pe pagina de contact.");
+      return;
+    }
+    setDone(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-  const reset = () => { setQuery(""); setSubject(""); setPrice(120); setRating(0); setFormat("toate"); setDay(""); };
-  const filters = <div className="space-y-7">
-    <div><label className="text-sm font-bold" htmlFor="subject">Materie</label><select id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} className="mt-2 h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"><option value="">Toate materiile</option>{POPULAR_SUBJECTS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}</select></div>
-    <div><div className="flex justify-between text-sm"><label className="font-bold" htmlFor="price">Preț maxim</label><span className="font-semibold text-primary">{price} lei/oră</span></div><input id="price" type="range" min="50" max="150" step="5" value={price} onChange={(e) => setPrice(Number(e.target.value))} className="mt-3 w-full accent-primary" /><div className="flex justify-between text-xs text-muted-foreground"><span>50 lei</span><span>150 lei</span></div></div>
-    <fieldset><legend className="text-sm font-bold">Recenzii</legend><div className="mt-3 space-y-2">{[4.8,4.5,4].map((value) => <label key={value} className="flex cursor-pointer items-center gap-2 text-sm"><input type="radio" name="rating" checked={rating === value} onChange={() => setRating(value)} className="accent-primary" /><span className="inline-flex gap-0.5">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-warning text-warning" />)}</span><span>{value}+</span></label>)}</div></fieldset>
-    <fieldset><legend className="text-sm font-bold">Format</legend><div className="mt-3 grid grid-cols-3 gap-2">{[["toate","Toate"],["online","Online"],["fizic","Fizic"]].map(([value,label]) => <button type="button" key={value} onClick={() => setFormat(value)} className={`h-9 rounded-lg border text-xs font-medium transition-colors ${format === value ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background hover:bg-muted"}`}>{label}</button>)}</div></fieldset>
-    <div><label className="text-sm font-bold" htmlFor="day">Disponibilitate</label><select id="day" value={day} onChange={(e) => setDay(e.target.value)} className="mt-2 h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"><option value="">Orice zi</option>{DAYS.map((item) => <option key={item}>{item}</option>)}</select></div>
-    <button onClick={reset} className="btn-outline w-full">Resetează filtrele</button>
-  </div>;
+  if (done) {
+    return (
+      <section className="container-page py-14 sm:py-20">
+        <div className="mx-auto max-w-xl rounded-2xl border border-border bg-card p-8 text-center sm:p-10">
+          <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-accent text-success"><Check className="h-7 w-7" /></span>
+          <h1 className="mt-5 text-3xl font-bold">Cererea ta a fost publicată</h1>
+          <p className="mt-3 leading-7 text-muted-foreground">
+            Profesorii verificați de <strong className="text-foreground">{SUBJECTS_SEO.find((s) => s.slug === subject)?.name ?? "materia aleasă"}</strong> o văd acum și îți pot trimite propuneri direct pe email{phone.trim() ? " sau telefon" : ""}. De obicei primești primele răspunsuri în câteva ore.
+          </p>
+          <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <button onClick={() => setDone(false)} className="btn-outline h-11 px-5">Trimite altă cerere</button>
+            <Link to="/" className="btn-primary h-11 px-5">Înapoi la pagina principală</Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
-  return <section className="container-page py-8 sm:py-10">
-    <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><nav className="text-xs text-muted-foreground"><Link to="/">Acasă</Link> / Profesori</nav><h1 className="mt-3 text-3xl font-bold sm:text-4xl">Găsește profesorul potrivit</h1><p className="mt-2 max-w-2xl text-muted-foreground">Compară profiluri, tarife și disponibilitate. Toți profesorii afișați sunt exemple demonstrative.</p></div><button onClick={() => setFiltersOpen((open) => !open)} className="btn-outline md:hidden"><Filter className="mr-2 h-4 w-4" /> Filtre <ChevronDown className="ml-2 h-4 w-4" /></button></div>
-    <div className="mt-7 grid gap-7 md:grid-cols-[240px_minmax(0,1fr)] lg:grid-cols-[260px_minmax(0,1fr)]">
-      <aside className={`${filtersOpen ? "block" : "hidden"} rounded-xl border border-border bg-card p-5 md:block md:self-start md:sticky md:top-24`}><div className="mb-6 flex items-center gap-2"><SlidersHorizontal className="h-4 w-4 text-primary" /><h2 className="font-bold">Filtre</h2></div>{filters}</aside>
-      <div className="min-w-0"><div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3"><div className="relative"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Caută după nume, materie sau oraș" className="h-12 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-sm outline-hidden focus:ring-2 focus:ring-ring" /></div><div className="grid h-12 place-items-center rounded-xl border border-border px-4 text-sm font-medium">{teachers.length} rezultate</div></div>
-        <div className="mt-5 grid gap-4 lg:grid-cols-2">{teachers.map((teacher) => <article key={teacher.id} className="flex min-w-0 flex-col rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-card)]"><div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3"><span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{teacher.initials}</span><div className="min-w-0"><div className="flex items-center gap-1"><h2 className="truncate font-bold">{teacher.name}</h2><BadgeCheck className="h-4 w-4 shrink-0 text-success" /></div><p className="text-sm text-muted-foreground">{teacher.subject}</p><span className="mt-1 inline-flex items-center gap-1 text-sm font-semibold"><Star className="h-4 w-4 fill-warning text-warning" /> {teacher.rating} <span className="font-normal text-muted-foreground">({teacher.reviews})</span></span></div><span className="text-right"><strong className="block text-lg">{teacher.price} lei</strong><span className="text-xs text-muted-foreground">/ oră</span></span></div><p className="mt-4 min-h-12 text-sm leading-6 text-muted-foreground">{teacher.tagline}</p><div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground"><span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {teacher.location}</span>{teacher.online && <span className="inline-flex items-center gap-1 text-primary"><Video className="h-3.5 w-3.5" /> Online</span>}<span className="inline-flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5" /> {teacher.availability.slice(0,2).join(", ")}</span></div><div className="mt-5 flex items-center justify-between border-t border-border pt-4"><span className="text-xs font-medium text-success">Disponibil săptămâna aceasta</span><Link to="/anunt/$slug" params={{ slug: teacher.slug }} className="btn-primary h-10 px-4">Vezi profil</Link></div></article>)}</div>
-        {teachers.length === 0 && <div className="mt-5 rounded-xl border border-dashed border-border p-10 text-center"><Search className="mx-auto h-8 w-8 text-muted-foreground" /><h2 className="mt-3 font-bold">Nu am găsit profesori</h2><p className="mt-1 text-sm text-muted-foreground">Încearcă să lărgești criteriile de căutare.</p><button onClick={reset} className="btn-primary mt-5">Resetează filtrele</button></div>}
+  return (
+    <section className="container-page py-10 sm:py-14">
+      <div className="mx-auto max-w-2xl text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary-soft px-3 py-1.5 text-xs font-semibold text-primary"><Megaphone className="h-4 w-4" /> Gratuit · fără cont obligatoriu</div>
+        <h1 className="mt-5 text-3xl font-bold sm:text-4xl">Spune-ne ce profesor cauți</h1>
+        <p className="mx-auto mt-3 max-w-xl leading-7 text-muted-foreground">
+          Nu mai căuta prin zeci de profile. Descrii o singură dată ce ai nevoie, iar profesorii verificați vin la tine cu propuneri și tarife.
+        </p>
       </div>
-    </div>
-  </section>;
+
+      <form onSubmit={submit} className="mx-auto mt-9 max-w-2xl rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="req-subject" className="text-sm font-bold">Materie *</label>
+            <select id="req-subject" required value={subject} onChange={(e) => setSubject(e.target.value)} className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm">
+              <option value="">Alege materia</option>
+              {SUBJECTS_SEO.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="req-level" className="text-sm font-bold">Nivel</label>
+            <select id="req-level" value={level} onChange={(e) => setLevel(e.target.value)} className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm">
+              <option value="">Alege nivelul</option>
+              {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="req-city" className="text-sm font-bold">Oraș</label>
+            <select id="req-city" value={city} onChange={(e) => setCity(e.target.value)} disabled={isOnline} className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm disabled:opacity-50">
+              <option value="">Alege orașul</option>
+              {CITIES.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
+            </select>
+            <label className="mt-2 flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+              <input type="checkbox" checked={isOnline} onChange={(e) => setIsOnline(e.target.checked)} className="accent-primary" />
+              Prefer meditații online
+            </label>
+          </div>
+          <div>
+            <label htmlFor="req-budget" className="text-sm font-bold">Buget (lei/oră)</label>
+            <input id="req-budget" type="number" min="30" max="500" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="ex. 80" className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm" />
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="req-details" className="text-sm font-bold">Detalii</label>
+            <textarea id="req-details" value={details} onChange={(e) => setDetails(e.target.value)} rows={4} placeholder="Ex: elev clasa a XII-a, pregătire BAC matematică M1, disponibil după ora 17:00, două ședințe pe săptămână…" className="mt-2 w-full rounded-xl border border-border bg-background px-3 py-3 text-sm" />
+          </div>
+          <div>
+            <label htmlFor="req-name" className="text-sm font-bold">Numele tău *</label>
+            <input id="req-name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Nume și prenume" className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm" />
+          </div>
+          <div>
+            <label htmlFor="req-email" className="text-sm font-bold">Email *</label>
+            <input id="req-email" required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="adresa@email.ro" className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm" />
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="req-phone" className="text-sm font-bold">Telefon <span className="font-normal text-muted-foreground">(opțional — vizibil doar profesorilor)</span></label>
+            <input id="req-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="07xx xxx xxx" className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm" />
+          </div>
+        </div>
+
+        {error && <p className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">{error}</p>}
+
+        <button type="submit" disabled={pending} className="btn-primary mt-6 h-12 w-full text-base disabled:opacity-60">
+          <Send className="mr-2 h-4 w-4" /> {pending ? "Se trimite…" : "Publică cererea — gratuit"}
+        </button>
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          Prin trimitere ești de acord cu <Link to="/termeni" className="underline">termenii</Link> și <Link to="/confidentialitate" className="underline">politica de confidențialitate</Link>. Cererea poate fi ștearsă oricând la cerere.
+        </p>
+      </form>
+
+      <div className="mx-auto mt-10 grid max-w-2xl gap-3 sm:grid-cols-2">
+        <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-5">
+          <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-success" />
+          <p className="text-sm leading-6 text-muted-foreground"><strong className="text-foreground">Datele tale sunt protejate.</strong> Doar profesorii cu cont pe platformă văd cererea și datele de contact.</p>
+        </div>
+        <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-5">
+          <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+          <p className="text-sm leading-6 text-muted-foreground"><strong className="text-foreground">Tu alegi.</strong> Compari propunerile primite și discuți direct cu profesorul potrivit, fără comision.</p>
+        </div>
+      </div>
+    </section>
+  );
 }

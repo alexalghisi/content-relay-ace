@@ -641,6 +641,51 @@ export type Database = {
           },
         ]
       }
+      student_requests: {
+        Row: {
+          budget_per_hour: number | null
+          city: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string
+          details: string | null
+          id: string
+          is_online: boolean
+          level: string | null
+          status: string
+          subject: string
+        }
+        Insert: {
+          budget_per_hour?: number | null
+          city?: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          is_online?: boolean
+          level?: string | null
+          status?: string
+          subject: string
+        }
+        Update: {
+          budget_per_hour?: number | null
+          city?: string | null
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          is_online?: boolean
+          level?: string | null
+          status?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       subjects: {
         Row: {
           created_at: string

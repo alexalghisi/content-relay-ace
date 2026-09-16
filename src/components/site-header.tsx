@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Menu, X, GraduationCap } from "lucide-react";
 
 const NAV = [
-  { to: "/meditatii", label: "Găsește profesori" },
+  { to: "/meditatii", label: "Cere ofertă" },
+  { to: "/cereri", label: "Cereri elevi" },
   { to: "/materii", label: "Materii" },
   { to: "/cum-functioneaza", label: "Cum funcționează" },
   { to: "/blog", label: "Blog" },
