@@ -70,7 +70,7 @@ function AdPage() {
       setAd(data as unknown as AdDetail);
       setLoading(false);
     })();
-  }, [slug, navigate, user, mockTeacher]);
+  }, [slug, navigate, user]);
 
   const startChat = async () => {
     if (!user) { toast.info("Conectează-te ca să trimiți mesaj"); navigate({ to: "/login" }); return; }
