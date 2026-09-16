@@ -44,7 +44,6 @@ export const Route = createFileRoute("/anunt/$slug")({
 
 function AdPage() {
   const { slug } = Route.useParams();
-  const mockTeacher = MOCK_TEACHERS.find((teacher) => teacher.slug === slug);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [ad, setAd] = useState<AdDetail | null>(null);
@@ -53,10 +52,6 @@ function AdPage() {
   const [starting, setStarting] = useState(false);
 
   useEffect(() => {
-    if (mockTeacher) {
-      setLoading(false);
-      return;
-    }
     (async () => {
       const teacherCols = user
         ? "id,full_name,avatar_url,experience_years,education,phone,bio,auth_user_id"
