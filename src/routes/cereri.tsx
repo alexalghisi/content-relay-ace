@@ -1,8 +1,98 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { GraduationCap, MapPin, Video, Wallet } from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
+import { Check, GraduationCap, MapPin, Send, Video, Wallet } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+
+function ProposalForm({ requestId, sent, onSent }: { requestId: string; sent: boolean; onSent: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [price, setPrice] = useState("");
+  const [message, setMessage] = useState("");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState("");
+
+  if (sent) {
+    return (
+      <p className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-success">
+        <Check className="h-4 w-4" /> Propunere trimisă
+      </p>
+    );
+  }
+
+  if (!open) {
+    return (
+      <button onClick={() => setOpen(true)} className="btn-primary mt-4 h-10 px-4 text-sm">
+        <Send className="mr-2 h-4 w-4" /> Trimite propunere
+      </button>
+    );
+  }
+
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    setError("");
+    if (!message.trim()) {
+      setError("Scrie un mesaj scurt pentru elev.");
+      return;
+    }
+    setPending(true);
+    const { data: auth } = await supabase.auth.getUser();
+    const uid = auth.user?.id;
+    if (!uid) {
+      setPending(false);
+      setError("Trebuie să fii autentificat.");
+      return;
+    }
+    const { error: insertError } = await supabase.from("teacher_proposals").insert({
+      user_id: uid,
+      request_id: requestId,
+      message: message.trim(),
+      price_per_hour: price ? Number(price) : null,
+      proposed_date: date || null,
+      proposed_time: time || null,
+    });
+    setPending(false);
+    if (insertError) {
+      setError(insertError.code === "23505" ? "Ai trimis deja o propunere la această cerere." : "Nu am putut trimite propunerea. Încearcă din nou.");
+      return;
+    }
+    onSent();
+  };
+
+  return (
+    <form onSubmit={submit} className="mt-4 rounded-xl border border-border bg-background p-4">
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div>
+          <label className="text-xs font-bold">Data</label>
+          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mt-1 h-10 w-full rounded-lg border border-border bg-background px-2 text-sm" />
+        </div>
+        <div>
+          <label className="text-xs font-bold">Ora</label>
+          <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="mt-1 h-10 w-full rounded-lg border border-border bg-background px-2 text-sm" />
+        </div>
+        <div>
+          <label className="text-xs font-bold">Tarif (lei/oră)</label>
+          <input type="number" min="30" max="500" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="ex. 90" className="mt-1 h-10 w-full rounded-lg border border-border bg-background px-2 text-sm" />
+        </div>
+      </div>
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        rows={3}
+        placeholder="Ex: Bună! Predau matematică de 8 ani, pot începe săptămâna viitoare, prima ședință de probă gratuită."
+        className="mt-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+      />
+      {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
+      <div className="mt-3 flex gap-2">
+        <button type="submit" disabled={pending} className="btn-primary h-10 px-4 text-sm disabled:opacity-60">
+          {pending ? "Se trimite…" : "Trimite propunerea"}
+        </button>
+        <button type="button" onClick={() => setOpen(false)} className="btn-outline h-10 px-4 text-sm">Anulează</button>
+      </div>
+    </form>
+  );
+}
 
 interface StudentRequest {
   id: string;
@@ -32,6 +122,7 @@ export const Route = createFileRoute("/cereri")({
 function RequestsPage() {
   const { user, loading } = useAuth();
   const [requests, setRequests] = useState<StudentRequest[] | null>(null);
+  const [sentIds, setSentIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!user) return;
@@ -42,6 +133,11 @@ function RequestsPage() {
       .order("created_at", { ascending: false })
       .limit(100)
       .then(({ data }) => setRequests((data as StudentRequest[] | null) ?? []));
+    supabase
+      .from("teacher_proposals")
+      .select("request_id")
+      .eq("user_id", user.id)
+      .then(({ data }) => setSentIds(new Set((data ?? []).map((p) => p.request_id))));
   }, [user]);
 
   if (loading) {
@@ -107,6 +203,11 @@ function RequestsPage() {
                   {r.contact_phone && <> · <a href={`tel:${r.contact_phone}`} className="text-primary hover:underline">{r.contact_phone}</a></>}
                 </p>
               </div>
+              <ProposalForm
+                requestId={r.id}
+                sent={sentIds.has(r.id)}
+                onSent={() => setSentIds((prev) => new Set(prev).add(r.id))}
+              />
             </article>
           ))}
         </div>

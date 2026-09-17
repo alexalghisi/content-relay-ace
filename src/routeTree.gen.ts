@@ -96,6 +96,7 @@ import { Route as ProfesorSlugRouteImport } from './routes/profesor.$slug'
 import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
+import { Route as CerereaMeaIdRouteImport } from './routes/cererea-mea.$id'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as BacMaterieRouteImport } from './routes/bac.$materie'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
@@ -555,6 +556,11 @@ const MeditatiiInOrasRoute = MeditatiiInOrasRouteImport.update({
   path: '/meditatii-in/$oras',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CerereaMeaIdRoute = CerereaMeaIdRouteImport.update({
+  id: '/cererea-mea/$id',
+  path: '/cererea-mea/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
@@ -721,6 +727,7 @@ export interface FileRoutesByFullPath {
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
+  '/cererea-mea/$id': typeof CerereaMeaIdRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
@@ -826,6 +833,7 @@ export interface FileRoutesByTo {
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
+  '/cererea-mea/$id': typeof CerereaMeaIdRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
@@ -932,6 +940,7 @@ export interface FileRoutesById {
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
+  '/cererea-mea/$id': typeof CerereaMeaIdRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
@@ -1039,6 +1048,7 @@ export interface FileRouteTypes {
     | '/anunt/$slug'
     | '/bac/$materie'
     | '/blog/$slug'
+    | '/cererea-mea/$id'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
@@ -1144,6 +1154,7 @@ export interface FileRouteTypes {
     | '/anunt/$slug'
     | '/bac/$materie'
     | '/blog/$slug'
+    | '/cererea-mea/$id'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
@@ -1249,6 +1260,7 @@ export interface FileRouteTypes {
     | '/anunt/$slug'
     | '/bac/$materie'
     | '/blog/$slug'
+    | '/cererea-mea/$id'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
@@ -1355,6 +1367,7 @@ export interface RootRouteChildren {
   AnuntSlugRoute: typeof AnuntSlugRoute
   BacMaterieRoute: typeof BacMaterieRouteWithChildren
   BlogSlugRoute: typeof BlogSlugRoute
+  CerereaMeaIdRoute: typeof CerereaMeaIdRoute
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
   MesajeIdRoute: typeof MesajeIdRoute
   PreturiMeditatiiMaterieRoute: typeof PreturiMeditatiiMaterieRoute
@@ -1991,6 +2004,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeditatiiInOrasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cererea-mea/$id': {
+      id: '/cererea-mea/$id'
+      path: '/cererea-mea/$id'
+      fullPath: '/cererea-mea/$id'
+      preLoaderRoute: typeof CerereaMeaIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/blog/$slug'
@@ -2226,6 +2246,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnuntSlugRoute: AnuntSlugRoute,
   BacMaterieRoute: BacMaterieRouteWithChildren,
   BlogSlugRoute: BlogSlugRoute,
+  CerereaMeaIdRoute: CerereaMeaIdRoute,
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
   MesajeIdRoute: MesajeIdRoute,
   PreturiMeditatiiMaterieRoute: PreturiMeditatiiMaterieRoute,
