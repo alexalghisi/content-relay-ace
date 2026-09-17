@@ -51,9 +51,9 @@ function HomePage() {
     <section className="relative overflow-hidden border-b border-border bg-primary-soft/45">
       <div className="container-page grid min-h-[620px] items-center gap-10 py-12 lg:grid-cols-[1.05fr_.95fr] lg:py-18">
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-background px-3 py-1.5 text-xs font-semibold text-primary shadow-sm"><ShieldCheck className="h-4 w-4" /> Profesori verificați · fără comision</div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-background px-3 py-1.5 text-xs font-semibold text-primary shadow-sm"><ShieldCheck className="h-4 w-4" /> Chat direct · evaluare în stele · fără comision</div>
           <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">Găsește profesorul perfect pentru <span className="text-primary">succesul tău</span></h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Nu mai căuta prin zeci de profile. Descrii o singură dată ce ai nevoie, iar profesorii verificați îți trimit propuneri cu tarife și program.</p>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Nu mai căuta prin zeci de profile. Descrii o singură dată ce ai nevoie, profesorii verificați îți trimit propuneri cu tarif și program, discutați direct în chat, iar la final evaluezi colaborarea cu stele.</p>
           <form onSubmit={submit} className="mt-8 grid gap-2 rounded-2xl border border-border bg-background p-2 shadow-[var(--shadow-card)] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
             <select aria-label="Materie" value={subject} onChange={(e) => setSubject(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Materie</option>{POPULAR_SUBJECTS.map((item) => <option value={item.slug} key={item.slug}>{item.name}</option>)}</select>
             <select aria-label="Nivel" value={level} onChange={(e) => setLevel(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Nivel</option>{LEVELS.map((item) => <option key={item}>{item}</option>)}</select>
