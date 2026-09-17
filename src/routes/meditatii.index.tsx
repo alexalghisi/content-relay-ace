@@ -5,13 +5,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { CITIES } from "@/data/cities";
 
-type SearchParams = { materie?: string; oras?: string; q?: string };
+type SearchParams = { materie?: string; oras?: string; q?: string; online?: string };
 
 export const Route = createFileRoute("/meditatii/")({
   validateSearch: (search: Record<string, unknown>): SearchParams => ({
     materie: typeof search.materie === "string" ? search.materie : undefined,
     oras: typeof search.oras === "string" ? search.oras : undefined,
     q: typeof search.q === "string" ? search.q : undefined,
+    online: typeof search.online === "string" ? search.online : undefined,
   }),
   head: () => ({
     meta: [
@@ -29,12 +30,38 @@ export const Route = createFileRoute("/meditatii/")({
 
 const LEVELS = ["Gimnaziu", "Evaluare Națională", "Liceu", "Bacalaureat", "Admitere facultate", "Altele"];
 
+/** Elimină diacriticele și normalizează pentru comparații între slug-uri și nume afișate. */
+const norm = (v: string) => v.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+/** Acceptă atât slug ("cluj-napoca") cât și nume afișat ("Cluj-Napoca") venite din alte formulare. */
+function cityFromParam(value?: string) {
+  if (!value) return "";
+  const n = norm(value);
+  if (n === "online") return "";
+  return CITIES.find((c) => c.slug === n || norm(c.name) === n || norm(c.slug) === n)?.slug ?? "";
+}
+
+const LEVEL_ALIASES: Record<string, string> = {
+  "scoala generala": "Gimnaziu",
+  "bac": "Bacalaureat",
+  "evaluare nationala": "Evaluare Națională",
+  "admitere": "Admitere facultate",
+  "admitere facultate": "Admitere facultate",
+};
+
+function levelFromParam(value?: string) {
+  if (!value) return "";
+  const n = norm(value);
+  const mapped = LEVEL_ALIASES[n] ?? value;
+  return LEVELS.find((l) => norm(l) === norm(mapped)) ?? "";
+}
+
 function RequestPage() {
   const search = Route.useSearch();
   const [subject, setSubject] = useState(search.materie ?? "");
-  const [level, setLevel] = useState(search.q ?? "");
-  const [city, setCity] = useState(search.oras ?? "");
-  const [isOnline, setIsOnline] = useState(false);
+  const [level, setLevel] = useState(() => levelFromParam(search.q));
+  const [city, setCity] = useState(() => cityFromParam(search.oras));
+  const [isOnline, setIsOnline] = useState(() => search.online === "1" || norm(search.oras ?? "") === "online");
   const [budget, setBudget] = useState("");
   const [details, setDetails] = useState("");
   const [name, setName] = useState("");
