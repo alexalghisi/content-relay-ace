@@ -7,6 +7,8 @@ export interface PublicProposal {
   proposed_date: string | null;
   proposed_time: string | null;
   created_at: string;
+  rating: number | null;
+  rating_comment: string | null;
   teacher: {
     display_name: string | null;
     slug: string | null;
