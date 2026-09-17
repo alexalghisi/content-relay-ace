@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-meditatii'
 import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacalaureat'
 import { Route as TutorialeRouteImport } from './routes/tutoriale'
 import { Route as TermeniRouteImport } from './routes/termeni'
@@ -114,6 +115,11 @@ import { Route as ApiPublicHooksIndexnowRouteImport } from './routes/api/public/
 import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
 import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
 
+const VreauSaDauMeditatiiRoute = VreauSaDauMeditatiiRouteImport.update({
+  id: '/vreau-sa-dau-meditatii',
+  path: '/vreau-sa-dau-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
   id: '/variante-bacalaureat',
   path: '/variante-bacalaureat',
@@ -723,6 +729,7 @@ export interface FileRoutesByFullPath {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -829,6 +836,7 @@ export interface FileRoutesByTo {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -936,6 +944,7 @@ export interface FileRoutesById {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -1044,6 +1053,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/anunt/$slug'
     | '/bac/$materie'
@@ -1150,6 +1160,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/anunt/$slug'
     | '/bac/$materie'
@@ -1256,6 +1267,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/anunt/$slug'
     | '/bac/$materie'
@@ -1363,6 +1375,7 @@ export interface RootRouteChildren {
   TermeniRoute: typeof TermeniRoute
   TutorialeRoute: typeof TutorialeRoute
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
+  VreauSaDauMeditatiiRoute: typeof VreauSaDauMeditatiiRoute
   AdminBacCrawlerRoute: typeof AdminBacCrawlerRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
   BacMaterieRoute: typeof BacMaterieRouteWithChildren
@@ -1395,6 +1408,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vreau-sa-dau-meditatii': {
+      id: '/vreau-sa-dau-meditatii'
+      path: '/vreau-sa-dau-meditatii'
+      fullPath: '/vreau-sa-dau-meditatii'
+      preLoaderRoute: typeof VreauSaDauMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/variante-bacalaureat': {
       id: '/variante-bacalaureat'
       path: '/variante-bacalaureat'
@@ -2242,6 +2262,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermeniRoute: TermeniRoute,
   TutorialeRoute: TutorialeRoute,
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
+  VreauSaDauMeditatiiRoute: VreauSaDauMeditatiiRoute,
   AdminBacCrawlerRoute: AdminBacCrawlerRoute,
   AnuntSlugRoute: AnuntSlugRoute,
   BacMaterieRoute: BacMaterieRouteWithChildren,
