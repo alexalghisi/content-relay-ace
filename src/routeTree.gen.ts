@@ -92,6 +92,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BacIndexRouteImport } from './routes/bac.index'
 import { Route as SubiecteAdmitereUniversitateRouteImport } from './routes/subiecte-admitere.$universitate'
 import { Route as ProfesoriOrasRouteImport } from './routes/profesori.$oras'
+import { Route as ProfesorSlugRouteImport } from './routes/profesor.$slug'
 import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
@@ -534,6 +535,11 @@ const ProfesoriOrasRoute = ProfesoriOrasRouteImport.update({
   path: '/profesori/$oras',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfesorSlugRoute = ProfesorSlugRouteImport.update({
+  id: '/profesor/$slug',
+  path: '/profesor/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PreturiMeditatiiMaterieRoute = PreturiMeditatiiMaterieRouteImport.update({
   id: '/preturi-meditatii/$materie',
   path: '/preturi-meditatii/$materie',
@@ -718,6 +724,7 @@ export interface FileRoutesByFullPath {
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
   '/bac/': typeof BacIndexRoute
@@ -822,6 +829,7 @@ export interface FileRoutesByTo {
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
   '/bac': typeof BacIndexRoute
@@ -927,6 +935,7 @@ export interface FileRoutesById {
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateRouteWithChildren
   '/bac/': typeof BacIndexRoute
@@ -1033,6 +1042,7 @@ export interface FileRouteTypes {
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
+    | '/profesor/$slug'
     | '/profesori/$oras'
     | '/subiecte-admitere/$universitate'
     | '/bac/'
@@ -1137,6 +1147,7 @@ export interface FileRouteTypes {
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
+    | '/profesor/$slug'
     | '/profesori/$oras'
     | '/subiecte-admitere/$universitate'
     | '/bac'
@@ -1241,6 +1252,7 @@ export interface FileRouteTypes {
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
+    | '/profesor/$slug'
     | '/profesori/$oras'
     | '/subiecte-admitere/$universitate'
     | '/bac/'
@@ -1346,6 +1358,7 @@ export interface RootRouteChildren {
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
   MesajeIdRoute: typeof MesajeIdRoute
   PreturiMeditatiiMaterieRoute: typeof PreturiMeditatiiMaterieRoute
+  ProfesorSlugRoute: typeof ProfesorSlugRoute
   ProfesoriOrasRoute: typeof ProfesoriOrasRoute
   SubiecteAdmitereUniversitateRoute: typeof SubiecteAdmitereUniversitateRouteWithChildren
   BacIndexRoute: typeof BacIndexRoute
@@ -1950,6 +1963,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfesoriOrasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profesor/$slug': {
+      id: '/profesor/$slug'
+      path: '/profesor/$slug'
+      fullPath: '/profesor/$slug'
+      preLoaderRoute: typeof ProfesorSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/preturi-meditatii/$materie': {
       id: '/preturi-meditatii/$materie'
       path: '/preturi-meditatii/$materie'
@@ -2209,6 +2229,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
   MesajeIdRoute: MesajeIdRoute,
   PreturiMeditatiiMaterieRoute: PreturiMeditatiiMaterieRoute,
+  ProfesorSlugRoute: ProfesorSlugRoute,
   ProfesoriOrasRoute: ProfesoriOrasRoute,
   SubiecteAdmitereUniversitateRoute:
     SubiecteAdmitereUniversitateRouteWithChildren,
