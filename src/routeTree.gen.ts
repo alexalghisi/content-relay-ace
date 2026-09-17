@@ -66,6 +66,7 @@ import { Route as MeditatiiAdmitereDreptRouteImport } from './routes/meditatii-a
 import { Route as MeditatiiAdmitereAseRouteImport } from './routes/meditatii-admitere-ase'
 import { Route as MateriiRouteImport } from './routes/materii'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as InvitaUnColegRouteImport } from './routes/invita-un-coleg'
 import { Route as GrileUpbRouteImport } from './routes/grile-upb'
 import { Route as GrileMedicinaRouteImport } from './routes/grile-medicina'
 import { Route as GrileAdmitereMedicina2026RouteImport } from './routes/grile-admitere-medicina-2026'
@@ -405,6 +406,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InvitaUnColegRoute = InvitaUnColegRouteImport.update({
+  id: '/invita-un-coleg',
+  path: '/invita-un-coleg',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GrileUpbRoute = GrileUpbRouteImport.update({
   id: '/grile-upb',
   path: '/grile-upb',
@@ -673,6 +679,7 @@ export interface FileRoutesByFullPath {
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
+  '/invita-un-coleg': typeof InvitaUnColegRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -780,6 +787,7 @@ export interface FileRoutesByTo {
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
+  '/invita-un-coleg': typeof InvitaUnColegRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -888,6 +896,7 @@ export interface FileRoutesById {
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
+  '/invita-un-coleg': typeof InvitaUnColegRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -997,6 +1006,7 @@ export interface FileRouteTypes {
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
+    | '/invita-un-coleg'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1104,6 +1114,7 @@ export interface FileRouteTypes {
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
+    | '/invita-un-coleg'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1211,6 +1222,7 @@ export interface FileRouteTypes {
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
+    | '/invita-un-coleg'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1319,6 +1331,7 @@ export interface RootRouteChildren {
   GrileAdmitereMedicina2026Route: typeof GrileAdmitereMedicina2026Route
   GrileMedicinaRoute: typeof GrileMedicinaRoute
   GrileUpbRoute: typeof GrileUpbRoute
+  InvitaUnColegRoute: typeof InvitaUnColegRoute
   LoginRoute: typeof LoginRoute
   MateriiRoute: typeof MateriiRoute
   MeditatiiAdmitereAseRoute: typeof MeditatiiAdmitereAseRoute
@@ -1807,6 +1820,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/invita-un-coleg': {
+      id: '/invita-un-coleg'
+      path: '/invita-un-coleg'
+      fullPath: '/invita-un-coleg'
+      preLoaderRoute: typeof InvitaUnColegRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/grile-upb': {
       id: '/grile-upb'
       path: '/grile-upb'
@@ -2206,6 +2226,7 @@ const rootRouteChildren: RootRouteChildren = {
   GrileAdmitereMedicina2026Route: GrileAdmitereMedicina2026Route,
   GrileMedicinaRoute: GrileMedicinaRoute,
   GrileUpbRoute: GrileUpbRoute,
+  InvitaUnColegRoute: InvitaUnColegRoute,
   LoginRoute: LoginRoute,
   MateriiRoute: MateriiRoute,
   MeditatiiAdmitereAseRoute: MeditatiiAdmitereAseRoute,
