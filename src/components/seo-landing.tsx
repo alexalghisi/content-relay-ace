@@ -10,8 +10,10 @@ export interface SeoLandingProps {
   h1: string;
   intro: string;
   bullets?: string[];
-  ctaPrimary?: { to: string; label: string; params?: Record<string, string> };
-  ctaSecondary?: { to: string; label: string };
+  ctaPrimary?: { to: string; label: string; params?: Record<string, string>; search?: Record<string, string | undefined> };
+  ctaSecondary?: { to: string; label: string; search?: Record<string, string | undefined> };
+  /** Optional CTA block at the end of the page; defaults to the student request CTA. */
+  ctaFooter?: { title: string; body: string; to: string; label: string; search?: Record<string, string | undefined> };
   sections?: { title: string; body: ReactNode }[];
   pdfs?: PdfItem[];
   faqs?: FaqItem[];
@@ -80,12 +82,12 @@ export function SeoLanding(p: SeoLandingProps) {
 
         <div className="mt-7 flex flex-wrap gap-3">
           {p.ctaPrimary && (
-            <Link to={p.ctaPrimary.to} className="btn-primary h-11 px-5 inline-flex items-center gap-2">
+            <Link to={p.ctaPrimary.to} search={p.ctaPrimary.search as never} className="btn-primary h-11 px-5 inline-flex items-center gap-2">
               {p.ctaPrimary.label} <ArrowRight className="h-4 w-4" />
             </Link>
           )}
           {p.ctaSecondary && (
-            <Link to={p.ctaSecondary.to} className="btn-outline h-11 px-5">
+            <Link to={p.ctaSecondary.to} search={p.ctaSecondary.search as never} className="btn-outline h-11 px-5">
               {p.ctaSecondary.label}
             </Link>
           )}
@@ -166,10 +168,10 @@ export function SeoLanding(p: SeoLandingProps) {
       <section className="mt-14 card-soft p-8 bg-gradient-to-br from-primary-soft to-card">
         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-bold inline-flex items-center gap-2"><GraduationCap className="h-5 w-5 text-primary" /> Caută profesorul potrivit</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Meditatori particulari verificați. Contact direct, fără intermediari.</p>
+            <h2 className="text-xl font-bold inline-flex items-center gap-2"><GraduationCap className="h-5 w-5 text-primary" /> {p.ctaFooter?.title ?? "Spune-ne ce profesor cauți"}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{p.ctaFooter?.body ?? "Descrii o singură dată ce ai nevoie și profesorii verificați îți trimit propuneri. Gratuit, fără comision."}</p>
           </div>
-          <Link to="/meditatii" className="btn-primary h-11 px-5">Vezi anunțuri</Link>
+          <Link to={p.ctaFooter?.to ?? "/meditatii"} search={(p.ctaFooter?.search ?? undefined) as never} className="btn-primary h-11 px-5">{p.ctaFooter?.label ?? "Cere ofertă"}</Link>
         </div>
       </section>
     </article>

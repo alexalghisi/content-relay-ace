@@ -195,15 +195,26 @@ function ComboPage() {
         pageUrl={url}
         breadcrumbParent={{ name: "Meditații", url: `${SITE}/meditatii` }}
         h1={h1Options[variant]}
-        intro={`Profesori verificați de ${subject.nameLower} în ${city.name} (${city.county}, ${city.population} locuitori — reper ${city.landmark}). Tarife locale ${localMin}–${localMax} lei/oră (medie ${localMed} lei), online prin Zoom/Meet sau la domiciliu. Contactezi profesorul direct, fără cont obligatoriu și fără comision.`}
+        intro={`Cauți meditații la ${subject.nameLower} în ${city.name} (${city.county}, ${city.population} locuitori — reper ${city.landmark})? Descrie o singură dată ce ai nevoie, iar profesorii verificați îți trimit propuneri cu dată, oră și tarif. Tarife locale ${localMin}–${localMax} lei/oră (medie ${localMed} lei), online prin Zoom/Meet sau la domiciliu. Gratuit, fără comision.`}
         bullets={[
           `${subject.name} pentru toate nivelurile: clasele V–XII, BAC 2026, admitere`,
           `Profesori titulari cu rezultate la ${city.landmark} și liceele din ${city.name}`,
           `Online (Zoom / Google Meet) sau la domiciliu în ${city.name}`,
           `Preț mediu ${localMed} lei/oră — indice local ${city.priceIndex.toFixed(2)}× media națională`,
         ]}
-        ctaPrimary={{ to: "/meditatii", label: `Vezi toți profesorii de ${subject.nameLower}` }}
-        ctaSecondary={{ to: "/caut-profesor", label: "Postează cerere" }}
+        ctaPrimary={{
+          to: "/meditatii",
+          label: `Cere ofertă pentru ${subject.nameLower} în ${city.name}`,
+          search: { materie: subject.slug, oras: city.slug },
+        }}
+        ctaSecondary={{ to: "/pentru-profesori", label: "Sunt profesor — vreau cererile" }}
+        ctaFooter={{
+          title: `Primește propuneri de la profesori de ${subject.nameLower} din ${city.name}`,
+          body: "Completezi cererea în 2 minute și primești propuneri cu dată, oră și tarif. Gratuit, fără comision.",
+          to: "/meditatii",
+          label: "Cere ofertă gratuit",
+          search: { materie: subject.slug, oras: city.slug },
+        }}
       />
 
       {/* Anunțuri reale — conținut indexabil bogat */}
@@ -261,6 +272,22 @@ function ComboPage() {
       )}
 
 
+
+      {/* Banda pentru profesori — cererile din acest oraș ajung în panoul lor */}
+      <section className="container-page py-8">
+        <div className="card-soft flex flex-col items-start gap-4 bg-gradient-to-br from-primary-soft to-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div>
+            <h2 className="text-lg font-bold">Predai {subject.nameLower} în {city.name}?</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Creezi cont gratuit, completezi profilul și vezi cererile elevilor din {city.county}. Fără comision — tu stabilești tariful.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Link to="/pentru-profesori" className="btn-primary h-11 px-5">Devino profesor</Link>
+            <Link to="/cereri" className="btn-outline h-11 px-5">Vezi cererile</Link>
+          </div>
+        </div>
+      </section>
 
       <div className="container-page"><AdsterraNativeBanner /></div>
 
