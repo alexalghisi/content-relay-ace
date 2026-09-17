@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { ArrowRight, BadgeCheck, BookOpen, Check, Megaphone, MessageSquareText, Search, ShieldCheck, UserRound } from "lucide-react";
 import heroImg from "@/assets/hero-tutoring.jpg";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
+import { CITIES } from "@/data/cities";
 
 export const Route = createFileRoute("/")({
   head: () => ({
