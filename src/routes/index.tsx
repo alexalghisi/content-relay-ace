@@ -8,12 +8,15 @@ import { CITIES } from "@/data/cities";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meditații Direct — Profesorii vin la tine cu propuneri" },
-      { name: "description", content: "Descrii o singură dată ce vrei să înveți, iar profesorii verificați îți trimit propuneri direct. Gratuit, fără comision, online sau în orașul tău." },
-      { property: "og:title", content: "Meditații Direct — Cere ofertă de la profesori" },
-      { property: "og:description", content: "Postezi cererea, profesorii verificați îți trimit propuneri. Fără comision." },
+      { title: "Meditații Direct — profesorii îți trimit propuneri, discuți în chat, evaluezi cu stele" },
+      { name: "description", content: "Un mod nou de a găsi meditații: descrii o singură dată ce vrei să înveți, profesorii verificați îți trimit propuneri cu dată, oră și tarif, discutați direct în chat, iar la final evaluezi colaborarea cu stele. Gratuit, fără comision, online sau în orașul tău." },
+      { property: "og:title", content: "Meditații Direct — cerere, propuneri, chat direct și evaluare în stele" },
+      { property: "og:description", content: "Postezi cererea, profesorii verificați îți trimit propuneri cu dată, oră și tarif. Chat direct cu profesorul și evaluare în stele. Fără comision." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://meditatiidirect.ro/" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Meditații Direct — cerere, propuneri, chat direct și evaluare în stele" },
+      { name: "twitter:description", content: "Postezi cererea, profesorii îți trimit propuneri cu dată, oră și tarif. Chat direct și evaluare în stele. Fără comision." },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/" }],
   }),
