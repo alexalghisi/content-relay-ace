@@ -273,6 +273,22 @@ function ComboPage() {
 
 
 
+      {/* Banda pentru profesori — cererile din acest oraș ajung în panoul lor */}
+      <section className="container-page py-8">
+        <div className="card-soft flex flex-col items-start gap-4 bg-gradient-to-br from-primary-soft to-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div>
+            <h2 className="text-lg font-bold">Predai {subject.nameLower} în {city.name}?</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Creezi cont gratuit, completezi profilul și vezi cererile elevilor din {city.county}. Fără comision — tu stabilești tariful.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Link to="/pentru-profesori" className="btn-primary h-11 px-5">Devino profesor</Link>
+            <Link to="/cereri" className="btn-outline h-11 px-5">Vezi cererile</Link>
+          </div>
+        </div>
+      </section>
+
       <div className="container-page"><AdsterraNativeBanner /></div>
 
       {/* Silos: link intern bidirecțional pentru autoritate */}
