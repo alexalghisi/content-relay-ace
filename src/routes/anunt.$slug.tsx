@@ -224,7 +224,7 @@ function AdPage() {
               <p className="mt-4 text-xs text-muted-foreground">Contact direct, fără intermediari și fără comision.</p>
               <div className="mt-6 border-t border-border pt-5">
                 <p className="text-sm font-bold">Alege o dată</p>
-                <BookingWidget compact />
+                <BookingWidget compact ad={ad} />
               </div>
             </div>
           </aside>
@@ -234,14 +234,68 @@ function AdPage() {
   );
 }
 
-function BookingWidget({ compact = false }: { compact?: boolean }) {
+function BookingWidget({ compact = false, ad }: { compact?: boolean; ad: AdDetail }) {
+  const { user } = useAuth();
   const [date, setDate] = useState<Date>();
   const [time, setTime] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
   const times = ["09:00", "12:30", "16:00", "18:30"];
+
+  useEffect(() => {
+    if (user?.email && !email) setEmail(user.email);
+  }, [user, email]);
+
+  const send = async () => {
+    if (!date || !time) return;
+    if (!name.trim() || !email.trim()) {
+      toast.error("Completează numele și adresa de email ca profesorul să te poată contacta.");
+      return;
+    }
+    setSending(true);
+    const dateLabel = date.toLocaleDateString("ro-RO", { day: "numeric", month: "long", year: "numeric" });
+    const { error } = await supabase.from("student_requests").insert({
+      subject: ad.subject_name ?? ad.title,
+      level: null,
+      city: ad.is_online ? null : ad.location,
+      is_online: ad.is_online,
+      budget_per_hour: ad.price_per_hour,
+      details: `Solicitare de rezervare pentru anunțul „${ad.title}”. Interval dorit: ${dateLabel}, ora ${time}.`,
+      contact_name: name.trim(),
+      contact_email: email.trim(),
+      contact_phone: phone.trim() || null,
+    });
+    setSending(false);
+    if (error) {
+      toast.error("Nu am putut trimite cererea. Încearcă din nou sau folosește butonul de contact.");
+      return;
+    }
+    setSent(true);
+    toast.success("Cererea a fost trimisă. Profesorii verificați o pot vedea și îți răspund pe email.");
+  };
+
+  if (sent) {
+    return <div className="mt-3 rounded-xl border border-border bg-muted/40 p-4 text-sm">
+      <p className="font-semibold">Cererea ta a fost trimisă</p>
+      <p className="mt-1 text-muted-foreground">Vei primi răspuns pe {email}. Poți trimite și un mesaj direct profesorului.</p>
+    </div>;
+  }
+
   return <div className="mt-3">
     <div className="pointer-events-auto overflow-x-auto"><Calendar mode="single" selected={date} onSelect={setDate} disabled={{ before: new Date() }} className={compact ? "p-0" : "mx-auto p-3"} /></div>
     <div className="mt-4 grid grid-cols-2 gap-2">{times.map((slot) => <Button key={slot} type="button" variant={time === slot ? "default" : "outline"} onClick={() => setTime(slot)}>{slot}</Button>)}</div>
-    <Button className="mt-4 h-11 w-full" disabled={!date || !time} onClick={() => toast.success("Interval selectat. Conectează-te pentru a trimite cererea.")}><CalendarCheck /> Solicită rezervarea</Button>
+    {date && time && (
+      <div className="mt-4 space-y-2">
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Numele tău *" className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm" />
+        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email *" className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm" />
+        <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Telefon (opțional)" className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm" />
+      </div>
+    )}
+    <Button className="mt-4 h-11 w-full" disabled={!date || !time || sending} onClick={send}><CalendarCheck /> {sending ? "Se trimite..." : "Solicită rezervarea"}</Button>
+    <p className="mt-2 text-xs text-muted-foreground">Cererea ajunge la profesorii verificați, care îți răspund direct pe email.</p>
   </div>;
 }
 

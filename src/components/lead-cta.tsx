@@ -42,6 +42,7 @@ export function LeadCta({ defaultSubject, defaultCity }: { defaultSubject?: stri
         <select id="lead-oras" value={oras} onChange={(e) => setOras(e.target.value)}
           className="h-11 rounded-xl border border-border bg-background px-3 text-sm">
           <option value="">Oraș / online</option>
+          <option value="online">Online</option>
           {CITIES.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
         </select>
 
