@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, MessageCircle, GraduationCap, Star, Shield, Wallet } from "lucide-react";
+import { Search, MessageCircle, Send, Star, Shield, Wallet } from "lucide-react";
 
 const URL = "https://meditatiidirect.ro/cum-functioneaza";
 const TITLE = "Cum funcționează MeditatiiDirect.ro — cerere, propuneri, chat direct și evaluare în stele";
