@@ -134,7 +134,28 @@ function PricePage() {
           Estimare orientativă bazată pe tariful mediu la {calc.s.nameLower} în {calc.c.name} și pe 4,33 săptămâni/lună.
           Tariful final se stabilește cu profesorul.
         </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link to="/meditatii" search={{ materie, oras } as never} className="btn-primary h-11 px-5">
+            Cere ofertă pentru {calc.s.nameLower} în {calc.c.name}
+          </Link>
+          <Link to="/pentru-profesori" className="btn-outline h-11 px-5">Sunt profesor</Link>
+        </div>
       </section>
+
+      {/* Banda pentru profesori */}
+      <section className="card-soft mt-8 flex flex-col items-start gap-4 bg-gradient-to-br from-primary-soft to-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+        <div>
+          <h2 className="text-lg font-bold">Predai și vrei elevi noi?</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Cont gratuit, profil real în 5 minute și vezi cererile elevilor cu materie, nivel, oraș și buget. Zero comision.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <Link to="/pentru-profesori" className="btn-primary h-11 px-5">Devino profesor</Link>
+          <Link to="/cereri" className="btn-outline h-11 px-5">Vezi cererile</Link>
+        </div>
+      </section>
+
 
       {/* TABEL MATERII */}
       <section className="mt-12">
