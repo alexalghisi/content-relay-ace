@@ -45,7 +45,7 @@ export const getRequestWithProposals = createServerFn({ method: "GET" })
 
     const { data: props } = await supabaseAdmin
       .from("teacher_proposals")
-      .select("id,user_id,message,price_per_hour,proposed_date,proposed_time,created_at")
+      .select("id,user_id,message,price_per_hour,proposed_date,proposed_time,created_at,rating,rating_comment")
       .eq("request_id", data.id)
       .order("created_at", { ascending: false });
 
