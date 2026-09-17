@@ -82,12 +82,12 @@ export function SeoLanding(p: SeoLandingProps) {
 
         <div className="mt-7 flex flex-wrap gap-3">
           {p.ctaPrimary && (
-            <Link to={p.ctaPrimary.to} className="btn-primary h-11 px-5 inline-flex items-center gap-2">
+            <Link to={p.ctaPrimary.to} search={p.ctaPrimary.search as never} className="btn-primary h-11 px-5 inline-flex items-center gap-2">
               {p.ctaPrimary.label} <ArrowRight className="h-4 w-4" />
             </Link>
           )}
           {p.ctaSecondary && (
-            <Link to={p.ctaSecondary.to} className="btn-outline h-11 px-5">
+            <Link to={p.ctaSecondary.to} search={p.ctaSecondary.search as never} className="btn-outline h-11 px-5">
               {p.ctaSecondary.label}
             </Link>
           )}
