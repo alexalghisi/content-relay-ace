@@ -12,7 +12,7 @@ export const Route = createFileRoute("/meditatii/")({
     materie: typeof search.materie === "string" ? search.materie : undefined,
     oras: typeof search.oras === "string" ? search.oras : undefined,
     q: typeof search.q === "string" ? search.q : undefined,
-    online: typeof search.online === "string" ? search.online : undefined,
+    online: search.online === undefined || search.online === null ? undefined : String(search.online),
   }),
   head: () => ({
     meta: [
