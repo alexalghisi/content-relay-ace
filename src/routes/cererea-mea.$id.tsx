@@ -83,6 +83,7 @@ function MyRequestPage() {
                   </div>
                 )}
               </div>
+              <RatingBox requestId={id} token={t} proposalId={p.id} initial={p.rating} />
             </article>
           ))}
         </div>
