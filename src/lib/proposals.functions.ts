@@ -93,3 +93,37 @@ export const getRequestWithProposals = createServerFn({ method: "GET" })
       }),
     };
   });
+
+/** Elevul evaluează cu stele propunerea/colaborarea, tot prin linkul privat (id + token). */
+export const rateProposal = createServerFn({ method: "POST" })
+  .inputValidator((data: { requestId: string; token: string; proposalId: string; rating: number; comment?: string }) => {
+    const rating = Number(data?.rating);
+    if (!data?.requestId || !data?.token || !data?.proposalId) throw new Error("Link invalid");
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) throw new Error("Rating invalid");
+    return {
+      requestId: String(data.requestId),
+      token: String(data.token),
+      proposalId: String(data.proposalId),
+      rating,
+      comment: data.comment ? String(data.comment).slice(0, 500) : null,
+    };
+  })
+  .handler(async ({ data }): Promise<{ ok: boolean }> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: req } = await supabaseAdmin
+      .from("student_requests")
+      .select("id,access_token")
+      .eq("id", data.requestId)
+      .maybeSingle();
+
+    if (!req || !req.access_token || req.access_token !== data.token) return { ok: false };
+
+    const { error } = await supabaseAdmin
+      .from("teacher_proposals")
+      .update({ rating: data.rating, rating_comment: data.comment, rated_at: new Date().toISOString() })
+      .eq("id", data.proposalId)
+      .eq("request_id", data.requestId);
+
+    return { ok: !error };
+  });
