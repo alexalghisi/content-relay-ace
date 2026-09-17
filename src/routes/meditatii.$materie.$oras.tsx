@@ -202,8 +202,19 @@ function ComboPage() {
           `Online (Zoom / Google Meet) sau la domiciliu în ${city.name}`,
           `Preț mediu ${localMed} lei/oră — indice local ${city.priceIndex.toFixed(2)}× media națională`,
         ]}
-        ctaPrimary={{ to: "/meditatii", label: `Vezi toți profesorii de ${subject.nameLower}` }}
-        ctaSecondary={{ to: "/caut-profesor", label: "Postează cerere" }}
+        ctaPrimary={{
+          to: "/meditatii",
+          label: `Cere ofertă pentru ${subject.nameLower} în ${city.name}`,
+          search: { materie: subject.slug, oras: city.slug },
+        }}
+        ctaSecondary={{ to: "/pentru-profesori", label: "Sunt profesor — vreau cererile" }}
+        ctaFooter={{
+          title: `Primește propuneri de la profesori de ${subject.nameLower} din ${city.name}`,
+          body: "Completezi cererea în 2 minute și primești propuneri cu dată, oră și tarif. Gratuit, fără comision.",
+          to: "/meditatii",
+          label: "Cere ofertă gratuit",
+          search: { materie: subject.slug, oras: city.slug },
+        }}
       />
 
       {/* Anunțuri reale — conținut indexabil bogat */}
