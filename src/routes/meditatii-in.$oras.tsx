@@ -52,7 +52,6 @@ export const Route = createFileRoute("/meditatii-in/$oras")({
       areaServed: { "@type": "City", name: city.name, containedInPlace: { "@type": "AdministrativeArea", name: `${city.county}, România` } },
       address: { "@type": "PostalAddress", addressLocality: city.name, addressRegion: city.county, addressCountry: "RO" },
       priceRange: "30-200 RON",
-      aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", reviewCount: "1247", bestRating: "5", worstRating: "1" },
       makesOffer: {
         "@type": "Offer",
         category: "Meditații particulare",

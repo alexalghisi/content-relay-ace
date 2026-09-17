@@ -37,7 +37,6 @@ export const Route = createFileRoute("/meditatii-engleza")({
         description: DESC, url: URL,
         areaServed: { "@type": "Country", name: "România" },
         offers: { "@type": "AggregateOffer", priceCurrency: "RON", lowPrice: "40", highPrice: "180" },
-        aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "380", bestRating: "5" },
       }) },
     ],
   }),

@@ -37,7 +37,6 @@ export const Route = createFileRoute("/meditatii-romana")({
         description: DESC, url: URL,
         areaServed: { "@type": "Country", name: "România" },
         offers: { "@type": "AggregateOffer", priceCurrency: "RON", lowPrice: "40", highPrice: "150" },
-        aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "420", bestRating: "5" },
       }) },
     ],
   }),
