@@ -87,7 +87,8 @@ function ProfesoriPage() {
         faqs={faqs}
       />
 
-      {teachers.length > 0 && (
+      {/* Ascuns până când platforma are cel puțin 150 de profesori înscriși. */}
+      {teachers.length >= 150 && (
         <section className="container-page py-10">
           <h2 className="text-2xl font-bold mb-6">Profesori cu cele mai bune recenzii</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
