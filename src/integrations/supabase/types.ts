@@ -740,6 +740,182 @@ export type Database = {
         }
         Relationships: []
       }
+      teacher_availability: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: string
+          start_time: string
+          user_id: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: string
+          start_time: string
+          user_id: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          start_time?: string
+          user_id?: string
+          weekday?: number
+        }
+        Relationships: []
+      }
+      teacher_offers: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_in_person: boolean
+          is_online: boolean
+          level: string | null
+          price_per_hour: number | null
+          status: string
+          subject: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_in_person?: boolean
+          is_online?: boolean
+          level?: string | null
+          price_per_hour?: number | null
+          status?: string
+          subject: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_in_person?: boolean
+          is_online?: boolean
+          level?: string | null
+          price_per_hour?: number | null
+          status?: string
+          subject?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      teacher_profiles: {
+        Row: {
+          about: string | null
+          avatar_url: string | null
+          city: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          display_name: string
+          experience_years: number | null
+          headline: string | null
+          id: string
+          in_person_available: boolean
+          is_published: boolean
+          levels: string[]
+          online_available: boolean
+          rate_max: number | null
+          rate_min: number | null
+          slug: string
+          subjects: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          about?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          display_name: string
+          experience_years?: number | null
+          headline?: string | null
+          id?: string
+          in_person_available?: boolean
+          is_published?: boolean
+          levels?: string[]
+          online_available?: boolean
+          rate_max?: number | null
+          rate_min?: number | null
+          slug: string
+          subjects?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          about?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          display_name?: string
+          experience_years?: number | null
+          headline?: string | null
+          id?: string
+          in_person_available?: boolean
+          is_published?: boolean
+          levels?: string[]
+          online_available?: boolean
+          rate_max?: number | null
+          rate_min?: number | null
+          slug?: string
+          subjects?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      teacher_proposals: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          price_per_hour: number | null
+          request_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          price_per_hour?: number | null
+          request_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          price_per_hour?: number | null
+          request_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_proposals_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "student_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teacher_subjects: {
         Row: {
           subject_id: string

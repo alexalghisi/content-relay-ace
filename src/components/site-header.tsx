@@ -44,6 +44,7 @@ export function SiteHeader() {
           {user ? (
             <>
               <Link to="/mesaje" className="btn-pill text-sm text-foreground/80 hover:text-foreground hover:bg-muted">Mesaje</Link>
+              <Link to="/profesor" className="btn-outline border-primary text-primary">Panoul meu</Link>
               <Link to="/cont" className="btn-outline">Contul meu</Link>
               <button onClick={() => signOut()} className="btn-pill text-sm text-muted-foreground hover:text-foreground">
                 Ieșire
@@ -85,7 +86,9 @@ export function SiteHeader() {
                 </>
               )}
             </div>
-            {!user && <Link to="/pentru-profesori" className="btn-outline mt-2" onClick={() => setOpen(false)}>Devino profesor</Link>}
+            {user
+              ? <Link to="/profesor" className="btn-outline mt-2 border-primary text-primary" onClick={() => setOpen(false)}>Panoul profesorului</Link>
+              : <Link to="/pentru-profesori" className="btn-outline mt-2" onClick={() => setOpen(false)}>Devino profesor</Link>}
           </div>
         </div>
       )}
