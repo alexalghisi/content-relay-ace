@@ -72,7 +72,21 @@ function HomePage() {
       { icon: Megaphone, title: "Descrii cererea", text: "Spui materia, nivelul, orașul sau online și bugetul. Durează 2 minute și e gratuit." },
       { icon: MessageSquareText, title: "Primești propuneri", text: "Profesorii verificați interesați te contactează direct cu tariful și programul lor." },
       { icon: BookOpen, title: "Alegi și înveți", text: "Compari propunerile, discuți direct cu profesorul potrivit și începi lecțiile." },
-    ].map((item, index) => <div key={item.title} className="relative rounded-xl border border-border bg-card p-7 text-center"><span className="absolute right-4 top-4 text-4xl font-bold text-primary-soft">0{index + 1}</span><span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary"><item.icon className="h-5 w-5" /></span><h3 className="mt-5 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{item.text}</p></div>)}</div><div className="mt-9 text-center"><Link to="/meditatii" className="btn-primary h-12 px-7">Postează cererea ta <ArrowRight className="ml-2 h-4 w-4" /></Link></div></div></section>
+      { icon: Star, title: "Evaluezi cu stele", text: "După discuție, acorzi de la 1 la 5 stele colaborării. Evaluări din interacțiuni reale, nu recenzii inventate." },
+    ].map((item, index) => <div key={item.title} className="relative rounded-xl border border-border bg-card p-7 text-center"><span className="absolute right-4 top-4 text-4xl font-bold text-primary-soft">0{index + 1}</span><span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary"><item.icon className="h-5 w-5" /></span><h3 className="mt-5 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{item.text}</p></div>)}</div><div className="mt-9 text-center"><Link to="/meditatii" className="btn-primary h-12 px-7">Postează cererea ta <ArrowRight className="ml-2 h-4 w-4" /></Link> <Link to="/cum-functioneaza" className="btn-outline h-12 px-7">Cum funcționează</Link></div></div></section>
+
+    <section className="container-page py-16">
+      <div className="rounded-2xl border border-primary/15 bg-primary-soft/40 p-8 md:p-10">
+        <p className="text-sm font-semibold text-primary">Un mod nou de a găsi meditații</p>
+        <h2 className="mt-2 text-3xl font-bold">Interacțiune directă elev–profesor: chat și evaluare în stele</h2>
+        <p className="mt-3 max-w-3xl text-muted-foreground">Fără intermediari și fără comision. Profesorul îți scrie direct, discutați în chat, iar la final tu evaluezi cu stele cum a decurs tot procesul — de la răspuns până la prima lecție.</p>
+        <div className="mt-7 grid gap-5 md:grid-cols-3">
+          <div className="rounded-xl border border-border bg-card p-6"><MessageSquareText className="h-6 w-6 text-primary" /><h3 className="mt-3 font-bold">Chat direct</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Vorbești cu profesorul în chatul platformei sau pe contactul din propunere. Fără call center.</p></div>
+          <div className="rounded-xl border border-border bg-card p-6"><Star className="h-6 w-6 text-primary" /><h3 className="mt-3 font-bold">Stele pentru proces</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">De la 1 la 5 stele pentru promptitudine, claritatea propunerii și discuție. Doar elevii cu cerere reală pot evalua.</p></div>
+          <div className="rounded-xl border border-border bg-card p-6"><ShieldCheck className="h-6 w-6 text-primary" /><h3 className="mt-3 font-bold">Transparent</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Tarif, dată și oră scrise în propunere de la început. Plătești direct profesorului, integral.</p></div>
+        </div>
+      </div>
+    </section>
 
     <section className="container-page py-16"><div className="grid items-center gap-7 rounded-2xl border border-border bg-accent p-8 md:grid-cols-[1fr_auto] md:p-10"><div><div className="flex items-center gap-2 text-success"><UserRound className="h-5 w-5" /><span className="text-sm font-bold">Pentru profesori</span></div><h2 className="mt-3 text-3xl font-bold">Elevii vin cu cererea, tu vii cu propunerea</h2><p className="mt-3 max-w-2xl text-muted-foreground">Vezi cererile recente de la elevi și părinți, contactează-i direct și îți umpli programul fără intermediari.</p></div><Link to="/pentru-profesori" className="btn-primary h-12 px-7">Devino profesor <ArrowRight className="ml-2 h-4 w-4" /></Link></div></section>
   </>;
