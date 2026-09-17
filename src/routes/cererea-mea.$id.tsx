@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CalendarDays, Clock, Mail, Phone, Wallet } from "lucide-react";
-import { getRequestWithProposals, type RequestWithProposals } from "@/lib/proposals.functions";
+import { CalendarDays, Clock, Mail, Phone, Star, Wallet } from "lucide-react";
+import { getRequestWithProposals, rateProposal, type RequestWithProposals } from "@/lib/proposals.functions";
 
 export const Route = createFileRoute("/cererea-mea/$id")({
   validateSearch: (search: Record<string, unknown>) => ({ t: typeof search.t === "string" ? search.t : "" }),
