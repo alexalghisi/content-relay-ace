@@ -10,8 +10,10 @@ export interface SeoLandingProps {
   h1: string;
   intro: string;
   bullets?: string[];
-  ctaPrimary?: { to: string; label: string; params?: Record<string, string> };
-  ctaSecondary?: { to: string; label: string };
+  ctaPrimary?: { to: string; label: string; params?: Record<string, string>; search?: Record<string, string | undefined> };
+  ctaSecondary?: { to: string; label: string; search?: Record<string, string | undefined> };
+  /** Optional CTA block at the end of the page; defaults to the student request CTA. */
+  ctaFooter?: { title: string; body: string; to: string; label: string; search?: Record<string, string | undefined> };
   sections?: { title: string; body: ReactNode }[];
   pdfs?: PdfItem[];
   faqs?: FaqItem[];
