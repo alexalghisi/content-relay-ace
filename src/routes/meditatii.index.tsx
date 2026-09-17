@@ -70,6 +70,7 @@ function RequestPage() {
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+  const [link, setLink] = useState<{ id: string; token: string } | null>(null);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -81,7 +82,11 @@ function RequestPage() {
     setPending(true);
     const subjectName = SUBJECTS_SEO.find((s) => s.slug === subject)?.name ?? subject;
     const cityName = CITIES.find((c) => c.slug === city)?.name ?? city;
+    const requestId = crypto.randomUUID();
+    const token = crypto.randomUUID().replace(/-/g, "");
     const { error: insertError } = await supabase.from("student_requests").insert({
+      id: requestId,
+      access_token: token,
       subject: subjectName,
       level: level || null,
       city: isOnline ? null : cityName || null,
@@ -97,6 +102,7 @@ function RequestPage() {
       setError("Nu am putut trimite cererea. Încearcă din nou sau scrie-ne pe pagina de contact.");
       return;
     }
+    setLink({ id: requestId, token });
     setDone(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -110,6 +116,19 @@ function RequestPage() {
           <p className="mt-3 leading-7 text-muted-foreground">
             Profesorii verificați de <strong className="text-foreground">{SUBJECTS_SEO.find((s) => s.slug === subject)?.name ?? "materia aleasă"}</strong> o văd acum și îți pot trimite propuneri direct pe email{phone.trim() ? " sau telefon" : ""}. De obicei primești primele răspunsuri în câteva ore.
           </p>
+          {link && (
+            <p className="mt-5 rounded-xl border border-border bg-background p-4 text-sm leading-6 text-muted-foreground">
+              Salvează acest link privat — aici vezi propunerile primite (dată, oră, tarif, mesaj):{" "}
+              <Link
+                to="/cererea-mea/$id"
+                params={{ id: link.id }}
+                search={{ t: link.token }}
+                className="font-semibold text-primary hover:underline"
+              >
+                Vezi propunerile la cererea ta
+              </Link>
+            </p>
+          )}
           <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:justify-center">
             <button onClick={() => setDone(false)} className="btn-outline h-11 px-5">Trimite altă cerere</button>
             <Link to="/" className="btn-primary h-11 px-5">Înapoi la pagina principală</Link>

@@ -643,6 +643,7 @@ export type Database = {
       }
       student_requests: {
         Row: {
+          access_token: string | null
           budget_per_hour: number | null
           city: string | null
           contact_email: string
@@ -657,6 +658,7 @@ export type Database = {
           subject: string
         }
         Insert: {
+          access_token?: string | null
           budget_per_hour?: number | null
           city?: string | null
           contact_email: string
@@ -671,6 +673,7 @@ export type Database = {
           subject: string
         }
         Update: {
+          access_token?: string | null
           budget_per_hour?: number | null
           city?: string | null
           contact_email?: string
@@ -887,7 +890,10 @@ export type Database = {
           id: string
           message: string
           price_per_hour: number | null
+          proposed_date: string | null
+          proposed_time: string | null
           request_id: string
+          status: string
           user_id: string
         }
         Insert: {
@@ -895,7 +901,10 @@ export type Database = {
           id?: string
           message: string
           price_per_hour?: number | null
+          proposed_date?: string | null
+          proposed_time?: string | null
           request_id: string
+          status?: string
           user_id: string
         }
         Update: {
@@ -903,7 +912,10 @@ export type Database = {
           id?: string
           message?: string
           price_per_hour?: number | null
+          proposed_date?: string | null
+          proposed_time?: string | null
           request_id?: string
+          status?: string
           user_id?: string
         }
         Relationships: [
