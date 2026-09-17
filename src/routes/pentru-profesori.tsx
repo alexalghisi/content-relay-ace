@@ -199,9 +199,10 @@ function TeachersPage() {
             <h2 className="text-xl font-bold">Gata să primești prima cerere?</h2>
             <p className="mt-1 text-sm text-muted-foreground">Contul durează un minut, profilul cinci.</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Link to="/signup" className="btn-primary h-11 px-5">Creează cont</Link>
-            <Link to="/login" className="btn-outline h-11 px-5">Am deja cont</Link>
+            <Link to="/vreau-sa-dau-meditatii" className="btn-outline h-11 px-5">Vreau să dau meditații</Link>
+            <Link to="/invita-un-coleg" className="btn-outline h-11 px-5">Invită un coleg</Link>
           </div>
         </div>
       </section>
