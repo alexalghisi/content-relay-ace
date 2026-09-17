@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-meditatii'
 import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacalaureat'
 import { Route as TutorialeRouteImport } from './routes/tutoriale'
 import { Route as TermeniRouteImport } from './routes/termeni'
@@ -65,6 +66,8 @@ import { Route as MeditatiiAdmitereDreptRouteImport } from './routes/meditatii-a
 import { Route as MeditatiiAdmitereAseRouteImport } from './routes/meditatii-admitere-ase'
 import { Route as MateriiRouteImport } from './routes/materii'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as KitPromovareRouteImport } from './routes/kit-promovare'
+import { Route as InvitaUnColegRouteImport } from './routes/invita-un-coleg'
 import { Route as GrileUpbRouteImport } from './routes/grile-upb'
 import { Route as GrileMedicinaRouteImport } from './routes/grile-medicina'
 import { Route as GrileAdmitereMedicina2026RouteImport } from './routes/grile-admitere-medicina-2026'
@@ -114,6 +117,11 @@ import { Route as ApiPublicHooksIndexnowRouteImport } from './routes/api/public/
 import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
 import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
 
+const VreauSaDauMeditatiiRoute = VreauSaDauMeditatiiRouteImport.update({
+  id: '/vreau-sa-dau-meditatii',
+  path: '/vreau-sa-dau-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
   id: '/variante-bacalaureat',
   path: '/variante-bacalaureat',
@@ -399,6 +407,16 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KitPromovareRoute = KitPromovareRouteImport.update({
+  id: '/kit-promovare',
+  path: '/kit-promovare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvitaUnColegRoute = InvitaUnColegRouteImport.update({
+  id: '/invita-un-coleg',
+  path: '/invita-un-coleg',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GrileUpbRoute = GrileUpbRouteImport.update({
   id: '/grile-upb',
   path: '/grile-upb',
@@ -667,6 +685,8 @@ export interface FileRoutesByFullPath {
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
+  '/invita-un-coleg': typeof InvitaUnColegRoute
+  '/kit-promovare': typeof KitPromovareRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -723,6 +743,7 @@ export interface FileRoutesByFullPath {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -773,6 +794,8 @@ export interface FileRoutesByTo {
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
+  '/invita-un-coleg': typeof InvitaUnColegRoute
+  '/kit-promovare': typeof KitPromovareRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -829,6 +852,7 @@ export interface FileRoutesByTo {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -880,6 +904,8 @@ export interface FileRoutesById {
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
+  '/invita-un-coleg': typeof InvitaUnColegRoute
+  '/kit-promovare': typeof KitPromovareRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -936,6 +962,7 @@ export interface FileRoutesById {
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
+  '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -988,6 +1015,8 @@ export interface FileRouteTypes {
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
+    | '/invita-un-coleg'
+    | '/kit-promovare'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1044,6 +1073,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/anunt/$slug'
     | '/bac/$materie'
@@ -1094,6 +1124,8 @@ export interface FileRouteTypes {
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
+    | '/invita-un-coleg'
+    | '/kit-promovare'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1150,6 +1182,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/anunt/$slug'
     | '/bac/$materie'
@@ -1200,6 +1233,8 @@ export interface FileRouteTypes {
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
+    | '/invita-un-coleg'
+    | '/kit-promovare'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1256,6 +1291,7 @@ export interface FileRouteTypes {
     | '/termeni'
     | '/tutoriale'
     | '/variante-bacalaureat'
+    | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/anunt/$slug'
     | '/bac/$materie'
@@ -1307,6 +1343,8 @@ export interface RootRouteChildren {
   GrileAdmitereMedicina2026Route: typeof GrileAdmitereMedicina2026Route
   GrileMedicinaRoute: typeof GrileMedicinaRoute
   GrileUpbRoute: typeof GrileUpbRoute
+  InvitaUnColegRoute: typeof InvitaUnColegRoute
+  KitPromovareRoute: typeof KitPromovareRoute
   LoginRoute: typeof LoginRoute
   MateriiRoute: typeof MateriiRoute
   MeditatiiAdmitereAseRoute: typeof MeditatiiAdmitereAseRoute
@@ -1363,6 +1401,7 @@ export interface RootRouteChildren {
   TermeniRoute: typeof TermeniRoute
   TutorialeRoute: typeof TutorialeRoute
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
+  VreauSaDauMeditatiiRoute: typeof VreauSaDauMeditatiiRoute
   AdminBacCrawlerRoute: typeof AdminBacCrawlerRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
   BacMaterieRoute: typeof BacMaterieRouteWithChildren
@@ -1395,6 +1434,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vreau-sa-dau-meditatii': {
+      id: '/vreau-sa-dau-meditatii'
+      path: '/vreau-sa-dau-meditatii'
+      fullPath: '/vreau-sa-dau-meditatii'
+      preLoaderRoute: typeof VreauSaDauMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/variante-bacalaureat': {
       id: '/variante-bacalaureat'
       path: '/variante-bacalaureat'
@@ -1785,6 +1831,20 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kit-promovare': {
+      id: '/kit-promovare'
+      path: '/kit-promovare'
+      fullPath: '/kit-promovare'
+      preLoaderRoute: typeof KitPromovareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invita-un-coleg': {
+      id: '/invita-un-coleg'
+      path: '/invita-un-coleg'
+      fullPath: '/invita-un-coleg'
+      preLoaderRoute: typeof InvitaUnColegRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/grile-upb': {
@@ -2186,6 +2246,8 @@ const rootRouteChildren: RootRouteChildren = {
   GrileAdmitereMedicina2026Route: GrileAdmitereMedicina2026Route,
   GrileMedicinaRoute: GrileMedicinaRoute,
   GrileUpbRoute: GrileUpbRoute,
+  InvitaUnColegRoute: InvitaUnColegRoute,
+  KitPromovareRoute: KitPromovareRoute,
   LoginRoute: LoginRoute,
   MateriiRoute: MateriiRoute,
   MeditatiiAdmitereAseRoute: MeditatiiAdmitereAseRoute,
@@ -2242,6 +2304,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermeniRoute: TermeniRoute,
   TutorialeRoute: TutorialeRoute,
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
+  VreauSaDauMeditatiiRoute: VreauSaDauMeditatiiRoute,
   AdminBacCrawlerRoute: AdminBacCrawlerRoute,
   AnuntSlugRoute: AnuntSlugRoute,
   BacMaterieRoute: BacMaterieRouteWithChildren,
