@@ -33,7 +33,15 @@ function HomePage() {
   const [location, setLocation] = useState("");
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    navigate({ to: "/meditatii", search: { materie: subject || undefined, oras: location === "Online" ? undefined : location || undefined, q: level || undefined } });
+    navigate({
+      to: "/meditatii",
+      search: {
+        materie: subject || undefined,
+        oras: location && location !== "online" ? location : undefined,
+        q: level || undefined,
+        online: location === "online" ? "1" : undefined,
+      },
+    });
   };
 
   return <>
@@ -46,7 +54,7 @@ function HomePage() {
           <form onSubmit={submit} className="mt-8 grid gap-2 rounded-2xl border border-border bg-background p-2 shadow-[var(--shadow-card)] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
             <select aria-label="Materie" value={subject} onChange={(e) => setSubject(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Materie</option>{POPULAR_SUBJECTS.map((item) => <option value={item.slug} key={item.slug}>{item.name}</option>)}</select>
             <select aria-label="Nivel" value={level} onChange={(e) => setLevel(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Nivel</option>{LEVELS.map((item) => <option key={item}>{item}</option>)}</select>
-            <select aria-label="Locație" value={location} onChange={(e) => setLocation(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Locație</option>{LOCATIONS.map((item) => <option key={item}>{item}</option>)}</select>
+            <select aria-label="Locație" value={location} onChange={(e) => setLocation(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Locație</option>{LOCATIONS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}</select>
             <button className="btn-primary h-13 px-6" type="submit"><Search className="mr-2 h-4 w-4" /> Cere ofertă</button>
           </form>
           <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Gratuit pentru elevi</span><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Profesori verificați</span><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Contact direct, fără intermediari</span></div>
