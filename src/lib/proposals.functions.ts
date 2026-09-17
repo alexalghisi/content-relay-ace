@@ -77,6 +77,8 @@ export const getRequestWithProposals = createServerFn({ method: "GET" })
           proposed_date: p.proposed_date,
           proposed_time: p.proposed_time,
           created_at: p.created_at,
+          rating: p.rating,
+          rating_comment: p.rating_comment,
           teacher: t
             ? {
                 display_name: t.display_name,
