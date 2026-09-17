@@ -19,8 +19,11 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const LEVELS = ["Școală generală", "Evaluare Națională", "Liceu", "Bacalaureat", "Admitere facultate"];
-const LOCATIONS = ["Online", "București", "Cluj-Napoca", "Timișoara", "Iași", "Brașov", "Constanța"];
+const LEVELS = ["Gimnaziu", "Evaluare Națională", "Liceu", "Bacalaureat", "Admitere facultate"];
+const LOCATIONS = [
+  { slug: "online", name: "Online" },
+  ...CITIES.slice(0, 12).map((c) => ({ slug: c.slug, name: c.name })),
+];
 
 function HomePage() {
   const navigate = useNavigate({ from: "/" });
