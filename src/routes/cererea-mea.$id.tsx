@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CalendarDays, Clock, Mail, Phone, Wallet } from "lucide-react";
-import { getRequestWithProposals, type RequestWithProposals } from "@/lib/proposals.functions";
+import { CalendarDays, Clock, Mail, Phone, Star, Wallet } from "lucide-react";
+import { getRequestWithProposals, rateProposal, type RequestWithProposals } from "@/lib/proposals.functions";
 
 export const Route = createFileRoute("/cererea-mea/$id")({
   validateSearch: (search: Record<string, unknown>) => ({ t: typeof search.t === "string" ? search.t : "" }),
@@ -83,10 +83,60 @@ function MyRequestPage() {
                   </div>
                 )}
               </div>
+              <RatingBox requestId={id} token={t} proposalId={p.id} initial={p.rating} />
             </article>
           ))}
         </div>
       )}
     </section>
+  );
+}
+
+function RatingBox({ requestId, token, proposalId, initial }: { requestId: string; token: string; proposalId: string; initial: number | null }) {
+  const [value, setValue] = useState<number>(initial ?? 0);
+  const [hover, setHover] = useState(0);
+  const [comment, setComment] = useState("");
+  const [saved, setSaved] = useState(initial != null);
+  const [busy, setBusy] = useState(false);
+
+  const send = async (rating: number) => {
+    setValue(rating);
+    setBusy(true);
+    const res = await rateProposal({ data: { requestId, token, proposalId, rating, comment } }).catch(() => ({ ok: false }));
+    setBusy(false);
+    if (res.ok) setSaved(true);
+  };
+
+  return (
+    <div className="mt-4 rounded-lg bg-muted/50 p-3">
+      <p className="text-xs font-semibold text-muted-foreground">
+        {saved ? "Evaluarea ta" : "Cum a decurs discuția cu acest profesor?"}
+      </p>
+      <div className="mt-1.5 flex items-center gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            type="button"
+            disabled={busy}
+            aria-label={`${star} stele`}
+            onMouseEnter={() => setHover(star)}
+            onMouseLeave={() => setHover(0)}
+            onClick={() => void send(star)}
+            className="p-0.5"
+          >
+            <Star className={`h-5 w-5 ${(hover || value) >= star ? "fill-warning text-warning" : "text-muted-foreground/40"}`} />
+          </button>
+        ))}
+        {saved && <span className="ml-2 text-xs text-success">Mulțumim!</span>}
+      </div>
+      {!saved && (
+        <input
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="Un cuvânt despre colaborare (opțional)"
+          className="mt-2 h-9 w-full rounded-lg border border-border bg-background px-3 text-xs outline-hidden focus:ring-2 focus:ring-ring"
+        />
+      )}
+    </div>
   );
 }

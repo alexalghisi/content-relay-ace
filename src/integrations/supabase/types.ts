@@ -892,6 +892,9 @@ export type Database = {
           price_per_hour: number | null
           proposed_date: string | null
           proposed_time: string | null
+          rated_at: string | null
+          rating: number | null
+          rating_comment: string | null
           request_id: string
           status: string
           user_id: string
@@ -903,6 +906,9 @@ export type Database = {
           price_per_hour?: number | null
           proposed_date?: string | null
           proposed_time?: string | null
+          rated_at?: string | null
+          rating?: number | null
+          rating_comment?: string | null
           request_id: string
           status?: string
           user_id: string
@@ -914,6 +920,9 @@ export type Database = {
           price_per_hour?: number | null
           proposed_date?: string | null
           proposed_time?: string | null
+          rated_at?: string | null
+          rating?: number | null
+          rating_comment?: string | null
           request_id?: string
           status?: string
           user_id?: string

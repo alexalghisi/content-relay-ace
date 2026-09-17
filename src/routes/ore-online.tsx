@@ -41,7 +41,6 @@ export const Route = createFileRoute("/ore-online")({
           areaServed: { "@type": "Country", name: "România" },
           provider: { "@type": "Organization", name: "MeditatiiDirect.ro", url: "https://meditatiidirect.ro/" },
           offers: { "@type": "AggregateOffer", priceCurrency: "RON", lowPrice: "30", highPrice: "200", offerCount: "800" },
-          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1380", bestRating: "5" },
         }),
       },
     ],

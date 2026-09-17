@@ -47,7 +47,6 @@ export const Route = createFileRoute("/meditatii-la-domiciliu")({
             highPrice: "200",
             offerCount: "500",
           },
-          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1380", bestRating: "5" },
         }),
       },
     ],

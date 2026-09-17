@@ -42,7 +42,6 @@ export const Route = createFileRoute("/meditatii-matematica")({
           areaServed: { "@type": "Country", name: "România" },
           provider: { "@id": "https://meditatiidirect.ro/#org" },
           offers: { "@type": "AggregateOffer", priceCurrency: "RON", lowPrice: "40", highPrice: "200" },
-          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1240", bestRating: "5" },
         }),
       },
     ],
