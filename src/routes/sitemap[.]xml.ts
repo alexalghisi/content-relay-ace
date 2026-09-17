@@ -72,6 +72,8 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/pregatire-admitere-medicina", priority: "0.9", changefreq: "weekly" },
   { path: "/cum-functioneaza", priority: "0.6", changefreq: "monthly" },
   { path: "/pentru-profesori", priority: "0.7", changefreq: "monthly" },
+  { path: "/vreau-sa-dau-meditatii", priority: "0.9", changefreq: "weekly" },
+  { path: "/invita-un-coleg", priority: "0.5", changefreq: "monthly" },
   { path: "/blog", priority: "0.7", changefreq: "weekly" },
   { path: "/tutoriale", priority: "0.6", changefreq: "weekly" },
   { path: "/parteneri", priority: "0.5", changefreq: "monthly" },

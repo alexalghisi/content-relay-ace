@@ -66,6 +66,7 @@ import { Route as MeditatiiAdmitereDreptRouteImport } from './routes/meditatii-a
 import { Route as MeditatiiAdmitereAseRouteImport } from './routes/meditatii-admitere-ase'
 import { Route as MateriiRouteImport } from './routes/materii'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as KitPromovareRouteImport } from './routes/kit-promovare'
 import { Route as InvitaUnColegRouteImport } from './routes/invita-un-coleg'
 import { Route as GrileUpbRouteImport } from './routes/grile-upb'
 import { Route as GrileMedicinaRouteImport } from './routes/grile-medicina'
@@ -406,6 +407,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KitPromovareRoute = KitPromovareRouteImport.update({
+  id: '/kit-promovare',
+  path: '/kit-promovare',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InvitaUnColegRoute = InvitaUnColegRouteImport.update({
   id: '/invita-un-coleg',
   path: '/invita-un-coleg',
@@ -680,6 +686,7 @@ export interface FileRoutesByFullPath {
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
   '/invita-un-coleg': typeof InvitaUnColegRoute
+  '/kit-promovare': typeof KitPromovareRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -788,6 +795,7 @@ export interface FileRoutesByTo {
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
   '/invita-un-coleg': typeof InvitaUnColegRoute
+  '/kit-promovare': typeof KitPromovareRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -897,6 +905,7 @@ export interface FileRoutesById {
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
   '/invita-un-coleg': typeof InvitaUnColegRoute
+  '/kit-promovare': typeof KitPromovareRoute
   '/login': typeof LoginRoute
   '/materii': typeof MateriiRoute
   '/meditatii-admitere-ase': typeof MeditatiiAdmitereAseRoute
@@ -1007,6 +1016,7 @@ export interface FileRouteTypes {
     | '/grile-medicina'
     | '/grile-upb'
     | '/invita-un-coleg'
+    | '/kit-promovare'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1115,6 +1125,7 @@ export interface FileRouteTypes {
     | '/grile-medicina'
     | '/grile-upb'
     | '/invita-un-coleg'
+    | '/kit-promovare'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1223,6 +1234,7 @@ export interface FileRouteTypes {
     | '/grile-medicina'
     | '/grile-upb'
     | '/invita-un-coleg'
+    | '/kit-promovare'
     | '/login'
     | '/materii'
     | '/meditatii-admitere-ase'
@@ -1332,6 +1344,7 @@ export interface RootRouteChildren {
   GrileMedicinaRoute: typeof GrileMedicinaRoute
   GrileUpbRoute: typeof GrileUpbRoute
   InvitaUnColegRoute: typeof InvitaUnColegRoute
+  KitPromovareRoute: typeof KitPromovareRoute
   LoginRoute: typeof LoginRoute
   MateriiRoute: typeof MateriiRoute
   MeditatiiAdmitereAseRoute: typeof MeditatiiAdmitereAseRoute
@@ -1820,6 +1833,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kit-promovare': {
+      id: '/kit-promovare'
+      path: '/kit-promovare'
+      fullPath: '/kit-promovare'
+      preLoaderRoute: typeof KitPromovareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/invita-un-coleg': {
       id: '/invita-un-coleg'
       path: '/invita-un-coleg'
@@ -2227,6 +2247,7 @@ const rootRouteChildren: RootRouteChildren = {
   GrileMedicinaRoute: GrileMedicinaRoute,
   GrileUpbRoute: GrileUpbRoute,
   InvitaUnColegRoute: InvitaUnColegRoute,
+  KitPromovareRoute: KitPromovareRoute,
   LoginRoute: LoginRoute,
   MateriiRoute: MateriiRoute,
   MeditatiiAdmitereAseRoute: MeditatiiAdmitereAseRoute,
