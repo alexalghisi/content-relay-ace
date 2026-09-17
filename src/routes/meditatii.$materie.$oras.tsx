@@ -195,7 +195,7 @@ function ComboPage() {
         pageUrl={url}
         breadcrumbParent={{ name: "Meditații", url: `${SITE}/meditatii` }}
         h1={h1Options[variant]}
-        intro={`Profesori verificați de ${subject.nameLower} în ${city.name} (${city.county}, ${city.population} locuitori — reper ${city.landmark}). Tarife locale ${localMin}–${localMax} lei/oră (medie ${localMed} lei), online prin Zoom/Meet sau la domiciliu. Contactezi profesorul direct, fără cont obligatoriu și fără comision.`}
+        intro={`Cauți meditații la ${subject.nameLower} în ${city.name} (${city.county}, ${city.population} locuitori — reper ${city.landmark})? Descrie o singură dată ce ai nevoie, iar profesorii verificați îți trimit propuneri cu dată, oră și tarif. Tarife locale ${localMin}–${localMax} lei/oră (medie ${localMed} lei), online prin Zoom/Meet sau la domiciliu. Gratuit, fără comision.`}
         bullets={[
           `${subject.name} pentru toate nivelurile: clasele V–XII, BAC 2026, admitere`,
           `Profesori titulari cu rezultate la ${city.landmark} și liceele din ${city.name}`,
