@@ -123,9 +123,16 @@ function RequestsPage() {
   const { user, loading } = useAuth();
   const [requests, setRequests] = useState<StudentRequest[] | null>(null);
   const [sentIds, setSentIds] = useState<Set<string>>(new Set());
+  const [hasTeacherProfile, setHasTeacherProfile] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!user) return;
+    supabase
+      .from("teacher_profiles")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => setHasTeacherProfile(Boolean(data)));
     supabase
       .from("student_requests")
       .select("id,created_at,subject,level,city,is_online,budget_per_hour,details,contact_name,contact_email,contact_phone")
