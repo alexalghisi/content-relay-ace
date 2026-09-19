@@ -123,9 +123,16 @@ function RequestsPage() {
   const { user, loading } = useAuth();
   const [requests, setRequests] = useState<StudentRequest[] | null>(null);
   const [sentIds, setSentIds] = useState<Set<string>>(new Set());
+  const [hasTeacherProfile, setHasTeacherProfile] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!user) return;
+    supabase
+      .from("teacher_profiles")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => setHasTeacherProfile(Boolean(data)));
     supabase
       .from("student_requests")
       .select("id,created_at,subject,level,city,is_online,budget_per_hour,details,contact_name,contact_email,contact_phone")
@@ -169,6 +176,14 @@ function RequestsPage() {
 
       {requests === null ? (
         <p className="mt-8 text-muted-foreground">Se încarcă cererile…</p>
+      ) : requests.length === 0 && hasTeacherProfile === false ? (
+        <div className="mt-8 rounded-xl border border-dashed border-border p-10 text-center">
+          <h2 className="font-bold">Completează-ți profilul de profesor ca să vezi cererile</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Cererile elevilor sunt vizibile doar profesorilor cu profil salvat. Durează un minut: nume, materii și tarif.
+          </p>
+          <Link to="/profesor" className="btn-primary mt-5 h-11 px-5">Completează profilul</Link>
+        </div>
       ) : requests.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-border p-10 text-center">
           <h2 className="font-bold">Momentan nu există cereri deschise</h2>
