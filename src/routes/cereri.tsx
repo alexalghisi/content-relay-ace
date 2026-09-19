@@ -176,6 +176,14 @@ function RequestsPage() {
 
       {requests === null ? (
         <p className="mt-8 text-muted-foreground">Se încarcă cererile…</p>
+      ) : requests.length === 0 && hasTeacherProfile === false ? (
+        <div className="mt-8 rounded-xl border border-dashed border-border p-10 text-center">
+          <h2 className="font-bold">Completează-ți profilul de profesor ca să vezi cererile</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Cererile elevilor sunt vizibile doar profesorilor cu profil salvat. Durează un minut: nume, materii și tarif.
+          </p>
+          <Link to="/profesor" className="btn-primary mt-5 h-11 px-5">Completează profilul</Link>
+        </div>
       ) : requests.length === 0 ? (
         <div className="mt-8 rounded-xl border border-dashed border-border p-10 text-center">
           <h2 className="font-bold">Momentan nu există cereri deschise</h2>
