@@ -81,6 +81,24 @@ function SignupPage() {
     navigate({ to: "/" });
   };
 
+  if (pending) {
+    return (
+      <section className="container-page py-12 sm:py-16 max-w-md">
+        <h1 className="text-3xl font-bold">Verifică-ți emailul</h1>
+        <p className="mt-3 text-muted-foreground">
+          Ți-am trimis un email de confirmare la <strong className="text-foreground">{email}</strong>. Apasă linkul din
+          email ca să-ți activezi contul. Dacă nu îl găsești, verifică și folderul Spam sau Promoții.
+        </p>
+        <button onClick={onResend} disabled={loading} className="mt-6 w-full h-12 rounded-full border border-border bg-background hover:bg-muted text-sm font-medium disabled:opacity-60">
+          {loading ? "Se trimite..." : "Trimite din nou emailul"}
+        </button>
+        <p className="mt-6 text-sm text-muted-foreground">
+          Ai confirmat deja? <Link to="/login" className="text-primary font-medium hover:underline">Autentifică-te</Link>
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section className="container-page py-12 sm:py-16 max-w-md">
       <h1 className="text-3xl font-bold">Înscriere gratuită</h1>
