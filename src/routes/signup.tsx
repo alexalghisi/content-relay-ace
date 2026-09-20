@@ -22,11 +22,23 @@ const schema = z.object({
   password: z.string().min(6, "Parola minim 6 caractere").max(72),
 });
 
+function authErrorRo(message: string) {
+  const m = message.toLowerCase();
+  if (m.includes("email not confirmed")) return "Contul nu este confirmat încă. Deschide emailul primit de la noi și apasă linkul de confirmare.";
+  if (m.includes("invalid login credentials")) return "Email sau parolă greșite.";
+  if (m.includes("user already registered") || m.includes("already been registered")) return "Există deja un cont cu acest email. Autentifică-te.";
+  if (m.includes("password")) return "Parola nu este acceptată. Folosește minim 6 caractere.";
+  if (m.includes("rate limit") || m.includes("too many")) return "Prea multe încercări. Mai încearcă peste câteva minute.";
+  if (m.includes("token") || m.includes("expired")) return "Linkul de confirmare a expirat sau a fost deja folosit. Trimite-ți unul nou.";
+  return "A apărut o eroare. Mai încearcă o dată.";
+}
+
 function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pending, setPending] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -34,15 +46,31 @@ function SignupPage() {
     const parsed = schema.safeParse({ name, email, password });
     if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
       options: { emailRedirectTo: `${window.location.origin}/`, data: { display_name: parsed.data.name } },
     });
     setLoading(false);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Cont creat! Verifică email-ul pentru confirmare.");
-    navigate({ to: "/" });
+    if (error) { toast.error(authErrorRo(error.message)); return; }
+    if (data.session) {
+      toast.success("Cont creat!");
+      navigate({ to: "/" });
+      return;
+    }
+    setPending(true);
+  };
+
+  const onResend = async () => {
+    setLoading(true);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: email.trim(),
+      options: { emailRedirectTo: `${window.location.origin}/` },
+    });
+    setLoading(false);
+    if (error) { toast.error(authErrorRo(error.message)); return; }
+    toast.success("Ți-am trimis un email nou de confirmare.");
   };
 
   const onGoogle = async () => {
@@ -52,6 +80,24 @@ function SignupPage() {
     if (result.redirected) return;
     navigate({ to: "/" });
   };
+
+  if (pending) {
+    return (
+      <section className="container-page py-12 sm:py-16 max-w-md">
+        <h1 className="text-3xl font-bold">Verifică-ți emailul</h1>
+        <p className="mt-3 text-muted-foreground">
+          Ți-am trimis un email de confirmare la <strong className="text-foreground">{email}</strong>. Apasă linkul din
+          email ca să-ți activezi contul. Dacă nu îl găsești, verifică și folderul Spam sau Promoții.
+        </p>
+        <button onClick={onResend} disabled={loading} className="mt-6 w-full h-12 rounded-full border border-border bg-background hover:bg-muted text-sm font-medium disabled:opacity-60">
+          {loading ? "Se trimite..." : "Trimite din nou emailul"}
+        </button>
+        <p className="mt-6 text-sm text-muted-foreground">
+          Ai confirmat deja? <Link to="/login" className="text-primary font-medium hover:underline">Autentifică-te</Link>
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="container-page py-12 sm:py-16 max-w-md">

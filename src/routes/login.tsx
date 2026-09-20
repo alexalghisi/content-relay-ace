@@ -21,11 +21,33 @@ const schema = z.object({
   password: z.string().min(6, "Parola minim 6 caractere").max(72),
 });
 
+function authErrorRo(message: string) {
+  const m = message.toLowerCase();
+  if (m.includes("email not confirmed")) return "Contul nu este confirmat încă. Deschide emailul de confirmare sau cere unul nou mai jos.";
+  if (m.includes("invalid login credentials")) return "Email sau parolă greșite.";
+  if (m.includes("rate limit") || m.includes("too many")) return "Prea multe încercări. Mai încearcă peste câteva minute.";
+  if (m.includes("token") || m.includes("expired")) return "Linkul de confirmare a expirat sau a fost deja folosit. Cere unul nou mai jos.";
+  return "A apărut o eroare. Mai încearcă o dată.";
+}
+
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [needsConfirm, setNeedsConfirm] = useState(false);
   const navigate = useNavigate();
+
+  const onResend = async () => {
+    setLoading(true);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: email.trim(),
+      options: { emailRedirectTo: `${window.location.origin}/` },
+    });
+    setLoading(false);
+    if (error) { toast.error(authErrorRo(error.message)); return; }
+    toast.success("Ți-am trimis un email nou de confirmare.");
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +56,12 @@ function LoginPage() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword(parsed.data);
     setLoading(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      setNeedsConfirm(error.message.toLowerCase().includes("email not confirmed"));
+      toast.error(authErrorRo(error.message));
+      return;
+    }
+    setNeedsConfirm(false);
     toast.success("Bine ai revenit!");
     navigate({ to: "/" });
   };
@@ -72,6 +99,14 @@ function LoginPage() {
           {loading ? "Se conectează..." : "Autentificare"}
         </button>
       </form>
+      {needsConfirm && (
+        <div className="mt-6 rounded-xl border border-border bg-muted/40 p-4">
+          <p className="text-sm">Contul tău nu este confirmat încă. Deschide emailul de confirmare sau cere unul nou.</p>
+          <button onClick={onResend} disabled={loading} className="mt-3 h-10 px-4 rounded-full border border-border bg-background hover:bg-muted text-sm font-medium disabled:opacity-60">
+            {loading ? "Se trimite..." : "Trimite din nou emailul de confirmare"}
+          </button>
+        </div>
+      )}
       <p className="mt-6 text-sm text-muted-foreground">
         Nu ai cont? <Link to="/signup" className="text-primary font-medium hover:underline">Creează cont gratuit</Link>
       </p>
