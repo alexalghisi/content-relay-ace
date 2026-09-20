@@ -131,6 +131,17 @@
     text-rendering: optimizeLegibility;
   }
   h1,h2,h3,h4 { font-family: var(--font-display); letter-spacing: 0; font-weight: 700; }
+
+  button,
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  [role="button"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 }
 
 @layer components {
