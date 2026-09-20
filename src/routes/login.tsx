@@ -99,6 +99,14 @@ function LoginPage() {
           {loading ? "Se conectează..." : "Autentificare"}
         </button>
       </form>
+      {needsConfirm && (
+        <div className="mt-6 rounded-xl border border-border bg-muted/40 p-4">
+          <p className="text-sm">Contul tău nu este confirmat încă. Deschide emailul de confirmare sau cere unul nou.</p>
+          <button onClick={onResend} disabled={loading} className="mt-3 h-10 px-4 rounded-full border border-border bg-background hover:bg-muted text-sm font-medium disabled:opacity-60">
+            {loading ? "Se trimite..." : "Trimite din nou emailul de confirmare"}
+          </button>
+        </div>
+      )}
       <p className="mt-6 text-sm text-muted-foreground">
         Nu ai cont? <Link to="/signup" className="text-primary font-medium hover:underline">Creează cont gratuit</Link>
       </p>
