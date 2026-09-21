@@ -108,6 +108,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as BacMaterieRouteImport } from './routes/bac.$materie'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
 import { Route as AdminBacCrawlerRouteImport } from './routes/admin.bac-crawler'
+import { Route as BacMaterieIndexRouteImport } from './routes/bac.$materie.index'
 import { Route as SubiecteAdmitereMaterieMaterieRouteImport } from './routes/subiecte-admitere.materie.$materie'
 import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './routes/subiecte-admitere.$universitate.$materie'
 import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
@@ -625,6 +626,11 @@ const AdminBacCrawlerRoute = AdminBacCrawlerRouteImport.update({
   path: '/admin/bac-crawler',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BacMaterieIndexRoute = BacMaterieIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BacMaterieRoute,
+} as any)
 const SubiecteAdmitereMaterieMaterieRoute =
   SubiecteAdmitereMaterieMaterieRouteImport.update({
     id: '/subiecte-admitere/materie/$materie',
@@ -808,6 +814,7 @@ export interface FileRoutesByFullPath {
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
+  '/bac/$materie/': typeof BacMaterieIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
@@ -900,7 +907,6 @@ export interface FileRoutesByTo {
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/anunt/$slug': typeof AnuntSlugRoute
-  '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/cererea-mea/$id': typeof CerereaMeaIdRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
@@ -923,6 +929,7 @@ export interface FileRoutesByTo {
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
+  '/bac/$materie': typeof BacMaterieIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
@@ -1039,6 +1046,7 @@ export interface FileRoutesById {
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
+  '/bac/$materie/': typeof BacMaterieIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
@@ -1156,6 +1164,7 @@ export interface FileRouteTypes {
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
+    | '/bac/$materie/'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
@@ -1248,7 +1257,6 @@ export interface FileRouteTypes {
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/anunt/$slug'
-    | '/bac/$materie'
     | '/blog/$slug'
     | '/cererea-mea/$id'
     | '/meditatii-in/$oras'
@@ -1271,6 +1279,7 @@ export interface FileRouteTypes {
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
+    | '/bac/$materie'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
@@ -1386,6 +1395,7 @@ export interface FileRouteTypes {
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
+    | '/bac/$materie/'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
@@ -2205,6 +2215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBacCrawlerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bac/$materie/': {
+      id: '/bac/$materie/'
+      path: '/'
+      fullPath: '/bac/$materie/'
+      preLoaderRoute: typeof BacMaterieIndexRouteImport
+      parentRoute: typeof BacMaterieRoute
+    }
     '/subiecte-admitere/materie/$materie': {
       id: '/subiecte-admitere/materie/$materie'
       path: '/subiecte-admitere/materie/$materie'
@@ -2320,10 +2337,12 @@ const BacMaterieAnRouteWithChildren = BacMaterieAnRoute._addFileChildren(
 
 interface BacMaterieRouteChildren {
   BacMaterieAnRoute: typeof BacMaterieAnRouteWithChildren
+  BacMaterieIndexRoute: typeof BacMaterieIndexRoute
 }
 
 const BacMaterieRouteChildren: BacMaterieRouteChildren = {
   BacMaterieAnRoute: BacMaterieAnRouteWithChildren,
+  BacMaterieIndexRoute: BacMaterieIndexRoute,
 }
 
 const BacMaterieRouteWithChildren = BacMaterieRoute._addFileChildren(
