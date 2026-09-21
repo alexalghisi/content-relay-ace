@@ -74,6 +74,9 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/pentru-profesori", priority: "0.7", changefreq: "monthly" },
   { path: "/vreau-sa-dau-meditatii", priority: "0.9", changefreq: "weekly" },
   { path: "/invita-un-coleg", priority: "0.5", changefreq: "monthly" },
+  { path: "/rezolvari", priority: "0.9", changefreq: "weekly" },
+  { path: "/calculator-medie-bac", priority: "0.9", changefreq: "monthly" },
+  { path: "/calculator-nota-admitere", priority: "0.85", changefreq: "monthly" },
   { path: "/blog", priority: "0.7", changefreq: "weekly" },
   { path: "/tutoriale", priority: "0.6", changefreq: "weekly" },
   { path: "/parteneri", priority: "0.5", changefreq: "monthly" },
@@ -184,18 +187,38 @@ export const Route = createFileRoute("/sitemap.xml")({
           console.error("sitemap combo fetch failed", err);
         }
 
-        // Arhivă BAC: /bac, /bac/{materie}, /bac/{materie}/{an} — 16 × 17 = 272 pagini
+        // Arhivă BAC: /bac, /bac/{materie}, /bac/{materie}/{an}, /bac/{materie}/{an}/{sesiune}
+        // + simulări cronometrate pe materie
         try {
-          const { BAC_SUBJECTS, BAC_YEARS } = await import("@/data/bac-catalog");
+          const { BAC_SUBJECTS, BAC_YEARS, BAC_SESSIONS } = await import("@/data/bac-catalog");
           urls.push(`  <url>\n    <loc>${BASE_URL}/bac</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
           for (const s of BAC_SUBJECTS) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+            urls.push(`  <url>\n    <loc>${BASE_URL}/simulare-bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             for (const y of BAC_YEARS) {
               urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+              for (const ses of BAC_SESSIONS) {
+                urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}/${ses.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
+              }
             }
           }
         } catch (err) {
           console.error("sitemap bac catalog fetch failed", err);
+        }
+
+        // Rezolvări publicate
+        try {
+          const { data: rez } = await supabaseAdmin
+            .from("bac_rezolvari")
+            .select("materie, an, sesiune, updated_at");
+          for (const r of rez ?? []) {
+            const last = r.updated_at ? new Date(r.updated_at).toISOString().slice(0, 10) : null;
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/rezolvari/${r.materie}/${r.an}/${r.sesiune}</loc>\n${last ? `    <lastmod>${last}</lastmod>\n` : ""}    <changefreq>monthly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+            );
+          }
+        } catch (err) {
+          console.error("sitemap rezolvari fetch failed", err);
         }
 
 

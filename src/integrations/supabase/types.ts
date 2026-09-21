@@ -178,6 +178,107 @@ export type Database = {
         }
         Relationships: []
       }
+      bac_rezolvari: {
+        Row: {
+          an: number
+          continut: string
+          created_at: string
+          dificultate: string
+          id: string
+          materie: string
+          sesiune: string
+          slug: string
+          status: string
+          timp_estimat_minute: number
+          titlu: string | null
+          updated_at: string
+          varianta_id: string | null
+        }
+        Insert: {
+          an: number
+          continut: string
+          created_at?: string
+          dificultate?: string
+          id?: string
+          materie: string
+          sesiune: string
+          slug: string
+          status?: string
+          timp_estimat_minute?: number
+          titlu?: string | null
+          updated_at?: string
+          varianta_id?: string | null
+        }
+        Update: {
+          an?: number
+          continut?: string
+          created_at?: string
+          dificultate?: string
+          id?: string
+          materie?: string
+          sesiune?: string
+          slug?: string
+          status?: string
+          timp_estimat_minute?: number
+          titlu?: string | null
+          updated_at?: string
+          varianta_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bac_rezolvari_varianta_id_fkey"
+            columns: ["varianta_id"]
+            isOneToOne: false
+            referencedRelation: "bac_variante"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bac_variante: {
+        Row: {
+          an: number
+          are_rezolvare: boolean
+          barem_path: string | null
+          created_at: string
+          id: string
+          is_published: boolean
+          materie: string
+          sesiune: string
+          slug: string
+          specializare: string | null
+          subiect_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          an: number
+          are_rezolvare?: boolean
+          barem_path?: string | null
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          materie: string
+          sesiune: string
+          slug: string
+          specializare?: string | null
+          subiect_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          an?: number
+          are_rezolvare?: boolean
+          barem_path?: string | null
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          materie?: string
+          sesiune?: string
+          slug?: string
+          specializare?: string | null
+          subiect_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           category: string | null
@@ -557,6 +658,33 @@ export type Database = {
           },
         ]
       }
+      newsletter_subscribers: {
+        Row: {
+          confirm_token: string
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          id: string
+          materii: string[]
+        }
+        Insert: {
+          confirm_token?: string
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          materii?: string[]
+        }
+        Update: {
+          confirm_token?: string
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          materii?: string[]
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -640,6 +768,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      rezolvare_comentarii: {
+        Row: {
+          autor: string
+          created_at: string
+          id: string
+          is_approved: boolean
+          mesaj: string
+          rezolvare_an: number
+          rezolvare_materie: string
+          rezolvare_sesiune: string
+        }
+        Insert: {
+          autor: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          mesaj: string
+          rezolvare_an: number
+          rezolvare_materie: string
+          rezolvare_sesiune: string
+        }
+        Update: {
+          autor?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          mesaj?: string
+          rezolvare_an?: number
+          rezolvare_materie?: string
+          rezolvare_sesiune?: string
+        }
+        Relationships: []
       }
       student_requests: {
         Row: {
