@@ -59,6 +59,7 @@ function BacHub() {
           ))}
         </ul>
       </section>
+      <NewsletterSignup className="mt-12" />
       <AdsterraNativeBanner className="mt-10" />
       <AdSenseSlot format="auto" className="mt-6" />
     </main>
