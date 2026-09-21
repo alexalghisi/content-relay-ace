@@ -2,6 +2,7 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ArrowLeft, GraduationCap } from "lucide-react";
 import { getBacSubject, BAC_YEARS } from "@/data/bac-catalog";
+import { BacCountdown } from "@/components/bac-countdown";
 
 const SITE = "https://meditatiidirect.ro";
 
@@ -57,6 +58,16 @@ function BacSubjectHub() {
           {BAC_YEARS.length} ani de subiecte oficiale și bareme la <strong>{subject.nameLower}</strong> ({subject.short}), din {BAC_YEARS[0]} până în {BAC_YEARS[BAC_YEARS.length - 1]}. Toate sesiunile (iunie, august, specială, simulare).
         </p>
       </header>
+      <BacCountdown className="mt-6" />
+
+      <nav aria-label="Unelte" className="mt-6 flex flex-wrap gap-2">
+        <Link to="/simulare-bac/$materie" params={{ materie: subject.slug }} className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+          Simulare cronometrată la {subject.nameLower}
+        </Link>
+        <Link to="/rezolvari" className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">Rezolvări explicate</Link>
+        <Link to="/calculator-medie-bac" className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">Calculator medie BAC</Link>
+      </nav>
+
       <section className="mt-8">
         <h2 className="text-xl font-semibold flex items-center gap-2"><GraduationCap className="h-5 w-5" /> Selectează anul</h2>
         <ul className="mt-4 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
