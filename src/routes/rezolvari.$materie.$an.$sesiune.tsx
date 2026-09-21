@@ -4,6 +4,8 @@ import { AlertTriangle, ArrowLeft, Clock, Gauge } from "lucide-react";
 import { getBacSubject, BAC_SESSIONS, type BacSessionSlug } from "@/data/bac-catalog";
 import { getRezolvare } from "@/lib/bac-content.functions";
 import { RezolvareContent } from "@/components/rezolvare-content";
+import { RezolvareComments } from "@/components/rezolvare-comments";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 
 const SITE = "https://meditatiidirect.ro";
 const SESSION_SLUGS = BAC_SESSIONS.map((s) => s.slug) as readonly string[];
@@ -159,6 +161,7 @@ function RezolvarePage() {
 
       <section className="mt-12">
         <h2 className="text-lg font-semibold">Rezolvări înrudite la {subject.nameLower}</h2>
+        {/* comentarii + newsletter randate mai jos */}
         <div className="mt-3 flex flex-wrap gap-2">
           {[year - 1, year - 2, year + 1].filter((y) => y >= 2010 && y <= 2026).map((y) => (
             <Link key={y} to="/rezolvari/$materie/$an/$sesiune" params={{ materie: subject.slug, an: String(y), sesiune }}
