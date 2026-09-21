@@ -36,6 +36,13 @@
       "when": 1789798560607,
       "tag": "0004_restore_anon_profiles_column_select",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1789952860332,
+      "tag": "0005_bac_variante_rezolvari",
+      "breakpoints": true
     }
   ]
 }
