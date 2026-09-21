@@ -86,6 +86,7 @@ import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubiecteAdmitereIndexRouteImport } from './routes/subiecte-admitere.index'
+import { Route as RezolvariIndexRouteImport } from './routes/rezolvari.index'
 import { Route as ProfesoriIndexRouteImport } from './routes/profesori.index'
 import { Route as ProfesorIndexRouteImport } from './routes/profesor.index'
 import { Route as PreturiMeditatiiIndexRouteImport } from './routes/preturi-meditatii.index'
@@ -109,9 +110,11 @@ import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './route
 import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
 import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
 import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
+import { Route as RezolvariMaterieAnSesiuneRouteImport } from './routes/rezolvari.$materie.$an.$sesiune'
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
 import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as BacMaterieAnSesiuneRouteImport } from './routes/bac.$materie.$an.$sesiune'
 import { Route as ApiPublicHooksSeoDailyRouteImport } from './routes/api/public/hooks/seo-daily'
 import { Route as ApiPublicHooksIndexnowRouteImport } from './routes/api/public/hooks/indexnow'
 import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
@@ -508,6 +511,11 @@ const SubiecteAdmitereIndexRoute = SubiecteAdmitereIndexRouteImport.update({
   path: '/subiecte-admitere/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RezolvariIndexRoute = RezolvariIndexRouteImport.update({
+  id: '/rezolvari/',
+  path: '/rezolvari/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfesoriIndexRoute = ProfesoriIndexRouteImport.update({
   id: '/profesori/',
   path: '/profesori/',
@@ -627,6 +635,12 @@ const SubiecteAdmitereUniversitateMaterieAnRoute =
     path: '/$an',
     getParentRoute: () => SubiecteAdmitereUniversitateMaterieRoute,
   } as any)
+const RezolvariMaterieAnSesiuneRoute =
+  RezolvariMaterieAnSesiuneRouteImport.update({
+    id: '/rezolvari/$materie/$an/$sesiune',
+    path: '/rezolvari/$materie/$an/$sesiune',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ResurseBacMaterieAnRoute = ResurseBacMaterieAnRouteImport.update({
   id: '/resurse/bac/$materie/$an',
   path: '/resurse/bac/$materie/$an',
@@ -644,6 +658,11 @@ const LovableEmailQueueProcessRoute =
     path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
+const BacMaterieAnSesiuneRoute = BacMaterieAnSesiuneRouteImport.update({
+  id: '/$sesiune',
+  path: '/$sesiune',
+  getParentRoute: () => BacMaterieAnRoute,
+} as any)
 const ApiPublicHooksSeoDailyRoute = ApiPublicHooksSeoDailyRouteImport.update({
   id: '/api/public/hooks/seo-daily',
   path: '/api/public/hooks/seo-daily',
@@ -762,8 +781,9 @@ export interface FileRoutesByFullPath {
   '/preturi-meditatii/': typeof PreturiMeditatiiIndexRoute
   '/profesor/': typeof ProfesorIndexRoute
   '/profesori/': typeof ProfesoriIndexRoute
+  '/rezolvari/': typeof RezolvariIndexRoute
   '/subiecte-admitere/': typeof SubiecteAdmitereIndexRoute
-  '/bac/$materie/$an': typeof BacMaterieAnRoute
+  '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -771,9 +791,11 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
+  '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
 }
 export interface FileRoutesByTo {
@@ -871,8 +893,9 @@ export interface FileRoutesByTo {
   '/preturi-meditatii': typeof PreturiMeditatiiIndexRoute
   '/profesor': typeof ProfesorIndexRoute
   '/profesori': typeof ProfesoriIndexRoute
+  '/rezolvari': typeof RezolvariIndexRoute
   '/subiecte-admitere': typeof SubiecteAdmitereIndexRoute
-  '/bac/$materie/$an': typeof BacMaterieAnRoute
+  '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -880,9 +903,11 @@ export interface FileRoutesByTo {
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
+  '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
 }
 export interface FileRoutesById {
@@ -981,8 +1006,9 @@ export interface FileRoutesById {
   '/preturi-meditatii/': typeof PreturiMeditatiiIndexRoute
   '/profesor/': typeof ProfesorIndexRoute
   '/profesori/': typeof ProfesoriIndexRoute
+  '/rezolvari/': typeof RezolvariIndexRoute
   '/subiecte-admitere/': typeof SubiecteAdmitereIndexRoute
-  '/bac/$materie/$an': typeof BacMaterieAnRoute
+  '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -990,9 +1016,11 @@ export interface FileRoutesById {
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
+  '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
 }
 export interface FileRouteTypes {
@@ -1092,6 +1120,7 @@ export interface FileRouteTypes {
     | '/preturi-meditatii/'
     | '/profesor/'
     | '/profesori/'
+    | '/rezolvari/'
     | '/subiecte-admitere/'
     | '/bac/$materie/$an'
     | '/meditatii/$materie/$oras'
@@ -1101,9 +1130,11 @@ export interface FileRouteTypes {
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
     | '/api/public/hooks/seo-daily'
+    | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -1201,6 +1232,7 @@ export interface FileRouteTypes {
     | '/preturi-meditatii'
     | '/profesor'
     | '/profesori'
+    | '/rezolvari'
     | '/subiecte-admitere'
     | '/bac/$materie/$an'
     | '/meditatii/$materie/$oras'
@@ -1210,9 +1242,11 @@ export interface FileRouteTypes {
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
     | '/api/public/hooks/seo-daily'
+    | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
   id:
     | '__root__'
@@ -1310,6 +1344,7 @@ export interface FileRouteTypes {
     | '/preturi-meditatii/'
     | '/profesor/'
     | '/profesori/'
+    | '/rezolvari/'
     | '/subiecte-admitere/'
     | '/bac/$materie/$an'
     | '/meditatii/$materie/$oras'
@@ -1319,9 +1354,11 @@ export interface FileRouteTypes {
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
     | '/api/public/hooks/seo-daily'
+    | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
   fileRoutesById: FileRoutesById
 }
@@ -1420,6 +1457,7 @@ export interface RootRouteChildren {
   PreturiMeditatiiIndexRoute: typeof PreturiMeditatiiIndexRoute
   ProfesorIndexRoute: typeof ProfesorIndexRoute
   ProfesoriIndexRoute: typeof ProfesoriIndexRoute
+  RezolvariIndexRoute: typeof RezolvariIndexRoute
   SubiecteAdmitereIndexRoute: typeof SubiecteAdmitereIndexRoute
   MeditatiiMaterieOrasRoute: typeof MeditatiiMaterieOrasRoute
   SubiecteAdmitereMaterieMaterieRoute: typeof SubiecteAdmitereMaterieMaterieRoute
@@ -1430,6 +1468,7 @@ export interface RootRouteChildren {
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
   ResurseBacMaterieAnRoute: typeof ResurseBacMaterieAnRoute
+  RezolvariMaterieAnSesiuneRoute: typeof RezolvariMaterieAnSesiuneRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1973,6 +2012,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubiecteAdmitereIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rezolvari/': {
+      id: '/rezolvari/'
+      path: '/rezolvari'
+      fullPath: '/rezolvari/'
+      preLoaderRoute: typeof RezolvariIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profesori/': {
       id: '/profesori/'
       path: '/profesori'
@@ -2134,6 +2180,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubiecteAdmitereUniversitateMaterieAnRouteImport
       parentRoute: typeof SubiecteAdmitereUniversitateMaterieRoute
     }
+    '/rezolvari/$materie/$an/$sesiune': {
+      id: '/rezolvari/$materie/$an/$sesiune'
+      path: '/rezolvari/$materie/$an/$sesiune'
+      fullPath: '/rezolvari/$materie/$an/$sesiune'
+      preLoaderRoute: typeof RezolvariMaterieAnSesiuneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resurse/bac/$materie/$an': {
       id: '/resurse/bac/$materie/$an'
       path: '/resurse/bac/$materie/$an'
@@ -2154,6 +2207,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/lovable/email/queue/process'
       preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/bac/$materie/$an/$sesiune': {
+      id: '/bac/$materie/$an/$sesiune'
+      path: '/$sesiune'
+      fullPath: '/bac/$materie/$an/$sesiune'
+      preLoaderRoute: typeof BacMaterieAnSesiuneRouteImport
+      parentRoute: typeof BacMaterieAnRoute
     }
     '/api/public/hooks/seo-daily': {
       id: '/api/public/hooks/seo-daily'
@@ -2186,12 +2246,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface BacMaterieAnRouteChildren {
+  BacMaterieAnSesiuneRoute: typeof BacMaterieAnSesiuneRoute
+}
+
+const BacMaterieAnRouteChildren: BacMaterieAnRouteChildren = {
+  BacMaterieAnSesiuneRoute: BacMaterieAnSesiuneRoute,
+}
+
+const BacMaterieAnRouteWithChildren = BacMaterieAnRoute._addFileChildren(
+  BacMaterieAnRouteChildren,
+)
+
 interface BacMaterieRouteChildren {
-  BacMaterieAnRoute: typeof BacMaterieAnRoute
+  BacMaterieAnRoute: typeof BacMaterieAnRouteWithChildren
 }
 
 const BacMaterieRouteChildren: BacMaterieRouteChildren = {
-  BacMaterieAnRoute: BacMaterieAnRoute,
+  BacMaterieAnRoute: BacMaterieAnRouteWithChildren,
 }
 
 const BacMaterieRouteWithChildren = BacMaterieRoute._addFileChildren(
@@ -2324,6 +2396,7 @@ const rootRouteChildren: RootRouteChildren = {
   PreturiMeditatiiIndexRoute: PreturiMeditatiiIndexRoute,
   ProfesorIndexRoute: ProfesorIndexRoute,
   ProfesoriIndexRoute: ProfesoriIndexRoute,
+  RezolvariIndexRoute: RezolvariIndexRoute,
   SubiecteAdmitereIndexRoute: SubiecteAdmitereIndexRoute,
   MeditatiiMaterieOrasRoute: MeditatiiMaterieOrasRoute,
   SubiecteAdmitereMaterieMaterieRoute: SubiecteAdmitereMaterieMaterieRoute,
@@ -2334,6 +2407,7 @@ const rootRouteChildren: RootRouteChildren = {
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
   ResurseBacMaterieAnRoute: ResurseBacMaterieAnRoute,
+  RezolvariMaterieAnSesiuneRoute: RezolvariMaterieAnSesiuneRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
