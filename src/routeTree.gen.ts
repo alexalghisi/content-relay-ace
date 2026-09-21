@@ -113,6 +113,7 @@ import { Route as SubiecteAdmitereMaterieMaterieRouteImport } from './routes/sub
 import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './routes/subiecte-admitere.$universitate.$materie'
 import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
 import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
+import { Route as BacMaterieAnIndexRouteImport } from './routes/bac.$materie.$an.index'
 import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
 import { Route as RezolvariMaterieAnSesiuneRouteImport } from './routes/rezolvari.$materie.$an.$sesiune'
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
@@ -653,6 +654,11 @@ const BacMaterieAnRoute = BacMaterieAnRouteImport.update({
   path: '/$an',
   getParentRoute: () => BacMaterieRoute,
 } as any)
+const BacMaterieAnIndexRoute = BacMaterieAnIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BacMaterieAnRoute,
+} as any)
 const SubiecteAdmitereUniversitateMaterieAnRoute =
   SubiecteAdmitereUniversitateMaterieAnRouteImport.update({
     id: '/$an',
@@ -825,6 +831,7 @@ export interface FileRoutesByFullPath {
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
+  '/bac/$materie/$an/': typeof BacMaterieAnIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -925,7 +932,6 @@ export interface FileRoutesByTo {
   '/profesori': typeof ProfesoriIndexRoute
   '/rezolvari': typeof RezolvariIndexRoute
   '/subiecte-admitere': typeof SubiecteAdmitereIndexRoute
-  '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -940,6 +946,7 @@ export interface FileRoutesByTo {
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
+  '/bac/$materie/$an': typeof BacMaterieAnIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1057,6 +1064,7 @@ export interface FileRoutesById {
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
+  '/bac/$materie/$an/': typeof BacMaterieAnIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1175,6 +1183,7 @@ export interface FileRouteTypes {
     | '/resurse/bac/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
+    | '/bac/$materie/$an/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1275,7 +1284,6 @@ export interface FileRouteTypes {
     | '/profesori'
     | '/rezolvari'
     | '/subiecte-admitere'
-    | '/bac/$materie/$an'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
@@ -1290,6 +1298,7 @@ export interface FileRouteTypes {
     | '/resurse/bac/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
+    | '/bac/$materie/$an'
   id:
     | '__root__'
     | '/'
@@ -1406,6 +1415,7 @@ export interface FileRouteTypes {
     | '/resurse/bac/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
+    | '/bac/$materie/$an/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -2250,6 +2260,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BacMaterieAnRouteImport
       parentRoute: typeof BacMaterieRoute
     }
+    '/bac/$materie/$an/': {
+      id: '/bac/$materie/$an/'
+      path: '/'
+      fullPath: '/bac/$materie/$an/'
+      preLoaderRoute: typeof BacMaterieAnIndexRouteImport
+      parentRoute: typeof BacMaterieAnRoute
+    }
     '/subiecte-admitere/$universitate/$materie/$an': {
       id: '/subiecte-admitere/$universitate/$materie/$an'
       path: '/$an'
@@ -2325,10 +2342,12 @@ declare module '@tanstack/react-router' {
 
 interface BacMaterieAnRouteChildren {
   BacMaterieAnSesiuneRoute: typeof BacMaterieAnSesiuneRoute
+  BacMaterieAnIndexRoute: typeof BacMaterieAnIndexRoute
 }
 
 const BacMaterieAnRouteChildren: BacMaterieAnRouteChildren = {
   BacMaterieAnSesiuneRoute: BacMaterieAnSesiuneRoute,
+  BacMaterieAnIndexRoute: BacMaterieAnIndexRoute,
 }
 
 const BacMaterieAnRouteWithChildren = BacMaterieAnRoute._addFileChildren(
