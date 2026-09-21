@@ -1,0 +1,67 @@
+// Citiri publice pentru arhiva BAC pe sesiuni și rezolvările explicate.
+// Rulează pe server cu cheia publishable (RLS ca anon) — fără secrete în client.
+import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
+import { z } from "zod";
+import type { Database } from "@/integrations/supabase/types";
+
+function publicClient() {
+  return createClient<Database>(
+    process.env["SUPABASE_URL"] ?? process.env["VITE_SUPABASE_URL"]!,
+    process.env["SUPABASE_PUBLISHABLE_KEY"] ?? process.env["VITE_SUPABASE_PUBLISHABLE_KEY"]!,
+    { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
+  );
+}
+
+const ComboSchema = z.object({
+  materie: z.string().min(1).max(40).regex(/^[a-z][a-z0-9-]*$/),
+  an: z.coerce.number().int().min(2000).max(2035),
+  sesiune: z.enum(["iunie", "august", "speciala", "simulare"]),
+});
+
+export const getVariantaSesiune = createServerFn({ method: "GET" })
+  .inputValidator((input: unknown) => ComboSchema.parse(input))
+  .handler(async ({ data }) => {
+    const sb = publicClient();
+    const [{ data: varianta }, { data: rezolvare }] = await Promise.all([
+      sb
+        .from("bac_variante")
+        .select("id, subiect_path, barem_path, specializare, are_rezolvare, updated_at")
+        .eq("materie", data.materie)
+        .eq("an", data.an)
+        .eq("sesiune", data.sesiune)
+        .maybeSingle(),
+      sb
+        .from("bac_rezolvari")
+        .select("slug, dificultate, timp_estimat_minute, status")
+        .eq("materie", data.materie)
+        .eq("an", data.an)
+        .eq("sesiune", data.sesiune)
+        .maybeSingle(),
+    ]);
+    return { varianta: varianta ?? null, rezolvare: rezolvare ?? null };
+  });
+
+export const getRezolvare = createServerFn({ method: "GET" })
+  .inputValidator((input: unknown) => ComboSchema.parse(input))
+  .handler(async ({ data }) => {
+    const sb = publicClient();
+    const { data: rezolvare } = await sb
+      .from("bac_rezolvari")
+      .select("titlu, continut, dificultate, timp_estimat_minute, status, updated_at")
+      .eq("materie", data.materie)
+      .eq("an", data.an)
+      .eq("sesiune", data.sesiune)
+      .maybeSingle();
+    return { rezolvare: rezolvare ?? null };
+  });
+
+export const listRezolvari = createServerFn({ method: "GET" }).handler(async () => {
+  const sb = publicClient();
+  const { data } = await sb
+    .from("bac_rezolvari")
+    .select("materie, an, sesiune, dificultate, timp_estimat_minute, status")
+    .order("an", { ascending: false })
+    .limit(500);
+  return { items: data ?? [] };
+});
