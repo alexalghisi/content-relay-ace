@@ -658,6 +658,33 @@ export type Database = {
           },
         ]
       }
+      newsletter_subscribers: {
+        Row: {
+          confirm_token: string
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          id: string
+          materii: string[]
+        }
+        Insert: {
+          confirm_token?: string
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          materii?: string[]
+        }
+        Update: {
+          confirm_token?: string
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          materii?: string[]
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -741,6 +768,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      rezolvare_comentarii: {
+        Row: {
+          autor: string
+          created_at: string
+          id: string
+          is_approved: boolean
+          mesaj: string
+          rezolvare_an: number
+          rezolvare_materie: string
+          rezolvare_sesiune: string
+        }
+        Insert: {
+          autor: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          mesaj: string
+          rezolvare_an: number
+          rezolvare_materie: string
+          rezolvare_sesiune: string
+        }
+        Update: {
+          autor?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          mesaj?: string
+          rezolvare_an?: number
+          rezolvare_materie?: string
+          rezolvare_sesiune?: string
+        }
+        Relationships: []
       }
       student_requests: {
         Row: {

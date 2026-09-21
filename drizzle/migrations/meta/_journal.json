@@ -43,6 +43,13 @@
       "when": 1789952860332,
       "tag": "0005_bac_variante_rezolvari",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789953157593,
+      "tag": "0006_newsletter_si_comentarii_rezolvari",
+      "breakpoints": true
     }
   ]
 }
