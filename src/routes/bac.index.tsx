@@ -4,6 +4,8 @@ import { BookOpen } from "lucide-react";
 import { BAC_SUBJECTS, BAC_YEARS } from "@/data/bac-catalog";
 import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { AdSenseSlot } from "@/components/ads/adsense";
+import { BacCountdown } from "@/components/bac-countdown";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 
 const SITE = "https://meditatiidirect.ro";
 
@@ -34,6 +36,14 @@ function BacHub() {
           {BAC_SUBJECTS.length} materii × {BAC_YEARS.length} ani de subiecte oficiale și bareme de bacalaureat. Toate sesiunile (iunie, august, specială, simulare națională). PDF gratuit, fără cont.
         </p>
       </header>
+      <BacCountdown className="mt-6" />
+
+      <nav aria-label="Unelte BAC" className="mt-6 flex flex-wrap gap-2">
+        <Link to="/rezolvari" className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">Rezolvări explicate</Link>
+        <Link to="/calculator-medie-bac" className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">Calculator medie BAC</Link>
+        <Link to="/calculator-nota-admitere" className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">Calculator notă admitere</Link>
+      </nav>
+
       <AdsterraBanner728 className="mt-6" />
       <section className="mt-8">
         <h2 className="text-xl font-semibold flex items-center gap-2"><BookOpen className="h-5 w-5" /> Alege materia</h2>
