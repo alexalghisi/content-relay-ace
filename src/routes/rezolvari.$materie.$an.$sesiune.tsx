@@ -161,7 +161,6 @@ function RezolvarePage() {
 
       <section className="mt-12">
         <h2 className="text-lg font-semibold">Rezolvări înrudite la {subject.nameLower}</h2>
-        {/* comentarii + newsletter randate mai jos */}
         <div className="mt-3 flex flex-wrap gap-2">
           {[year - 1, year - 2, year + 1].filter((y) => y >= 2010 && y <= 2026).map((y) => (
             <Link key={y} to="/rezolvari/$materie/$an/$sesiune" params={{ materie: subject.slug, an: String(y), sesiune }}
@@ -175,6 +174,10 @@ function RezolvarePage() {
           </Link>
         </div>
       </section>
+
+      <RezolvareComments materie={subject.slug} an={year} sesiune={sesiune} />
+
+      <NewsletterSignup defaultSubject={subject.slug} className="mt-12" />
 
       <section className="mt-10 rounded-2xl border border-primary/20 bg-primary-soft/40 p-6 sm:p-8">
         <h2 className="text-xl font-semibold">Vrei explicația în direct?</h2>
