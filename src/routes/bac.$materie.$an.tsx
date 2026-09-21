@@ -142,7 +142,15 @@ function SessionCard({ materie, an, sesiune, label, subjectLower }: {
   return (
     <div className="card-soft p-5">
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
-      <h3 className="mt-1 text-lg font-semibold">BAC {subjectLower} — {label.toLowerCase()} {an}</h3>
+      <h3 className="mt-1 text-lg font-semibold">
+        <Link to="/bac/$materie/$an/$sesiune" params={{ materie, an: String(an), sesiune }} className="hover:text-primary">
+          BAC {subjectLower} — {label.toLowerCase()} {an}
+        </Link>
+      </h3>
+      <Link to="/bac/$materie/$an/$sesiune" params={{ materie, an: String(an), sesiune }}
+        className="mt-1 inline-flex text-xs text-primary hover:underline">
+        Deschide varianta în pagină (subiect + barem + rezolvare) →
+      </Link>
       <div className="mt-3 grid gap-2">
         <a href={subiect} rel="nofollow noopener" target="_blank"
            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm hover:border-primary/40 hover:text-primary">
