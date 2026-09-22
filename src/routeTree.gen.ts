@@ -102,6 +102,7 @@ import { Route as SimulareBacMaterieRouteImport } from './routes/simulare-bac.$m
 import { Route as ProfesoriOrasRouteImport } from './routes/profesori.$oras'
 import { Route as ProfesorSlugRouteImport } from './routes/profesor.$slug'
 import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
+import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
@@ -602,6 +603,11 @@ const PreturiMeditatiiMaterieRoute = PreturiMeditatiiMaterieRouteImport.update({
   path: '/preturi-meditatii/$materie',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsletterConfirmRoute = NewsletterConfirmRouteImport.update({
+  id: '/newsletter/confirm',
+  path: '/newsletter/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MesajeIdRoute = MesajeIdRouteImport.update({
   id: '/mesaje/$id',
   path: '/mesaje/$id',
@@ -836,6 +842,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
@@ -957,6 +964,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
@@ -1079,6 +1087,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
@@ -1203,6 +1212,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
     | '/profesor/$slug'
     | '/profesori/$oras'
@@ -1324,6 +1334,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
     | '/profesor/$slug'
     | '/profesori/$oras'
@@ -1445,6 +1456,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
     | '/profesor/$slug'
     | '/profesori/$oras'
@@ -1568,6 +1580,7 @@ export interface RootRouteChildren {
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
   MesajeIdRoute: typeof MesajeIdRoute
+  NewsletterConfirmRoute: typeof NewsletterConfirmRoute
   PreturiMeditatiiMaterieRoute: typeof PreturiMeditatiiMaterieRoute
   ProfesorSlugRoute: typeof ProfesorSlugRoute
   ProfesoriOrasRoute: typeof ProfesoriOrasRoute
@@ -2250,6 +2263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreturiMeditatiiMaterieRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/newsletter/confirm': {
+      id: '/newsletter/confirm'
+      path: '/newsletter/confirm'
+      fullPath: '/newsletter/confirm'
+      preLoaderRoute: typeof NewsletterConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mesaje/$id': {
       id: '/mesaje/$id'
       path: '/mesaje/$id'
@@ -2588,6 +2608,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
   MesajeIdRoute: MesajeIdRoute,
+  NewsletterConfirmRoute: NewsletterConfirmRoute,
   PreturiMeditatiiMaterieRoute: PreturiMeditatiiMaterieRoute,
   ProfesorSlugRoute: ProfesorSlugRoute,
   ProfesoriOrasRoute: ProfesoriOrasRoute,
