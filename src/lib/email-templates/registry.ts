@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react'
+import { template as newsletterConfirmTemplate } from './newsletter-confirm'
 
 export interface TemplateEntry {
   component: ComponentType<any>
