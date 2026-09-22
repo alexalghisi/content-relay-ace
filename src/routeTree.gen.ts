@@ -104,6 +104,7 @@ import { Route as ProfesorSlugRouteImport } from './routes/profesor.$slug'
 import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as CerereaMeaIdRouteImport } from './routes/cererea-mea.$id'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as BacMaterieRouteImport } from './routes/bac.$materie'
@@ -113,12 +114,15 @@ import { Route as BacMaterieIndexRouteImport } from './routes/bac.$materie.index
 import { Route as SubiecteAdmitereMaterieMaterieRouteImport } from './routes/subiecte-admitere.materie.$materie'
 import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './routes/subiecte-admitere.$universitate.$materie'
 import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
 import { Route as BacMaterieAnIndexRouteImport } from './routes/bac.$materie.$an.index'
 import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
 import { Route as RezolvariMaterieAnSesiuneRouteImport } from './routes/rezolvari.$materie.$an.$sesiune'
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
 import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as BacMaterieAnSesiuneRouteImport } from './routes/bac.$materie.$an.$sesiune'
 import { Route as ApiPublicHooksSeoDailyRouteImport } from './routes/api/public/hooks/seo-daily'
@@ -608,6 +612,11 @@ const MeditatiiInOrasRoute = MeditatiiInOrasRouteImport.update({
   path: '/meditatii-in/$oras',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CerereaMeaIdRoute = CerereaMeaIdRouteImport.update({
   id: '/cererea-mea/$id',
   path: '/cererea-mea/$id',
@@ -655,6 +664,11 @@ const MeditatiiMaterieOrasRoute = MeditatiiMaterieOrasRouteImport.update({
   path: '/meditatii/$materie/$oras',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BacMaterieAnRoute = BacMaterieAnRouteImport.update({
   id: '/$an',
   path: '/$an',
@@ -686,6 +700,18 @@ const ResurseAdmitereFacultateAnRoute =
   ResurseAdmitereFacultateAnRouteImport.update({
     id: '/resurse/admitere/$facultate/$an',
     path: '/resurse/admitere/$facultate/$an',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailQueueProcessRoute =
@@ -807,6 +833,7 @@ export interface FileRoutesByFullPath {
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/cererea-mea/$id': typeof CerereaMeaIdRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
@@ -824,6 +851,7 @@ export interface FileRoutesByFullPath {
   '/rezolvari/': typeof RezolvariIndexRoute
   '/subiecte-admitere/': typeof SubiecteAdmitereIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -834,6 +862,8 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
   '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
@@ -924,6 +954,7 @@ export interface FileRoutesByTo {
   '/anunt/$slug': typeof AnuntSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/cererea-mea/$id': typeof CerereaMeaIdRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
@@ -940,6 +971,7 @@ export interface FileRoutesByTo {
   '/profesori': typeof ProfesoriIndexRoute
   '/rezolvari': typeof RezolvariIndexRoute
   '/subiecte-admitere': typeof SubiecteAdmitereIndexRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -950,6 +982,8 @@ export interface FileRoutesByTo {
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
   '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
@@ -1042,6 +1076,7 @@ export interface FileRoutesById {
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/cererea-mea/$id': typeof CerereaMeaIdRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
@@ -1059,6 +1094,7 @@ export interface FileRoutesById {
   '/rezolvari/': typeof RezolvariIndexRoute
   '/subiecte-admitere/': typeof SubiecteAdmitereIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieRouteWithChildren
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
@@ -1069,6 +1105,8 @@ export interface FileRoutesById {
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
   '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
@@ -1162,6 +1200,7 @@ export interface FileRouteTypes {
     | '/bac/$materie'
     | '/blog/$slug'
     | '/cererea-mea/$id'
+    | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
@@ -1179,6 +1218,7 @@ export interface FileRouteTypes {
     | '/rezolvari/'
     | '/subiecte-admitere/'
     | '/bac/$materie/$an'
+    | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
@@ -1189,6 +1229,8 @@ export interface FileRouteTypes {
     | '/api/public/hooks/seo-daily'
     | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
@@ -1279,6 +1321,7 @@ export interface FileRouteTypes {
     | '/anunt/$slug'
     | '/blog/$slug'
     | '/cererea-mea/$id'
+    | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
@@ -1295,6 +1338,7 @@ export interface FileRouteTypes {
     | '/profesori'
     | '/rezolvari'
     | '/subiecte-admitere'
+    | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
@@ -1305,6 +1349,8 @@ export interface FileRouteTypes {
     | '/api/public/hooks/seo-daily'
     | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
@@ -1396,6 +1442,7 @@ export interface FileRouteTypes {
     | '/bac/$materie'
     | '/blog/$slug'
     | '/cererea-mea/$id'
+    | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
     | '/preturi-meditatii/$materie'
@@ -1413,6 +1460,7 @@ export interface FileRouteTypes {
     | '/rezolvari/'
     | '/subiecte-admitere/'
     | '/bac/$materie/$an'
+    | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/$universitate/$materie'
     | '/subiecte-admitere/materie/$materie'
@@ -1423,6 +1471,8 @@ export interface FileRouteTypes {
     | '/api/public/hooks/seo-daily'
     | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
@@ -1515,6 +1565,7 @@ export interface RootRouteChildren {
   BacMaterieRoute: typeof BacMaterieRouteWithChildren
   BlogSlugRoute: typeof BlogSlugRoute
   CerereaMeaIdRoute: typeof CerereaMeaIdRoute
+  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
   MesajeIdRoute: typeof MesajeIdRoute
   PreturiMeditatiiMaterieRoute: typeof PreturiMeditatiiMaterieRoute
@@ -1531,6 +1582,7 @@ export interface RootRouteChildren {
   ProfesoriIndexRoute: typeof ProfesoriIndexRoute
   RezolvariIndexRoute: typeof RezolvariIndexRoute
   SubiecteAdmitereIndexRoute: typeof SubiecteAdmitereIndexRoute
+  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   MeditatiiMaterieOrasRoute: typeof MeditatiiMaterieOrasRoute
   SubiecteAdmitereMaterieMaterieRoute: typeof SubiecteAdmitereMaterieMaterieRoute
   ApiPublicHooksAutoBlogPostRoute: typeof ApiPublicHooksAutoBlogPostRoute
@@ -1538,6 +1590,8 @@ export interface RootRouteChildren {
   ApiPublicHooksIndexnowRoute: typeof ApiPublicHooksIndexnowRoute
   ApiPublicHooksSeoDailyRoute: typeof ApiPublicHooksSeoDailyRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
+  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
   ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
   ResurseBacMaterieAnRoute: typeof ResurseBacMaterieAnRoute
   RezolvariMaterieAnSesiuneRoute: typeof RezolvariMaterieAnSesiuneRoute
@@ -2210,6 +2264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeditatiiInOrasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cererea-mea/$id': {
       id: '/cererea-mea/$id'
       path: '/cererea-mea/$id'
@@ -2273,6 +2334,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeditatiiMaterieOrasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bac/$materie/$an': {
       id: '/bac/$materie/$an'
       path: '/$an'
@@ -2313,6 +2381,20 @@ declare module '@tanstack/react-router' {
       path: '/resurse/admitere/$facultate/$an'
       fullPath: '/resurse/admitere/$facultate/$an'
       preLoaderRoute: typeof ResurseAdmitereFacultateAnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/queue/process': {
@@ -2503,6 +2585,7 @@ const rootRouteChildren: RootRouteChildren = {
   BacMaterieRoute: BacMaterieRouteWithChildren,
   BlogSlugRoute: BlogSlugRoute,
   CerereaMeaIdRoute: CerereaMeaIdRoute,
+  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
   MesajeIdRoute: MesajeIdRoute,
   PreturiMeditatiiMaterieRoute: PreturiMeditatiiMaterieRoute,
@@ -2520,6 +2603,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfesoriIndexRoute: ProfesoriIndexRoute,
   RezolvariIndexRoute: RezolvariIndexRoute,
   SubiecteAdmitereIndexRoute: SubiecteAdmitereIndexRoute,
+  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   MeditatiiMaterieOrasRoute: MeditatiiMaterieOrasRoute,
   SubiecteAdmitereMaterieMaterieRoute: SubiecteAdmitereMaterieMaterieRoute,
   ApiPublicHooksAutoBlogPostRoute: ApiPublicHooksAutoBlogPostRoute,
@@ -2527,6 +2611,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksIndexnowRoute: ApiPublicHooksIndexnowRoute,
   ApiPublicHooksSeoDailyRoute: ApiPublicHooksSeoDailyRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
+  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
   ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
   ResurseBacMaterieAnRoute: ResurseBacMaterieAnRoute,
   RezolvariMaterieAnSesiuneRoute: RezolvariMaterieAnSesiuneRoute,
