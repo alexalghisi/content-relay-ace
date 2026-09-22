@@ -78,6 +78,7 @@ import { Route as ContRouteImport } from './routes/cont'
 import { Route as ConfidentialitateRouteImport } from './routes/confidentialitate'
 import { Route as CereriRouteImport } from './routes/cereri'
 import { Route as CautProfesorRouteImport } from './routes/caut-profesor'
+import { Route as CastigaDinMeditatiiRouteImport } from './routes/castiga-din-meditatii'
 import { Route as CalculatorNotaAdmitereRouteImport } from './routes/calculator-nota-admitere'
 import { Route as CalculatorMedieBacRouteImport } from './routes/calculator-medie-bac'
 import { Route as AnunturiMeditatiiBacRouteImport } from './routes/anunturi-meditatii-bac'
@@ -476,6 +477,11 @@ const CautProfesorRoute = CautProfesorRouteImport.update({
   path: '/caut-profesor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CastigaDinMeditatiiRoute = CastigaDinMeditatiiRouteImport.update({
+  id: '/castiga-din-meditatii',
+  path: '/castiga-din-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalculatorNotaAdmitereRoute = CalculatorNotaAdmitereRouteImport.update({
   id: '/calculator-nota-admitere',
   path: '/calculator-nota-admitere',
@@ -726,6 +732,7 @@ export interface FileRoutesByFullPath {
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
+  '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
@@ -843,6 +850,7 @@ export interface FileRoutesByTo {
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
+  '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
@@ -959,6 +967,7 @@ export interface FileRoutesById {
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
+  '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
@@ -1078,6 +1087,7 @@ export interface FileRouteTypes {
     | '/anunturi-meditatii-bac'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
+    | '/castiga-din-meditatii'
     | '/caut-profesor'
     | '/cereri'
     | '/confidentialitate'
@@ -1195,6 +1205,7 @@ export interface FileRouteTypes {
     | '/anunturi-meditatii-bac'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
+    | '/castiga-din-meditatii'
     | '/caut-profesor'
     | '/cereri'
     | '/confidentialitate'
@@ -1310,6 +1321,7 @@ export interface FileRouteTypes {
     | '/anunturi-meditatii-bac'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
+    | '/castiga-din-meditatii'
     | '/caut-profesor'
     | '/cereri'
     | '/confidentialitate'
@@ -1428,6 +1440,7 @@ export interface RootRouteChildren {
   AnunturiMeditatiiBacRoute: typeof AnunturiMeditatiiBacRoute
   CalculatorMedieBacRoute: typeof CalculatorMedieBacRoute
   CalculatorNotaAdmitereRoute: typeof CalculatorNotaAdmitereRoute
+  CastigaDinMeditatiiRoute: typeof CastigaDinMeditatiiRoute
   CautProfesorRoute: typeof CautProfesorRoute
   CereriRoute: typeof CereriRoute
   ConfidentialitateRoute: typeof ConfidentialitateRoute
@@ -2015,6 +2028,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CautProfesorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/castiga-din-meditatii': {
+      id: '/castiga-din-meditatii'
+      path: '/castiga-din-meditatii'
+      fullPath: '/castiga-din-meditatii'
+      preLoaderRoute: typeof CastigaDinMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calculator-nota-admitere': {
       id: '/calculator-nota-admitere'
       path: '/calculator-nota-admitere'
@@ -2408,6 +2428,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnunturiMeditatiiBacRoute: AnunturiMeditatiiBacRoute,
   CalculatorMedieBacRoute: CalculatorMedieBacRoute,
   CalculatorNotaAdmitereRoute: CalculatorNotaAdmitereRoute,
+  CastigaDinMeditatiiRoute: CastigaDinMeditatiiRoute,
   CautProfesorRoute: CautProfesorRoute,
   CereriRoute: CereriRoute,
   ConfidentialitateRoute: ConfidentialitateRoute,

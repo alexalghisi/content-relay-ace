@@ -931,6 +931,48 @@ export type Database = {
         }
         Relationships: []
       }
+      teacher_leads: {
+        Row: {
+          city: string | null
+          consent: boolean
+          contacted_at: string | null
+          created_at: string
+          email: string
+          experience: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          source: string
+          subjects: string
+        }
+        Insert: {
+          city?: string | null
+          consent?: boolean
+          contacted_at?: string | null
+          created_at?: string
+          email: string
+          experience?: string | null
+          full_name: string
+          id?: string
+          phone?: string | null
+          source?: string
+          subjects: string
+        }
+        Update: {
+          city?: string | null
+          consent?: boolean
+          contacted_at?: string | null
+          created_at?: string
+          email?: string
+          experience?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          source?: string
+          subjects?: string
+        }
+        Relationships: []
+      }
       teacher_offers: {
         Row: {
           created_at: string
