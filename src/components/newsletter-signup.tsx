@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { subscribeToNewsletter } from "@/lib/newsletter.functions";
 import { BAC_SUBJECTS } from "@/data/bac-catalog";
 
 /** Abonare la variante și rezolvări noi. Dublă confirmare: rândul rămâne neconfirmat
@@ -14,21 +14,27 @@ export function NewsletterSignup({ defaultSubject, className = "" }: { defaultSu
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setState("sending");
-    const { error } = await supabase
-      .from("newsletter_subscribers")
-      .insert({ email: email.trim().toLowerCase(), materii: materie ? [materie] : [] });
-    if (error) {
-      if (error.code === "23505") {
-        setState("done");
-        setMsg("Ești deja pe listă — îți trimitem variantele noi pe email.");
+    try {
+      const res = await subscribeToNewsletter({
+        data: { email: email.trim().toLowerCase(), materie: materie || undefined },
+      });
+      if (res.status === "error") {
+        setState("error");
+        setMsg("Nu am putut salva adresa. Verifică emailul și încearcă din nou.");
         return;
       }
+      setState("done");
+      if (res.status === "already_confirmed") {
+        setMsg("Ești deja pe listă — îți trimitem variantele noi pe email.");
+      } else if (res.emailSent) {
+        setMsg("Gata! Ți-am trimis un email de confirmare — dă click pe link ca să activezi abonarea.");
+      } else {
+        setMsg("Te-am trecut pe listă. Îți trimitem emailul de confirmare imediat ce sistemul nostru de email e gata.");
+      }
+    } catch {
       setState("error");
-      setMsg("Nu am putut salva adresa. Verifică emailul și încearcă din nou.");
-      return;
+      setMsg("Nu am putut salva adresa. Încearcă din nou în câteva momente.");
     }
-    setState("done");
-    setMsg("Gata! Ți-am trimis un email de confirmare — dă click pe link ca să activezi abonarea.");
   }
 
   if (state === "done") {

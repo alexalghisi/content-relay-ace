@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-meditatii'
 import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacalaureat'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TutorialeRouteImport } from './routes/tutoriale'
 import { Route as TermeniRouteImport } from './routes/termeni'
 import { Route as SubiecteBac2026RouteImport } from './routes/subiecte-bac-2026'
@@ -102,6 +103,7 @@ import { Route as SimulareBacMaterieRouteImport } from './routes/simulare-bac.$m
 import { Route as ProfesoriOrasRouteImport } from './routes/profesori.$oras'
 import { Route as ProfesorSlugRouteImport } from './routes/profesor.$slug'
 import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
+import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
 import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
@@ -138,6 +140,11 @@ const VreauSaDauMeditatiiRoute = VreauSaDauMeditatiiRouteImport.update({
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
   id: '/variante-bacalaureat',
   path: '/variante-bacalaureat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TutorialeRoute = TutorialeRouteImport.update({
@@ -602,6 +609,11 @@ const PreturiMeditatiiMaterieRoute = PreturiMeditatiiMaterieRouteImport.update({
   path: '/preturi-meditatii/$materie',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsletterConfirmRoute = NewsletterConfirmRouteImport.update({
+  id: '/newsletter/confirm',
+  path: '/newsletter/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MesajeIdRoute = MesajeIdRouteImport.update({
   id: '/mesaje/$id',
   path: '/mesaje/$id',
@@ -826,6 +838,7 @@ export interface FileRoutesByFullPath {
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
@@ -836,6 +849,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
@@ -948,6 +962,7 @@ export interface FileRoutesByTo {
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
@@ -957,6 +972,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
@@ -1069,6 +1085,7 @@ export interface FileRoutesById {
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
@@ -1079,6 +1096,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/meditatii-in/$oras': typeof MeditatiiInOrasRoute
   '/mesaje/$id': typeof MesajeIdRoute
+  '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
@@ -1193,6 +1211,7 @@ export interface FileRouteTypes {
     | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
+    | '/unsubscribe'
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
@@ -1203,6 +1222,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
     | '/profesor/$slug'
     | '/profesori/$oras'
@@ -1315,6 +1335,7 @@ export interface FileRouteTypes {
     | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
+    | '/unsubscribe'
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
@@ -1324,6 +1345,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
     | '/profesor/$slug'
     | '/profesori/$oras'
@@ -1435,6 +1457,7 @@ export interface FileRouteTypes {
     | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
+    | '/unsubscribe'
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
@@ -1445,6 +1468,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/meditatii-in/$oras'
     | '/mesaje/$id'
+    | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
     | '/profesor/$slug'
     | '/profesori/$oras'
@@ -1558,6 +1582,7 @@ export interface RootRouteChildren {
   SubiecteBac2026Route: typeof SubiecteBac2026Route
   TermeniRoute: typeof TermeniRoute
   TutorialeRoute: typeof TutorialeRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
   VreauSaDauMeditatiiRoute: typeof VreauSaDauMeditatiiRoute
   AdminBacCrawlerRoute: typeof AdminBacCrawlerRoute
@@ -1568,6 +1593,7 @@ export interface RootRouteChildren {
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   MeditatiiInOrasRoute: typeof MeditatiiInOrasRoute
   MesajeIdRoute: typeof MesajeIdRoute
+  NewsletterConfirmRoute: typeof NewsletterConfirmRoute
   PreturiMeditatiiMaterieRoute: typeof PreturiMeditatiiMaterieRoute
   ProfesorSlugRoute: typeof ProfesorSlugRoute
   ProfesoriOrasRoute: typeof ProfesoriOrasRoute
@@ -1611,6 +1637,13 @@ declare module '@tanstack/react-router' {
       path: '/variante-bacalaureat'
       fullPath: '/variante-bacalaureat'
       preLoaderRoute: typeof VarianteBacalaureatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tutoriale': {
@@ -2250,6 +2283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreturiMeditatiiMaterieRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/newsletter/confirm': {
+      id: '/newsletter/confirm'
+      path: '/newsletter/confirm'
+      fullPath: '/newsletter/confirm'
+      preLoaderRoute: typeof NewsletterConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mesaje/$id': {
       id: '/mesaje/$id'
       path: '/mesaje/$id'
@@ -2578,6 +2618,7 @@ const rootRouteChildren: RootRouteChildren = {
   SubiecteBac2026Route: SubiecteBac2026Route,
   TermeniRoute: TermeniRoute,
   TutorialeRoute: TutorialeRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
   VreauSaDauMeditatiiRoute: VreauSaDauMeditatiiRoute,
   AdminBacCrawlerRoute: AdminBacCrawlerRoute,
@@ -2588,6 +2629,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   MeditatiiInOrasRoute: MeditatiiInOrasRoute,
   MesajeIdRoute: MesajeIdRoute,
+  NewsletterConfirmRoute: NewsletterConfirmRoute,
   PreturiMeditatiiMaterieRoute: PreturiMeditatiiMaterieRoute,
   ProfesorSlugRoute: ProfesorSlugRoute,
   ProfesoriOrasRoute: ProfesoriOrasRoute,
