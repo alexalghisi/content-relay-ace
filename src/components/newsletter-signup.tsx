@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Mail } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { subscribeToNewsletter } from "@/lib/newsletter.functions";
 import { BAC_SUBJECTS } from "@/data/bac-catalog";
 
 /** Abonare la variante și rezolvări noi. Dublă confirmare: rândul rămâne neconfirmat

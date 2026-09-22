@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-meditatii'
 import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacalaureat'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TutorialeRouteImport } from './routes/tutoriale'
 import { Route as TermeniRouteImport } from './routes/termeni'
 import { Route as SubiecteBac2026RouteImport } from './routes/subiecte-bac-2026'
@@ -139,6 +140,11 @@ const VreauSaDauMeditatiiRoute = VreauSaDauMeditatiiRouteImport.update({
 const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
   id: '/variante-bacalaureat',
   path: '/variante-bacalaureat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TutorialeRoute = TutorialeRouteImport.update({
@@ -832,6 +838,7 @@ export interface FileRoutesByFullPath {
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
@@ -955,6 +962,7 @@ export interface FileRoutesByTo {
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
@@ -1077,6 +1085,7 @@ export interface FileRoutesById {
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
@@ -1202,6 +1211,7 @@ export interface FileRouteTypes {
     | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
+    | '/unsubscribe'
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
@@ -1325,6 +1335,7 @@ export interface FileRouteTypes {
     | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
+    | '/unsubscribe'
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
@@ -1446,6 +1457,7 @@ export interface FileRouteTypes {
     | '/subiecte-bac-2026'
     | '/termeni'
     | '/tutoriale'
+    | '/unsubscribe'
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
@@ -1570,6 +1582,7 @@ export interface RootRouteChildren {
   SubiecteBac2026Route: typeof SubiecteBac2026Route
   TermeniRoute: typeof TermeniRoute
   TutorialeRoute: typeof TutorialeRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
   VreauSaDauMeditatiiRoute: typeof VreauSaDauMeditatiiRoute
   AdminBacCrawlerRoute: typeof AdminBacCrawlerRoute
@@ -1624,6 +1637,13 @@ declare module '@tanstack/react-router' {
       path: '/variante-bacalaureat'
       fullPath: '/variante-bacalaureat'
       preLoaderRoute: typeof VarianteBacalaureatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tutoriale': {
@@ -2598,6 +2618,7 @@ const rootRouteChildren: RootRouteChildren = {
   SubiecteBac2026Route: SubiecteBac2026Route,
   TermeniRoute: TermeniRoute,
   TutorialeRoute: TutorialeRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
   VreauSaDauMeditatiiRoute: VreauSaDauMeditatiiRoute,
   AdminBacCrawlerRoute: AdminBacCrawlerRoute,
