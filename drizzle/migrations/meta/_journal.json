@@ -50,6 +50,13 @@
       "when": 1789953157593,
       "tag": "0006_newsletter_si_comentarii_rezolvari",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790067103502,
+      "tag": "0007_teacher_leads_optin",
+      "breakpoints": true
     }
   ]
 }
