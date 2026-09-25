@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { ArrowRight, BadgeCheck, BookOpen, Check, Megaphone, MessageSquareText, Search, ShieldCheck, Star, UserRound } from "lucide-react";
 import heroImg from "@/assets/hero-tutoring.jpg";
-import tutoringVideo from "@/assets/tutoring-home-intro.mp4.asset.json";
+import tutoringVideo from "@/assets/tutoring-home-web.mp4.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 
