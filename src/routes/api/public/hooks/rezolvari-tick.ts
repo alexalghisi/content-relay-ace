@@ -19,6 +19,7 @@ interface QueueItem {
   materie: string;
   an: number;
   sesiune: string;
+  attempts: number;
 }
 
 interface GeneratedRezolvare {
@@ -258,7 +259,7 @@ export const Route = createFileRoute("/api/public/hooks/rezolvari-tick")({
           } else {
             await supabaseAdmin
               .from("rezolvari_queue")
-              .update({ attempts: (item as QueueItem & { attempts?: number }).attempts ?? 0 + 1, error: "generation_failed" })
+              .update({ attempts: item.attempts + 1, error: "generation_failed" })
               .eq("id", item.id);
           }
           results.push({ materie: item.materie, an: item.an, sesiune: item.sesiune, ok: r.ok });
