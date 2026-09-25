@@ -2,10 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-  BadgeCheck, CalendarDays, Eye, EyeOff, GraduationCap, Loader2, Plus, Save, Trash2,
+  BadgeCheck, CalendarDays, Check, ChevronDown, Eye, EyeOff, GraduationCap, Loader2, Pencil, Plus, Save, Trash2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { CITIES } from "@/data/cities";
+import { SUBJECTS_SEO } from "@/data/subjects-seo";
 
 export const Route = createFileRoute("/profesor/")({
   head: () => ({
@@ -18,6 +20,18 @@ export const Route = createFileRoute("/profesor/")({
 });
 
 const DAYS = ["Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă", "Duminică"];
+const LEVELS = ["Primar", "Gimnaziu", "Evaluare Națională", "Liceu", "Bacalaureat", "Admitere facultate", "Studenți", "Adulți"];
+const RATES = ["100", "150", "200"];
+const EXTRA_COUNTY_SEATS = [
+  { name: "Alexandria", county: "Teleorman" },
+  { name: "Miercurea-Ciuc", county: "Harghita" },
+  { name: "Târgu Jiu", county: "Gorj" },
+];
+const LOCATIONS = [...CITIES.map(({ name, county }) => ({ name, county })), ...EXTRA_COUNTY_SEATS]
+  .sort((a, b) => a.county.localeCompare(b.county, "ro"));
+const EMPTY_OFFER = {
+  title: "", subject: "", level: "", description: "", price_per_hour: "", is_online: true, is_in_person: false,
+};
 
 interface TeacherProfile {
   slug: string;
@@ -65,9 +79,8 @@ function TeacherDashboard() {
   const [newSlot, setNewSlot] = useState({ weekday: 0, start_time: "16:00", end_time: "20:00" });
   const [offers, setOffers] = useState<Offer[]>([]);
   const [showOfferForm, setShowOfferForm] = useState(false);
-  const [offerDraft, setOfferDraft] = useState({
-    title: "", subject: "", level: "", description: "", price_per_hour: "", is_online: true, is_in_person: false,
-  });
+  const [editingOfferId, setEditingOfferId] = useState<string | null>(null);
+  const [offerDraft, setOfferDraft] = useState(EMPTY_OFFER);
 
   const load = useCallback(async (uid: string, email: string) => {
     setBusy(true);
@@ -185,7 +198,7 @@ function TeacherDashboard() {
 
   const saveOffer = async () => {
     if (!offerDraft.title.trim() || !offerDraft.subject.trim()) { toast.error("Titlul și materia sunt obligatorii."); return; }
-    const { data, error } = await supabase.from("teacher_offers").insert({
+    const payload = {
       user_id: user.id,
       title: offerDraft.title.trim(),
       subject: offerDraft.subject.trim(),
@@ -194,12 +207,40 @@ function TeacherDashboard() {
       price_per_hour: offerDraft.price_per_hour ? Number(offerDraft.price_per_hour) : null,
       is_online: offerDraft.is_online,
       is_in_person: offerDraft.is_in_person,
-    }).select("*").single();
+      updated_at: new Date().toISOString(),
+    };
+    const query = editingOfferId
+      ? supabase.from("teacher_offers").update(payload).eq("id", editingOfferId)
+      : supabase.from("teacher_offers").insert(payload);
+    const { data, error } = await query.select("*").single();
     if (error) { toast.error(error.message); return; }
-    setOffers((o) => [data as Offer, ...o]);
-    setOfferDraft({ title: "", subject: "", level: "", description: "", price_per_hour: "", is_online: true, is_in_person: false });
+    setOffers((current) => editingOfferId
+      ? current.map((offer) => offer.id === editingOfferId ? data as Offer : offer)
+      : [data as Offer, ...current]);
+    setOfferDraft(EMPTY_OFFER);
+    setEditingOfferId(null);
     setShowOfferForm(false);
-    toast.success("Ofertă publicată.");
+    toast.success(editingOfferId ? "Oferta a fost modificată." : "Ofertă publicată.");
+  };
+
+  const editOffer = (offer: Offer) => {
+    setOfferDraft({
+      title: offer.title,
+      subject: offer.subject,
+      level: offer.level ?? "",
+      description: offer.description ?? "",
+      price_per_hour: offer.price_per_hour?.toString() ?? "",
+      is_online: offer.is_online,
+      is_in_person: offer.is_in_person,
+    });
+    setEditingOfferId(offer.id);
+    setShowOfferForm(true);
+  };
+
+  const cancelOfferForm = () => {
+    setOfferDraft(EMPTY_OFFER);
+    setEditingOfferId(null);
+    setShowOfferForm(false);
   };
 
   const toggleOffer = async (offer: Offer) => {
@@ -263,7 +304,11 @@ function TeacherDashboard() {
                 <input className="field-input" value={profile.display_name} onChange={(e) => setProfile({ ...profile, display_name: e.target.value })} />
               </Field>
               <Field label="Oraș">
-                <input className="field-input" value={profile.city} placeholder="București" onChange={(e) => setProfile({ ...profile, city: e.target.value })} />
+                <select className="field-input" value={profile.city} onChange={(e) => setProfile({ ...profile, city: e.target.value })}>
+                  <option value="">Alege orașul sau județul</option>
+                  {profile.city && !LOCATIONS.some((item) => item.name === profile.city) && <option value={profile.city}>{profile.city}</option>}
+                  {LOCATIONS.map((item) => <option key={`${item.county}-${item.name}`} value={item.name}>{item.name} — jud. {item.county}</option>)}
+                </select>
               </Field>
             </div>
             <Field label="Titlu profesional">
@@ -273,11 +318,21 @@ function TeacherDashboard() {
               <textarea rows={5} maxLength={1500} className="field-input min-h-[120px] py-3" value={profile.about} onChange={(e) => setProfile({ ...profile, about: e.target.value })} />
             </Field>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Materii predate * (separate prin virgulă)">
-                <input className="field-input" placeholder="Matematică, Fizică" value={profile.subjects} onChange={(e) => setProfile({ ...profile, subjects: e.target.value })} />
+              <Field label="Materii predate *">
+                <MultiSelectDropdown
+                  label="Alege una sau mai multe materii"
+                  options={SUBJECTS_SEO.map((subject) => subject.name)}
+                  value={profile.subjects.split(",").map((item) => item.trim()).filter(Boolean)}
+                  onChange={(subjects) => setProfile({ ...profile, subjects: subjects.join(", ") })}
+                />
               </Field>
-              <Field label="Niveluri (separate prin virgulă)">
-                <input className="field-input" placeholder="Gimnaziu, Liceu, Bacalaureat" value={profile.levels} onChange={(e) => setProfile({ ...profile, levels: e.target.value })} />
+              <Field label="Niveluri predate">
+                <MultiSelectDropdown
+                  label="Alege unul sau mai multe niveluri"
+                  options={LEVELS}
+                  value={profile.levels.split(",").map((item) => item.trim()).filter(Boolean)}
+                  onChange={(levels) => setProfile({ ...profile, levels: levels.join(", ") })}
+                />
               </Field>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
@@ -285,10 +340,18 @@ function TeacherDashboard() {
                 <input type="number" min={0} max={60} className="field-input" value={profile.experience_years} onChange={(e) => setProfile({ ...profile, experience_years: e.target.value })} />
               </Field>
               <Field label="Tarif de la (lei/oră)">
-                <input type="number" min={0} className="field-input" value={profile.rate_min} onChange={(e) => setProfile({ ...profile, rate_min: e.target.value })} />
+                <select className="field-input" value={profile.rate_min} onChange={(e) => setProfile({ ...profile, rate_min: e.target.value })}>
+                  <option value="">Alege tariful</option>
+                  {profile.rate_min && !RATES.includes(profile.rate_min) && <option value={profile.rate_min}>{profile.rate_min} RON</option>}
+                  {RATES.map((rate) => <option key={rate} value={rate}>{rate} RON</option>)}
+                </select>
               </Field>
               <Field label="Tarif până la (lei/oră)">
-                <input type="number" min={0} className="field-input" value={profile.rate_max} onChange={(e) => setProfile({ ...profile, rate_max: e.target.value })} />
+                <select className="field-input" value={profile.rate_max} onChange={(e) => setProfile({ ...profile, rate_max: e.target.value })}>
+                  <option value="">Alege tariful</option>
+                  {profile.rate_max && !RATES.includes(profile.rate_max) && <option value={profile.rate_max}>{profile.rate_max} RON</option>}
+                  {RATES.map((rate) => <option key={rate} value={rate}>{rate} RON</option>)}
+                </select>
               </Field>
             </div>
             <div className="flex flex-wrap gap-5 text-sm">
@@ -365,7 +428,7 @@ function TeacherDashboard() {
           <div className="card-soft mt-6 p-5 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 className="inline-flex items-center gap-2 text-lg font-semibold"><Eye className="h-4 w-4 text-primary" /> Ofertele mele</h2>
-              <button onClick={() => setShowOfferForm((v) => !v)} className="btn-outline inline-flex h-10 items-center gap-2 text-sm">
+              <button onClick={() => showOfferForm ? cancelOfferForm() : setShowOfferForm(true)} className="btn-outline inline-flex h-10 items-center gap-2 text-sm">
                 <Plus className="h-4 w-4" /> Ofertă nouă
               </button>
             </div>
@@ -374,16 +437,19 @@ function TeacherDashboard() {
               <div className="mt-4 space-y-4 rounded-xl border border-border p-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="Titlu *"><input className="field-input" placeholder="Pregătire Bacalaureat matematică M1" value={offerDraft.title} onChange={(e) => setOfferDraft({ ...offerDraft, title: e.target.value })} /></Field>
-                  <Field label="Materie *"><input className="field-input" placeholder="Matematică" value={offerDraft.subject} onChange={(e) => setOfferDraft({ ...offerDraft, subject: e.target.value })} /></Field>
-                  <Field label="Nivel"><input className="field-input" placeholder="Clasa a XII-a" value={offerDraft.level} onChange={(e) => setOfferDraft({ ...offerDraft, level: e.target.value })} /></Field>
-                  <Field label="Preț (lei/oră)"><input type="number" min={0} className="field-input" value={offerDraft.price_per_hour} onChange={(e) => setOfferDraft({ ...offerDraft, price_per_hour: e.target.value })} /></Field>
+                  <Field label="Materie *"><select className="field-input" value={offerDraft.subject} onChange={(e) => setOfferDraft({ ...offerDraft, subject: e.target.value })}><option value="">Alege materia</option>{offerDraft.subject && !SUBJECTS_SEO.some((s) => s.name === offerDraft.subject) && <option value={offerDraft.subject}>{offerDraft.subject}</option>}{SUBJECTS_SEO.map((s) => <option key={s.slug} value={s.name}>{s.name}</option>)}</select></Field>
+                  <Field label="Nivel"><select className="field-input" value={offerDraft.level} onChange={(e) => setOfferDraft({ ...offerDraft, level: e.target.value })}><option value="">Alege nivelul</option>{offerDraft.level && !LEVELS.includes(offerDraft.level) && <option value={offerDraft.level}>{offerDraft.level}</option>}{LEVELS.map((level) => <option key={level} value={level}>{level}</option>)}</select></Field>
+                  <Field label="Preț (RON/oră)"><select className="field-input" value={offerDraft.price_per_hour} onChange={(e) => setOfferDraft({ ...offerDraft, price_per_hour: e.target.value })}><option value="">Alege prețul</option>{offerDraft.price_per_hour && !RATES.includes(offerDraft.price_per_hour) && <option value={offerDraft.price_per_hour}>{offerDraft.price_per_hour} RON</option>}{RATES.map((rate) => <option key={rate} value={rate}>{rate} RON</option>)}</select></Field>
                 </div>
                 <Field label="Descriere"><textarea rows={3} maxLength={800} className="field-input min-h-[90px] py-3" value={offerDraft.description} onChange={(e) => setOfferDraft({ ...offerDraft, description: e.target.value })} /></Field>
                 <div className="flex flex-wrap gap-5 text-sm">
                   <label className="inline-flex items-center gap-2"><input type="checkbox" checked={offerDraft.is_online} onChange={(e) => setOfferDraft({ ...offerDraft, is_online: e.target.checked })} /> Online</label>
                   <label className="inline-flex items-center gap-2"><input type="checkbox" checked={offerDraft.is_in_person} onChange={(e) => setOfferDraft({ ...offerDraft, is_in_person: e.target.checked })} /> Față în față</label>
                 </div>
-                <button onClick={() => void saveOffer()} className="btn-primary inline-flex h-11 items-center gap-2"><Save className="h-4 w-4" /> Publică oferta</button>
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={() => void saveOffer()} className="btn-primary inline-flex h-11 items-center gap-2"><Save className="h-4 w-4" /> {editingOfferId ? "Salvează modificările" : "Publică oferta"}</button>
+                  {editingOfferId && <button onClick={cancelOfferForm} className="btn-outline h-11">Renunță</button>}
+                </div>
               </div>
             )}
 
@@ -405,6 +471,7 @@ function TeacherDashboard() {
                         <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${o.status === "published" ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>
                           {o.status === "published" ? "Activă" : "În pauză"}
                         </span>
+                        <button aria-label={`Modifică oferta ${o.title}`} title="Modifică oferta" onClick={() => editOffer(o)} className="btn-outline h-9 gap-1.5 px-3 text-xs"><Pencil className="h-3.5 w-3.5" /> Modifică</button>
                         <button onClick={() => void toggleOffer(o)} className="btn-outline h-9 text-xs">{o.status === "published" ? "Pune pauză" : "Activează"}</button>
                         <button aria-label="Șterge oferta" onClick={() => void deleteOffer(o.id)} className="text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
                       </div>
@@ -418,6 +485,25 @@ function TeacherDashboard() {
         </>
       )}
     </section>
+  );
+}
+
+function MultiSelectDropdown({ label, options, value, onChange }: { label: string; options: string[]; value: string[]; onChange: (value: string[]) => void }) {
+  const toggle = (option: string) => onChange(value.includes(option) ? value.filter((item) => item !== option) : [...value, option]);
+  return (
+    <details className="group relative">
+      <summary className="field-input flex cursor-pointer list-none items-center justify-between gap-3">
+        <span className={value.length ? "text-foreground" : "text-muted-foreground"}>{value.length ? value.join(", ") : label}</span>
+        <ChevronDown className="h-4 w-4 shrink-0 transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="absolute z-30 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-border bg-card p-2 shadow-lg">
+        {options.map((option) => (
+          <button type="button" key={option} onClick={() => toggle(option)} className="flex min-h-10 w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm hover:bg-muted">
+            <span>{option}</span>{value.includes(option) && <Check className="h-4 w-4 text-primary" />}
+          </button>
+        ))}
+      </div>
+    </details>
   );
 }
 
