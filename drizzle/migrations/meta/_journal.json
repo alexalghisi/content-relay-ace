@@ -64,6 +64,13 @@
       "when": 1790116094241,
       "tag": "0008_newsletter_confirm_token_index",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790303576835,
+      "tag": "0009_rezolvari_generator_queue",
+      "breakpoints": true
     }
   ]
 }
