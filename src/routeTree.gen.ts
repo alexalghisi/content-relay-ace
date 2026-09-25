@@ -128,6 +128,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as BacMaterieAnSesiuneRouteImport } from './routes/bac.$materie.$an.$sesiune'
 import { Route as ApiPublicHooksSeoDailyRouteImport } from './routes/api/public/hooks/seo-daily'
+import { Route as ApiPublicHooksRezolvariTickRouteImport } from './routes/api/public/hooks/rezolvari-tick'
 import { Route as ApiPublicHooksIndexnowRouteImport } from './routes/api/public/hooks/indexnow'
 import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
 import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
@@ -742,6 +743,12 @@ const ApiPublicHooksSeoDailyRoute = ApiPublicHooksSeoDailyRouteImport.update({
   path: '/api/public/hooks/seo-daily',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksRezolvariTickRoute =
+  ApiPublicHooksRezolvariTickRouteImport.update({
+    id: '/api/public/hooks/rezolvari-tick',
+    path: '/api/public/hooks/rezolvari-tick',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksIndexnowRoute = ApiPublicHooksIndexnowRouteImport.update({
   id: '/api/public/hooks/indexnow',
   path: '/api/public/hooks/indexnow',
@@ -873,6 +880,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
+  '/api/public/hooks/rezolvari-tick': typeof ApiPublicHooksRezolvariTickRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
   '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -995,6 +1003,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
+  '/api/public/hooks/rezolvari-tick': typeof ApiPublicHooksRezolvariTickRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
   '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -1120,6 +1129,7 @@ export interface FileRoutesById {
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
+  '/api/public/hooks/rezolvari-tick': typeof ApiPublicHooksRezolvariTickRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
   '/bac/$materie/$an/$sesiune': typeof BacMaterieAnSesiuneRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -1246,6 +1256,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
+    | '/api/public/hooks/rezolvari-tick'
     | '/api/public/hooks/seo-daily'
     | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
@@ -1368,6 +1379,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
+    | '/api/public/hooks/rezolvari-tick'
     | '/api/public/hooks/seo-daily'
     | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
@@ -1492,6 +1504,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
     | '/api/public/hooks/indexnow'
+    | '/api/public/hooks/rezolvari-tick'
     | '/api/public/hooks/seo-daily'
     | '/bac/$materie/$an/$sesiune'
     | '/lovable/email/queue/process'
@@ -1614,6 +1627,7 @@ export interface RootRouteChildren {
   ApiPublicHooksAutoBlogPostRoute: typeof ApiPublicHooksAutoBlogPostRoute
   ApiPublicHooksBacCrawlTickRoute: typeof ApiPublicHooksBacCrawlTickRoute
   ApiPublicHooksIndexnowRoute: typeof ApiPublicHooksIndexnowRoute
+  ApiPublicHooksRezolvariTickRoute: typeof ApiPublicHooksRezolvariTickRoute
   ApiPublicHooksSeoDailyRoute: typeof ApiPublicHooksSeoDailyRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -2458,6 +2472,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSeoDailyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/rezolvari-tick': {
+      id: '/api/public/hooks/rezolvari-tick'
+      path: '/api/public/hooks/rezolvari-tick'
+      fullPath: '/api/public/hooks/rezolvari-tick'
+      preLoaderRoute: typeof ApiPublicHooksRezolvariTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/indexnow': {
       id: '/api/public/hooks/indexnow'
       path: '/api/public/hooks/indexnow'
@@ -2651,6 +2672,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksAutoBlogPostRoute: ApiPublicHooksAutoBlogPostRoute,
   ApiPublicHooksBacCrawlTickRoute: ApiPublicHooksBacCrawlTickRoute,
   ApiPublicHooksIndexnowRoute: ApiPublicHooksIndexnowRoute,
+  ApiPublicHooksRezolvariTickRoute: ApiPublicHooksRezolvariTickRoute,
   ApiPublicHooksSeoDailyRoute: ApiPublicHooksSeoDailyRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,

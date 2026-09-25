@@ -578,6 +578,33 @@ export type Database = {
         }
         Relationships: []
       }
+      job_state: {
+        Row: {
+          consecutive_failures: number
+          job: string
+          lease_until: string | null
+          pause_reason: string | null
+          paused: boolean
+          updated_at: string
+        }
+        Insert: {
+          consecutive_failures?: number
+          job: string
+          lease_until?: string | null
+          pause_reason?: string | null
+          paused?: boolean
+          updated_at?: string
+        }
+        Update: {
+          consecutive_failures?: number
+          job?: string
+          lease_until?: string | null
+          pause_reason?: string | null
+          paused?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       legacy_teachers: {
         Row: {
           auth_user_id: string | null
@@ -799,6 +826,45 @@ export type Database = {
           rezolvare_an?: number
           rezolvare_materie?: string
           rezolvare_sesiune?: string
+        }
+        Relationships: []
+      }
+      rezolvari_queue: {
+        Row: {
+          an: number
+          attempts: number
+          created_at: string
+          error: string | null
+          id: string
+          materie: string
+          prioritate: number
+          processed_at: string | null
+          sesiune: string
+          status: string
+        }
+        Insert: {
+          an: number
+          attempts?: number
+          created_at?: string
+          error?: string | null
+          id?: string
+          materie: string
+          prioritate?: number
+          processed_at?: string | null
+          sesiune: string
+          status?: string
+        }
+        Update: {
+          an?: number
+          attempts?: number
+          created_at?: string
+          error?: string | null
+          id?: string
+          materie?: string
+          prioritate?: number
+          processed_at?: string | null
+          sesiune?: string
+          status?: string
         }
         Relationships: []
       }
