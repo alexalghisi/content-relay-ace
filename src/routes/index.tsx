@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { ArrowRight, BadgeCheck, BookOpen, Check, Megaphone, MessageSquareText, Search, ShieldCheck, Star, UserRound } from "lucide-react";
 import heroImg from "@/assets/hero-tutoring.jpg";
 import tutoringVideo from "@/assets/tutoring-home-web.mp4.asset.json";
+import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 
@@ -102,7 +103,6 @@ function HomePage() {
         </div>
         <video
           className="aspect-video w-full rounded-lg object-cover shadow-[var(--shadow-card)]"
-          src={tutoringVideo.url}
           poster={heroImg}
           autoPlay
           muted
@@ -110,7 +110,10 @@ function HomePage() {
           playsInline
           preload="metadata"
           aria-label="Profesor explicând unui elev o problemă de matematică la o ședință de meditații acasă"
-        />
+        >
+          <source src={tutoringVideoWebm.url} type="video/webm" />
+          <source src={tutoringVideo.url} type="video/mp4" />
+        </video>
       </div>
     </section>
 
