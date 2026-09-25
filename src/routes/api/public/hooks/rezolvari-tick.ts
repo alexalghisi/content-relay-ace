@@ -219,7 +219,7 @@ export const Route = createFileRoute("/api/public/hooks/rezolvari-tick")({
         // Lotul următor: prioritate (matematica -> romana -> restul), apoi anii recenți
         const { data: items } = await supabaseAdmin
           .from("rezolvari_queue")
-          .select("id, materie, an, sesiune")
+          .select("id, materie, an, sesiune, attempts")
           .eq("status", "queued")
           .order("prioritate", { ascending: true })
           .order("an", { ascending: false })
