@@ -13,6 +13,11 @@ export const Route = createFileRoute("/profesor/")({
   head: () => ({
     meta: [
       { title: "Panoul profesorului — MeditatiiDirect.ro" },
+      { name: "description", content: "Completează profilul, disponibilitatea și ofertele tale de meditații în panoul privat MeditatiiDirect.ro." },
+      { property: "og:title", content: "Panoul profesorului — MeditatiiDirect.ro" },
+      { property: "og:description", content: "Completează profilul, disponibilitatea și ofertele tale de meditații." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
@@ -26,6 +31,7 @@ const EXTRA_COUNTY_SEATS = [
   { name: "Alexandria", county: "Teleorman" },
   { name: "Miercurea-Ciuc", county: "Harghita" },
   { name: "Târgu Jiu", county: "Gorj" },
+  { name: "Otopeni", county: "Ilfov" },
 ];
 const LOCATIONS = [...CITIES.map(({ name, county }) => ({ name, county })), ...EXTRA_COUNTY_SEATS]
   .sort((a, b) => a.county.localeCompare(b.county, "ro"));
@@ -509,9 +515,9 @@ function MultiSelectDropdown({ label, options, value, onChange }: { label: strin
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <label className="block text-sm">
+    <div className="block text-sm">
       <span className="mb-1 block text-muted-foreground">{label}</span>
       {children}
-    </label>
+    </div>
   );
 }
