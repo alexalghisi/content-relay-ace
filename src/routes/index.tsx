@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { ArrowRight, BadgeCheck, BookOpen, Check, Megaphone, MessageSquareText, Search, ShieldCheck, Star, UserRound } from "lucide-react";
 import heroImg from "@/assets/hero-tutoring.jpg";
+import tutoringVideo from "@/assets/tutoring-home-intro.mp4.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 
@@ -88,6 +89,28 @@ function HomePage() {
           <div className="rounded-xl border border-border bg-card p-6"><Star className="h-6 w-6 text-primary" /><h3 className="mt-3 font-bold">Stele pentru proces</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">De la 1 la 5 stele pentru promptitudine, claritatea propunerii și discuție. Doar elevii cu cerere reală pot evalua.</p></div>
           <div className="rounded-xl border border-border bg-card p-6"><ShieldCheck className="h-6 w-6 text-primary" /><h3 className="mt-3 font-bold">Transparent</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Tarif, dată și oră scrise în propunere de la început. Plătești direct profesorului, integral.</p></div>
         </div>
+      </div>
+    </section>
+
+    <section className="border-y border-border bg-foreground py-14 text-background sm:py-18">
+      <div className="container-page grid items-center gap-8 lg:grid-cols-[.7fr_1.3fr]">
+        <div>
+          <p className="text-sm font-semibold text-primary-soft">O lecție, văzută de aproape</p>
+          <h2 className="mt-2 text-3xl font-bold">Meditații acasă, cu explicații pe înțelesul elevului</h2>
+          <p className="mt-4 leading-7 text-background/75">Profesorul potrivit adaptează ritmul, explică pas cu pas și lasă elevului timp să înțeleagă. Tu postezi cererea, iar profesorii disponibili îți trimit propuneri clare.</p>
+          <Link to="/meditatii" className="btn-primary mt-6 h-12 px-6">Cere o ofertă <ArrowRight className="ml-2 h-4 w-4" /></Link>
+        </div>
+        <video
+          className="aspect-video w-full rounded-lg object-cover shadow-[var(--shadow-card)]"
+          src={tutoringVideo.url}
+          poster={heroImg}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label="Profesor explicând unui elev o problemă de matematică la o ședință de meditații acasă"
+        />
       </div>
     </section>
 
