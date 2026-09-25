@@ -205,7 +205,7 @@ export const Route = createFileRoute("/api/public/hooks/rezolvari-tick")({
     handlers: {
       POST: async ({ request }) => {
         const apiKey = request.headers.get("x-webhook-secret") ?? request.headers.get("x-api-key");
-        const expected = process.env.REZOLVARI_HOOK_SECRET;
+        const expected = process.env.REZOLVARI_CRON_KEY;
         if (!expected || !apiKey || apiKey.length !== expected.length || apiKey !== expected) {
           return json({ error: "Unauthorized" }, 401);
         }
