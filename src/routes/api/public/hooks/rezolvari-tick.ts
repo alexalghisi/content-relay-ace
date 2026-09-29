@@ -257,9 +257,15 @@ export const Route = createFileRoute("/api/public/hooks/rezolvari-tick")({
               .eq("id", item.id);
             await bumpFailures(true);
           } else {
+            // Cap de reîncercări: după 5 eșecuri trece pe 'failed', ca să nu blocheze coada.
+            const nextAttempts = item.attempts + 1;
             await supabaseAdmin
               .from("rezolvari_queue")
-              .update({ attempts: item.attempts + 1, error: "generation_failed" })
+              .update(
+                nextAttempts >= 5
+                  ? { attempts: nextAttempts, status: "failed", error: "generation_failed_max_attempts" }
+                  : { attempts: nextAttempts, error: "generation_failed" },
+              )
               .eq("id", item.id);
           }
           results.push({ materie: item.materie, an: item.an, sesiune: item.sesiune, ok: r.ok });
