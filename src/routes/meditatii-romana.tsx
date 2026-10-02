@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-romana";
-const TITLE = "Meditații Română 2026 — Online & Acasă | BAC, Evaluare Națională, Admitere";
-const DESC = "★ Meditații limba română online sau la domiciliu: gramatică, eseu, comentariu literar, BAC, Evaluare Națională, admitere. Profesori verificați, de la 40 lei/oră. FĂRĂ comision.";
+const TITLE = "Meditații Română 2026 — Online și Acasă, BAC și EN";
+const DESC = "Meditații limba română online sau la domiciliu: gramatică, eseu, comentariu literar, BAC, Evaluare Națională, admitere. De la 40 lei/oră, fără comision.";
 
 const faqs = [
   { q: "Cât costă o meditație la română?", a: "Tarifele pentru meditații de limba română încep de la 40 lei/oră pentru gimnaziu, 50–100 lei/oră pentru liceu și pregătire BAC, și 80–150 lei/oră pentru pregătire intensivă pentru admitere la Drept sau Litere." },
