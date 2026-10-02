@@ -16,10 +16,11 @@ export const Route = createFileRoute("/meditatii/")({
   }),
   head: () => ({
     meta: [
-      { title: "Cere ofertă de la profesori — gratuit, în 2 minute | Meditații Direct" },
-      { name: "description", content: "Descrie ce vrei să înveți și profesorii verificați îți trimit propuneri direct. Fără comision, fără intermediari. Online sau în orașul tău." },
-      { property: "og:title", content: "Cere ofertă de la profesori | Meditații Direct" },
-      { property: "og:description", content: "Postează cererea ta și primești propuneri de la profesori verificați." },
+      { title: "Meditații 2026 — Online sau Acasă, la Orice Materie | MeditatiiDirect" },
+      { name: "description", content: "Meditații la matematică, română, engleză, informatică, biologie și orice materie. Descrii ce ai nevoie, profesorii îți trimit propuneri. Gratuit, fără comision." },
+      { property: "og:title", content: "Meditații online sau acasă, la orice materie | MeditatiiDirect" },
+      { property: "og:description", content: "Spune ce vrei să înveți și primești propuneri de la profesori, gratuit și fără comision." },
+      { property: "og:url", content: "https://meditatiidirect.ro/meditatii" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

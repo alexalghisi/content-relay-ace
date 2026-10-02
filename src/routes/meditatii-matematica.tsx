@@ -55,7 +55,7 @@ function Page() {
       pageUrl={PAGE_URL}
       breadcrumbParent={{ name: "Meditații", url: "https://meditatiidirect.ro/meditatii" }}
       h1="Meditații matematică — profesori verificați, online sau acasă"
-      intro="MeditatiiDirect.ro îți oferă acces direct la peste 500 de profesori verificați de matematică din toată România. Indiferent că ai nevoie de meditații matematică pentru gimnaziu, liceu, Evaluarea Națională, BAC sau admitere la facultate (UPB, ASE, Medicină, Politehnică), găsești profesorul potrivit în câteva minute. Contact direct, fără comision."
+      intro="Pe MeditatiiDirect.ro descrii o singură dată ce ai nevoie la matematică, iar profesorii îți trimit propuneri direct. Indiferent că ai nevoie de meditații matematică pentru gimnaziu, liceu, Evaluarea Națională, BAC sau admitere la facultate (UPB, ASE, Medicină, Politehnică), primești oferte cu dată, oră și tarif. Contact direct, fără comision."
       bullets={[
         "Profesori verificați cu CV și recenzii reale",
         "Algebră, analiză matematică, geometrie, trigonometrie",
