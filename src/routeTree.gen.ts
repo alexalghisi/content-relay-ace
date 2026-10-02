@@ -9,433 +9,223 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SplatRouteImport } from './routes/$'
-import { Route as AdmitereRouteImport } from './routes/admitere'
-import { Route as AdmitereFacultate2026RouteImport } from './routes/admitere-facultate-2026'
-import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
-import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditatii'
-import { Route as AnunturiMeditatiiBacRouteImport } from './routes/anunturi-meditatii-bac'
-import { Route as CalculatorMedieBacRouteImport } from './routes/calculator-medie-bac'
-import { Route as CalculatorNotaAdmitereRouteImport } from './routes/calculator-nota-admitere'
-import { Route as CastigaDinMeditatiiRouteImport } from './routes/castiga-din-meditatii'
-import { Route as CautProfesorRouteImport } from './routes/caut-profesor'
-import { Route as CereriRouteImport } from './routes/cereri'
-import { Route as ConfidentialitateRouteImport } from './routes/confidentialitate'
-import { Route as ContRouteImport } from './routes/cont'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CumFunctioneazaRouteImport } from './routes/cum-functioneaza'
-import { Route as DespreRouteImport } from './routes/despre'
-import { Route as GrileAdmitereMedicina2026RouteImport } from './routes/grile-admitere-medicina-2026'
-import { Route as GrileMedicinaRouteImport } from './routes/grile-medicina'
-import { Route as GrileUpbRouteImport } from './routes/grile-upb'
-import { Route as InvitaUnColegRouteImport } from './routes/invita-un-coleg'
-import { Route as KitPromovareRouteImport } from './routes/kit-promovare'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as MateriiRouteImport } from './routes/materii'
-import { Route as MeditatiiAdmitereAseRouteImport } from './routes/meditatii-admitere-ase'
-import { Route as MeditatiiAdmitereDreptRouteImport } from './routes/meditatii-admitere-drept'
-import { Route as MeditatiiAdmitereMedicinaRouteImport } from './routes/meditatii-admitere-medicina'
-import { Route as MeditatiiAdmiterePolitehnicaRouteImport } from './routes/meditatii-admitere-politehnica'
-import { Route as MeditatiiBacRouteImport } from './routes/meditatii-bac'
-import { Route as MeditatiiBiologieRouteImport } from './routes/meditatii-biologie'
-import { Route as MeditatiiChimieRouteImport } from './routes/meditatii-chimie'
-import { Route as MeditatiiClasa12RouteImport } from './routes/meditatii-clasa-12'
-import { Route as MeditatiiClasa8RouteImport } from './routes/meditatii-clasa-8'
-import { Route as MeditatiiDefinitivatRouteImport } from './routes/meditatii-definitivat'
-import { Route as MeditatiiEnglezaRouteImport } from './routes/meditatii-engleza'
-import { Route as MeditatiiEvaluareNationalaRouteImport } from './routes/meditatii-evaluare-nationala'
-import { Route as MeditatiiFizicaRouteImport } from './routes/meditatii-fizica'
-import { Route as MeditatiiFrancezaRouteImport } from './routes/meditatii-franceza'
-import { Route as MeditatiiGeografieRouteImport } from './routes/meditatii-geografie'
-import { Route as MeditatiiGermanaRouteImport } from './routes/meditatii-germana'
-import { Route as MeditatiiGimnaziuRouteImport } from './routes/meditatii-gimnaziu'
-import { Route as MeditatiiIeftineRouteImport } from './routes/meditatii-ieftine'
-import { Route as MeditatiiInformaticaRouteImport } from './routes/meditatii-informatica'
-import { Route as MeditatiiIstorieRouteImport } from './routes/meditatii-istorie'
-import { Route as MeditatiiLaDomiciliuRouteImport } from './routes/meditatii-la-domiciliu'
-import { Route as MeditatiiLiceuRouteImport } from './routes/meditatii-liceu'
-import { Route as MeditatiiMatematicaRouteImport } from './routes/meditatii-matematica'
-import { Route as MeditatiiOnlineRouteImport } from './routes/meditatii-online'
-import { Route as MeditatiiParticulareRouteImport } from './routes/meditatii-particulare'
-import { Route as MeditatiiPrivateRouteImport } from './routes/meditatii-private'
-import { Route as MeditatiiRomanaRouteImport } from './routes/meditatii-romana'
-import { Route as MeditatiiScoalaRouteImport } from './routes/meditatii-scoala'
-import { Route as MeditatiiTitularizareRouteImport } from './routes/meditatii-titularizare'
-import { Route as MeditatoriRouteImport } from './routes/meditatori'
-import { Route as OferMeditatiiRouteImport } from './routes/ofer-meditatii'
-import { Route as OreOnlineRouteImport } from './routes/ore-online'
-import { Route as ParteneriRouteImport } from './routes/parteneri'
-import { Route as PentruProfesoriRouteImport } from './routes/pentru-profesori'
-import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
-import { Route as PoliticaCookiesRouteImport } from './routes/politica-cookies'
-import { Route as PregatireAdmitereMedicinaRouteImport } from './routes/pregatire-admitere-medicina'
-import { Route as PregatireBacalaureatRouteImport } from './routes/pregatire-bacalaureat'
-import { Route as PretMeditatiiRouteImport } from './routes/pret-meditatii'
-import { Route as ProfesorMeditatiiRouteImport } from './routes/profesor-meditatii'
-import { Route as ProfesorParticularRouteImport } from './routes/profesor-particular'
-import { Route as ProfesoriMeditatiiRouteImport } from './routes/profesori-meditatii'
-import { Route as RezultateBac2026RouteImport } from './routes/rezultate-bac-2026'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SimulareBacalaureatRouteImport } from './routes/simulare-bacalaureat'
-import { Route as SimulareDrept2026RouteImport } from './routes/simulare-drept-2026'
-import { Route as SimulareUtcn2026RouteImport } from './routes/simulare-utcn-2026'
-import { Route as SimulariBacalaureat2026RouteImport } from './routes/simulari-bacalaureat-2026'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SubiecteBacRouteImport } from './routes/subiecte-bac'
-import { Route as SubiecteBac2026RouteImport } from './routes/subiecte-bac-2026'
-import { Route as TermeniRouteImport } from './routes/termeni'
-import { Route as TutorialeRouteImport } from './routes/tutoriale'
-import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
-import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacalaureat'
 import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-meditatii'
-import { Route as AdminBacCrawlerRouteImport } from './routes/admin.bac-crawler'
-import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
-import { Route as BacIndexRouteImport } from './routes/bac.index'
-import { Route as BacMaterieRouteImport } from './routes/bac.$materie'
-import { Route as BlogIndexRouteImport } from './routes/blog.index'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as CerereaMeaIdRouteImport } from './routes/cererea-mea.$id'
-import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
-import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
-import { Route as MeditatiiIndexRouteImport } from './routes/meditatii.index'
-import { Route as MesajeIndexRouteImport } from './routes/mesaje.index'
-import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
-import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
-import { Route as PreturiMeditatiiIndexRouteImport } from './routes/preturi-meditatii.index'
-import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
-import { Route as ProfesorIndexRouteImport } from './routes/profesor.index'
-import { Route as ProfesorSlugRouteImport } from './routes/profesor.$slug'
-import { Route as ProfesoriIndexRouteImport } from './routes/profesori.index'
-import { Route as ProfesoriOrasRouteImport } from './routes/profesori.$oras'
-import { Route as RezolvariIndexRouteImport } from './routes/rezolvari.index'
-import { Route as SimulareBacMaterieRouteImport } from './routes/simulare-bac.$materie'
+import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacalaureat'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
+import { Route as TutorialeRouteImport } from './routes/tutoriale'
+import { Route as TermeniRouteImport } from './routes/termeni'
+import { Route as SubiecteBac2026RouteImport } from './routes/subiecte-bac-2026'
+import { Route as SubiecteBacRouteImport } from './routes/subiecte-bac'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SimulariBacalaureat2026RouteImport } from './routes/simulari-bacalaureat-2026'
+import { Route as SimulareUtcn2026RouteImport } from './routes/simulare-utcn-2026'
+import { Route as SimulareDrept2026RouteImport } from './routes/simulare-drept-2026'
+import { Route as SimulareBacalaureatRouteImport } from './routes/simulare-bacalaureat'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as RezultateBac2026RouteImport } from './routes/rezultate-bac-2026'
+import { Route as ProfesoriMeditatiiRouteImport } from './routes/profesori-meditatii'
+import { Route as ProfesorParticularRouteImport } from './routes/profesor-particular'
+import { Route as ProfesorMeditatiiRouteImport } from './routes/profesor-meditatii'
+import { Route as PretMeditatiiRouteImport } from './routes/pret-meditatii'
+import { Route as PregatireBacalaureatRouteImport } from './routes/pregatire-bacalaureat'
+import { Route as PregatireAdmitereMedicinaRouteImport } from './routes/pregatire-admitere-medicina'
+import { Route as PoliticaCookiesRouteImport } from './routes/politica-cookies'
+import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
+import { Route as PentruProfesoriRouteImport } from './routes/pentru-profesori'
+import { Route as ParteneriRouteImport } from './routes/parteneri'
+import { Route as OreOnlineRouteImport } from './routes/ore-online'
+import { Route as OferMeditatiiRouteImport } from './routes/ofer-meditatii'
+import { Route as MeditatoriRouteImport } from './routes/meditatori'
+import { Route as MeditatiiTitularizareRouteImport } from './routes/meditatii-titularizare'
+import { Route as MeditatiiScoalaRouteImport } from './routes/meditatii-scoala'
+import { Route as MeditatiiRomanaRouteImport } from './routes/meditatii-romana'
+import { Route as MeditatiiPrivateRouteImport } from './routes/meditatii-private'
+import { Route as MeditatiiParticulareRouteImport } from './routes/meditatii-particulare'
+import { Route as MeditatiiOnlineRouteImport } from './routes/meditatii-online'
+import { Route as MeditatiiMatematicaRouteImport } from './routes/meditatii-matematica'
+import { Route as MeditatiiLiceuRouteImport } from './routes/meditatii-liceu'
+import { Route as MeditatiiLaDomiciliuRouteImport } from './routes/meditatii-la-domiciliu'
+import { Route as MeditatiiIstorieRouteImport } from './routes/meditatii-istorie'
+import { Route as MeditatiiInformaticaRouteImport } from './routes/meditatii-informatica'
+import { Route as MeditatiiIeftineRouteImport } from './routes/meditatii-ieftine'
+import { Route as MeditatiiGimnaziuRouteImport } from './routes/meditatii-gimnaziu'
+import { Route as MeditatiiGermanaRouteImport } from './routes/meditatii-germana'
+import { Route as MeditatiiGeografieRouteImport } from './routes/meditatii-geografie'
+import { Route as MeditatiiFrancezaRouteImport } from './routes/meditatii-franceza'
+import { Route as MeditatiiFizicaRouteImport } from './routes/meditatii-fizica'
+import { Route as MeditatiiEvaluareNationalaRouteImport } from './routes/meditatii-evaluare-nationala'
+import { Route as MeditatiiEnglezaRouteImport } from './routes/meditatii-engleza'
+import { Route as MeditatiiDefinitivatRouteImport } from './routes/meditatii-definitivat'
+import { Route as MeditatiiClasa8RouteImport } from './routes/meditatii-clasa-8'
+import { Route as MeditatiiClasa12RouteImport } from './routes/meditatii-clasa-12'
+import { Route as MeditatiiChimieRouteImport } from './routes/meditatii-chimie'
+import { Route as MeditatiiBiologieRouteImport } from './routes/meditatii-biologie'
+import { Route as MeditatiiBacRouteImport } from './routes/meditatii-bac'
+import { Route as MeditatiiAdmiterePolitehnicaRouteImport } from './routes/meditatii-admitere-politehnica'
+import { Route as MeditatiiAdmitereMedicinaRouteImport } from './routes/meditatii-admitere-medicina'
+import { Route as MeditatiiAdmitereDreptRouteImport } from './routes/meditatii-admitere-drept'
+import { Route as MeditatiiAdmitereAseRouteImport } from './routes/meditatii-admitere-ase'
+import { Route as MateriiRouteImport } from './routes/materii'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as KitPromovareRouteImport } from './routes/kit-promovare'
+import { Route as InvitaUnColegRouteImport } from './routes/invita-un-coleg'
+import { Route as GrileUpbRouteImport } from './routes/grile-upb'
+import { Route as GrileMedicinaRouteImport } from './routes/grile-medicina'
+import { Route as GrileAdmitereMedicina2026RouteImport } from './routes/grile-admitere-medicina-2026'
+import { Route as DespreRouteImport } from './routes/despre'
+import { Route as CumFunctioneazaRouteImport } from './routes/cum-functioneaza'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ContRouteImport } from './routes/cont'
+import { Route as ConfidentialitateRouteImport } from './routes/confidentialitate'
+import { Route as CereriRouteImport } from './routes/cereri'
+import { Route as CautProfesorRouteImport } from './routes/caut-profesor'
+import { Route as CastigaDinMeditatiiRouteImport } from './routes/castiga-din-meditatii'
+import { Route as CalculatorNotaAdmitereRouteImport } from './routes/calculator-nota-admitere'
+import { Route as CalculatorMedieBacRouteImport } from './routes/calculator-medie-bac'
+import { Route as AnunturiMeditatiiBacRouteImport } from './routes/anunturi-meditatii-bac'
+import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditatii'
+import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
+import { Route as AdmitereFacultate2026RouteImport } from './routes/admitere-facultate-2026'
+import { Route as AdmitereRouteImport } from './routes/admitere'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubiecteAdmitereIndexRouteImport } from './routes/subiecte-admitere.index'
+import { Route as RezolvariIndexRouteImport } from './routes/rezolvari.index'
+import { Route as ProfesoriIndexRouteImport } from './routes/profesori.index'
+import { Route as ProfesorIndexRouteImport } from './routes/profesor.index'
+import { Route as PreturiMeditatiiIndexRouteImport } from './routes/preturi-meditatii.index'
+import { Route as MesajeIndexRouteImport } from './routes/mesaje.index'
+import { Route as MeditatiiIndexRouteImport } from './routes/meditatii.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BacIndexRouteImport } from './routes/bac.index'
 import { Route as SubiecteAdmitereUniversitateRouteImport } from './routes/subiecte-admitere.$universitate'
+import { Route as SimulareBacMaterieRouteImport } from './routes/simulare-bac.$materie'
+import { Route as ProfesoriOrasRouteImport } from './routes/profesori.$oras'
+import { Route as ProfesorSlugRouteImport } from './routes/profesor.$slug'
+import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
+import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
+import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
+import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as CerereaMeaIdRouteImport } from './routes/cererea-mea.$id'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as BacMaterieRouteImport } from './routes/bac.$materie'
+import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
+import { Route as AdminBacCrawlerRouteImport } from './routes/admin.bac-crawler'
 import { Route as BacMaterieIndexRouteImport } from './routes/bac.$materie.index'
-import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
-import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
-import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
-import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './routes/subiecte-admitere.$universitate.$materie'
 import { Route as SubiecteAdmitereMaterieMaterieRouteImport } from './routes/subiecte-admitere.materie.$materie'
-import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
-import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
-import { Route as ApiPublicHooksIndexnowRouteImport } from './routes/api/public/hooks/indexnow'
-import { Route as ApiPublicHooksRezolvariTickRouteImport } from './routes/api/public/hooks/rezolvari-tick'
-import { Route as ApiPublicHooksSeoDailyRouteImport } from './routes/api/public/hooks/seo-daily'
+import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './routes/subiecte-admitere.$universitate.$materie'
+import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
 import { Route as BacMaterieAnIndexRouteImport } from './routes/bac.$materie.$an.index'
-import { Route as BacMaterieAnSesiuneRouteImport } from './routes/bac.$materie.$an.$sesiune'
-import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
-import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
-import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
-import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
-import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
-import { Route as RezolvariMaterieAnSesiuneRouteImport } from './routes/rezolvari.$materie.$an.$sesiune'
 import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
+import { Route as RezolvariMaterieAnSesiuneRouteImport } from './routes/rezolvari.$materie.$an.$sesiune'
+import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
+import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
+import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as BacMaterieAnSesiuneRouteImport } from './routes/bac.$materie.$an.$sesiune'
+import { Route as ApiPublicHooksSeoDailyRouteImport } from './routes/api/public/hooks/seo-daily'
+import { Route as ApiPublicHooksRezolvariTickRouteImport } from './routes/api/public/hooks/rezolvari-tick'
+import { Route as ApiPublicHooksIndexnowRouteImport } from './routes/api/public/hooks/indexnow'
+import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
+import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const VreauSaDauMeditatiiRoute = VreauSaDauMeditatiiRouteImport.update({
+  id: '/vreau-sa-dau-meditatii',
+  path: '/vreau-sa-dau-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SplatRoute = SplatRouteImport.update({
-  id: '/$',
-  path: '/$',
+const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
+  id: '/variante-bacalaureat',
+  path: '/variante-bacalaureat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdmitereRoute = AdmitereRouteImport.update({
-  id: '/admitere',
-  path: '/admitere',
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdmitereFacultate2026Route = AdmitereFacultate2026RouteImport.update({
-  id: '/admitere-facultate-2026',
-  path: '/admitere-facultate-2026',
+const TutorialeRoute = TutorialeRouteImport.update({
+  id: '/tutoriale',
+  path: '/tutoriale',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdsDottxtRoute = AdsDottxtRouteImport.update({
-  id: '/ads.txt',
-  path: '/ads.txt',
+const TermeniRoute = TermeniRouteImport.update({
+  id: '/termeni',
+  path: '/termeni',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AnunturiMeditatiiRoute = AnunturiMeditatiiRouteImport.update({
-  id: '/anunturi-meditatii',
-  path: '/anunturi-meditatii',
+const SubiecteBac2026Route = SubiecteBac2026RouteImport.update({
+  id: '/subiecte-bac-2026',
+  path: '/subiecte-bac-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AnunturiMeditatiiBacRoute = AnunturiMeditatiiBacRouteImport.update({
-  id: '/anunturi-meditatii-bac',
-  path: '/anunturi-meditatii-bac',
+const SubiecteBacRoute = SubiecteBacRouteImport.update({
+  id: '/subiecte-bac',
+  path: '/subiecte-bac',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CalculatorMedieBacRoute = CalculatorMedieBacRouteImport.update({
-  id: '/calculator-medie-bac',
-  path: '/calculator-medie-bac',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CalculatorNotaAdmitereRoute = CalculatorNotaAdmitereRouteImport.update({
-  id: '/calculator-nota-admitere',
-  path: '/calculator-nota-admitere',
+const SimulariBacalaureat2026Route = SimulariBacalaureat2026RouteImport.update({
+  id: '/simulari-bacalaureat-2026',
+  path: '/simulari-bacalaureat-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CastigaDinMeditatiiRoute = CastigaDinMeditatiiRouteImport.update({
-  id: '/castiga-din-meditatii',
-  path: '/castiga-din-meditatii',
+const SimulareUtcn2026Route = SimulareUtcn2026RouteImport.update({
+  id: '/simulare-utcn-2026',
+  path: '/simulare-utcn-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CautProfesorRoute = CautProfesorRouteImport.update({
-  id: '/caut-profesor',
-  path: '/caut-profesor',
+const SimulareDrept2026Route = SimulareDrept2026RouteImport.update({
+  id: '/simulare-drept-2026',
+  path: '/simulare-drept-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CereriRoute = CereriRouteImport.update({
-  id: '/cereri',
-  path: '/cereri',
+const SimulareBacalaureatRoute = SimulareBacalaureatRouteImport.update({
+  id: '/simulare-bacalaureat',
+  path: '/simulare-bacalaureat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ConfidentialitateRoute = ConfidentialitateRouteImport.update({
-  id: '/confidentialitate',
-  path: '/confidentialitate',
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContRoute = ContRouteImport.update({
-  id: '/cont',
-  path: '/cont',
+const RezultateBac2026Route = RezultateBac2026RouteImport.update({
+  id: '/rezultate-bac-2026',
+  path: '/rezultate-bac-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
+const ProfesoriMeditatiiRoute = ProfesoriMeditatiiRouteImport.update({
+  id: '/profesori-meditatii',
+  path: '/profesori-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CumFunctioneazaRoute = CumFunctioneazaRouteImport.update({
-  id: '/cum-functioneaza',
-  path: '/cum-functioneaza',
+const ProfesorParticularRoute = ProfesorParticularRouteImport.update({
+  id: '/profesor-particular',
+  path: '/profesor-particular',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DespreRoute = DespreRouteImport.update({
-  id: '/despre',
-  path: '/despre',
+const ProfesorMeditatiiRoute = ProfesorMeditatiiRouteImport.update({
+  id: '/profesor-meditatii',
+  path: '/profesor-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GrileAdmitereMedicina2026Route =
-  GrileAdmitereMedicina2026RouteImport.update({
-    id: '/grile-admitere-medicina-2026',
-    path: '/grile-admitere-medicina-2026',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const GrileMedicinaRoute = GrileMedicinaRouteImport.update({
-  id: '/grile-medicina',
-  path: '/grile-medicina',
+const PretMeditatiiRoute = PretMeditatiiRouteImport.update({
+  id: '/pret-meditatii',
+  path: '/pret-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GrileUpbRoute = GrileUpbRouteImport.update({
-  id: '/grile-upb',
-  path: '/grile-upb',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvitaUnColegRoute = InvitaUnColegRouteImport.update({
-  id: '/invita-un-coleg',
-  path: '/invita-un-coleg',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KitPromovareRoute = KitPromovareRouteImport.update({
-  id: '/kit-promovare',
-  path: '/kit-promovare',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MateriiRoute = MateriiRouteImport.update({
-  id: '/materii',
-  path: '/materii',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiAdmitereAseRoute = MeditatiiAdmitereAseRouteImport.update({
-  id: '/meditatii-admitere-ase',
-  path: '/meditatii-admitere-ase',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiAdmitereDreptRoute = MeditatiiAdmitereDreptRouteImport.update({
-  id: '/meditatii-admitere-drept',
-  path: '/meditatii-admitere-drept',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiAdmitereMedicinaRoute =
-  MeditatiiAdmitereMedicinaRouteImport.update({
-    id: '/meditatii-admitere-medicina',
-    path: '/meditatii-admitere-medicina',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MeditatiiAdmiterePolitehnicaRoute =
-  MeditatiiAdmiterePolitehnicaRouteImport.update({
-    id: '/meditatii-admitere-politehnica',
-    path: '/meditatii-admitere-politehnica',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MeditatiiBacRoute = MeditatiiBacRouteImport.update({
-  id: '/meditatii-bac',
-  path: '/meditatii-bac',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiBiologieRoute = MeditatiiBiologieRouteImport.update({
-  id: '/meditatii-biologie',
-  path: '/meditatii-biologie',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiChimieRoute = MeditatiiChimieRouteImport.update({
-  id: '/meditatii-chimie',
-  path: '/meditatii-chimie',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiClasa12Route = MeditatiiClasa12RouteImport.update({
-  id: '/meditatii-clasa-12',
-  path: '/meditatii-clasa-12',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiClasa8Route = MeditatiiClasa8RouteImport.update({
-  id: '/meditatii-clasa-8',
-  path: '/meditatii-clasa-8',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiDefinitivatRoute = MeditatiiDefinitivatRouteImport.update({
-  id: '/meditatii-definitivat',
-  path: '/meditatii-definitivat',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiEnglezaRoute = MeditatiiEnglezaRouteImport.update({
-  id: '/meditatii-engleza',
-  path: '/meditatii-engleza',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiEvaluareNationalaRoute =
-  MeditatiiEvaluareNationalaRouteImport.update({
-    id: '/meditatii-evaluare-nationala',
-    path: '/meditatii-evaluare-nationala',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MeditatiiFizicaRoute = MeditatiiFizicaRouteImport.update({
-  id: '/meditatii-fizica',
-  path: '/meditatii-fizica',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiFrancezaRoute = MeditatiiFrancezaRouteImport.update({
-  id: '/meditatii-franceza',
-  path: '/meditatii-franceza',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiGeografieRoute = MeditatiiGeografieRouteImport.update({
-  id: '/meditatii-geografie',
-  path: '/meditatii-geografie',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiGermanaRoute = MeditatiiGermanaRouteImport.update({
-  id: '/meditatii-germana',
-  path: '/meditatii-germana',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiGimnaziuRoute = MeditatiiGimnaziuRouteImport.update({
-  id: '/meditatii-gimnaziu',
-  path: '/meditatii-gimnaziu',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiIeftineRoute = MeditatiiIeftineRouteImport.update({
-  id: '/meditatii-ieftine',
-  path: '/meditatii-ieftine',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiInformaticaRoute = MeditatiiInformaticaRouteImport.update({
-  id: '/meditatii-informatica',
-  path: '/meditatii-informatica',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiIstorieRoute = MeditatiiIstorieRouteImport.update({
-  id: '/meditatii-istorie',
-  path: '/meditatii-istorie',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiLaDomiciliuRoute = MeditatiiLaDomiciliuRouteImport.update({
-  id: '/meditatii-la-domiciliu',
-  path: '/meditatii-la-domiciliu',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiLiceuRoute = MeditatiiLiceuRouteImport.update({
-  id: '/meditatii-liceu',
-  path: '/meditatii-liceu',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiMatematicaRoute = MeditatiiMatematicaRouteImport.update({
-  id: '/meditatii-matematica',
-  path: '/meditatii-matematica',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiOnlineRoute = MeditatiiOnlineRouteImport.update({
-  id: '/meditatii-online',
-  path: '/meditatii-online',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiParticulareRoute = MeditatiiParticulareRouteImport.update({
-  id: '/meditatii-particulare',
-  path: '/meditatii-particulare',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiPrivateRoute = MeditatiiPrivateRouteImport.update({
-  id: '/meditatii-private',
-  path: '/meditatii-private',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiRomanaRoute = MeditatiiRomanaRouteImport.update({
-  id: '/meditatii-romana',
-  path: '/meditatii-romana',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiScoalaRoute = MeditatiiScoalaRouteImport.update({
-  id: '/meditatii-scoala',
-  path: '/meditatii-scoala',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiTitularizareRoute = MeditatiiTitularizareRouteImport.update({
-  id: '/meditatii-titularizare',
-  path: '/meditatii-titularizare',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatoriRoute = MeditatoriRouteImport.update({
-  id: '/meditatori',
-  path: '/meditatori',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OferMeditatiiRoute = OferMeditatiiRouteImport.update({
-  id: '/ofer-meditatii',
-  path: '/ofer-meditatii',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OreOnlineRoute = OreOnlineRouteImport.update({
-  id: '/ore-online',
-  path: '/ore-online',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ParteneriRoute = ParteneriRouteImport.update({
-  id: '/parteneri',
-  path: '/parteneri',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PentruProfesoriRoute = PentruProfesoriRouteImport.update({
-  id: '/pentru-profesori',
-  path: '/pentru-profesori',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlatformaMeditatiiOnlineRoute =
-  PlatformaMeditatiiOnlineRouteImport.update({
-    id: '/platforma-meditatii-online',
-    path: '/platforma-meditatii-online',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const PoliticaCookiesRoute = PoliticaCookiesRouteImport.update({
-  id: '/politica-cookies',
-  path: '/politica-cookies',
+const PregatireBacalaureatRoute = PregatireBacalaureatRouteImport.update({
+  id: '/pregatire-bacalaureat',
+  path: '/pregatire-bacalaureat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PregatireAdmitereMedicinaRoute =
@@ -444,194 +234,314 @@ const PregatireAdmitereMedicinaRoute =
     path: '/pregatire-admitere-medicina',
     getParentRoute: () => rootRouteImport,
   } as any)
-const PregatireBacalaureatRoute = PregatireBacalaureatRouteImport.update({
-  id: '/pregatire-bacalaureat',
-  path: '/pregatire-bacalaureat',
+const PoliticaCookiesRoute = PoliticaCookiesRouteImport.update({
+  id: '/politica-cookies',
+  path: '/politica-cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PretMeditatiiRoute = PretMeditatiiRouteImport.update({
-  id: '/pret-meditatii',
-  path: '/pret-meditatii',
+const PlatformaMeditatiiOnlineRoute =
+  PlatformaMeditatiiOnlineRouteImport.update({
+    id: '/platforma-meditatii-online',
+    path: '/platforma-meditatii-online',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const PentruProfesoriRoute = PentruProfesoriRouteImport.update({
+  id: '/pentru-profesori',
+  path: '/pentru-profesori',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfesorMeditatiiRoute = ProfesorMeditatiiRouteImport.update({
-  id: '/profesor-meditatii',
-  path: '/profesor-meditatii',
+const ParteneriRoute = ParteneriRouteImport.update({
+  id: '/parteneri',
+  path: '/parteneri',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfesorParticularRoute = ProfesorParticularRouteImport.update({
-  id: '/profesor-particular',
-  path: '/profesor-particular',
+const OreOnlineRoute = OreOnlineRouteImport.update({
+  id: '/ore-online',
+  path: '/ore-online',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfesoriMeditatiiRoute = ProfesoriMeditatiiRouteImport.update({
-  id: '/profesori-meditatii',
-  path: '/profesori-meditatii',
+const OferMeditatiiRoute = OferMeditatiiRouteImport.update({
+  id: '/ofer-meditatii',
+  path: '/ofer-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RezultateBac2026Route = RezultateBac2026RouteImport.update({
-  id: '/rezultate-bac-2026',
-  path: '/rezultate-bac-2026',
+const MeditatoriRoute = MeditatoriRouteImport.update({
+  id: '/meditatori',
+  path: '/meditatori',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
+const MeditatiiTitularizareRoute = MeditatiiTitularizareRouteImport.update({
+  id: '/meditatii-titularizare',
+  path: '/meditatii-titularizare',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SimulareBacalaureatRoute = SimulareBacalaureatRouteImport.update({
-  id: '/simulare-bacalaureat',
-  path: '/simulare-bacalaureat',
+const MeditatiiScoalaRoute = MeditatiiScoalaRouteImport.update({
+  id: '/meditatii-scoala',
+  path: '/meditatii-scoala',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SimulareDrept2026Route = SimulareDrept2026RouteImport.update({
-  id: '/simulare-drept-2026',
-  path: '/simulare-drept-2026',
+const MeditatiiRomanaRoute = MeditatiiRomanaRouteImport.update({
+  id: '/meditatii-romana',
+  path: '/meditatii-romana',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SimulareUtcn2026Route = SimulareUtcn2026RouteImport.update({
-  id: '/simulare-utcn-2026',
-  path: '/simulare-utcn-2026',
+const MeditatiiPrivateRoute = MeditatiiPrivateRouteImport.update({
+  id: '/meditatii-private',
+  path: '/meditatii-private',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SimulariBacalaureat2026Route = SimulariBacalaureat2026RouteImport.update({
-  id: '/simulari-bacalaureat-2026',
-  path: '/simulari-bacalaureat-2026',
+const MeditatiiParticulareRoute = MeditatiiParticulareRouteImport.update({
+  id: '/meditatii-particulare',
+  path: '/meditatii-particulare',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const MeditatiiOnlineRoute = MeditatiiOnlineRouteImport.update({
+  id: '/meditatii-online',
+  path: '/meditatii-online',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SubiecteBacRoute = SubiecteBacRouteImport.update({
-  id: '/subiecte-bac',
-  path: '/subiecte-bac',
+const MeditatiiMatematicaRoute = MeditatiiMatematicaRouteImport.update({
+  id: '/meditatii-matematica',
+  path: '/meditatii-matematica',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SubiecteBac2026Route = SubiecteBac2026RouteImport.update({
-  id: '/subiecte-bac-2026',
-  path: '/subiecte-bac-2026',
+const MeditatiiLiceuRoute = MeditatiiLiceuRouteImport.update({
+  id: '/meditatii-liceu',
+  path: '/meditatii-liceu',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TermeniRoute = TermeniRouteImport.update({
-  id: '/termeni',
-  path: '/termeni',
+const MeditatiiLaDomiciliuRoute = MeditatiiLaDomiciliuRouteImport.update({
+  id: '/meditatii-la-domiciliu',
+  path: '/meditatii-la-domiciliu',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TutorialeRoute = TutorialeRouteImport.update({
-  id: '/tutoriale',
-  path: '/tutoriale',
+const MeditatiiIstorieRoute = MeditatiiIstorieRouteImport.update({
+  id: '/meditatii-istorie',
+  path: '/meditatii-istorie',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UnsubscribeRoute = UnsubscribeRouteImport.update({
-  id: '/unsubscribe',
-  path: '/unsubscribe',
+const MeditatiiInformaticaRoute = MeditatiiInformaticaRouteImport.update({
+  id: '/meditatii-informatica',
+  path: '/meditatii-informatica',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VarianteBacalaureatRoute = VarianteBacalaureatRouteImport.update({
-  id: '/variante-bacalaureat',
-  path: '/variante-bacalaureat',
+const MeditatiiIeftineRoute = MeditatiiIeftineRouteImport.update({
+  id: '/meditatii-ieftine',
+  path: '/meditatii-ieftine',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VreauSaDauMeditatiiRoute = VreauSaDauMeditatiiRouteImport.update({
-  id: '/vreau-sa-dau-meditatii',
-  path: '/vreau-sa-dau-meditatii',
+const MeditatiiGimnaziuRoute = MeditatiiGimnaziuRouteImport.update({
+  id: '/meditatii-gimnaziu',
+  path: '/meditatii-gimnaziu',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminBacCrawlerRoute = AdminBacCrawlerRouteImport.update({
-  id: '/admin/bac-crawler',
-  path: '/admin/bac-crawler',
+const MeditatiiGermanaRoute = MeditatiiGermanaRouteImport.update({
+  id: '/meditatii-germana',
+  path: '/meditatii-germana',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AnuntSlugRoute = AnuntSlugRouteImport.update({
-  id: '/anunt/$slug',
-  path: '/anunt/$slug',
+const MeditatiiGeografieRoute = MeditatiiGeografieRouteImport.update({
+  id: '/meditatii-geografie',
+  path: '/meditatii-geografie',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BacIndexRoute = BacIndexRouteImport.update({
-  id: '/bac/',
-  path: '/bac/',
+const MeditatiiFrancezaRoute = MeditatiiFrancezaRouteImport.update({
+  id: '/meditatii-franceza',
+  path: '/meditatii-franceza',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BacMaterieRoute = BacMaterieRouteImport.update({
-  id: '/bac/$materie',
-  path: '/bac/$materie',
+const MeditatiiFizicaRoute = MeditatiiFizicaRouteImport.update({
+  id: '/meditatii-fizica',
+  path: '/meditatii-fizica',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogIndexRoute = BlogIndexRouteImport.update({
-  id: '/blog/',
-  path: '/blog/',
+const MeditatiiEvaluareNationalaRoute =
+  MeditatiiEvaluareNationalaRouteImport.update({
+    id: '/meditatii-evaluare-nationala',
+    path: '/meditatii-evaluare-nationala',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MeditatiiEnglezaRoute = MeditatiiEnglezaRouteImport.update({
+  id: '/meditatii-engleza',
+  path: '/meditatii-engleza',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/blog/$slug',
-  path: '/blog/$slug',
+const MeditatiiDefinitivatRoute = MeditatiiDefinitivatRouteImport.update({
+  id: '/meditatii-definitivat',
+  path: '/meditatii-definitivat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CerereaMeaIdRoute = CerereaMeaIdRouteImport.update({
-  id: '/cererea-mea/$id',
-  path: '/cererea-mea/$id',
+const MeditatiiClasa8Route = MeditatiiClasa8RouteImport.update({
+  id: '/meditatii-clasa-8',
+  path: '/meditatii-clasa-8',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
-  id: '/email/unsubscribe',
-  path: '/email/unsubscribe',
+const MeditatiiClasa12Route = MeditatiiClasa12RouteImport.update({
+  id: '/meditatii-clasa-12',
+  path: '/meditatii-clasa-12',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MeditatiiInOrasRoute = MeditatiiInOrasRouteImport.update({
-  id: '/meditatii-in/$oras',
-  path: '/meditatii-in/$oras',
+const MeditatiiChimieRoute = MeditatiiChimieRouteImport.update({
+  id: '/meditatii-chimie',
+  path: '/meditatii-chimie',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MeditatiiIndexRoute = MeditatiiIndexRouteImport.update({
-  id: '/meditatii/',
-  path: '/meditatii/',
+const MeditatiiBiologieRoute = MeditatiiBiologieRouteImport.update({
+  id: '/meditatii-biologie',
+  path: '/meditatii-biologie',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MesajeIndexRoute = MesajeIndexRouteImport.update({
-  id: '/mesaje/',
-  path: '/mesaje/',
+const MeditatiiBacRoute = MeditatiiBacRouteImport.update({
+  id: '/meditatii-bac',
+  path: '/meditatii-bac',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MesajeIdRoute = MesajeIdRouteImport.update({
-  id: '/mesaje/$id',
-  path: '/mesaje/$id',
+const MeditatiiAdmiterePolitehnicaRoute =
+  MeditatiiAdmiterePolitehnicaRouteImport.update({
+    id: '/meditatii-admitere-politehnica',
+    path: '/meditatii-admitere-politehnica',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MeditatiiAdmitereMedicinaRoute =
+  MeditatiiAdmitereMedicinaRouteImport.update({
+    id: '/meditatii-admitere-medicina',
+    path: '/meditatii-admitere-medicina',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MeditatiiAdmitereDreptRoute = MeditatiiAdmitereDreptRouteImport.update({
+  id: '/meditatii-admitere-drept',
+  path: '/meditatii-admitere-drept',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsletterConfirmRoute = NewsletterConfirmRouteImport.update({
-  id: '/newsletter/confirm',
-  path: '/newsletter/confirm',
+const MeditatiiAdmitereAseRoute = MeditatiiAdmitereAseRouteImport.update({
+  id: '/meditatii-admitere-ase',
+  path: '/meditatii-admitere-ase',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PreturiMeditatiiIndexRoute = PreturiMeditatiiIndexRouteImport.update({
-  id: '/preturi-meditatii/',
-  path: '/preturi-meditatii/',
+const MateriiRoute = MateriiRouteImport.update({
+  id: '/materii',
+  path: '/materii',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PreturiMeditatiiMaterieRoute = PreturiMeditatiiMaterieRouteImport.update({
-  id: '/preturi-meditatii/$materie',
-  path: '/preturi-meditatii/$materie',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfesorIndexRoute = ProfesorIndexRouteImport.update({
-  id: '/profesor/',
-  path: '/profesor/',
+const KitPromovareRoute = KitPromovareRouteImport.update({
+  id: '/kit-promovare',
+  path: '/kit-promovare',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfesorSlugRoute = ProfesorSlugRouteImport.update({
-  id: '/profesor/$slug',
-  path: '/profesor/$slug',
+const InvitaUnColegRoute = InvitaUnColegRouteImport.update({
+  id: '/invita-un-coleg',
+  path: '/invita-un-coleg',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfesoriIndexRoute = ProfesoriIndexRouteImport.update({
-  id: '/profesori/',
-  path: '/profesori/',
+const GrileUpbRoute = GrileUpbRouteImport.update({
+  id: '/grile-upb',
+  path: '/grile-upb',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProfesoriOrasRoute = ProfesoriOrasRouteImport.update({
-  id: '/profesori/$oras',
-  path: '/profesori/$oras',
+const GrileMedicinaRoute = GrileMedicinaRouteImport.update({
+  id: '/grile-medicina',
+  path: '/grile-medicina',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrileAdmitereMedicina2026Route =
+  GrileAdmitereMedicina2026RouteImport.update({
+    id: '/grile-admitere-medicina-2026',
+    path: '/grile-admitere-medicina-2026',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DespreRoute = DespreRouteImport.update({
+  id: '/despre',
+  path: '/despre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CumFunctioneazaRoute = CumFunctioneazaRouteImport.update({
+  id: '/cum-functioneaza',
+  path: '/cum-functioneaza',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContRoute = ContRouteImport.update({
+  id: '/cont',
+  path: '/cont',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfidentialitateRoute = ConfidentialitateRouteImport.update({
+  id: '/confidentialitate',
+  path: '/confidentialitate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CereriRoute = CereriRouteImport.update({
+  id: '/cereri',
+  path: '/cereri',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CautProfesorRoute = CautProfesorRouteImport.update({
+  id: '/caut-profesor',
+  path: '/caut-profesor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CastigaDinMeditatiiRoute = CastigaDinMeditatiiRouteImport.update({
+  id: '/castiga-din-meditatii',
+  path: '/castiga-din-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalculatorNotaAdmitereRoute = CalculatorNotaAdmitereRouteImport.update({
+  id: '/calculator-nota-admitere',
+  path: '/calculator-nota-admitere',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalculatorMedieBacRoute = CalculatorMedieBacRouteImport.update({
+  id: '/calculator-medie-bac',
+  path: '/calculator-medie-bac',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnunturiMeditatiiBacRoute = AnunturiMeditatiiBacRouteImport.update({
+  id: '/anunturi-meditatii-bac',
+  path: '/anunturi-meditatii-bac',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnunturiMeditatiiRoute = AnunturiMeditatiiRouteImport.update({
+  id: '/anunturi-meditatii',
+  path: '/anunturi-meditatii',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdsDottxtRoute = AdsDottxtRouteImport.update({
+  id: '/ads.txt',
+  path: '/ads.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmitereFacultate2026Route = AdmitereFacultate2026RouteImport.update({
+  id: '/admitere-facultate-2026',
+  path: '/admitere-facultate-2026',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmitereRoute = AdmitereRouteImport.update({
+  id: '/admitere',
+  path: '/admitere',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubiecteAdmitereIndexRoute = SubiecteAdmitereIndexRouteImport.update({
+  id: '/subiecte-admitere/',
+  path: '/subiecte-admitere/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RezolvariIndexRoute = RezolvariIndexRouteImport.update({
@@ -639,14 +549,39 @@ const RezolvariIndexRoute = RezolvariIndexRouteImport.update({
   path: '/rezolvari/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SimulareBacMaterieRoute = SimulareBacMaterieRouteImport.update({
-  id: '/simulare-bac/$materie',
-  path: '/simulare-bac/$materie',
+const ProfesoriIndexRoute = ProfesoriIndexRouteImport.update({
+  id: '/profesori/',
+  path: '/profesori/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SubiecteAdmitereIndexRoute = SubiecteAdmitereIndexRouteImport.update({
-  id: '/subiecte-admitere/',
-  path: '/subiecte-admitere/',
+const ProfesorIndexRoute = ProfesorIndexRouteImport.update({
+  id: '/profesor/',
+  path: '/profesor/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreturiMeditatiiIndexRoute = PreturiMeditatiiIndexRouteImport.update({
+  id: '/preturi-meditatii/',
+  path: '/preturi-meditatii/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MesajeIndexRoute = MesajeIndexRouteImport.update({
+  id: '/mesaje/',
+  path: '/mesaje/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiIndexRoute = MeditatiiIndexRouteImport.update({
+  id: '/meditatii/',
+  path: '/meditatii/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BacIndexRoute = BacIndexRouteImport.update({
+  id: '/bac/',
+  path: '/bac/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubiecteAdmitereUniversitateRoute =
@@ -655,86 +590,129 @@ const SubiecteAdmitereUniversitateRoute =
     path: '/subiecte-admitere/$universitate',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SimulareBacMaterieRoute = SimulareBacMaterieRouteImport.update({
+  id: '/simulare-bac/$materie',
+  path: '/simulare-bac/$materie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfesoriOrasRoute = ProfesoriOrasRouteImport.update({
+  id: '/profesori/$oras',
+  path: '/profesori/$oras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfesorSlugRoute = ProfesorSlugRouteImport.update({
+  id: '/profesor/$slug',
+  path: '/profesor/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreturiMeditatiiMaterieRoute = PreturiMeditatiiMaterieRouteImport.update({
+  id: '/preturi-meditatii/$materie',
+  path: '/preturi-meditatii/$materie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsletterConfirmRoute = NewsletterConfirmRouteImport.update({
+  id: '/newsletter/confirm',
+  path: '/newsletter/confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MesajeIdRoute = MesajeIdRouteImport.update({
+  id: '/mesaje/$id',
+  path: '/mesaje/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiInOrasRoute = MeditatiiInOrasRouteImport.update({
+  id: '/meditatii-in/$oras',
+  path: '/meditatii-in/$oras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CerereaMeaIdRoute = CerereaMeaIdRouteImport.update({
+  id: '/cererea-mea/$id',
+  path: '/cererea-mea/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BacMaterieRoute = BacMaterieRouteImport.update({
+  id: '/bac/$materie',
+  path: '/bac/$materie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnuntSlugRoute = AnuntSlugRouteImport.update({
+  id: '/anunt/$slug',
+  path: '/anunt/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminBacCrawlerRoute = AdminBacCrawlerRouteImport.update({
+  id: '/admin/bac-crawler',
+  path: '/admin/bac-crawler',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BacMaterieIndexRoute = BacMaterieIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => BacMaterieRoute,
 } as any)
-const BacMaterieAnRoute = BacMaterieAnRouteImport.update({
-  id: '/$an',
-  path: '/$an',
-  getParentRoute: () => BacMaterieRoute,
-} as any)
-const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
-  id: '/lovable/email/suppression',
-  path: '/lovable/email/suppression',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MeditatiiMaterieOrasRoute = MeditatiiMaterieOrasRouteImport.update({
-  id: '/meditatii/$materie/$oras',
-  path: '/meditatii/$materie/$oras',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SubiecteAdmitereUniversitateMaterieRoute =
-  SubiecteAdmitereUniversitateMaterieRouteImport.update({
-    id: '/$materie',
-    path: '/$materie',
-    getParentRoute: () => SubiecteAdmitereUniversitateRoute,
-  } as any)
 const SubiecteAdmitereMaterieMaterieRoute =
   SubiecteAdmitereMaterieMaterieRouteImport.update({
     id: '/subiecte-admitere/materie/$materie',
     path: '/subiecte-admitere/materie/$materie',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicHooksAutoBlogPostRoute =
-  ApiPublicHooksAutoBlogPostRouteImport.update({
-    id: '/api/public/hooks/auto-blog-post',
-    path: '/api/public/hooks/auto-blog-post',
-    getParentRoute: () => rootRouteImport,
+const SubiecteAdmitereUniversitateMaterieRoute =
+  SubiecteAdmitereUniversitateMaterieRouteImport.update({
+    id: '/$materie',
+    path: '/$materie',
+    getParentRoute: () => SubiecteAdmitereUniversitateRoute,
   } as any)
-const ApiPublicHooksBacCrawlTickRoute =
-  ApiPublicHooksBacCrawlTickRouteImport.update({
-    id: '/api/public/hooks/bac-crawl-tick',
-    path: '/api/public/hooks/bac-crawl-tick',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksIndexnowRoute = ApiPublicHooksIndexnowRouteImport.update({
-  id: '/api/public/hooks/indexnow',
-  path: '/api/public/hooks/indexnow',
+const MeditatiiMaterieOrasRoute = MeditatiiMaterieOrasRouteImport.update({
+  id: '/meditatii/$materie/$oras',
+  path: '/meditatii/$materie/$oras',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicHooksRezolvariTickRoute =
-  ApiPublicHooksRezolvariTickRouteImport.update({
-    id: '/api/public/hooks/rezolvari-tick',
-    path: '/api/public/hooks/rezolvari-tick',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicHooksSeoDailyRoute = ApiPublicHooksSeoDailyRouteImport.update({
-  id: '/api/public/hooks/seo-daily',
-  path: '/api/public/hooks/seo-daily',
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BacMaterieAnRoute = BacMaterieAnRouteImport.update({
+  id: '/$an',
+  path: '/$an',
+  getParentRoute: () => BacMaterieRoute,
 } as any)
 const BacMaterieAnIndexRoute = BacMaterieAnIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => BacMaterieAnRoute,
 } as any)
-const BacMaterieAnSesiuneRoute = BacMaterieAnSesiuneRouteImport.update({
-  id: '/$sesiune',
-  path: '/$sesiune',
-  getParentRoute: () => BacMaterieAnRoute,
-} as any)
-const LovableEmailQueueProcessRoute =
-  LovableEmailQueueProcessRouteImport.update({
-    id: '/lovable/email/queue/process',
-    path: '/lovable/email/queue/process',
+const SubiecteAdmitereUniversitateMaterieAnRoute =
+  SubiecteAdmitereUniversitateMaterieAnRouteImport.update({
+    id: '/$an',
+    path: '/$an',
+    getParentRoute: () => SubiecteAdmitereUniversitateMaterieRoute,
+  } as any)
+const RezolvariMaterieAnSesiuneRoute =
+  RezolvariMaterieAnSesiuneRouteImport.update({
+    id: '/rezolvari/$materie/$an/$sesiune',
+    path: '/rezolvari/$materie/$an/$sesiune',
     getParentRoute: () => rootRouteImport,
   } as any)
-const LovableEmailTransactionalPreviewRoute =
-  LovableEmailTransactionalPreviewRouteImport.update({
-    id: '/lovable/email/transactional/preview',
-    path: '/lovable/email/transactional/preview',
+const ResurseBacMaterieAnRoute = ResurseBacMaterieAnRouteImport.update({
+  id: '/resurse/bac/$materie/$an',
+  path: '/resurse/bac/$materie/$an',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResurseAdmitereFacultateAnRoute =
+  ResurseAdmitereFacultateAnRouteImport.update({
+    id: '/resurse/admitere/$facultate/$an',
+    path: '/resurse/admitere/$facultate/$an',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LovableEmailTransactionalSendRoute =
@@ -743,28 +721,50 @@ const LovableEmailTransactionalSendRoute =
     path: '/lovable/email/transactional/send',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ResurseAdmitereFacultateAnRoute =
-  ResurseAdmitereFacultateAnRouteImport.update({
-    id: '/resurse/admitere/$facultate/$an',
-    path: '/resurse/admitere/$facultate/$an',
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ResurseBacMaterieAnRoute = ResurseBacMaterieAnRouteImport.update({
-  id: '/resurse/bac/$materie/$an',
-  path: '/resurse/bac/$materie/$an',
+const LovableEmailQueueProcessRoute =
+  LovableEmailQueueProcessRouteImport.update({
+    id: '/lovable/email/queue/process',
+    path: '/lovable/email/queue/process',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BacMaterieAnSesiuneRoute = BacMaterieAnSesiuneRouteImport.update({
+  id: '/$sesiune',
+  path: '/$sesiune',
+  getParentRoute: () => BacMaterieAnRoute,
+} as any)
+const ApiPublicHooksSeoDailyRoute = ApiPublicHooksSeoDailyRouteImport.update({
+  id: '/api/public/hooks/seo-daily',
+  path: '/api/public/hooks/seo-daily',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RezolvariMaterieAnSesiuneRoute =
-  RezolvariMaterieAnSesiuneRouteImport.update({
-    id: '/rezolvari/$materie/$an/$sesiune',
-    path: '/rezolvari/$materie/$an/$sesiune',
+const ApiPublicHooksRezolvariTickRoute =
+  ApiPublicHooksRezolvariTickRouteImport.update({
+    id: '/api/public/hooks/rezolvari-tick',
+    path: '/api/public/hooks/rezolvari-tick',
     getParentRoute: () => rootRouteImport,
   } as any)
-const SubiecteAdmitereUniversitateMaterieAnRoute =
-  SubiecteAdmitereUniversitateMaterieAnRouteImport.update({
-    id: '/$an',
-    path: '/$an',
-    getParentRoute: () => SubiecteAdmitereUniversitateMaterieRoute,
+const ApiPublicHooksIndexnowRoute = ApiPublicHooksIndexnowRouteImport.update({
+  id: '/api/public/hooks/indexnow',
+  path: '/api/public/hooks/indexnow',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHooksBacCrawlTickRoute =
+  ApiPublicHooksBacCrawlTickRouteImport.update({
+    id: '/api/public/hooks/bac-crawl-tick',
+    path: '/api/public/hooks/bac-crawl-tick',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksAutoBlogPostRoute =
+  ApiPublicHooksAutoBlogPostRouteImport.update({
+    id: '/api/public/hooks/auto-blog-post',
+    path: '/api/public/hooks/auto-blog-post',
+    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -1639,550 +1639,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$': {
-      id: '/$'
-      path: '/$'
-      fullPath: '/$'
-      preLoaderRoute: typeof SplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admitere': {
-      id: '/admitere'
-      path: '/admitere'
-      fullPath: '/admitere'
-      preLoaderRoute: typeof AdmitereRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admitere-facultate-2026': {
-      id: '/admitere-facultate-2026'
-      path: '/admitere-facultate-2026'
-      fullPath: '/admitere-facultate-2026'
-      preLoaderRoute: typeof AdmitereFacultate2026RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ads.txt': {
-      id: '/ads.txt'
-      path: '/ads.txt'
-      fullPath: '/ads.txt'
-      preLoaderRoute: typeof AdsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/anunturi-meditatii': {
-      id: '/anunturi-meditatii'
-      path: '/anunturi-meditatii'
-      fullPath: '/anunturi-meditatii'
-      preLoaderRoute: typeof AnunturiMeditatiiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/anunturi-meditatii-bac': {
-      id: '/anunturi-meditatii-bac'
-      path: '/anunturi-meditatii-bac'
-      fullPath: '/anunturi-meditatii-bac'
-      preLoaderRoute: typeof AnunturiMeditatiiBacRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calculator-medie-bac': {
-      id: '/calculator-medie-bac'
-      path: '/calculator-medie-bac'
-      fullPath: '/calculator-medie-bac'
-      preLoaderRoute: typeof CalculatorMedieBacRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calculator-nota-admitere': {
-      id: '/calculator-nota-admitere'
-      path: '/calculator-nota-admitere'
-      fullPath: '/calculator-nota-admitere'
-      preLoaderRoute: typeof CalculatorNotaAdmitereRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/castiga-din-meditatii': {
-      id: '/castiga-din-meditatii'
-      path: '/castiga-din-meditatii'
-      fullPath: '/castiga-din-meditatii'
-      preLoaderRoute: typeof CastigaDinMeditatiiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/caut-profesor': {
-      id: '/caut-profesor'
-      path: '/caut-profesor'
-      fullPath: '/caut-profesor'
-      preLoaderRoute: typeof CautProfesorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cereri': {
-      id: '/cereri'
-      path: '/cereri'
-      fullPath: '/cereri'
-      preLoaderRoute: typeof CereriRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/confidentialitate': {
-      id: '/confidentialitate'
-      path: '/confidentialitate'
-      fullPath: '/confidentialitate'
-      preLoaderRoute: typeof ConfidentialitateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cont': {
-      id: '/cont'
-      path: '/cont'
-      fullPath: '/cont'
-      preLoaderRoute: typeof ContRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cum-functioneaza': {
-      id: '/cum-functioneaza'
-      path: '/cum-functioneaza'
-      fullPath: '/cum-functioneaza'
-      preLoaderRoute: typeof CumFunctioneazaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/despre': {
-      id: '/despre'
-      path: '/despre'
-      fullPath: '/despre'
-      preLoaderRoute: typeof DespreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/grile-admitere-medicina-2026': {
-      id: '/grile-admitere-medicina-2026'
-      path: '/grile-admitere-medicina-2026'
-      fullPath: '/grile-admitere-medicina-2026'
-      preLoaderRoute: typeof GrileAdmitereMedicina2026RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/grile-medicina': {
-      id: '/grile-medicina'
-      path: '/grile-medicina'
-      fullPath: '/grile-medicina'
-      preLoaderRoute: typeof GrileMedicinaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/grile-upb': {
-      id: '/grile-upb'
-      path: '/grile-upb'
-      fullPath: '/grile-upb'
-      preLoaderRoute: typeof GrileUpbRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invita-un-coleg': {
-      id: '/invita-un-coleg'
-      path: '/invita-un-coleg'
-      fullPath: '/invita-un-coleg'
-      preLoaderRoute: typeof InvitaUnColegRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kit-promovare': {
-      id: '/kit-promovare'
-      path: '/kit-promovare'
-      fullPath: '/kit-promovare'
-      preLoaderRoute: typeof KitPromovareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/materii': {
-      id: '/materii'
-      path: '/materii'
-      fullPath: '/materii'
-      preLoaderRoute: typeof MateriiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-admitere-ase': {
-      id: '/meditatii-admitere-ase'
-      path: '/meditatii-admitere-ase'
-      fullPath: '/meditatii-admitere-ase'
-      preLoaderRoute: typeof MeditatiiAdmitereAseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-admitere-drept': {
-      id: '/meditatii-admitere-drept'
-      path: '/meditatii-admitere-drept'
-      fullPath: '/meditatii-admitere-drept'
-      preLoaderRoute: typeof MeditatiiAdmitereDreptRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-admitere-medicina': {
-      id: '/meditatii-admitere-medicina'
-      path: '/meditatii-admitere-medicina'
-      fullPath: '/meditatii-admitere-medicina'
-      preLoaderRoute: typeof MeditatiiAdmitereMedicinaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-admitere-politehnica': {
-      id: '/meditatii-admitere-politehnica'
-      path: '/meditatii-admitere-politehnica'
-      fullPath: '/meditatii-admitere-politehnica'
-      preLoaderRoute: typeof MeditatiiAdmiterePolitehnicaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-bac': {
-      id: '/meditatii-bac'
-      path: '/meditatii-bac'
-      fullPath: '/meditatii-bac'
-      preLoaderRoute: typeof MeditatiiBacRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-biologie': {
-      id: '/meditatii-biologie'
-      path: '/meditatii-biologie'
-      fullPath: '/meditatii-biologie'
-      preLoaderRoute: typeof MeditatiiBiologieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-chimie': {
-      id: '/meditatii-chimie'
-      path: '/meditatii-chimie'
-      fullPath: '/meditatii-chimie'
-      preLoaderRoute: typeof MeditatiiChimieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-clasa-12': {
-      id: '/meditatii-clasa-12'
-      path: '/meditatii-clasa-12'
-      fullPath: '/meditatii-clasa-12'
-      preLoaderRoute: typeof MeditatiiClasa12RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-clasa-8': {
-      id: '/meditatii-clasa-8'
-      path: '/meditatii-clasa-8'
-      fullPath: '/meditatii-clasa-8'
-      preLoaderRoute: typeof MeditatiiClasa8RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-definitivat': {
-      id: '/meditatii-definitivat'
-      path: '/meditatii-definitivat'
-      fullPath: '/meditatii-definitivat'
-      preLoaderRoute: typeof MeditatiiDefinitivatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-engleza': {
-      id: '/meditatii-engleza'
-      path: '/meditatii-engleza'
-      fullPath: '/meditatii-engleza'
-      preLoaderRoute: typeof MeditatiiEnglezaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-evaluare-nationala': {
-      id: '/meditatii-evaluare-nationala'
-      path: '/meditatii-evaluare-nationala'
-      fullPath: '/meditatii-evaluare-nationala'
-      preLoaderRoute: typeof MeditatiiEvaluareNationalaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-fizica': {
-      id: '/meditatii-fizica'
-      path: '/meditatii-fizica'
-      fullPath: '/meditatii-fizica'
-      preLoaderRoute: typeof MeditatiiFizicaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-franceza': {
-      id: '/meditatii-franceza'
-      path: '/meditatii-franceza'
-      fullPath: '/meditatii-franceza'
-      preLoaderRoute: typeof MeditatiiFrancezaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-geografie': {
-      id: '/meditatii-geografie'
-      path: '/meditatii-geografie'
-      fullPath: '/meditatii-geografie'
-      preLoaderRoute: typeof MeditatiiGeografieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-germana': {
-      id: '/meditatii-germana'
-      path: '/meditatii-germana'
-      fullPath: '/meditatii-germana'
-      preLoaderRoute: typeof MeditatiiGermanaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-gimnaziu': {
-      id: '/meditatii-gimnaziu'
-      path: '/meditatii-gimnaziu'
-      fullPath: '/meditatii-gimnaziu'
-      preLoaderRoute: typeof MeditatiiGimnaziuRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-ieftine': {
-      id: '/meditatii-ieftine'
-      path: '/meditatii-ieftine'
-      fullPath: '/meditatii-ieftine'
-      preLoaderRoute: typeof MeditatiiIeftineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-informatica': {
-      id: '/meditatii-informatica'
-      path: '/meditatii-informatica'
-      fullPath: '/meditatii-informatica'
-      preLoaderRoute: typeof MeditatiiInformaticaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-istorie': {
-      id: '/meditatii-istorie'
-      path: '/meditatii-istorie'
-      fullPath: '/meditatii-istorie'
-      preLoaderRoute: typeof MeditatiiIstorieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-la-domiciliu': {
-      id: '/meditatii-la-domiciliu'
-      path: '/meditatii-la-domiciliu'
-      fullPath: '/meditatii-la-domiciliu'
-      preLoaderRoute: typeof MeditatiiLaDomiciliuRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-liceu': {
-      id: '/meditatii-liceu'
-      path: '/meditatii-liceu'
-      fullPath: '/meditatii-liceu'
-      preLoaderRoute: typeof MeditatiiLiceuRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-matematica': {
-      id: '/meditatii-matematica'
-      path: '/meditatii-matematica'
-      fullPath: '/meditatii-matematica'
-      preLoaderRoute: typeof MeditatiiMatematicaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-online': {
-      id: '/meditatii-online'
-      path: '/meditatii-online'
-      fullPath: '/meditatii-online'
-      preLoaderRoute: typeof MeditatiiOnlineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-particulare': {
-      id: '/meditatii-particulare'
-      path: '/meditatii-particulare'
-      fullPath: '/meditatii-particulare'
-      preLoaderRoute: typeof MeditatiiParticulareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-private': {
-      id: '/meditatii-private'
-      path: '/meditatii-private'
-      fullPath: '/meditatii-private'
-      preLoaderRoute: typeof MeditatiiPrivateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-romana': {
-      id: '/meditatii-romana'
-      path: '/meditatii-romana'
-      fullPath: '/meditatii-romana'
-      preLoaderRoute: typeof MeditatiiRomanaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-scoala': {
-      id: '/meditatii-scoala'
-      path: '/meditatii-scoala'
-      fullPath: '/meditatii-scoala'
-      preLoaderRoute: typeof MeditatiiScoalaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii-titularizare': {
-      id: '/meditatii-titularizare'
-      path: '/meditatii-titularizare'
-      fullPath: '/meditatii-titularizare'
-      preLoaderRoute: typeof MeditatiiTitularizareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatori': {
-      id: '/meditatori'
-      path: '/meditatori'
-      fullPath: '/meditatori'
-      preLoaderRoute: typeof MeditatoriRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ofer-meditatii': {
-      id: '/ofer-meditatii'
-      path: '/ofer-meditatii'
-      fullPath: '/ofer-meditatii'
-      preLoaderRoute: typeof OferMeditatiiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ore-online': {
-      id: '/ore-online'
-      path: '/ore-online'
-      fullPath: '/ore-online'
-      preLoaderRoute: typeof OreOnlineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/parteneri': {
-      id: '/parteneri'
-      path: '/parteneri'
-      fullPath: '/parteneri'
-      preLoaderRoute: typeof ParteneriRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pentru-profesori': {
-      id: '/pentru-profesori'
-      path: '/pentru-profesori'
-      fullPath: '/pentru-profesori'
-      preLoaderRoute: typeof PentruProfesoriRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/platforma-meditatii-online': {
-      id: '/platforma-meditatii-online'
-      path: '/platforma-meditatii-online'
-      fullPath: '/platforma-meditatii-online'
-      preLoaderRoute: typeof PlatformaMeditatiiOnlineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/politica-cookies': {
-      id: '/politica-cookies'
-      path: '/politica-cookies'
-      fullPath: '/politica-cookies'
-      preLoaderRoute: typeof PoliticaCookiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pregatire-admitere-medicina': {
-      id: '/pregatire-admitere-medicina'
-      path: '/pregatire-admitere-medicina'
-      fullPath: '/pregatire-admitere-medicina'
-      preLoaderRoute: typeof PregatireAdmitereMedicinaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pregatire-bacalaureat': {
-      id: '/pregatire-bacalaureat'
-      path: '/pregatire-bacalaureat'
-      fullPath: '/pregatire-bacalaureat'
-      preLoaderRoute: typeof PregatireBacalaureatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pret-meditatii': {
-      id: '/pret-meditatii'
-      path: '/pret-meditatii'
-      fullPath: '/pret-meditatii'
-      preLoaderRoute: typeof PretMeditatiiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profesor-meditatii': {
-      id: '/profesor-meditatii'
-      path: '/profesor-meditatii'
-      fullPath: '/profesor-meditatii'
-      preLoaderRoute: typeof ProfesorMeditatiiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profesor-particular': {
-      id: '/profesor-particular'
-      path: '/profesor-particular'
-      fullPath: '/profesor-particular'
-      preLoaderRoute: typeof ProfesorParticularRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profesori-meditatii': {
-      id: '/profesori-meditatii'
-      path: '/profesori-meditatii'
-      fullPath: '/profesori-meditatii'
-      preLoaderRoute: typeof ProfesoriMeditatiiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rezultate-bac-2026': {
-      id: '/rezultate-bac-2026'
-      path: '/rezultate-bac-2026'
-      fullPath: '/rezultate-bac-2026'
-      preLoaderRoute: typeof RezultateBac2026RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/simulare-bacalaureat': {
-      id: '/simulare-bacalaureat'
-      path: '/simulare-bacalaureat'
-      fullPath: '/simulare-bacalaureat'
-      preLoaderRoute: typeof SimulareBacalaureatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/simulare-drept-2026': {
-      id: '/simulare-drept-2026'
-      path: '/simulare-drept-2026'
-      fullPath: '/simulare-drept-2026'
-      preLoaderRoute: typeof SimulareDrept2026RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/simulare-utcn-2026': {
-      id: '/simulare-utcn-2026'
-      path: '/simulare-utcn-2026'
-      fullPath: '/simulare-utcn-2026'
-      preLoaderRoute: typeof SimulareUtcn2026RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/simulari-bacalaureat-2026': {
-      id: '/simulari-bacalaureat-2026'
-      path: '/simulari-bacalaureat-2026'
-      fullPath: '/simulari-bacalaureat-2026'
-      preLoaderRoute: typeof SimulariBacalaureat2026RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/subiecte-bac': {
-      id: '/subiecte-bac'
-      path: '/subiecte-bac'
-      fullPath: '/subiecte-bac'
-      preLoaderRoute: typeof SubiecteBacRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/subiecte-bac-2026': {
-      id: '/subiecte-bac-2026'
-      path: '/subiecte-bac-2026'
-      fullPath: '/subiecte-bac-2026'
-      preLoaderRoute: typeof SubiecteBac2026RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/termeni': {
-      id: '/termeni'
-      path: '/termeni'
-      fullPath: '/termeni'
-      preLoaderRoute: typeof TermeniRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tutoriale': {
-      id: '/tutoriale'
-      path: '/tutoriale'
-      fullPath: '/tutoriale'
-      preLoaderRoute: typeof TutorialeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/unsubscribe': {
-      id: '/unsubscribe'
-      path: '/unsubscribe'
-      fullPath: '/unsubscribe'
-      preLoaderRoute: typeof UnsubscribeRouteImport
+    '/vreau-sa-dau-meditatii': {
+      id: '/vreau-sa-dau-meditatii'
+      path: '/vreau-sa-dau-meditatii'
+      fullPath: '/vreau-sa-dau-meditatii'
+      preLoaderRoute: typeof VreauSaDauMeditatiiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/variante-bacalaureat': {
@@ -2192,158 +1653,550 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VarianteBacalaureatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/vreau-sa-dau-meditatii': {
-      id: '/vreau-sa-dau-meditatii'
-      path: '/vreau-sa-dau-meditatii'
-      fullPath: '/vreau-sa-dau-meditatii'
-      preLoaderRoute: typeof VreauSaDauMeditatiiRouteImport
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/bac-crawler': {
-      id: '/admin/bac-crawler'
-      path: '/admin/bac-crawler'
-      fullPath: '/admin/bac-crawler'
-      preLoaderRoute: typeof AdminBacCrawlerRouteImport
+    '/tutoriale': {
+      id: '/tutoriale'
+      path: '/tutoriale'
+      fullPath: '/tutoriale'
+      preLoaderRoute: typeof TutorialeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/anunt/$slug': {
-      id: '/anunt/$slug'
-      path: '/anunt/$slug'
-      fullPath: '/anunt/$slug'
-      preLoaderRoute: typeof AnuntSlugRouteImport
+    '/termeni': {
+      id: '/termeni'
+      path: '/termeni'
+      fullPath: '/termeni'
+      preLoaderRoute: typeof TermeniRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/bac/': {
-      id: '/bac/'
-      path: '/bac'
-      fullPath: '/bac/'
-      preLoaderRoute: typeof BacIndexRouteImport
+    '/subiecte-bac-2026': {
+      id: '/subiecte-bac-2026'
+      path: '/subiecte-bac-2026'
+      fullPath: '/subiecte-bac-2026'
+      preLoaderRoute: typeof SubiecteBac2026RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/bac/$materie': {
-      id: '/bac/$materie'
-      path: '/bac/$materie'
-      fullPath: '/bac/$materie'
-      preLoaderRoute: typeof BacMaterieRouteImport
+    '/subiecte-bac': {
+      id: '/subiecte-bac'
+      path: '/subiecte-bac'
+      fullPath: '/subiecte-bac'
+      preLoaderRoute: typeof SubiecteBacRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog/': {
-      id: '/blog/'
-      path: '/blog'
-      fullPath: '/blog/'
-      preLoaderRoute: typeof BlogIndexRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/blog/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
+    '/simulari-bacalaureat-2026': {
+      id: '/simulari-bacalaureat-2026'
+      path: '/simulari-bacalaureat-2026'
+      fullPath: '/simulari-bacalaureat-2026'
+      preLoaderRoute: typeof SimulariBacalaureat2026RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cererea-mea/$id': {
-      id: '/cererea-mea/$id'
-      path: '/cererea-mea/$id'
-      fullPath: '/cererea-mea/$id'
-      preLoaderRoute: typeof CerereaMeaIdRouteImport
+    '/simulare-utcn-2026': {
+      id: '/simulare-utcn-2026'
+      path: '/simulare-utcn-2026'
+      fullPath: '/simulare-utcn-2026'
+      preLoaderRoute: typeof SimulareUtcn2026RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/email/unsubscribe': {
-      id: '/email/unsubscribe'
-      path: '/email/unsubscribe'
-      fullPath: '/email/unsubscribe'
-      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+    '/simulare-drept-2026': {
+      id: '/simulare-drept-2026'
+      path: '/simulare-drept-2026'
+      fullPath: '/simulare-drept-2026'
+      preLoaderRoute: typeof SimulareDrept2026RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/meditatii-in/$oras': {
-      id: '/meditatii-in/$oras'
-      path: '/meditatii-in/$oras'
-      fullPath: '/meditatii-in/$oras'
-      preLoaderRoute: typeof MeditatiiInOrasRouteImport
+    '/simulare-bacalaureat': {
+      id: '/simulare-bacalaureat'
+      path: '/simulare-bacalaureat'
+      fullPath: '/simulare-bacalaureat'
+      preLoaderRoute: typeof SimulareBacalaureatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/meditatii/': {
-      id: '/meditatii/'
-      path: '/meditatii'
-      fullPath: '/meditatii/'
-      preLoaderRoute: typeof MeditatiiIndexRouteImport
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mesaje/': {
-      id: '/mesaje/'
-      path: '/mesaje'
-      fullPath: '/mesaje/'
-      preLoaderRoute: typeof MesajeIndexRouteImport
+    '/rezultate-bac-2026': {
+      id: '/rezultate-bac-2026'
+      path: '/rezultate-bac-2026'
+      fullPath: '/rezultate-bac-2026'
+      preLoaderRoute: typeof RezultateBac2026RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mesaje/$id': {
-      id: '/mesaje/$id'
-      path: '/mesaje/$id'
-      fullPath: '/mesaje/$id'
-      preLoaderRoute: typeof MesajeIdRouteImport
+    '/profesori-meditatii': {
+      id: '/profesori-meditatii'
+      path: '/profesori-meditatii'
+      fullPath: '/profesori-meditatii'
+      preLoaderRoute: typeof ProfesoriMeditatiiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/newsletter/confirm': {
-      id: '/newsletter/confirm'
-      path: '/newsletter/confirm'
-      fullPath: '/newsletter/confirm'
-      preLoaderRoute: typeof NewsletterConfirmRouteImport
+    '/profesor-particular': {
+      id: '/profesor-particular'
+      path: '/profesor-particular'
+      fullPath: '/profesor-particular'
+      preLoaderRoute: typeof ProfesorParticularRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/preturi-meditatii/': {
-      id: '/preturi-meditatii/'
-      path: '/preturi-meditatii'
-      fullPath: '/preturi-meditatii/'
-      preLoaderRoute: typeof PreturiMeditatiiIndexRouteImport
+    '/profesor-meditatii': {
+      id: '/profesor-meditatii'
+      path: '/profesor-meditatii'
+      fullPath: '/profesor-meditatii'
+      preLoaderRoute: typeof ProfesorMeditatiiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/preturi-meditatii/$materie': {
-      id: '/preturi-meditatii/$materie'
-      path: '/preturi-meditatii/$materie'
-      fullPath: '/preturi-meditatii/$materie'
-      preLoaderRoute: typeof PreturiMeditatiiMaterieRouteImport
+    '/pret-meditatii': {
+      id: '/pret-meditatii'
+      path: '/pret-meditatii'
+      fullPath: '/pret-meditatii'
+      preLoaderRoute: typeof PretMeditatiiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profesor/': {
-      id: '/profesor/'
-      path: '/profesor'
-      fullPath: '/profesor/'
-      preLoaderRoute: typeof ProfesorIndexRouteImport
+    '/pregatire-bacalaureat': {
+      id: '/pregatire-bacalaureat'
+      path: '/pregatire-bacalaureat'
+      fullPath: '/pregatire-bacalaureat'
+      preLoaderRoute: typeof PregatireBacalaureatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profesor/$slug': {
-      id: '/profesor/$slug'
-      path: '/profesor/$slug'
-      fullPath: '/profesor/$slug'
-      preLoaderRoute: typeof ProfesorSlugRouteImport
+    '/pregatire-admitere-medicina': {
+      id: '/pregatire-admitere-medicina'
+      path: '/pregatire-admitere-medicina'
+      fullPath: '/pregatire-admitere-medicina'
+      preLoaderRoute: typeof PregatireAdmitereMedicinaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profesori/': {
-      id: '/profesori/'
-      path: '/profesori'
-      fullPath: '/profesori/'
-      preLoaderRoute: typeof ProfesoriIndexRouteImport
+    '/politica-cookies': {
+      id: '/politica-cookies'
+      path: '/politica-cookies'
+      fullPath: '/politica-cookies'
+      preLoaderRoute: typeof PoliticaCookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/profesori/$oras': {
-      id: '/profesori/$oras'
-      path: '/profesori/$oras'
-      fullPath: '/profesori/$oras'
-      preLoaderRoute: typeof ProfesoriOrasRouteImport
+    '/platforma-meditatii-online': {
+      id: '/platforma-meditatii-online'
+      path: '/platforma-meditatii-online'
+      fullPath: '/platforma-meditatii-online'
+      preLoaderRoute: typeof PlatformaMeditatiiOnlineRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rezolvari/': {
-      id: '/rezolvari/'
-      path: '/rezolvari'
-      fullPath: '/rezolvari/'
-      preLoaderRoute: typeof RezolvariIndexRouteImport
+    '/pentru-profesori': {
+      id: '/pentru-profesori'
+      path: '/pentru-profesori'
+      fullPath: '/pentru-profesori'
+      preLoaderRoute: typeof PentruProfesoriRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/simulare-bac/$materie': {
-      id: '/simulare-bac/$materie'
-      path: '/simulare-bac/$materie'
-      fullPath: '/simulare-bac/$materie'
-      preLoaderRoute: typeof SimulareBacMaterieRouteImport
+    '/parteneri': {
+      id: '/parteneri'
+      path: '/parteneri'
+      fullPath: '/parteneri'
+      preLoaderRoute: typeof ParteneriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ore-online': {
+      id: '/ore-online'
+      path: '/ore-online'
+      fullPath: '/ore-online'
+      preLoaderRoute: typeof OreOnlineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ofer-meditatii': {
+      id: '/ofer-meditatii'
+      path: '/ofer-meditatii'
+      fullPath: '/ofer-meditatii'
+      preLoaderRoute: typeof OferMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatori': {
+      id: '/meditatori'
+      path: '/meditatori'
+      fullPath: '/meditatori'
+      preLoaderRoute: typeof MeditatoriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-titularizare': {
+      id: '/meditatii-titularizare'
+      path: '/meditatii-titularizare'
+      fullPath: '/meditatii-titularizare'
+      preLoaderRoute: typeof MeditatiiTitularizareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-scoala': {
+      id: '/meditatii-scoala'
+      path: '/meditatii-scoala'
+      fullPath: '/meditatii-scoala'
+      preLoaderRoute: typeof MeditatiiScoalaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-romana': {
+      id: '/meditatii-romana'
+      path: '/meditatii-romana'
+      fullPath: '/meditatii-romana'
+      preLoaderRoute: typeof MeditatiiRomanaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-private': {
+      id: '/meditatii-private'
+      path: '/meditatii-private'
+      fullPath: '/meditatii-private'
+      preLoaderRoute: typeof MeditatiiPrivateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-particulare': {
+      id: '/meditatii-particulare'
+      path: '/meditatii-particulare'
+      fullPath: '/meditatii-particulare'
+      preLoaderRoute: typeof MeditatiiParticulareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-online': {
+      id: '/meditatii-online'
+      path: '/meditatii-online'
+      fullPath: '/meditatii-online'
+      preLoaderRoute: typeof MeditatiiOnlineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-matematica': {
+      id: '/meditatii-matematica'
+      path: '/meditatii-matematica'
+      fullPath: '/meditatii-matematica'
+      preLoaderRoute: typeof MeditatiiMatematicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-liceu': {
+      id: '/meditatii-liceu'
+      path: '/meditatii-liceu'
+      fullPath: '/meditatii-liceu'
+      preLoaderRoute: typeof MeditatiiLiceuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-la-domiciliu': {
+      id: '/meditatii-la-domiciliu'
+      path: '/meditatii-la-domiciliu'
+      fullPath: '/meditatii-la-domiciliu'
+      preLoaderRoute: typeof MeditatiiLaDomiciliuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-istorie': {
+      id: '/meditatii-istorie'
+      path: '/meditatii-istorie'
+      fullPath: '/meditatii-istorie'
+      preLoaderRoute: typeof MeditatiiIstorieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-informatica': {
+      id: '/meditatii-informatica'
+      path: '/meditatii-informatica'
+      fullPath: '/meditatii-informatica'
+      preLoaderRoute: typeof MeditatiiInformaticaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-ieftine': {
+      id: '/meditatii-ieftine'
+      path: '/meditatii-ieftine'
+      fullPath: '/meditatii-ieftine'
+      preLoaderRoute: typeof MeditatiiIeftineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-gimnaziu': {
+      id: '/meditatii-gimnaziu'
+      path: '/meditatii-gimnaziu'
+      fullPath: '/meditatii-gimnaziu'
+      preLoaderRoute: typeof MeditatiiGimnaziuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-germana': {
+      id: '/meditatii-germana'
+      path: '/meditatii-germana'
+      fullPath: '/meditatii-germana'
+      preLoaderRoute: typeof MeditatiiGermanaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-geografie': {
+      id: '/meditatii-geografie'
+      path: '/meditatii-geografie'
+      fullPath: '/meditatii-geografie'
+      preLoaderRoute: typeof MeditatiiGeografieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-franceza': {
+      id: '/meditatii-franceza'
+      path: '/meditatii-franceza'
+      fullPath: '/meditatii-franceza'
+      preLoaderRoute: typeof MeditatiiFrancezaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-fizica': {
+      id: '/meditatii-fizica'
+      path: '/meditatii-fizica'
+      fullPath: '/meditatii-fizica'
+      preLoaderRoute: typeof MeditatiiFizicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-evaluare-nationala': {
+      id: '/meditatii-evaluare-nationala'
+      path: '/meditatii-evaluare-nationala'
+      fullPath: '/meditatii-evaluare-nationala'
+      preLoaderRoute: typeof MeditatiiEvaluareNationalaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-engleza': {
+      id: '/meditatii-engleza'
+      path: '/meditatii-engleza'
+      fullPath: '/meditatii-engleza'
+      preLoaderRoute: typeof MeditatiiEnglezaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-definitivat': {
+      id: '/meditatii-definitivat'
+      path: '/meditatii-definitivat'
+      fullPath: '/meditatii-definitivat'
+      preLoaderRoute: typeof MeditatiiDefinitivatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-clasa-8': {
+      id: '/meditatii-clasa-8'
+      path: '/meditatii-clasa-8'
+      fullPath: '/meditatii-clasa-8'
+      preLoaderRoute: typeof MeditatiiClasa8RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-clasa-12': {
+      id: '/meditatii-clasa-12'
+      path: '/meditatii-clasa-12'
+      fullPath: '/meditatii-clasa-12'
+      preLoaderRoute: typeof MeditatiiClasa12RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-chimie': {
+      id: '/meditatii-chimie'
+      path: '/meditatii-chimie'
+      fullPath: '/meditatii-chimie'
+      preLoaderRoute: typeof MeditatiiChimieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-biologie': {
+      id: '/meditatii-biologie'
+      path: '/meditatii-biologie'
+      fullPath: '/meditatii-biologie'
+      preLoaderRoute: typeof MeditatiiBiologieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-bac': {
+      id: '/meditatii-bac'
+      path: '/meditatii-bac'
+      fullPath: '/meditatii-bac'
+      preLoaderRoute: typeof MeditatiiBacRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-admitere-politehnica': {
+      id: '/meditatii-admitere-politehnica'
+      path: '/meditatii-admitere-politehnica'
+      fullPath: '/meditatii-admitere-politehnica'
+      preLoaderRoute: typeof MeditatiiAdmiterePolitehnicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-admitere-medicina': {
+      id: '/meditatii-admitere-medicina'
+      path: '/meditatii-admitere-medicina'
+      fullPath: '/meditatii-admitere-medicina'
+      preLoaderRoute: typeof MeditatiiAdmitereMedicinaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-admitere-drept': {
+      id: '/meditatii-admitere-drept'
+      path: '/meditatii-admitere-drept'
+      fullPath: '/meditatii-admitere-drept'
+      preLoaderRoute: typeof MeditatiiAdmitereDreptRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-admitere-ase': {
+      id: '/meditatii-admitere-ase'
+      path: '/meditatii-admitere-ase'
+      fullPath: '/meditatii-admitere-ase'
+      preLoaderRoute: typeof MeditatiiAdmitereAseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/materii': {
+      id: '/materii'
+      path: '/materii'
+      fullPath: '/materii'
+      preLoaderRoute: typeof MateriiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kit-promovare': {
+      id: '/kit-promovare'
+      path: '/kit-promovare'
+      fullPath: '/kit-promovare'
+      preLoaderRoute: typeof KitPromovareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invita-un-coleg': {
+      id: '/invita-un-coleg'
+      path: '/invita-un-coleg'
+      fullPath: '/invita-un-coleg'
+      preLoaderRoute: typeof InvitaUnColegRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grile-upb': {
+      id: '/grile-upb'
+      path: '/grile-upb'
+      fullPath: '/grile-upb'
+      preLoaderRoute: typeof GrileUpbRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grile-medicina': {
+      id: '/grile-medicina'
+      path: '/grile-medicina'
+      fullPath: '/grile-medicina'
+      preLoaderRoute: typeof GrileMedicinaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grile-admitere-medicina-2026': {
+      id: '/grile-admitere-medicina-2026'
+      path: '/grile-admitere-medicina-2026'
+      fullPath: '/grile-admitere-medicina-2026'
+      preLoaderRoute: typeof GrileAdmitereMedicina2026RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/despre': {
+      id: '/despre'
+      path: '/despre'
+      fullPath: '/despre'
+      preLoaderRoute: typeof DespreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cum-functioneaza': {
+      id: '/cum-functioneaza'
+      path: '/cum-functioneaza'
+      fullPath: '/cum-functioneaza'
+      preLoaderRoute: typeof CumFunctioneazaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cont': {
+      id: '/cont'
+      path: '/cont'
+      fullPath: '/cont'
+      preLoaderRoute: typeof ContRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confidentialitate': {
+      id: '/confidentialitate'
+      path: '/confidentialitate'
+      fullPath: '/confidentialitate'
+      preLoaderRoute: typeof ConfidentialitateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cereri': {
+      id: '/cereri'
+      path: '/cereri'
+      fullPath: '/cereri'
+      preLoaderRoute: typeof CereriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/caut-profesor': {
+      id: '/caut-profesor'
+      path: '/caut-profesor'
+      fullPath: '/caut-profesor'
+      preLoaderRoute: typeof CautProfesorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/castiga-din-meditatii': {
+      id: '/castiga-din-meditatii'
+      path: '/castiga-din-meditatii'
+      fullPath: '/castiga-din-meditatii'
+      preLoaderRoute: typeof CastigaDinMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calculator-nota-admitere': {
+      id: '/calculator-nota-admitere'
+      path: '/calculator-nota-admitere'
+      fullPath: '/calculator-nota-admitere'
+      preLoaderRoute: typeof CalculatorNotaAdmitereRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calculator-medie-bac': {
+      id: '/calculator-medie-bac'
+      path: '/calculator-medie-bac'
+      fullPath: '/calculator-medie-bac'
+      preLoaderRoute: typeof CalculatorMedieBacRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anunturi-meditatii-bac': {
+      id: '/anunturi-meditatii-bac'
+      path: '/anunturi-meditatii-bac'
+      fullPath: '/anunturi-meditatii-bac'
+      preLoaderRoute: typeof AnunturiMeditatiiBacRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anunturi-meditatii': {
+      id: '/anunturi-meditatii'
+      path: '/anunturi-meditatii'
+      fullPath: '/anunturi-meditatii'
+      preLoaderRoute: typeof AnunturiMeditatiiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ads.txt': {
+      id: '/ads.txt'
+      path: '/ads.txt'
+      fullPath: '/ads.txt'
+      preLoaderRoute: typeof AdsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admitere-facultate-2026': {
+      id: '/admitere-facultate-2026'
+      path: '/admitere-facultate-2026'
+      fullPath: '/admitere-facultate-2026'
+      preLoaderRoute: typeof AdmitereFacultate2026RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admitere': {
+      id: '/admitere'
+      path: '/admitere'
+      fullPath: '/admitere'
+      preLoaderRoute: typeof AdmitereRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subiecte-admitere/': {
@@ -2353,11 +2206,158 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubiecteAdmitereIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rezolvari/': {
+      id: '/rezolvari/'
+      path: '/rezolvari'
+      fullPath: '/rezolvari/'
+      preLoaderRoute: typeof RezolvariIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profesori/': {
+      id: '/profesori/'
+      path: '/profesori'
+      fullPath: '/profesori/'
+      preLoaderRoute: typeof ProfesoriIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profesor/': {
+      id: '/profesor/'
+      path: '/profesor'
+      fullPath: '/profesor/'
+      preLoaderRoute: typeof ProfesorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preturi-meditatii/': {
+      id: '/preturi-meditatii/'
+      path: '/preturi-meditatii'
+      fullPath: '/preturi-meditatii/'
+      preLoaderRoute: typeof PreturiMeditatiiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mesaje/': {
+      id: '/mesaje/'
+      path: '/mesaje'
+      fullPath: '/mesaje/'
+      preLoaderRoute: typeof MesajeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii/': {
+      id: '/meditatii/'
+      path: '/meditatii'
+      fullPath: '/meditatii/'
+      preLoaderRoute: typeof MeditatiiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bac/': {
+      id: '/bac/'
+      path: '/bac'
+      fullPath: '/bac/'
+      preLoaderRoute: typeof BacIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/subiecte-admitere/$universitate': {
       id: '/subiecte-admitere/$universitate'
       path: '/subiecte-admitere/$universitate'
       fullPath: '/subiecte-admitere/$universitate'
       preLoaderRoute: typeof SubiecteAdmitereUniversitateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulare-bac/$materie': {
+      id: '/simulare-bac/$materie'
+      path: '/simulare-bac/$materie'
+      fullPath: '/simulare-bac/$materie'
+      preLoaderRoute: typeof SimulareBacMaterieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profesori/$oras': {
+      id: '/profesori/$oras'
+      path: '/profesori/$oras'
+      fullPath: '/profesori/$oras'
+      preLoaderRoute: typeof ProfesoriOrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profesor/$slug': {
+      id: '/profesor/$slug'
+      path: '/profesor/$slug'
+      fullPath: '/profesor/$slug'
+      preLoaderRoute: typeof ProfesorSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preturi-meditatii/$materie': {
+      id: '/preturi-meditatii/$materie'
+      path: '/preturi-meditatii/$materie'
+      fullPath: '/preturi-meditatii/$materie'
+      preLoaderRoute: typeof PreturiMeditatiiMaterieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newsletter/confirm': {
+      id: '/newsletter/confirm'
+      path: '/newsletter/confirm'
+      fullPath: '/newsletter/confirm'
+      preLoaderRoute: typeof NewsletterConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mesaje/$id': {
+      id: '/mesaje/$id'
+      path: '/mesaje/$id'
+      fullPath: '/mesaje/$id'
+      preLoaderRoute: typeof MesajeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-in/$oras': {
+      id: '/meditatii-in/$oras'
+      path: '/meditatii-in/$oras'
+      fullPath: '/meditatii-in/$oras'
+      preLoaderRoute: typeof MeditatiiInOrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cererea-mea/$id': {
+      id: '/cererea-mea/$id'
+      path: '/cererea-mea/$id'
+      fullPath: '/cererea-mea/$id'
+      preLoaderRoute: typeof CerereaMeaIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bac/$materie': {
+      id: '/bac/$materie'
+      path: '/bac/$materie'
+      fullPath: '/bac/$materie'
+      preLoaderRoute: typeof BacMaterieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/anunt/$slug': {
+      id: '/anunt/$slug'
+      path: '/anunt/$slug'
+      fullPath: '/anunt/$slug'
+      preLoaderRoute: typeof AnuntSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/bac-crawler': {
+      id: '/admin/bac-crawler'
+      path: '/admin/bac-crawler'
+      fullPath: '/admin/bac-crawler'
+      preLoaderRoute: typeof AdminBacCrawlerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bac/$materie/': {
@@ -2367,25 +2367,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BacMaterieIndexRouteImport
       parentRoute: typeof BacMaterieRoute
     }
-    '/bac/$materie/$an': {
-      id: '/bac/$materie/$an'
-      path: '/$an'
-      fullPath: '/bac/$materie/$an'
-      preLoaderRoute: typeof BacMaterieAnRouteImport
-      parentRoute: typeof BacMaterieRoute
-    }
-    '/lovable/email/suppression': {
-      id: '/lovable/email/suppression'
-      path: '/lovable/email/suppression'
-      fullPath: '/lovable/email/suppression'
-      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/meditatii/$materie/$oras': {
-      id: '/meditatii/$materie/$oras'
-      path: '/meditatii/$materie/$oras'
-      fullPath: '/meditatii/$materie/$oras'
-      preLoaderRoute: typeof MeditatiiMaterieOrasRouteImport
+    '/subiecte-admitere/materie/$materie': {
+      id: '/subiecte-admitere/materie/$materie'
+      path: '/subiecte-admitere/materie/$materie'
+      fullPath: '/subiecte-admitere/materie/$materie'
+      preLoaderRoute: typeof SubiecteAdmitereMaterieMaterieRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subiecte-admitere/$universitate/$materie': {
@@ -2395,47 +2381,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubiecteAdmitereUniversitateMaterieRouteImport
       parentRoute: typeof SubiecteAdmitereUniversitateRoute
     }
-    '/subiecte-admitere/materie/$materie': {
-      id: '/subiecte-admitere/materie/$materie'
-      path: '/subiecte-admitere/materie/$materie'
-      fullPath: '/subiecte-admitere/materie/$materie'
-      preLoaderRoute: typeof SubiecteAdmitereMaterieMaterieRouteImport
+    '/meditatii/$materie/$oras': {
+      id: '/meditatii/$materie/$oras'
+      path: '/meditatii/$materie/$oras'
+      fullPath: '/meditatii/$materie/$oras'
+      preLoaderRoute: typeof MeditatiiMaterieOrasRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/auto-blog-post': {
-      id: '/api/public/hooks/auto-blog-post'
-      path: '/api/public/hooks/auto-blog-post'
-      fullPath: '/api/public/hooks/auto-blog-post'
-      preLoaderRoute: typeof ApiPublicHooksAutoBlogPostRouteImport
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/bac-crawl-tick': {
-      id: '/api/public/hooks/bac-crawl-tick'
-      path: '/api/public/hooks/bac-crawl-tick'
-      fullPath: '/api/public/hooks/bac-crawl-tick'
-      preLoaderRoute: typeof ApiPublicHooksBacCrawlTickRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/indexnow': {
-      id: '/api/public/hooks/indexnow'
-      path: '/api/public/hooks/indexnow'
-      fullPath: '/api/public/hooks/indexnow'
-      preLoaderRoute: typeof ApiPublicHooksIndexnowRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/rezolvari-tick': {
-      id: '/api/public/hooks/rezolvari-tick'
-      path: '/api/public/hooks/rezolvari-tick'
-      fullPath: '/api/public/hooks/rezolvari-tick'
-      preLoaderRoute: typeof ApiPublicHooksRezolvariTickRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/hooks/seo-daily': {
-      id: '/api/public/hooks/seo-daily'
-      path: '/api/public/hooks/seo-daily'
-      fullPath: '/api/public/hooks/seo-daily'
-      preLoaderRoute: typeof ApiPublicHooksSeoDailyRouteImport
-      parentRoute: typeof rootRouteImport
+    '/bac/$materie/$an': {
+      id: '/bac/$materie/$an'
+      path: '/$an'
+      fullPath: '/bac/$materie/$an'
+      preLoaderRoute: typeof BacMaterieAnRouteImport
+      parentRoute: typeof BacMaterieRoute
     }
     '/bac/$materie/$an/': {
       id: '/bac/$materie/$an/'
@@ -2444,39 +2409,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BacMaterieAnIndexRouteImport
       parentRoute: typeof BacMaterieAnRoute
     }
-    '/bac/$materie/$an/$sesiune': {
-      id: '/bac/$materie/$an/$sesiune'
-      path: '/$sesiune'
-      fullPath: '/bac/$materie/$an/$sesiune'
-      preLoaderRoute: typeof BacMaterieAnSesiuneRouteImport
-      parentRoute: typeof BacMaterieAnRoute
+    '/subiecte-admitere/$universitate/$materie/$an': {
+      id: '/subiecte-admitere/$universitate/$materie/$an'
+      path: '/$an'
+      fullPath: '/subiecte-admitere/$universitate/$materie/$an'
+      preLoaderRoute: typeof SubiecteAdmitereUniversitateMaterieAnRouteImport
+      parentRoute: typeof SubiecteAdmitereUniversitateMaterieRoute
     }
-    '/lovable/email/queue/process': {
-      id: '/lovable/email/queue/process'
-      path: '/lovable/email/queue/process'
-      fullPath: '/lovable/email/queue/process'
-      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lovable/email/transactional/preview': {
-      id: '/lovable/email/transactional/preview'
-      path: '/lovable/email/transactional/preview'
-      fullPath: '/lovable/email/transactional/preview'
-      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/lovable/email/transactional/send': {
-      id: '/lovable/email/transactional/send'
-      path: '/lovable/email/transactional/send'
-      fullPath: '/lovable/email/transactional/send'
-      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/resurse/admitere/$facultate/$an': {
-      id: '/resurse/admitere/$facultate/$an'
-      path: '/resurse/admitere/$facultate/$an'
-      fullPath: '/resurse/admitere/$facultate/$an'
-      preLoaderRoute: typeof ResurseAdmitereFacultateAnRouteImport
+    '/rezolvari/$materie/$an/$sesiune': {
+      id: '/rezolvari/$materie/$an/$sesiune'
+      path: '/rezolvari/$materie/$an/$sesiune'
+      fullPath: '/rezolvari/$materie/$an/$sesiune'
+      preLoaderRoute: typeof RezolvariMaterieAnSesiuneRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resurse/bac/$materie/$an': {
@@ -2486,19 +2430,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResurseBacMaterieAnRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rezolvari/$materie/$an/$sesiune': {
-      id: '/rezolvari/$materie/$an/$sesiune'
-      path: '/rezolvari/$materie/$an/$sesiune'
-      fullPath: '/rezolvari/$materie/$an/$sesiune'
-      preLoaderRoute: typeof RezolvariMaterieAnSesiuneRouteImport
+    '/resurse/admitere/$facultate/$an': {
+      id: '/resurse/admitere/$facultate/$an'
+      path: '/resurse/admitere/$facultate/$an'
+      fullPath: '/resurse/admitere/$facultate/$an'
+      preLoaderRoute: typeof ResurseAdmitereFacultateAnRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/subiecte-admitere/$universitate/$materie/$an': {
-      id: '/subiecte-admitere/$universitate/$materie/$an'
-      path: '/$an'
-      fullPath: '/subiecte-admitere/$universitate/$materie/$an'
-      preLoaderRoute: typeof SubiecteAdmitereUniversitateMaterieAnRouteImport
-      parentRoute: typeof SubiecteAdmitereUniversitateMaterieRoute
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/queue/process': {
+      id: '/lovable/email/queue/process'
+      path: '/lovable/email/queue/process'
+      fullPath: '/lovable/email/queue/process'
+      preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bac/$materie/$an/$sesiune': {
+      id: '/bac/$materie/$an/$sesiune'
+      path: '/$sesiune'
+      fullPath: '/bac/$materie/$an/$sesiune'
+      preLoaderRoute: typeof BacMaterieAnSesiuneRouteImport
+      parentRoute: typeof BacMaterieAnRoute
+    }
+    '/api/public/hooks/seo-daily': {
+      id: '/api/public/hooks/seo-daily'
+      path: '/api/public/hooks/seo-daily'
+      fullPath: '/api/public/hooks/seo-daily'
+      preLoaderRoute: typeof ApiPublicHooksSeoDailyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/rezolvari-tick': {
+      id: '/api/public/hooks/rezolvari-tick'
+      path: '/api/public/hooks/rezolvari-tick'
+      fullPath: '/api/public/hooks/rezolvari-tick'
+      preLoaderRoute: typeof ApiPublicHooksRezolvariTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/indexnow': {
+      id: '/api/public/hooks/indexnow'
+      path: '/api/public/hooks/indexnow'
+      fullPath: '/api/public/hooks/indexnow'
+      preLoaderRoute: typeof ApiPublicHooksIndexnowRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/bac-crawl-tick': {
+      id: '/api/public/hooks/bac-crawl-tick'
+      path: '/api/public/hooks/bac-crawl-tick'
+      fullPath: '/api/public/hooks/bac-crawl-tick'
+      preLoaderRoute: typeof ApiPublicHooksBacCrawlTickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/auto-blog-post': {
+      id: '/api/public/hooks/auto-blog-post'
+      path: '/api/public/hooks/auto-blog-post'
+      fullPath: '/api/public/hooks/auto-blog-post'
+      preLoaderRoute: typeof ApiPublicHooksAutoBlogPostRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
