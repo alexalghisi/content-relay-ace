@@ -2,27 +2,26 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
 // ads.txt pentru Google AdSense (IAB Authorized Digital Sellers).
-// Citește publisher ID-ul din env. Dacă nu e setat, returnează un fișier
-// gol cu instrucțiuni — astfel încât crawlerul AdSense să nu primească 404.
-//
-// Setează `VITE_ADSENSE_CLIENT=ca-pub-XXXXXXXXXXXXXXXX` în .env pentru
-// a publica linia oficială. Linia recomandată de Google:
+// Linia recomandată de Google:
 //   google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+// Publisher ID-ul MeditatiiDirect.ro: pub-4079300108937036 (public, apare și în sursa paginii).
+// Env `ADSENSE_CLIENT` poate suprascrie valoarea implicită, dacă se schimbă contul AdSense.
+const DEFAULT_PUBLISHER_ID = "pub-4079300108937036";
 
 export const Route = createFileRoute("/ads.txt")({
   server: {
     handlers: {
       GET: async () => {
-        const client = (process.env.VITE_ADSENSE_CLIENT ||
-          process.env.ADSENSE_CLIENT ||
-          "") as string;
+        const client = (process.env.ADSENSE_CLIENT ||
+          process.env.VITE_ADSENSE_CLIENT ||
+          DEFAULT_PUBLISHER_ID) as string;
         const pubId = client.replace(/^ca-/, "").trim();
 
         // Returnăm întotdeauna text/plain cu o linie validă când publisher-ul e setat,
         // altfel un placeholder util pentru crawlerul AdSense (nu 404, nu HTML).
         const body = pubId
           ? `google.com, ${pubId}, DIRECT, f08c47fec0942fa0\n`
-          : `# MeditatiiDirect.ro ads.txt\n# Setează secretul VITE_ADSENSE_CLIENT (ca-pub-XXXXXXXXXXXXXXXX) pentru a publica linia DIRECT.\n# Vezi: https://support.google.com/adsense/answer/7532444\n`;
+          : `# MeditatiiDirect.ro ads.txt\n# Setează secretul ADSENSE_CLIENT (ca-pub-XXXXXXXXXXXXXXXX) pentru a publica linia DIRECT.\n# Vezi: https://support.google.com/adsense/answer/7532444\n`;
 
         return new Response(body, {
           status: 200,
