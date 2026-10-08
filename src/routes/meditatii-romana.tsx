@@ -1,16 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-romana";
-const TITLE = "Meditații Română 2026 — Online și Acasă, BAC și EN";
-const DESC = "Meditații limba română online sau la domiciliu: gramatică, eseu, comentariu literar, BAC, Evaluare Națională, admitere. De la 40 lei/oră, fără comision.";
+const TITLE = "Meditații română — BAC și Evaluarea Națională | MeditatiiDirect.ro";
+const DESC = "Cauți meditații română pentru BAC, Evaluarea Națională sau gramatică? Postezi cererea gratuită, compari propunerile și discuți direct în chat cu profesorii.";
 
 const faqs = [
-  { q: "Cât costă o meditație la română?", a: "Tarifele pentru meditații de limba română încep de la 40 lei/oră pentru gimnaziu, 50–100 lei/oră pentru liceu și pregătire BAC, și 80–150 lei/oră pentru pregătire intensivă pentru admitere la Drept sau Litere." },
-  { q: "Pot face meditații română online?", a: "Da. Majoritatea profesorilor de română oferă meditații online prin Zoom sau Google Meet, cu materiale partajate în timp real. Eficient mai ales pentru analiză de text, comentariu și pregătire eseu BAC." },
-  { q: "Ce includ meditațiile pentru BAC la română?", a: "Gramatică (morfologie, sintaxă, fonetică), comentariu literar pe operele din programă, eseu argumentativ, planuri tip rezolvate, simulări cronometrate și corectare individuală." },
-  { q: "Există meditații de română pentru Evaluare Națională?", a: "Da, avem profesori specializați pe Evaluare Națională clasa a VIII-a: subiect tip, lectură, redactare, gramatică nivel gimnaziu și simulări complete." },
-  { q: "Cum aleg cel mai bun profesor de română?", a: "Filtrează după nivel (gimnaziu, liceu, BAC, admitere), verifică recenziile, citește descrierea metodei și solicită o oră de probă. Mulți profesori oferă prima ședință la preț redus." },
+  { q: "Cât costă o meditație la română?", a: "Fiecare profesor își comunică tariful în propunere. Menționează bugetul și durata dorită în cerere; compară prețul pe ședință și ce include corectarea temelor. Platforma nu stabilește prețul lecțiilor." },
+  { q: "Pot face meditații română online?", a: "Da. Bifează online în cerere. Stabilești cu profesorul platforma video și modul de lucru: documente partajate, analiza textului, redactare și corectarea individuală a eseurilor." },
+  { q: "Ce includ meditațiile pentru BAC la română?", a: "Pregătirea pentru proba scrisă poate include înțelegerea textului la prima vedere, textul argumentativ, cerințele de analiză și eseul literar, în funcție de profil și programa oficială. Cere feedback pe propriile texte, nu doar comentarii memorate." },
+  { q: "Există meditații de română pentru Evaluare Națională?", a: "Poți trimite o cerere pentru clasa a VIII-a: lectură, compararea textelor, redactare, vocabular, morfologie și sintaxă. Precizează capitolele dificile și dacă dorești simulări cronometrate." },
+  { q: "Cum aleg cel mai bun profesor de română?", a: "Compară propunerile primite după nivel, metodă, disponibilitate și tarif. Întreabă în chat cum se corectează redactările și cum se măsoară progresul. În pagina privată a cererii poți acorda propunerilor 1–5 stele." },
 ];
 
 export const Route = createFileRoute("/meditatii-romana")({
@@ -36,7 +36,6 @@ export const Route = createFileRoute("/meditatii-romana")({
         name: "Meditații română — MeditatiiDirect.ro",
         description: DESC, url: URL,
         areaServed: { "@type": "Country", name: "România" },
-        offers: { "@type": "AggregateOffer", priceCurrency: "RON", lowPrice: "40", highPrice: "150" },
       }) },
     ],
   }),
@@ -44,20 +43,23 @@ export const Route = createFileRoute("/meditatii-romana")({
     <SeoLanding
       pageUrl={URL}
       h1="Meditații limba română — online și la domiciliu"
-      intro="Profesori verificați de limba română pentru gimnaziu, Evaluare Națională, liceu, BAC și admitere la Drept sau Litere. Gramatică, comentariu literar, eseu argumentativ, redactare — totul cu plan personalizat și corectare individuală. Online prin Zoom/Meet sau la domiciliu în București, Cluj, Iași, Timișoara, Brașov, Constanța."
+      intro="Cauți meditații la limba română pentru gimnaziu, Evaluarea Națională, BAC sau admitere? Descrii ce ai nevoie într-o cerere gratuită, iar profesorii interesați trimit propuneri cu tarif, dată și oră. Compari metodele, discuți direct în chat și evaluezi propunerile cu stele. Alegi online sau în orașul tău."
       bullets={[
         "Pregătire BAC română — eseu, comentariu, planuri",
         "Evaluare Națională clasa a VIII-a",
         "Gramatică completă: morfologie, sintaxă, fonetică",
         "Admitere Drept, Litere, Jurnalism",
         "Online sau la domiciliu — tu alegi",
-        "De la 40 lei/oră, fără comision",
+        "Tarif în fiecare propunere, fără comision",
       ]}
-      ctaPrimary={{ to: "/meditatii", label: "Vezi profesori română" }}
-      ctaSecondary={{ to: "/meditatii-bac", label: "Pregătire BAC română" }}
-      pdfs={[
-        { href: "/resurse/bac/romana/2025", title: "Subiect BAC 2026 — Limba română", meta: "Subiect oficial + barem PDF gratuit" },
+      ctaPrimary={{ to: "/meditatii", search: { materie: "romana" }, label: "Cere meditații la română" }}
+      ctaSecondary={{ to: "/meditatii", search: { materie: "romana", online: "1" }, label: "Cere meditații online" }}
+      sections={[
+        { title: "Meditații română pentru BAC", body: <><p>Pornește de la profilul tău și programa oficială. Un plan de lucru util separă textul argumentativ, analiza textului la prima vedere și eseul despre opera literară. Lucrează cu baremul și cere profesorului să explice ce puncte ai pierdut.</p><p>Consultă <Link to="/bac/$materie" params={{ materie: "romana" }} className="text-primary underline">arhiva de subiecte BAC la română</Link> și <Link to="/rezolvari" className="text-primary underline">rezolvările explicate</Link>. Respectă starea de verificare afișată pentru fiecare rezolvare.</p></> },
+        { title: "Clasa a VIII-a și gramatică", body: <><p>La Evaluarea Națională contează atât lectura, cât și exprimarea și gramatica. În cerere scrie concret: dificultăți la pronume, funcții sintactice, frază, rezumat sau redactare. Un diagnostic inițial ajută la alegerea exercițiilor potrivite.</p><p>Vezi pagina de <Link to="/meditatii-evaluare-nationala" className="text-primary underline">pregătire pentru Evaluarea Națională</Link>.</p></> },
+        { title: "Cum alegi propunerea potrivită", body: <><p>Spune clasa, obiectivul, programul și bugetul. Când primești o propunere, întreabă în chat despre corectarea temelor și feedback. Stabiliți durata lecției și ritmul de lucru; acceptarea profesorului închide cererea.</p><p>Vezi <Link to="/cum-functioneaza" className="text-primary underline">cum funcționează cererea și propunerile</Link> sau <Link to="/preturi-meditatii" className="text-primary underline">ghidul de prețuri</Link>.</p></> },
       ]}
+      ctaFooter={{ title: "Cauți un profesor de română?", body: "Spune clasa, examenul și ce vrei să îmbunătățești. Profesorii interesați îți trimit propuneri.", to: "/meditatii", label: "Trimite cererea gratuită", search: { materie: "romana" } }}
       faqs={faqs}
       related={[
         { to: "/meditatii-bac", label: "Meditații BAC" },

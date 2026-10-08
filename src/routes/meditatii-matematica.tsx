@@ -3,15 +3,15 @@ import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-matematica";
 
-const TITLE = "Meditații Matematică 2026 — Profesori Verificați";
-const DESCRIPTION = "Meditații matematică pentru gimnaziu, liceu, BAC și admitere (UPB, ASE, Medicină). Online sau acasă, profesori verificați. De la 40 lei/oră.";
+const TITLE = "Meditații matematică — BAC, clasa a 8-a și online | MeditatiiDirect.ro";
+const DESCRIPTION = "Cauți meditații matematică? Postezi gratuit cererea pentru BAC, Evaluarea Națională sau admitere, primești propuneri cu tarif și discuți direct cu profesorii.";
 
 const FAQS: FaqItem[] = [
-  { q: "Cât costă o meditație la matematică?", a: "Tarifele pentru meditații la matematică încep de la 40 lei/oră pentru gimnaziu, 60–100 lei/oră pentru liceu și BAC, și 100–200 lei/oră pentru pregătire de admitere la facultăți competitive (UPB, ASE, Medicină)." },
-  { q: "Pot face meditații matematică online?", a: "Da, majoritatea profesorilor de matematică oferă meditații online prin Zoom, Google Meet sau Skype, cu tabletă grafică. Eficiența este similară cu cea față-în-față, iar economisești timpul de transport." },
-  { q: "Cum aleg cel mai bun profesor de matematică?", a: "Verifică experiența (ani predați), recenziile elevilor, materia exactă (algebră, geometrie, analiză), nivelul (gimnaziu/liceu/BAC/admitere) și solicită o lecție de probă. Pe MeditatiiDirect toți profesorii sunt verificați manual." },
-  { q: "Cât timp înainte de BAC ar trebui să încep meditațiile la matematică?", a: "Recomandăm minim 6 luni înainte de BAC pentru recapitulare completă (algebră, analiză matematică, geometrie). Pentru admiterea la UPB sau Medicină, ideal e să începi din clasa a XI-a." },
-  { q: "Există meditații matematică pentru Evaluarea Națională?", a: "Da, avem profesori specializați pe Evaluarea Națională clasa a VIII-a: recapitulare programă, rezolvare variante oficiale, tehnici de lucru pe foaia de examen." },
+  { q: "Cât costă o meditație la matematică?", a: "Prețul este stabilit de fiecare profesor în propunerea sa, nu de platformă. Menționează bugetul, durata dorită și nivelul în cerere; compară costul unei ședințe, nu doar prețul pe oră. Plata lecțiilor se stabilește direct cu profesorul." },
+  { q: "Pot face meditații matematică online?", a: "Da. Bifează online în cerere și discută cu profesorul despre platforma video, tabla digitală și felul în care veți corecta exercițiile. Ai nevoie de o conexiune stabilă și de o modalitate de a trimite rezolvările tale." },
+  { q: "Cum aleg cel mai bun profesor de matematică?", a: "Postează cererea, apoi compară propunerile după nivel, metodă, tarif și disponibilitate. În chat întreabă profesorul cum identifică lacunele și cum urmărește progresul; poți evalua cu 1–5 stele propunerea primită în pagina privată a cererii." },
+  { q: "Cât timp înainte de BAC ar trebui să încep meditațiile la matematică?", a: "Recomandăm minim 6 luni înainte de BAC pentru recapitulare completă (algebră, analiză matematică, geometrie). Pentru admitere, verifică mai întâi programa și materiile cerute de facultatea aleasă." },
+  { q: "Există meditații matematică pentru Evaluarea Națională?", a: "Poți posta o cerere pentru clasa a VIII-a și Evaluarea Națională. Precizează ce ai nevoie: ecuații, probleme de geometrie, recapitulare sau antrenament pe subiecte oficiale." },
 ];
 
 export const Route = createFileRoute("/meditatii-matematica")({
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/meditatii-matematica")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: PAGE_URL },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
@@ -41,7 +42,6 @@ export const Route = createFileRoute("/meditatii-matematica")({
           url: PAGE_URL,
           areaServed: { "@type": "Country", name: "România" },
           provider: { "@id": "https://meditatiidirect.ro/#org" },
-          offers: { "@type": "AggregateOffer", priceCurrency: "RON", lowPrice: "40", highPrice: "200" },
         }),
       },
     ],
@@ -54,25 +54,25 @@ function Page() {
     <SeoLanding
       pageUrl={PAGE_URL}
       breadcrumbParent={{ name: "Meditații", url: "https://meditatiidirect.ro/meditatii" }}
-      h1="Meditații matematică — profesori verificați, online sau acasă"
+      h1="Meditații matematică — online sau acasă"
       intro="Pe MeditatiiDirect.ro descrii o singură dată ce ai nevoie la matematică, iar profesorii îți trimit propuneri direct. Indiferent că ai nevoie de meditații matematică pentru gimnaziu, liceu, Evaluarea Națională, BAC sau admitere la facultate (UPB, ASE, Medicină, Politehnică), primești oferte cu dată, oră și tarif. Contact direct, fără comision."
       bullets={[
-        "Profesori verificați cu CV și recenzii reale",
+        "Cerere gratuită, propuneri cu tarif și program",
         "Algebră, analiză matematică, geometrie, trigonometrie",
         "Meditații online (Zoom, Meet) sau față-în-față",
         "Pregătire BAC matematică M1, M2, M_tehnologic",
-        "Pregătire admitere UPB, ASE, Medicină, UTCN, Drept",
-        "Tarife transparente: 40 – 200 lei / oră",
+        "Pregătire pentru admiterea cu probă de matematică",
+        "Compari tariful și discuți direct în chat",
       ]}
-      ctaPrimary={{ to: "/meditatii", label: "Vezi anunțuri matematică" }}
-      ctaSecondary={{ to: "/profesori", label: "Toți profesorii" }}
+      ctaPrimary={{ to: "/meditatii", search: { materie: "matematica" }, label: "Cere meditații la matematică" }}
+      ctaSecondary={{ to: "/meditatii", search: { materie: "matematica", online: "1" }, label: "Cere meditații online" }}
       sections={[
         {
           title: "Meditații matematică pe nivel școlar",
           body: (
             <>
-              <p>Acoperim toată programa de matematică: <strong>clasele V–VIII</strong> (numere, fracții, ecuații, geometrie plană), <strong>clasele IX–XII</strong> (funcții, derivate, integrale, geometrie analitică, combinatorică, matrici), precum și <strong>pregătire intensivă pentru BAC</strong> (M1 — Matematică-Informatică, M2 — Științele naturii, M_tehnologic).</p>
-              <p>Pentru elevii de clasa a VIII-a, oferim <Link to="/meditatii-evaluare-nationala" className="text-primary underline">meditații pentru Evaluarea Națională</Link> cu rezolvare de variante oficiale.</p>
+              <p>În cerere poți preciza capitolele pe care vrei să lucrezi: <strong>clasele V–VIII</strong> (numere, fracții, ecuații, geometrie plană), <strong>clasele IX–XII</strong> (funcții, derivate, integrale, geometrie analitică, combinatorică, matrici), precum și <strong>pregătire intensivă pentru BAC</strong> (M1 — Matematică-Informatică, M2 — Științele naturii, M_tehnologic).</p>
+              <p>Pentru elevii de clasa a VIII-a, poți cere <Link to="/meditatii-evaluare-nationala" className="text-primary underline">meditații pentru Evaluarea Națională</Link> cu rezolvare de variante oficiale.</p>
             </>
           ),
         },
@@ -80,8 +80,8 @@ function Page() {
           title: "Pregătire admitere la facultate",
           body: (
             <>
-              <p>Profesorii noștri pregătesc candidați pentru admiterea la <strong>UPB (Politehnica București)</strong>, <strong>ASE</strong>, <strong>Universitatea Tehnică Cluj-Napoca</strong>, <strong>Medicină (UMF)</strong>, Informatică, Automatică, Electronică și Drept.</p>
-              <p>Vezi <Link to="/grile-upb" className="text-primary underline">grilele UPB rezolvate</Link>, <Link to="/grile-admitere-medicina-2026" className="text-primary underline">grilele de medicină 2026</Link> și <Link to="/subiecte-admitere" className="text-primary underline">subiectele de admitere din anii anteriori</Link>.</p>
+              <p>Pentru admiterea la <strong>Politehnica București</strong>, <strong>ASE</strong>, <strong>UTCN</strong> sau o facultate de informatică, verifică metodologia instituției. Include în cerere facultatea, programa, formatul examenului și capitolele care îți pun probleme. Nu toate facultățile au probă de matematică.</p>
+              <p>Vezi <Link to="/grile-upb" className="text-primary underline">grilele UPB rezolvate</Link>, <Link to="/subiecte-admitere" className="text-primary underline">subiectele de admitere din anii anteriori</Link>.</p>
             </>
           ),
         },
@@ -90,11 +90,12 @@ function Page() {
           body: (
             <>
               <p>Profesorii oferă meditații atât <Link to="/meditatii-online" className="text-primary underline">online</Link>, cât și acasă, în orașe ca <Link to="/meditatii-in/$oras" params={{ oras: "bucuresti" }} className="text-primary underline">București</Link>, <Link to="/meditatii-in/$oras" params={{ oras: "cluj-napoca" }} className="text-primary underline">Cluj</Link>, <Link to="/meditatii-in/$oras" params={{ oras: "iasi" }} className="text-primary underline">Iași</Link>, <Link to="/meditatii-in/$oras" params={{ oras: "timisoara" }} className="text-primary underline">Timișoara</Link>, Brașov sau Constanța.</p>
-              <p>Lecțiile online folosesc tabletă grafică și sunt la fel de eficiente ca cele față-în-față, fără pierdere de timp cu transportul.</p>
+              <p>În chat stabiliți cum veți scrie și corecta rezolvările, ce materiale folosiți și durata ședinței. Alege formatul în care poți lucra constant, nu doar cel cu cel mai mic tarif.</p>
             </>
           ),
         },
       ]}
+      ctaFooter={{ title: "Cauți un profesor de matematică?", body: "Precizează clasa, examenul și capitolele dificile. Primești propuneri cu tarif și program.", to: "/meditatii", label: "Trimite cererea gratuită", search: { materie: "matematica" } }}
       faqs={FAQS}
       related={[
         { to: "/meditatii-bac", label: "Meditații BAC" },
