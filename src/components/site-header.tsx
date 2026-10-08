@@ -18,29 +18,29 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-xl">
       <div className="container-page grid h-18 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 lg:flex lg:justify-between">
-        <Link to="/" className="flex items-center gap-2 font-bold">
+        <Link to="/" className="flex min-w-0 items-center gap-2 font-bold lg:shrink-0">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[var(--shadow-pop)]">
             <GraduationCap className="h-5 w-5" />
           </span>
-          <span className="text-lg leading-tight">
+          <span className="truncate text-lg leading-tight">
             MeditatiiDirect<span className="text-primary">.ro</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden shrink-0 items-center gap-1 lg:flex">
           {NAV.map((n) => (
             <Link
               key={n.to}
               to={n.to}
-              className="rounded-full px-3 py-2 text-sm text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
-              activeProps={{ className: "rounded-full px-3 py-2 text-sm font-medium text-primary bg-primary-soft" }}
+              className="inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-2 py-2 text-center text-sm leading-5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
+              activeProps={{ className: "font-medium text-primary bg-primary-soft" }}
             >
               {n.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
           {user ? (
             <>
               <Link to="/mesaje" className="btn-pill text-sm text-foreground/80 hover:text-foreground hover:bg-muted">Mesaje</Link>
@@ -68,7 +68,7 @@ export function SiteHeader() {
         <div className="border-t border-border bg-background lg:hidden">
           <div className="container-page flex flex-col gap-1 py-3">
             {NAV.map((n) => (
-              <Link key={n.to} to={n.to} className="rounded-lg px-3 py-2 text-sm hover:bg-muted" onClick={() => setOpen(false)}>
+              <Link key={n.to} to={n.to} className="inline-flex min-h-11 items-center justify-center rounded-lg px-3 py-2 text-center text-sm leading-5 hover:bg-muted" onClick={() => setOpen(false)}>
                 {n.label}
               </Link>
             ))}
