@@ -4,8 +4,8 @@ import { BAC_SUBJECTS } from "@/data/bac-catalog";
 
 // Generator automat de rezolvări BAC: lot de max 2 per rulare, cu lease DB,
 // circuit breaker (402/403/429 repetate => pauză) și progres idempotent în rezolvari_queue.
-const BATCH_SIZE = 2;
-const LEASE_MINUTES = 10;
+const BATCH_SIZE = 1;
+const LEASE_MINUTES = 20;
 
 const SESSION_LABELS: Record<string, string> = {
   iunie: "sesiunea iunie–iulie",
@@ -83,63 +83,79 @@ async function bumpFailures(reset = false) {
   return next;
 }
 
-async function generateOne(item: QueueItem, apiKey: string): Promise<{ ok: boolean; pause?: string; retryLater?: boolean }> {
+async function pdfBlock(path: string) {
+  const { data, error } = await supabaseAdmin.storage.from("bac-pdfs").download(path);
+  if (error || !data) return null;
+  const buf = new Uint8Array(await data.arrayBuffer());
+  if (buf.length < 5 || String.fromCharCode(...buf.slice(0, 4)) !== "%PDF") return null;
+  let bin = "";
+  for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode(...buf.subarray(i, i + 0x8000));
+  return { type: "document", source: { type: "base64", media_type: "application/pdf", data: btoa(bin) } };
+}
+
+/** Citește stream-ul SSE de la /v1/messages și întoarce textul + stop_reason. */
+async function readMessagesStream(res: Response): Promise<{ text: string; stop: string | null; error?: string }> {
+  const reader = res.body!.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  let text = "";
+  let stop: string | null = null;
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let idx: number;
+    while ((idx = buf.indexOf("\n")) >= 0) {
+      const line = buf.slice(0, idx).trim();
+      buf = buf.slice(idx + 1);
+      if (!line.startsWith("data:")) continue;
+      try {
+        const ev = JSON.parse(line.slice(5));
+        if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta") text += ev.delta.text;
+        else if (ev.type === "message_delta" && ev.delta?.stop_reason) stop = ev.delta.stop_reason;
+        else if (ev.type === "error") return { text, stop, error: JSON.stringify(ev.error ?? ev).slice(0, 200) };
+      } catch {
+        /* cadru incomplet — ignorat */
+      }
+    }
+  }
+  return { text, stop };
+}
+
+// Rezolvările se fac DOAR pe subiectul oficial găzduit la noi (PDF verificat de model).
+// Fără PDF sau cu PDF greșit => varianta e marcată și sărită; nu se inventează subiecte.
+async function generateOne(
+  item: QueueItem,
+  apiKey: string,
+): Promise<{ ok: boolean; pause?: string; retryLater?: boolean; skip?: string }> {
   const subject = BAC_SUBJECTS.find((s) => s.slug === item.materie);
   const materieName = subject?.name ?? item.materie;
   const sesiuneLabel = SESSION_LABELS[item.sesiune] ?? item.sesiune;
+  const subPath = `${item.materie}/${item.an}/${item.sesiune}-subiect.pdf`;
+  const barPath = `${item.materie}/${item.an}/${item.sesiune}-barem.pdf`;
 
-  const systemPrompt = `Ești profesor metodist cu 20 de ani experiență la BAC, specializat pe ${materieName}.
-Scrii rezolvări explicate, în limba română cu diacritice corecte, pentru MeditatiiDirect.ro.
+  const subj = await pdfBlock(subPath);
+  if (!subj) return { ok: false, skip: "fara_subiect_oficial" };
+  const bar = await pdfBlock(barPath);
 
-STRUCTURA OBLIGATORIE a conținutului (markdown):
-## Rezumatul cerinței
-## Rezolvare pas cu pas
-### Subiectul I (cu subpuncte, fiecare cu explicația „de ce")
-### Subiectul al II-lea
-### Subiectul al III-lea
-## Răspunsuri finale
-## Greșeli frecvente
-## Recapitulare
+  const prompt = `Primul document ar trebui să fie subiectul oficial BAC ${item.an}, ${sesiuneLabel}, la ${materieName}. ${
+    bar ? "Al doilea document este baremul oficial: răspunsurile tale trebuie să coincidă cu el." : "Nu ai baremul; rezolvă riguros."
+  }
+VERIFICARE OBLIGATORIE: dacă primul document NU conține enunțurile subiectului oficial al Ministerului Educației pentru exact acest an, sesiune și materie (de ex. e un barem, un ordin, o simulare județeană, alt an), NU reconstitui nimic și răspunde DOAR: NEPOTRIVIT|<ce este documentul>
 
-REGULI:
-- 700–1100 cuvinte, ton cald și clar, adresat unui elev de liceu.
-- Formulele matematice se scriu în LaTeX între $...$ (inline) sau $$...$$ (bloc).
-- Pentru informatică, codul se pune în blocuri \`\`\`cpp.
-- Subiectele sunt cele oficiale uzuale de la BAC ${item.an}, ${sesiuneLabel}, pentru ${materieName}; dacă nu cunoști exact varianta, rezolvă subiecte tipice conforme cu programa oficială din acel an și menționează asta discret la final.
-- NU inventa surse sau linkuri.`;
+Altfel scrie în română cu diacritice rezolvarea completă, explicată pentru un elev de liceu, exact pe itemii din document. Fără prezentări personale și fără ton promoțional. Formule în LaTeX între $...$ / $$...$$; cod în blocuri \`\`\`cpp.
+Format STRICT:
+Linia 1: META|<titlu max 80 caractere>|<usor|mediu|greu>|<minute>
+Apoi markdown: ## Rezumatul cerinței, ## Subiectul I, ## Subiectul al II-lea, ## Subiectul al III-lea, ## Răspunsuri finale, ## Greșeli frecvente, ## Recapitulare; ### pentru fiecare item, cu explicația „de ce”.`;
 
-  const userPrompt = `Scrie rezolvarea completă pentru BAC ${item.an}, ${sesiuneLabel}, materia: ${materieName}.`;
-
-  const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/messages", {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", "X-Lovable-AIG-SDK": "fetch" },
     body: JSON.stringify({
-      model: "google/gemini-2.5-pro",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-      tools: [
-        {
-          type: "function",
-          function: {
-            name: "create_rezolvare",
-            description: "Salvează o rezolvare explicată BAC",
-            parameters: {
-              type: "object",
-              properties: {
-                titlu: { type: "string", minLength: 20, maxLength: 90 },
-                continut: { type: "string", minLength: 2000 },
-                dificultate: { type: "string", enum: ["usor", "mediu", "greu"] },
-                timp_estimat_minute: { type: "integer", minimum: 20, maximum: 180 },
-              },
-              required: ["titlu", "continut", "dificultate", "timp_estimat_minute"],
-              additionalProperties: false,
-            },
-          },
-        },
-      ],
-      tool_choice: { type: "function", function: { name: "create_rezolvare" } },
+      model: "anthropic/claude-sonnet-5",
+      max_tokens: 32000,
+      stream: true,
+      messages: [{ role: "user", content: [subj, ...(bar ? [bar] : []), { type: "text", text: prompt }] }],
     }),
   });
 
@@ -148,22 +164,25 @@ REGULI:
     if (aiRes.status === 402 || aiRes.status === 403) {
       return { ok: false, pause: `AI gateway ${aiRes.status}: ${errText.slice(0, 200)}` };
     }
-    if (aiRes.status === 429) return { ok: false, retryLater: true };
+    if (aiRes.status === 429 || aiRes.status >= 500) return { ok: false, retryLater: true };
     return { ok: false };
   }
 
-  const aiData = await aiRes.json();
-  const toolCall = aiData?.choices?.[0]?.message?.tool_calls?.[0];
-  if (!toolCall?.function?.arguments) return { ok: false };
+  const { text, stop, error } = await readMessagesStream(aiRes);
+  if (error) return { ok: false };
+  if (stop === "refusal") return { ok: false, skip: "refuz_model" };
+  const out = text.trim();
+  if (out.startsWith("NEPOTRIVIT")) return { ok: false, skip: `pdf_nepotrivit: ${out.slice(11, 200)}` };
+  if (/reconstitu/i.test(out)) return { ok: false, skip: "pdf_nepotrivit: reconstituit" };
+  const mm = /^META\|([^|\n]+)\|(usor|mediu|greu)\|(\d+)\s*\n/.exec(out);
+  if (!mm || out.length < 3000) return { ok: false };
+  const gen: GeneratedRezolvare = {
+    titlu: mm[1].trim().slice(0, 90),
+    dificultate: mm[2],
+    timp_estimat_minute: Math.max(20, Math.min(180, Number(mm[3]))),
+    continut: out.slice(mm[0].length).trim(),
+  };
 
-  let gen: GeneratedRezolvare;
-  try {
-    gen = JSON.parse(toolCall.function.arguments) as GeneratedRezolvare;
-  } catch {
-    return { ok: false };
-  }
-
-  // Asigură rândul din bac_variante (legătura variantă ↔ rezolvare)
   const slug = `${item.materie}-${item.an}-${item.sesiune}`;
   const { data: varianta } = await supabaseAdmin
     .from("bac_variante")
@@ -173,8 +192,8 @@ REGULI:
         an: item.an,
         sesiune: item.sesiune,
         slug,
-        subiect_path: `${item.materie}/${item.an}/${item.sesiune}-subiect.pdf`,
-        barem_path: `${item.materie}/${item.an}/${item.sesiune}-barem.pdf`,
+        subiect_path: subPath,
+        barem_path: bar ? barPath : null,
         are_rezolvare: true,
         is_published: true,
       },
@@ -183,20 +202,24 @@ REGULI:
     .select("id")
     .single();
 
-  const { error: insertErr } = await supabaseAdmin.from("bac_rezolvari").insert({
-    varianta_id: varianta?.id ?? null,
-    materie: item.materie,
-    an: item.an,
-    sesiune: item.sesiune,
-    slug: `rezolvare-${slug}`,
-    titlu: gen.titlu,
-    continut: gen.continut,
-    dificultate: gen.dificultate,
-    timp_estimat_minute: gen.timp_estimat_minute,
-    status: "draft",
-  });
-  if (insertErr) return { ok: false };
-
+  const { error: upErr } = await supabaseAdmin.from("bac_rezolvari").upsert(
+    {
+      varianta_id: varianta?.id ?? null,
+      materie: item.materie,
+      an: item.an,
+      sesiune: item.sesiune,
+      slug: `rezolvare-${slug}`,
+      titlu: gen.titlu,
+      continut: gen.continut,
+      dificultate: gen.dificultate,
+      timp_estimat_minute: gen.timp_estimat_minute,
+      status: "draft",
+      sursa: "subiect_oficial",
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "materie,an,sesiune" },
+  );
+  if (upErr) return { ok: false };
   return { ok: true };
 }
 
@@ -256,6 +279,11 @@ export const Route = createFileRoute("/api/public/hooks/rezolvari-tick")({
               .update({ status: "done", processed_at: new Date().toISOString(), error: null })
               .eq("id", item.id);
             await bumpFailures(true);
+          } else if (r.skip) {
+            await supabaseAdmin
+              .from("rezolvari_queue")
+              .update({ status: "failed", processed_at: new Date().toISOString(), error: r.skip.slice(0, 300) })
+              .eq("id", item.id);
           } else {
             // Cap de reîncercări: după 5 eșecuri trece pe 'failed', ca să nu blocheze coada.
             const nextAttempts = item.attempts + 1;

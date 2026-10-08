@@ -189,6 +189,7 @@ export type Database = {
           sesiune: string
           slug: string
           status: string
+          sursa: string | null
           timp_estimat_minute: number
           titlu: string | null
           updated_at: string
@@ -204,6 +205,7 @@ export type Database = {
           sesiune: string
           slug: string
           status?: string
+          sursa?: string | null
           timp_estimat_minute?: number
           titlu?: string | null
           updated_at?: string
@@ -219,6 +221,7 @@ export type Database = {
           sesiune?: string
           slug?: string
           status?: string
+          sursa?: string | null
           timp_estimat_minute?: number
           titlu?: string | null
           updated_at?: string
@@ -1327,6 +1330,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bac_pdf_names: { Args: { _prefix?: string }; Returns: string[] }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean

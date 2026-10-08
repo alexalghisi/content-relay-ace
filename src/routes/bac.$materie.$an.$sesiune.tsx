@@ -2,7 +2,7 @@
 // Subiect + barem găzduite la noi, afișate în pagină (lazy), plus CTA rezolvare.
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { ArrowLeft, Download, FileText, Lightbulb } from "lucide-react";
-import { getBacSubject, BAC_SESSIONS, BAC_YEARS, bacPdfUrl, type BacSessionSlug } from "@/data/bac-catalog";
+import { getBacSubject, BAC_SESSIONS, BAC_YEARS, type BacSessionSlug } from "@/data/bac-catalog";
 import { getVariantaSesiune } from "@/lib/bac-content.functions";
 import { LazyPdfPreview } from "@/components/lazy-pdf-preview";
 
@@ -17,25 +17,29 @@ export const Route = createFileRoute("/bac/$materie/$an/$sesiune")({
     if (!SESSION_SLUGS.includes(params.sesiune)) throw notFound();
     const sesiune = params.sesiune as BacSessionSlug;
     const session = BAC_SESSIONS.find((s) => s.slug === sesiune)!;
-    let db: Awaited<ReturnType<typeof getVariantaSesiune>> = { varianta: null, rezolvare: null };
+    let db: Awaited<ReturnType<typeof getVariantaSesiune>> = {
+      varianta: null,
+      rezolvare: null,
+      pdfs: { subiect: null, barem: null },
+    };
     try {
       db = await getVariantaSesiune({ data: { materie: subject.slug, an: year, sesiune } });
     } catch {
-      /* fără date în DB — folosim convenția de storage */
+      /* fără date — pagina rămâne neindexată */
     }
     return { subject, year, sesiune, sessionLabel: session.label, db };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Variantă indisponibilă" }, { name: "robots", content: "noindex" }] };
-    const { subject, year, sesiune, sessionLabel } = loaderData;
+    const { subject, year, sesiune, sessionLabel, db } = loaderData;
     const url = `${SITE}/bac/${subject.slug}/${year}/${sesiune}`;
     const title = `Subiecte BAC ${subject.name} ${year} — ${sessionLabel} (subiect + barem PDF) | MeditatiiDirect.ro`;
-    const desc = `Varianta oficială de bacalaureat la ${subject.nameLower}, ${year}, ${sessionLabel.toLowerCase()}: subiectul și baremul de corectare în PDF, direct în pagină. Gratuit, fără cont.`;
+    const desc = `Varianta de bacalaureat la ${subject.nameLower}, ${year}, ${sessionLabel.toLowerCase()}: subiectul și baremul de corectare în PDF, direct în pagină. Gratuit, fără cont.`;
     return {
       meta: [
         { title },
         { name: "description", content: desc },
-        { name: "keywords", content: `subiecte bac ${subject.nameLower} ${year} ${sesiune}, barem bac ${subject.nameLower} ${year}, variante bac ${subject.nameLower}` },
+        ...(db.pdfs?.subiect ? [] : [{ name: "robots", content: "noindex, follow" }]),
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
@@ -98,8 +102,8 @@ export const Route = createFileRoute("/bac/$materie/$an/$sesiune")({
 function VariantaPage() {
   const { subject, year, sesiune, sessionLabel, db } = Route.useLoaderData();
   const base = `https://gmgcufdfwwvfnnzfazae.supabase.co/storage/v1/object/public/bac-pdfs/`;
-  const subiect = db.varianta?.subiect_path ? base + db.varianta.subiect_path : bacPdfUrl(subject.slug, year, sesiune, "subiect");
-  const barem = db.varianta?.barem_path ? base + db.varianta.barem_path : bacPdfUrl(subject.slug, year, sesiune, "barem");
+  const subiect = db.pdfs?.subiect ? base + db.pdfs.subiect : null;
+  const barem = db.pdfs?.barem ? base + db.pdfs.barem : null;
   const prevYear = year > BAC_YEARS[0] ? year - 1 : null;
   const nextYear = year < BAC_YEARS[BAC_YEARS.length - 1] ? year + 1 : null;
 
@@ -124,38 +128,44 @@ function VariantaPage() {
           Subiecte BAC {subject.name} {year} — {sessionLabel}
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">
-          Subiectul oficial și baremul de corectare la <strong>{subject.nameLower}</strong>, sesiunea {sessionLabel.toLowerCase()} {year}. Le poți citi direct aici sau le descarci în PDF — sunt găzduite pe MeditatiiDirect.ro.
+          {subiect
+            ? <>Subiectul și baremul de corectare la <strong>{subject.nameLower}</strong>, sesiunea {sessionLabel.toLowerCase()} {year}. Le poți citi direct aici sau le descarci în PDF — sunt găzduite pe MeditatiiDirect.ro.</>
+            : <>Încă nu avem în arhivă documentul verificat pentru <strong>{subject.nameLower}</strong>, {sessionLabel.toLowerCase()} {year}. Publicăm doar fișiere verificate — până atunci, încearcă altă sesiune sau alt an.</>}
         </p>
       </header>
 
-      <section className="mt-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-2xl font-bold">Subiectul</h2>
-          <a href={subiect} target="_blank" rel="noopener" download
-             className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
-            <Download className="h-4 w-4" /> Descarcă subiectul (PDF)
-          </a>
-        </div>
-        <div className="mt-3">
-          <LazyPdfPreview src={subiect} title={`Subiect BAC ${subject.nameLower} ${year} ${sessionLabel}`} />
-        </div>
-        <p className="mt-2 text-xs text-muted-foreground">
-          Dacă previzualizarea nu pornește pe telefon, <a href={subiect} target="_blank" rel="noopener" className="text-primary hover:underline">deschide PDF-ul într-o filă nouă</a>.
-        </p>
-      </section>
+      {subiect && (
+        <section className="mt-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-2xl font-bold">Subiectul</h2>
+            <a href={subiect} target="_blank" rel="noopener" download
+               className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+              <Download className="h-4 w-4" /> Descarcă subiectul (PDF)
+            </a>
+          </div>
+          <div className="mt-3">
+            <LazyPdfPreview src={subiect} title={`Subiect BAC ${subject.nameLower} ${year} ${sessionLabel}`} />
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Dacă previzualizarea nu pornește pe telefon, <a href={subiect} target="_blank" rel="noopener" className="text-primary hover:underline">deschide PDF-ul într-o filă nouă</a>.
+          </p>
+        </section>
+      )}
 
-      <section className="mt-12">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-2xl font-bold">Baremul de corectare</h2>
-          <a href={barem} target="_blank" rel="noopener" download
-             className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">
-            <FileText className="h-4 w-4 text-primary" /> Descarcă baremul (PDF)
-          </a>
-        </div>
-        <div className="mt-3">
-          <LazyPdfPreview src={barem} title={`Barem BAC ${subject.nameLower} ${year} ${sessionLabel}`} />
-        </div>
-      </section>
+      {barem && (
+        <section className="mt-12">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-2xl font-bold">Baremul de corectare</h2>
+            <a href={barem} target="_blank" rel="noopener" download
+               className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">
+              <FileText className="h-4 w-4 text-primary" /> Descarcă baremul (PDF)
+            </a>
+          </div>
+          <div className="mt-3">
+            <LazyPdfPreview src={barem} title={`Barem BAC ${subject.nameLower} ${year} ${sessionLabel}`} />
+          </div>
+        </section>
+      )}
 
       <section className="mt-12 rounded-2xl border border-primary/20 bg-primary-soft/40 p-6 sm:p-8">
         <h2 className="flex items-center gap-2 text-xl font-semibold">

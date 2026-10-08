@@ -192,6 +192,9 @@ export const Route = createFileRoute("/sitemap.xml")({
         // + simulări cronometrate pe materie
         try {
           const { BAC_SUBJECTS, BAC_YEARS, BAC_SESSIONS } = await import("@/data/bac-catalog");
+          // Doar sesiunile care au efectiv subiectul verificat în arhivă (restul sunt noindex).
+          const { data: pdfNames } = await supabaseAdmin.rpc("bac_pdf_names", { _prefix: "" });
+          const pdfSet = new Set((pdfNames ?? []) as string[]);
           urls.push(`  <url>\n    <loc>${BASE_URL}/bac</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
           for (const s of BAC_SUBJECTS) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
@@ -199,6 +202,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             for (const y of BAC_YEARS) {
               urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
               for (const ses of BAC_SESSIONS) {
+                if (!pdfSet.has(`${s.slug}/${y}/${ses.slug}-subiect.pdf`)) continue;
                 urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}/${ses.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
               }
             }
@@ -207,11 +211,12 @@ export const Route = createFileRoute("/sitemap.xml")({
           console.error("sitemap bac catalog fetch failed", err);
         }
 
-        // Rezolvări publicate
+        // Rezolvări publicate — doar cele făcute pe subiectul oficial
         try {
           const { data: rez } = await supabaseAdmin
             .from("bac_rezolvari")
-            .select("materie, an, sesiune, updated_at");
+            .select("materie, an, sesiune, updated_at")
+            .eq("sursa", "subiect_oficial");
           for (const r of rez ?? []) {
             const last = r.updated_at ? new Date(r.updated_at).toISOString().slice(0, 10) : null;
             urls.push(
