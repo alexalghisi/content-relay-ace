@@ -9,6 +9,7 @@ export interface PublicProposal {
   created_at: string;
   rating: number | null;
   rating_comment: string | null;
+  status: string;
   teacher: {
     display_name: string | null;
     slug: string | null;
@@ -20,7 +21,7 @@ export interface PublicProposal {
 }
 
 export interface RequestWithProposals {
-  request: { id: string; subject: string; level: string | null; city: string | null; is_online: boolean; created_at: string } | null;
+  request: { id: string; subject: string; level: string | null; city: string | null; is_online: boolean; created_at: string; status: string } | null;
   proposals: PublicProposal[];
 }
 
@@ -35,7 +36,7 @@ export const getRequestWithProposals = createServerFn({ method: "GET" })
 
     const { data: req } = await supabaseAdmin
       .from("student_requests")
-      .select("id,subject,level,city,is_online,created_at,access_token")
+      .select("id,subject,level,city,is_online,created_at,access_token,status")
       .eq("id", data.id)
       .maybeSingle();
 
@@ -45,7 +46,7 @@ export const getRequestWithProposals = createServerFn({ method: "GET" })
 
     const { data: props } = await supabaseAdmin
       .from("teacher_proposals")
-      .select("id,user_id,message,price_per_hour,proposed_date,proposed_time,created_at,rating,rating_comment")
+      .select("id,user_id,message,price_per_hour,proposed_date,proposed_time,created_at,rating,rating_comment,status")
       .eq("request_id", data.id)
       .order("created_at", { ascending: false });
 
@@ -67,6 +68,7 @@ export const getRequestWithProposals = createServerFn({ method: "GET" })
         city: req.city,
         is_online: req.is_online,
         created_at: req.created_at,
+        status: req.status,
       },
       proposals: (props ?? []).map((p) => {
         const t = byUser.get(p.user_id);
@@ -79,6 +81,7 @@ export const getRequestWithProposals = createServerFn({ method: "GET" })
           created_at: p.created_at,
           rating: p.rating,
           rating_comment: p.rating_comment,
+          status: p.status,
           teacher: t
             ? {
                 display_name: t.display_name,
