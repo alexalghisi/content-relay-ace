@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 import { useState } from "react";
 import { Menu, X, GraduationCap } from "lucide-react";
+import { NewRequestsBadge } from "@/components/new-requests-badge";
 
 const NAV = [
   { to: "/meditatii", label: "Cere ofertă" },
@@ -35,7 +36,7 @@ export function SiteHeader() {
               className="inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-2 py-2 text-center text-sm leading-5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
               activeProps={{ className: "font-medium text-primary bg-primary-soft" }}
             >
-              {n.label}
+              {n.label}{n.to === "/cereri" && <NewRequestsBadge />}
             </Link>
           ))}
         </nav>
@@ -69,7 +70,7 @@ export function SiteHeader() {
           <div className="container-page flex flex-col gap-1 py-3">
             {NAV.map((n) => (
               <Link key={n.to} to={n.to} className="inline-flex min-h-11 items-center justify-center rounded-lg px-3 py-2 text-center text-sm leading-5 hover:bg-muted" onClick={() => setOpen(false)}>
-                {n.label}
+                {n.label}{n.to === "/cereri" && <NewRequestsBadge />}
               </Link>
             ))}
             <div className="mt-2 flex gap-2">

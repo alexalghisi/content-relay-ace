@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { markConversationRead } from "@/lib/security.functions";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft, Send, Video } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/mesaje/$id")({
@@ -90,7 +90,18 @@ function ChatThreadPage() {
             <Link to="/anunt/$slug" params={{ slug: conv.ads.seo_slug }} className="text-xs text-muted-foreground hover:text-primary truncate block">↳ {conv.ads.title}</Link>
           )}
         </div>
+        <a
+          href={`https://meet.jit.si/MeditatiiDirect-${conv.id}`}
+          target="_blank" rel="noopener noreferrer"
+          className="btn-primary h-10 px-3 text-sm"
+        >
+          <Video className="h-4 w-4" /> Apel video
+        </a>
       </div>
+      <p className="mt-2 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
+        🔒 Pentru siguranța ta, telefoanele și emailurile se ascund automat în chat. Faceți prima ședință prin apelul video de pe platformă.
+      </p>
+
 
       <div ref={scrollRef} className="h-[60vh] overflow-y-auto py-4 space-y-2">
         {msgs.length === 0 && <p className="text-center text-sm text-muted-foreground py-12">Spune salut! Începeți conversația.</p>}

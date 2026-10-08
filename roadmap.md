@@ -10,3 +10,6 @@
 - [x] Rezolvări BAC doar pe subiectul oficial (PDF verificat); drafturile vechi fără sursă ascunse; PDF-urile greșite mutate în `_carantina/`
 - [ ] Revizuire umană a rezolvărilor (status draft → revizuit) — blocat: necesită editor
 - [ ] Reîncărcare subiecte oficiale corecte pentru variantele carantinate — blocat: sursă verificată a fișierelor
+- [x] Apel video în chat + ascunderea automată a telefoanelor/emailurilor în mesaje
+- [x] Număr „Cereri noi” lângă „Cereri elevi”
+- [ ] SMS către profesori la cerere nouă — blocat: conectarea contului GatewayAPI de către utilizator
