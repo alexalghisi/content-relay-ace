@@ -1,6 +1,6 @@
 // Helper compact pentru a defini o pagină SEO landing reutilizând <SeoLanding/>.
 // Reduce dramatic codul per rută — un fișier de rută devine ~10 linii.
-import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
+import { SeoLanding, faqJsonLd, type FaqItem, type SeoLandingProps } from "@/components/seo-landing";
 
 const SITE = "https://meditatiidirect.ro";
 
@@ -13,7 +13,10 @@ export interface SeoPageConfig {
   bullets?: string[];
   faqs?: FaqItem[];
   related?: { to: string; label: string }[];
-  ctaPrimary?: { to: string; label: string };
+  ctaPrimary?: SeoLandingProps["ctaPrimary"];
+  ctaSecondary?: SeoLandingProps["ctaSecondary"];
+  ctaFooter?: SeoLandingProps["ctaFooter"];
+  sections?: SeoLandingProps["sections"];
 }
 
 export function seoPage(c: SeoPageConfig) {
@@ -27,6 +30,7 @@ export function seoPage(c: SeoPageConfig) {
         { property: "og:description", content: c.description },
         { property: "og:url", content: url },
         { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: c.title },
         { name: "twitter:description", content: c.description },
       ],
@@ -41,7 +45,10 @@ export function seoPage(c: SeoPageConfig) {
         h1={c.h1}
         intro={c.intro}
         bullets={c.bullets}
-        ctaPrimary={c.ctaPrimary ?? { to: "/meditatii", label: "Vezi profesori verificați" }}
+        ctaPrimary={c.ctaPrimary ?? { to: "/meditatii", label: "Cere meditații gratuit" }}
+        ctaSecondary={c.ctaSecondary}
+        ctaFooter={c.ctaFooter}
+        sections={c.sections}
         faqs={c.faqs}
         related={c.related}
       />
