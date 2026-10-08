@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { Check, GraduationCap, MapPin, Send, Video, Wallet } from "lucide-react";
+import { Check, GraduationCap, MapPin, Send, Trash2, Video, Wallet } from "lucide-react";
+import { adminDeleteRequest } from "@/lib/admin-requests.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 
@@ -124,9 +125,17 @@ function RequestsPage() {
   const [requests, setRequests] = useState<StudentRequest[] | null>(null);
   const [sentIds, setSentIds] = useState<Set<string>>(new Set());
   const [hasTeacherProfile, setHasTeacherProfile] = useState<boolean | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const removeRequest = async (id: string) => {
+    if (!confirm("Ștergi definitiv această cerere și propunerile ei?")) return;
+    const res = await adminDeleteRequest({ data: { requestId: id } }).catch(() => ({ ok: false, error: "Eroare de rețea" }));
+    if (res.ok) setRequests((prev) => (prev ?? []).filter((r) => r.id !== id));
+    else alert(res.error ?? "Nu s-a putut șterge.");
+  };
 
   useEffect(() => {
     if (!user) return;
+    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }).then(({ data }) => setIsAdmin(Boolean(data)));
     supabase
       .from("teacher_profiles")
       .select("user_id")
@@ -200,7 +209,14 @@ function RequestsPage() {
                     {r.level ?? "Nivel nespecificat"} · {new Date(r.created_at).toLocaleDateString("ro-RO", { day: "numeric", month: "long", year: "numeric" })}
                   </p>
                 </div>
-                <span className="rounded-full bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary">Deschisă</span>
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary">Deschisă</span>
+                  {isAdmin && (
+                    <button type="button" onClick={() => removeRequest(r.id)} aria-label="Șterge cererea" title="Șterge cererea (admin)" className="inline-flex h-8 w-8 items-center justify-center rounded-full text-destructive hover:bg-destructive/10">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
                 {r.is_online ? (
