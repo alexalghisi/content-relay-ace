@@ -464,6 +464,33 @@ export type Database = {
           },
         ]
       }
+      daily_seo_reports: {
+        Row: {
+          completed_at: string | null
+          error_message: string | null
+          report_date: string
+          reports: Json
+          started_at: string
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          error_message?: string | null
+          report_date: string
+          reports?: Json
+          started_at?: string
+          status?: string
+        }
+        Update: {
+          completed_at?: string | null
+          error_message?: string | null
+          report_date?: string
+          reports?: Json
+          started_at?: string
+          status?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
