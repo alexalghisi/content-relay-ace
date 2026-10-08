@@ -1,7 +1,7 @@
 # Roadmap
 
-- [ ] Verifică acum concurența și cererea de căutare din România; configurează monitorizarea SEO zilnică automată prin Semrush.
-- [ ] Aplică optimizări relevante pe paginile de meditații, păstrând modelul cerere–propunere și designul.
+- [x] Verifică acum concurența și cererea de căutare din România; configurează monitorizarea SEO zilnică automată prin Semrush.
+- [x] Aplică optimizări relevante pe paginile de meditații, păstrând modelul cerere–propunere și designul.
 
 - [x] Transformă orașul, materiile, nivelurile și tarifele profilului în selecții clare; include toate județele prin orașele disponibile.
 - [x] Adaugă modificarea ofertelor existente, păstrând pauza și ștergerea.

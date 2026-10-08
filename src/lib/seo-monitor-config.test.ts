@@ -1,3 +1,4 @@
+/// <reference types="bun" />
 import { describe, expect, test } from "bun:test";
 import { SEO_DOMAINS, SEO_MARKET, providerFailure, romaniaReportDate } from "./seo-monitor-config";
 
