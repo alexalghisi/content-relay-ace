@@ -125,14 +125,14 @@ function RezolvarePage() {
             <span className="inline-flex items-center gap-1"><Gauge className="h-4 w-4 text-primary" /> Dificultate: {rezolvare.dificultate}</span>
             <span className="inline-flex items-center gap-1"><Clock className="h-4 w-4 text-primary" /> Timp estimat: {rezolvare.timp_estimat_minute} min</span>
             <span className="rounded-full border border-border px-2 py-0.5 text-xs">
-              {rezolvare.status === "revizuit" ? "Verificată editorial" : "Ciornă — în curs de verificare"}
+              {rezolvare.status === "revizuit" ? "Verificată editorial" : "Făcută pe subiectul și baremul oficial — în verificare editorială"}
             </span>
           </p>
         )}
       </header>
 
-      <div className="mt-6 flex items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm">
-        <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600" />
+      <div className="mt-6 flex items-start gap-3 rounded-xl border border-border bg-muted/40 p-4 text-sm">
+        <AlertTriangle className="h-5 w-5 shrink-0 text-primary" />
         <p className="text-muted-foreground">
           Rezolvare generată și verificată editorial. Dacă găsești o eroare,{" "}
           <Link to="/contact" className="text-primary hover:underline">semnalează-ne</Link> — o corectăm rapid.

@@ -5,6 +5,9 @@ import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
 
+/** Doar rezolvările făcute pe subiectul oficial (PDF verificat) sunt publice și indexabile. */
+export const REZOLVARE_SURSA_OFICIALA = "subiect_oficial";
+
 function publicClient() {
   return createClient<Database>(
     process.env["SUPABASE_URL"] ?? process.env["VITE_SUPABASE_URL"]!,
@@ -23,7 +26,8 @@ export const getVariantaSesiune = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => ComboSchema.parse(input))
   .handler(async ({ data }) => {
     const sb = publicClient();
-    const [{ data: varianta }, { data: rezolvare }] = await Promise.all([
+    const prefix = `${data.materie}/${data.an}/${data.sesiune}-`;
+    const [{ data: varianta }, { data: rezolvare }, { data: names }] = await Promise.all([
       sb
         .from("bac_variante")
         .select("id, subiect_path, barem_path, specializare, are_rezolvare, updated_at")
@@ -37,9 +41,19 @@ export const getVariantaSesiune = createServerFn({ method: "GET" })
         .eq("materie", data.materie)
         .eq("an", data.an)
         .eq("sesiune", data.sesiune)
+        .eq("sursa", REZOLVARE_SURSA_OFICIALA)
         .maybeSingle(),
+      sb.rpc("bac_pdf_names", { _prefix: prefix }),
     ]);
-    return { varianta: varianta ?? null, rezolvare: rezolvare ?? null };
+    const files = new Set((names ?? []) as string[]);
+    return {
+      varianta: varianta ?? null,
+      rezolvare: rezolvare ?? null,
+      pdfs: {
+        subiect: files.has(`${prefix}subiect.pdf`) ? `${prefix}subiect.pdf` : null,
+        barem: files.has(`${prefix}barem.pdf`) ? `${prefix}barem.pdf` : null,
+      },
+    };
   });
 
 export const getRezolvare = createServerFn({ method: "GET" })
@@ -48,10 +62,11 @@ export const getRezolvare = createServerFn({ method: "GET" })
     const sb = publicClient();
     const { data: rezolvare } = await sb
       .from("bac_rezolvari")
-      .select("titlu, continut, dificultate, timp_estimat_minute, status, updated_at")
+      .select("titlu, continut, dificultate, timp_estimat_minute, status, updated_at, sursa")
       .eq("materie", data.materie)
       .eq("an", data.an)
       .eq("sesiune", data.sesiune)
+      .eq("sursa", REZOLVARE_SURSA_OFICIALA)
       .maybeSingle();
     return { rezolvare: rezolvare ?? null };
   });
@@ -61,6 +76,7 @@ export const listRezolvari = createServerFn({ method: "GET" }).handler(async () 
   const { data } = await sb
     .from("bac_rezolvari")
     .select("materie, an, sesiune, dificultate, timp_estimat_minute, status")
+    .eq("sursa", REZOLVARE_SURSA_OFICIALA)
     .order("an", { ascending: false })
     .limit(500);
   return { items: data ?? [] };

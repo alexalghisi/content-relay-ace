@@ -71,6 +71,20 @@
       "when": 1790303576835,
       "tag": "0009_rezolvari_generator_queue",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791456273425,
+      "tag": "0010_rezolvari_sursa_oficiala",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1791456640773,
+      "tag": "0011_bac_pdf_names_function",
+      "breakpoints": true
     }
   ]
 }
