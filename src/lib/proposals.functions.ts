@@ -127,3 +127,39 @@ export const rateProposal = createServerFn({ method: "POST" })
 
     return { ok: !error };
   });
+
+/** Elevul acceptă o propunere: cererea se închide și dispare din lista profesorilor. */
+export const acceptProposal = createServerFn({ method: "POST" })
+  .inputValidator((data: { requestId: string; token: string; proposalId: string }) => {
+    if (!data?.requestId || !data?.token || !data?.proposalId) throw new Error("Link invalid");
+    return { requestId: String(data.requestId), token: String(data.token), proposalId: String(data.proposalId) };
+  })
+  .handler(async ({ data }): Promise<{ ok: boolean }> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: req } = await supabaseAdmin
+      .from("student_requests").select("id,access_token").eq("id", data.requestId).maybeSingle();
+    if (!req || !req.access_token || req.access_token !== data.token) return { ok: false };
+    const { error } = await supabaseAdmin
+      .from("teacher_proposals").update({ status: "accepted" })
+      .eq("id", data.proposalId).eq("request_id", data.requestId);
+    if (error) return { ok: false };
+    await supabaseAdmin.from("teacher_proposals").update({ status: "declined" })
+      .eq("request_id", data.requestId).neq("id", data.proposalId);
+    await supabaseAdmin.from("student_requests").update({ status: "closed" }).eq("id", data.requestId);
+    return { ok: true };
+  });
+
+/** Elevul închide cererea (a găsit profesor în altă parte / nu mai are nevoie). */
+export const closeMyRequest = createServerFn({ method: "POST" })
+  .inputValidator((data: { requestId: string; token: string }) => {
+    if (!data?.requestId || !data?.token) throw new Error("Link invalid");
+    return { requestId: String(data.requestId), token: String(data.token) };
+  })
+  .handler(async ({ data }): Promise<{ ok: boolean }> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: req } = await supabaseAdmin
+      .from("student_requests").select("id,access_token").eq("id", data.requestId).maybeSingle();
+    if (!req || !req.access_token || req.access_token !== data.token) return { ok: false };
+    const { error } = await supabaseAdmin.from("student_requests").update({ status: "closed" }).eq("id", data.requestId);
+    return { ok: !error };
+  });
