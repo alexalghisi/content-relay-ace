@@ -64,7 +64,7 @@ export function SeoLanding(p: SeoLandingProps) {
       )}
       <header className="max-w-3xl">
         <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">
-          <BadgeCheck className="h-4 w-4" /> Profesori verificați • Fără comision
+          <BadgeCheck className="h-4 w-4" /> Chat direct elev–profesor • Fără comision
         </p>
         <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{p.h1}</h1>
         <p className="mt-4 text-lg text-muted-foreground leading-relaxed">{p.intro}</p>
@@ -169,7 +169,7 @@ export function SeoLanding(p: SeoLandingProps) {
         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-bold inline-flex items-center gap-2"><GraduationCap className="h-5 w-5 text-primary" /> {p.ctaFooter?.title ?? "Spune-ne ce profesor cauți"}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">{p.ctaFooter?.body ?? "Descrii o singură dată ce ai nevoie și profesorii verificați îți trimit propuneri. Gratuit, fără comision."}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{p.ctaFooter?.body ?? "Descrii o singură dată ce ai nevoie și profesorii interesați îți trimit propuneri. Gratuit, fără comision."}</p>
           </div>
           <Link to={p.ctaFooter?.to ?? "/meditatii"} search={(p.ctaFooter?.search ?? undefined) as never} className="btn-primary h-11 px-5">{p.ctaFooter?.label ?? "Cere ofertă"}</Link>
         </div>
