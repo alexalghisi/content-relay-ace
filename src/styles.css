@@ -156,3 +156,25 @@
   .card-soft { @apply rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]; }
   .field-input { @apply h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/25; }
 }
+
+/* Keep shared action labels centered even when utility classes override layers.
+   Selects, accordions and text fields retain their own content alignment. */
+:is(.btn-primary, .btn-outline, .btn-pill) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.25rem;
+  flex-shrink: 0;
+  padding-block: 0.5rem;
+}
+
+:is(.btn-primary, .btn-outline, .btn-pill) svg {
+  flex-shrink: 0;
+}
+
+button:not([role="combobox"]):not([aria-expanded]):not([role="checkbox"]):not([role="switch"]),
+a[role="button"] {
+  text-align: center;
+}
