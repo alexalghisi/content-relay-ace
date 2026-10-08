@@ -1,200 +1,200 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
-// SEO seed topics — high-value long-tail keywords from GSC + Semrush research
+// Un articol per apel. Cron-ul îl cheamă de 5 ori pe zi.
+// Teme legate direct de ce face platforma: elevul postează o cerere, profesorii trimit
+// propuneri cu dată/oră/tarif, chat direct, evaluare în stele — plus materii și examene.
 const SEED_TOPICS = [
-  "Cum te pregătești pentru admitere medicină — strategia pe materii (biologie, chimie, fizică)",
-  "Diferența între meditații individuale și grup — care funcționează pentru tine",
-  "Top 10 greșeli la BAC matematică și cum le eviți",
-  "Pregătire BAC română — eseu pe Mihai Eminescu (Luceafărul) explicat",
-  "Admitere UPB Electronică — proba scrisă, programa, subiecte",
-  "Meditații Cambridge Advanced (CAE) — cum iei C1 în 6 luni",
-  "Bursă Erasmus pentru liceeni și studenți — cum aplici în 2026",
-  "Cum alegi un liceu de top după Evaluarea Națională",
-  "Pregătire admitere Drept București — gramatică + raționament logic",
-  "Meditații chimie organică BAC — alcooli, acizi, esteri explicate simplu",
-  "Subiecte oficiale UMF Cluj — analiză 2022–2025 + predicții 2026",
-  "Cum recuperezi 2 ani de matematică în 6 luni pentru BAC",
-  "Diferențe între Evaluare Națională și Testele Naționale — calendar și probe",
-  "Cele mai bune profile de liceu pentru admitere medicină",
-  "Strategie de învățare cu tehnica Pomodoro pentru elevi de liceu",
-  "Cum te pregătești pentru proba orală de limba română la BAC",
-  "Admitere Politehnică Cluj (UTCN) — calendar, taxe, medii admitere",
-  "Cum scrii un CV pentru bursă în străinătate (UK, Germania, Olanda)",
-  "Meditații fizică — electromagnetism explicat pas cu pas",
-  "Tot ce trebuie să știi despre simularea BAC 2026 — date, probe, note",
+  "Cum ceri meditații fără să suni la zece profesori: cererea care aduce propuneri",
+  "Ce să scrii în cererea de meditații ca să primești propuneri potrivite",
+  "Cum compari propunerile profesorilor: tarif, disponibilitate, experiență",
+  "Prima lecție de meditații: ce întrebări să pui profesorului în chat",
+  "Cum evaluezi corect un profesor după lecție și de ce contează stelele",
+  "Meditații matematică pentru BAC M1: plan de pregătire pe luni",
+  "Meditații matematică clasa a 8-a: cum recuperezi materia pentru Evaluarea Națională",
+  "Meditații română BAC: cum structurezi eseul despre un roman interbelic",
+  "Meditații română: comentariul de text poetic pas cu pas",
+  "Meditații engleză pentru adulți: de la zero la conversație",
+  "Meditații engleză pentru BAC: proba orală și scrisă explicate",
+  "Meditații informatică BAC: algoritmii care apar cel mai des",
+  "Meditații chimie organică: cum înveți grupele funcționale",
+  "Meditații fizică BAC: mecanica fără formule memorate pe de rost",
+  "Meditații biologie pentru admitere la medicină: ce capitole contează",
+  "Meditații germană: când merită un profesor și când o aplicație",
+  "Meditații online sau acasă: cum alegi formatul potrivit",
+  "Cât costă meditațiile în 2026 și cum îți stabilești bugetul în cerere",
+  "Cum te organizezi în ultimele 3 luni înainte de BAC",
+  "Cum folosești subiectele BAC din anii trecuți ca să te antrenezi",
+  "Simularea BAC: ce faci cu rezultatul ca să crești nota",
+  "Evaluarea Națională la română: greșeli care costă puncte",
+  "Cum găsești elevi ca profesor: răspunde la cereri cu propuneri clare",
+  "Pentru profesori: cum scrii o propunere de meditații care e acceptată",
+  "Pentru părinți: cum îți dai seama dacă copilul are nevoie de meditații",
+  "Tehnici de învățare care funcționează: repetiția spațiată și testarea",
+  "Cum îți faci un program de studiu pe săptămână pentru clasa a 12-a",
+  "Admitere la Politehnică: ce materii pregătești și cu cât timp înainte",
+  "Admitere la Drept: cum te pregătești la limba română și logică",
+  "Meditații pentru copii cu dificultăți la matematică: răbdare și pași mici",
 ];
 
-interface GeneratedPost {
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string; // markdown
-  category: string;
-  tags: string[];
+const INTERNAL_LINKS = [
+  "/meditatii", "/cum-functioneaza", "/meditatii-online", "/meditatii-matematica", "/meditatii-romana",
+  "/meditatii-engleza", "/meditatii-germana", "/meditatii-franceza", "/meditatii-informatica", "/meditatii-fizica",
+  "/meditatii-chimie", "/meditatii-biologie", "/meditatii-bac", "/meditatii-evaluare-nationala", "/bac",
+  "/rezolvari", "/subiecte-bac", "/variante-bacalaureat", "/simulare-bacalaureat", "/calculator-medie-bac",
+  "/calculator-nota-admitere", "/admitere", "/preturi-meditatii", "/pentru-profesori", "/vreau-sa-dau-meditatii",
+  "/cereri", "/blog",
+];
+
+const CATEGORIES = ["BAC", "Admitere", "Meditații online", "Pentru profesori", "Pentru părinți", "Limbi străine", "Evaluare Națională", "Cum funcționează"];
+
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 70);
 }
+
+async function readText(res: Response): Promise<{ text: string; stop: string | null; error?: string }> {
+  const reader = res.body!.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  let text = "";
+  let stop: string | null = null;
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let i: number;
+    while ((i = buf.indexOf("\n")) >= 0) {
+      const line = buf.slice(0, i).trim();
+      buf = buf.slice(i + 1);
+      if (!line.startsWith("data:")) continue;
+      try {
+        const ev = JSON.parse(line.slice(5));
+        if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta") text += ev.delta.text;
+        else if (ev.type === "message_delta" && ev.delta?.stop_reason) stop = ev.delta.stop_reason;
+        else if (ev.type === "error") return { text, stop, error: JSON.stringify(ev.error ?? ev).slice(0, 300) };
+      } catch {
+        /* cadru incomplet */
+      }
+    }
+  }
+  return { text, stop };
+}
+
+const json = (b: unknown, status = 200) =>
+  new Response(JSON.stringify(b), { status, headers: { "Content-Type": "application/json" } });
 
 export const Route = createFileRoute("/api/public/hooks/auto-blog-post")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        // Auth via dedicated server-only secret (NOT the public anon key)
         const apiKey = request.headers.get("x-webhook-secret") ?? request.headers.get("x-api-key");
         const expected = process.env.BLOG_HOOK_SECRET;
-        if (!expected || !apiKey || apiKey.length !== expected.length || apiKey !== expected) {
-          return new Response(JSON.stringify({ error: "Unauthorized" }), {
-            status: 401,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
+        if (!expected || !apiKey || apiKey !== expected) return json({ error: "Unauthorized" }, 401);
 
         const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
-        if (!LOVABLE_API_KEY) {
-          return new Response(JSON.stringify({ error: "LOVABLE_API_KEY missing" }), { status: 500 });
-        }
+        if (!LOVABLE_API_KEY) return json({ error: "LOVABLE_API_KEY missing" }, 500);
 
-        // Get existing slugs/titles to avoid duplicates
+        // Limită de siguranță: maximum 5 articole publicate automat pe zi.
+        const since = new Date();
+        since.setUTCHours(0, 0, 0, 0);
+        const { count } = await supabaseAdmin
+          .from("blog_posts")
+          .select("id", { count: "exact", head: true })
+          .gte("published_at", since.toISOString());
+        if ((count ?? 0) >= 5) return json({ status: "daily_limit_reached" });
+
         const { data: existing } = await supabaseAdmin
           .from("blog_posts")
           .select("slug,title")
           .order("created_at", { ascending: false })
-          .limit(60);
+          .limit(300);
         const existingSlugs = new Set((existing ?? []).map((p) => p.slug));
-        const existingTitles = (existing ?? []).map((p) => p.title).slice(0, 25).join("\n - ");
+        const titles = (existing ?? []).map((p) => p.title);
+        const norm = (s: string) => slugify(s).split("-").filter((w) => w.length > 3);
+        const covered = (t: string) => {
+          const w = new Set(norm(t));
+          return titles.some((x) => {
+            const xs = norm(x);
+            const hit = xs.filter((y) => w.has(y)).length;
+            return xs.length > 0 && hit / Math.min(w.size, xs.length) >= 0.6;
+          });
+        };
+        const pool = SEED_TOPICS.filter((t) => !covered(t));
+        const topic = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
 
-        // Pick a topic not yet covered (basic heuristic)
-        const candidates = SEED_TOPICS.filter((t) => {
-          const seedSlug = t.toLowerCase().split(" ").slice(0, 4).join("-");
-          return !Array.from(existingSlugs).some((s) => s.includes(seedSlug.slice(0, 12)));
-        });
-        const pool = candidates.length ? candidates : SEED_TOPICS;
-        const topic = pool[Math.floor(Math.random() * pool.length)];
+        const prompt = `Ești redactor pentru MeditatiiDirect.ro, platformă din România care pune în legătură elevii cu profesorii într-un mod nou: elevul (sau părintele) postează gratuit, fără cont, o cerere de meditații (materie, nivel, oraș sau online, buget), iar profesorii îi trimit propuneri cu dată, oră, tarif și mesaj. Elevul compară propunerile, vorbește direct cu profesorul în chat și, după lecție, evaluează propunerea aleasă cu 1–5 stele. Platforma mai are arhivă de subiecte BAC oficiale, rezolvări explicate, simulări și calculatoare de medie.
 
-        const systemPrompt = `Ești redactor SEO senior pentru MeditatiiDirect.ro — platformă de meditații din România.
-Scrii articole în limba română, cu diacritice corecte (ă, â, î, ș, ț), optimizate la maximum pentru Google.
+${topic ? `Tema: „${topic}”.` : "Alege o temă nouă, utilă elevilor, părinților sau profesorilor din România, legată de meditații, BAC, Evaluarea Națională sau admitere."}
 
-REGULI STRICTE:
-- Lungime conținut: 600–900 cuvinte
-- Format markdown: titluri cu "## ", paragrafe normale, listele cu "- " sau "1. "
-- Adaugă MINIM 6 linkuri interne sub forma [text ancoră](/cale), folosind DOAR aceste URL-uri reale:
-  /meditatii, /meditatii-online, /meditatii-matematica, /meditatii-romana, /meditatii-engleza,
-  /meditatii-franceza, /meditatii-informatica, /meditatii-fizica, /meditatii-bac, /meditatii-evaluare-nationala,
-  /admitere, /subiecte-bac, /variante-bacalaureat, /simulari-bacalaureat-2026,
-  /grile-medicina, /grile-upb, /ore-online, /platforma-meditatii-online,
-  /profesori, /meditatori, /preturi-meditatii, /ofer-meditatii, /anunturi-meditatii,
-  /meditatii-la-domiciliu, /pentru-profesori, /blog
-- Folosește cifre reale plauzibile (tarife, procente, medii). Anul curent este 2026.
-- Titlu între 50 și 70 caractere, conține anul 2026 dacă e relevant
-- Excerpt între 140 și 160 caractere, descrie clar beneficiul cititorului
-- Slug url-friendly fără diacritice, separat cu liniuțe, max 60 caractere, NU repeta sluguri existente
-- Category: una singură ("BAC", "Admitere", "Meditații online", "Pentru profesori", "Limbi străine", "Evaluare Națională", "Burse & finanțare")
-- Tags: 3-5 cuvinte cheie scurte`;
+Titluri deja publicate (NU repeta tema, alege alt unghi):
+${titles.slice(0, 120).map((t) => `- ${t}`).join("\n")}
 
-        const userPrompt = `Scrie un articol nou SEO-optimizat la maxim despre subiectul: "${topic}".
+Reguli:
+- Română cu diacritice, ton cald, concret, util. 900–1300 de cuvinte. Răspunde direct la întrebarea cititorului în primul paragraf.
+- Markdown: secțiuni "## ", subsecțiuni "### ", liste, un mic exemplu practic sau un plan pe pași.
+- NU inventa cifre, statistici, studii, citate, mărturii, nume de profesori sau număr de profesori/elevi pe platformă. Fără „profesori verificați”, fără liste de profesori. Tarifele doar ca interval orientativ și spune că fiecare profesor își trimite tariful în propunere.
+- Unde e firesc, explică pe scurt cum ajută modelul cerere → propuneri → chat → stele. Nu transforma tot articolul în reclamă.
+- Minim 5 linkuri interne [text](/cale), DOAR din: ${INTERNAL_LINKS.join(", ")}. Încheie cu un îndemn către [cererea gratuită](/meditatii).
+- Data curentă: ${new Date().toISOString().slice(0, 10)}.
 
-Sluguri DEJA folosite (nu le repeta):
- - ${existingTitles}
+Răspunde STRICT cu un obiect JSON, fără text în afară, cu cheile:
+{"title": "50–70 caractere", "excerpt": "140–160 caractere", "category": una din ${JSON.stringify(CATEGORIES)}, "tags": ["3–5 etichete"], "content": "markdown"}`;
 
-Returnează DOAR JSON valid cu schema: { title, slug, excerpt, content, category, tags }.`;
-
-        const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/messages", {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
+          headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json", "X-Lovable-AIG-SDK": "fetch" },
           body: JSON.stringify({
-            model: "google/gemini-2.5-pro",
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: userPrompt },
-            ],
-            tools: [
-              {
-                type: "function",
-                function: {
-                  name: "create_blog_post",
-                  description: "Create one SEO-optimized blog post",
-                  parameters: {
-                    type: "object",
-                    properties: {
-                      title: { type: "string", minLength: 30, maxLength: 80 },
-                      slug: { type: "string", pattern: "^[a-z0-9-]+$", maxLength: 70 },
-                      excerpt: { type: "string", minLength: 120, maxLength: 180 },
-                      content: { type: "string", minLength: 1500 },
-                      category: { type: "string" },
-                      tags: { type: "array", items: { type: "string" }, minItems: 3, maxItems: 6 },
-                    },
-                    required: ["title", "slug", "excerpt", "content", "category", "tags"],
-                    additionalProperties: false,
-                  },
-                },
-              },
-            ],
-            tool_choice: { type: "function", function: { name: "create_blog_post" } },
+            model: "anthropic/claude-sonnet-5",
+            max_tokens: 16000,
+            stream: true,
+            messages: [{ role: "user", content: prompt }],
           }),
         });
-
         if (!aiRes.ok) {
-          const errText = await aiRes.text();
-          if (aiRes.status === 429) {
-            return new Response(JSON.stringify({ error: "rate_limited", detail: errText }), { status: 429 });
-          }
-          if (aiRes.status === 402) {
-            return new Response(JSON.stringify({ error: "credits_exhausted" }), { status: 402 });
-          }
-          return new Response(JSON.stringify({ error: "ai_failed", detail: errText }), { status: 502 });
+          const detail = (await aiRes.text().catch(() => "")).slice(0, 300);
+          return json({ error: "ai_failed", detail }, aiRes.status === 402 || aiRes.status === 403 || aiRes.status === 429 ? aiRes.status : 502);
         }
+        const { text, stop, error } = await readText(aiRes);
+        if (error) return json({ error: "ai_stream_error", detail: error }, 502);
+        if (stop === "refusal") return json({ error: "refusal" }, 422);
 
-        const aiData = await aiRes.json();
-        const toolCall = aiData?.choices?.[0]?.message?.tool_calls?.[0];
-        if (!toolCall?.function?.arguments) {
-          return new Response(JSON.stringify({ error: "no_tool_call", raw: aiData }), { status: 502 });
-        }
-
-        let post: GeneratedPost;
+        let post: { title: string; excerpt: string; category: string; tags: string[]; content: string };
         try {
-          post = JSON.parse(toolCall.function.arguments) as GeneratedPost;
-        } catch (e) {
-          return new Response(JSON.stringify({ error: "parse_failed", raw: toolCall.function.arguments }), {
-            status: 502,
-          });
+          const s = text.indexOf("{");
+          const e = text.lastIndexOf("}");
+          post = JSON.parse(text.slice(s, e + 1));
+        } catch {
+          return json({ error: "parse_failed" }, 502);
         }
+        if (!post?.title || !post?.content || post.content.length < 3000) return json({ error: "too_short" }, 502);
+        if (covered(post.title)) return json({ status: "duplicate_skipped", title: post.title });
 
-        // Ensure unique slug
-        let finalSlug = post.slug;
-        if (existingSlugs.has(finalSlug)) {
-          finalSlug = `${post.slug}-${new Date().toISOString().slice(0, 10)}`;
-        }
+        let slug = slugify(post.title);
+        if (existingSlugs.has(slug)) slug = `${slug}-${new Date().toISOString().slice(0, 10)}`;
 
         const { data: inserted, error: insertErr } = await supabaseAdmin
           .from("blog_posts")
           .insert({
-            title: post.title,
-            slug: finalSlug,
-            excerpt: post.excerpt,
+            title: post.title.slice(0, 90),
+            slug,
+            excerpt: (post.excerpt ?? "").slice(0, 200),
             content: post.content,
-            category: post.category,
-            tags: post.tags,
+            category: CATEGORIES.includes(post.category) ? post.category : "Meditații online",
+            tags: Array.isArray(post.tags) ? post.tags.slice(0, 6) : [],
             is_published: true,
             published_at: new Date().toISOString(),
           })
           .select("id,slug,title")
           .single();
+        if (insertErr) return json({ error: "insert_failed", detail: insertErr.message }, 500);
 
-        if (insertErr) {
-          return new Response(JSON.stringify({ error: "insert_failed", detail: insertErr.message }), { status: 500 });
-        }
-
-        return new Response(
-          JSON.stringify({
-            success: true,
-            topic,
-            post: inserted,
-            url: `https://meditatiidirect.ro/blog/${inserted?.slug}`,
-          }),
-          { headers: { "Content-Type": "application/json" } },
-        );
+        return json({ success: true, topic, post: inserted, url: `https://meditatiidirect.ro/blog/${inserted?.slug}` });
       },
     },
   },
