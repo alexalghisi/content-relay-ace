@@ -128,9 +128,20 @@ export const Route = createFileRoute("/api/public/hooks/auto-blog-post")({
         const pool = SEED_TOPICS.filter((t) => !covered(t));
         const topic = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
 
+        const { data: seoReport } = await supabaseAdmin.from("daily_seo_reports")
+          .select("report_date,reports").eq("status", "complete")
+          .order("report_date", { ascending: false }).limit(1).maybeSingle();
+        const research = seoReport?.reports as { keywords?: { data?: { rows?: unknown[][] } } } | null;
+        const demand = research?.keywords?.data?.rows?.filter(row =>
+          typeof row[0] === "string" && /^[a-zA-Z0-9ăâîșțĂÂÎȘȚ –-]+$/.test(row[0]) && Number.isFinite(Number(row[1]))
+        ).map(row => ({ keyword: String(row[0]), volume: Number(row[1]) }))
+          .sort((a, b) => b.volume - a.volume).slice(0, 5) ?? [];
+
         const prompt = `Ești redactor pentru MeditatiiDirect.ro, platformă din România care pune în legătură elevii cu profesorii într-un mod nou: elevul (sau părintele) postează gratuit, fără cont, o cerere de meditații (materie, nivel, oraș sau online, buget), iar profesorii îi trimit propuneri cu dată, oră, tarif și mesaj. Elevul compară propunerile, vorbește direct cu profesorul în chat și, după lecție, evaluează propunerea aleasă cu 1–5 stele. Platforma mai are arhivă de subiecte BAC oficiale, rezolvări explicate, simulări și calculatoare de medie.
 
 ${topic ? `Tema: „${topic}”.` : "Alege o temă nouă, utilă elevilor, părinților sau profesorilor din România, legată de meditații, BAC, Evaluarea Națională sau admitere."}
+
+${demand.length ? `Cercetare Semrush România din ${seoReport?.report_date}: ${demand.map(item => `${item.keyword} (~${item.volume} căutări/lună estimate)`).join(", ")}. Prioritizează un unghi util și nou legat de această cerere, fără repetarea articolelor existente. Datele sunt context editorial, NU le publica drept statistici proprii și NU sunt Google Trends sau poziții live.` : ""}
 
 Titluri deja publicate (NU repeta tema, alege alt unghi):
 ${titles.slice(0, 120).map((t) => `- ${t}`).join("\n")}
