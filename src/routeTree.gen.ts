@@ -28,6 +28,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CumFunctioneazaRouteImport } from './routes/cum-functioneaza'
 import { Route as DespreRouteImport } from './routes/despre'
 import { Route as EvaluareNationalaRouteImport } from './routes/evaluare-nationala'
+import { Route as EvaluareNationalaClujRouteImport } from './routes/evaluare-nationala-cluj'
 import { Route as GrileAdmitereMedicina2026RouteImport } from './routes/grile-admitere-medicina-2026'
 import { Route as GrileMedicinaRouteImport } from './routes/grile-medicina'
 import { Route as GrileUpbRouteImport } from './routes/grile-upb'
@@ -44,6 +45,7 @@ import { Route as MeditatiiBiologieRouteImport } from './routes/meditatii-biolog
 import { Route as MeditatiiChimieRouteImport } from './routes/meditatii-chimie'
 import { Route as MeditatiiClasa12RouteImport } from './routes/meditatii-clasa-12'
 import { Route as MeditatiiClasa8RouteImport } from './routes/meditatii-clasa-8'
+import { Route as MeditatiiClujRouteImport } from './routes/meditatii-cluj'
 import { Route as MeditatiiDefinitivatRouteImport } from './routes/meditatii-definitivat'
 import { Route as MeditatiiEnglezaRouteImport } from './routes/meditatii-engleza'
 import { Route as MeditatiiEvaluareNationalaRouteImport } from './routes/meditatii-evaluare-nationala'
@@ -232,6 +234,11 @@ const EvaluareNationalaRoute = EvaluareNationalaRouteImport.update({
   path: '/evaluare-nationala',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EvaluareNationalaClujRoute = EvaluareNationalaClujRouteImport.update({
+  id: '/evaluare-nationala-cluj',
+  path: '/evaluare-nationala-cluj',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GrileAdmitereMedicina2026Route =
   GrileAdmitereMedicina2026RouteImport.update({
     id: '/grile-admitere-medicina-2026',
@@ -313,6 +320,11 @@ const MeditatiiClasa12Route = MeditatiiClasa12RouteImport.update({
 const MeditatiiClasa8Route = MeditatiiClasa8RouteImport.update({
   id: '/meditatii-clasa-8',
   path: '/meditatii-clasa-8',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiClujRoute = MeditatiiClujRouteImport.update({
+  id: '/meditatii-cluj',
+  path: '/meditatii-cluj',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeditatiiDefinitivatRoute = MeditatiiDefinitivatRouteImport.update({
@@ -807,6 +819,7 @@ export interface FileRoutesByFullPath {
   '/cum-functioneaza': typeof CumFunctioneazaRoute
   '/despre': typeof DespreRoute
   '/evaluare-nationala': typeof EvaluareNationalaRoute
+  '/evaluare-nationala-cluj': typeof EvaluareNationalaClujRoute
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
@@ -823,6 +836,7 @@ export interface FileRoutesByFullPath {
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
+  '/meditatii-cluj': typeof MeditatiiClujRoute
   '/meditatii-definitivat': typeof MeditatiiDefinitivatRoute
   '/meditatii-engleza': typeof MeditatiiEnglezaRoute
   '/meditatii-evaluare-nationala': typeof MeditatiiEvaluareNationalaRoute
@@ -935,6 +949,7 @@ export interface FileRoutesByTo {
   '/cum-functioneaza': typeof CumFunctioneazaRoute
   '/despre': typeof DespreRoute
   '/evaluare-nationala': typeof EvaluareNationalaRoute
+  '/evaluare-nationala-cluj': typeof EvaluareNationalaClujRoute
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
@@ -951,6 +966,7 @@ export interface FileRoutesByTo {
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
+  '/meditatii-cluj': typeof MeditatiiClujRoute
   '/meditatii-definitivat': typeof MeditatiiDefinitivatRoute
   '/meditatii-engleza': typeof MeditatiiEnglezaRoute
   '/meditatii-evaluare-nationala': typeof MeditatiiEvaluareNationalaRoute
@@ -1062,6 +1078,7 @@ export interface FileRoutesById {
   '/cum-functioneaza': typeof CumFunctioneazaRoute
   '/despre': typeof DespreRoute
   '/evaluare-nationala': typeof EvaluareNationalaRoute
+  '/evaluare-nationala-cluj': typeof EvaluareNationalaClujRoute
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
@@ -1078,6 +1095,7 @@ export interface FileRoutesById {
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
+  '/meditatii-cluj': typeof MeditatiiClujRoute
   '/meditatii-definitivat': typeof MeditatiiDefinitivatRoute
   '/meditatii-engleza': typeof MeditatiiEnglezaRoute
   '/meditatii-evaluare-nationala': typeof MeditatiiEvaluareNationalaRoute
@@ -1192,6 +1210,7 @@ export interface FileRouteTypes {
     | '/cum-functioneaza'
     | '/despre'
     | '/evaluare-nationala'
+    | '/evaluare-nationala-cluj'
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
@@ -1208,6 +1227,7 @@ export interface FileRouteTypes {
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
+    | '/meditatii-cluj'
     | '/meditatii-definitivat'
     | '/meditatii-engleza'
     | '/meditatii-evaluare-nationala'
@@ -1320,6 +1340,7 @@ export interface FileRouteTypes {
     | '/cum-functioneaza'
     | '/despre'
     | '/evaluare-nationala'
+    | '/evaluare-nationala-cluj'
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
@@ -1336,6 +1357,7 @@ export interface FileRouteTypes {
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
+    | '/meditatii-cluj'
     | '/meditatii-definitivat'
     | '/meditatii-engleza'
     | '/meditatii-evaluare-nationala'
@@ -1446,6 +1468,7 @@ export interface FileRouteTypes {
     | '/cum-functioneaza'
     | '/despre'
     | '/evaluare-nationala'
+    | '/evaluare-nationala-cluj'
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
@@ -1462,6 +1485,7 @@ export interface FileRouteTypes {
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
+    | '/meditatii-cluj'
     | '/meditatii-definitivat'
     | '/meditatii-engleza'
     | '/meditatii-evaluare-nationala'
@@ -1575,6 +1599,7 @@ export interface RootRouteChildren {
   CumFunctioneazaRoute: typeof CumFunctioneazaRoute
   DespreRoute: typeof DespreRoute
   EvaluareNationalaRoute: typeof EvaluareNationalaRoute
+  EvaluareNationalaClujRoute: typeof EvaluareNationalaClujRoute
   GrileAdmitereMedicina2026Route: typeof GrileAdmitereMedicina2026Route
   GrileMedicinaRoute: typeof GrileMedicinaRoute
   GrileUpbRoute: typeof GrileUpbRoute
@@ -1591,6 +1616,7 @@ export interface RootRouteChildren {
   MeditatiiChimieRoute: typeof MeditatiiChimieRoute
   MeditatiiClasa12Route: typeof MeditatiiClasa12Route
   MeditatiiClasa8Route: typeof MeditatiiClasa8Route
+  MeditatiiClujRoute: typeof MeditatiiClujRoute
   MeditatiiDefinitivatRoute: typeof MeditatiiDefinitivatRoute
   MeditatiiEnglezaRoute: typeof MeditatiiEnglezaRoute
   MeditatiiEvaluareNationalaRoute: typeof MeditatiiEvaluareNationalaRoute
@@ -1813,6 +1839,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EvaluareNationalaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/evaluare-nationala-cluj': {
+      id: '/evaluare-nationala-cluj'
+      path: '/evaluare-nationala-cluj'
+      fullPath: '/evaluare-nationala-cluj'
+      preLoaderRoute: typeof EvaluareNationalaClujRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/grile-admitere-medicina-2026': {
       id: '/grile-admitere-medicina-2026'
       path: '/grile-admitere-medicina-2026'
@@ -1923,6 +1956,13 @@ declare module '@tanstack/react-router' {
       path: '/meditatii-clasa-8'
       fullPath: '/meditatii-clasa-8'
       preLoaderRoute: typeof MeditatiiClasa8RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-cluj': {
+      id: '/meditatii-cluj'
+      path: '/meditatii-cluj'
+      fullPath: '/meditatii-cluj'
+      preLoaderRoute: typeof MeditatiiClujRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-definitivat': {
@@ -2643,6 +2683,7 @@ const rootRouteChildren: RootRouteChildren = {
   CumFunctioneazaRoute: CumFunctioneazaRoute,
   DespreRoute: DespreRoute,
   EvaluareNationalaRoute: EvaluareNationalaRoute,
+  EvaluareNationalaClujRoute: EvaluareNationalaClujRoute,
   GrileAdmitereMedicina2026Route: GrileAdmitereMedicina2026Route,
   GrileMedicinaRoute: GrileMedicinaRoute,
   GrileUpbRoute: GrileUpbRoute,
@@ -2659,6 +2700,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiChimieRoute: MeditatiiChimieRoute,
   MeditatiiClasa12Route: MeditatiiClasa12Route,
   MeditatiiClasa8Route: MeditatiiClasa8Route,
+  MeditatiiClujRoute: MeditatiiClujRoute,
   MeditatiiDefinitivatRoute: MeditatiiDefinitivatRoute,
   MeditatiiEnglezaRoute: MeditatiiEnglezaRoute,
   MeditatiiEvaluareNationalaRoute: MeditatiiEvaluareNationalaRoute,
