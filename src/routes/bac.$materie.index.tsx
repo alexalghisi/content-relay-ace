@@ -48,6 +48,7 @@ export const Route = createFileRoute("/bac/$materie/")({
     return {
       meta: [
         { title }, { name: "description", content: desc },
+        ...(ani.length ? [] : [{ name: "robots", content: "noindex, follow" }]),
         { name: "keywords", content: `subiecte bac ${subject.nameLower}, variante bac ${subject.nameLower}, barem bac ${subject.nameLower}, bacalaureat ${subject.nameLower}` },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
