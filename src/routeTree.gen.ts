@@ -16,6 +16,7 @@ import { Route as AdmitereFacultate2026RouteImport } from './routes/admitere-fac
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditatii'
 import { Route as AnunturiMeditatiiBacRouteImport } from './routes/anunturi-meditatii-bac'
+import { Route as CalculatorMediaEvaluareNationalaRouteImport } from './routes/calculator-media-evaluare-nationala'
 import { Route as CalculatorMedieBacRouteImport } from './routes/calculator-medie-bac'
 import { Route as CalculatorNotaAdmitereRouteImport } from './routes/calculator-nota-admitere'
 import { Route as CastigaDinMeditatiiRouteImport } from './routes/castiga-din-meditatii'
@@ -26,6 +27,7 @@ import { Route as ContRouteImport } from './routes/cont'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CumFunctioneazaRouteImport } from './routes/cum-functioneaza'
 import { Route as DespreRouteImport } from './routes/despre'
+import { Route as EvaluareNationalaRouteImport } from './routes/evaluare-nationala'
 import { Route as GrileAdmitereMedicina2026RouteImport } from './routes/grile-admitere-medicina-2026'
 import { Route as GrileMedicinaRouteImport } from './routes/grile-medicina'
 import { Route as GrileUpbRouteImport } from './routes/grile-upb'
@@ -169,6 +171,12 @@ const AnunturiMeditatiiBacRoute = AnunturiMeditatiiBacRouteImport.update({
   path: '/anunturi-meditatii-bac',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CalculatorMediaEvaluareNationalaRoute =
+  CalculatorMediaEvaluareNationalaRouteImport.update({
+    id: '/calculator-media-evaluare-nationala',
+    path: '/calculator-media-evaluare-nationala',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CalculatorMedieBacRoute = CalculatorMedieBacRouteImport.update({
   id: '/calculator-medie-bac',
   path: '/calculator-medie-bac',
@@ -217,6 +225,11 @@ const CumFunctioneazaRoute = CumFunctioneazaRouteImport.update({
 const DespreRoute = DespreRouteImport.update({
   id: '/despre',
   path: '/despre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvaluareNationalaRoute = EvaluareNationalaRouteImport.update({
+  id: '/evaluare-nationala',
+  path: '/evaluare-nationala',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GrileAdmitereMedicina2026Route =
@@ -782,6 +795,7 @@ export interface FileRoutesByFullPath {
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
+  '/calculator-media-evaluare-nationala': typeof CalculatorMediaEvaluareNationalaRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
@@ -792,6 +806,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/cum-functioneaza': typeof CumFunctioneazaRoute
   '/despre': typeof DespreRoute
+  '/evaluare-nationala': typeof EvaluareNationalaRoute
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
@@ -908,6 +923,7 @@ export interface FileRoutesByTo {
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
+  '/calculator-media-evaluare-nationala': typeof CalculatorMediaEvaluareNationalaRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
@@ -918,6 +934,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/cum-functioneaza': typeof CumFunctioneazaRoute
   '/despre': typeof DespreRoute
+  '/evaluare-nationala': typeof EvaluareNationalaRoute
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
@@ -1033,6 +1050,7 @@ export interface FileRoutesById {
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
+  '/calculator-media-evaluare-nationala': typeof CalculatorMediaEvaluareNationalaRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
@@ -1043,6 +1061,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/cum-functioneaza': typeof CumFunctioneazaRoute
   '/despre': typeof DespreRoute
+  '/evaluare-nationala': typeof EvaluareNationalaRoute
   '/grile-admitere-medicina-2026': typeof GrileAdmitereMedicina2026Route
   '/grile-medicina': typeof GrileMedicinaRoute
   '/grile-upb': typeof GrileUpbRoute
@@ -1161,6 +1180,7 @@ export interface FileRouteTypes {
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
+    | '/calculator-media-evaluare-nationala'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
     | '/castiga-din-meditatii'
@@ -1171,6 +1191,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cum-functioneaza'
     | '/despre'
+    | '/evaluare-nationala'
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
@@ -1287,6 +1308,7 @@ export interface FileRouteTypes {
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
+    | '/calculator-media-evaluare-nationala'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
     | '/castiga-din-meditatii'
@@ -1297,6 +1319,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cum-functioneaza'
     | '/despre'
+    | '/evaluare-nationala'
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
@@ -1411,6 +1434,7 @@ export interface FileRouteTypes {
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
+    | '/calculator-media-evaluare-nationala'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
     | '/castiga-din-meditatii'
@@ -1421,6 +1445,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cum-functioneaza'
     | '/despre'
+    | '/evaluare-nationala'
     | '/grile-admitere-medicina-2026'
     | '/grile-medicina'
     | '/grile-upb'
@@ -1538,6 +1563,7 @@ export interface RootRouteChildren {
   AdsDottxtRoute: typeof AdsDottxtRoute
   AnunturiMeditatiiRoute: typeof AnunturiMeditatiiRoute
   AnunturiMeditatiiBacRoute: typeof AnunturiMeditatiiBacRoute
+  CalculatorMediaEvaluareNationalaRoute: typeof CalculatorMediaEvaluareNationalaRoute
   CalculatorMedieBacRoute: typeof CalculatorMedieBacRoute
   CalculatorNotaAdmitereRoute: typeof CalculatorNotaAdmitereRoute
   CastigaDinMeditatiiRoute: typeof CastigaDinMeditatiiRoute
@@ -1548,6 +1574,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CumFunctioneazaRoute: typeof CumFunctioneazaRoute
   DespreRoute: typeof DespreRoute
+  EvaluareNationalaRoute: typeof EvaluareNationalaRoute
   GrileAdmitereMedicina2026Route: typeof GrileAdmitereMedicina2026Route
   GrileMedicinaRoute: typeof GrileMedicinaRoute
   GrileUpbRoute: typeof GrileUpbRoute
@@ -1702,6 +1729,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnunturiMeditatiiBacRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/calculator-media-evaluare-nationala': {
+      id: '/calculator-media-evaluare-nationala'
+      path: '/calculator-media-evaluare-nationala'
+      fullPath: '/calculator-media-evaluare-nationala'
+      preLoaderRoute: typeof CalculatorMediaEvaluareNationalaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calculator-medie-bac': {
       id: '/calculator-medie-bac'
       path: '/calculator-medie-bac'
@@ -1770,6 +1804,13 @@ declare module '@tanstack/react-router' {
       path: '/despre'
       fullPath: '/despre'
       preLoaderRoute: typeof DespreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evaluare-nationala': {
+      id: '/evaluare-nationala'
+      path: '/evaluare-nationala'
+      fullPath: '/evaluare-nationala'
+      preLoaderRoute: typeof EvaluareNationalaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/grile-admitere-medicina-2026': {
@@ -2590,6 +2631,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdsDottxtRoute: AdsDottxtRoute,
   AnunturiMeditatiiRoute: AnunturiMeditatiiRoute,
   AnunturiMeditatiiBacRoute: AnunturiMeditatiiBacRoute,
+  CalculatorMediaEvaluareNationalaRoute: CalculatorMediaEvaluareNationalaRoute,
   CalculatorMedieBacRoute: CalculatorMedieBacRoute,
   CalculatorNotaAdmitereRoute: CalculatorNotaAdmitereRoute,
   CastigaDinMeditatiiRoute: CastigaDinMeditatiiRoute,
@@ -2600,6 +2642,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CumFunctioneazaRoute: CumFunctioneazaRoute,
   DespreRoute: DespreRoute,
+  EvaluareNationalaRoute: EvaluareNationalaRoute,
   GrileAdmitereMedicina2026Route: GrileAdmitereMedicina2026Route,
   GrileMedicinaRoute: GrileMedicinaRoute,
   GrileUpbRoute: GrileUpbRoute,

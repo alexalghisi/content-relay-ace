@@ -20,7 +20,7 @@ const FAQ = [
   },
   {
     q: "Media claselor V–VIII intră în nota de admitere la liceu?",
-    a: "Nu. Admiterea se face pe baza mediei Evaluării Naționale. Media anilor V–VIII se folosește doar la departajare, când doi candidați au aceeași medie de EN. Verifică methodology la zi pe edu.ro și la liceul la care candidezi.",
+    a: "Nu. Admiterea se face pe baza mediei Evaluării Naționale. Media anilor V–VIII se folosește doar la departajare, când doi candidați au aceeași medie de EN. Verifică metodologia la zi pe edu.ro și la liceul la care candidezi.",
   },
   {
     q: "Cât durează probele scrise?",
@@ -97,7 +97,7 @@ function EvaluareNationalaHub() {
         <h2 className="flex items-center gap-2 text-xl font-semibold"><CalendarDays className="h-5 w-5 text-primary" /> Calendarul probelor</h2>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
           Date conform metodologiei pentru anul școlar 2025–2026 (Ordinul 6.058/29.08.2025). Calendarul se poate modifica prin
-          ordin ulterioar — verifică pe <a className="text-primary hover:underline" href="https://www.edu.ro/evaluare_nationala_ENVIII" rel="noopener noreferrer" target="_blank">edu.ro</a>.
+          ordin ulterioară — verifică pe <a className="text-primary hover:underline" href="https://www.edu.ro/evaluare_nationala_ENVIII" rel="noopener noreferrer" target="_blank">edu.ro</a>.
         </p>
         <ul className="mt-4 max-w-2xl divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
           {CALENDAR.map((c) => (

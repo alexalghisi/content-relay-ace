@@ -16,7 +16,7 @@ const FAQ = [
     a: "Două pentru elevii de la majoritate (limba română și matematică) și trei pentru elevii de la minoritățile naționale (se adaugă limba maternă).",
   },
   {
-    q: "Ce notăPromovarea Evaluării Naționale?",
+    q: "Ce medie trebuie ca să promovezi Evaluarea Națională?",
     a: "Media finală trebuie să fie cel puțin 5,00. Notele sub 5,00 la o probă nu anulează promovarea în mod automat, dar trag media în jos.",
   },
   {
