@@ -17,10 +17,18 @@ export interface SeoPageConfig {
   ctaSecondary?: SeoLandingProps["ctaSecondary"];
   ctaFooter?: SeoLandingProps["ctaFooter"];
   sections?: SeoLandingProps["sections"];
+  image?: string;          // URL absolut 1200x630 pentru og:image
+}
+
+const SUBJECT_OG = ["matematica", "romana", "engleza", "franceza", "germana", "biologie", "chimie", "fizica", "geografie", "istorie", "informatica"];
+function defaultImage(path: string) {
+  const m = /^\/meditatii-([a-z]+)$/.exec(path);
+  return m && SUBJECT_OG.includes(m[1]) ? `${SITE}/og/meditatii/${m[1]}.jpg` : undefined;
 }
 
 export function seoPage(c: SeoPageConfig) {
   const url = `${SITE}${c.path}`;
+  const image = c.image ?? defaultImage(c.path);
   return {
     head: () => ({
       meta: [
@@ -33,6 +41,14 @@ export function seoPage(c: SeoPageConfig) {
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: c.title },
         { name: "twitter:description", content: c.description },
+        ...(image
+          ? [
+              { property: "og:image", content: image },
+              { property: "og:image:width", content: "1200" },
+              { property: "og:image:height", content: "630" },
+              { name: "twitter:image", content: image },
+            ]
+          : []),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: c.faqs
