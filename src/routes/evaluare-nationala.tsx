@@ -151,6 +151,9 @@ function EvaluareNationalaHub() {
           <Link to="/calculator-media-evaluare-nationala" className="inline-flex rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">
             Calculator de medie
           </Link>
+          <Link to="/evaluare-nationala-cluj" className="inline-flex rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">
+            Evaluarea Națională în Cluj
+          </Link>
         </div>
       </section>
     </main>
