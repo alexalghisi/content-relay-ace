@@ -4,6 +4,7 @@ import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play, RotateCcw, Timer } from "lucide-react";
 import { getBacSubject, BAC_SESSIONS, BAC_YEARS, bacPdfUrl, type BacSessionSlug } from "@/data/bac-catalog";
+import { getVarianteMaterie, type VariantaDisponibila } from "@/lib/bac-content.functions";
 import { LazyPdfPreview } from "@/components/lazy-pdf-preview";
 import { CalmStart } from "@/components/calm-start";
 
