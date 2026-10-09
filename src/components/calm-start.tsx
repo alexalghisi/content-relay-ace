@@ -32,8 +32,13 @@ export function CalmStart({ onDone }: { onDone: () => void }) {
   }, [running]);
 
   const elapsed = TOTAL_SEC - left;
-  const pos = elapsed % CYCLE;
-  const phase = PHASES.find((p) => pos < p.seconds + PHASES.slice(0, PHASES.indexOf(p)).reduce((s, q) => s + q.seconds, 0)) ?? PHASES[PHASES.length - 1];
+  let pos = elapsed % CYCLE;
+  let idx = 0;
+  for (let i = 0; i < PHASES.length; i++) {
+    if (pos < PHASES[i].seconds) { idx = i; break; }
+    pos -= PHASES[i].seconds;
+  }
+  const phase = PHASES[idx];
 
   return (
     <section className="card-soft mt-8 p-5 sm:p-6" aria-labelledby="calm-title">
