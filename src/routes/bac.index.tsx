@@ -1,7 +1,8 @@
-// Hub global BAC: /bac — toate materiile.
+// Hub global BAC: /bac — toate materiile, cu câte variante reale avem pentru fiecare.
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen } from "lucide-react";
-import { BAC_SUBJECTS, BAC_YEARS } from "@/data/bac-catalog";
+import { BAC_SUBJECTS } from "@/data/bac-catalog";
+import { getArhivaBAC } from "@/lib/bac-content.functions";
 import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { AdSenseSlot } from "@/components/ads/adsense";
 import { BacCountdown } from "@/components/bac-countdown";
@@ -9,11 +10,34 @@ import { NewsletterSignup } from "@/components/newsletter-signup";
 
 const SITE = "https://meditatiidirect.ro";
 
+interface ContorMaterie {
+  materie: string;
+  ani: number;
+  sesiuni: number;
+  cuBarem: number;
+  ultimul_an: number;
+}
+
 export const Route = createFileRoute("/bac/")({
-  head: () => {
+  loader: async () => {
+    let materii: ContorMaterie[] = [];
+    try {
+      const r = await getArhivaBAC();
+      materii = r.materii;
+    } catch {
+      /* fără date — afișăm materiile fără numărătoare */
+    }
+    return { materii };
+  },
+  head: ({ loaderData }) => {
     const url = `${SITE}/bac`;
-    const title = `Subiecte BAC 2010–2026 — Toate materiile, toate sesiunile (PDF) | MeditatiiDirect.ro`;
-    const desc = `Arhivă completă subiecte BAC ${BAC_YEARS[0]}–${BAC_YEARS[BAC_YEARS.length - 1]}: ${BAC_SUBJECTS.length} materii, toate variantele și baremele oficiale. Descărcare PDF gratuită.`;
+    const materii = loaderData?.materii ?? [];
+    const total = materii.reduce((s, m) => s + m.sesiuni, 0);
+    const cuSubiecte = materii.filter((m) => m.sesiuni > 0).length;
+    const title = `Subiecte BAC cu barem — arhivă PDF gratuită | MeditatiiDirect.ro`;
+    const desc = total
+      ? `Arhivă de subiecte și bareme de bacalaureat: ${total} variante verificate în ${cuSubiecte} materii, PDF gratuit, fără cont. Adăugăm variante pe măsură ce le verificăm.`
+      : `Arhivă de subiecte și bareme de bacalaureat în PDF, gratuit și fără cont. Publicăm doar fișiere verificate.`;
     return {
       meta: [
         { title }, { name: "description", content: desc },
@@ -28,12 +52,21 @@ export const Route = createFileRoute("/bac/")({
 });
 
 function BacHub() {
+  const { materii } = Route.useLoaderData();
+  const contor = new Map(materii.map((m) => [m.materie, m]));
+  const total = materii.reduce((s, m) => s + m.sesiuni, 0);
+  const cuSubiecte = materii.filter((m) => m.sesiuni > 0).length;
+
   return (
     <main className="container-page py-10 lg:py-14">
       <header className="max-w-3xl">
-        <h1 className="text-3xl font-bold sm:text-4xl">Subiecte BAC 2010–2026 — arhivă completă</h1>
+        <h1 className="text-3xl font-bold sm:text-4xl">Subiecte BAC cu barem — arhivă PDF</h1>
         <p className="mt-3 text-lg text-muted-foreground">
-          {BAC_SUBJECTS.length} materii × {BAC_YEARS.length} ani de subiecte oficiale și bareme de bacalaureat. Toate sesiunile (iunie, august, specială, simulare națională). PDF gratuit, fără cont.
+          {total
+            ? <>Am verificat și găzduit <strong>{total}</strong> de variante de bacalaureat în <strong>{cuSubiecte}</strong> materii,
+                cu subiect și, unde există, barem. PDF gratuit, fără cont.</>
+            : <>Arhivă de subiecte și bareme de bacalaureat în PDF, gratuit și fără cont.
+                Publicăm doar fișierele pe care le-am citit și verificat.</>}
         </p>
       </header>
       <BacCountdown className="mt-6" />
@@ -48,15 +81,22 @@ function BacHub() {
       <section className="mt-8">
         <h2 className="text-xl font-semibold flex items-center gap-2"><BookOpen className="h-5 w-5" /> Alege materia</h2>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {BAC_SUBJECTS.map((s) => (
-            <li key={s.slug}>
-              <Link to="/bac/$materie" params={{ materie: s.slug }} className="card-soft block p-5 hover:border-primary/40">
-                <p className="text-lg font-semibold">{s.name}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{s.short}</p>
-                <p className="mt-2 text-xs text-primary">{BAC_YEARS.length} ani disponibili →</p>
-              </Link>
-            </li>
-          ))}
+          {BAC_SUBJECTS.map((s) => {
+            const c = contor.get(s.slug);
+            return (
+              <li key={s.slug}>
+                <Link to="/bac/$materie" params={{ materie: s.slug }} className="card-soft block p-5 hover:border-primary/40">
+                  <p className="text-lg font-semibold">{s.name}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{s.short}</p>
+                  <p className="mt-2 text-xs text-primary">
+                    {c && c.sesiuni > 0
+                      ? `${c.ani} ${c.ani === 1 ? "an" : "ani"} · ${c.sesiuni} ${c.sesiuni === 1 ? "sesiune" : "sesiuni"} →`
+                      : "încă fără subiect verificat →"}
+                  </p>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </section>
       <NewsletterSignup className="mt-12" />

@@ -119,3 +119,29 @@ export const getVarianteMaterie = createServerFn({ method: "GET" })
       .sort((a, b) => b.an - a.an || a.sesiune.localeCompare(b.sesiune));
     return { variante };
   });
+
+/** Câte variante reale are fiecare materie, numărate din fișierele efectiv prezente în Storage. */
+export const getArhivaBAC = createServerFn({ method: "GET" }).handler(async () => {
+  const sb = publicClient();
+  const { data: names } = await sb.rpc("bac_pdf_names", { _prefix: "" });
+  const contor = new Map<string, { ani: Set<number>; sesiuni: number; cuBarem: number }>();
+  for (const n of (names ?? []) as string[]) {
+    const m = /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare)-(subiect|barem)\.pdf$/.exec(n);
+    if (!m) continue;
+    const row = contor.get(m[1]) ?? { ani: new Set<number>(), sesiuni: 0, cuBarem: 0 };
+    if (m[4] === "subiect") {
+      row.ani.add(Number(m[2]));
+      row.sesiuni += 1;
+    } else row.cuBarem += 1;
+    contor.set(m[1], row);
+  }
+  return {
+    materii: [...contor.entries()].map(([materie, r]) => ({
+      materie,
+      ani: r.ani.size,
+      sesiuni: r.sesiuni,
+      cuBarem: r.cuBarem,
+      ultimul_an: Math.max(...r.ani),
+    })),
+  };
+});
