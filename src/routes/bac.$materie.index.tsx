@@ -94,7 +94,7 @@ function BacSubjectHub() {
               {" "}Baremul apare doar acolo unde l-am găsit și verificat.</>
           ) : (
             <>Pentru <strong>{subject.nameLower}</strong> ({subject.short}) încă nu avem niciun subiect verificat în arhivă.
-              {" "}Publicăm doar fișiere citite și verificat — spunem sincer când ceva lipsește.</>
+              {" "}Publicăm doar fișiere citite și verificate — spunem sincer când ceva lipsește.</>
           )}
         </p>
       </header>
@@ -129,7 +129,7 @@ function BacSubjectHub() {
 
       {aniLipsa.length > 0 && (
         <p className="mt-6 max-w-3xl text-sm text-muted-foreground">
-          {!ani.length ? "Niciun an nu este" : "Încă nu avem fișiere verificate pentru"}: {aniLipsa.join(", ")}.
+          {!ani.length ? "Niciun an nu este încă disponibil" : "Încă nu avem fișiere verificate pentru"}: {aniLipsa.join(", ")}.
           {" "}Pe măsură ce găsim și verificăm subiectele oficiale, le publicăm aici.
         </p>
       )}

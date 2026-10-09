@@ -68,8 +68,8 @@ export const Route = createFileRoute("/bac/$materie/$an/")({
           mainEntity: [
             { "@type": "Question", name: `Unde găsesc subiectele BAC ${subject.nameLower} ${year}?`,
               acceptedAnswer: { "@type": "Answer", text: varianteAn.length
-                ? `Subiectele și baremele pe care le-am găzduit și verificat pentru ${subject.nameLower} ${year} apar pe această pagină, cu link direct la PDF. Publicăm doar fișiere verificat, așa că nu toate sesiunile sunt încă disponibile.`
-                : `Pentru ${subject.nameLower} ${year} nu avem încă niciun subiect verificat în arhivă. Publicăm doar fișiere verificat, așa că preferăm să spunem sincer că lipsește, în loc să punem un PDF greșit.` } },
+                ? `Subiectele și baremele pe care le-am găzduit și verificat pentru ${subject.nameLower} ${year} apar pe această pagină, cu link direct la PDF. Publicăm doar fișiere verificate, așa că nu toate sesiunile sunt încă disponibile.`
+                : `Pentru ${subject.nameLower} ${year} nu avem încă niciun subiect verificat în arhivă. Publicăm doar fișiere verificate, așa că preferăm să spunem sincer că lipsește, în loc să punem un PDF greșit.` } },
             { "@type": "Question", name: `Ce conține baremul de corectare ${year}?`,
               acceptedAnswer: { "@type": "Answer", text: `Baremul oficial conține punctajul pe fiecare cerință și răspunsurile model, util pentru autoevaluare. La ${subject.nameLower}, sesiunile din ${year} au barem doar acolo unde l-am găsit și verificat.` } },
             { "@type": "Question", name: `Pot să mă pregătesc cu un profesor pe baza acestor subiecte?`,
