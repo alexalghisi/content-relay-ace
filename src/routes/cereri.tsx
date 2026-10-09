@@ -4,6 +4,8 @@ import { Check, GraduationCap, MapPin, Send, Trash2, Video, Wallet } from "lucid
 import { adminDeleteRequest } from "@/lib/admin-requests.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { toast } from "sonner";
+import { MyProposals } from "@/components/my-proposals";
 
 function ProposalForm({ requestId, sent, onSent }: { requestId: string; sent: boolean; onSent: () => void }) {
   const [open, setOpen] = useState(false);
@@ -17,7 +19,7 @@ function ProposalForm({ requestId, sent, onSent }: { requestId: string; sent: bo
   if (sent) {
     return (
       <p className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-success">
-        <Check className="h-4 w-4" /> Propunere trimisă
+        <Check className="h-4 w-4" /> Propunere trimisă — elevul o vede în pagina cererii lui și te poate accepta sau evalua.
       </p>
     );
   }
@@ -58,6 +60,7 @@ function ProposalForm({ requestId, sent, onSent }: { requestId: string; sent: bo
       setError(insertError.code === "23505" ? "Ai trimis deja o propunere la această cerere." : "Nu am putut trimite propunerea. Încearcă din nou.");
       return;
     }
+    toast.success("Propunerea a fost trimisă!", { description: "Elevul a primit-o. O găsești în „Propunerile mele”, unde vezi și dacă te-a acceptat și ce notă ți-a dat." });
     onSent();
   };
 
@@ -182,6 +185,8 @@ function RequestsPage() {
     <section className="container-page py-10">
       <h1 className="text-3xl font-bold">Cereri de la elevi</h1>
       <p className="mt-2 text-muted-foreground">Elevi și părinți care caută profesor chiar acum. Contactează-i direct — fără comision.</p>
+      <MyProposals compact refreshKey={sentIds.size} />
+      <h2 className="mt-10 text-xl font-bold">Cereri noi</h2>
 
       {requests === null ? (
         <p className="mt-8 text-muted-foreground">Se încarcă cererile…</p>
