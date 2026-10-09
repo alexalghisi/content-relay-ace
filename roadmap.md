@@ -13,3 +13,6 @@
 - [x] Apel video în chat + ascunderea automată a telefoanelor/emailurilor în mesaje
 - [x] Număr „Cereri noi” lângă „Cereri elevi”
 - [ ] SMS către profesori la cerere nouă — blocat: conectarea contului GatewayAPI de către utilizator
+- [x] Pauză de respirație de 2 minute înainte de pornirea cronometrului în simularea BAC
+- [ ] Arhivă Evaluarea Națională (subiecte + bareme pe ani și sesiuni), pagină reală pentru clasa a VIII-a și calculator de notă — în lucru
+- [ ] Admitere medicină: grile reale pe discipline, calculator de admitere, pagină UMF Cluj
