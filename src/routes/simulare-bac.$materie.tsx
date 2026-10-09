@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Pause, Play, RotateCcw, Timer } from "lucide-react";
 import { getBacSubject, BAC_SESSIONS, BAC_YEARS, bacPdfUrl, type BacSessionSlug } from "@/data/bac-catalog";
 import { LazyPdfPreview } from "@/components/lazy-pdf-preview";
+import { CalmStart } from "@/components/calm-start";
 
 const SITE = "https://meditatiidirect.ro";
 const DURATA_MIN = 180;
@@ -76,6 +77,7 @@ function SimularePage() {
   const [left, setLeft] = useState(DURATA_MIN * 60);
   const [running, setRunning] = useState(false);
   const [started, setStarted] = useState(false);
+  const [calmDone, setCalmDone] = useState(false);
   const tick = useRef<number | null>(null);
 
   useEffect(() => {
@@ -109,6 +111,8 @@ function SimularePage() {
           Alegi o variantă oficială, pornești cronometrul de 3 ore și lucrezi pe foaie. La final compari cu baremul și citești rezolvarea explicată.
         </p>
       </header>
+
+      {!started && !calmDone && <CalmStart onDone={() => setCalmDone(true)} />}
 
       <section className="card-soft mt-8 p-5">
         <h2 className="text-lg font-semibold">1. Alege varianta</h2>
