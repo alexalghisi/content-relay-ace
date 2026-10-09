@@ -81,3 +81,67 @@ export const listRezolvari = createServerFn({ method: "GET" }).handler(async () 
     .limit(500);
   return { items: data ?? [] };
 });
+
+const MaterieSchema = z.object({
+  materie: z.string().min(1).max(40).regex(/^[a-z][a-z0-9-]*$/),
+});
+
+export interface VariantaDisponibila {
+  an: number;
+  sesiune: "iunie" | "august" | "speciala" | "simulare";
+  subiect_path: string;
+  are_barem: boolean;
+}
+
+/** Variantele pentru care subiectul există efectiv în Storage (nu doar în tabel). */
+export const getVarianteMaterie = createServerFn({ method: "GET" })
+  .inputValidator((input: unknown) => MaterieSchema.parse(input))
+  .handler(async ({ data }) => {
+    const sb = publicClient();
+    const { data: names } = await sb.rpc("bac_pdf_names", { _prefix: `${data.materie}/` });
+    const byCombo = new Map<string, VariantaDisponibila>();
+    for (const n of (names ?? []) as string[]) {
+      const m = /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare)-(subiect|barem)\.pdf$/.exec(n);
+      if (!m || m[1] !== data.materie) continue;
+      const key = `${m[2]}-${m[3]}`;
+      const row = byCombo.get(key) ?? {
+        an: Number(m[2]),
+        sesiune: m[3] as VariantaDisponibila["sesiune"],
+        subiect_path: "",
+        are_barem: false,
+      };
+      if (m[4] === "subiect") row.subiect_path = n;
+      else row.are_barem = true;
+      byCombo.set(key, row);
+    }
+    const variante = [...byCombo.values()]
+      .filter((v) => v.subiect_path)
+      .sort((a, b) => b.an - a.an || a.sesiune.localeCompare(b.sesiune));
+    return { variante };
+  });
+
+/** Câte variante reale are fiecare materie, numărate din fișierele efectiv prezente în Storage. */
+export const getArhivaBAC = createServerFn({ method: "GET" }).handler(async () => {
+  const sb = publicClient();
+  const { data: names } = await sb.rpc("bac_pdf_names", { _prefix: "" });
+  const contor = new Map<string, { ani: Set<number>; sesiuni: number; cuBarem: number }>();
+  for (const n of (names ?? []) as string[]) {
+    const m = /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare)-(subiect|barem)\.pdf$/.exec(n);
+    if (!m) continue;
+    const row = contor.get(m[1]) ?? { ani: new Set<number>(), sesiuni: 0, cuBarem: 0 };
+    if (m[4] === "subiect") {
+      row.ani.add(Number(m[2]));
+      row.sesiuni += 1;
+    } else row.cuBarem += 1;
+    contor.set(m[1], row);
+  }
+  return {
+    materii: [...contor.entries()].map(([materie, r]) => ({
+      materie,
+      ani: r.ani.size,
+      sesiuni: r.sesiuni,
+      cuBarem: r.cuBarem,
+      ultimul_an: Math.max(...r.ani),
+    })),
+  };
+});

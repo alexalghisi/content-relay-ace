@@ -48,8 +48,10 @@ export function SiteFooter() {
           <div className="font-semibold mb-3">Examene</div>
           <ul className="space-y-2 text-muted-foreground">
             <li><Link to="/variante-bacalaureat" className="hover:text-foreground">Variante BAC (subiecte + bareme)</Link></li>
+            <li><Link to="/evaluare-nationala" className="hover:text-foreground">Evaluarea Națională — calendar și reguli</Link></li>
+            <li><Link to="/calculator-media-evaluare-nationala" className="hover:text-foreground">Calculator medie Evaluarea Națională</Link></li>
             <li><Link to="/admitere" className="hover:text-foreground">Admitere facultate</Link></li>
-            <li><Link to="/meditatii-evaluare-nationala" className="hover:text-foreground">Evaluare Națională</Link></li>
+            <li><Link to="/meditatii-evaluare-nationala" className="hover:text-foreground">Meditații Evaluare Națională</Link></li>
           </ul>
         </div>
         <div>

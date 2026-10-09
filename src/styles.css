@@ -178,3 +178,18 @@ button:not([role="combobox"]):not([aria-expanded]):not([role="checkbox"]):not([r
 a[role="button"] {
   text-align: center;
 }
+
+/* Respirație ghidată: cercul se mărește la inspir, stă la reținere, se micșorează la expir. */
+.breathe-orb {
+  transform: scale(0.72);
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
+  transition-duration: 4s;
+}
+.breathe-orb[data-phase="inhala"] { transform: scale(1); transition-duration: 4s; }
+.breathe-orb[data-phase="ține"] { transform: scale(1); transition-duration: 4s; }
+.breathe-orb[data-phase="expiră"] { transform: scale(0.72); transition-duration: 6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .breathe-orb { transition: none; transform: none; }
+}
