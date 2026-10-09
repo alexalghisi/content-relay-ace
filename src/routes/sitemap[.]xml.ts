@@ -78,6 +78,8 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/rezolvari", priority: "0.9", changefreq: "weekly" },
   { path: "/calculator-medie-bac", priority: "0.9", changefreq: "monthly" },
   { path: "/calculator-nota-admitere", priority: "0.85", changefreq: "monthly" },
+  { path: "/evaluare-nationala", priority: "0.95", changefreq: "weekly" },
+  { path: "/calculator-media-evaluare-nationala", priority: "0.9", changefreq: "monthly" },
   { path: "/blog", priority: "0.7", changefreq: "weekly" },
   { path: "/tutoriale", priority: "0.6", changefreq: "weekly" },
   { path: "/parteneri", priority: "0.5", changefreq: "monthly" },
