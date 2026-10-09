@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
+import { MyProposals } from "@/components/my-proposals";
 
 export const Route = createFileRoute("/profesor/")({
   head: () => ({
@@ -488,6 +489,8 @@ function TeacherDashboard() {
               </ul>
             )}
           </div>
+          <MyProposals />
+          <p className="mt-4 text-center"><Link to="/cereri" className="btn-primary h-11 px-5">Vezi cererile noi ale elevilor</Link></p>
         </>
       )}
     </section>
