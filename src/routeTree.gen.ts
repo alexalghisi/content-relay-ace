@@ -94,6 +94,7 @@ import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacalaureat'
 import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-meditatii'
 import { Route as AdminBacCrawlerRouteImport } from './routes/admin.bac-crawler'
+import { Route as AdminMesajeRouteImport } from './routes/admin.mesaje'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
 import { Route as BacIndexRouteImport } from './routes/bac.index'
 import { Route as BacMaterieRouteImport } from './routes/bac.$materie'
@@ -570,6 +571,11 @@ const AdminBacCrawlerRoute = AdminBacCrawlerRouteImport.update({
   path: '/admin/bac-crawler',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminMesajeRoute = AdminMesajeRouteImport.update({
+  id: '/admin/mesaje',
+  path: '/admin/mesaje',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AnuntSlugRoute = AnuntSlugRouteImport.update({
   id: '/anunt/$slug',
   path: '/anunt/$slug',
@@ -885,6 +891,7 @@ export interface FileRoutesByFullPath {
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
+  '/admin/mesaje': typeof AdminMesajeRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -1015,6 +1022,7 @@ export interface FileRoutesByTo {
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
+  '/admin/mesaje': typeof AdminMesajeRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/cererea-mea/$id': typeof CerereaMeaIdRoute
@@ -1144,6 +1152,7 @@ export interface FileRoutesById {
   '/variante-bacalaureat': typeof VarianteBacalaureatRoute
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
+  '/admin/mesaje': typeof AdminMesajeRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
@@ -1276,6 +1285,7 @@ export interface FileRouteTypes {
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
+    | '/admin/mesaje'
     | '/anunt/$slug'
     | '/bac/$materie'
     | '/blog/$slug'
@@ -1406,6 +1416,7 @@ export interface FileRouteTypes {
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
+    | '/admin/mesaje'
     | '/anunt/$slug'
     | '/blog/$slug'
     | '/cererea-mea/$id'
@@ -1534,6 +1545,7 @@ export interface FileRouteTypes {
     | '/variante-bacalaureat'
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
+    | '/admin/mesaje'
     | '/anunt/$slug'
     | '/bac/$materie'
     | '/blog/$slug'
@@ -1665,6 +1677,7 @@ export interface RootRouteChildren {
   VarianteBacalaureatRoute: typeof VarianteBacalaureatRoute
   VreauSaDauMeditatiiRoute: typeof VreauSaDauMeditatiiRoute
   AdminBacCrawlerRoute: typeof AdminBacCrawlerRoute
+  AdminMesajeRoute: typeof AdminMesajeRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
   BacMaterieRoute: typeof BacMaterieRouteWithChildren
   BlogSlugRoute: typeof BlogSlugRoute
@@ -2301,6 +2314,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBacCrawlerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/mesaje': {
+      id: '/admin/mesaje'
+      path: '/admin/mesaje'
+      fullPath: '/admin/mesaje'
+      preLoaderRoute: typeof AdminMesajeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/anunt/$slug': {
       id: '/anunt/$slug'
       path: '/anunt/$slug'
@@ -2749,6 +2769,7 @@ const rootRouteChildren: RootRouteChildren = {
   VarianteBacalaureatRoute: VarianteBacalaureatRoute,
   VreauSaDauMeditatiiRoute: VreauSaDauMeditatiiRoute,
   AdminBacCrawlerRoute: AdminBacCrawlerRoute,
+  AdminMesajeRoute: AdminMesajeRoute,
   AnuntSlugRoute: AnuntSlugRoute,
   BacMaterieRoute: BacMaterieRouteWithChildren,
   BlogSlugRoute: BlogSlugRoute,
