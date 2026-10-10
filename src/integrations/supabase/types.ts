@@ -608,6 +608,39 @@ export type Database = {
         }
         Relationships: []
       }
+      inbound_emails: {
+        Row: {
+          body_html: string | null
+          body_text: string | null
+          from_address: string
+          id: string
+          is_read: boolean
+          received_at: string
+          subject: string | null
+          to_address: string
+        }
+        Insert: {
+          body_html?: string | null
+          body_text?: string | null
+          from_address: string
+          id?: string
+          is_read?: boolean
+          received_at?: string
+          subject?: string | null
+          to_address: string
+        }
+        Update: {
+          body_html?: string | null
+          body_text?: string | null
+          from_address?: string
+          id?: string
+          is_read?: boolean
+          received_at?: string
+          subject?: string | null
+          to_address?: string
+        }
+        Relationships: []
+      }
       job_state: {
         Row: {
           consecutive_failures: number
