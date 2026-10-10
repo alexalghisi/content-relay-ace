@@ -113,6 +113,13 @@
       "when": 1791619120533,
       "tag": "0015_admin_role_for_admin_email",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1791619131105,
+      "tag": "0016_admin_manage_contact_messages",
+      "breakpoints": true
     }
   ]
 }
