@@ -14,6 +14,14 @@ interface ContactMessage {
   message: string;
   is_read: boolean;
   created_at: string;
+  source: "contact" | "email";
+}
+
+const tableOf = (m: ContactMessage) => (m.source === "email" ? "inbound_emails" : "contact_messages");
+
+function parseFrom(from: string) {
+  const match = from.match(/^\s*"?([^"<]*)"?\s*<([^>]+)>/);
+  return match ? { name: match[1].trim() || match[2], email: match[2] } : { name: from, email: from };
 }
 
 export const Route = createFileRoute("/admin/mesaje")({
@@ -33,12 +41,34 @@ function AdminInboxPage() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const { data } = await supabase
-      .from("contact_messages")
-      .select("id,sender_name,sender_email,phone,subject,message,is_read,created_at")
-      .order("created_at", { ascending: false })
-      .limit(200);
-    setMessages((data as ContactMessage[] | null) ?? []);
+    const [contact, inbound] = await Promise.all([
+      supabase
+        .from("contact_messages")
+        .select("id,sender_name,sender_email,phone,subject,message,is_read,created_at")
+        .order("created_at", { ascending: false })
+        .limit(200),
+      supabase
+        .from("inbound_emails")
+        .select("id,from_address,subject,body_text,is_read,received_at")
+        .order("received_at", { ascending: false })
+        .limit(200),
+    ]);
+    const a: ContactMessage[] = (contact.data ?? []).map((m) => ({ ...m, is_read: Boolean(m.is_read), source: "contact" }));
+    const b: ContactMessage[] = (inbound.data ?? []).map((m) => {
+      const f = parseFrom(m.from_address);
+      return {
+        id: m.id,
+        sender_name: f.name,
+        sender_email: f.email,
+        phone: null,
+        subject: m.subject,
+        message: m.body_text || "(e-mail fără text)",
+        is_read: m.is_read,
+        created_at: m.received_at,
+        source: "email",
+      };
+    });
+    setMessages([...a, ...b].sort((x, y) => y.created_at.localeCompare(x.created_at)));
   }, []);
 
   useEffect(() => {
@@ -50,13 +80,13 @@ function AdminInboxPage() {
   }, [user, load]);
 
   const markRead = async (m: ContactMessage, read: boolean) => {
-    await supabase.from("contact_messages").update({ is_read: read }).eq("id", m.id);
+    await supabase.from(tableOf(m)).update({ is_read: read }).eq("id", m.id);
     setMessages((prev) => (prev ?? []).map((x) => (x.id === m.id ? { ...x, is_read: read } : x)));
   };
 
   const remove = async (m: ContactMessage) => {
     if (!confirm("Ștergi definitiv acest mesaj?")) return;
-    const { error } = await supabase.from("contact_messages").delete().eq("id", m.id);
+    const { error } = await supabase.from(tableOf(m)).delete().eq("id", m.id);
     if (error) {
       toast.error("Nu s-a putut șterge mesajul.");
       return;
@@ -106,7 +136,7 @@ function AdminInboxPage() {
     <section className="container-page py-10">
       <h1 className="text-3xl font-bold">Mesaje primite</h1>
       <p className="mt-2 text-muted-foreground">
-        Mesajele trimise prin formularul de contact al site-ului. {unread > 0 ? `${unread} necitite.` : "Toate citite."}
+        Mesajele din formularul de contact și e-mailurile primite la admin@meditatiidirect.ro. {unread > 0 ? `${unread} necitite.` : "Toate citite."}
       </p>
 
       {messages === null ? (
@@ -135,7 +165,7 @@ function AdminInboxPage() {
                     <p className={`truncate text-sm ${m.is_read ? "" : "font-bold"}`}>
                       {m.sender_name} — {m.subject || "Fără subiect"}
                     </p>
-                    <p className="truncate text-xs text-muted-foreground">{m.sender_email}</p>
+                    <p className="truncate text-xs text-muted-foreground">{m.source === "email" ? "E-mail · " : "Formular · "}{m.sender_email}</p>
                   </div>
                 </div>
                 <span className="shrink-0 text-xs text-muted-foreground">

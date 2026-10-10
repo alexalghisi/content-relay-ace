@@ -125,6 +125,7 @@ import { Route as SubiecteAdmitereUniversitateMaterieRouteImport } from './route
 import { Route as SubiecteAdmitereMaterieMaterieRouteImport } from './routes/subiecte-admitere.materie.$materie'
 import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
 import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
+import { Route as ApiPublicHooksInboundEmailRouteImport } from './routes/api/public/hooks/inbound-email'
 import { Route as ApiPublicHooksIndexnowRouteImport } from './routes/api/public/hooks/indexnow'
 import { Route as ApiPublicHooksRezolvariTickRouteImport } from './routes/api/public/hooks/rezolvari-tick'
 import { Route as ApiPublicHooksSeoDailyRouteImport } from './routes/api/public/hooks/seo-daily'
@@ -731,6 +732,12 @@ const ApiPublicHooksBacCrawlTickRoute =
     path: '/api/public/hooks/bac-crawl-tick',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksInboundEmailRoute =
+  ApiPublicHooksInboundEmailRouteImport.update({
+    id: '/api/public/hooks/inbound-email',
+    path: '/api/public/hooks/inbound-email',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksIndexnowRoute = ApiPublicHooksIndexnowRouteImport.update({
   id: '/api/public/hooks/indexnow',
   path: '/api/public/hooks/indexnow',
@@ -922,6 +929,7 @@ export interface FileRoutesByFullPath {
   '/bac/$materie/': typeof BacMaterieIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
+  '/api/public/hooks/inbound-email': typeof ApiPublicHooksInboundEmailRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
   '/api/public/hooks/rezolvari-tick': typeof ApiPublicHooksRezolvariTickRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
@@ -1051,6 +1059,7 @@ export interface FileRoutesByTo {
   '/bac/$materie': typeof BacMaterieIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
+  '/api/public/hooks/inbound-email': typeof ApiPublicHooksInboundEmailRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
   '/api/public/hooks/rezolvari-tick': typeof ApiPublicHooksRezolvariTickRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
@@ -1183,6 +1192,7 @@ export interface FileRoutesById {
   '/bac/$materie/': typeof BacMaterieIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
+  '/api/public/hooks/inbound-email': typeof ApiPublicHooksInboundEmailRoute
   '/api/public/hooks/indexnow': typeof ApiPublicHooksIndexnowRoute
   '/api/public/hooks/rezolvari-tick': typeof ApiPublicHooksRezolvariTickRoute
   '/api/public/hooks/seo-daily': typeof ApiPublicHooksSeoDailyRoute
@@ -1316,6 +1326,7 @@ export interface FileRouteTypes {
     | '/bac/$materie/'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
+    | '/api/public/hooks/inbound-email'
     | '/api/public/hooks/indexnow'
     | '/api/public/hooks/rezolvari-tick'
     | '/api/public/hooks/seo-daily'
@@ -1445,6 +1456,7 @@ export interface FileRouteTypes {
     | '/bac/$materie'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
+    | '/api/public/hooks/inbound-email'
     | '/api/public/hooks/indexnow'
     | '/api/public/hooks/rezolvari-tick'
     | '/api/public/hooks/seo-daily'
@@ -1576,6 +1588,7 @@ export interface FileRouteTypes {
     | '/bac/$materie/'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
+    | '/api/public/hooks/inbound-email'
     | '/api/public/hooks/indexnow'
     | '/api/public/hooks/rezolvari-tick'
     | '/api/public/hooks/seo-daily'
@@ -1705,6 +1718,7 @@ export interface RootRouteChildren {
   SubiecteAdmitereMaterieMaterieRoute: typeof SubiecteAdmitereMaterieMaterieRoute
   ApiPublicHooksAutoBlogPostRoute: typeof ApiPublicHooksAutoBlogPostRoute
   ApiPublicHooksBacCrawlTickRoute: typeof ApiPublicHooksBacCrawlTickRoute
+  ApiPublicHooksInboundEmailRoute: typeof ApiPublicHooksInboundEmailRoute
   ApiPublicHooksIndexnowRoute: typeof ApiPublicHooksIndexnowRoute
   ApiPublicHooksRezolvariTickRoute: typeof ApiPublicHooksRezolvariTickRoute
   ApiPublicHooksSeoDailyRoute: typeof ApiPublicHooksSeoDailyRoute
@@ -2531,6 +2545,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksBacCrawlTickRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/inbound-email': {
+      id: '/api/public/hooks/inbound-email'
+      path: '/api/public/hooks/inbound-email'
+      fullPath: '/api/public/hooks/inbound-email'
+      preLoaderRoute: typeof ApiPublicHooksInboundEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/indexnow': {
       id: '/api/public/hooks/indexnow'
       path: '/api/public/hooks/indexnow'
@@ -2798,6 +2819,7 @@ const rootRouteChildren: RootRouteChildren = {
   SubiecteAdmitereMaterieMaterieRoute: SubiecteAdmitereMaterieMaterieRoute,
   ApiPublicHooksAutoBlogPostRoute: ApiPublicHooksAutoBlogPostRoute,
   ApiPublicHooksBacCrawlTickRoute: ApiPublicHooksBacCrawlTickRoute,
+  ApiPublicHooksInboundEmailRoute: ApiPublicHooksInboundEmailRoute,
   ApiPublicHooksIndexnowRoute: ApiPublicHooksIndexnowRoute,
   ApiPublicHooksRezolvariTickRoute: ApiPublicHooksRezolvariTickRoute,
   ApiPublicHooksSeoDailyRoute: ApiPublicHooksSeoDailyRoute,
