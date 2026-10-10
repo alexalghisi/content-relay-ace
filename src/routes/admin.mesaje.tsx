@@ -136,7 +136,7 @@ function AdminInboxPage() {
     <section className="container-page py-10">
       <h1 className="text-3xl font-bold">Mesaje primite</h1>
       <p className="mt-2 text-muted-foreground">
-        Mesajele trimise prin formularul de contact al site-ului. {unread > 0 ? `${unread} necitite.` : "Toate citite."}
+        Mesajele din formularul de contact și e-mailurile primite la admin@meditatiidirect.ro. {unread > 0 ? `${unread} necitite.` : "Toate citite."}
       </p>
 
       {messages === null ? (
@@ -165,7 +165,7 @@ function AdminInboxPage() {
                     <p className={`truncate text-sm ${m.is_read ? "" : "font-bold"}`}>
                       {m.sender_name} — {m.subject || "Fără subiect"}
                     </p>
-                    <p className="truncate text-xs text-muted-foreground">{m.sender_email}</p>
+                    <p className="truncate text-xs text-muted-foreground">{m.source === "email" ? "E-mail · " : "Formular · "}{m.sender_email}</p>
                   </div>
                 </div>
                 <span className="shrink-0 text-xs text-muted-foreground">
