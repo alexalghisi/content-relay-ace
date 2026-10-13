@@ -1,3 +1,4 @@
+import { validateRequest, clip } from "@/lib/request-validation";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { Check, Megaphone, Send, ShieldCheck, Sparkles } from "lucide-react";
