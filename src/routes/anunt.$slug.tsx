@@ -255,18 +255,25 @@ function BookingWidget({ compact = false, ad }: { compact?: boolean; ad: AdDetai
       toast.error("Completează numele și adresa de email ca profesorul să te poată contacta.");
       return;
     }
+    const subj = (clip(ad.subject_name ?? ad.title, 120) ?? "Meditații").padEnd(2, ".");
+    const invalid = validateRequest({ subject: subj, name, email, phone });
+    if (invalid) {
+      toast.error(invalid);
+      return;
+    }
     setSending(true);
     const dateLabel = date.toLocaleDateString("ro-RO", { day: "numeric", month: "long", year: "numeric" });
+    const budget = ad.price_per_hour != null && ad.price_per_hour >= 0 && ad.price_per_hour <= 10000 ? ad.price_per_hour : null;
     const { error } = await supabase.from("student_requests").insert({
-      subject: ad.subject_name ?? ad.title,
+      subject: subj,
       level: null,
-      city: ad.is_online ? null : ad.location,
+      city: ad.is_online ? null : clip(ad.location, 120),
       is_online: ad.is_online,
-      budget_per_hour: ad.price_per_hour,
-      details: `Solicitare de rezervare pentru anunțul „${ad.title}”. Interval dorit: ${dateLabel}, ora ${time}.`,
+      budget_per_hour: budget,
+      details: clip(`Solicitare de rezervare pentru anunțul „${ad.title}”. Interval dorit: ${dateLabel}, ora ${time}.`, 4000),
       contact_name: name.trim(),
       contact_email: email.trim(),
-      contact_phone: phone.trim() || null,
+      contact_phone: clip(phone, 40),
     });
     setSending(false);
     if (error) {
