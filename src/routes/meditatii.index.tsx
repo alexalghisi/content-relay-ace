@@ -1,3 +1,4 @@
+import { validateRequest, clip } from "@/lib/request-validation";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { Check, Megaphone, Send, ShieldCheck, Sparkles } from "lucide-react";
@@ -80,23 +81,29 @@ function RequestPage() {
       setError("Completează cel puțin materia, numele și adresa de email.");
       return;
     }
-    setPending(true);
     const subjectName = SUBJECTS_SEO.find((s) => s.slug === subject)?.name ?? subject;
+    const budgetNum = budget ? Number(budget) : null;
+    const invalid = validateRequest({ subject: subjectName, name, email, details, phone, budget: budgetNum });
+    if (invalid) {
+      setError(invalid);
+      return;
+    }
+    setPending(true);
     const cityName = CITIES.find((c) => c.slug === city)?.name ?? city;
     const requestId = crypto.randomUUID();
     const token = crypto.randomUUID().replace(/-/g, "");
     const { error: insertError } = await supabase.from("student_requests").insert({
       id: requestId,
       access_token: token,
-      subject: subjectName,
-      level: level || null,
-      city: isOnline ? null : cityName || null,
+      subject: subjectName.trim(),
+      level: clip(level, 120),
+      city: isOnline ? null : clip(cityName, 120),
       is_online: isOnline,
-      budget_per_hour: budget ? Number(budget) : null,
-      details: details.trim() || null,
+      budget_per_hour: budgetNum,
+      details: clip(details, 4000),
       contact_name: name.trim(),
       contact_email: email.trim(),
-      contact_phone: phone.trim() || null,
+      contact_phone: clip(phone, 40),
     });
     setPending(false);
     if (insertError) {
