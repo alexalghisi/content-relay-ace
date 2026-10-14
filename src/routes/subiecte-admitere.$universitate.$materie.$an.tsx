@@ -19,7 +19,6 @@ export const Route = createFileRoute("/subiecte-admitere/$universitate/$materie/
       listRelatedUnisForSubject(params.materie, params.universitate),
       listYearsForUniSubject(params.universitate, params.materie),
     ]);
-    console.log("ADMDBG", params, papers.length);
     if (papers.length === 0) throw notFound();
     return {
       universitate: params.universitate, materie: params.materie, an,
