@@ -1,0 +1,1 @@
+ALTER TABLE public.student_requests ADD COLUMN IF NOT EXISTS teachers_notified_at timestamptz;

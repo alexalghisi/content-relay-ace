@@ -1,3 +1,4 @@
+import { notifyTeachersOfRequest } from "@/lib/notify-teachers.functions";
 import { validateRequest, clip } from "@/lib/request-validation";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
@@ -110,6 +111,7 @@ function RequestPage() {
       setError("Nu am putut trimite cererea. Încearcă din nou sau scrie-ne pe pagina de contact.");
       return;
     }
+    notifyTeachersOfRequest({ data: { requestId } }).catch(() => {});
     setLink({ id: requestId, token });
     setDone(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
