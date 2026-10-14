@@ -68,6 +68,14 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    // Single canonical host/path: no www, no trailing slash (301).
+    const url = new URL(request.url);
+    let changed = false;
+    if (url.hostname.startsWith("www.")) { url.hostname = url.hostname.slice(4); changed = true; }
+    if (url.pathname.length > 1 && url.pathname.endsWith("/")) { url.pathname = url.pathname.replace(/\/+$/, ""); changed = true; }
+    if (changed && (request.method === "GET" || request.method === "HEAD")) {
+      return Response.redirect(url.toString(), 301);
+    }
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
