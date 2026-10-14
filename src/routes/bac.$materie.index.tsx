@@ -41,9 +41,11 @@ export const Route = createFileRoute("/bac/$materie/")({
     if (!loaderData) return {};
     const { subject, ani } = loaderData;
     const url = `${SITE}/bac/${subject.slug}`;
-    const title = `Subiecte BAC ${subject.name} ${ani.length ? `${ani[0].an}–${ani[ani.length - 1].an}` : "2010–2026"} — PDF cu barem | MeditatiiDirect.ro`;
+    const anMax = ani.length ? Math.max(...ani.map((a) => a.an)) : 2026;
+    const anMin = ani.length ? Math.min(...ani.map((a) => a.an)) : 2010;
+    const title = `Subiecte BAC ${subject.name} cu barem (${anMin}–${anMax}) — PDF gratuit`;
     const desc = ani.length
-      ? `Arhivă subiecte BAC ${subject.nameLower}: ${ani.length} ani cu subiect verificat (${ani.map((a) => a.an).join(", ")}), cu sau fără barem. PDF gratuit, fără cont.`
+      ? `Descarcă gratuit subiectele BAC la ${subject.nameLower} din ${ani.length} ani, cu barem oficial, inclusiv ${anMax}. Fără cont. Exersează pe variante reale și verifică-ți nota.`
       : `Arhivă subiecte BAC ${subject.nameLower}: încă nu avem un subiect verificat pentru această materie. Vezi celelalte materii disponibile.`;
     return {
       meta: [
