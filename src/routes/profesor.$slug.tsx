@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { getTeacherRating } from "@/lib/market-stats.functions";
 import { useEffect, useState } from "react";
 import { BadgeCheck, CalendarDays, GraduationCap, Mail, MapPin, Phone, User, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,21 +27,44 @@ interface PublicProfile {
 interface Slot { id: string; weekday: number; start_time: string; end_time: string }
 interface Offer { id: string; title: string; subject: string; level: string | null; description: string | null; price_per_hour: number | null; is_online: boolean; is_in_person: boolean }
 
+const PUBLIC_COLS = "user_id,display_name,avatar_url,headline,about,subjects,levels,city,experience_years,rate_min,rate_max,online_available,in_person_available,contact_email";
+const SITE_URL = "https://meditatiidirect.ro";
+
 export const Route = createFileRoute("/profesor/$slug")({
-  head: ({ params }) => {
-    const human = decodeURIComponent(params.slug).replace(/-/g, " ").replace(/\s+[0-9a-f]{6}$/i, "");
-    const title = `${human} — profesor meditații | MeditatiiDirect.ro`;
-    const description = `Profil de profesor pe MeditatiiDirect.ro: materii predate, disponibilitate și oferte de meditații. Contact direct, fără comision.`;
+  // Server-side load: the profile text ships in the initial HTML; unknown profiles return a real 404.
+  loader: async ({ params }) => {
+    const { data } = await supabase.from("teacher_profiles").select(PUBLIC_COLS).eq("slug", params.slug).eq("is_published", true).maybeSingle();
+    const profile = data as unknown as PublicProfile | null;
+    if (!profile) throw notFound();
+    const rating = await getTeacherRating({ data: { userId: profile.user_id } }).catch(() => null);
+    return { profile, rating };
+  },
+  head: ({ params, loaderData }) => {
+    const p = loaderData?.profile;
+    const url = `${SITE_URL}/profesor/${params.slug}`;
+    if (!p) return { meta: [{ title: "Profil indisponibil | MeditatiiDirect.ro" }, { name: "robots", content: "noindex, follow" }] };
+    const subj = p.subjects.slice(0, 3).join(", ");
+    const title = `${p.display_name} — profesor ${subj}${p.city ? `, ${p.city}` : ""} | MeditatiiDirect.ro`;
+    const description = (p.headline ? `${p.headline}. ` : "") + `Meditații ${subj}${p.online_available ? " online" : ""}${p.city ? ` în ${p.city}` : ""}${p.rate_min ? `, de la ${p.rate_min} lei/oră` : ""}. Profil verificat pe MeditatiiDirect.ro.`;
+    const rating = loaderData?.rating;
+    const person = {
+      "@context": "https://schema.org", "@type": "Person",
+      name: p.display_name, jobTitle: p.headline ?? "Profesor meditații",
+      description: p.about ?? undefined, knowsAbout: p.subjects, url,
+      image: p.avatar_url ?? undefined,
+      address: p.city ? { "@type": "PostalAddress", addressLocality: p.city, addressCountry: "RO" } : undefined,
+      // Only real ratings from students who received this teacher's proposals.
+      ...(rating ? { aggregateRating: { "@type": "AggregateRating", ratingValue: rating.avg, ratingCount: rating.count, bestRating: 5, worstRating: 1 } } : {}),
+    };
     return {
       meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "profile" },
-        { property: "og:url", content: `https://meditatiidirect.ro/profesor/${params.slug}` },
+        { title }, { name: "description", content: description },
+        { property: "og:title", content: title }, { property: "og:description", content: description },
+        { property: "og:type", content: "profile" }, { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary" },
       ],
-      links: [{ rel: "canonical", href: `https://meditatiidirect.ro/profesor/${params.slug}` }],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(person) }],
     };
   },
   component: PublicTeacherPage,
@@ -49,18 +73,19 @@ export const Route = createFileRoute("/profesor/$slug")({
 function PublicTeacherPage() {
   const { slug } = Route.useParams();
   const { user } = useAuth();
-  const [profile, setProfile] = useState<PublicProfile | null>(null);
+  const initial = Route.useLoaderData();
+  const [profile, setProfile] = useState<PublicProfile | null>(initial.profile);
+  const rating = initial.rating;
   const [slots, setSlots] = useState<Slot[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
-      setLoading(true);
       const cols = "user_id,display_name,avatar_url,headline,about,subjects,levels,city,experience_years,rate_min,rate_max,online_available,in_person_available,contact_email" + (user ? ",contact_phone" : "");
       const { data } = await supabase.from("teacher_profiles").select(cols).eq("slug", slug).eq("is_published", true).maybeSingle();
       const p = (data as unknown as PublicProfile | null) ?? null;
-      setProfile(p);
+      if (p) setProfile(p);
       if (p) {
         const [{ data: av }, { data: of }] = await Promise.all([
           supabase.from("teacher_availability").select("id,weekday,start_time,end_time").eq("user_id", p.user_id).order("weekday"),
@@ -85,20 +110,10 @@ function PublicTeacherPage() {
     );
   }
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: profile.display_name,
-    jobTitle: profile.headline ?? "Profesor meditații",
-    description: profile.about ?? undefined,
-    address: profile.city ? { "@type": "PostalAddress", addressLocality: profile.city, addressCountry: "RO" } : undefined,
-    knowsAbout: profile.subjects,
-    url: `https://meditatiidirect.ro/profesor/${slug}`,
-  };
+
 
   return (
     <section className="container-page max-w-4xl py-10">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <header className="flex flex-wrap items-center gap-5">
         {profile.avatar_url ? (
@@ -109,6 +124,10 @@ function PublicTeacherPage() {
         <div>
           <h1 className="text-2xl font-bold sm:text-3xl">{profile.display_name}</h1>
           {profile.headline && <p className="mt-1 text-muted-foreground">{profile.headline}</p>}
+          <p className="mt-1 inline-flex items-center gap-1 text-sm text-primary"><BadgeCheck className="h-4 w-4" /> Profil verificat</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {rating ? <>★ {rating.avg.toFixed(1)} / 5 · {rating.count} {rating.count === 1 ? "evaluare" : "evaluări"} de la elevi</> : "Încă nu are evaluări de la elevi"}
+          </p>
           <div className="mt-2 flex flex-wrap gap-3 text-sm text-muted-foreground">
             {profile.city && <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" /> {profile.city}</span>}
             {profile.online_available && <span className="inline-flex items-center gap-1 text-primary"><Video className="h-4 w-4" /> Online</span>}
