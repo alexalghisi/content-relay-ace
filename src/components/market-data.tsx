@@ -17,6 +17,13 @@ export function comboFaqs(s: ComboStats, subject: string, city: string) {
       ? `Din cele ${s.listings} anunțuri active care acoperă ${city}, ${s.onlineListings} oferă ședințe online și ${s.localListings} sunt publicate de profesori din ${city}. În cerere poți alege online, față în față sau ambele.`
       : `În cerere alegi online, față în față sau ambele; profesorii care acoperă ${city} îți trimit propuneri potrivite.`,
   });
+  if (s.priceOnline || s.priceInPerson) {
+    const part = (label: string, x: ComboStats["price"]) => x ? `${label}: mediană ${x.median} lei/oră (${x.min}–${x.max}, ${x.n} ${x.n === 1 ? "anunț" : "anunțuri"})` : `${label}: încă fără date suficiente`;
+    faqs.push({
+      q: `Sunt meditațiile online la ${subject} mai ieftine decât cele față în față în ${city}?`,
+      a: `Din anunțurile active pe MeditatiiDirect — ${part("online", s.priceOnline)}; ${part(`față în față în ${city}`, s.priceInPerson)}. Actualizat la ${fmtDate(s.updatedAt)}.`,
+    });
+  }
   faqs.push({
     q: `Câte ședințe pe săptămână sunt recomandate la ${subject}?`,
     a: `Frecvența o stabilești direct cu profesorul în propunere. Pe platformă, fiecare propunere vine cu o dată și o oră concretă, iar ritmul îl ajustați după primele ședințe.`,
@@ -57,6 +64,27 @@ export function ComboDataBlock({ s, subject, city }: { s: ComboStats; subject: s
           <dd className="text-xs text-muted-foreground">{s.rating ? `${s.rating.count} evaluări de la elevi` : "încă nicio evaluare"}</dd>
         </div>
       </dl>
+      {(s.priceOnline || s.priceInPerson || s.teachersByLevel.length > 0) && (
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {(s.priceOnline || s.priceInPerson) && (
+            <div className="card-soft p-5">
+              <h3 className="text-lg font-semibold">Tarif real după format</h3>
+              <ul className="mt-2 space-y-1 text-sm">
+                <li>Online: {s.priceOnline ? `mediană ${s.priceOnline.median} lei/oră (${s.priceOnline.min}–${s.priceOnline.max}, ${s.priceOnline.n} anunțuri)` : "încă fără date"}</li>
+                <li>Față în față în {city}: {s.priceInPerson ? `mediană ${s.priceInPerson.median} lei/oră (${s.priceInPerson.min}–${s.priceInPerson.max}, ${s.priceInPerson.n} anunțuri)` : "încă fără date"}</li>
+              </ul>
+            </div>
+          )}
+          {s.teachersByLevel.length > 0 && (
+            <div className="card-soft p-5">
+              <h3 className="text-lg font-semibold">Profesori după nivel</h3>
+              <ul className="mt-2 space-y-1 text-sm">
+                {s.teachersByLevel.slice(0, 6).map((l) => <li key={l.level}>{l.level}: {l.count} {l.count === 1 ? "profesor" : "profesori"}</li>)}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
       {s.recentRequests.length > 0 && (
         <div className="mt-6">
           <h3 className="text-lg font-semibold">Cereri recente (anonimizate)</h3>
