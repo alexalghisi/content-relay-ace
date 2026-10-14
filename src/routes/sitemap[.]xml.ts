@@ -104,18 +104,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         );
 
         try {
-          const { data: subjects } = await supabaseAdmin.from("subjects").select("slug");
-          for (const s of subjects ?? []) {
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/meditatii?materie=${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
-            );
-          }
-          const { data: cities } = await supabaseAdmin.from("cities").select("slug");
-          for (const c of cities ?? []) {
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/meditatii?oras=${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
-            );
-          }
+          // Query-string listings (/meditatii?materie=…) are canonicalised to /meditatii — not listed.
           // Per-ad pages — primary long-tail SEO surface
           const { data: ads } = await supabaseAdmin
             .from("ads")
@@ -182,9 +171,17 @@ export const Route = createFileRoute("/sitemap.xml")({
         try {
           const { SUBJECTS_SEO } = await import("@/data/subjects-seo");
           const { CITIES } = await import("@/data/cities");
+          // Same rule as the page: a combo with no active ads is noindex, so keep it out of the sitemap.
+          const { data: adRows } = await supabaseAdmin
+            .from("ads").select("subject_slug,location,is_online").eq("status", "active").limit(10000);
+          const rows = (adRows ?? []) as { subject_slug: string | null; location: string | null; is_online: boolean }[];
+          const comboHasAds = (subs: string[], locs: string[]) =>
+            rows.some((r) => r.subject_slug && subs.includes(r.subject_slug) &&
+              (r.is_online || locs.some((m) => (r.location ?? "").toLowerCase().includes(m.toLowerCase()))));
           for (const s of SUBJECTS_SEO) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/preturi-meditatii/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             for (const c of CITIES) {
+              if (!comboHasAds(s.dbSlugs, c.matchLocation)) continue;
               urls.push(`  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
             }
           }
@@ -204,6 +201,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             urls.push(`  <url>\n    <loc>${BASE_URL}/simulare-bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             for (const y of BAC_YEARS) {
+              if (![...pdfSet].some((n) => n.startsWith(`${s.slug}/${y}/`) && n.endsWith("-subiect.pdf"))) continue;
               urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
               for (const ses of BAC_SESSIONS) {
                 if (!pdfSet.has(`${s.slug}/${y}/${ses.slug}-subiect.pdf`)) continue;
