@@ -265,7 +265,9 @@ function BookingWidget({ compact = false, ad }: { compact?: boolean; ad: AdDetai
     setSending(true);
     const dateLabel = date.toLocaleDateString("ro-RO", { day: "numeric", month: "long", year: "numeric" });
     const budget = ad.price_per_hour != null && ad.price_per_hour >= 0 && ad.price_per_hour <= 10000 ? ad.price_per_hour : null;
+    const requestId = crypto.randomUUID();
     const { error } = await supabase.from("student_requests").insert({
+      id: requestId,
       subject: subj,
       level: null,
       city: ad.is_online ? null : clip(ad.location, 120),

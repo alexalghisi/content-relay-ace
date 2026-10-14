@@ -110,6 +110,7 @@ function RequestPage() {
       setError("Nu am putut trimite cererea. Încearcă din nou sau scrie-ne pe pagina de contact.");
       return;
     }
+    notifyTeachersOfRequest({ data: { requestId } }).catch(() => {});
     setLink({ id: requestId, token });
     setDone(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
