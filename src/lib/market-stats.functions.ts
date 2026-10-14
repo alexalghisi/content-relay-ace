@@ -22,6 +22,9 @@ export interface ComboStats {
   onlineListings: number;
   teachers: number;
   price: { min: number; median: number; max: number; n: number } | null;
+  priceOnline: { min: number; median: number; max: number; n: number } | null;
+  priceInPerson: { min: number; median: number; max: number; n: number } | null;
+  teachersByLevel: { level: string; count: number }[];
   recentRequests: { level: string | null; place: string; budget: number | null; date: string }[];
   requestsTotal: number;
   rating: { avg: number; count: number } | null;
@@ -42,7 +45,7 @@ export const getComboStats = createServerFn({ method: "GET" })
 
     const [adsR, tpR, offR, reqR] = await Promise.all([
       supabaseAdmin.from("ads").select("price_per_hour,location,is_online,subject_slug").eq("status", "active").in("subject_slug", data.subjectSlugs),
-      supabaseAdmin.from("teacher_profiles").select("user_id,subjects,city,online_available").eq("is_published", true),
+      supabaseAdmin.from("teacher_profiles").select("user_id,subjects,city,online_available,levels").eq("is_published", true),
       supabaseAdmin.from("teacher_offers").select("subject,price_per_hour").eq("status", "published"),
       supabaseAdmin.from("student_requests").select("id,subject,level,city,is_online,budget_per_hour,created_at").order("created_at", { ascending: false }).limit(1000),
     ]);
@@ -71,7 +74,12 @@ export const getComboStats = createServerFn({ method: "GET" })
       ...proposalPrices,
     ]);
 
+    const lv = new Map<string, number>();
+    for (const t of teachers) for (const l of (t.levels ?? []) as string[]) if (l) lv.set(l, (lv.get(l) ?? 0) + 1);
     return {
+      priceOnline: quantiles(ads.filter((a) => a.is_online).map((a) => a.price_per_hour ?? 0)),
+      priceInPerson: quantiles(localAds.filter((a) => !a.is_online).map((a) => a.price_per_hour ?? 0)),
+      teachersByLevel: [...lv.entries()].map(([level, count]) => ({ level, count })).sort((a, b) => b.count - a.count),
       listings: ads.length,
       localListings: localAds.length,
       onlineListings: ads.filter((a) => a.is_online).length,
