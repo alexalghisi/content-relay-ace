@@ -1,3 +1,4 @@
+import { subjectLoader } from "@/lib/subject-stats";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 import { AdsterraNativeBanner, AdsterraBanner728 } from "@/components/ads/adsterra";
@@ -16,6 +17,7 @@ const faqs = [
 ];
 
 export const Route = createFileRoute("/meditatii-informatica")({
+  loader: subjectLoader("informatica"),
   head: () => ({
     meta: [
       { title: TITLE },

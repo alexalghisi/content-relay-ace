@@ -41,7 +41,7 @@ export const getComboStats = createServerFn({ method: "GET" })
       const n = norm(s);
       return !!n && (n.includes(subj) || subjSlugs.some((x) => n.includes(x)));
     };
-    const inCity = (loc: string | null) => data.cityMatch.some((m) => norm(loc).includes(norm(m)));
+    const inCity = (loc: string | null) => data.cityMatch.length === 0 || data.cityMatch.some((m) => norm(loc).includes(norm(m)));
 
     const [adsR, tpR, offR, reqR] = await Promise.all([
       supabaseAdmin.from("ads").select("price_per_hour,location,is_online,subject_slug").eq("status", "active").in("subject_slug", data.subjectSlugs),
