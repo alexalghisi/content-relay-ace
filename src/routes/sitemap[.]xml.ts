@@ -3,8 +3,6 @@ import type {} from "@tanstack/react-start";
 import { CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 
-const PRIORITY_SUBJECTS = ["engleza", "germana", "franceza", "matematica", "fizica", "romana"];
-const PRIORITY_CITIES = ["cluj-napoca", "bucuresti", "timisoara", "iasi", "brasov", "constanta", "sibiu", "craiova"];
 
 const BASE_URL = "https://meditatiidirect.ro";
 
