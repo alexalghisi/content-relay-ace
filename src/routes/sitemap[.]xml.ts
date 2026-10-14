@@ -123,14 +123,6 @@ export const Route = createFileRoute("/sitemap.xml")({
               `  <url>\n    <loc>${BASE_URL}/meditatii-${sub.slug}-online</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
             );
           }
-          // Combinații prioritare materie × oraș
-          for (const ms of PRIORITY_SUBJECTS) {
-            for (const cs of PRIORITY_CITIES) {
-              urls.push(
-                `  <url>\n    <loc>${BASE_URL}/meditatii/${ms}/${cs}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
-              );
-            }
-          }
           // City landing pages + profesori per oraș (nou — 14 pagini SEO)
           for (const c of CITIES) {
             urls.push(
@@ -157,7 +149,13 @@ export const Route = createFileRoute("/sitemap.xml")({
         // Pagini-resursă pentru fiecare PDF găzduit la noi (BAC + admitere)
         try {
           const { BAC_ARCHIVE } = await import("@/data/bac-archive");
+          // Resource pages without a hosted subject PDF are noindex — skip them.
+          const { data: names } = await supabaseAdmin.rpc("bac_pdf_names", { _prefix: "" });
+          const have = new Set(((names ?? []) as string[])
+            .filter((n) => n.endsWith("-subiect.pdf")).map((n) => n.split("/").slice(0, 2).join("/")));
           for (const it of BAC_ARCHIVE) {
+            const m = it.internal.match(/^\/resurse\/bac\/([^/]+)\/(\d{4})/);
+            if (m && !have.has(`${m[1]}/${m[2]}`)) continue;
             urls.push(`  <url>\n    <loc>${BASE_URL}${it.internal}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
           }
         } catch (err) {
