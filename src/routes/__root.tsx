@@ -56,6 +56,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // Fallback (e.g. 404 page); every content route overrides it.
+      { title: "Pagina nu a fost găsită | MeditatiiDirect.ro" },
       { name: "author", content: "MeditatiiDirect" },
       { name: "language", content: "ro" },
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
