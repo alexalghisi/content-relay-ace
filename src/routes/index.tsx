@@ -10,10 +10,10 @@ import { CITIES } from "@/data/cities";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meditații online și în orașul tău — postează cererea | MeditatiiDirect.ro" },
-      { name: "description", content: "Cauți meditații la matematică, română, engleză sau pentru BAC? Postezi gratuit cererea, profesorii îți trimit propuneri cu tarif și program, discutați direct și evaluezi cu stele." },
-      { property: "og:title", content: "Meditații online și în orașul tău — cerere, propuneri și chat direct" },
-      { property: "og:description", content: "Postezi gratuit un anunț de meditații, primești propuneri cu tarif și program, discuți direct și evaluezi colaborarea cu stele." },
+      { title: "Meditații Direct — meditații matematică, română, engleză, BAC | Gratuit" },
+      { name: "description", content: "Spui în 2 minute ce meditații cauți, iar profesorii îți trimit oferte cu preț și program. Gratuit pentru elevi, fără comision, online sau în orașul tău. Subiecte BAC cu barem incluse." },
+      { property: "og:title", content: "Meditații Direct — primești oferte de la profesori, gratuit" },
+      { property: "og:description", content: "Spui ce meditații cauți, profesorii îți trimit oferte cu preț și program. Gratuit, fără comision, online sau în orașul tău." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://meditatiidirect.ro/" },
       { name: "twitter:card", content: "summary_large_image" },
