@@ -1,4 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
+import { ComboDataBlock } from "@/components/market-data";
+import type { ComboStats } from "@/lib/market-stats.functions";
 import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { AdSenseSlot } from "@/components/ads/adsense";
@@ -25,6 +27,7 @@ export interface SeoLandingProps {
 }
 
 export function SeoLanding(p: SeoLandingProps) {
+  const ld = useLoaderData({ strict: false }) as { subjectStats?: ComboStats | null; subjectName?: string } | undefined;
   const breadcrumbLd = p.pageUrl
     ? {
         "@context": "https://schema.org",
@@ -135,6 +138,7 @@ export function SeoLanding(p: SeoLandingProps) {
         </section>
       )}
 
+      {ld?.subjectStats && ld.subjectName && <ComboDataBlock s={ld.subjectStats} subject={ld.subjectName} city="România" />}
       {p.faqs && p.faqs.length > 0 && (
         <section className="mt-14 max-w-3xl">
           <h2 className="text-2xl font-bold">Întrebări frecvente</h2>

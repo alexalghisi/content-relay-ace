@@ -1,3 +1,4 @@
+import { subjectLoader } from "@/lib/subject-stats";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
@@ -15,6 +16,7 @@ const FAQS: FaqItem[] = [
 ];
 
 export const Route = createFileRoute("/meditatii-matematica")({
+  loader: subjectLoader("matematica"),
   head: () => ({
     meta: [
       { title: TITLE },

@@ -1,3 +1,4 @@
+import { subjectLoader } from "@/lib/subject-stats";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
@@ -14,6 +15,7 @@ const faqs = [
 ];
 
 export const Route = createFileRoute("/meditatii-romana")({
+  loader: subjectLoader("romana"),
   head: () => ({
     meta: [
       { title: TITLE },

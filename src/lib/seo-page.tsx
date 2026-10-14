@@ -2,6 +2,8 @@
 // Reduce dramatic codul per rută — un fișier de rută devine ~10 linii.
 import { SeoLanding, faqJsonLd, type FaqItem, type SeoLandingProps } from "@/components/seo-landing";
 
+import { subjectLoader } from "@/lib/subject-stats";
+
 const SITE = "https://meditatiidirect.ro";
 
 export interface SeoPageConfig {
@@ -29,7 +31,9 @@ function defaultImage(path: string) {
 export function seoPage(c: SeoPageConfig) {
   const url = `${SITE}${c.path}`;
   const image = c.image ?? defaultImage(c.path);
+  const sm = /^\/meditatii-([a-z]+)$/.exec(c.path);
   return {
+    ...(sm && SUBJECT_OG.includes(sm[1]) ? { loader: subjectLoader(sm[1]) } : {}),
     head: () => ({
       meta: [
         { title: c.title },
