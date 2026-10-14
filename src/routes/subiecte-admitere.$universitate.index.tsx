@@ -5,7 +5,7 @@ import { listSubjectsForUni } from "@/lib/admission-papers";
 
 type SubjectRow = { slug: string; name: string; count: number };
 
-export const Route = createFileRoute("/subiecte-admitere/$universitate")({
+export const Route = createFileRoute("/subiecte-admitere/$universitate/")({
   loader: async ({ params }): Promise<{ universitate: string; universityName: string; subjects: SubjectRow[] }> => {
     const { universityName, subjects } = await listSubjectsForUni(params.universitate);
     return { universitate: params.universitate, universityName: universityName || params.universitate, subjects };

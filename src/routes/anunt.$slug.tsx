@@ -1,6 +1,6 @@
 import { notifyTeachersOfRequest } from "@/lib/notify-teachers.functions";
 import { validateRequest, clip } from "@/lib/request-validation";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, notFound, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -21,16 +21,34 @@ interface AdDetail {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+const PUBLIC_SEL = "id,title,description,location,is_online,price_per_hour,session_duration,subject_name,subject_slug,subcategories,seo_slug,views_count,legacy_teachers(id,full_name,avatar_url,experience_years,education,bio,auth_user_id)";
+
 export const Route = createFileRoute("/anunt/$slug")({
+  // Server-side load so the ad text ships in the initial HTML; missing ads return a real 404.
+  loader: async ({ params }) => {
+    let { data } = await supabase.from("ads").select(PUBLIC_SEL).eq("seo_slug", params.slug).maybeSingle();
+    if (!data && UUID_RE.test(params.slug)) {
+      data = (await supabase.from("ads").select(PUBLIC_SEL).eq("id", params.slug).maybeSingle()).data;
+      const d = data as unknown as { seo_slug: string | null } | null;
+      if (d?.seo_slug) throw redirect({ to: "/anunt/$slug", params: { slug: d.seo_slug }, statusCode: 301 });
+    }
+    if (!data) throw notFound();
+    return { ad: data as unknown as AdDetail };
+  },
   component: AdPage,
-  head: ({ params }) => {
+  head: ({ params, loaderData }) => {
     const isUuid = UUID_RE.test(params.slug);
-    const human = decodeURIComponent(params.slug).replace(/-/g, " ");
+    const ad = loaderData?.ad;
+    const human = ad?.title ?? decodeURIComponent(params.slug).replace(/-/g, " ");
+    const where = ad?.location ? ` ${ad.location}` : ad?.is_online ? " online" : "";
+    const desc = ad
+      ? `Meditații ${ad.subject_name ?? ""}${where} cu ${ad.legacy_teachers?.full_name ?? "profesor"}${ad.price_per_hour ? `, ${ad.price_per_hour} lei/oră` : ""}. Contact direct pe MeditatiiDirect.ro, fără comision.`.replace(/\s+/g, " ")
+      : `Anunț meditații: ${human}. Contact direct, fără comision.`;
     const meta = [
-      { title: `Meditații ${human} | Profesor verificat | MeditatiiDirect.ro` },
-      { name: "description", content: `Anunț meditații cu profesor verificat: ${human}. Contact direct, preț per oră, recenzii reale. Fără comision, fără intermediari.` },
-      { property: "og:title", content: `Meditații ${human} — MeditatiiDirect.ro` },
-      { property: "og:description", content: `Profesor verificat. Contact direct, fără comision.` },
+      { title: `${human} | MeditatiiDirect.ro` },
+      { name: "description", content: desc },
+      { property: "og:title", content: `${human} — MeditatiiDirect.ro` },
+      { property: "og:description", content: desc },
       { property: "og:type", content: "article" },
     ];
     if (isUuid) {
@@ -48,8 +66,9 @@ function AdPage() {
   const { slug } = Route.useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [ad, setAd] = useState<AdDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+  const initial = Route.useLoaderData();
+  const [ad, setAd] = useState<AdDetail | null>(initial.ad);
+  const [loading, setLoading] = useState(!initial.ad);
   const [showContact, setShowContact] = useState(false);
   const [starting, setStarting] = useState(false);
 
@@ -69,7 +88,7 @@ function AdPage() {
           return;
         }
       }
-      setAd(data as unknown as AdDetail);
+      if (data) setAd(data as unknown as AdDetail);
       setLoading(false);
     })();
   }, [slug, navigate, user]);

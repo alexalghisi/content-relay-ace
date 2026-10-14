@@ -3,8 +3,6 @@ import type {} from "@tanstack/react-start";
 import { CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 
-const PRIORITY_SUBJECTS = ["engleza", "germana", "franceza", "matematica", "fizica", "romana"];
-const PRIORITY_CITIES = ["cluj-napoca", "bucuresti", "timisoara", "iasi", "brasov", "constanta", "sibiu", "craiova"];
 
 const BASE_URL = "https://meditatiidirect.ro";
 
@@ -104,18 +102,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         );
 
         try {
-          const { data: subjects } = await supabaseAdmin.from("subjects").select("slug");
-          for (const s of subjects ?? []) {
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/meditatii?materie=${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
-            );
-          }
-          const { data: cities } = await supabaseAdmin.from("cities").select("slug");
-          for (const c of cities ?? []) {
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/meditatii?oras=${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
-            );
-          }
+          // Query-string listings (/meditatii?materie=…) are canonicalised to /meditatii — not listed.
           // Per-ad pages — primary long-tail SEO surface
           const { data: ads } = await supabaseAdmin
             .from("ads")
@@ -133,14 +120,6 @@ export const Route = createFileRoute("/sitemap.xml")({
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/meditatii-${sub.slug}-online</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
             );
-          }
-          // Combinații prioritare materie × oraș
-          for (const ms of PRIORITY_SUBJECTS) {
-            for (const cs of PRIORITY_CITIES) {
-              urls.push(
-                `  <url>\n    <loc>${BASE_URL}/meditatii/${ms}/${cs}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
-              );
-            }
           }
           // City landing pages + profesori per oraș (nou — 14 pagini SEO)
           for (const c of CITIES) {
@@ -168,7 +147,13 @@ export const Route = createFileRoute("/sitemap.xml")({
         // Pagini-resursă pentru fiecare PDF găzduit la noi (BAC + admitere)
         try {
           const { BAC_ARCHIVE } = await import("@/data/bac-archive");
+          // Resource pages without a hosted subject PDF are noindex — skip them.
+          const { data: names } = await supabaseAdmin.rpc("bac_pdf_names", { _prefix: "" });
+          const have = new Set(((names ?? []) as string[])
+            .filter((n) => n.endsWith("-subiect.pdf")).map((n) => n.split("/").slice(0, 2).join("/")));
           for (const it of BAC_ARCHIVE) {
+            const m = it.internal.match(/^\/resurse\/bac\/([^/]+)\/(\d{4})/);
+            if (m && !have.has(`${m[1]}/${m[2]}`)) continue;
             urls.push(`  <url>\n    <loc>${BASE_URL}${it.internal}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
           }
         } catch (err) {
@@ -182,9 +167,17 @@ export const Route = createFileRoute("/sitemap.xml")({
         try {
           const { SUBJECTS_SEO } = await import("@/data/subjects-seo");
           const { CITIES } = await import("@/data/cities");
+          // Same rule as the page: a combo with no active ads is noindex, so keep it out of the sitemap.
+          const { data: adRows } = await supabaseAdmin
+            .from("ads").select("subject_slug,location,is_online").eq("status", "active").limit(10000);
+          const rows = (adRows ?? []) as { subject_slug: string | null; location: string | null; is_online: boolean }[];
+          const comboHasAds = (subs: string[], locs: string[]) =>
+            rows.some((r) => r.subject_slug && subs.includes(r.subject_slug) &&
+              (r.is_online || locs.some((m) => (r.location ?? "").toLowerCase().includes(m.toLowerCase()))));
           for (const s of SUBJECTS_SEO) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/preturi-meditatii/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             for (const c of CITIES) {
+              if (!comboHasAds(s.dbSlugs, c.matchLocation)) continue;
               urls.push(`  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
             }
           }
@@ -204,6 +197,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             urls.push(`  <url>\n    <loc>${BASE_URL}/simulare-bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             for (const y of BAC_YEARS) {
+              if (![...pdfSet].some((n) => n.startsWith(`${s.slug}/${y}/`) && n.endsWith("-subiect.pdf"))) continue;
               urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
               for (const ses of BAC_SESSIONS) {
                 if (!pdfSet.has(`${s.slug}/${y}/${ses.slug}-subiect.pdf`)) continue;
