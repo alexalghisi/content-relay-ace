@@ -4,7 +4,7 @@ import { listYearsForUniSubject } from "@/lib/admission-papers";
 
 type SubjectMeta = { universitate: string; materie: string; universityName: string; subjectName: string; years: number[] };
 
-export const Route = createFileRoute("/subiecte-admitere/$universitate/$materie")({
+export const Route = createFileRoute("/subiecte-admitere/$universitate/$materie/")({
   loader: async ({ params }): Promise<SubjectMeta> => {
     const { universityName, subjectName, years } = await listYearsForUniSubject(params.universitate, params.materie);
     return {
