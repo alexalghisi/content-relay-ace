@@ -807,9 +807,9 @@ const SubiecteAdmitereUniversitateMaterieIndexRoute =
   } as any)
 const SubiecteAdmitereUniversitateMaterieAnRoute =
   SubiecteAdmitereUniversitateMaterieAnRouteImport.update({
-    id: '/subiecte-admitere/$universitate/$materie/$an',
-    path: '/subiecte-admitere/$universitate/$materie/$an',
-    getParentRoute: () => rootRouteImport,
+    id: '/$an',
+    path: '/$an',
+    getParentRoute: () => SubiecteAdmitereUniversitateMaterieRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -1729,7 +1729,6 @@ export interface RootRouteChildren {
   ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
   ResurseBacMaterieAnRoute: typeof ResurseBacMaterieAnRoute
   RezolvariMaterieAnSesiuneRoute: typeof RezolvariMaterieAnSesiuneRoute
-  SubiecteAdmitereUniversitateMaterieAnRoute: typeof SubiecteAdmitereUniversitateMaterieAnRoute
   SubiecteAdmitereUniversitateMaterieIndexRoute: typeof SubiecteAdmitereUniversitateMaterieIndexRoute
 }
 
@@ -2640,10 +2639,10 @@ declare module '@tanstack/react-router' {
     }
     '/subiecte-admitere/$universitate/$materie/$an': {
       id: '/subiecte-admitere/$universitate/$materie/$an'
-      path: '/subiecte-admitere/$universitate/$materie/$an'
+      path: '/$an'
       fullPath: '/subiecte-admitere/$universitate/$materie/$an'
       preLoaderRoute: typeof SubiecteAdmitereUniversitateMaterieAnRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof SubiecteAdmitereUniversitateMaterieRoute
     }
   }
 }
@@ -2802,8 +2801,6 @@ const rootRouteChildren: RootRouteChildren = {
   ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
   ResurseBacMaterieAnRoute: ResurseBacMaterieAnRoute,
   RezolvariMaterieAnSesiuneRoute: RezolvariMaterieAnSesiuneRoute,
-  SubiecteAdmitereUniversitateMaterieAnRoute:
-    SubiecteAdmitereUniversitateMaterieAnRoute,
   SubiecteAdmitereUniversitateMaterieIndexRoute:
     SubiecteAdmitereUniversitateMaterieIndexRoute,
 }
