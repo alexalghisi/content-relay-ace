@@ -153,6 +153,14 @@ function RatingBox({ requestId, token, proposalId, initial }: { requestId: strin
         ))}
         {saved && <span className="ml-2 text-xs text-success">Mulțumim!</span>}
       </div>
+      {saved && value === 5 && (
+        <p className="mt-2 text-xs text-muted-foreground">
+          Ți-a plăcut? Ne ajută mult o recenzie publică:{" "}
+          <a href="https://www.trustpilot.com/evaluate/meditatiidirect.ro" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary underline">
+            lasă o recenzie pe Trustpilot
+          </a>
+        </p>
+      )}
       {!saved && (
         <input
           value={comment}

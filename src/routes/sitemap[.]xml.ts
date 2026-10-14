@@ -171,9 +171,10 @@ export const Route = createFileRoute("/sitemap.xml")({
           const { data: adRows } = await supabaseAdmin
             .from("ads").select("subject_slug,location,is_online").eq("status", "active").limit(10000);
           const rows = (adRows ?? []) as { subject_slug: string | null; location: string | null; is_online: boolean }[];
+          const { MIN_LISTINGS_FOR_INDEX } = await import("@/lib/market-stats.functions");
           const comboHasAds = (subs: string[], locs: string[]) =>
-            rows.some((r) => r.subject_slug && subs.includes(r.subject_slug) &&
-              (r.is_online || locs.some((m) => (r.location ?? "").toLowerCase().includes(m.toLowerCase()))));
+            rows.filter((r) => r.subject_slug && subs.includes(r.subject_slug) &&
+              (r.is_online || locs.some((m) => (r.location ?? "").toLowerCase().includes(m.toLowerCase())))).length >= MIN_LISTINGS_FOR_INDEX;
           for (const s of SUBJECTS_SEO) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/preturi-meditatii/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             for (const c of CITIES) {
