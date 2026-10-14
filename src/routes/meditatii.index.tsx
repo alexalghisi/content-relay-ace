@@ -1,3 +1,4 @@
+import { notifyTeachersOfRequest } from "@/lib/notify-teachers.functions";
 import { validateRequest, clip } from "@/lib/request-validation";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";

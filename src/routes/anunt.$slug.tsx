@@ -1,3 +1,4 @@
+import { notifyTeachersOfRequest } from "@/lib/notify-teachers.functions";
 import { validateRequest, clip } from "@/lib/request-validation";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -283,6 +284,7 @@ function BookingWidget({ compact = false, ad }: { compact?: boolean; ad: AdDetai
       toast.error("Nu am putut trimite cererea. Încearcă din nou sau folosește butonul de contact.");
       return;
     }
+    notifyTeachersOfRequest({ data: { requestId } }).catch(() => {});
     setSent(true);
     toast.success("Cererea a fost trimisă. Profesorii verificați o pot vedea și îți răspund pe email.");
   };
