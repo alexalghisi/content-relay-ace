@@ -87,7 +87,6 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
     const seed = (subject.slug + city.slug).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
     const variant = seed % 4;
     const countLbl = count >= 5 ? `${count} profesori` : "Profesori";
-    const countLbl = count >= 5 ? `${count} profesori` : "Profesori";
     const titleTemplates = [
       `Meditații ${subject.name} ${city.name} — ${countLbl}, ${priceTxt}`,
       `Profesori ${subject.name} ${city.name}: online sau la domiciliu | MeditatiiDirect`,
