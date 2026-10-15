@@ -67,6 +67,11 @@ export function ComboDataBlock({ s, subject, city }: { s: ComboStats; subject: s
           <dd className="text-xs text-muted-foreground">{s.answeredRequests > 0 ? `mediana pe ${s.answeredRequests} cereri cu răspuns` : "încă fără răspunsuri"}</dd>
         </div>
         <div className="card-soft p-5">
+          <dt className="flex items-center gap-2 text-sm text-muted-foreground"><Clock className="h-4 w-4 text-primary" /> Cereri de la elevi</dt>
+          <dd className="mt-1 text-2xl font-bold">{s.requestsTotal}</dd>
+          <dd className="text-xs text-muted-foreground">în {city} sau online</dd>
+        </div>
+        <div className="card-soft p-5">
           <dt className="flex items-center gap-2 text-sm text-muted-foreground"><Star className="h-4 w-4 text-primary" /> Evaluare medie</dt>
           <dd className="mt-1 text-2xl font-bold">{s.rating ? `${s.rating.avg.toFixed(1)} / 5` : "—"}</dd>
           <dd className="text-xs text-muted-foreground">{s.rating ? `${s.rating.count} evaluări de la elevi` : "încă nicio evaluare"}</dd>
