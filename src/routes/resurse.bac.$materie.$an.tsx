@@ -31,6 +31,8 @@ export const Route = createFileRoute("/resurse/bac/$materie/$an")({
       // resolver failure => treat as no PDFs, still render the fallback page instead of erroring.
     }
     const yearAvailable = !!pdfs.subiect;
+    // Years without a hosted paper are thin content: real 404 (and absent from the sitemap).
+    if (!yearAvailable) throw notFound();
     return { subject, year, yearAvailable, pdfs };
   },
   head: ({ loaderData }) => {
