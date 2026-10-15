@@ -96,6 +96,8 @@ export const Route = createFileRoute("/api/public/hooks/auto-blog-post")({
         const apiKey = request.headers.get("x-webhook-secret") ?? request.headers.get("x-api-key");
         const expected = process.env.BLOG_HOOK_SECRET;
         if (!expected || !apiKey || apiKey !== expected) return json({ error: "Unauthorized" }, 401);
+        // Oprit la cererea proprietarului (15 oct 2026): publicarea automată producea articole duplicate.
+        if (process.env.AUTO_BLOG_ENABLED !== "true") return json({ status: "disabled" });
 
         const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
         if (!LOVABLE_API_KEY) return json({ error: "LOVABLE_API_KEY missing" }, 500);

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
+import { consolidatedTarget } from "@/lib/seo-redirects";
 
 
 const BASE_URL = "https://meditatiidirect.ro";
@@ -96,7 +97,7 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         // No synthetic <lastmod>: only entries with a real content timestamp carry one.
-        const urls: string[] = STATIC_PATHS.map(
+        const urls: string[] = STATIC_PATHS.filter((p) => !consolidatedTarget(p.path)).map(
           (e) =>
             `  <url>\n    <loc>${BASE_URL}${e.path}</loc>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority}</priority>\n  </url>`,
         );
