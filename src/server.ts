@@ -2,6 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { consolidatedTarget } from "./lib/seo-redirects";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -73,6 +74,8 @@ export default {
     let changed = false;
     if (url.hostname.startsWith("www.")) { url.hostname = url.hostname.slice(4); changed = true; }
     if (url.pathname.length > 1 && url.pathname.endsWith("/")) { url.pathname = url.pathname.replace(/\/+$/, ""); changed = true; }
+    const merged = consolidatedTarget(url.pathname);
+    if (merged) { url.pathname = merged; changed = true; }
     if (changed && (request.method === "GET" || request.method === "HEAD")) {
       return Response.redirect(url.toString(), 301);
     }

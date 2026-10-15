@@ -126,9 +126,6 @@ export const Route = createFileRoute("/sitemap.xml")({
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,
             );
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/profesori/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
-            );
           }
 
           // Blog posts
