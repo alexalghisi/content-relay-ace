@@ -27,6 +27,9 @@ export interface ComboStats {
   teachersByLevel: { level: string; count: number }[];
   recentRequests: { level: string | null; place: string; budget: number | null; date: string }[];
   requestsTotal: number;
+  /** Median hours from request posting to the first teacher proposal (real data), null when no proposal exists yet. */
+  firstProposalHours: number | null;
+  answeredRequests: number;
   rating: { avg: number; count: number } | null;
   updatedAt: string;
 }
@@ -61,11 +64,33 @@ export const getComboStats = createServerFn({ method: "GET" })
 
     let proposalPrices: number[] = [];
     let ratings: number[] = [];
+    let firstProposalHours: number | null = null;
+    let answeredRequests = 0;
     if (reqs.length) {
       const { data: props } = await supabaseAdmin
-        .from("teacher_proposals").select("price_per_hour,rating").in("request_id", reqs.map((r) => r.id));
+        .from("teacher_proposals").select("request_id,price_per_hour,rating,created_at").in("request_id", reqs.map((r) => r.id));
       proposalPrices = (props ?? []).map((p) => p.price_per_hour ?? 0);
       ratings = (props ?? []).map((p) => p.rating ?? 0).filter((x) => x > 0);
+      const firstByReq = new Map<string, number>();
+      for (const p of props ?? []) {
+        const t = new Date(p.created_at).getTime();
+        const prev = firstByReq.get(p.request_id);
+        if (prev == null || t < prev) firstByReq.set(p.request_id, t);
+      }
+      const delays: number[] = [];
+      for (const r of reqs) {
+        const first = firstByReq.get(r.id);
+        if (first == null) continue;
+        const hours = (first - new Date(r.created_at).getTime()) / 3_600_000;
+        if (hours >= 0) delays.push(hours);
+      }
+      answeredRequests = delays.length;
+      if (delays.length) {
+        delays.sort((a, b) => a - b);
+        const mid = Math.floor(delays.length / 2);
+        const med = delays.length % 2 ? delays[mid] : (delays[mid - 1] + delays[mid]) / 2;
+        firstProposalHours = Math.round(med * 10) / 10;
+      }
     }
 
     const price = quantiles([
@@ -92,6 +117,8 @@ export const getComboStats = createServerFn({ method: "GET" })
         date: r.created_at.slice(0, 10),
       })),
       requestsTotal: localReqs.length,
+      firstProposalHours,
+      answeredRequests,
       rating: ratings.length ? { avg: Math.round((ratings.reduce((s, x) => s + x, 0) / ratings.length) * 10) / 10, count: ratings.length } : null,
       updatedAt: new Date().toISOString().slice(0, 10),
     };

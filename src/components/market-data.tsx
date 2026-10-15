@@ -34,6 +34,14 @@ export function comboFaqs(s: ComboStats, subject: string, city: string) {
       ? `Până la ${fmtDate(s.updatedAt)}, elevii au postat ${s.requestsTotal} ${s.requestsTotal === 1 ? "cerere" : "cereri"} la ${subject} pentru ${city} sau online.`
       : `Încă nu există cereri publicate la ${subject} pentru ${city}. Poți fi primul: cererea e gratuită.`,
   });
+  if (s.firstProposalHours != null && s.answeredRequests > 0) {
+    const h = s.firstProposalHours;
+    const timp = h < 1 ? "sub o oră" : h < 48 ? `circa ${h} ${h === 1 ? "oră" : "ore"}` : `circa ${Math.round(h / 24)} ${Math.round(h / 24) === 1 ? "zi" : "zile"}`;
+    faqs.push({
+      q: `În cât timp primesc prima propunere la ${subject}?`,
+      a: `Pe MeditatiiDirect, jumătate dintre cererile la ${subject} cu cel puțin o propunere au primit primul răspuns în ${timp} (calculat din ${s.answeredRequests} ${s.answeredRequests === 1 ? "cerere reală" : "cereri reale"}, actualizat la ${fmtDate(s.updatedAt)}). Profesorii sunt anunțați prin e-mail imediat ce apare o cerere la materia lor.`,
+    });
+  }
   return faqs;
 }
 
@@ -52,6 +60,11 @@ export function ComboDataBlock({ s, subject, city }: { s: ComboStats; subject: s
           <dt className="flex items-center gap-2 text-sm text-muted-foreground"><Wallet className="h-4 w-4 text-primary" /> Tarif real (lei/oră)</dt>
           <dd className="mt-1 text-2xl font-bold">{s.price ? s.price.median : "—"}</dd>
           <dd className="text-xs text-muted-foreground">{s.price ? `minim ${s.price.min} · maxim ${s.price.max} · ${s.price.n} tarife` : "încă fără tarife suficiente"}</dd>
+        </div>
+        <div className="card-soft p-5">
+          <dt className="flex items-center gap-2 text-sm text-muted-foreground"><Clock className="h-4 w-4 text-primary" /> Prima propunere</dt>
+          <dd className="mt-1 text-2xl font-bold">{s.firstProposalHours != null ? (s.firstProposalHours < 1 ? "< 1 oră" : s.firstProposalHours < 48 ? `~${s.firstProposalHours} ore` : `~${Math.round(s.firstProposalHours / 24)} zile`) : "—"}</dd>
+          <dd className="text-xs text-muted-foreground">{s.answeredRequests > 0 ? `mediana pe ${s.answeredRequests} cereri cu răspuns` : "încă fără răspunsuri"}</dd>
         </div>
         <div className="card-soft p-5">
           <dt className="flex items-center gap-2 text-sm text-muted-foreground"><Clock className="h-4 w-4 text-primary" /> Cereri de la elevi</dt>
