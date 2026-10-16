@@ -228,7 +228,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         // Noua arhivă /subiecte-admitere/* — generată din tabelul admission_papers
         try {
-          urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+          // /subiecte-admitere itself is already listed in STATIC_PATHS.
           const { data: papers } = await supabaseAdmin
             .from("admission_papers")
             .select("university_slug, subject_slug, year, updated_at")
