@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Reintroduce Adsterra în plasările existente, separat de AdSense, cu acord explicit și fără popunder/social bar.
+
 - [x] Corectează prezentarea incompletă a articolelor, livrează blogul în primul răspuns, înlocuiește pagina goală de tutoriale cu ghiduri practice și suspendă reclamele; verificat în preview pe desktop și telefon.
 - [ ] Revizuire editorială integrală a articolelor și materialelor de examen — blocat: necesită verificare umană a exactității și surselor; corecțiile tehnice nu garantează aprobarea AdSense.
 - [ ] Reevaluare AdSense — blocat: aprobarea este decisă de Google, cererea se trimite din contul utilizatorului după publicare.
