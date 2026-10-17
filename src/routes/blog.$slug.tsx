@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { getPublicBlogPost } from "@/lib/blog.functions";
+import { BlogContent, slugifyHeading } from "@/components/blog-content";
 import { CalendarDays, ArrowLeft } from "lucide-react";
 import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { AdSenseSlot } from "@/components/ads/adsense";
@@ -12,15 +13,13 @@ interface Post {
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
-    const { data } = await supabase.from("blog_posts")
-      .select("slug,title,excerpt,content,category,published_at,tags,featured_image,updated_at")
-      .eq("slug", params.slug).eq("is_published", true).maybeSingle();
-    if (!data) throw notFound();
-    return { post: data as Post };
+    const { post } = await getPublicBlogPost({ data: { slug: params.slug } });
+    if (!post?.content?.trim()) throw notFound();
+    return { post: post as Post };
   },
   head: ({ params, loaderData }) => {
     const post = loaderData?.post;
-    if (!post) return { meta: [] };
+    if (!post) return { meta: [{ title: "Articol indisponibil | MeditatiiDirect.ro" }, { name: "description", content: "Articolul solicitat nu este disponibil. Consultă ghidurile publicate pe MeditatiiDirect.ro." }, { property: "og:title", content: "Articol indisponibil | MeditatiiDirect.ro" }, { property: "og:description", content: "Consultă ghidurile publicate pe MeditatiiDirect.ro." }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex, follow" }] };
     const url = `https://meditatiidirect.ro/blog/${params.slug}`;
     const articleLd = {
       "@context": "https://schema.org",
@@ -33,10 +32,9 @@ export const Route = createFileRoute("/blog/$slug")({
       publisher: {
         "@type": "Organization",
         name: "MeditatiiDirect",
-        logo: { "@type": "ImageObject", url: "https://meditatiidirect.ro/favicon.ico" },
+        logo: { "@type": "ImageObject", url: "https://meditatiidirect.ro/apple-touch-icon.png" },
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
-      image: post.featured_image ?? "https://meditatiidirect.ro/favicon.ico",
       inLanguage: "ro-RO",
       articleSection: post.category ?? undefined,
       keywords: (post.tags ?? []).join(", ") || undefined,
@@ -83,10 +81,10 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:description", content: post.excerpt ?? "" },
         { property: "og:url", content: url },
         { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
         ...(post.published_at ? [{ property: "article:published_time", content: post.published_at }] : []),
         ...(post.category ? [{ property: "article:section", content: post.category }] : []),
         ...((post.tags ?? []).map((t) => ({ property: "article:tag", content: t }))),
-        ...(post.featured_image ? [{ property: "og:image", content: post.featured_image }] : []),
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
@@ -97,12 +95,9 @@ export const Route = createFileRoute("/blog/$slug")({
     };
   },
   component: PostPage,
+  errorComponent: () => <article className="container-page py-10"><h1 className="text-2xl font-bold">Articolul nu poate fi încărcat momentan</h1><Link to="/blog" className="mt-4 inline-flex text-primary">Înapoi la blog</Link></article>,
+  notFoundComponent: () => <article className="container-page py-10"><h1 className="text-2xl font-bold">Articol indisponibil</h1><Link to="/blog" className="mt-4 inline-flex text-primary">Vezi articolele publicate</Link></article>,
 });
-
-const slugifyHeading = (t: string) =>
-  t.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 function PostPage() {
   const { post } = Route.useLoaderData();
@@ -111,19 +106,6 @@ function PostPage() {
   const readingMinutes = Math.max(1, Math.round(words / 200));
   const headings = Array.from(content.matchAll(/^## (.+)$/gm)).map((m) => m[1].trim());
 
-  // Render markdown-light: ## headings + paragraphs + [link](url)
-  const renderContent = (md: string) => {
-    return md.split(/\n\n+/).map((block, i) => {
-      const h2 = block.match(/^## (.+)/);
-      if (h2) return <h2 key={i} id={slugifyHeading(h2[1])} className="mt-8 scroll-mt-24 text-xl font-bold">{h2[1]}</h2>;
-      const linked = block.split(/(\[[^\]]+\]\([^)]+\))/g).map((part, j) => {
-        const m = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-        if (m) return <Link key={j} to={m[2] as never} className="text-primary underline">{m[1]}</Link>;
-        return <span key={j}>{part}</span>;
-      });
-      return <p key={i} className="mt-4 text-foreground/90 leading-relaxed whitespace-pre-line">{linked}</p>;
-    });
-  };
   return (
     <article className="container-page py-10 max-w-3xl">
       <nav aria-label="Breadcrumb" className="text-xs text-muted-foreground">
@@ -173,7 +155,7 @@ function PostPage() {
 
       <AdsterraBanner728 className="mt-6" />
       <div className="mt-8 prose max-w-none">
-        {renderContent(content)}
+        <BlogContent content={content} />
       </div>
       <AdsterraNativeBanner className="mt-8" />
       <AdSenseSlot format="auto" className="mt-6" />

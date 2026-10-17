@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { listPublicBlogPosts } from "@/lib/blog.functions";
 import { CalendarDays, Tag } from "lucide-react";
 import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { AdSenseSlot } from "@/components/ads/adsense";
 
-interface Post { slug: string; title: string; excerpt: string | null; category: string | null; published_at: string | null; tags: string[] | null; }
+const postsQuery = queryOptions({ queryKey: ["public-blog-posts"], queryFn: () => listPublicBlogPosts() });
 
 export const Route = createFileRoute("/blog/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery),
   head: () => ({
     meta: [
       { title: "Blog Meditații — Ghiduri BAC, Admitere și Sfaturi 2026 | MeditatiiDirect.ro" },
@@ -16,19 +17,18 @@ export const Route = createFileRoute("/blog/")({
       { property: "og:title", content: "Blog Meditații — Ghiduri BAC și Admitere 2026" },
       { property: "og:description", content: "Articole, ghiduri și sfaturi despre meditații și examene." },
       { property: "og:url", content: "https://meditatiidirect.ro/blog" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/blog" }],
   }),
   component: BlogIndex,
+  errorComponent: () => <article className="container-page py-10"><h1 className="text-2xl font-bold">Articolele nu pot fi încărcate momentan</h1><Link to="/blog" className="mt-4 inline-flex text-primary">Revino la blog</Link></article>,
+  notFoundComponent: () => <article className="container-page py-10"><h1 className="text-2xl font-bold">Blog indisponibil</h1><Link to="/" className="mt-4 inline-flex text-primary">Acasă</Link></article>,
 });
 
 function BlogIndex() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    supabase.from("blog_posts").select("slug,title,excerpt,category,published_at,tags").eq("is_published", true).order("published_at", { ascending: false }).limit(100)
-      .then(({ data }) => { setPosts((data ?? []) as Post[]); setLoading(false); });
-  }, []);
+  const { data: { posts } } = useSuspenseQuery(postsQuery);
   return (
     <article className="container-page py-10">
       <header className="max-w-3xl">
@@ -37,8 +37,8 @@ function BlogIndex() {
       </header>
       <AdsterraBanner728 className="mt-8" />
       <AdsterraNativeBanner className="mt-4" />
-      {loading ? (
-        <p className="mt-8 text-muted-foreground">Se încarcă articolele...</p>
+      {posts.length === 0 ? (
+        <p className="mt-8 text-muted-foreground">Nu sunt articole publicate momentan.</p>
       ) : (
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((p) => (
