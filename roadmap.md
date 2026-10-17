@@ -1,6 +1,7 @@
 # Roadmap
 
-- [ ] Corectează problemele confirmate de prezentare a articolelor și eligibilitate a reclamelor pentru refuzul AdSense „Low-value content”; verifică în site.
+- [x] Corectează prezentarea incompletă a articolelor, livrează blogul în primul răspuns, înlocuiește pagina goală de tutoriale cu ghiduri practice și suspendă reclamele; verificat în preview pe desktop și telefon.
+- [ ] Revizuire editorială integrală a articolelor și materialelor de examen — blocat: necesită verificare umană a exactității și surselor; corecțiile tehnice nu garantează aprobarea AdSense.
 - [ ] Reevaluare AdSense — blocat: aprobarea este decisă de Google, cererea se trimite din contul utilizatorului după publicare.
 
 - [x] Verifică acum concurența și cererea de căutare din România; configurează monitorizarea SEO zilnică automată prin Semrush.
