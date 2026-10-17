@@ -7,3 +7,6 @@
 - Public SEO numbers (prices, counts, ratings) come only from src/lib/market-stats.functions.ts aggregates of real DB rows; never estimated or templated values, and AggregateRating only when real ratings exist.
 - Duplicate pages are consolidated only through src/lib/seo-redirects.ts (301 in src/server.ts + sitemap exclusion); one canonical page per search intent.
 - Automatic blog publishing stays off unless AUTO_BLOG_ENABLED="true"; it produced duplicate articles.
+- Public blog reads use publishable server functions and SSR; failed reads must not masquerade as empty articles.
+- Blog Markdown uses a safe GFM renderer without raw HTML; preserve complete paragraphs, lists, tables and source links.
+- Keep ad serving centrally disabled during AdSense rejection and until approval plus certified consent setup; preserve ownership verification independently.

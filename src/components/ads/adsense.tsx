@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 
 /**
  * Google AdSense slot.
@@ -10,7 +11,7 @@ import { useEffect, useRef } from "react";
  *
  * Dacă nu e configurat, componenta nu randează nimic — sigur pentru AdSense review.
  */
-const CLIENT = import.meta.env.VITE_ADSENSE_CLIENT as string | undefined;
+const CLIENT = (import.meta.env.VITE_ADSENSE_CLIENT as string | undefined) || "ca-pub-4079300108937036";
 const DEFAULT_SLOT = import.meta.env.VITE_ADSENSE_SLOT_DEFAULT as string | undefined;
 
 interface Props {
@@ -32,7 +33,7 @@ export function AdSenseSlot({
   const resolvedSlot = slot || DEFAULT_SLOT;
 
   useEffect(() => {
-    if (!CLIENT || !resolvedSlot) return;
+    if (!AD_SERVING_ENABLED || !CLIENT || !resolvedSlot) return;
     try {
       // @ts-expect-error adsbygoogle global injected by AdSense script
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -41,7 +42,7 @@ export function AdSenseSlot({
     }
   }, [resolvedSlot]);
 
-  if (!CLIENT || !resolvedSlot) return null;
+  if (!AD_SERVING_ENABLED || !CLIENT || !resolvedSlot) return null;
 
   return (
     <div className={`my-8 flex flex-col items-center ${className}`}>
