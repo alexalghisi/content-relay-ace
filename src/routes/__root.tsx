@@ -15,6 +15,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ADSENSE_CLIENT } from "@/components/ads/adsense";
+import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 // Popunder/anchor Adsterra dezactivate până la aprobarea AdSense.
 
 function NotFoundComponent() {
@@ -68,6 +69,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "geo.placename", content: "România" },
       { name: "rating", content: "general" },
       { name: "google-site-verification", content: "0ffO5lotmxwkEENDzoH1pVYFDx96xfPwo6XpohLNn_E" },
+      ...(ADSENSE_CLIENT ? [{ name: "google-adsense-account", content: ADSENSE_CLIENT }] : []),
       { property: "og:site_name", content: "MeditatiiDirect.ro" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "ro_RO" },
@@ -86,7 +88,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         { rel: "alternate", hrefLang: "x-default", href: "https://meditatiidirect.ro" },
       ],
       scripts: [
-        ...(ADSENSE_CLIENT
+        ...(AD_SERVING_ENABLED && ADSENSE_CLIENT
           ? [{
               async: true,
               src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
@@ -103,7 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
                 "@id": "https://meditatiidirect.ro/#org",
                 name: "MeditatiiDirect",
                 url: "https://meditatiidirect.ro",
-                logo: "https://meditatiidirect.ro/favicon.ico",
+                logo: "https://meditatiidirect.ro/apple-touch-icon.png",
                 sameAs: [],
                 description: "Platformă de anunțuri meditații cu profesori verificați din toată România. Contact direct, fără comision.",
               },
@@ -125,7 +127,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
                 "@id": "https://meditatiidirect.ro/#edu",
                 name: "MeditatiiDirect",
                 url: "https://meditatiidirect.ro",
-                logo: "https://meditatiidirect.ro/favicon.ico",
+                logo: "https://meditatiidirect.ro/apple-touch-icon.png",
                 description: "Platformă educațională cu profesori particulari verificați pentru meditații online și la domiciliu — gimnaziu, liceu, BAC 2026, admitere facultate.",
                 areaServed: { "@type": "Country", name: "România" },
                 knowsLanguage: ["ro", "en"],
@@ -137,7 +139,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
                 name: "MeditatiiDirect — Meditații România",
                 url: "https://meditatiidirect.ro",
                 areaServed: { "@type": "Country", name: "România" },
-                priceRange: "30-200 RON",
                 description: "Anunțuri meditații cu profesori verificați în București, Cluj, Iași, Timișoara, Brașov, Constanța și restul țării.",
               },
             ],

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 
 /**
  * Google AdSense slot.
@@ -32,7 +33,7 @@ export function AdSenseSlot({
   const resolvedSlot = slot || DEFAULT_SLOT;
 
   useEffect(() => {
-    if (!CLIENT || !resolvedSlot) return;
+    if (!AD_SERVING_ENABLED || !CLIENT || !resolvedSlot) return;
     try {
       // @ts-expect-error adsbygoogle global injected by AdSense script
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -41,7 +42,7 @@ export function AdSenseSlot({
     }
   }, [resolvedSlot]);
 
-  if (!CLIENT || !resolvedSlot) return null;
+  if (!AD_SERVING_ENABLED || !CLIENT || !resolvedSlot) return null;
 
   return (
     <div className={`my-8 flex flex-col items-center ${className}`}>
