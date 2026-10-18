@@ -8,7 +8,6 @@ export function getAdsterraBanner(wide: boolean) {
 const fillObserver = `<script>
 (() => {
   const loadedFrames = new WeakSet();
-  let previous = false;
   const visible = (node) => {
     const box = node.getBoundingClientRect();
     const style = getComputedStyle(node);
@@ -28,10 +27,7 @@ const fillObserver = `<script>
       if (node.tagName === 'VIDEO') return node.readyState >= 2;
       return /^https?:/.test(node.href) && node.textContent.trim().length > 0;
     });
-    if (filled || filled !== previous) {
-      previous = filled;
-      parent.postMessage({ type: 'adsterra-fill', filled }, '*');
-    }
+    parent.postMessage({ type: 'adsterra-fill', filled }, '*');
   };
   new MutationObserver(inspect).observe(document.body, { childList: true, subtree: true, attributes: true });
   document.addEventListener('load', inspect, true);
