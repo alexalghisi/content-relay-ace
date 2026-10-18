@@ -1,5 +1,6 @@
 # Roadmap
 
+- [ ] Elimină cadrele și spațiile Adsterra fără reclamă; păstrează codurile furnizate și verifică afișarea doar când este livrat conținut real.
 - [x] Actualizează cele trei coduri de bannere Adsterra furnizate pe 18 octombrie, în plasările existente, inclusiv bannerul mobil 320×50; fără popup/social bar și cu AdSense oprit.
 - [x] Diagnostichează răspunsurile, consola și blocările celor trei bannere; repară solicitarea mobilă inutilă înaintea bannerului desktop, fără modificarea designului.
 - [ ] Confirmă livrarea reclamelor cu noile coduri — pe 18 octombrie, cererile din browser și cele directe (cu/fără Referer meditatiidirect.ro) returnează HTTP 200, Content-Length: 0, application/javascript pentru cele trei scripturi noi; nicio eroare de browser sau cerere blocată în browserul de test, fără CSP restrictiv. Livrarea de conținut depinde de Adsterra; aprobarea zonelor, filtrarea IP/geografică și compatibilitatea sandbox nu sunt confirmate. Live folosește încă URL-urile vechi: schimbările noi nu sunt publicate. Scriptul suplimentar fără configurație de banner rămâne neactivat.
