@@ -1,5 +1,8 @@
 # Roadmap
 
+- [x] Actualizează cele trei coduri de bannere Adsterra furnizate pe 18 octombrie, în plasările existente, inclusiv bannerul mobil 320×50; fără popup/social bar și cu AdSense oprit.
+- [ ] Confirmă livrarea reclamelor cu noile coduri — verificarea directă returnează HTTP 200 cu 0 bytes pentru toate cele patru scripturi furnizate; necesită livrare de conținut de la Adsterra. Scriptul suplimentar fără configurație de banner nu este activat: formatul nu poate fi confirmat și popunder/social bar sunt interzise.
+
 - [x] Restaurează plasările Adsterra lipsă pe prima pagină; verificat: două cadre după acceptare, zero înainte de acord și după refuz; AdSense rămâne oprit.
 - [ ] Afișare efectivă reclame Adsterra — blocat: verificat din nou pe preview și pe meditatiidirect.ro la 18 octombrie 2026, după apăsarea Accept; ambele invoke.js răspund HTTP 200 cu 0 bytes, inclusiv la cereri directe în browser. Identificatorul native corespunde containerului, iar cheia bannerului corespunde URL-ului; nu există conținut publicitar de executat. Necesită coduri active și confirmarea zonelor/domeniului de la Adsterra; eliminarea acordului necesită o variantă confirmată fără cookie-uri/date personale. Designul și izolarea reclamelor au rămas neschimbate; cele 4 teste de acord/AdSense trec.
 
