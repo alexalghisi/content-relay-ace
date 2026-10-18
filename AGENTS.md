@@ -10,3 +10,4 @@
 - Public blog reads use publishable server functions and SSR; failed reads must not masquerade as empty articles.
 - Blog Markdown uses a safe GFM renderer without raw HTML; preserve complete paragraphs, lists, tables and source links.
 - Keep AdSense serving centrally disabled until approval plus certified consent setup; preserve ownership verification independently. Adsterra uses isolated sandboxed banner frames in existing placements, without popunders or social bars; no consent prompt by owner decision.
+- Resolve the viewport before loading an Adsterra banner zone; avoid requesting and discarding a mobile impression on desktop hydration.
