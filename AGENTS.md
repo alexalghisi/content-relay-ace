@@ -9,6 +9,6 @@
 - Automatic blog publishing stays off unless AUTO_BLOG_ENABLED="true"; it produced duplicate articles.
 - Public blog reads use publishable server functions and SSR; failed reads must not masquerade as empty articles.
 - Blog Markdown uses a safe GFM renderer without raw HTML; preserve complete paragraphs, lists, tables and source links.
-- Keep AdSense serving centrally disabled until approval plus certified consent setup; preserve ownership verification independently. Adsterra uses isolated sandboxed banner frames in existing placements, without popunders or social bars; no consent prompt by owner decision.
+- Keep AdSense serving centrally disabled until approval plus certified consent setup; preserve ownership verification independently. Adsterra banners and Social Bar run in opaque sandboxed in-flow frames with user-activated navigation only; this confines provider overlays and prevents automatic popunders. Smartlink stays an explicitly labeled sponsored link, not a site CTA; public monetization excludes private workflows.
 - Resolve the viewport before loading an Adsterra banner zone; avoid requesting and discarding a mobile impression on desktop hydration.
 - Reveal Adsterra placements only after their sandbox reports rendered ad media, validating the message source against the placement frame; empty provider responses must not leave advertising labels or reserved blank space.

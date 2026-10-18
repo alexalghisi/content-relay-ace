@@ -1,5 +1,8 @@
 # Roadmap
 
+- [x] Integrează Social Bar într-un cadru izolat și Smartlink etichetat pe paginile publice, mută native mai sus. Verificat la 1280 și 390 px: fără overflow sau erori, trei cadre nepopulate cu înălțime zero, link corect; 7 teste trec. Numai previzualizare, nepublicat.
+- [ ] Confirmă livrarea Social Bar și bannerelor — blocat de Adsterra: toate scripturile solicitate la verificarea din 18 octombrie răspund 200 cu 0 bytes pe calculator și telefon. Compatibilitatea Social Bar în cadru izolat și destinațiile Smartlink nu sunt confirmate de furnizor.
+
 - [x] Elimină cadrele, etichetele și spațiile proprii Adsterra fără reclamă; pe prima pagină și spațierea exterioară dispare. Browser: ambele plasări reale au înălțime 0; cu media simulată ambele se afișează, fără erori. Cele 4 teste trec. Simularea nu confirmă livrarea furnizorului.
 - [ ] Livrare efectivă Adsterra — blocată de furnizor: browserul local primește 200 cu 0 bytes; verificarea HTTP independentă primește 403 cu 0 bytes la cele trei URL-uri, inclusiv cu Referer live. Codurile rămân integrate, fără reclame fabricate. Modificările sunt în previzualizare, nepublicate.
 - [x] Actualizează cele trei coduri de bannere Adsterra furnizate pe 18 octombrie, în plasările existente, inclusiv bannerul mobil 320×50; fără popup/social bar și cu AdSense oprit.

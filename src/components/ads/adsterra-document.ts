@@ -36,9 +36,12 @@ const fillObserver = `<script>
 })();
 </script>`;
 
-export function adsterraDocument(banner: boolean, wide: boolean) {
+export const ADSTERRA_SMARTLINK = "https://www.profitableratecpmnetwork.com/cm7nts632?key=c462925f5d81f7eae9d76fb825822ea2";
+export const ADSTERRA_SOCIAL_SCRIPT = "https://pl28658947.profitableratecpmnetwork.com/a0/9f/6a/a09f6a5d814edea7ad9b7e8ef7576015.js";
+
+export function adsterraDocument(banner: boolean, wide: boolean, social = false) {
   const options = getAdsterraBanner(wide);
-  const provider = banner
+  const provider = social ? `<script src="${ADSTERRA_SOCIAL_SCRIPT}"></script>` : banner
     ? `<script>atOptions=${JSON.stringify({ ...options, format: "iframe", params: {} })};</script><script src="https://www.highrevenueformat.com/${options.key}/invoke.js"></script>`
     : `<div id="container-95124b7bfc8466072188bbabf608cbf1"></div><script async data-cfasync="false" src="https://pl28681688.profitableratecpmnetwork.com/95124b7bfc8466072188bbabf608cbf1/invoke.js"></script>`;
   return `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0}</style></head><body>${fillObserver}${provider}</body></html>`;
