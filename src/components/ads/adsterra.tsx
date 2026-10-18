@@ -16,7 +16,9 @@ function bannerDocument(wide: boolean) {
 
 function AdsterraPlacement({ className = "", banner = false, mobileOnly = false }: { className?: string; banner?: boolean; mobileOnly?: boolean }) {
 
-  const [wide, setWide] = useState(false);
+  // Wait for the viewport before requesting a banner: desktop must not
+  // request the mobile zone first and immediately discard that impression.
+  const [wide, setWide] = useState<boolean | null>(null);
   useEffect(() => {
     const media = window.matchMedia("(min-width: 800px)");
     const update = () => setWide(media.matches);
@@ -25,10 +27,10 @@ function AdsterraPlacement({ className = "", banner = false, mobileOnly = false 
     return () => media.removeEventListener("change", update);
   }, []);
 
-  const desktopBanner = banner && wide && !mobileOnly;
+  const desktopBanner = banner && wide === true && !mobileOnly;
   return <aside aria-label="Publicitate" className={`mx-auto w-full overflow-hidden ${className}`}>
     <p className="mb-2 text-center text-xs text-muted-foreground">Publicitate</p>
-    <iframe title={banner ? "Banner Adsterra" : "Reclame Adsterra"} srcDoc={banner ? bannerDocument(desktopBanner) : nativeDocument} sandbox="allow-scripts" referrerPolicy="strict-origin-when-cross-origin" loading="lazy" className={desktopBanner ? "mx-auto h-28 w-[748px] max-w-full border-0" : banner ? "mx-auto h-[70px] w-[340px] max-w-full border-0" : "h-80 w-full border-0"} />
+    {(!banner || wide !== null) && <iframe title={banner ? "Banner Adsterra" : "Reclame Adsterra"} srcDoc={banner ? bannerDocument(desktopBanner) : nativeDocument} sandbox="allow-scripts" referrerPolicy="strict-origin-when-cross-origin" loading="lazy" className={desktopBanner ? "mx-auto h-28 w-[748px] max-w-full border-0" : banner ? "mx-auto h-[70px] w-[340px] max-w-full border-0" : "h-80 w-full border-0"} />}
   </aside>;
 }
 
