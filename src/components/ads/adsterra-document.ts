@@ -28,7 +28,7 @@ const fillObserver = `<script>
       if (node.tagName === 'VIDEO') return node.readyState >= 2;
       return /^https?:/.test(node.href) && node.textContent.trim().length > 0;
     });
-    if (filled !== previous) {
+    if (filled || filled !== previous) {
       previous = filled;
       parent.postMessage({ type: 'adsterra-fill', filled }, '*');
     }
