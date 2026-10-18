@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
-  BadgeCheck, CalendarDays, Check, ChevronDown, Eye, EyeOff, GraduationCap, Loader2, Pencil, Plus, Save, Trash2,
+  BadgeCheck, CalendarDays, Camera, Check, ChevronDown, Eye, EyeOff, GraduationCap, Loader2, Pencil, Plus, Save, Trash2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -82,6 +82,7 @@ function TeacherDashboard() {
   const [hasProfile, setHasProfile] = useState(false);
   const [busy, setBusy] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [slots, setSlots] = useState<Slot[]>([]);
   const [newSlot, setNewSlot] = useState({ weekday: 0, start_time: "16:00", end_time: "20:00" });
   const [offers, setOffers] = useState<Offer[]>([]);
@@ -155,7 +156,23 @@ function TeacherDashboard() {
     );
   }
 
+  const uploadAvatar = async (file: File) => {
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) { toast.error("Alege o imagine JPG, PNG sau WebP."); return; }
+    if (file.size > 3 * 1024 * 1024) { toast.error("Imaginea depășește 3 MB."); return; }
+    setUploading(true);
+    const ext = file.type.split("/")[1].replace("jpeg", "jpg");
+    const path = `${user.id}/teacher-${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+    if (error) { setUploading(false); toast.error(error.message); return; }
+    const url = supabase.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+    setProfile((p) => ({ ...p, avatar_url: url }));
+    if (hasProfile) await supabase.from("teacher_profiles").update({ avatar_url: url, updated_at: new Date().toISOString() }).eq("user_id", user.id);
+    setUploading(false);
+    toast.success(hasProfile ? "Fotografia a fost salvată." : "Fotografie încărcată — salvează profilul.");
+  };
+
   const saveProfile = async (publish?: boolean) => {
+    if (publish === true && !profile.avatar_url) toast.info("Recomandare: adaugă o fotografie de profil — elevii aleg mai ușor un profesor cu poză.");
     if (profile.display_name.trim().length < 2) { toast.error("Completează numele."); return; }
     if (!profile.subjects.trim()) { toast.error("Adaugă cel puțin o materie."); return; }
     const slug = profile.slug || `${slugify(profile.display_name)}-${user.id.slice(0, 6)}`;
@@ -306,6 +323,30 @@ function TeacherDashboard() {
             className="card-soft mt-6 space-y-4 p-5 sm:p-6"
           >
             <h2 className="inline-flex items-center gap-2 text-lg font-semibold"><GraduationCap className="h-4 w-4 text-primary" /> Profilul meu de profesor</h2>
+            <div className={`flex flex-wrap items-center gap-4 rounded-xl border p-4 ${profile.avatar_url ? "border-border" : "border-primary/40 bg-primary-soft"}`}>
+              {profile.avatar_url ? (
+                <img src={profile.avatar_url} alt="Fotografia ta de profil" className="h-20 w-20 rounded-full border border-border object-cover" />
+              ) : (
+                <div className="grid h-20 w-20 place-items-center rounded-full bg-muted text-muted-foreground"><Camera className="h-8 w-8" /></div>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold">Fotografie de profil {profile.avatar_url ? "" : "(recomandat)"}</p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                  Profilurile cu fotografie reală inspiră mai multă încredere elevilor și părinților. Folosește o poză clară cu fața, JPG/PNG/WebP, max 3 MB.
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <label className="btn-outline inline-flex h-9 cursor-pointer items-center gap-2 text-sm">
+                    {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
+                    {profile.avatar_url ? "Schimbă poza" : "Încarcă poza"}
+                    <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploading}
+                      onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void uploadAvatar(f); }} />
+                  </label>
+                  {profile.avatar_url && (
+                    <button type="button" className="btn-outline h-9 text-sm" onClick={() => setProfile({ ...profile, avatar_url: null })}>Elimină</button>
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Nume afișat *">
                 <input className="field-input" value={profile.display_name} onChange={(e) => setProfile({ ...profile, display_name: e.target.value })} />
