@@ -6,6 +6,7 @@ import tutoringVideo from "@/assets/tutoring-home-web.mp4.asset.json";
 import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
+import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -71,6 +72,8 @@ function HomePage() {
       </div>
     </section>
 
+    <div className="container-page py-6"><AdsterraBannerResponsive /></div>
+
     <section className="container-page py-16"><div className="flex items-end justify-between gap-4"><div><p className="text-sm font-semibold text-primary">Începe cu materia potrivită</p><h2 className="mt-2 text-3xl font-bold">Categorii populare</h2></div><Link to="/materii" className="hidden items-center gap-1 text-sm font-semibold text-primary sm:flex">Toate materiile <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">{POPULAR_SUBJECTS.map((item) => <Link key={item.slug} to="/meditatii" search={{ materie: item.slug }} className="group rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-card)]"><span className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-sm font-bold text-primary">{item.icon}</span><h3 className="mt-4 text-sm font-bold">{item.name}</h3><p className="mt-1 text-xs leading-5 text-muted-foreground">{item.description}</p><p className="mt-3 text-xs font-medium text-primary">Cere ofertă →</p></Link>)}</div></section>
 
     <section className="border-y border-border bg-muted/40"><div className="container-page py-18"><div className="text-center"><p className="text-sm font-semibold text-primary">Simplu și transparent</p><h2 className="mt-2 text-3xl font-bold">Cum funcționează</h2><p className="mx-auto mt-3 max-w-xl text-muted-foreground">Elevii vin cu cererea, profesorii cu propunerea, discuția e directă, iar procesul primește stele.</p></div><div className="relative mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">{[
@@ -134,5 +137,6 @@ function HomePage() {
     </section>
 
     <section className="container-page py-16"><div className="grid items-center gap-7 rounded-2xl border border-border bg-accent p-8 md:grid-cols-[1fr_auto] md:p-10"><div><div className="flex items-center gap-2 text-success"><UserRound className="h-5 w-5" /><span className="text-sm font-bold">Pentru profesori</span></div><h2 className="mt-3 text-3xl font-bold">Elevii vin cu cererea, tu vii cu propunerea</h2><p className="mt-3 max-w-2xl text-muted-foreground">Vezi cererile recente de la elevi și părinți, contactează-i direct și îți umpli programul fără intermediari.</p></div><Link to="/pentru-profesori" className="btn-primary h-12 px-7">Devino profesor <ArrowRight className="ml-2 h-4 w-4" /></Link></div></section>
+    <div className="container-page pb-8"><AdsterraNativeBanner /></div>
   </>;
 }

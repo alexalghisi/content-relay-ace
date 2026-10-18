@@ -1,5 +1,8 @@
 # Roadmap
 
+- [x] Restaurează plasările Adsterra lipsă pe prima pagină; verificat: două cadre după acceptare, zero înainte de acord și după refuz; AdSense rămâne oprit.
+- [ ] Afișare efectivă reclame Adsterra — blocat: scripturile furnizorului nu livrează reclame în verificare (cadre goale); necesită verificarea zonelor/domeniului în contul Adsterra. Eliminarea acordului necesită o variantă confirmată fără cookie-uri/date personale.
+
 - [x] Reintroduce Adsterra în plasările existente, separat de AdSense, cu acord explicit și fără popunder/social bar.
 
 - [x] Corectează prezentarea incompletă a articolelor, livrează blogul în primul răspuns, înlocuiește pagina goală de tutoriale cu ghiduri practice și suspendă reclamele; verificat în preview pe desktop și telefon.
