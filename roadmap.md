@@ -1,7 +1,7 @@
 # Roadmap
 
 - [x] Restaurează plasările Adsterra lipsă pe prima pagină; verificat: două cadre după acceptare, zero înainte de acord și după refuz; AdSense rămâne oprit.
-- [ ] Afișare efectivă reclame Adsterra — blocat: scripturile furnizorului nu livrează reclame în verificare (cadre goale); necesită verificarea zonelor/domeniului în contul Adsterra. Eliminarea acordului necesită o variantă confirmată fără cookie-uri/date personale.
+- [ ] Afișare efectivă reclame Adsterra — blocat: verificat din nou pe preview și pe meditatiidirect.ro la 18 octombrie 2026, după apăsarea Accept; ambele invoke.js răspund HTTP 200 cu 0 bytes, inclusiv la cereri directe în browser. Identificatorul native corespunde containerului, iar cheia bannerului corespunde URL-ului; nu există conținut publicitar de executat. Necesită coduri active și confirmarea zonelor/domeniului de la Adsterra; eliminarea acordului necesită o variantă confirmată fără cookie-uri/date personale. Designul și izolarea reclamelor au rămas neschimbate; cele 4 teste de acord/AdSense trec.
 
 - [x] Reintroduce Adsterra în plasările existente, separat de AdSense, cu acord explicit și fără popunder/social bar.
 
