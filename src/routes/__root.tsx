@@ -16,7 +16,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ADSENSE_CLIENT } from "@/components/ads/adsense";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
-// Popunder/anchor Adsterra dezactivate până la aprobarea AdSense.
+import { AdsterraMonetization } from "@/components/ads/adsterra";
 
 function NotFoundComponent() {
   return (
@@ -176,10 +176,10 @@ function RootComponent() {
           <main className="flex-1">
             <Outlet />
           </main>
+          <AdsterraMonetization />
           <SiteFooter />
         </div>
         <Toaster />
-        {/* Popunder / social bar dezactivate până la aprobarea AdSense (conflict de politici). */}
       </AuthProvider>
     </QueryClientProvider>
   );
