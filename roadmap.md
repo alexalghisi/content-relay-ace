@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Restaurează bannerele Adsterra lipsă și verifică afișarea; păstrează protecția datelor pentru reclame care necesită acord.
+
 - [x] Reintroduce Adsterra în plasările existente, separat de AdSense, cu acord explicit și fără popunder/social bar.
 
 - [x] Corectează prezentarea incompletă a articolelor, livrează blogul în primul răspuns, înlocuiește pagina goală de tutoriale cu ghiduri practice și suspendă reclamele; verificat în preview pe desktop și telefon.
