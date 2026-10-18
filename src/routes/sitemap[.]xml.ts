@@ -129,6 +129,19 @@ export const Route = createFileRoute("/sitemap.xml")({
             );
           }
 
+          // Published teacher profiles (/profesor/{slug}) — SSR pages with Person JSON-LD
+          const { data: teachers } = await supabaseAdmin
+            .from("teacher_profiles")
+            .select("slug,updated_at")
+            .eq("is_published", true);
+          for (const t of teachers ?? []) {
+            if (!t.slug) continue;
+            const last = t.updated_at ? new Date(t.updated_at).toISOString().slice(0, 10) : null;
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/profesor/${t.slug}</loc>\n${last ? `    <lastmod>${last}</lastmod>\n` : ""}    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+            );
+          }
+
           // Blog posts
           const { data: posts } = await supabaseAdmin
             .from("blog_posts").select("slug,updated_at").eq("is_published", true);

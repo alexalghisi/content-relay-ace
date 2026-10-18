@@ -53,6 +53,12 @@ export const Route = createFileRoute("/profesor/$slug")({
       description: p.about ?? undefined, knowsAbout: p.subjects, url,
       image: p.avatar_url ?? undefined,
       address: p.city ? { "@type": "PostalAddress", addressLocality: p.city, addressCountry: "RO" } : undefined,
+      // Real tariff from the teacher's own profile; online teachers serve all of Romania.
+      ...(p.rate_min ? { makesOffer: {
+        "@type": "Offer", priceCurrency: "RON", price: p.rate_min,
+        priceSpecification: { "@type": "UnitPriceSpecification", price: p.rate_min, priceCurrency: "RON", unitText: "oră" },
+        itemOffered: { "@type": "Service", name: `Meditații ${subj}${p.online_available ? " online" : ""}`, areaServed: p.online_available ? { "@type": "Country", name: "România" } : (p.city ?? undefined) },
+      } } : {}),
       // Only real ratings from students who received this teacher's proposals.
       ...(rating ? { aggregateRating: { "@type": "AggregateRating", ratingValue: rating.avg, ratingCount: rating.count, bestRating: 5, worstRating: 1 } } : {}),
     };
