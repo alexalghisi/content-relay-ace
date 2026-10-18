@@ -351,10 +351,11 @@ function TeacherDashboard() {
               <Field label="Nume afișat *">
                 <input className="field-input" value={profile.display_name} onChange={(e) => setProfile({ ...profile, display_name: e.target.value })} />
               </Field>
-              <Field label="Oraș">
+              <Field label="Oraș / locație">
                 <select className="field-input" value={profile.city} onChange={(e) => setProfile({ ...profile, city: e.target.value })}>
-                  <option value="">Alege orașul sau județul</option>
-                  {profile.city && !LOCATIONS.some((item) => item.name === profile.city) && <option value={profile.city}>{profile.city}</option>}
+                  <option value="">Alege orașul, județul sau online</option>
+                  <option value="Online">Doar online (fără oraș fix)</option>
+                  {profile.city && profile.city !== "Online" && !LOCATIONS.some((item) => item.name === profile.city) && <option value={profile.city}>{profile.city}</option>}
                   {LOCATIONS.map((item) => <option key={`${item.county}-${item.name}`} value={item.name}>{item.name} — jud. {item.county}</option>)}
                 </select>
               </Field>
