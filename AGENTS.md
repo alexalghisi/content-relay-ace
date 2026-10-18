@@ -11,3 +11,4 @@
 - Blog Markdown uses a safe GFM renderer without raw HTML; preserve complete paragraphs, lists, tables and source links.
 - Keep AdSense serving centrally disabled until approval plus certified consent setup; preserve ownership verification independently. Adsterra uses isolated sandboxed banner frames in existing placements, without popunders or social bars; no consent prompt by owner decision.
 - Resolve the viewport before loading an Adsterra banner zone; avoid requesting and discarding a mobile impression on desktop hydration.
+- Reveal Adsterra placements only after their sandbox reports rendered ad media, validating the message source against the placement frame; empty provider responses must not leave advertising labels or reserved blank space.

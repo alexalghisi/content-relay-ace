@@ -1,21 +1,10 @@
-import { useEffect, useState } from "react";
-
-
-const nativeDocument = `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><script async data-cfasync="false" src="https://pl28681688.profitableratecpmnetwork.com/95124b7bfc8466072188bbabf608cbf1/invoke.js"></script><div id="container-95124b7bfc8466072188bbabf608cbf1"></div></body></html>`;
-
-export function getAdsterraBanner(wide: boolean) {
-  return wide
-    ? { key: "7fc628f1017bfe4d5cc26dc8c9885f53", width: 728, height: 90 }
-    : { key: "0e3484e9a11e0faff6adb5a6f5a74348", width: 320, height: 50 };
-}
-
-function bannerDocument(wide: boolean) {
-  const options = getAdsterraBanner(wide);
-  return `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><script>atOptions=${JSON.stringify({ ...options, format: "iframe", params: {} })};</script><script src="https://www.highrevenueformat.com/${options.key}/invoke.js"></script></body></html>`;
-}
+import { useEffect, useRef, useState } from "react";
+import { adsterraDocument } from "./adsterra-document";
+export { getAdsterraBanner } from "./adsterra-document";
 
 function AdsterraPlacement({ className = "", banner = false, mobileOnly = false }: { className?: string; banner?: boolean; mobileOnly?: boolean }) {
-
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  const [filled, setFilled] = useState(false);
   // Wait for the viewport before requesting a banner: desktop must not
   // request the mobile zone first and immediately discard that impression.
   const [wide, setWide] = useState<boolean | null>(null);
@@ -28,9 +17,19 @@ function AdsterraPlacement({ className = "", banner = false, mobileOnly = false 
   }, []);
 
   const desktopBanner = banner && wide === true && !mobileOnly;
-  return <aside aria-label="Publicitate" className={`mx-auto w-full overflow-hidden ${className}`}>
-    <p className="mb-2 text-center text-xs text-muted-foreground">Publicitate</p>
-    {(!banner || wide !== null) && <iframe title={banner ? "Banner Adsterra" : "Reclame Adsterra"} srcDoc={banner ? bannerDocument(desktopBanner) : nativeDocument} sandbox="allow-scripts" referrerPolicy="strict-origin-when-cross-origin" loading="lazy" className={desktopBanner ? "mx-auto h-28 w-[748px] max-w-full border-0" : banner ? "mx-auto h-[70px] w-[340px] max-w-full border-0" : "h-80 w-full border-0"} />}
+  useEffect(() => {
+    setFilled(false);
+    const receive = (event: MessageEvent) => {
+      if (event.source !== frameRef.current?.contentWindow || event.data?.type !== "adsterra-fill" || typeof event.data.filled !== "boolean") return;
+      setFilled(event.data.filled);
+    };
+    window.addEventListener("message", receive);
+    return () => window.removeEventListener("message", receive);
+  }, [desktopBanner, banner]);
+
+  return <aside aria-label={filled ? "Publicitate" : undefined} aria-hidden={!filled} data-adsterra-filled={filled} className={`relative mx-auto w-full overflow-hidden ${filled ? className : "h-0"}`}>
+    {filled && <p className="mb-2 text-center text-xs text-muted-foreground">Publicitate</p>}
+    {(!banner || wide !== null) && <iframe ref={frameRef} key={banner ? String(desktopBanner) : "native"} title={banner ? "Banner Adsterra" : "Reclame Adsterra"} srcDoc={adsterraDocument(banner, desktopBanner)} sandbox="allow-scripts" referrerPolicy="strict-origin-when-cross-origin" tabIndex={filled ? 0 : -1} className={`${filled ? "" : "pointer-events-none absolute inset-x-0 top-0 invisible"} ${desktopBanner ? "mx-auto h-28 w-[748px] max-w-full border-0" : banner ? "mx-auto h-[70px] w-[340px] max-w-full border-0" : "h-80 w-full border-0"}`} />}
   </aside>;
 }
 
