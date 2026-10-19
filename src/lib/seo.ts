@@ -72,7 +72,7 @@ export const blogPostingJsonLd = (p: {
   publisher: {
     "@type": "Organization",
     name: "MeditatiiDirect",
-    logo: { "@type": "ImageObject", url: `${SITE}/favicon.ico` },
+    logo: { "@type": "ImageObject", url: `${SITE}/apple-touch-icon.png` },
   },
   mainEntityOfPage: `${SITE}${p.path}`,
 });
