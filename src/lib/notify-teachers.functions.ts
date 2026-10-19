@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { sendSms } from "@/lib/sms.server";
 
 const norm = (s: string) =>
   s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/^limba\s+/, "").trim();
@@ -14,7 +15,8 @@ export const notifyTeachersOfRequest = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const LOVABLE_API_KEY = process.env["LOVABLE_API_KEY"];
     const RESEND_API_KEY = process.env["RESEND_API_KEY"];
-    if (!LOVABLE_API_KEY || !RESEND_API_KEY) return { sent: 0 };
+    const canEmail = !!(LOVABLE_API_KEY && RESEND_API_KEY);
+    if (!canEmail && !process.env["GATEWAYAPI_TOKEN"]) return { sent: 0, sms: 0 };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const since = new Date(Date.now() - 15 * 60_000).toISOString();
@@ -31,15 +33,17 @@ export const notifyTeachersOfRequest = createServerFn({ method: "POST" })
     const subj = norm(req.subject);
     const { data: teachers } = await supabaseAdmin
       .from("teacher_profiles")
-      .select("user_id,display_name,subjects,contact_email");
+      .select("user_id,display_name,subjects,contact_email,contact_phone");
     const emails = new Set<string>();
     const list: { to: string; name: string }[] = [];
+    const phones: string[] = [];
     for (const t of teachers ?? []) {
       const match = (t.subjects ?? []).some((s: string) => {
         const n = norm(s);
         return n && (n === subj || n.includes(subj) || subj.includes(n));
       });
       if (!match) continue;
+      if (t.contact_phone) phones.push(t.contact_phone);
       let to = t.contact_email?.trim();
       if (!to) {
         const { data: u } = await supabaseAdmin.auth.admin.getUserById(t.user_id);
@@ -49,11 +53,12 @@ export const notifyTeachersOfRequest = createServerFn({ method: "POST" })
       emails.add(to.toLowerCase());
       list.push({ to, name: t.display_name });
     }
-    if (!list.length) return { sent: 0 };
-
     const where = req.is_online ? "online" : req.city ? `în ${req.city}` : "";
     const subject = `Un elev caută meditații la ${req.subject}${where ? " " + where : ""}`;
     const url = "https://meditatiidirect.ro/cereri";
+    // SMS doar primilor 25 de profesori potriviți, ca să țină costul sub control.
+    const sms = await sendSms(phones.slice(0, 25), `MeditatiiDirect: elev nou caută meditații la ${req.subject}${where ? " " + where : ""}. Trimite propunerea: ${url}`);
+    if (!canEmail || !list.length) return { sent: 0, sms };
     const from = process.env["RESEND_FROM"] || "MeditatiiDirect <cereri@meditatiidirect.ro>";
 
     const payload = list.map(({ to, name }) => ({
@@ -85,5 +90,5 @@ export const notifyTeachersOfRequest = createServerFn({ method: "POST" })
       }
       sent += Math.min(100, payload.length - i);
     }
-    return { sent };
+    return { sent, sms };
   });
