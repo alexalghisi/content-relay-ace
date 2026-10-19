@@ -15,3 +15,4 @@
 
 - Harta Blocajelor (/harta-blocajelor) is static, hand-written content in src/data/blocaje (one node per concept, prerequisites as slugs, no teacher/price/review data); slugs are site-unique and bun tests enforce graph integrity. Its CTA pre-fills /meditatii via `blocaj=` without storing any student answers.
 - Adsterra zone scripts must use the exact URLs from the Adsterra panel (currently bicea.org / arwf.org); the old profitableratecpmnetwork.com / highrevenueformat.com hosts return 0 bytes.
+- Student/teacher notifications: email via the Resend connector (RESEND_API_KEY) and SMS via GatewayAPI (GATEWAYAPI_TOKEN, src/lib/sms.server.ts); both are no-ops when the secret is missing. Proposal notifications require the proposal author's auth, a 3-minute window and an edge-cache claim, so the endpoint cannot be used to spam students.
