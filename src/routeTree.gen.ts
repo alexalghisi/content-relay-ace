@@ -102,6 +102,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CerereaMeaIdRouteImport } from './routes/cererea-mea.$id'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
+import { Route as HartaBlocajelorIndexRouteImport } from './routes/harta-blocajelor.index'
 import { Route as MeditatiiInOrasRouteImport } from './routes/meditatii-in.$oras'
 import { Route as MeditatiiIndexRouteImport } from './routes/meditatii.index'
 import { Route as MesajeIndexRouteImport } from './routes/mesaje.index'
@@ -118,6 +119,8 @@ import { Route as SimulareBacMaterieRouteImport } from './routes/simulare-bac.$m
 import { Route as SubiecteAdmitereIndexRouteImport } from './routes/subiecte-admitere.index'
 import { Route as BacMaterieIndexRouteImport } from './routes/bac.$materie.index'
 import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
+import { Route as HartaBlocajelorMaterieIndexRouteImport } from './routes/harta-blocajelor.$materie.index'
+import { Route as HartaBlocajelorMaterieBlocajRouteImport } from './routes/harta-blocajelor.$materie.$blocaj'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
 import { Route as SubiecteAdmitereUniversitateIndexRouteImport } from './routes/subiecte-admitere.$universitate.index'
@@ -612,6 +615,11 @@ const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   path: '/email/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HartaBlocajelorIndexRoute = HartaBlocajelorIndexRouteImport.update({
+  id: '/harta-blocajelor/',
+  path: '/harta-blocajelor/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MeditatiiInOrasRoute = MeditatiiInOrasRouteImport.update({
   id: '/meditatii-in/$oras',
   path: '/meditatii-in/$oras',
@@ -692,6 +700,18 @@ const BacMaterieAnRoute = BacMaterieAnRouteImport.update({
   path: '/$an',
   getParentRoute: () => BacMaterieRoute,
 } as any)
+const HartaBlocajelorMaterieIndexRoute =
+  HartaBlocajelorMaterieIndexRouteImport.update({
+    id: '/harta-blocajelor/$materie/',
+    path: '/harta-blocajelor/$materie/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const HartaBlocajelorMaterieBlocajRoute =
+  HartaBlocajelorMaterieBlocajRouteImport.update({
+    id: '/harta-blocajelor/$materie/$blocaj',
+    path: '/harta-blocajelor/$materie/$blocaj',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   id: '/lovable/email/suppression',
   path: '/lovable/email/suppression',
@@ -913,6 +933,7 @@ export interface FileRoutesByFullPath {
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
   '/bac/': typeof BacIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/harta-blocajelor/': typeof HartaBlocajelorIndexRoute
   '/meditatii/': typeof MeditatiiIndexRoute
   '/mesaje/': typeof MesajeIndexRoute
   '/preturi-meditatii/': typeof PreturiMeditatiiIndexRoute
@@ -921,10 +942,12 @@ export interface FileRoutesByFullPath {
   '/rezolvari/': typeof RezolvariIndexRoute
   '/subiecte-admitere/': typeof SubiecteAdmitereIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
+  '/harta-blocajelor/$materie/$blocaj': typeof HartaBlocajelorMaterieBlocajRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/bac/$materie/': typeof BacMaterieIndexRoute
+  '/harta-blocajelor/$materie/': typeof HartaBlocajelorMaterieIndexRoute
   '/subiecte-admitere/$universitate/': typeof SubiecteAdmitereUniversitateIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
@@ -1044,6 +1067,7 @@ export interface FileRoutesByTo {
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
   '/bac': typeof BacIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/harta-blocajelor': typeof HartaBlocajelorIndexRoute
   '/meditatii': typeof MeditatiiIndexRoute
   '/mesaje': typeof MesajeIndexRoute
   '/preturi-meditatii': typeof PreturiMeditatiiIndexRoute
@@ -1051,10 +1075,12 @@ export interface FileRoutesByTo {
   '/profesori': typeof ProfesoriIndexRoute
   '/rezolvari': typeof RezolvariIndexRoute
   '/subiecte-admitere': typeof SubiecteAdmitereIndexRoute
+  '/harta-blocajelor/$materie/$blocaj': typeof HartaBlocajelorMaterieBlocajRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/bac/$materie': typeof BacMaterieIndexRoute
+  '/harta-blocajelor/$materie': typeof HartaBlocajelorMaterieIndexRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
@@ -1176,6 +1202,7 @@ export interface FileRoutesById {
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
   '/bac/': typeof BacIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/harta-blocajelor/': typeof HartaBlocajelorIndexRoute
   '/meditatii/': typeof MeditatiiIndexRoute
   '/mesaje/': typeof MesajeIndexRoute
   '/preturi-meditatii/': typeof PreturiMeditatiiIndexRoute
@@ -1184,10 +1211,12 @@ export interface FileRoutesById {
   '/rezolvari/': typeof RezolvariIndexRoute
   '/subiecte-admitere/': typeof SubiecteAdmitereIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
+  '/harta-blocajelor/$materie/$blocaj': typeof HartaBlocajelorMaterieBlocajRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
   '/bac/$materie/': typeof BacMaterieIndexRoute
+  '/harta-blocajelor/$materie/': typeof HartaBlocajelorMaterieIndexRoute
   '/subiecte-admitere/$universitate/': typeof SubiecteAdmitereUniversitateIndexRoute
   '/api/public/hooks/auto-blog-post': typeof ApiPublicHooksAutoBlogPostRoute
   '/api/public/hooks/bac-crawl-tick': typeof ApiPublicHooksBacCrawlTickRoute
@@ -1310,6 +1339,7 @@ export interface FileRouteTypes {
     | '/simulare-bac/$materie'
     | '/bac/'
     | '/blog/'
+    | '/harta-blocajelor/'
     | '/meditatii/'
     | '/mesaje/'
     | '/preturi-meditatii/'
@@ -1318,10 +1348,12 @@ export interface FileRouteTypes {
     | '/rezolvari/'
     | '/subiecte-admitere/'
     | '/bac/$materie/$an'
+    | '/harta-blocajelor/$materie/$blocaj'
     | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/materie/$materie'
     | '/bac/$materie/'
+    | '/harta-blocajelor/$materie/'
     | '/subiecte-admitere/$universitate/'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
@@ -1441,6 +1473,7 @@ export interface FileRouteTypes {
     | '/simulare-bac/$materie'
     | '/bac'
     | '/blog'
+    | '/harta-blocajelor'
     | '/meditatii'
     | '/mesaje'
     | '/preturi-meditatii'
@@ -1448,10 +1481,12 @@ export interface FileRouteTypes {
     | '/profesori'
     | '/rezolvari'
     | '/subiecte-admitere'
+    | '/harta-blocajelor/$materie/$blocaj'
     | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/materie/$materie'
     | '/bac/$materie'
+    | '/harta-blocajelor/$materie'
     | '/subiecte-admitere/$universitate'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
@@ -1572,6 +1607,7 @@ export interface FileRouteTypes {
     | '/simulare-bac/$materie'
     | '/bac/'
     | '/blog/'
+    | '/harta-blocajelor/'
     | '/meditatii/'
     | '/mesaje/'
     | '/preturi-meditatii/'
@@ -1580,10 +1616,12 @@ export interface FileRouteTypes {
     | '/rezolvari/'
     | '/subiecte-admitere/'
     | '/bac/$materie/$an'
+    | '/harta-blocajelor/$materie/$blocaj'
     | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/materie/$materie'
     | '/bac/$materie/'
+    | '/harta-blocajelor/$materie/'
     | '/subiecte-admitere/$universitate/'
     | '/api/public/hooks/auto-blog-post'
     | '/api/public/hooks/bac-crawl-tick'
@@ -1705,6 +1743,7 @@ export interface RootRouteChildren {
   SimulareBacMaterieRoute: typeof SimulareBacMaterieRoute
   BacIndexRoute: typeof BacIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  HartaBlocajelorIndexRoute: typeof HartaBlocajelorIndexRoute
   MeditatiiIndexRoute: typeof MeditatiiIndexRoute
   MesajeIndexRoute: typeof MesajeIndexRoute
   PreturiMeditatiiIndexRoute: typeof PreturiMeditatiiIndexRoute
@@ -1712,9 +1751,11 @@ export interface RootRouteChildren {
   ProfesoriIndexRoute: typeof ProfesoriIndexRoute
   RezolvariIndexRoute: typeof RezolvariIndexRoute
   SubiecteAdmitereIndexRoute: typeof SubiecteAdmitereIndexRoute
+  HartaBlocajelorMaterieBlocajRoute: typeof HartaBlocajelorMaterieBlocajRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   MeditatiiMaterieOrasRoute: typeof MeditatiiMaterieOrasRoute
   SubiecteAdmitereMaterieMaterieRoute: typeof SubiecteAdmitereMaterieMaterieRoute
+  HartaBlocajelorMaterieIndexRoute: typeof HartaBlocajelorMaterieIndexRoute
   SubiecteAdmitereUniversitateIndexRoute: typeof SubiecteAdmitereUniversitateIndexRoute
   ApiPublicHooksAutoBlogPostRoute: typeof ApiPublicHooksAutoBlogPostRoute
   ApiPublicHooksBacCrawlTickRoute: typeof ApiPublicHooksBacCrawlTickRoute
@@ -2386,6 +2427,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmailUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/harta-blocajelor/': {
+      id: '/harta-blocajelor/'
+      path: '/harta-blocajelor'
+      fullPath: '/harta-blocajelor/'
+      preLoaderRoute: typeof HartaBlocajelorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/meditatii-in/$oras': {
       id: '/meditatii-in/$oras'
       path: '/meditatii-in/$oras'
@@ -2497,6 +2545,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/bac/$materie/$an'
       preLoaderRoute: typeof BacMaterieAnRouteImport
       parentRoute: typeof BacMaterieRoute
+    }
+    '/harta-blocajelor/$materie/': {
+      id: '/harta-blocajelor/$materie/'
+      path: '/harta-blocajelor/$materie'
+      fullPath: '/harta-blocajelor/$materie/'
+      preLoaderRoute: typeof HartaBlocajelorMaterieIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/harta-blocajelor/$materie/$blocaj': {
+      id: '/harta-blocajelor/$materie/$blocaj'
+      path: '/harta-blocajelor/$materie/$blocaj'
+      fullPath: '/harta-blocajelor/$materie/$blocaj'
+      preLoaderRoute: typeof HartaBlocajelorMaterieBlocajRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/lovable/email/suppression': {
       id: '/lovable/email/suppression'
@@ -2777,6 +2839,7 @@ const rootRouteChildren: RootRouteChildren = {
   SimulareBacMaterieRoute: SimulareBacMaterieRoute,
   BacIndexRoute: BacIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  HartaBlocajelorIndexRoute: HartaBlocajelorIndexRoute,
   MeditatiiIndexRoute: MeditatiiIndexRoute,
   MesajeIndexRoute: MesajeIndexRoute,
   PreturiMeditatiiIndexRoute: PreturiMeditatiiIndexRoute,
@@ -2784,9 +2847,11 @@ const rootRouteChildren: RootRouteChildren = {
   ProfesoriIndexRoute: ProfesoriIndexRoute,
   RezolvariIndexRoute: RezolvariIndexRoute,
   SubiecteAdmitereIndexRoute: SubiecteAdmitereIndexRoute,
+  HartaBlocajelorMaterieBlocajRoute: HartaBlocajelorMaterieBlocajRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   MeditatiiMaterieOrasRoute: MeditatiiMaterieOrasRoute,
   SubiecteAdmitereMaterieMaterieRoute: SubiecteAdmitereMaterieMaterieRoute,
+  HartaBlocajelorMaterieIndexRoute: HartaBlocajelorMaterieIndexRoute,
   SubiecteAdmitereUniversitateIndexRoute:
     SubiecteAdmitereUniversitateIndexRoute,
   ApiPublicHooksAutoBlogPostRoute: ApiPublicHooksAutoBlogPostRoute,
