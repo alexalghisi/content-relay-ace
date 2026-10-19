@@ -36,6 +36,9 @@ MeditatiiDirect.ro conectează elevi și părinți cu peste 1000 de meditatori v
 ## Resurse
 
 - [Harta Blocajelor](/harta-blocajelor): Pentru fiecare blocaj frecvent (matematică, română, fizică, chimie, engleză, informatică) — noțiunea care lipsește, explicație, exemplu rezolvat și verificare.
+- [Scanerul de lacune](/scaner-lacune): Test adaptiv gratuit pe materie: pornește de la capitolul la care elevul s-a blocat, coboară pe prerechizite și arată rădăcina blocajului plus ordinea de recuperare.
+- [Simulare cu AI](/simulare-ai): Test generat de AI pe materie, clasă (V–XII) și durată (15–60 min), cu cronometru; notă 1–10 și explicația fiecărei greșeli (unde, ce, de ce). Necesită cont gratuit.
+- [Meditator AI](/meditator-ai): Asistent AI care explică pas cu pas, pe programa din România, la orice materie școlară. Necesită cont gratuit.
 
 - [Blog](/blog): Articole, sfaturi și ghiduri educaționale.
 - [Tutoriale](/tutoriale): Materiale de învățare.

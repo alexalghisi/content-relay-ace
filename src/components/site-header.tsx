@@ -9,6 +9,7 @@ const NAV = [
   { to: "/cereri", label: "Cereri elevi" },
   { to: "/materii", label: "Materii" },
   { to: "/harta-blocajelor", label: "Harta Blocajelor" },
+  { to: "/meditator-ai", label: "Meditator AI" },
   { to: "/cum-functioneaza", label: "Cum funcționează" },
   { to: "/blog", label: "Blog" },
 ] as const;
@@ -34,7 +35,7 @@ export function SiteHeader() {
             <Link
               key={n.to}
               to={n.to}
-              className="inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-2 py-2 text-center text-sm leading-5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
+              className={`${n.to === "/meditator-ai" ? "hidden 2xl:inline-flex" : "inline-flex"} min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-full px-2 py-2 text-center text-sm leading-5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground`}
               activeProps={{ className: "font-medium text-primary bg-primary-soft" }}
             >
               {n.label}{n.to === "/cereri" && <NewRequestsBadge />}

@@ -40,6 +40,9 @@ export function SiteFooter() {
           <ul className="space-y-2 text-muted-foreground">
             <li><Link to="/meditatii" className="hover:text-foreground">Caută meditații</Link></li>
             <li><Link to="/harta-blocajelor" className="hover:text-foreground">Harta Blocajelor — ce noțiune îți lipsește</Link></li>
+            <li><Link to="/scaner-lacune" className="hover:text-foreground">Scanerul de lacune — test gratuit</Link></li>
+            <li><Link to="/simulare-ai" className="hover:text-foreground">Simulare test cu corectare AI</Link></li>
+            <li><Link to="/meditator-ai" className="hover:text-foreground">Meditator AI</Link></li>
             <li><Link to="/profesori" className="hover:text-foreground">Profesori</Link></li>
             <li><Link to="/materii" className="hover:text-foreground">Materii</Link></li>
             <li><Link to="/preturi-meditatii" className="hover:text-foreground">Prețuri</Link></li>

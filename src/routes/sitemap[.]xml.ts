@@ -83,6 +83,9 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/evaluare-nationala-cluj", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-cluj", priority: "0.9", changefreq: "weekly" },
   { path: "/harta-blocajelor", priority: "0.9", changefreq: "weekly" },
+  { path: "/scaner-lacune", priority: "0.9", changefreq: "weekly" },
+  { path: "/simulare-ai", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditator-ai", priority: "0.9", changefreq: "weekly" },
   { path: "/blog", priority: "0.7", changefreq: "weekly" },
   { path: "/tutoriale", priority: "0.6", changefreq: "weekly" },
   { path: "/parteneri", priority: "0.5", changefreq: "monthly" },
@@ -107,6 +110,10 @@ export const Route = createFileRoute("/sitemap.xml")({
         // Harta Blocajelor — conținut static, indexabil: o pagină pe materie + una pe blocaj
         for (const m of BLOCAJE_MATERII) {
           urls.push(`  <url>\n    <loc>${BASE_URL}/harta-blocajelor/${m.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+        }
+        // Scanerul de lacune — o pagină indexabilă pe materie (?tinta= nu se listează)
+        for (const m of BLOCAJE_MATERII) {
+          urls.push(`  <url>\n    <loc>${BASE_URL}/scaner-lacune/${m.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
         }
         for (const n of BLOCAJE) {
           urls.push(`  <url>\n    <loc>${BASE_URL}/harta-blocajelor/${n.materie}/${n.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
