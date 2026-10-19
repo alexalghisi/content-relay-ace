@@ -8,6 +8,7 @@ const NAV = [
   { to: "/meditatii", label: "Cere ofertă" },
   { to: "/cereri", label: "Cereri elevi" },
   { to: "/materii", label: "Materii" },
+  { to: "/harta-blocajelor", label: "Harta Blocajelor" },
   { to: "/cum-functioneaza", label: "Cum funcționează" },
   { to: "/blog", label: "Blog" },
 ] as const;
@@ -53,7 +54,7 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Link to="/login" className="btn-outline">Autentificare</Link>
+              <span className="hidden 2xl:block"><Link to="/login" className="btn-outline">Autentificare</Link></span>
               <Link to="/signup" className="btn-primary">Creează cont</Link>
               <Link to="/pentru-profesori" className="btn-outline border-primary text-primary">Devino profesor</Link>
             </>

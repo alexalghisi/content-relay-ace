@@ -39,6 +39,7 @@ export function SiteFooter() {
           <div className="font-semibold mb-3">Pentru elevi</div>
           <ul className="space-y-2 text-muted-foreground">
             <li><Link to="/meditatii" className="hover:text-foreground">Caută meditații</Link></li>
+            <li><Link to="/harta-blocajelor" className="hover:text-foreground">Harta Blocajelor — ce noțiune îți lipsește</Link></li>
             <li><Link to="/profesori" className="hover:text-foreground">Profesori</Link></li>
             <li><Link to="/materii" className="hover:text-foreground">Materii</Link></li>
             <li><Link to="/preturi-meditatii" className="hover:text-foreground">Prețuri</Link></li>
