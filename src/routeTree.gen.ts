@@ -66,6 +66,7 @@ import { Route as MeditatiiPrivateRouteImport } from './routes/meditatii-private
 import { Route as MeditatiiRomanaRouteImport } from './routes/meditatii-romana'
 import { Route as MeditatiiScoalaRouteImport } from './routes/meditatii-scoala'
 import { Route as MeditatiiTitularizareRouteImport } from './routes/meditatii-titularizare'
+import { Route as MeditatorAiRouteImport } from './routes/meditator-ai'
 import { Route as MeditatoriRouteImport } from './routes/meditatori'
 import { Route as OferMeditatiiRouteImport } from './routes/ofer-meditatii'
 import { Route as OreOnlineRouteImport } from './routes/ore-online'
@@ -81,6 +82,7 @@ import { Route as ProfesorParticularRouteImport } from './routes/profesor-partic
 import { Route as ProfesoriMeditatiiRouteImport } from './routes/profesori-meditatii'
 import { Route as RezultateBac2026RouteImport } from './routes/rezultate-bac-2026'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SimulareAiRouteImport } from './routes/simulare-ai'
 import { Route as SimulareBacalaureatRouteImport } from './routes/simulare-bacalaureat'
 import { Route as SimulareDrept2026RouteImport } from './routes/simulare-drept-2026'
 import { Route as SimulareUtcn2026RouteImport } from './routes/simulare-utcn-2026'
@@ -435,6 +437,11 @@ const MeditatiiTitularizareRoute = MeditatiiTitularizareRouteImport.update({
   path: '/meditatii-titularizare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeditatorAiRoute = MeditatorAiRouteImport.update({
+  id: '/meditator-ai',
+  path: '/meditator-ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MeditatoriRoute = MeditatoriRouteImport.update({
   id: '/meditatori',
   path: '/meditatori',
@@ -510,6 +517,11 @@ const RezultateBac2026Route = RezultateBac2026RouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulareAiRoute = SimulareAiRouteImport.update({
+  id: '/simulare-ai',
+  path: '/simulare-ai',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SimulareBacalaureatRoute = SimulareBacalaureatRouteImport.update({
@@ -902,6 +914,7 @@ export interface FileRoutesByFullPath {
   '/meditatii-romana': typeof MeditatiiRomanaRoute
   '/meditatii-scoala': typeof MeditatiiScoalaRoute
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
+  '/meditator-ai': typeof MeditatorAiRoute
   '/meditatori': typeof MeditatoriRoute
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
@@ -917,6 +930,7 @@ export interface FileRoutesByFullPath {
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/rezultate-bac-2026': typeof RezultateBac2026Route
   '/signup': typeof SignupRoute
+  '/simulare-ai': typeof SimulareAiRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
@@ -1039,6 +1053,7 @@ export interface FileRoutesByTo {
   '/meditatii-romana': typeof MeditatiiRomanaRoute
   '/meditatii-scoala': typeof MeditatiiScoalaRoute
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
+  '/meditator-ai': typeof MeditatorAiRoute
   '/meditatori': typeof MeditatoriRoute
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
@@ -1054,6 +1069,7 @@ export interface FileRoutesByTo {
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/rezultate-bac-2026': typeof RezultateBac2026Route
   '/signup': typeof SignupRoute
+  '/simulare-ai': typeof SimulareAiRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
@@ -1175,6 +1191,7 @@ export interface FileRoutesById {
   '/meditatii-romana': typeof MeditatiiRomanaRoute
   '/meditatii-scoala': typeof MeditatiiScoalaRoute
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
+  '/meditator-ai': typeof MeditatorAiRoute
   '/meditatori': typeof MeditatoriRoute
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
@@ -1190,6 +1207,7 @@ export interface FileRoutesById {
   '/profesori-meditatii': typeof ProfesoriMeditatiiRoute
   '/rezultate-bac-2026': typeof RezultateBac2026Route
   '/signup': typeof SignupRoute
+  '/simulare-ai': typeof SimulareAiRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
@@ -1314,6 +1332,7 @@ export interface FileRouteTypes {
     | '/meditatii-romana'
     | '/meditatii-scoala'
     | '/meditatii-titularizare'
+    | '/meditator-ai'
     | '/meditatori'
     | '/ofer-meditatii'
     | '/ore-online'
@@ -1329,6 +1348,7 @@ export interface FileRouteTypes {
     | '/profesori-meditatii'
     | '/rezultate-bac-2026'
     | '/signup'
+    | '/simulare-ai'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
     | '/simulare-utcn-2026'
@@ -1451,6 +1471,7 @@ export interface FileRouteTypes {
     | '/meditatii-romana'
     | '/meditatii-scoala'
     | '/meditatii-titularizare'
+    | '/meditator-ai'
     | '/meditatori'
     | '/ofer-meditatii'
     | '/ore-online'
@@ -1466,6 +1487,7 @@ export interface FileRouteTypes {
     | '/profesori-meditatii'
     | '/rezultate-bac-2026'
     | '/signup'
+    | '/simulare-ai'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
     | '/simulare-utcn-2026'
@@ -1586,6 +1608,7 @@ export interface FileRouteTypes {
     | '/meditatii-romana'
     | '/meditatii-scoala'
     | '/meditatii-titularizare'
+    | '/meditator-ai'
     | '/meditatori'
     | '/ofer-meditatii'
     | '/ore-online'
@@ -1601,6 +1624,7 @@ export interface FileRouteTypes {
     | '/profesori-meditatii'
     | '/rezultate-bac-2026'
     | '/signup'
+    | '/simulare-ai'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
     | '/simulare-utcn-2026'
@@ -1724,6 +1748,7 @@ export interface RootRouteChildren {
   MeditatiiRomanaRoute: typeof MeditatiiRomanaRoute
   MeditatiiScoalaRoute: typeof MeditatiiScoalaRoute
   MeditatiiTitularizareRoute: typeof MeditatiiTitularizareRoute
+  MeditatorAiRoute: typeof MeditatorAiRoute
   MeditatoriRoute: typeof MeditatoriRoute
   OferMeditatiiRoute: typeof OferMeditatiiRoute
   OreOnlineRoute: typeof OreOnlineRoute
@@ -1739,6 +1764,7 @@ export interface RootRouteChildren {
   ProfesoriMeditatiiRoute: typeof ProfesoriMeditatiiRoute
   RezultateBac2026Route: typeof RezultateBac2026Route
   SignupRoute: typeof SignupRoute
+  SimulareAiRoute: typeof SimulareAiRoute
   SimulareBacalaureatRoute: typeof SimulareBacalaureatRoute
   SimulareDrept2026Route: typeof SimulareDrept2026Route
   SimulareUtcn2026Route: typeof SimulareUtcn2026Route
@@ -2201,6 +2227,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeditatiiTitularizareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/meditator-ai': {
+      id: '/meditator-ai'
+      path: '/meditator-ai'
+      fullPath: '/meditator-ai'
+      preLoaderRoute: typeof MeditatorAiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/meditatori': {
       id: '/meditatori'
       path: '/meditatori'
@@ -2304,6 +2337,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulare-ai': {
+      id: '/simulare-ai'
+      path: '/simulare-ai'
+      fullPath: '/simulare-ai'
+      preLoaderRoute: typeof SimulareAiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/simulare-bacalaureat': {
@@ -2836,6 +2876,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiRomanaRoute: MeditatiiRomanaRoute,
   MeditatiiScoalaRoute: MeditatiiScoalaRoute,
   MeditatiiTitularizareRoute: MeditatiiTitularizareRoute,
+  MeditatorAiRoute: MeditatorAiRoute,
   MeditatoriRoute: MeditatoriRoute,
   OferMeditatiiRoute: OferMeditatiiRoute,
   OreOnlineRoute: OreOnlineRoute,
@@ -2851,6 +2892,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfesoriMeditatiiRoute: ProfesoriMeditatiiRoute,
   RezultateBac2026Route: RezultateBac2026Route,
   SignupRoute: SignupRoute,
+  SimulareAiRoute: SimulareAiRoute,
   SimulareBacalaureatRoute: SimulareBacalaureatRoute,
   SimulareDrept2026Route: SimulareDrept2026Route,
   SimulareUtcn2026Route: SimulareUtcn2026Route,
