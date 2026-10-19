@@ -122,6 +122,7 @@ function Page() {
       ]}
       faqs={faqs}
       related={[
+        { to: "/harta-blocajelor/engleza", label: "Harta Blocajelor engleză" },
         { to: "/meditatii-bac", label: "Meditații BAC" },
         { to: "/meditatii-romana", label: "Meditații română" },
         { to: "/meditatii-germana", label: "Meditații germană" },

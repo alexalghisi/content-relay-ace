@@ -63,6 +63,7 @@ function Page() {
         ctaFooter={{ title: "Cauți ajutor la informatică?", body: "Spune limbajul, clasa și obiectivul. Primești propuneri cu tarif și program.", to: "/meditatii", search: { materie: "informatica" }, label: "Trimite cererea gratuită" }}
         faqs={faqs}
         related={[
+        { to: "/harta-blocajelor/informatica", label: "Harta Blocajelor informatică" },
           { to: "/meditatii-matematica", label: "Matematică" },
           { to: "/meditatii-bac", label: "BAC 2026" },
           { to: "/grile-upb", label: "Grile UPB" },

@@ -13,6 +13,7 @@ export const Route = createFileRoute("/meditatii-chimie")(seoPage({
     { q: "Se pot face meditații chimie online?", a: "Da, majoritatea profesorilor predau online prin Zoom sau Meet cu tabletă grafică, la fel de eficient ca la domiciliu." },
   ],
   related: [
+    { to: "/harta-blocajelor/chimie", label: "Harta Blocajelor chimie" },
     { to: "/meditatii-biologie", label: "Meditații biologie" },
     { to: "/grile-medicina", label: "Grile medicină" },
     { to: "/meditatii-bac", label: "Meditații BAC" },

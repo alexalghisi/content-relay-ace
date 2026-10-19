@@ -3,6 +3,7 @@ import type {} from "@tanstack/react-start";
 import { CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { consolidatedTarget } from "@/lib/seo-redirects";
+import { BLOCAJE, BLOCAJE_MATERII } from "@/data/blocaje";
 
 
 const BASE_URL = "https://meditatiidirect.ro";
@@ -81,6 +82,7 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/calculator-media-evaluare-nationala", priority: "0.9", changefreq: "monthly" },
   { path: "/evaluare-nationala-cluj", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-cluj", priority: "0.9", changefreq: "weekly" },
+  { path: "/harta-blocajelor", priority: "0.9", changefreq: "weekly" },
   { path: "/blog", priority: "0.7", changefreq: "weekly" },
   { path: "/tutoriale", priority: "0.6", changefreq: "weekly" },
   { path: "/parteneri", priority: "0.5", changefreq: "monthly" },
@@ -101,6 +103,14 @@ export const Route = createFileRoute("/sitemap.xml")({
           (e) =>
             `  <url>\n    <loc>${BASE_URL}${e.path}</loc>\n    <changefreq>${e.changefreq}</changefreq>\n    <priority>${e.priority}</priority>\n  </url>`,
         );
+
+        // Harta Blocajelor — conținut static, indexabil: o pagină pe materie + una pe blocaj
+        for (const m of BLOCAJE_MATERII) {
+          urls.push(`  <url>\n    <loc>${BASE_URL}/harta-blocajelor/${m.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+        }
+        for (const n of BLOCAJE) {
+          urls.push(`  <url>\n    <loc>${BASE_URL}/harta-blocajelor/${n.materie}/${n.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+        }
 
         try {
           // Query-string listings (/meditatii?materie=…) are canonicalised to /meditatii — not listed.

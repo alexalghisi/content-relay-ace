@@ -6,8 +6,9 @@ import { Check, Megaphone, Send, ShieldCheck, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { CITIES } from "@/data/cities";
+import { claseLabel, getBlocaj } from "@/data/blocaje";
 
-type SearchParams = { materie?: string; oras?: string; q?: string; online?: string };
+type SearchParams = { materie?: string; oras?: string; q?: string; online?: string; blocaj?: string };
 
 export const Route = createFileRoute("/meditatii/")({
   validateSearch: (search: Record<string, unknown>): SearchParams => ({
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/meditatii/")({
     oras: typeof search.oras === "string" ? search.oras : undefined,
     q: typeof search.q === "string" ? search.q : undefined,
     online: search.online === undefined || search.online === null ? undefined : String(search.online),
+    blocaj: typeof search.blocaj === "string" ? search.blocaj : undefined,
   }),
   head: () => ({
     meta: [
@@ -66,7 +68,11 @@ function RequestPage() {
   const [city, setCity] = useState(() => cityFromParam(search.oras));
   const [isOnline, setIsOnline] = useState(() => search.online === "1" || norm(search.oras ?? "") === "online");
   const [budget, setBudget] = useState("");
-  const [details, setDetails] = useState("");
+  // Venit din Harta Blocajelor: precompletăm detaliile cu blocajul ales (fără date personale).
+  const [details, setDetails] = useState(() => {
+    const b = search.blocaj ? getBlocaj(search.blocaj) : undefined;
+    return b ? `M-am blocat la: ${b.titlu} (${claseLabel(b.clase)}). ${b.blocaj}` : "";
+  });
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");

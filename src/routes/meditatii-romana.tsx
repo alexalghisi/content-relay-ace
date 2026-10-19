@@ -68,6 +68,7 @@ export const Route = createFileRoute("/meditatii-romana")({
       ctaFooter={{ title: "Cauți un profesor de română?", body: "Spune clasa, examenul și ce vrei să îmbunătățești. Profesorii interesați îți trimit propuneri.", to: "/meditatii", label: "Trimite cererea gratuită", search: { materie: "romana" } }}
       faqs={faqs}
       related={[
+        { to: "/harta-blocajelor/romana", label: "Harta Blocajelor română" },
         { to: "/meditatii-bac", label: "Meditații BAC" },
         { to: "/meditatii-evaluare-nationala", label: "Evaluare Națională" },
         { to: "/meditatii-online", label: "Meditații online" },

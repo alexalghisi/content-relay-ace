@@ -50,6 +50,7 @@ export const Route = createFileRoute("/meditatii-fizica")({
       ]}
       faqs={faqs}
       related={[
+        { to: "/harta-blocajelor/fizica", label: "Harta Blocajelor fizică" },
         { to: "/meditatii-matematica", label: "Matematică" },
         { to: "/grile-upb", label: "Grile UPB" },
         { to: "/grile-medicina", label: "Grile Medicină" },

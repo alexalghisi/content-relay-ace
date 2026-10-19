@@ -104,6 +104,7 @@ function Page() {
       ctaFooter={{ title: "Cauți un profesor de matematică?", body: "Precizează clasa, examenul și capitolele dificile. Primești propuneri cu tarif și program.", to: "/meditatii", label: "Trimite cererea gratuită", search: { materie: "matematica" } }}
       faqs={FAQS}
       related={[
+        { to: "/harta-blocajelor/matematica", label: "Harta Blocajelor matematică" },
         { to: "/meditatii-bac", label: "Meditații BAC" },
         { to: "/meditatii-evaluare-nationala", label: "Meditații Evaluare Națională" },
         { to: "/meditatii-fizica", label: "Meditații fizică" },
