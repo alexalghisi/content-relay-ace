@@ -36,6 +36,7 @@ MeditatiiDirect.ro conectează elevi și părinți cu peste 1000 de meditatori v
 ## Resurse
 
 - [Harta Blocajelor](/harta-blocajelor): Pentru fiecare blocaj frecvent (matematică, română, fizică, chimie, engleză, informatică) — noțiunea care lipsește, explicație, exemplu rezolvat și verificare.
+- [Scanerul de lacune](/scaner-lacune): Test adaptiv gratuit pe materie: pornește de la capitolul la care elevul s-a blocat, coboară pe prerechizite și arată rădăcina blocajului plus ordinea de recuperare.
 
 - [Blog](/blog): Articole, sfaturi și ghiduri educaționale.
 - [Tutoriale](/tutoriale): Materiale de învățare.
