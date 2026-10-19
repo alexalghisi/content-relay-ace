@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 import { MyProposals } from "@/components/my-proposals";
+import { notifyStudentOfProposal } from "@/lib/notify-student.functions";
 
 function ProposalForm({ requestId, sent, onSent }: { requestId: string; sent: boolean; onSent: () => void }) {
   const [open, setOpen] = useState(false);
@@ -47,19 +48,21 @@ function ProposalForm({ requestId, sent, onSent }: { requestId: string; sent: bo
       setError("Trebuie să fii autentificat.");
       return;
     }
-    const { error: insertError } = await supabase.from("teacher_proposals").insert({
+    const { data: inserted, error: insertError } = await supabase.from("teacher_proposals").insert({
       user_id: uid,
       request_id: requestId,
       message: message.trim(),
       price_per_hour: price ? Number(price) : null,
       proposed_date: date || null,
       proposed_time: time || null,
-    });
+    }).select("id").single();
     setPending(false);
     if (insertError) {
       setError(insertError.code === "23505" ? "Ai trimis deja o propunere la această cerere." : "Nu am putut trimite propunerea. Încearcă din nou.");
       return;
     }
+    // Anunțăm elevul pe email (și SMS, dacă a lăsat telefon) — nu blochează interfața.
+    if (inserted?.id) notifyStudentOfProposal({ data: { proposalId: inserted.id } }).catch(() => {});
     toast.success("Propunerea a fost trimisă!", { description: "Elevul a primit-o. O găsești în „Propunerile mele”, unde vezi și dacă te-a acceptat și ce notă ți-a dat." });
     onSent();
   };
