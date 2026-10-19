@@ -12,3 +12,6 @@
 - Keep AdSense serving centrally disabled until approval plus certified consent setup; preserve ownership verification independently. Adsterra banners and Social Bar run in opaque sandboxed in-flow frames with user-activated navigation only; this confines provider overlays and prevents automatic popunders. Smartlink stays an explicitly labeled sponsored link, not a site CTA; public monetization excludes private workflows.
 - Resolve the viewport before loading an Adsterra banner zone; avoid requesting and discarding a mobile impression on desktop hydration.
 - Reveal Adsterra placements only after their sandbox reports rendered ad media, validating the message source against the placement frame; empty provider responses must not leave advertising labels or reserved blank space.
+
+- Harta Blocajelor (/harta-blocajelor) is static, hand-written content in src/data/blocaje (one node per concept, prerequisites as slugs, no teacher/price/review data); slugs are site-unique and bun tests enforce graph integrity. Its CTA pre-fills /meditatii via `blocaj=` without storing any student answers.
+- Adsterra zone scripts must use the exact URLs from the Adsterra panel (currently bicea.org / arwf.org); the old profitableratecpmnetwork.com / highrevenueformat.com hosts return 0 bytes.
