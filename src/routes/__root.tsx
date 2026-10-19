@@ -17,6 +17,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ADSENSE_CLIENT } from "@/components/ads/adsense";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 import { AdsterraMonetization } from "@/components/ads/adsterra";
+import { InstallAppBanner } from "@/components/install-app-banner";
 
 function NotFoundComponent() {
   return (
@@ -64,6 +65,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
       { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1" },
       { name: "theme-color", content: "#0ea5e9" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-title", content: "MeditatiiDirect" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { name: "format-detection", content: "telephone=no" },
       { name: "geo.region", content: "RO" },
       { name: "geo.placename", content: "România" },
@@ -80,6 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "dns-prefetch", href: "https://pagead2.googlesyndication.com" },
         { rel: "preconnect", href: "https://pagead2.googlesyndication.com", crossOrigin: "anonymous" },
         { rel: "dns-prefetch", href: "https://www.googletagmanager.com" },
@@ -180,6 +186,7 @@ function RootComponent() {
           <SiteFooter />
         </div>
         <Toaster />
+        <InstallAppBanner />
       </AuthProvider>
     </QueryClientProvider>
   );
