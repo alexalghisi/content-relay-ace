@@ -84,6 +84,8 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/meditatii-cluj", priority: "0.9", changefreq: "weekly" },
   { path: "/harta-blocajelor", priority: "0.9", changefreq: "weekly" },
   { path: "/scaner-lacune", priority: "0.9", changefreq: "weekly" },
+  { path: "/simulare-ai", priority: "0.9", changefreq: "weekly" },
+  { path: "/meditator-ai", priority: "0.9", changefreq: "weekly" },
   { path: "/blog", priority: "0.7", changefreq: "weekly" },
   { path: "/tutoriale", priority: "0.6", changefreq: "weekly" },
   { path: "/parteneri", priority: "0.5", changefreq: "monthly" },
