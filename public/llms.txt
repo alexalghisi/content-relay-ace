@@ -35,6 +35,8 @@ MeditatiiDirect.ro conectează elevi și părinți cu peste 1000 de meditatori v
 
 ## Resurse
 
+- [Harta Blocajelor](/harta-blocajelor): Pentru fiecare blocaj frecvent (matematică, română, fizică, chimie, engleză, informatică) — noțiunea care lipsește, explicație, exemplu rezolvat și verificare.
+
 - [Blog](/blog): Articole, sfaturi și ghiduri educaționale.
 - [Tutoriale](/tutoriale): Materiale de învățare.
 
