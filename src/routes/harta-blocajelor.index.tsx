@@ -101,6 +101,9 @@ function Page() {
           și locul unde te-ai împotmolit — îți arătăm noțiunea care lipsește de obicei, o explicăm
           scurt, rezolvăm un exemplu și te lăsăm să verifici singur dacă ai înțeles.
         </p>
+        <Link to="/scaner-lacune" className="btn-primary mt-6 h-11 px-5">
+          Nu știi de unde vine? Fă testul de lacune
+        </Link>
       </header>
 
       <section aria-labelledby="alege" className="mt-8 card-soft p-5 sm:p-6">

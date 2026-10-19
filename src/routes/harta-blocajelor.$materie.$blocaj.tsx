@@ -257,6 +257,22 @@ function Page() {
         </div>
 
         <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+          <Link
+            to="/scaner-lacune/$materie"
+            params={{ materie: m.slug }}
+            search={{ tinta: n.slug }}
+            className="card-soft block border-primary/40 p-5 transition hover:shadow-[var(--shadow-pop)]"
+          >
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Scanerul de lacune</p>
+            <p className="mt-1 font-bold">Nu ești sigur de unde vine blocajul?</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              Răspunde la câteva întrebări pornind de la „{n.titlu}” și află rădăcina exactă, plus
+              ordinea de recuperare.
+            </p>
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary">
+              Scanează lanțul <ArrowRight className="h-4 w-4" />
+            </span>
+          </Link>
           <div className="card-soft bg-gradient-to-br from-primary-soft to-card p-5">
             <h2 className="inline-flex items-center gap-2 font-bold">
               <MessageSquareText className="h-5 w-5 text-primary" /> Nu se leagă nici așa?

@@ -7,8 +7,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { CITIES } from "@/data/cities";
 import { claseLabel, getBlocaj } from "@/data/blocaje";
+import { textFromTraseuParam } from "@/lib/scaner-lacune";
 
-type SearchParams = { materie?: string; oras?: string; q?: string; online?: string; blocaj?: string };
+type SearchParams = { materie?: string; oras?: string; q?: string; online?: string; blocaj?: string; traseu?: string };
 
 export const Route = createFileRoute("/meditatii/")({
   validateSearch: (search: Record<string, unknown>): SearchParams => ({
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/meditatii/")({
     q: typeof search.q === "string" ? search.q : undefined,
     online: search.online === undefined || search.online === null ? undefined : String(search.online),
     blocaj: typeof search.blocaj === "string" ? search.blocaj : undefined,
+    traseu: typeof search.traseu === "string" ? search.traseu : undefined,
   }),
   head: () => ({
     meta: [
@@ -70,6 +72,11 @@ function RequestPage() {
   const [budget, setBudget] = useState("");
   // Venit din Harta Blocajelor: precompletăm detaliile cu blocajul ales (fără date personale).
   const [details, setDetails] = useState(() => {
+    // Venit din Scanerul de lacune: diagnosticul (doar noțiuni, fără date personale).
+    if (search.traseu) {
+      const t = textFromTraseuParam(search.traseu);
+      if (t) return t;
+    }
     const b = search.blocaj ? getBlocaj(search.blocaj) : undefined;
     return b ? `M-am blocat la: ${b.titlu} (${claseLabel(b.clase)}). ${b.blocaj}` : "";
   });

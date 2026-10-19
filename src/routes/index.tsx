@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { ArrowRight, BadgeCheck, BookOpen, Check, Megaphone, MessageSquareText, Search, ShieldCheck, Star, UserRound } from "lucide-react";
+import { ArrowRight, BadgeCheck, BookOpen, Check, Megaphone, MessageSquareText, ScanSearch, Search, ShieldCheck, Star, UserRound } from "lucide-react";
 import heroImg from "@/assets/hero-tutoring.jpg";
 import tutoringVideo from "@/assets/tutoring-home-web.mp4.asset.json";
 import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
@@ -73,6 +73,29 @@ function HomePage() {
     </section>
 
     <AdsterraBannerResponsive className="container-page py-6" />
+
+    <section className="container-page pt-12">
+      <div className="grid items-center gap-8 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary-soft to-card p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr]">
+        <div>
+          <p className="inline-flex items-center gap-2 text-sm font-semibold text-primary"><ScanSearch className="h-5 w-5" /> Nou: Scanerul de lacune</p>
+          <h2 className="mt-3 text-3xl font-bold leading-tight">Nu îți iese un capitol? Află în câteva minute de unde vine problema.</h2>
+          <p className="mt-3 leading-7 text-muted-foreground">Pornești de la capitolul la care te-ai blocat, iar scanerul coboară întrebare cu întrebare pe noțiunile de bază până găsește rădăcina. Primești traseul de recuperare, în ordine, și îl poți trimite profesorilor într-o cerere. Gratuit, fără cont.</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link to="/scaner-lacune/$materie" params={{ materie: "matematica" }} className="btn-primary h-12 px-6">Scanează la matematică <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <Link to="/scaner-lacune" className="btn-outline h-12 px-5">Alte materii</Link>
+          </div>
+        </div>
+        <div className="rounded-xl border border-border bg-card p-5" aria-label="Exemplu de diagnostic">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Exemplu de lanț verificat</p>
+          <ol className="mt-4 space-y-2 text-sm">
+            <li className="flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2 text-destructive">✗ Derivate <span className="ml-auto text-xs">aici te-ai blocat</span></li>
+            <li className="ml-4 flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2 text-destructive">✗ Limite de funcții</li>
+            <li className="ml-8 flex items-center gap-2 rounded-lg bg-accent px-3 py-2">✓ Funcții: domeniu, monotonie, grafic</li>
+            <li className="ml-8 flex items-center gap-2 rounded-lg border border-primary/50 bg-primary-soft px-3 py-2 font-semibold text-primary">✗ Formule de calcul prescurtat <span className="ml-auto text-xs font-normal">rădăcina</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
 
     <section className="container-page py-16"><div className="flex items-end justify-between gap-4"><div><p className="text-sm font-semibold text-primary">Începe cu materia potrivită</p><h2 className="mt-2 text-3xl font-bold">Categorii populare</h2></div><Link to="/materii" className="hidden items-center gap-1 text-sm font-semibold text-primary sm:flex">Toate materiile <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">{POPULAR_SUBJECTS.map((item) => <Link key={item.slug} to="/meditatii" search={{ materie: item.slug }} className="group rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-card)]"><span className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-sm font-bold text-primary">{item.icon}</span><h3 className="mt-4 text-sm font-bold">{item.name}</h3><p className="mt-1 text-xs leading-5 text-muted-foreground">{item.description}</p><p className="mt-3 text-xs font-medium text-primary">Cere ofertă →</p></Link>)}</div></section>
 
