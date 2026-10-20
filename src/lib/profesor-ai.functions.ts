@@ -319,7 +319,7 @@ Răspunzi DOAR cu JSON: {"vorbit": "...", "tabla": "...", "emotie": "..."}`;
     }
   });
 
-/** Token de streaming pentru avatarul realist HeyGen (doar pentru o sesiune validă). */
+/** Token pentru avatarul realist: LiveAvatar dacă e configurat, altfel contractul HeyGen vechi. */
 export const profesorAiAvatar = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ token: z.string().max(4000) }).parse(d))
@@ -327,9 +327,16 @@ export const profesorAiAvatar = createServerFn({ method: "POST" })
     const s = await citesteSesiune(data.token, context.userId);
     if (!s)
       return {
-        heygen: null as null | { token: string; avatarId: string; voiceId?: string },
+        heygen: null as null | import("./profesor-ai-avatar.server").AvatarAccess,
         error: "Sesiunea nu este validă.",
       };
-    const { createHeygenAccess } = await import("./profesor-ai-avatar.server");
-    return createHeygenAccess({ key: process.env["HEYGEN_API_KEY"], avatarId: process.env["HEYGEN_AVATAR_ID"], voiceId: process.env["HEYGEN_VOICE_ID"] });
+    const av = await import("./profesor-ai-avatar.server");
+    if (process.env["LIVEAVATAR_API_KEY"])
+      return av.createLiveAvatarAccess({
+        key: process.env["LIVEAVATAR_API_KEY"],
+        avatarId: process.env["LIVEAVATAR_AVATAR_ID"],
+        voiceId: process.env["LIVEAVATAR_VOICE_ID"],
+        maxSeconds: Math.min(3600, (s.durata + 5) * 60),
+      });
+    return av.createHeygenAccess({ key: process.env["HEYGEN_API_KEY"], avatarId: process.env["HEYGEN_AVATAR_ID"], voiceId: process.env["HEYGEN_VOICE_ID"] });
   });
