@@ -331,8 +331,9 @@ export const profesorAiAvatar = createServerFn({ method: "POST" })
         error: "Sesiunea nu este validă.",
       };
     const av = await import("./profesor-ai-avatar.server");
+    const ids = await av.resolveLiveAvatarIds(av.liveAvatarConfig(process.env));
     return av.createLiveAvatarAccess({
-      ...av.liveAvatarConfig(process.env),
+      ...ids,
       maxSeconds: Math.min(3600, (s.durata + 5) * 60),
     });
   });

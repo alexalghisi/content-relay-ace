@@ -16,6 +16,74 @@ export function liveAvatarConfig(env: Record<string, string | undefined>) {
   };
 }
 
+type LaAvatar = { id: string; name: string; status?: string; default_voice?: { id: string; name: string } | null };
+type LaVoice = { id: string; name: string; language?: string | null; gender?: string | null };
+type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+
+/** Pure choice: female teacher preset avatar, Romanian voice if one exists, else the avatar's own voice (spoken in "ro"). */
+export function chooseLiveAvatar(avatars: LaAvatar[], voices: LaVoice[]) {
+  const active = avatars.filter((a) => !a.status || a.status === "ACTIVE");
+  const rank = (n: string) => {
+    const s = n.toLowerCase();
+    if (s.includes("teacher") && s.includes("sitting")) return 0;
+    if (s.includes("teacher")) return 1;
+    if (s.includes("professor") || s.includes("tutor")) return 2;
+    return 9;
+  };
+  const femaleVoice = new Set(voices.filter((v) => v.gender === "female").map((v) => v.id));
+  const pool = active
+    .filter((a) => rank(a.name) < 9 && (!a.default_voice || femaleVoice.size === 0 || femaleVoice.has(a.default_voice.id)))
+    .sort((a, b) => rank(a.name) - rank(b.name));
+  const avatar = pool[0];
+  if (!avatar) return null;
+  const ro = voices.find((v) => (v.language ?? "").toLowerCase().startsWith("ro") && v.gender === "female")
+    ?? voices.find((v) => (v.language ?? "").toLowerCase().startsWith("ro"));
+  const voice = ro ?? (avatar.default_voice ? { id: avatar.default_voice.id, name: avatar.default_voice.name } : null);
+  if (!voice) return null;
+  return { avatarId: avatar.id, avatarName: avatar.name, voiceId: voice.id, voiceName: voice.name, romanianVoice: !!ro };
+}
+
+let cached: { avatarId: string; voiceId: string } | null = null;
+
+async function listAll<T>(url: string, key: string, request: Fetcher): Promise<T[]> {
+  const out: T[] = [];
+  let next: string | null = url;
+  for (let i = 0; next && i < 10; i++) {
+    const res = await request(next, { headers: { "X-API-KEY": key, accept: "application/json" } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const j = (await res.json()) as { data?: { results?: T[]; next?: string | null } };
+    out.push(...(j.data?.results ?? []));
+    next = j.data?.next ?? null;
+  }
+  return out;
+}
+
+/** Keeps valid configured UUIDs; otherwise picks (and caches) a teacher avatar + voice from the LiveAvatar catalogue. */
+export async function resolveLiveAvatarIds(
+  config: { key?: string; avatarId?: string; voiceId?: string },
+  request: Fetcher = fetch,
+) {
+  const okA = !!config.avatarId && UUID.test(config.avatarId);
+  const okV = !!config.voiceId && UUID.test(config.voiceId);
+  if ((okA && okV) || !config.key) return config;
+  if (!cached) {
+    try {
+      const [avatars, voices] = await Promise.all([
+        listAll<LaAvatar>("https://api.liveavatar.com/v1/avatars/public?page_size=100", config.key, request),
+        listAll<LaVoice>("https://api.liveavatar.com/v1/voices?page_size=100", config.key, request),
+      ]);
+      const c = chooseLiveAvatar(avatars, voices);
+      if (!c) return config;
+      console.log(`[profesor-ai] liveavatar auto-ales: avatar "${c.avatarName}", voce "${c.voiceName}"${c.romanianVoice ? " (ro)" : " (vorbește în ro)"}`);
+      cached = { avatarId: c.avatarId, voiceId: c.voiceId };
+    } catch (e) {
+      console.error(`[profesor-ai] liveavatar catalog ${(e as Error).message}`);
+      return config;
+    }
+  }
+  return { ...config, avatarId: okA ? config.avatarId : cached.avatarId, voiceId: okV ? config.voiceId : cached.voiceId };
+}
+
 /**
  * LiveAvatar FULL session without a context ("restricted mode"): the avatar only speaks the
  * text our tutor sends, while LiveAvatar still detects and transcribes the student's voice.
