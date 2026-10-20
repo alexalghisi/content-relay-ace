@@ -1,5 +1,8 @@
 # Roadmap
 
+- [ ] Profesor AI: întrerupere în timpul vorbirii și întrebări prioritare, fără reluarea replicilor vechi; teste.
+- [ ] Profesor AI: voce naturală română și avatar video fotorealist; verificare reală a serviciului și conversației.
+
 - [x] Repară erorile document.cookie din cadrele Adsterra fără a elimina izolarea; 80 citiri/scrieri simulate în cadrul real fără cookie-uri persistate sau erori, verificare separată a scripturilor furnizorului fără erori; 10 teste trec. Test AI real generat cu cont conectat. Doar previzualizare; livrarea reclamelor nu este confirmată.
 
 - [x] Integrează Social Bar într-un cadru izolat și Smartlink etichetat pe paginile publice, mută native mai sus. Verificat la 1280 și 390 px: fără overflow sau erori, trei cadre nepopulate cu înălțime zero, link corect; 7 teste trec. Numai previzualizare, nepublicat.
