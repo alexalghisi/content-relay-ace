@@ -86,12 +86,15 @@ export function SesiuneProfesorAi({
   const nextQuestion = useRef<{ text: string; ascuns: boolean }[]>([]);
   const sendRef = useRef<(text: string, ascuns?: boolean) => Promise<void>>(async () => {});
   const listening = useRef(false);
+  const liveVoice = useRef(false);
   const interrupt = useCallback(() => {
     revision.current += 1;
     coada.current.cancel();
     setRealistVorbeste(false);
     void heygen.current?.interrupt().catch(() => {});
   }, []);
+  const interruptRef = useRef(interrupt);
+  interruptRef.current = interrupt;
   const terminat = !gratuit && ramas <= 0;
 
   // Never disguise an unavailable realistic stream with a cartoon or device voice.
@@ -278,6 +281,20 @@ export function SesiuneProfesorAi({
   }, [modAvatar, permisSunet, trimite, vorbeste, config.materie]);
 
   const microfon = () => {
+    // LiveAvatar: microfon continuu — vocea elevului oprește profesorul și devine întrebarea.
+    if (liveVoice.current && heygen.current) {
+      const pornit = !asculta;
+      setAsculta(pornit);
+      listening.current = pornit;
+      if (pornit) interrupt();
+      const op = pornit ? heygen.current.startListening() : heygen.current.stopListening();
+      void op.catch(() => {
+        setAsculta(false);
+        listening.current = false;
+        setEroare("Microfonul nu este disponibil. Verifică permisiunea sau scrie întrebarea.");
+      });
+      return;
+    }
     if (asculta) return sr.current?.stop();
     const W = window as unknown as {
       SpeechRecognition?: new () => SR;
