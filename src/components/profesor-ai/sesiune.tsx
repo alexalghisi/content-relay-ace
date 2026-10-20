@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
-import { Clock, Loader2, Mic, MicOff, Send, Square, Volume2, VolumeX } from "lucide-react";
-import { AvatarAnimat, useVoceRo } from "./avatar-animat";
+import { Clock, Loader2, Mic, MicOff, Send, Square, VideoOff, Volume2, VolumeX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { createSpeechQueue } from "@/lib/profesor-ai-dialog";
 import { profesorAiAvatar, profesorAiRaspunde } from "@/lib/profesor-ai.functions";
 import {
   paMaterieName,
@@ -15,6 +16,8 @@ type Msg = { role: "user" | "assistant"; content: string; tabla?: string };
 type HeyGen = {
   speak: (r: { text: string; taskType?: string }) => Promise<unknown>;
   interrupt: () => Promise<unknown>;
+  startListening: () => Promise<unknown>;
+  stopListening: () => Promise<unknown>;
   stopAvatar: () => Promise<unknown>;
 };
 
@@ -44,6 +47,7 @@ type SR = {
   onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
   onend: (() => void) | null;
   onerror: (() => void) | null;
+  onspeechstart: (() => void) | null;
 };
 
 export function SesiuneProfesorAi({
@@ -76,16 +80,29 @@ export function SesiuneProfesorAi({
   const heygen = useRef<HeyGen | null>(null);
   const sr = useRef<SR | null>(null);
   const scroll = useRef<HTMLDivElement>(null);
-  const voce = useVoceRo();
+  const coada = useRef(createSpeechQueue());
+  const processing = useRef(false);
+  const revision = useRef(0);
+  const messagesRef = useRef<Msg[]>([]);
+  const nextQuestion = useRef<{ text: string; ascuns: boolean } | null>(null);
+  const sendRef = useRef<(text: string, ascuns?: boolean) => Promise<void>>(async () => {});
+  const listening = useRef(false);
+  const interrupt = useCallback(() => {
+    revision.current += 1;
+    coada.current.cancel();
+    setRealistVorbeste(false);
+    void heygen.current?.interrupt().catch(() => {});
+  }, []);
   const terminat = !gratuit && ramas <= 0;
 
-  // Avatar realist (HeyGen) dacă e configurat; altfel avatarul animat cu voce din browser.
+  // Never disguise an unavailable realistic stream with a cartoon or device voice.
   useEffect(() => {
     let anulat = false;
     (async () => {
       try {
         const { heygen: h } = await profesorAiAvatar({ data: { token } });
-        if (!h || anulat) return setModAvatar("animat");
+        if (anulat) return;
+        if (!h) return setModAvatar("animat");
         const mod = await import("@heygen/streaming-avatar");
         const av = new mod.default({ token: h.token });
         av.on(mod.StreamingEvents.STREAM_READY, (e: CustomEvent<MediaStream>) => {
@@ -101,7 +118,12 @@ export function SesiuneProfesorAi({
           quality: mod.AvatarQuality.High,
           avatarName: h.avatarId,
           language: "ro",
-          voice: { voiceId: h.voiceId, emotion: mod.VoiceEmotion.FRIENDLY, rate: 1 },
+          voice: {
+            voiceId: h.voiceId,
+            emotion: mod.VoiceEmotion.FRIENDLY,
+            rate: 1,
+            model: mod.ElevenLabsModel.eleven_multilingual_v2,
+          },
           activityIdleTimeout: 600,
         });
         if (anulat) return void av.stopAvatar();
@@ -113,6 +135,9 @@ export function SesiuneProfesorAi({
     })();
     return () => {
       anulat = true;
+      coada.current.cancel();
+      listening.current = false;
+      sr.current?.stop();
       void heygen.current?.stopAvatar().catch(() => {});
       heygen.current = null;
     };
@@ -129,7 +154,6 @@ export function SesiuneProfesorAi({
   }, [mesaje, pending]);
 
   // Coadă de vorbire: salutul și primul răspuns se spun pe rând, fără să se taie unul pe altul.
-  const coada = useRef<Promise<void>>(Promise.resolve());
   const vorbeste = useCallback(
     (t: string) => {
       if (!sunet) return Promise.resolve();
@@ -142,26 +166,27 @@ export function SesiuneProfesorAi({
             setModAvatar("animat");
           }
         }
-        await voce.spune(t);
+
       };
-      coada.current = coada.current.then(spune, spune);
-      return coada.current;
+      return coada.current.enqueue(spune);
     },
-    [sunet, voce],
+    [sunet],
   );
 
   const trimite = useCallback(
     async (continut: string, ascuns = false) => {
       const c = continut.trim();
-      if (!c || pending || terminat) return;
-      setEroare("");
-      if (!ascuns) {
-        // Elevul a vorbit: profesorul se oprește și ascultă.
-        coada.current = Promise.resolve();
-        voce.opreste();
-        void heygen.current?.interrupt().catch(() => {});
+      if (!c || terminat) return;
+      if (!ascuns) interrupt();
+      if (processing.current) {
+        nextQuestion.current = { text: c, ascuns };
+        return;
       }
-      const istoric: Msg[] = [...mesaje, { role: "user", content: c }];
+      processing.current = true;
+      const currentRevision = revision.current;
+      setEroare("");
+      const previous = messagesRef.current;
+      const istoric: Msg[] = [...previous, { role: "user", content: c }];
       if (!ascuns) setMesaje(istoric);
       setPending(true);
       setEmotie("gandire");
@@ -172,25 +197,36 @@ export function SesiuneProfesorAi({
         error: "Conexiunea a eșuat. Încearcă din nou.",
         cod: "retea" as string | undefined,
       }));
+      processing.current = false;
       setPending(false);
+      const next = nextQuestion.current;
+      nextQuestion.current = null;
+      if (next) {
+        void sendRef.current(next.text, next.ascuns);
+        return;
+      }
+      if (currentRevision !== revision.current) return;
       if (!r.ok) {
         setEroare(r.error);
         setEmotie("neutru");
         // Nu reîncercăm automat (fără bucle și fără cost ascuns); elevul apasă „Reîncearcă”.
         setDeReluat({ text: c, ascuns, cod: r.cod });
-        if (!ascuns) setMesaje(mesaje);
+        if (!ascuns) setMesaje(previous);
         return;
       }
       setDeReluat(null);
       const raspuns: Msg = { role: "assistant", content: r.data.vorbit, tabla: r.data.tabla };
       // Mesajul de pornire rămâne în istoric (pentru AI), dar nu se afișează ca replică a elevului.
-      setMesaje(ascuns ? [{ role: "user", content: c }, raspuns] : [...istoric, raspuns]);
+      messagesRef.current = [...istoric, raspuns];
+      setMesaje(messagesRef.current);
       if (r.data.tabla) setTabla(r.data.tabla);
       setEmotie(r.data.emotie);
       void vorbeste(r.data.vorbit);
     },
-    [mesaje, pending, terminat, token, voce, vorbeste],
+    [terminat, token, interrupt, vorbeste],
   );
+
+  sendRef.current = trimite;
 
   // Profesorul începe să vorbească singur imediat ce avatarul e gata: salutul se spune pe loc,
   // iar prima întrebare a lecției vine de la AI imediat după. Dacă browserul nu permite încă
@@ -223,23 +259,33 @@ export function SesiuneProfesorAi({
       setEroare("Browserul tău nu suportă dictarea. Scrie întrebarea în căsuța de mai jos.");
       return;
     }
-    voce.opreste();
-    void heygen.current?.interrupt().catch(() => {});
+    interrupt();
+    listening.current = true;
+    void heygen.current?.startListening().catch(() => {});
     const rec = new Ctor();
     rec.lang = "ro-RO";
     rec.interimResults = false;
+    rec.onspeechstart = interrupt;
     rec.continuous = false;
     rec.onresult = (e) => {
       const spus = Array.from(e.results)
         .map((r) => r[0].transcript)
         .join(" ");
-      if (spus.trim()) void trimite(spus);
+      if (spus.trim()) void sendRef.current(spus);
     };
-    rec.onend = () => setAsculta(false);
-    rec.onerror = () => setAsculta(false);
+    const stopListening = () => {
+      listening.current = false;
+      setAsculta(false);
+      void heygen.current?.stopListening().catch(() => {});
+    };
+    rec.onend = stopListening;
+    rec.onerror = () => {
+      stopListening();
+      setEroare("Microfonul nu este disponibil. Verifică permisiunea sau scrie întrebarea.");
+    };
     sr.current = rec;
     setAsculta(true);
-    rec.start();
+    try { rec.start(); } catch { rec.onerror?.(); }
   };
 
   const submit = (e: FormEvent) => {
@@ -251,7 +297,7 @@ export function SesiuneProfesorAi({
 
   const min = Math.floor(ramas / 60000);
   const sec = Math.floor((ramas % 60000) / 1000);
-  const vorbesteAcum = modAvatar === "realist" ? realistVorbeste : voce.vorbeste;
+  const vorbesteAcum = modAvatar === "realist" && realistVorbeste;
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
@@ -260,24 +306,24 @@ export function SesiuneProfesorAi({
           {modAvatar === "realist" ? (
             <video ref={video} autoPlay playsInline className="h-full w-full object-cover" />
           ) : modAvatar === "animat" ? (
-            <AvatarAnimat
-              gura={voce.gura}
-              emotie={pending ? "gandire" : emotie}
-              asculta={asculta}
-            />
+            <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center text-background">
+              <VideoOff className="h-8 w-8" />
+              <p>Avatarul video și vocea realistă nu sunt disponibile momentan.</p>
+              <p className="text-sm">Poți continua lecția în scris.</p>
+            </div>
           ) : (
             <div className="grid h-full place-items-center text-background/80">
               <Loader2 className="h-8 w-8 animate-spin" aria-label="Se conectează profesorul" />
             </div>
           )}
           {!permisSunet && modAvatar !== "incarcare" && (
-            <button
+            <Button
               type="button"
               onClick={() => setPermisSunet(true)}
               className="absolute inset-0 grid place-items-center bg-black/35 text-lg font-bold text-white"
             >
               <span className="rounded-full bg-primary px-6 py-3 shadow-lg">▶ Începe lecția</span>
-            </button>
+            </Button>
           )}
           <div className="absolute left-3 top-3 flex flex-wrap gap-2 text-xs">
             <span className="rounded-full bg-black/55 px-3 py-1 font-semibold text-white">
@@ -297,17 +343,17 @@ export function SesiuneProfesorAi({
               <Clock className="h-3.5 w-3.5" />{" "}
               {gratuit ? "cont de test · fără plată" : `${min}:${String(sec).padStart(2, "0")}`}
             </span>
-            <button
+            <Button
               type="button"
               onClick={() => {
                 setSunet((s) => !s);
-                voce.opreste();
+                interrupt();
               }}
               aria-label={sunet ? "Oprește vocea" : "Pornește vocea"}
               className="grid h-8 w-8 place-items-center rounded-full bg-black/55 text-white"
             >
               {sunet ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-            </button>
+            </Button>
           </div>
         </div>
         {tabla && (
@@ -347,7 +393,7 @@ export function SesiuneProfesorAi({
               <p>{eroare}</p>
               {deReluat && (
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => {
                       const d = deReluat;
@@ -358,7 +404,7 @@ export function SesiuneProfesorAi({
                     className="btn-outline h-9 px-3 text-xs"
                   >
                     Reîncearcă
-                  </button>
+                  </Button>
                   {(deReluat.cod === "credits" ||
                     deReluat.cod === "auth" ||
                     deReluat.cod === "config") && (
@@ -386,27 +432,27 @@ export function SesiuneProfesorAi({
         </div>
         <div className="flex gap-2 overflow-x-auto px-5 pb-2">
           {SCURTATURI.map((s) => (
-            <button
+            <Button
               key={s}
               type="button"
-              disabled={pending || terminat}
+              disabled={terminat}
               onClick={() => void trimite(s)}
               className="shrink-0 rounded-full border border-border px-3 py-1.5 text-xs hover:border-primary/40 disabled:opacity-50"
             >
               {s}
-            </button>
+            </Button>
           ))}
         </div>
         <form onSubmit={submit} className="flex items-center gap-2 border-t border-border p-3">
-          <button
+          <Button
             type="button"
             onClick={microfon}
-            disabled={pending || terminat}
+            disabled={terminat}
             aria-label={asculta ? "Oprește microfonul" : "Vorbește cu profesorul"}
             className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${asculta ? "bg-destructive text-white" : "bg-primary text-primary-foreground"} disabled:opacity-50`}
           >
             {asculta ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-          </button>
+          </Button>
           <label htmlFor="pa-text" className="sr-only">
             Scrie profesorului
           </label>
@@ -419,32 +465,33 @@ export function SesiuneProfesorAi({
             className="h-11 min-w-0 flex-1 rounded-full border border-border bg-background px-4 text-sm"
             maxLength={2000}
           />
-          {vorbesteAcum ? (
-            <button
+          {vorbesteAcum && (
+            <Button
               type="button"
               onClick={() => {
-                voce.opreste();
-                void heygen.current?.interrupt().catch(() => {});
+                interrupt();
+
               }}
               aria-label="Oprește profesorul"
               className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border"
             >
               <Square className="h-4 w-4" />
-            </button>
-          ) : (
-            <button
+            </Button>
+          )}
+          { (
+            <Button
               type="submit"
-              disabled={pending || terminat || !text.trim()}
+              disabled={terminat || !text.trim()}
               aria-label="Trimite"
               className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border disabled:opacity-50"
             >
               <Send className="h-4 w-4" />
-            </button>
+            </Button>
           )}
         </form>
         {modAvatar === "animat" && (
           <p className="px-5 pb-3 text-[11px] text-muted-foreground">
-            Avatar animat cu vocea dispozitivului tău.
+            Vocea dispozitivului nu este folosită ca înlocuitor al vocii realiste.
           </p>
         )}
       </section>
