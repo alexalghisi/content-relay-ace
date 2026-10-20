@@ -27,8 +27,9 @@ export const Route = createFileRoute("/api/profesor-ai-stream")({
         const anon = process.env["SUPABASE_PUBLISHABLE_KEY"];
         if (!url || !anon) return err(500, "Configurare incompletă.", "config");
         const sb = createClient(url, anon, { auth: { persistSession: false, autoRefreshToken: false } });
-        const { data: u } = await sb.auth.getUser(jwt);
-        const userId = u.user?.id;
+        // getClaims verifies the JWT signature locally (cached JWKS) — no extra auth round trip.
+        const { data: cl } = await sb.auth.getClaims(jwt);
+        const userId = typeof cl?.claims?.sub === "string" ? cl.claims.sub : undefined;
         if (!userId) return err(401, "Autentifică-te din nou.", "auth_user");
 
         const parsed = body.safeParse(await request.json().catch(() => null));

@@ -268,6 +268,10 @@ export function SesiuneProfesorAi({
           const { sentences } = takeSentences(spoken.slice(consumed) + (done ? " " : ""));
           for (const sn of sentences) {
             consumed = spoken.indexOf(sn, consumed) + sn.length;
+            if (!rostit || t0.current) {
+              const w = window as unknown as { __paFirstSentence?: number[] };
+              if (t0.current) (w.__paFirstSentence ??= []).push(Math.round(performance.now() - t0.current));
+            }
             rostit = true;
             void vorbeste(sn.replace(/[*#`_]/g, ""));
           }
