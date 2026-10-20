@@ -95,7 +95,7 @@ export async function createLiveAvatarAccess(
   if (!config.key) return unavailable("Cheia LiveAvatar nu este configurată.");
   if (!config.avatarId || !config.voiceId)
     return unavailable("Avatarul și vocea din LiveAvatar trebuie alese înainte de pornire.");
-  const res = await request(LIVEAVATAR_TOKEN_URL, {
+  const call = (maxSeconds: number) => request(LIVEAVATAR_TOKEN_URL, {
     method: "POST",
     headers: { "X-API-KEY": config.key, "Content-Type": "application/json", accept: "application/json" },
     body: JSON.stringify({
@@ -104,9 +104,18 @@ export async function createLiveAvatarAccess(
       avatar_persona: { voice_id: config.voiceId, language: "ro" },
       video_settings: { quality: "high", encoding: "H264" },
       interactivity_type: "CONVERSATIONAL",
-      max_session_duration: config.maxSeconds ?? 1800,
+      max_session_duration: maxSeconds,
     }),
   }).catch(() => null);
+  let res = await call(config.maxSeconds ?? 1800);
+  // The account plan caps session length: repair the request once with the cap LiveAvatar states.
+  if (res?.status === 400) {
+    const cap = /max_session_duration[^"]*maximum allowed \((\d+)s\)/.exec(await res.clone().text().catch(() => ""));
+    if (cap) {
+      console.warn(`[profesor-ai] liveavatar: planul contului limitează sesiunea la ${cap[1]}s`);
+      res = await call(Number(cap[1]));
+    }
+  }
   if (!res?.ok) {
     const body = res ? (await res.text().catch(() => "")).slice(0, 500) : "";
     console.error(`[profesor-ai] liveavatar HTTP ${res?.status ?? "network"} ${body}`);

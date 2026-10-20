@@ -63,3 +63,14 @@ test("valid UUID overrides skip the catalogue", async () => {
   expect(calls).toBe(0);
   expect(r.avatarId).toBe(la.avatarId);
 });
+test("plan session cap from LiveAvatar is applied in exactly one repaired retry", async () => {
+  const sent: number[] = [];
+  const r = await createLiveAvatarAccess({ ...la, maxSeconds: 2100 }, async (_u, init) => {
+    sent.push(JSON.parse(String(init?.body)).max_session_duration);
+    return sent.length === 1
+      ? Response.json({ message: "max_session_duration (2100s) exceeds the maximum allowed (120s)" }, { status: 400 })
+      : Response.json({ data: { session_token: "tok" } });
+  });
+  expect(sent).toEqual([2100, 120]);
+  expect(r.heygen?.token).toBe("tok");
+});
