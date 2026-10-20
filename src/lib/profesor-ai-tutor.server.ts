@@ -177,7 +177,8 @@ export async function streamTutor(system: string, messages: M[]): Promise<Readab
     return await streamGateway(system, messages);
   } catch (e) {
     const { AiError } = await import("./ai-gateway.server");
-    if (!process.env["GEMINI_API_KEY"] || (e instanceof AiError && e.kind === "content")) throw e;
+    if (!process.env["GEMINI_API_KEY"]) throw e;
+    void AiError;
     console.warn("[profesor-ai] gateway indisponibil, trec la Gemini");
     return streamGemini(system, messages);
   }
