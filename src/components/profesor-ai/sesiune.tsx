@@ -4,7 +4,7 @@ import { Clock, Loader2, Mic, MicOff, Send, Square, VideoOff, Volume2, VolumeX }
 import { Button } from "@/components/ui/button";
 import { createSpeechQueue, isEcho, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
 import { supabase } from "@/integrations/supabase/client";
-import { profesorAiAvatar } from "@/lib/profesor-ai.functions";
+import { profesorAiAvatar, profesorAiRaspunde } from "@/lib/profesor-ai.functions";
 import {
   paMaterieName,
   paNivelName,
@@ -249,6 +249,19 @@ export function SesiuneProfesorAi({
         });
         if (!res.ok || !res.body) {
           const j = (await res.json().catch(() => null)) as { error?: string; cod?: string } | null;
+          // Gemini ocupat/limitat → răspuns complet prin serviciul AI de rezervă, apoi rostit pe propoziții.
+          if (j?.cod === "rate_limit" || j?.cod === "upstream") {
+            const r = await profesorAiRaspunde({ data: { token, mesaje: fereastra(istoric) } }).catch(() => null);
+            if (rev !== revision.current) return;
+            if (r?.ok) {
+              const { sentences, rest } = takeSentences(r.data.vorbit + " ");
+              for (const sn of [...sentences, rest.trim()].filter(Boolean)) { rostit = true; void vorbeste(sn); }
+              if (r.data.tabla) setTabla(r.data.tabla);
+              setDeReluat(null);
+              messagesRef.current = [...istoric, { role: "assistant", content: r.data.vorbit, tabla: r.data.tabla }];
+              return setMesaje(messagesRef.current);
+            }
+          }
           return fail(j?.error ?? "Profesorul nu a putut răspunde. Încearcă din nou.", j?.cod);
         }
         const reader = res.body.getReader();
