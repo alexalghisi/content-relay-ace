@@ -204,10 +204,12 @@ export const Route = createFileRoute("/sitemap.xml")({
           const comboHasAds = (subs: string[], locs: string[]) =>
             rows.filter((r) => r.subject_slug && subs.includes(r.subject_slug) &&
               (r.is_online || locs.some((m) => (r.location ?? "").toLowerCase().includes(m.toLowerCase())))).length >= MIN_LISTINGS_FOR_INDEX;
+          const { getGhidLocal } = await import("@/data/ghiduri-locale");
           for (const s of SUBJECTS_SEO) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/preturi-meditatii/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
             for (const c of CITIES) {
-              if (!comboHasAds(s.dbSlugs, c.matchLocation)) continue;
+              // Combinațiile cu ghid local sunt indexabile și fără anunțuri (vezi ruta).
+              if (!getGhidLocal(s.slug, c.slug) && !comboHasAds(s.dbSlugs, c.matchLocation)) continue;
               urls.push(`  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
             }
           }
