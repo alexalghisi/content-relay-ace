@@ -58,9 +58,12 @@ export const TUTOR_MODELS = () =>
   [process.env["PROFESOR_AI_MODEL"], "gemini-3.5-flash", "gemini-flash-latest"].filter(Boolean) as string[];
 
 type M = { role: "user" | "assistant"; content: string };
+/** Optional JPEG/PNG data URL (board drawing or shared photo) attached to the last student turn. */
+export type Img = string | undefined;
+const splitImg = (img: string) => { const m = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(img); return m ? { mime: m[1], data: m[2] } : null; };
 
 /** Streams plain text deltas from Gemini (SSE). Throws AiError on HTTP failure. */
-export async function streamGemini(system: string, messages: M[]): Promise<ReadableStream<Uint8Array>> {
+export async function streamGemini(system: string, messages: M[], img?: Img): Promise<ReadableStream<Uint8Array>> {
   const { eroareGemini, AiError } = await import("./ai-gateway.server");
   const key = process.env["GEMINI_API_KEY"];
   if (!key) throw new AiError("GEMINI_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
@@ -73,7 +76,12 @@ export async function streamGemini(system: string, messages: M[]): Promise<Reada
       headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: system }] },
-        contents: messages.map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] })),
+        contents: messages.map((m, i) => {
+          const parts: object[] = [{ text: m.content }];
+          const im = img && i === messages.length - 1 ? splitImg(img) : null;
+          if (im) parts.push({ inlineData: { mimeType: im.mime, data: im.data } });
+          return { role: m.role === "assistant" ? "model" : "user", parts };
+        }),
         generationConfig: {
           maxOutputTokens: 1400,
           temperature: 0.6,
@@ -122,7 +130,7 @@ export async function streamGemini(system: string, messages: M[]): Promise<Reada
 export const GATEWAY_TUTOR_MODEL = () => process.env["PROFESOR_AI_GATEWAY_MODEL"] || "google/gemini-3-flash-preview";
 
 /** Streams plain text deltas from the Lovable AI Gateway (OpenAI-style SSE). */
-export async function streamGateway(system: string, messages: M[]): Promise<ReadableStream<Uint8Array>> {
+export async function streamGateway(system: string, messages: M[], img?: Img): Promise<ReadableStream<Uint8Array>> {
   const { AiError, eroareDinStatus } = await import("./ai-gateway.server");
   const key = process.env["LOVABLE_API_KEY"];
   if (!key) throw new AiError("LOVABLE_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
@@ -135,7 +143,14 @@ export async function streamGateway(system: string, messages: M[]): Promise<Read
       stream: true,
       reasoning_effort: greu ? "low" : "none",
       max_tokens: 1400,
-      messages: [{ role: "system", content: system }, ...messages],
+      messages: [
+        { role: "system", content: system },
+        ...messages.map((m, i) =>
+          img && i === messages.length - 1 && splitImg(img)
+            ? { role: m.role, content: [{ type: "text", text: m.content }, { type: "image_url", image_url: { url: img } }] }
+            : m,
+        ),
+      ],
     }),
   }).catch(() => null);
   if (!res || !res.ok || !res.body) {
@@ -172,14 +187,14 @@ export async function streamGateway(system: string, messages: M[]): Promise<Read
 }
 
 /** Gateway first; Gemini key only as fallback when the gateway errors. */
-export async function streamTutor(system: string, messages: M[]): Promise<ReadableStream<Uint8Array>> {
+export async function streamTutor(system: string, messages: M[], img?: Img): Promise<ReadableStream<Uint8Array>> {
   try {
-    return await streamGateway(system, messages);
+    return await streamGateway(system, messages, img);
   } catch (e) {
     const { AiError } = await import("./ai-gateway.server");
     if (!process.env["GEMINI_API_KEY"]) throw e;
     void AiError;
     console.warn("[profesor-ai] gateway indisponibil, trec la Gemini");
-    return streamGemini(system, messages);
+    return streamGemini(system, messages, img);
   }
 }

@@ -12,6 +12,8 @@ const body = z.object({
     .min(1)
     .max(60)
     .refine((m) => m[m.length - 1].role === "user"),
+  // Board drawing / shared photo, re-encoded client-side as JPEG (≈ ≤ 1.5 MB).
+  imagine: z.string().regex(/^data:image\/(jpeg|png|webp);base64,/).max(2_000_000).optional(),
 });
 
 const err = (status: number, error: string, cod?: string) =>
@@ -49,7 +51,7 @@ export const Route = createFileRoute("/api/profesor-ai-stream")({
         }
         const t = await import("@/lib/profesor-ai-tutor.server");
         try {
-          const stream = await t.streamTutor(t.tutorPrompt(s, s.durata), parsed.data.mesaje);
+          const stream = await t.streamTutor(t.tutorPrompt(s, s.durata), parsed.data.mesaje, parsed.data.imagine);
           return new Response(stream, {
             headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
           });

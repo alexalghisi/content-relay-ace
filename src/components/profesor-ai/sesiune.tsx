@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Clock, Loader2, Mic, MicOff, Send, Square, VideoOff, Volume2, VolumeX } from "lucide-react";
+import { Clock, Loader2, Mic, MicOff, Square, VideoOff, Volume2, VolumeX } from "lucide-react";
+import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
+import { TablaComuna } from "./tabla-comuna";
 import { Button } from "@/components/ui/button";
 import { createSpeechQueue, isEcho, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,13 +32,6 @@ const fereastra = (m: Msg[]) => {
 
 const START =
   "Începe sesiunea: un salut scurt și o singură întrebare despre ce vreau să învăț, fără prezentare.";
-const SCURTATURI = [
-  "Nu am înțeles, explică altfel",
-  "Dă-mi un exemplu",
-  "Dă-mi un exercițiu",
-  "Verifică-mi răspunsul",
-  "Mai simplu, te rog",
-];
 
 type SR = {
   lang: string;
@@ -63,7 +58,6 @@ export function SesiuneProfesorAi({
 }) {
   const [mesaje, setMesaje] = useState<Msg[]>([]);
   const [tabla, setTabla] = useState<string>("");
-  const [text, setText] = useState("");
   const [pending, setPending] = useState(false);
   const [eroare, setEroare] = useState("");
   const [deReluat, setDeReluat] = useState<{ text: string; ascuns: boolean; cod?: string } | null>(null);
@@ -81,11 +75,12 @@ export function SesiuneProfesorAi({
   const revision = useRef(0);
   const messagesRef = useRef<Msg[]>([]);
   const abortRef = useRef<AbortController | null>(null);
-  const sendRef = useRef<(text: string, ascuns?: boolean) => Promise<void>>(async () => {});
+  const sendRef = useRef<(text: string, ascuns?: boolean, imagine?: string) => Promise<void>>(async () => {});
   const handsFree = useRef(false);
   const liveVoice = useRef(false);
   const speakEnd = useRef<(() => void) | null>(null);
   const spokenNow = useRef("");
+  const speakingRef = useRef(false);
   const sunetRef = useRef(sunet);
   sunetRef.current = sunet;
   // Măsurare: momentul trimiterii întrebării → primul sunet al profesorului.
@@ -109,6 +104,7 @@ export function SesiuneProfesorAi({
     void heygen.current?.interrupt().catch(() => {});
     try { window.speechSynthesis?.cancel(); } catch { /* ignore */ }
   }, []);
+  useEffect(() => { speakingRef.current = realistVorbeste; }, [realistVorbeste]);
   const interruptRef = useRef(interrupt);
   interruptRef.current = interrupt;
   const terminat = !gratuit && ramas <= 0;
@@ -207,7 +203,7 @@ export function SesiuneProfesorAi({
   }, []);
 
   const trimite = useCallback(
-    async (continut: string, ascuns = false) => {
+    async (continut: string, ascuns = false, imagine?: string) => {
       const c = continut.trim();
       if (!c || terminat) return;
       interrupt(); // o întrebare nouă oprește orice răspuns în curs
@@ -240,7 +236,7 @@ export function SesiuneProfesorAi({
           method: "POST",
           signal: ctrl.signal,
           headers: { "content-type": "application/json", authorization: `Bearer ${sess.session?.access_token ?? ""}` },
-          body: JSON.stringify({ token, mesaje: fereastra(istoric) }),
+          body: JSON.stringify({ token, mesaje: fereastra(istoric), imagine }),
         });
         if (!res.ok || !res.body) {
           const j = (await res.json().catch(() => null)) as { error?: string; cod?: string } | null;
@@ -335,13 +331,23 @@ export function SesiuneProfesorAi({
     const rec = new Ctor();
     rec.lang = "ro-RO";
     rec.continuous = true;
-    rec.interimResults = false;
+    rec.interimResults = true;
     rec.onspeechstart = null;
     rec.onresult = (e) => {
-      const last = e.results[e.results.length - 1];
+      const last = e.results[e.results.length - 1] as ArrayLike<{ transcript: string }> & { isFinal?: boolean };
       const spus = last?.[0]?.transcript?.trim() ?? "";
       // Ignorăm ecoul vocii profesorului captat de microfon.
-      if (spus && !isEcho(spus, spokenNow.current)) void sendRef.current(spus);
+      if (!spus || isEcho(spus, spokenNow.current)) return;
+      if (!last.isFinal) {
+        // Elevul vorbește peste profesoară: o oprim imediat, ca la telefon.
+        if (speakingRef.current && spus.split(/\s+/).length >= 2) {
+          console.info("[voice] fallback barge-in");
+          interruptRef.current();
+        }
+        return;
+      }
+      console.info("[voice] fallback transcription", spus);
+      void sendRef.current(spus);
     };
     rec.onend = () => {
       if (handsFree.current && sr.current === rec) { try { rec.start(); return; } catch { /* fall through */ } }
@@ -382,59 +388,51 @@ export function SesiuneProfesorAi({
 
   const microfon = () => (asculta ? stopMic() : startMic());
 
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    const t = text;
-    setText("");
-    void trimite(t);
-  };
 
   const min = Math.floor(ramas / 60000);
   const sec = Math.floor((ramas % 60000) / 1000);
   const vorbesteAcum = modAvatar !== "incarcare" && realistVorbeste;
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-      <section className="min-w-0 overflow-hidden rounded-3xl border border-border bg-foreground/95 shadow-[var(--shadow-card)]">
-        <div className="relative aspect-[4/3] w-full sm:aspect-video">
-          <video ref={video} autoPlay playsInline muted={!sunet} className={modAvatar === "realist" ? "h-full w-full object-cover" : "hidden"} />
+    <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
+      <section className="flex min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+        <div className="relative aspect-[4/3] w-full bg-foreground sm:aspect-video">
+          {modAvatar !== "realist" && (
+            <img src={hannah.url} alt="Profesoara ta AI" className="absolute inset-0 h-full w-full object-cover" />
+          )}
+          <video ref={video} autoPlay playsInline muted={!sunet} poster={hannah.url} className={modAvatar === "realist" ? "h-full w-full object-cover" : "hidden"} />
           {modAvatar === "indisponibil" ? (
-            <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center text-background">
-              <VideoOff className="h-8 w-8" />
-              <p>{avatarError || "Avatarul video și vocea realistă nu sunt disponibile momentan."}</p>
-              <p className="text-sm">Profesorul îți răspunde în scris și cu vocea browserului (română).</p>
+            <div className="absolute inset-x-3 bottom-3 flex items-start gap-2 rounded-2xl bg-foreground/70 px-4 py-3 text-sm text-background">
+              <VideoOff className="mt-0.5 h-4 w-4 shrink-0" />
+              <p>{avatarError || "Video indisponibil momentan."} Vorbește liber: îți răspunde cu vocea browserului, în română.</p>
             </div>
           ) : modAvatar === "incarcare" ? (
-            <div className="grid h-full place-items-center text-background/80">
-              <Loader2 className="h-8 w-8 animate-spin" aria-label="Se conectează profesorul" />
+            <div className="absolute inset-0 grid place-items-center bg-foreground/30 text-background">
+              <Loader2 className="h-8 w-8 animate-spin" aria-label="Se conectează profesoara" />
             </div>
           ) : null}
           {!permisSunet && modAvatar !== "incarcare" && (
             <Button
               type="button"
               onClick={() => setPermisSunet(true)}
-              className="absolute inset-0 grid place-items-center bg-foreground/35 text-lg font-bold text-background"
+              className="absolute inset-0 grid h-full w-full place-items-center rounded-none bg-foreground/35 text-lg font-bold text-background"
             >
-              <span className="rounded-full bg-primary px-6 py-3 shadow-lg">▶ Începe lecția</span>
+              <span className="rounded-full bg-primary px-6 py-3 text-primary-foreground shadow-lg">▶ Începe lecția</span>
             </Button>
           )}
           <div className="absolute left-3 top-3 flex flex-wrap gap-2 text-xs">
             <span className="rounded-full bg-foreground/55 px-3 py-1 font-semibold text-background">
               Profesor AI · {paMaterieName(config.materie)}
             </span>
-            {vorbesteAcum && (
-              <span className="rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground">
-                vorbește…
-              </span>
-            )}
-            {asculta && (
+            {vorbesteAcum ? (
+              <span className="rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground">vorbește…</span>
+            ) : pending ? (
+              <span className="rounded-full bg-foreground/55 px-3 py-1 text-background">se gândește…</span>
+            ) : asculta ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-foreground/55 px-3 py-1 text-background">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-primary" /> te ascult…
               </span>
-            )}
-            {pending && (
-              <span className="rounded-full bg-foreground/55 px-3 py-1 text-background">se gândește…</span>
-            )}
+            ) : null}
           </div>
           <div className="absolute right-3 top-3 flex items-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-full bg-foreground/55 px-3 py-1 text-xs font-semibold text-background">
@@ -454,23 +452,30 @@ export function SesiuneProfesorAi({
             </Button>
           </div>
         </div>
-        {tabla && (
-          <div className="border-t border-border bg-foreground px-5 py-4">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-background/80">
-              Tabla
-            </p>
-            <pre className="mt-1 whitespace-pre-wrap font-mono text-sm leading-relaxed text-background">
-              {tabla}
-            </pre>
-          </div>
-        )}
-      </section>
 
-      <section className="flex min-h-[420px] min-w-0 flex-col rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
-        <div className="border-b border-border px-5 py-3 text-xs text-muted-foreground">
-          {paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min
+        <div className="flex items-center justify-center gap-3 border-b border-border px-4 py-3">
+          <Button
+            type="button"
+            onClick={microfon}
+            disabled={terminat}
+            aria-label={asculta ? "Oprește microfonul" : "Pornește microfonul"}
+            aria-pressed={asculta}
+            className={`h-12 gap-2 rounded-full px-6 ${asculta ? "bg-primary text-primary-foreground" : "bg-destructive text-background"}`}
+          >
+            {asculta ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
+            {asculta ? "Microfon pornit — vorbește oricând" : "Microfon oprit — apasă ca să vorbești"}
+          </Button>
+          {vorbesteAcum && (
+            <Button type="button" variant="outline" onClick={interrupt} aria-label="Oprește profesoara" className="h-12 w-12 rounded-full p-0">
+              <Square className="h-4 w-4" />
+            </Button>
+          )}
         </div>
-        <div ref={scroll} className="flex-1 space-y-3 overflow-y-auto px-5 py-4" aria-live="polite">
+
+        <div className="px-5 pt-3 text-xs text-muted-foreground">
+          {paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min · poți vorbi peste profesoară ca s-o întrerupi
+        </div>
+        <div ref={scroll} className="max-h-72 flex-1 space-y-3 overflow-y-auto px-5 py-3" aria-live="polite">
           {mesaje
             .filter((m) => m.content !== START)
             .map((m, i) => (
@@ -482,12 +487,8 @@ export function SesiuneProfesorAi({
                 </p>
               </div>
             ))}
-          {pending && <p className="text-sm text-muted-foreground">Profesorul se gândește…</p>}
           {eroare && (
-            <div
-              role="alert"
-              className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive"
-            >
+            <div role="alert" className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
               <p>{eroare}</p>
               {deReluat && (
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -503,9 +504,7 @@ export function SesiuneProfesorAi({
                   >
                     Reîncearcă
                   </Button>
-                  {(deReluat.cod === "credits" ||
-                    deReluat.cod === "auth" ||
-                    deReluat.cod === "config") && (
+                  {(deReluat.cod === "credits" || deReluat.cod === "auth" || deReluat.cod === "config") && (
                     <Link to="/meditatii" className="btn-outline h-9 px-3 text-xs">
                       Cere un meditator real
                     </Link>
@@ -528,69 +527,18 @@ export function SesiuneProfesorAi({
             </div>
           )}
         </div>
-        <div className="flex gap-2 overflow-x-auto px-5 pb-2">
-          {SCURTATURI.map((s) => (
-            <Button
-              key={s}
-              type="button"
-              disabled={terminat}
-              onClick={() => void trimite(s)}
-              className="shrink-0 rounded-full border border-border px-3 py-1.5 text-xs hover:border-primary/40 disabled:opacity-50"
-            >
-              {s}
-            </Button>
-          ))}
-        </div>
-        <form onSubmit={submit} className="flex items-center gap-2 border-t border-border p-3">
-          <Button
-            type="button"
-            onClick={microfon}
-            disabled={terminat}
-            aria-label={asculta ? "Oprește microfonul" : "Pornește microfonul"}
-            aria-pressed={asculta}
-            className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${asculta ? "bg-destructive text-background" : "bg-primary text-primary-foreground"} disabled:opacity-50`}
-          >
-            {asculta ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-          </Button>
-          <label htmlFor="pa-text" className="sr-only">
-            Scrie profesorului
-          </label>
-          <input
-            id="pa-text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            disabled={terminat}
-            placeholder="Scrie o întrebare (sau vorbește)"
-            className="h-11 min-w-0 flex-1 rounded-full border border-border bg-background px-4 text-sm"
-            maxLength={2000}
-          />
-          {vorbesteAcum && (
-            <Button
-              type="button"
-              onClick={() => {
-                interrupt();
+      </section>
 
-              }}
-              aria-label="Oprește profesorul"
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border"
-            >
-              <Square className="h-4 w-4" />
-            </Button>
-          )}
-          <Button
-              type="submit"
-              disabled={terminat || !text.trim()}
-              aria-label="Trimite"
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border disabled:opacity-50"
-            >
-              <Send className="h-4 w-4" />
-          </Button>
-        </form>
-        {modAvatar === "indisponibil" && (
-          <p className="px-5 pb-3 text-[11px] text-muted-foreground">
-            Mod tablă + voce: răspunsurile sunt citite cu vocea browserului, în română.
-          </p>
-        )}
+      <section className="min-w-0 overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+        <div className="border-b border-border px-5 py-3">
+          <h2 className="text-sm font-semibold">Tabla comună</h2>
+          <p className="text-xs text-muted-foreground">Desenează, pune o poză sau un fișier și arată-i profesoarei.</p>
+        </div>
+        <TablaComuna
+          textProfesor={tabla}
+          dezactivat={terminat}
+          onTrimite={(jpeg, descriere) => void trimite(descriere, false, jpeg)}
+        />
       </section>
     </div>
   );
