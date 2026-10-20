@@ -17,6 +17,11 @@ export const Route = createFileRoute("/profesor-ai/sesiune")({
   head: () => ({
     meta: [
       { title: "Sesiune Profesor AI | MeditatiiDirect.ro" },
+      { name: "description", content: "Sesiunea ta privată cu Profesorul AI de pe MeditatiiDirect.ro." },
+      { property: "og:title", content: "Sesiune Profesor AI | MeditatiiDirect.ro" },
+      { property: "og:description", content: "Lecție privată cu întrebări și explicații adaptate nivelului tău." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/profesor-ai" }],
