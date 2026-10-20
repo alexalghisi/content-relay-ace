@@ -21,6 +21,7 @@ export default defineConfig({
         name: "browser-events-polyfill",
         enforce: "pre",
         resolveId(id) {
+          if (id === "events") console.log("[events-plugin] hit");
           if (id === "events") return fileURLToPath(new URL("./node_modules/events/events.js", import.meta.url));
         },
       },
