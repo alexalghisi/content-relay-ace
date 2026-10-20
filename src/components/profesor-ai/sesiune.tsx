@@ -252,7 +252,7 @@ export function SesiuneProfesorAi({
           <div className="absolute right-3 top-3 flex items-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-full bg-black/55 px-3 py-1 text-xs font-semibold text-white">
               <Clock className="h-3.5 w-3.5" />{" "}
-              {gratuit ? "test · nelimitat" : `${min}:${String(sec).padStart(2, "0")}`}
+              {gratuit ? "test · fără limită de timp" : `${min}:${String(sec).padStart(2, "0")}`}
             </span>
             <button
               type="button"

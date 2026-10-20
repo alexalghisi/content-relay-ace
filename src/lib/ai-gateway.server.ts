@@ -16,15 +16,49 @@ export class AiError extends Error {
 
 type Msg = { role: "user" | "assistant"; content: string };
 
+/** Traduce un răspuns de eroare al gateway-ului într-un AiError clar (fără a expune chei sau conținut). */
+export async function gatewayError(res: Response): Promise<AiError> {
+  const status = res.status;
+  let type = "";
+  try {
+    const j = (await res.json()) as { type?: string; error?: { type?: string } | string };
+    type = String(j?.type ?? (typeof j?.error === "object" ? j.error?.type : "") ?? "");
+  } catch {
+    /* corp ne-JSON */
+  }
+  // Log operațional: doar status + tipul erorii, niciodată cheia sau mesajele elevului.
+  console.error(`[ai-gateway] status=${status} type=${type || "-"}`);
+  const tag = `gateway ${status}${type ? ` ${type}` : ""}`;
+  if (status === 401)
+    return new AiError(tag, "Funcția AI nu este configurată corect. Am anunțat echipa.");
+  if (status === 402)
+    return new AiError(
+      tag,
+      "Creditele AI ale platformei s-au terminat temporar. Nu e vina ta și nu ți se scade din sesiune — încearcă din nou puțin mai târziu.",
+    );
+  if (status === 403 && /credit|limit|disabled/i.test(type))
+    return new AiError(
+      tag,
+      "Limita de cheltuieli AI a platformei a fost atinsă. Încearcă din nou puțin mai târziu.",
+    );
+  if (status === 403) return new AiError(tag, "Serviciul AI a refuzat cererea.");
+  if (status === 429)
+    return new AiError(tag, "Sunt multe cereri acum. Încearcă din nou peste un minut.");
+  return new AiError(tag, "Serviciul AI nu a răspuns. Încearcă din nou.");
+}
+
 /** Apel non-interactiv; citește răspunsul în flux ca să nu depindă de limite de timp ale gateway-ului. */
-export async function callAi(opts: {
-  system: string;
-  messages: Msg[];
-  maxTokens: number;
-}): Promise<string> {
+export async function callAi(
+  opts: {
+    system: string;
+    messages: Msg[];
+    maxTokens: number;
+  },
+  doFetch: typeof fetch = fetch,
+): Promise<string> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new AiError("LOVABLE_API_KEY missing", "Funcția AI nu este configurată încă.");
-  const res = await fetch(GATEWAY, {
+  const res = await doFetch(GATEWAY, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -39,20 +73,7 @@ export async function callAi(opts: {
       messages: opts.messages,
     }),
   });
-  if (!res.ok || !res.body) {
-    const status = res.status;
-    if (status === 402)
-      throw new AiError(
-        `gateway ${status}`,
-        "Creditele AI ale platformei s-au terminat. Revino mai târziu.",
-      );
-    if (status === 429)
-      throw new AiError(
-        `gateway ${status}`,
-        "Sunt multe cereri acum. Încearcă din nou peste un minut.",
-      );
-    throw new AiError(`gateway ${status}`, "Serviciul AI nu a răspuns. Încearcă din nou.");
-  }
+  if (!res.ok || !res.body) throw await gatewayError(res);
   const reader = res.body.getReader();
   const dec = new TextDecoder();
   let buf = "";
