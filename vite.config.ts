@@ -13,18 +13,16 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
-  vite: {
-    // LiveAvatar SDK imports Node's "events"; resolve it to the browser-safe npm package
-    // (an exact file path bypasses the empty builtin stub).
-    plugins: [
-      {
-        name: "browser-events-polyfill",
-        enforce: "pre",
-        resolveId(id) {
-          if (id === "events") console.log("[events-plugin] hit");
-          if (id === "events") return fileURLToPath(new URL("./node_modules/events/events.js", import.meta.url));
-        },
+  // LiveAvatar SDK imports Node's "events"; resolve it to the browser-safe npm package
+  // instead of Vite's empty builtin stub. Extra plugins must be passed here, not under `vite`.
+  plugins: [
+    {
+      name: "browser-events-polyfill",
+      enforce: "pre",
+      resolveId(id) {
+        if (id === "events")
+          return fileURLToPath(new URL("./node_modules/events/events.js", import.meta.url));
       },
-    ],
-  },
+    },
+  ],
 });
