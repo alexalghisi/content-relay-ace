@@ -3,6 +3,10 @@ export const LIVEAVATAR_TOKEN_URL = "https://api.liveavatar.com/v1/sessions/toke
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+/** Owner choice: LiveAvatar preset "Hannah (Friendly)" with her own voice "Hannah" (spoken in ro). */
+export const HANNAH_FRIENDLY = "1d91e311-781e-42ab-bcbf-07801119a67b";
+export const HANNAH_VOICE = "72568766-68eb-490b-9375-57301d24c8f1";
+
 export type AvatarAccess = { provider: "liveavatar"; token: string };
 
 const unavailable = (error: string) => ({ heygen: null as null | AvatarAccess, error });
@@ -12,8 +16,8 @@ export function liveAvatarConfig(env: Record<string, string | undefined>) {
   return {
     key: env["LIVEAVATAR_API_KEY"] ?? env["HEYGEN_API_KEY"],
     // Owner chooses the avatar and voice; never auto-picked, never legacy HeyGen IDs.
-    avatarId: env["LIVEAVATAR_AVATAR_ID"],
-    voiceId: env["LIVEAVATAR_VOICE_ID"],
+    avatarId: env["LIVEAVATAR_AVATAR_ID"] || HANNAH_FRIENDLY,
+    voiceId: env["LIVEAVATAR_VOICE_ID"] || HANNAH_VOICE,
   };
 }
 
