@@ -92,12 +92,13 @@ export function SesiuneProfesorAi({
     coada.current.cancel();
     setRealistVorbeste(false);
     void heygen.current?.interrupt().catch(() => {});
+    try { window.speechSynthesis?.cancel(); } catch { /* ignore */ }
   }, []);
   const interruptRef = useRef(interrupt);
   interruptRef.current = interrupt;
   const terminat = !gratuit && ramas <= 0;
 
-  // Never disguise an unavailable realistic stream with a cartoon or device voice.
+  // Avatar unavailable → text + browser ro-RO voice (requested fallback), clearly labelled.
   useEffect(() => {
     let anulat = false;
     (async () => {
@@ -127,7 +128,10 @@ export function SesiuneProfesorAi({
             if (e.text?.trim()) void sendRef.current(e.text);
           });
           s.on(la.SessionEvent.SESSION_DISCONNECTED, () => {
-            if (!anulat) { setAvatarError("Conexiunea video s-a închis."); setModAvatar("indisponibil"); }
+            heygen.current = null;
+            liveVoice.current = false;
+            setAsculta(false);
+            if (!anulat) { setAvatarError("Conexiunea video s-a închis. Continuăm cu vocea browserului."); setModAvatar("indisponibil"); }
           });
           await s.start();
           if (anulat) return void s.stop();
@@ -169,10 +173,23 @@ export function SesiuneProfesorAi({
             await heygen.current.speak({ text: t, taskType: "repeat" });
             return;
           } catch {
+            heygen.current = null;
             setModAvatar("indisponibil");
           }
         }
-
+        // Rezervă: vocea browserului în română.
+        const synth = typeof window !== "undefined" ? window.speechSynthesis : undefined;
+        if (!synth) return;
+        await new Promise<void>((done) => {
+          const u = new SpeechSynthesisUtterance(t);
+          u.lang = "ro-RO";
+          const v = synth.getVoices().find((x) => x.lang.toLowerCase().startsWith("ro"));
+          if (v) u.voice = v;
+          u.rate = 1.05;
+          u.onstart = () => setRealistVorbeste(true);
+          u.onend = u.onerror = () => { setRealistVorbeste(false); done(); };
+          synth.speak(u);
+        });
       };
       return coada.current.enqueue(spune);
     },
@@ -284,6 +301,7 @@ export function SesiuneProfesorAi({
     rec.interimResults = false;
     rec.onspeechstart = interrupt;
     rec.continuous = false;
+    rec.interimResults = false;
     rec.onresult = (e) => {
       const spus = Array.from(e.results)
         .map((r) => r[0].transcript)
@@ -314,7 +332,7 @@ export function SesiuneProfesorAi({
 
   const min = Math.floor(ramas / 60000);
   const sec = Math.floor((ramas % 60000) / 1000);
-  const vorbesteAcum = modAvatar === "realist" && realistVorbeste;
+  const vorbesteAcum = modAvatar !== "incarcare" && realistVorbeste;
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
@@ -325,7 +343,7 @@ export function SesiuneProfesorAi({
             <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center text-background">
               <VideoOff className="h-8 w-8" />
               <p>{avatarError || "Avatarul video și vocea realistă nu sunt disponibile momentan."}</p>
-              <p className="text-sm">Poți continua lecția în scris.</p>
+              <p className="text-sm">Profesorul îți răspunde în scris și cu vocea browserului (română).</p>
             </div>
           ) : modAvatar === "incarcare" ? (
             <div className="grid h-full place-items-center text-background/80">
