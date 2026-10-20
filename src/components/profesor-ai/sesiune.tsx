@@ -102,6 +102,35 @@ export function SesiuneProfesorAi({
         const { heygen: h, error } = await profesorAiAvatar({ data: { token } });
         if (anulat) return;
         if (!h) { setAvatarError(error ?? "Avatarul video nu este disponibil."); return setModAvatar("indisponibil"); }
+        if (h.provider === "liveavatar") {
+          const la = await import("@heygen/liveavatar-web-sdk");
+          // Microfonul pornește doar la cererea elevului; vocea lui întrerupe profesorul.
+          const s = new la.LiveAvatarSession(h.token, { autoKeepAlive: true, voiceChat: { defaultMuted: true } });
+          heygen.current = {
+            speak: async ({ text }) => { s.repeat(text); },
+            interrupt: async () => { s.interrupt(); },
+            startListening: async () => { await s.voiceChat.unmute(); },
+            stopListening: async () => { await s.voiceChat.mute(); },
+            stopAvatar: async () => { await s.stop(); },
+          };
+          liveVoice.current = true;
+          s.on(la.SessionEvent.SESSION_STREAM_READY, () => {
+            if (video.current) { s.attach(video.current); void video.current.play().catch(() => {}); }
+          });
+          s.on(la.AgentEventsEnum.AVATAR_SPEAK_STARTED, () => setRealistVorbeste(true));
+          s.on(la.AgentEventsEnum.AVATAR_SPEAK_ENDED, () => setRealistVorbeste(false));
+          s.on(la.AgentEventsEnum.USER_SPEAK_STARTED, () => interruptRef.current());
+          s.on(la.AgentEventsEnum.USER_TRANSCRIPTION, (e) => {
+            if (e.text?.trim()) void sendRef.current(e.text);
+          });
+          s.on(la.SessionEvent.SESSION_DISCONNECTED, () => {
+            if (!anulat) { setAvatarError("Conexiunea video s-a închis."); setModAvatar("indisponibil"); }
+          });
+          await s.start();
+          if (anulat) return void s.stop();
+          setModAvatar("realist");
+          return;
+        }
         const mod = await import("@heygen/streaming-avatar");
         const av = new mod.default({ token: h.token });
         heygen.current = av as unknown as HeyGen;
@@ -133,7 +162,7 @@ export function SesiuneProfesorAi({
       } catch {
         void heygen.current?.stopAvatar().catch(() => {});
         heygen.current = null;
-        if (!anulat) { setAvatarError("Nu am putut conecta avatarul video. Verifică accesul și configurația HeyGen."); setModAvatar("indisponibil"); }
+        if (!anulat) { setAvatarError("Nu am putut conecta avatarul video. Verifică accesul și configurația avatarului."); setModAvatar("indisponibil"); }
       }
     })();
     return () => {
