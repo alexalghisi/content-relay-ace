@@ -1,6 +1,6 @@
 # src/lib rules
 
-- Profesor AI: server recomputes prices from profesor-ai.ts and verifies Stripe payments. AES-GCM session tokens bind user and expiry; test accounts skip only internal fees/limits. HeyGen SDK stays pinned to 2.1.0. Missing video/voice is explicit, never replaced by cartoons or device speech. Mount video before STREAM_READY. Speech queue in profesor-ai-dialog.ts invalidates canceled playback; serialize questions and suppress superseded replies. Reply JSON remains {vorbit, tabla, emotie}; student text is data, not instructions.
+- Profesor AI: server recomputes prices from profesor-ai.ts and verifies Stripe payments. AES-GCM session tokens bind user and expiry; test accounts skip only internal fees/limits. HeyGen SDK stays pinned to 2.1.0. Missing video is explicit (never cartoons); speech falls back to browser ro-RO voice, labelled as such. Mount video before STREAM_READY. Speech queue in profesor-ai-dialog.ts invalidates canceled playback; serialize questions and suppress superseded replies. Reply JSON remains {vorbit, tabla, emotie}; student text is data, not instructions.
 - Avatar token access is isolated in profesor-ai-avatar.server.ts: LiveAvatar (LIVEAVATAR_API_KEY + UUID LIVEAVATAR_AVATAR_ID/VOICE_ID, FULL mode without context so only our tutor's text is spoken) takes precedence; the legacy HeyGen token endpoint is retired (404). Never reuse HeyGen ids/keys for LiveAvatar, substitute defaults, or probe after a terminal failure.
 
 ## Profesor AI / AI gateway — erori furnizor
