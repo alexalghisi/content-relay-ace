@@ -37,7 +37,13 @@ export function AvatarAnimat({
   const ochiH = clipire ? 0.6 : 7;
 
   return (
-    <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Profesorul AI" className="h-full w-full">
+    <svg
+      viewBox="0 0 400 400"
+      preserveAspectRatio="xMidYMid slice"
+      role="img"
+      aria-label="Profesorul AI"
+      className="h-full w-full"
+    >
       <defs>
         <radialGradient id="pa-bg" cx="50%" cy="40%" r="70%">
           <stop offset="0" stopColor="#e8f0ff" />
