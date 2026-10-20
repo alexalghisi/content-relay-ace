@@ -18,6 +18,13 @@ type HeyGen = {
   stopAvatar: () => Promise<unknown>;
 };
 
+/** Ultimele mesaje (economie de tokeni), începând mereu cu un mesaj al elevului. */
+const fereastra = (m: Msg[]) => {
+  const w = m.slice(-12);
+  while (w.length && w[0].role !== "user") w.shift();
+  return w.map(({ role, content }) => ({ role, content }));
+};
+
 const START =
   "Începe sesiunea: salută-mă pe scurt, spune-mi cum lucrăm azi și pune-mi prima întrebare.";
 const SCURTATURI = [
@@ -145,7 +152,7 @@ export function SesiuneProfesorAi({
       setPending(true);
       setEmotie("gandire");
       const r = await profesorAiRaspunde({
-        data: { token, mesaje: istoric.slice(-30).map(({ role, content }) => ({ role, content })) },
+        data: { token, mesaje: fereastra(istoric) },
       }).catch(() => ({ ok: false as const, error: "Conexiunea a eșuat. Încearcă din nou." }));
       setPending(false);
       if (!r.ok) {
