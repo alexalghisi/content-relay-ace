@@ -96,8 +96,11 @@ export async function streamTutor(system: string, messages: M[]): Promise<Readab
   let buf = "";
   return new ReadableStream<Uint8Array>({
     async pull(ctrl) {
+      // Keep reading until at least one text delta is emitted (or the upstream ends).
+      for (;;) {
       const { done, value } = await reader.read();
       if (done) return ctrl.close();
+      let sent = false;
       buf += dec.decode(value, { stream: true });
       const lines = buf.split("\n");
       buf = lines.pop() ?? "";
@@ -105,8 +108,10 @@ export async function streamTutor(system: string, messages: M[]): Promise<Readab
         if (!l.startsWith("data:")) continue;
         try {
           const j = JSON.parse(l.slice(5)) as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] } }[] };
-          for (const p of j.candidates?.[0]?.content?.parts ?? []) if (p.text && !p.thought) ctrl.enqueue(enc.encode(p.text));
+          for (const p of j.candidates?.[0]?.content?.parts ?? []) if (p.text && !p.thought) { ctrl.enqueue(enc.encode(p.text)); sent = true; }
         } catch { /* partial frame */ }
+      }
+      if (sent) return;
       }
     },
     cancel() { void reader.cancel(); },
