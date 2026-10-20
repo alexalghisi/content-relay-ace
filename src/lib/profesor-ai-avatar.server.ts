@@ -3,7 +3,7 @@ export const HEYGEN_TOKEN_URL = "https://api.heygen.com/v1/streaming.create_toke
 
 export async function createHeygenAccess(
   config: { key?: string; avatarId?: string; voiceId?: string },
-  request: typeof fetch = fetch,
+  request: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response> = fetch,
 ) {
   const unavailable = (error: string) => ({
     heygen: null as null | { token: string; avatarId: string; voiceId: string },
