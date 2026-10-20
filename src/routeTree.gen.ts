@@ -98,6 +98,7 @@ import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-m
 import { Route as AdminBacCrawlerRouteImport } from './routes/admin.bac-crawler'
 import { Route as AdminMesajeRouteImport } from './routes/admin.mesaje'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
+import { Route as ApiProfesorAiStreamRouteImport } from './routes/api/profesor-ai-stream'
 import { Route as BacIndexRouteImport } from './routes/bac.index'
 import { Route as BacMaterieRouteImport } from './routes/bac.$materie'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -601,6 +602,11 @@ const AnuntSlugRoute = AnuntSlugRouteImport.update({
   path: '/anunt/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiProfesorAiStreamRoute = ApiProfesorAiStreamRouteImport.update({
+  id: '/api/profesor-ai-stream',
+  path: '/api/profesor-ai-stream',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BacIndexRoute = BacIndexRouteImport.update({
   id: '/bac/',
   path: '/bac/',
@@ -958,6 +964,7 @@ export interface FileRoutesByFullPath {
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/cererea-mea/$id': typeof CerereaMeaIdRoute
@@ -1099,6 +1106,7 @@ export interface FileRoutesByTo {
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/cererea-mea/$id': typeof CerereaMeaIdRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
@@ -1239,6 +1247,7 @@ export interface FileRoutesById {
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/cererea-mea/$id': typeof CerereaMeaIdRoute
@@ -1382,6 +1391,7 @@ export interface FileRouteTypes {
     | '/admin/bac-crawler'
     | '/admin/mesaje'
     | '/anunt/$slug'
+    | '/api/profesor-ai-stream'
     | '/bac/$materie'
     | '/blog/$slug'
     | '/cererea-mea/$id'
@@ -1523,6 +1533,7 @@ export interface FileRouteTypes {
     | '/admin/bac-crawler'
     | '/admin/mesaje'
     | '/anunt/$slug'
+    | '/api/profesor-ai-stream'
     | '/blog/$slug'
     | '/cererea-mea/$id'
     | '/email/unsubscribe'
@@ -1662,6 +1673,7 @@ export interface FileRouteTypes {
     | '/admin/bac-crawler'
     | '/admin/mesaje'
     | '/anunt/$slug'
+    | '/api/profesor-ai-stream'
     | '/bac/$materie'
     | '/blog/$slug'
     | '/cererea-mea/$id'
@@ -1804,6 +1816,7 @@ export interface RootRouteChildren {
   AdminBacCrawlerRoute: typeof AdminBacCrawlerRoute
   AdminMesajeRoute: typeof AdminMesajeRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
+  ApiProfesorAiStreamRoute: typeof ApiProfesorAiStreamRoute
   BacMaterieRoute: typeof BacMaterieRouteWithChildren
   BlogSlugRoute: typeof BlogSlugRoute
   CerereaMeaIdRoute: typeof CerereaMeaIdRoute
@@ -2477,6 +2490,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnuntSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/profesor-ai-stream': {
+      id: '/api/profesor-ai-stream'
+      path: '/api/profesor-ai-stream'
+      fullPath: '/api/profesor-ai-stream'
+      preLoaderRoute: typeof ApiProfesorAiStreamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bac/': {
       id: '/bac/'
       path: '/bac'
@@ -2948,6 +2968,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminBacCrawlerRoute: AdminBacCrawlerRoute,
   AdminMesajeRoute: AdminMesajeRoute,
   AnuntSlugRoute: AnuntSlugRoute,
+  ApiProfesorAiStreamRoute: ApiProfesorAiStreamRoute,
   BacMaterieRoute: BacMaterieRouteWithChildren,
   BlogSlugRoute: BlogSlugRoute,
   CerereaMeaIdRoute: CerereaMeaIdRoute,
