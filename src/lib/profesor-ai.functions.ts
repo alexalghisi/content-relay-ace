@@ -331,12 +331,8 @@ export const profesorAiAvatar = createServerFn({ method: "POST" })
         error: "Sesiunea nu este validă.",
       };
     const av = await import("./profesor-ai-avatar.server");
-    if (process.env["LIVEAVATAR_API_KEY"])
-      return av.createLiveAvatarAccess({
-        key: process.env["LIVEAVATAR_API_KEY"],
-        avatarId: process.env["LIVEAVATAR_AVATAR_ID"],
-        voiceId: process.env["LIVEAVATAR_VOICE_ID"],
-        maxSeconds: Math.min(3600, (s.durata + 5) * 60),
-      });
-    return av.createHeygenAccess({ key: process.env["HEYGEN_API_KEY"], avatarId: process.env["HEYGEN_AVATAR_ID"], voiceId: process.env["HEYGEN_VOICE_ID"] });
+    return av.createLiveAvatarAccess({
+      ...av.liveAvatarConfig(process.env),
+      maxSeconds: Math.min(3600, (s.durata + 5) * 60),
+    });
   });

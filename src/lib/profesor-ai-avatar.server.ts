@@ -1,42 +1,19 @@
-/** Legacy HeyGen contract; never substitute LiveAvatar credentials or selections. */
-export const HEYGEN_TOKEN_URL = "https://api.heygen.com/v1/streaming.create_token";
-/** LiveAvatar (HeyGen's successor platform): separate account, key and UUID catalog. */
+/** LiveAvatar (HeyGen's successor platform). The legacy HeyGen streaming endpoint is retired. */
 export const LIVEAVATAR_TOKEN_URL = "https://api.liveavatar.com/v1/sessions/token";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export type AvatarAccess =
-  | { provider: "heygen"; token: string; avatarId: string; voiceId: string }
-  | { provider: "liveavatar"; token: string };
+export type AvatarAccess = { provider: "liveavatar"; token: string };
 
 const unavailable = (error: string) => ({ heygen: null as null | AvatarAccess, error });
 
-export async function createHeygenAccess(
-  config: { key?: string; avatarId?: string; voiceId?: string },
-  request: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response> = fetch,
-) {
-  if (!config.key) return unavailable("Serviciul de avatar video nu este configurat.");
-  if (!config.avatarId || !config.voiceId)
-    return unavailable("Avatarul și vocea în română trebuie configurate înainte de pornire.");
-  const res = await request(HEYGEN_TOKEN_URL, {
-    method: "POST",
-    headers: { "x-api-key": config.key, "Content-Type": "application/json" },
-  }).catch(() => null);
-  if (!res?.ok) {
-    console.error(`[profesor-ai] avatar HTTP ${res?.status ?? "network"}`);
-    if (res?.status === 404)
-      return unavailable("HeyGen a retras serviciul vechi de avatar interactiv (404). Avatarul video pornește după ce administratorul adaugă cheia LiveAvatar și alege în LiveAvatar avatarul și vocea. Poți continua în scris.");
-    if (res?.status === 401 || res?.status === 403)
-      return unavailable("HeyGen nu autorizează accesul video. Administratorul trebuie să verifice cheia și accesul API al contului. Poți continua în scris.");
-    if (res?.status === 429)
-      return unavailable("HeyGen limitează momentan pornirea sesiunilor video. Încearcă mai târziu; poți continua în scris.");
-    return unavailable("HeyGen nu a putut porni avatarul video. Lecția poate continua în scris.");
-  }
-  const j = await res.json().catch(() => null) as { data?: { token?: unknown } } | null;
-  if (typeof j?.data?.token !== "string" || !j.data.token.trim())
-    return unavailable("HeyGen nu a emis accesul pentru avatarul video.");
-  const access: AvatarAccess = { provider: "heygen", token: j.data.token, avatarId: config.avatarId, voiceId: config.voiceId };
-  return { error: undefined, heygen: access };
+/** LIVEAVATAR_* secrets win; HEYGEN_* secrets are accepted as the same LiveAvatar credentials. */
+export function liveAvatarConfig(env: Record<string, string | undefined>) {
+  return {
+    key: env["LIVEAVATAR_API_KEY"] ?? env["HEYGEN_API_KEY"],
+    avatarId: env["LIVEAVATAR_AVATAR_ID"] ?? env["HEYGEN_AVATAR_ID"],
+    voiceId: env["LIVEAVATAR_VOICE_ID"] ?? env["HEYGEN_VOICE_ID"],
+  };
 }
 
 /**
@@ -50,8 +27,6 @@ export async function createLiveAvatarAccess(
   if (!config.key) return unavailable("Cheia LiveAvatar nu este configurată.");
   if (!config.avatarId || !config.voiceId)
     return unavailable("Avatarul și vocea din LiveAvatar trebuie alese înainte de pornire.");
-  if (!UUID.test(config.avatarId) || !UUID.test(config.voiceId))
-    return unavailable("Avatarul sau vocea au formatul vechi HeyGen. LiveAvatar folosește alte coduri: alege același avatar și aceeași voce în LiveAvatar.");
   const res = await request(LIVEAVATAR_TOKEN_URL, {
     method: "POST",
     headers: { "X-API-KEY": config.key, "Content-Type": "application/json", accept: "application/json" },
@@ -65,13 +40,17 @@ export async function createLiveAvatarAccess(
     }),
   }).catch(() => null);
   if (!res?.ok) {
-    console.error(`[profesor-ai] liveavatar HTTP ${res?.status ?? "network"}`);
+    const body = res ? (await res.text().catch(() => "")).slice(0, 500) : "";
+    console.error(`[profesor-ai] liveavatar HTTP ${res?.status ?? "network"} ${body}`);
+    const ids = !UUID.test(config.avatarId) || !UUID.test(config.voiceId)
+      ? " Codurile salvate au formatul vechi HeyGen; LiveAvatar folosește coduri noi (UUID)."
+      : "";
     if (res?.status === 401 || res?.status === 403)
-      return unavailable("LiveAvatar nu acceptă cheia configurată. Administratorul trebuie să copieze cheia din app.liveavatar.com/developers. Poți continua în scris.");
+      return unavailable("LiveAvatar respinge cheia salvată (cheie invalidă). Administratorul trebuie să pună cheia din app.liveavatar.com/developers. Poți continua în scris.");
     if (res?.status === 402)
       return unavailable("Contul LiveAvatar nu are credite pentru o sesiune video. Poți continua în scris.");
-    if (res?.status === 404 || res?.status === 400 || res?.status === 422)
-      return unavailable("LiveAvatar nu găsește avatarul sau vocea aleasă în acest cont. Avatarul și vocea nu au fost înlocuite. Poți continua în scris.");
+    if (res?.status === 400 || res?.status === 404 || res?.status === 422)
+      return unavailable(`LiveAvatar nu acceptă avatarul sau vocea salvate.${ids} Poți continua în scris.`);
     if (res?.status === 429)
       return unavailable("LiveAvatar limitează momentan pornirea sesiunilor video. Încearcă mai târziu; poți continua în scris.");
     return unavailable("LiveAvatar nu a putut porni avatarul video. Lecția poate continua în scris.");
