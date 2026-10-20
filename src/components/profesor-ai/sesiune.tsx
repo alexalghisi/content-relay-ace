@@ -132,31 +132,26 @@ export function SesiuneProfesorAi({
         if (anulat) return;
         if (!h) return treceLaVoce(error ?? "Avatarul video nu este disponibil.");
         const la = await import("@heygen/liveavatar-web-sdk");
+        const { connectVoice } = await import("@/lib/profesor-ai-voice");
         const s = new la.LiveAvatarSession(h.token, { autoKeepAlive: true, voiceChat: { defaultMuted: true } });
+        const v = connectVoice(s as unknown as import("@/lib/profesor-ai-voice").VoiceSession, {
+          onUserSpeechStart: () => interruptRef.current(),
+          onUserTranscript: (t) => void sendRef.current(t),
+          onSpeaking: (on) => { setRealistVorbeste(on); if (on) marcheazaVorbire(); },
+        });
         heygen.current = {
-          // Așteaptă finalul propoziției, ca propozițiile să fie rostite pe rând.
-          speak: ({ text }) => new Promise<void>((done) => {
-            const t = window.setTimeout(() => fin(), 2500 + text.length * 90);
-            const fin = () => { window.clearTimeout(t); if (speakEnd.current === fin) speakEnd.current = null; done(); };
-            speakEnd.current = fin;
-            s.repeat(text);
-          }),
-          interrupt: async () => { s.interrupt(); },
-          startListening: async () => { await s.voiceChat.unmute(); },
-          stopListening: async () => { await s.voiceChat.mute(); },
+          speak: ({ text }) => v.speak(text),
+          interrupt: async () => { v.interrupt(); },
+          startListening: () => v.enableMic(),
+          stopListening: () => v.disableMic(),
           stopAvatar: async () => { await s.stop(); },
         };
         liveVoice.current = true;
         s.on(la.SessionEvent.SESSION_STREAM_READY, () => {
           if (video.current) { s.attach(video.current); void video.current.play().catch(() => {}); }
         });
-        s.on(la.AgentEventsEnum.AVATAR_SPEAK_STARTED, () => { setRealistVorbeste(true); marcheazaVorbire(); });
-        s.on(la.AgentEventsEnum.AVATAR_SPEAK_ENDED, () => { setRealistVorbeste(false); speakEnd.current?.(); });
-        s.on(la.AgentEventsEnum.USER_SPEAK_STARTED, () => interruptRef.current());
-        s.on(la.AgentEventsEnum.USER_TRANSCRIPTION, (e) => {
-          if (e.text?.trim()) void sendRef.current(e.text);
-        });
         s.on(la.SessionEvent.SESSION_DISCONNECTED, () => {
+          console.info("[voice] in session.disconnected");
           if (!anulat && heygen.current) treceLaVoce("Sesiunea video s-a încheiat. Continuăm cu tabla și vocea în română.");
         });
         await s.start();
