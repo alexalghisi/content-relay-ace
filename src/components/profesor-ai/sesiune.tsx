@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
 import { Link } from "@tanstack/react-router";
 import { Clock, Loader2, Mic, MicOff, Send, Square, VideoOff, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { createSpeechQueue } from "@/lib/profesor-ai-dialog";
-import { profesorAiAvatar, profesorAiRaspunde } from "@/lib/profesor-ai.functions";
+import { createSpeechQueue, isEcho, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
+import { supabase } from "@/integrations/supabase/client";
+import { profesorAiAvatar } from "@/lib/profesor-ai.functions";
 import {
   paMaterieName,
   paNivelName,
@@ -65,10 +66,7 @@ export function SesiuneProfesorAi({
   const [text, setText] = useState("");
   const [pending, setPending] = useState(false);
   const [eroare, setEroare] = useState("");
-  // Ultimul mesaj care n-a primit răspuns din cauza furnizorului — se poate retrimite manual.
-  const [deReluat, setDeReluat] = useState<{ text: string; ascuns: boolean; cod?: string } | null>(
-    null,
-  );
+  const [deReluat, setDeReluat] = useState<{ text: string; ascuns: boolean; cod?: string } | null>(null);
   const [asculta, setAsculta] = useState(false);
   const [sunet, setSunet] = useState(true);
   const [ramas, setRamas] = useState(() => Math.max(0, exp - Date.now()));
@@ -80,17 +78,34 @@ export function SesiuneProfesorAi({
   const sr = useRef<SR | null>(null);
   const scroll = useRef<HTMLDivElement>(null);
   const coada = useRef(createSpeechQueue());
-  const processing = useRef(false);
   const revision = useRef(0);
   const messagesRef = useRef<Msg[]>([]);
-  const nextQuestion = useRef<{ text: string; ascuns: boolean }[]>([]);
+  const abortRef = useRef<AbortController | null>(null);
   const sendRef = useRef<(text: string, ascuns?: boolean) => Promise<void>>(async () => {});
-  const listening = useRef(false);
+  const handsFree = useRef(false);
   const liveVoice = useRef(false);
+  const speakEnd = useRef<(() => void) | null>(null);
+  const spokenNow = useRef("");
+  const sunetRef = useRef(sunet);
+  sunetRef.current = sunet;
+  // Măsurare: momentul trimiterii întrebării → primul sunet al profesorului.
+  const t0 = useRef(0);
+  const marcheazaVorbire = () => {
+    if (!t0.current) return;
+    const ms = Math.round(performance.now() - t0.current);
+    t0.current = 0;
+    const w = window as unknown as { __paTtfs?: number[] };
+    (w.__paTtfs ??= []).push(ms);
+    console.info(`[profesor-ai] time-to-first-speech ${ms} ms`);
+  };
+
   const interrupt = useCallback(() => {
     revision.current += 1;
     coada.current.cancel();
+    abortRef.current?.abort();
     setRealistVorbeste(false);
+    speakEnd.current?.();
+    spokenNow.current = "";
     void heygen.current?.interrupt().catch(() => {});
     try { window.speechSynthesis?.cancel(); } catch { /* ignore */ }
   }, []);
@@ -98,60 +113,69 @@ export function SesiuneProfesorAi({
   interruptRef.current = interrupt;
   const terminat = !gratuit && ramas <= 0;
 
-  // Avatar unavailable → text + browser ro-RO voice (requested fallback), clearly labelled.
+  const treceLaVoce = useCallback((motiv: string) => {
+    heygen.current = null;
+    liveVoice.current = false;
+    setAvatarError(motiv);
+    setModAvatar("indisponibil");
+    // Microfonul continuă cu recunoașterea vocală a browserului.
+    if (handsFree.current) window.setTimeout(() => startRef.current(), 300);
+  }, []);
+  const startRef = useRef<() => void>(() => {});
+
+  // Avatar indisponibil → tabla + vocea browserului în română; pagina nu se închide niciodată.
   useEffect(() => {
     let anulat = false;
     (async () => {
       try {
         const { heygen: h, error } = await profesorAiAvatar({ data: { token } });
         if (anulat) return;
-        if (!h) { setAvatarError(error ?? "Avatarul video nu este disponibil."); return setModAvatar("indisponibil"); }
-        {
-          const la = await import("@heygen/liveavatar-web-sdk");
-          // Microfonul pornește doar la cererea elevului; vocea lui întrerupe profesorul.
-          const s = new la.LiveAvatarSession(h.token, { autoKeepAlive: true, voiceChat: { defaultMuted: true } });
-          heygen.current = {
-            speak: async ({ text }) => { s.repeat(text); },
-            interrupt: async () => { s.interrupt(); },
-            startListening: async () => { await s.voiceChat.unmute(); },
-            stopListening: async () => { await s.voiceChat.mute(); },
-            stopAvatar: async () => { await s.stop(); },
-          };
-          liveVoice.current = true;
-          s.on(la.SessionEvent.SESSION_STREAM_READY, () => {
-            if (video.current) { s.attach(video.current); void video.current.play().catch(() => {}); }
-          });
-          s.on(la.AgentEventsEnum.AVATAR_SPEAK_STARTED, () => setRealistVorbeste(true));
-          s.on(la.AgentEventsEnum.AVATAR_SPEAK_ENDED, () => setRealistVorbeste(false));
-          s.on(la.AgentEventsEnum.USER_SPEAK_STARTED, () => interruptRef.current());
-          s.on(la.AgentEventsEnum.USER_TRANSCRIPTION, (e) => {
-            if (e.text?.trim()) void sendRef.current(e.text);
-          });
-          s.on(la.SessionEvent.SESSION_DISCONNECTED, () => {
-            heygen.current = null;
-            liveVoice.current = false;
-            setAsculta(false);
-            if (!anulat) { setAvatarError("Conexiunea video s-a închis. Continuăm cu vocea browserului."); setModAvatar("indisponibil"); }
-          });
-          await s.start();
-          if (anulat) return void s.stop();
-          setModAvatar("realist");
-        }
+        if (!h) return treceLaVoce(error ?? "Avatarul video nu este disponibil.");
+        const la = await import("@heygen/liveavatar-web-sdk");
+        const s = new la.LiveAvatarSession(h.token, { autoKeepAlive: true, voiceChat: { defaultMuted: true } });
+        heygen.current = {
+          // Așteaptă finalul propoziției, ca propozițiile să fie rostite pe rând.
+          speak: ({ text }) => new Promise<void>((done) => {
+            const t = window.setTimeout(() => fin(), 2500 + text.length * 90);
+            const fin = () => { window.clearTimeout(t); if (speakEnd.current === fin) speakEnd.current = null; done(); };
+            speakEnd.current = fin;
+            s.repeat(text);
+          }),
+          interrupt: async () => { s.interrupt(); },
+          startListening: async () => { await s.voiceChat.unmute(); },
+          stopListening: async () => { await s.voiceChat.mute(); },
+          stopAvatar: async () => { await s.stop(); },
+        };
+        liveVoice.current = true;
+        s.on(la.SessionEvent.SESSION_STREAM_READY, () => {
+          if (video.current) { s.attach(video.current); void video.current.play().catch(() => {}); }
+        });
+        s.on(la.AgentEventsEnum.AVATAR_SPEAK_STARTED, () => { setRealistVorbeste(true); marcheazaVorbire(); });
+        s.on(la.AgentEventsEnum.AVATAR_SPEAK_ENDED, () => { setRealistVorbeste(false); speakEnd.current?.(); });
+        s.on(la.AgentEventsEnum.USER_SPEAK_STARTED, () => interruptRef.current());
+        s.on(la.AgentEventsEnum.USER_TRANSCRIPTION, (e) => {
+          if (e.text?.trim()) void sendRef.current(e.text);
+        });
+        s.on(la.SessionEvent.SESSION_DISCONNECTED, () => {
+          if (!anulat && heygen.current) treceLaVoce("Sesiunea video s-a încheiat. Continuăm cu tabla și vocea în română.");
+        });
+        await s.start();
+        if (anulat) return void s.stop();
+        setModAvatar("realist");
       } catch {
         void heygen.current?.stopAvatar().catch(() => {});
-        heygen.current = null;
-        if (!anulat) { setAvatarError("Nu am putut conecta avatarul video. Verifică accesul și configurația avatarului."); setModAvatar("indisponibil"); }
+        if (!anulat) treceLaVoce("Nu am putut conecta avatarul video. Continuăm cu tabla și vocea în română.");
       }
     })();
     return () => {
       anulat = true;
       coada.current.cancel();
-      listening.current = false;
+      handsFree.current = false;
       sr.current?.stop();
       void heygen.current?.stopAvatar().catch(() => {});
       heygen.current = null;
     };
-  }, [token]);
+  }, [token, treceLaVoce]);
 
   useEffect(() => {
     if (gratuit) return;
@@ -163,165 +187,181 @@ export function SesiuneProfesorAi({
     scroll.current?.scrollTo({ top: scroll.current.scrollHeight, behavior: "smooth" });
   }, [mesaje, pending]);
 
-  // Coadă de vorbire: salutul și primul răspuns se spun pe rând, fără să se taie unul pe altul.
-  const vorbeste = useCallback(
-    (t: string) => {
-      if (!sunet) return Promise.resolve();
-      const spune = async () => {
-        if (heygen.current) {
-          try {
-            await heygen.current.speak({ text: t, taskType: "repeat" });
-            return;
-          } catch {
-            heygen.current = null;
-            setModAvatar("indisponibil");
-          }
-        }
-        // Rezervă: vocea browserului în română.
-        const synth = typeof window !== "undefined" ? window.speechSynthesis : undefined;
-        if (!synth) return;
-        await new Promise<void>((done) => {
-          const u = new SpeechSynthesisUtterance(t);
-          u.lang = "ro-RO";
-          const v = synth.getVoices().find((x) => x.lang.toLowerCase().startsWith("ro"));
-          if (v) u.voice = v;
-          u.rate = 1.05;
-          u.onstart = () => setRealistVorbeste(true);
-          u.onend = u.onerror = () => { setRealistVorbeste(false); done(); };
-          synth.speak(u);
-        });
-      };
-      return coada.current.enqueue(spune);
-    },
-    [sunet],
-  );
+  // Coadă de vorbire: propozițiile se spun pe rând, imediat ce sunt gata.
+  const vorbeste = useCallback((t: string) => {
+    const spune = async () => {
+      if (!sunetRef.current) return marcheazaVorbire();
+      spokenNow.current = t;
+      if (heygen.current) {
+        try { await heygen.current.speak({ text: t, taskType: "repeat" }); return; } catch { heygen.current = null; }
+      }
+      const synth = typeof window !== "undefined" ? window.speechSynthesis : undefined;
+      if (!synth) return marcheazaVorbire();
+      await new Promise<void>((done) => {
+        const u = new SpeechSynthesisUtterance(t);
+        u.lang = "ro-RO";
+        const v = synth.getVoices().find((x) => x.lang.toLowerCase().startsWith("ro"));
+        if (v) u.voice = v;
+        u.rate = 1.05;
+        u.onstart = () => { setRealistVorbeste(true); marcheazaVorbire(); };
+        u.onend = u.onerror = () => { setRealistVorbeste(false); done(); };
+        synth.speak(u);
+      });
+    };
+    return coada.current.enqueue(spune);
+  }, []);
 
   const trimite = useCallback(
     async (continut: string, ascuns = false) => {
       const c = continut.trim();
       if (!c || terminat) return;
-      if (!ascuns) interrupt();
-      if (processing.current) {
-        nextQuestion.current.push({ text: c, ascuns });
-        return;
-      }
-      processing.current = true;
-      const currentRevision = revision.current;
+      interrupt(); // o întrebare nouă oprește orice răspuns în curs
+      const rev = revision.current;
       setEroare("");
       const previous = messagesRef.current;
       const istoric: Msg[] = [...previous, { role: "user", content: c }];
-      if (!ascuns) setMesaje(istoric);
+      messagesRef.current = istoric;
+      setMesaje(istoric);
       setPending(true);
-
-      const r = await profesorAiRaspunde({
-        data: { token, mesaje: fereastra(istoric) },
-      }).catch(() => ({
-        ok: false as const,
-        error: "Conexiunea a eșuat. Încearcă din nou.",
-        cod: "retea" as string | undefined,
-      }));
-      processing.current = false;
-      setPending(false);
-      const next = nextQuestion.current.shift();
-      if (next) {
-        messagesRef.current = istoric;
-        void sendRef.current(next.text, next.ascuns);
-        return;
+      t0.current = performance.now();
+      const ctrl = new AbortController();
+      abortRef.current = ctrl;
+      let rostit = false;
+      const filler = window.setTimeout(() => {
+        if (!rostit && rev === revision.current && !ascuns) { rostit = true; void vorbeste("Hmm, stai puțin."); }
+      }, 1500);
+      const fail = (error: string, cod?: string) => {
+        if (rev !== revision.current) return;
+        setEroare(error);
+        setDeReluat({ text: c, ascuns, cod });
+        messagesRef.current = previous;
+        setMesaje(previous);
+      };
+      try {
+        const { data: sess } = await supabase.auth.getSession();
+        const res = await fetch("/api/profesor-ai-stream", {
+          method: "POST",
+          signal: ctrl.signal,
+          headers: { "content-type": "application/json", authorization: `Bearer ${sess.session?.access_token ?? ""}` },
+          body: JSON.stringify({ token, mesaje: fereastra(istoric) }),
+        });
+        if (!res.ok || !res.body) {
+          const j = (await res.json().catch(() => null)) as { error?: string; cod?: string } | null;
+          return fail(j?.error ?? "Profesorul nu a putut răspunde. Încearcă din nou.", j?.cod);
+        }
+        const reader = res.body.getReader();
+        const dec = new TextDecoder();
+        let full = "";
+        let consumed = 0; // câte caractere din partea vorbită au fost deja trimise la voce
+        const bubble = () => {
+          const { spoken, board } = spokenPart(full);
+          const m: Msg = { role: "assistant", content: spoken.replace(/[*#`_]/g, "").trim() || "…", tabla: board ?? undefined };
+          setMesaje([...istoric, m]);
+          if (board) setTabla(board);
+          return spoken;
+        };
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (rev !== revision.current) return void reader.cancel();
+          if (value) full += dec.decode(value, { stream: true });
+          const spoken = bubble();
+          const { sentences } = takeSentences(spoken.slice(consumed) + (done ? " " : ""));
+          for (const sn of sentences) {
+            consumed = spoken.indexOf(sn, consumed) + sn.length;
+            rostit = true;
+            void vorbeste(sn.replace(/[*#`_]/g, ""));
+          }
+          if (done) {
+            const tail = spoken.slice(consumed).trim();
+            if (tail) { rostit = true; void vorbeste(tail); }
+            break;
+          }
+        }
+        const { spoken, board } = spokenPart(full);
+        if (!spoken.trim()) return fail("Nu am primit un răspuns. Încearcă din nou.");
+        setDeReluat(null);
+        messagesRef.current = [...istoric, { role: "assistant", content: spoken.trim(), tabla: board?.trim() || undefined }];
+        setMesaje(messagesRef.current);
+      } catch (e) {
+        if ((e as Error).name !== "AbortError") fail("Conexiunea a eșuat. Încearcă din nou.", "retea");
+      } finally {
+        window.clearTimeout(filler);
+        if (rev === revision.current) setPending(false);
       }
-      if (currentRevision !== revision.current) return;
-      if (!r.ok) {
-        setEroare(r.error);
-
-        // Nu reîncercăm automat (fără bucle și fără cost ascuns); elevul apasă „Reîncearcă”.
-        setDeReluat({ text: c, ascuns, cod: r.cod });
-        if (!ascuns) setMesaje(previous);
-        return;
-      }
-      setDeReluat(null);
-      const raspuns: Msg = { role: "assistant", content: r.data.vorbit, tabla: r.data.tabla };
-      // Mesajul de pornire rămâne în istoric (pentru AI), dar nu se afișează ca replică a elevului.
-      messagesRef.current = [...istoric, raspuns];
-      setMesaje(messagesRef.current);
-      if (r.data.tabla) setTabla(r.data.tabla);
-
-      void vorbeste(r.data.vorbit);
     },
     [terminat, token, interrupt, vorbeste],
   );
-
   sendRef.current = trimite;
 
-  // Profesorul începe să vorbească singur imediat ce avatarul e gata: salutul se spune pe loc,
-  // iar prima întrebare a lecției vine de la AI imediat după. Dacă browserul nu permite încă
-  // sunet (pagină deschisă direct, fără click), cerem un singur click „Începe lecția”.
+  // Ascultare continuă (mâini libere) cât timp sesiunea e pornită.
+  const startMic = useCallback(() => {
+    handsFree.current = true;
+    if (liveVoice.current && heygen.current) {
+      setAsculta(true);
+      void heygen.current.startListening().catch(() => {
+        setAsculta(false);
+        handsFree.current = false;
+        setEroare("Microfonul nu este disponibil. Permite accesul la microfon sau scrie întrebarea.");
+      });
+      return;
+    }
+    const W = window as unknown as { SpeechRecognition?: new () => SR; webkitSpeechRecognition?: new () => SR };
+    const Ctor = W.SpeechRecognition ?? W.webkitSpeechRecognition;
+    if (!Ctor) {
+      handsFree.current = false;
+      setEroare("Browserul tău nu suportă dictarea. Scrie întrebarea în căsuța de mai jos.");
+      return;
+    }
+    sr.current?.stop();
+    const rec = new Ctor();
+    rec.lang = "ro-RO";
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.onspeechstart = null;
+    rec.onresult = (e) => {
+      const last = e.results[e.results.length - 1];
+      const spus = last?.[0]?.transcript?.trim() ?? "";
+      // Ignorăm ecoul vocii profesorului captat de microfon.
+      if (spus && !isEcho(spus, spokenNow.current)) void sendRef.current(spus);
+    };
+    rec.onend = () => {
+      if (handsFree.current && sr.current === rec) { try { rec.start(); return; } catch { /* fall through */ } }
+      setAsculta(false);
+    };
+    rec.onerror = () => {
+      handsFree.current = false;
+      setAsculta(false);
+      setEroare("Microfonul nu este disponibil. Permite accesul la microfon sau scrie întrebarea.");
+    };
+    sr.current = rec;
+    setAsculta(true);
+    try { rec.start(); } catch { rec.onerror?.(); }
+  }, []);
+  startRef.current = startMic;
+
+  const stopMic = () => {
+    handsFree.current = false;
+    setAsculta(false);
+    const r = sr.current;
+    sr.current = null;
+    r?.stop();
+    void heygen.current?.stopListening().catch(() => {});
+  };
+
   const [permisSunet, setPermisSunet] = useState(true);
   useEffect(() => {
-    const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } })
-      .userActivation;
+    const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation;
     if (ua && !ua.hasBeenActive) setPermisSunet(false);
   }, []);
   const pornit = useRef(false);
   useEffect(() => {
     if (modAvatar === "incarcare" || !permisSunet || pornit.current) return;
     pornit.current = true;
-
     void trimite(START, true);
-  }, [modAvatar, permisSunet, trimite, vorbeste, config.materie]);
+    startMic();
+  }, [modAvatar, permisSunet, trimite, startMic]);
 
-  const microfon = () => {
-    // LiveAvatar: microfon continuu — vocea elevului oprește profesorul și devine întrebarea.
-    if (liveVoice.current && heygen.current) {
-      const pornit = !asculta;
-      setAsculta(pornit);
-      listening.current = pornit;
-      if (pornit) interrupt();
-      const op = pornit ? heygen.current.startListening() : heygen.current.stopListening();
-      void op.catch(() => {
-        setAsculta(false);
-        listening.current = false;
-        setEroare("Microfonul nu este disponibil. Verifică permisiunea sau scrie întrebarea.");
-      });
-      return;
-    }
-    if (asculta) return sr.current?.stop();
-    const W = window as unknown as {
-      SpeechRecognition?: new () => SR;
-      webkitSpeechRecognition?: new () => SR;
-    };
-    const Ctor = W.SpeechRecognition ?? W.webkitSpeechRecognition;
-    if (!Ctor) {
-      setEroare("Browserul tău nu suportă dictarea. Scrie întrebarea în căsuța de mai jos.");
-      return;
-    }
-    interrupt();
-    listening.current = true;
-    void heygen.current?.startListening().catch(() => {});
-    const rec = new Ctor();
-    rec.lang = "ro-RO";
-    rec.interimResults = false;
-    rec.onspeechstart = interrupt;
-    rec.continuous = false;
-    rec.interimResults = false;
-    rec.onresult = (e) => {
-      const spus = Array.from(e.results)
-        .map((r) => r[0].transcript)
-        .join(" ");
-      if (spus.trim()) void sendRef.current(spus);
-    };
-    const stopListening = () => {
-      listening.current = false;
-      setAsculta(false);
-      void heygen.current?.stopListening().catch(() => {});
-    };
-    rec.onend = stopListening;
-    rec.onerror = () => {
-      stopListening();
-      setEroare("Microfonul nu este disponibil. Verifică permisiunea sau scrie întrebarea.");
-    };
-    sr.current = rec;
-    setAsculta(true);
-    try { rec.start(); } catch { rec.onerror?.(); }
-  };
+  const microfon = () => (asculta ? stopMic() : startMic());
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -366,6 +406,11 @@ export function SesiuneProfesorAi({
             {vorbesteAcum && (
               <span className="rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground">
                 vorbește…
+              </span>
+            )}
+            {asculta && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-foreground/55 px-3 py-1 text-background">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-primary" /> te ascult…
               </span>
             )}
             {pending && (
@@ -482,7 +527,8 @@ export function SesiuneProfesorAi({
             type="button"
             onClick={microfon}
             disabled={terminat}
-            aria-label={asculta ? "Oprește microfonul" : "Vorbește cu profesorul"}
+            aria-label={asculta ? "Oprește microfonul" : "Pornește microfonul"}
+            aria-pressed={asculta}
             className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${asculta ? "bg-destructive text-background" : "bg-primary text-primary-foreground"} disabled:opacity-50`}
           >
             {asculta ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
@@ -493,9 +539,9 @@ export function SesiuneProfesorAi({
           <input
             id="pa-text"
             value={text}
-            onChange={(e) => { if (vorbesteAcum) interrupt(); setText(e.target.value); }}
+            onChange={(e) => setText(e.target.value)}
             disabled={terminat}
-            placeholder={asculta ? "Te ascult…" : "Scrie sau apasă microfonul și vorbește"}
+            placeholder="Scrie o întrebare (sau vorbește)"
             className="h-11 min-w-0 flex-1 rounded-full border border-border bg-background px-4 text-sm"
             maxLength={2000}
           />
@@ -523,7 +569,7 @@ export function SesiuneProfesorAi({
         </form>
         {modAvatar === "indisponibil" && (
           <p className="px-5 pb-3 text-[11px] text-muted-foreground">
-            Avatarul video nu e disponibil: răspunsurile sunt citite cu vocea browserului.
+            Mod tablă + voce: răspunsurile sunt citite cu vocea browserului, în română.
           </p>
         )}
       </section>
