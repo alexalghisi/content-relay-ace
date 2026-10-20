@@ -53,7 +53,9 @@ export function thinkingBudget(last: string): number {
   return /\d|rezolv|calcul|demonstr|exerci|ecua|problem|verific|deriv|integr/i.test(last) ? 512 : 0;
 }
 
-export const TUTOR_MODEL = () => process.env["PROFESOR_AI_MODEL"] || "gemini-2.5-flash";
+/** Fastest strong model measured for this key (≈1.2 s to first token); later entries are fallbacks. */
+export const TUTOR_MODELS = () =>
+  [process.env["PROFESOR_AI_MODEL"], "gemini-3.5-flash", "gemini-flash-latest"].filter(Boolean) as string[];
 
 type M = { role: "user" | "assistant"; content: string };
 
@@ -62,8 +64,10 @@ export async function streamTutor(system: string, messages: M[]): Promise<Readab
   const { eroareGemini, AiError } = await import("./ai-gateway.server");
   const key = process.env["GEMINI_API_KEY"];
   if (!key) throw new AiError("GEMINI_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${TUTOR_MODEL()}:streamGenerateContent?alt=sse`,
+  let res: Response | null = null;
+  for (const model of TUTOR_MODELS()) {
+  res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`,
     {
       method: "POST",
       headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
@@ -78,9 +82,12 @@ export async function streamTutor(system: string, messages: M[]): Promise<Readab
       }),
     },
   );
-  if (!res.ok || !res.body) {
-    const err = eroareGemini(res.status, await res.text().catch(() => ""));
-    console.warn(`[profesor-ai] gemini stream ${res.status} (${err.kind})`);
+    if (res.status !== 404) break;
+    console.warn(`[profesor-ai] model ${model} indisponibil (404), încerc următorul`);
+  }
+  if (!res || !res.ok || !res.body) {
+    const err = eroareGemini(res?.status ?? 503, await res?.text().catch(() => ""));
+    console.warn(`[profesor-ai] gemini stream ${res?.status} (${err.kind})`);
     throw err;
   }
   const enc = new TextEncoder();
