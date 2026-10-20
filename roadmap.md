@@ -1,5 +1,8 @@
 # Roadmap
 
+- [ ] Profesor AI: diagnostichează 404 HeyGen prin documentația actuală și accesul disponibil; păstrează avatarul/vocea alese, repară numai contractul confirmat și verifică o conversație audibilă înainte de succes.
+- [ ] Profesor AI: măsoară și reduce întârzierea răspunsurilor fără schimbarea modelului, plafonului de cost sau protecțiilor.
+
 - [x] Profesor AI: corectată coada de vorbire, întrebările pot fi trimise și în timpul răspunsului, prioritate întrebării noi; 6 teste trec. Cont real: răspuns corect la 7+5, fără erori; doar previzualizare.
 - [ ] Profesor AI: voce naturală română, avatar fotorealist și întrerupere vocală automată — blocat: HeyGen streaming.create_token returnează 404 inclusiv cu accesul salvat. Nu s-a verificat o conversație audibilă; necesită confirmarea serviciului API disponibil de HeyGen (posibil LiveAvatar, migrarea neconfirmată). Fără înlocuitor desenat sau voce de dispozitiv.
 
