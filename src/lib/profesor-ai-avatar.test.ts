@@ -4,10 +4,10 @@ import { createLiveAvatarAccess, liveAvatarConfig, LIVEAVATAR_TOKEN_URL } from "
 const la = { key: "test-la", avatarId: "11111111-2222-4333-8444-555555555555", voiceId: "66666666-7777-4888-9999-000000000000" };
 
 test("HEYGEN_* secrets are used as LiveAvatar credentials when LIVEAVATAR_* are missing", () => {
-  expect(liveAvatarConfig({ HEYGEN_API_KEY: "k", HEYGEN_AVATAR_ID: "a", HEYGEN_VOICE_ID: "v" })).toEqual({ key: "k", avatarId: "a", voiceId: "v" });
+  expect(liveAvatarConfig({ HEYGEN_API_KEY: "k", HEYGEN_AVATAR_ID: "a", HEYGEN_VOICE_ID: "v" })).toEqual({ key: "k", avatarId: undefined, voiceId: undefined });
 });
 test("LIVEAVATAR_* secrets take priority over HEYGEN_*", () => {
-  expect(liveAvatarConfig({ LIVEAVATAR_API_KEY: "L", HEYGEN_API_KEY: "k", HEYGEN_AVATAR_ID: "a", LIVEAVATAR_VOICE_ID: "V" })).toEqual({ key: "L", avatarId: "a", voiceId: "V" });
+  expect(liveAvatarConfig({ LIVEAVATAR_API_KEY: "L", HEYGEN_API_KEY: "k", HEYGEN_AVATAR_ID: "a", LIVEAVATAR_VOICE_ID: "V" })).toEqual({ key: "L", avatarId: undefined, voiceId: "V" });
 });
 test("missing voice never calls the provider", async () => {
   let calls = 0;
@@ -43,7 +43,6 @@ test("malformed success is not access", async () => {
   expect(r.heygen).toBeNull();
 });
 
-import { liveAvatarConfig } from "./profesor-ai-avatar.server";
 test("avatar and voice come only from LIVEAVATAR_* secrets (no auto-pick, no HeyGen IDs)", () => {
   const c = liveAvatarConfig({ LIVEAVATAR_API_KEY: "k", HEYGEN_AVATAR_ID: "old", HEYGEN_VOICE_ID: "old" });
   expect(c.avatarId).toBeUndefined();
