@@ -86,7 +86,7 @@ export async function streamTutor(system: string, messages: M[]): Promise<Readab
     console.warn(`[profesor-ai] model ${model} indisponibil (404), încerc următorul`);
   }
   if (!res || !res.ok || !res.body) {
-    const err = eroareGemini(res?.status ?? 503, await res?.text().catch(() => ""));
+    const err = eroareGemini(res?.status ?? 503, (await res?.text().catch(() => "")) ?? "");
     console.warn(`[profesor-ai] gemini stream ${res?.status} (${err.kind})`);
     throw err;
   }
