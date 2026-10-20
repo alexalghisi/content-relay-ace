@@ -81,9 +81,11 @@ export const MESAJ_CREDITE =
   "Profesorul AI este temporar indisponibil: creditele AI ale platformei s-au epuizat. Nu ți s-a consumat nimic din limită; încearcă din nou puțin mai târziu.";
 
 /** Mapează un răspuns HTTP eșuat al gateway-ului într-o eroare controlată. Exportat pentru teste. */
-export function eroareDinStatus(status: number, retryAfter: string | null): AiError {
+export function eroareDinStatus(status: number, retryAfter: string | null, tip = ""): AiError {
   const ra = retryAfter && /^\d+$/.test(retryAfter) ? Number(retryAfter) : undefined;
-  if (status === 402) return new AiError(`gateway ${status}`, MESAJ_CREDITE, "credits");
+  // 402 = sold epuizat; 403 cu tip „credit_limit_reached” = plafonul de cheltuieli al workspace-ului.
+  if (status === 402 || (status === 403 && /credit|limit|disabled/i.test(tip)))
+    return new AiError(`gateway ${status} ${tip}`.trim(), MESAJ_CREDITE, "credits");
   if (status === 429)
     return new AiError(
       `gateway ${status}`,
@@ -105,6 +107,16 @@ export function eroareDinStatus(status: number, retryAfter: string | null): AiEr
 }
 
 type Msg = { role: "user" | "assistant"; content: string };
+
+/** Tipul erorii din corpul JSON al gateway-ului (ex. „credit_limit_reached”); niciodată conținutul. */
+async function tipEroare(res: Response): Promise<string> {
+  try {
+    const j = (await res.json()) as { type?: string; error?: { type?: string } | string };
+    return String(j?.type ?? (typeof j?.error === "object" ? j.error?.type : "") ?? "");
+  } catch {
+    return "";
+  }
+}
 
 /** Apel non-interactiv; citește răspunsul în flux ca să nu depindă de limite de timp ale gateway-ului. */
 type AiOpts = { system: string; messages: Msg[]; maxTokens: number };
@@ -226,7 +238,7 @@ async function callLovable(opts: AiOpts): Promise<string> {
     throw new AiError("network", "Serviciul AI nu a răspuns. Încearcă din nou.", "upstream");
   }
   if (!res.ok || !res.body) {
-    const err = eroareDinStatus(res.status, res.headers.get("retry-after"));
+    const err = eroareDinStatus(res.status, res.headers.get("retry-after"), await tipEroare(res));
     // Log sigur: doar codul și tipul — fără cheie, fără conținutul elevului.
     console.warn(`[ai] gateway ${res.status} (${err.kind})`);
     if (err.kind === "credits") await marcheazaIndisponibil("credits", CREDITS_PAUSE_SEC);
