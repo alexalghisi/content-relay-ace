@@ -80,6 +80,7 @@ export function SesiuneProfesorAi({
   const liveVoice = useRef(false);
   const speakEnd = useRef<(() => void) | null>(null);
   const spokenNow = useRef("");
+  const speakingRef = useRef(false);
   const sunetRef = useRef(sunet);
   sunetRef.current = sunet;
   // Măsurare: momentul trimiterii întrebării → primul sunet al profesorului.
@@ -103,6 +104,7 @@ export function SesiuneProfesorAi({
     void heygen.current?.interrupt().catch(() => {});
     try { window.speechSynthesis?.cancel(); } catch { /* ignore */ }
   }, []);
+  useEffect(() => { speakingRef.current = realistVorbeste; }, [realistVorbeste]);
   const interruptRef = useRef(interrupt);
   interruptRef.current = interrupt;
   const terminat = !gratuit && ramas <= 0;
@@ -338,7 +340,7 @@ export function SesiuneProfesorAi({
       if (!spus || isEcho(spus, spokenNow.current)) return;
       if (!last.isFinal) {
         // Elevul vorbește peste profesoară: o oprim imediat, ca la telefon.
-        if (spokenNow.current && spus.split(/\s+/).length >= 2) {
+        if (speakingRef.current && spus.split(/\s+/).length >= 2) {
           console.info("[voice] fallback barge-in");
           interruptRef.current();
         }
