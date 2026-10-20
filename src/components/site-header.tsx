@@ -7,7 +7,7 @@ import { NewRequestsBadge } from "@/components/new-requests-badge";
 const NAV = [
   { to: "/meditatii", label: "Cere ofertă" },
   { to: "/cereri", label: "Cereri elevi" },
-  { to: "/materii", label: "Materii" },
+  { to: "/profesor-ai", label: "Profesor AI" },
   { to: "/harta-blocajelor", label: "Harta Blocajelor" },
   { to: "/meditator-ai", label: "Meditator AI" },
   { to: "/cum-functioneaza", label: "Cum funcționează" },
