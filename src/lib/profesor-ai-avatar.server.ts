@@ -7,6 +7,8 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 export const HANNAH_FRIENDLY = "1d91e311-781e-42ab-bcbf-07801119a67b";
 export const HANNAH_VOICE = "72568766-68eb-490b-9375-57301d24c8f1";
 
+export const RO_VOICE_SETTINGS = { model: "eleven_multilingual_v2", stability: 0.6, similarity_boost: 0.8, speed: 1.0 };
+
 export type AvatarAccess = { provider: "liveavatar"; token: string };
 
 const unavailable = (error: string) => ({ heygen: null as null | AvatarAccess, error });
@@ -38,7 +40,9 @@ export async function createLiveAvatarAccess(
     body: JSON.stringify({
       mode: "FULL",
       avatar_id: config.avatarId,
-      avatar_persona: { voice_id: config.voiceId, language: "ro" },
+      // Romanian is mandatory: STT + TTS language "ro"; ElevenLabs multilingual model speaks
+      // Romanian text with native pronunciation even for voices catalogued as English.
+      avatar_persona: { voice_id: config.voiceId, language: "ro", voice_settings: RO_VOICE_SETTINGS },
       video_settings: { quality: "high", encoding: "H264" },
       interactivity_type: "CONVERSATIONAL",
       max_session_duration: maxSeconds,
