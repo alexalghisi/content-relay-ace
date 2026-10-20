@@ -12,4 +12,9 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  vite: {
+    // LiveAvatar SDK imports Node's "events"; resolve it to the browser-safe npm package
+    // (trailing slash forces package resolution instead of the empty builtin stub).
+    resolve: { alias: { events: "events/" } },
+  },
 });
