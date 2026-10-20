@@ -224,6 +224,8 @@ export function SesiuneProfesorAi({
       setMesaje(istoric);
       setPending(true);
       t0.current = performance.now();
+      const tSend = t0.current;
+      let primaGata = false;
       const ctrl = new AbortController();
       abortRef.current = ctrl;
       let rostit = false;
@@ -268,9 +270,10 @@ export function SesiuneProfesorAi({
           const { sentences } = takeSentences(spoken.slice(consumed) + (done ? " " : ""));
           for (const sn of sentences) {
             consumed = spoken.indexOf(sn, consumed) + sn.length;
-            if (!rostit || t0.current) {
+            if (!primaGata) {
+              primaGata = true;
               const w = window as unknown as { __paFirstSentence?: number[] };
-              if (t0.current) (w.__paFirstSentence ??= []).push(Math.round(performance.now() - t0.current));
+              (w.__paFirstSentence ??= []).push(Math.round(performance.now() - tSend));
             }
             rostit = true;
             void vorbeste(sn.replace(/[*#`_]/g, ""));
