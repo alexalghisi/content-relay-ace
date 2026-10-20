@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { createHeygenAccess, HEYGEN_TOKEN_URL } from "./profesor-ai-avatar.server";
+import { createHeygenAccess, createLiveAvatarAccess, HEYGEN_TOKEN_URL, LIVEAVATAR_TOKEN_URL } from "./profesor-ai-avatar.server";
 
 const config = { key: "test-credential", avatarId: "selected-avatar", voiceId: "selected-romanian-voice" };
 test("missing selected voice never substitutes a default or calls provider", async () => {
@@ -36,3 +36,30 @@ test("malformed successful response is not successful access", async () => {
   const result = await createHeygenAccess(config, async () => Response.json({ data: { token: 123 } }));
   expect(result.heygen).toBeNull();
 });
+const la = { key: "test-la", avatarId: "11111111-2222-4333-8444-555555555555", voiceId: "66666666-7777-4888-9999-000000000000" };
+test("LiveAvatar refuses legacy HeyGen ids without calling the provider", async () => {
+  let calls = 0;
+  const r = await createLiveAvatarAccess({ ...la, avatarId: "0123456789abcdef0123456789abcdef" }, async () => { calls++; return new Response(); });
+  expect(calls).toBe(0);
+  expect(r.heygen).toBeNull();
+});
+test("LiveAvatar token request keeps the selected avatar, voice and Romanian", async () => {
+  const r = await createLiveAvatarAccess(la, async (url, init) => {
+    expect(String(url)).toBe(LIVEAVATAR_TOKEN_URL);
+    const b = JSON.parse(String(init?.body));
+    expect(b.avatar_id).toBe(la.avatarId);
+    expect(b.avatar_persona.voice_id).toBe(la.voiceId);
+    expect(b.avatar_persona.language).toBe("ro");
+    expect(b.avatar_persona.context_id).toBeUndefined();
+    return Response.json({ code: 100, data: { session_id: "s", session_token: "tok" } });
+  });
+  expect(r.heygen).toEqual({ provider: "liveavatar", token: "tok" });
+});
+for (const status of [401, 402, 404, 422, 429]) {
+  test(`LiveAvatar ${status} is a single terminal call`, async () => {
+    let calls = 0;
+    const r = await createLiveAvatarAccess(la, async () => { calls++; return new Response(null, { status }); });
+    expect(calls).toBe(1);
+    expect(r.heygen).toBeNull();
+  });
+}
