@@ -83,6 +83,7 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/evaluare-nationala-cluj", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-cluj", priority: "0.9", changefreq: "weekly" },
   { path: "/harta-blocajelor", priority: "0.9", changefreq: "weekly" },
+  { path: "/profesor-ai", priority: "0.9", changefreq: "weekly" },
   { path: "/scaner-lacune", priority: "0.9", changefreq: "weekly" },
   { path: "/simulare-ai", priority: "0.9", changefreq: "weekly" },
   { path: "/meditator-ai", priority: "0.9", changefreq: "weekly" },
