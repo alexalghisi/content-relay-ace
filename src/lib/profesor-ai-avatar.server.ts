@@ -30,9 +30,9 @@ export function chooseLiveAvatar(avatars: LaAvatar[], voices: LaVoice[]) {
     if (s.includes("professor") || s.includes("tutor")) return 2;
     return 9;
   };
-  const femaleVoice = new Set(voices.filter((v) => v.gender === "female").map((v) => v.id));
+  const maleVoice = new Set(voices.filter((v) => v.gender === "male").map((v) => v.id));
   const pool = active
-    .filter((a) => rank(a.name) < 9 && (!a.default_voice || femaleVoice.size === 0 || femaleVoice.has(a.default_voice.id)))
+    .filter((a) => rank(a.name) < 9 && !(a.default_voice && maleVoice.has(a.default_voice.id)))
     .sort((a, b) => rank(a.name) - rank(b.name));
   const avatar = pool[0];
   if (!avatar) return null;

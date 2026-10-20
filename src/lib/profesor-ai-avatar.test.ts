@@ -42,3 +42,24 @@ test("malformed success is not access", async () => {
   const r = await createLiveAvatarAccess(la, async () => Response.json({ data: { session_token: 1 } }));
   expect(r.heygen).toBeNull();
 });
+
+import { chooseLiveAvatar, resolveLiveAvatarIds } from "./profesor-ai-avatar.server";
+test("auto-pick prefers a female teacher preset and a Romanian voice when listed", () => {
+  const c = chooseLiveAvatar(
+    [{ id: "a1", name: "Dexter Lawyer", default_voice: { id: "m", name: "Dexter" } },
+     { id: "a2", name: "Bob Teacher Sitting", default_voice: { id: "m", name: "Bob" } },
+     { id: "a3", name: "Judy Teacher Standing", default_voice: { id: "f", name: "Judy" } }],
+    [{ id: "m", name: "Bob", gender: "male", language: "en" }, { id: "r", name: "Ioana", gender: "female", language: "ro" }],
+  );
+  expect(c).toMatchObject({ avatarId: "a3", voiceId: "r", romanianVoice: true });
+});
+test("without a Romanian voice, the avatar's own voice is used", () => {
+  const c = chooseLiveAvatar([{ id: "a3", name: "Judy Teacher Sitting", default_voice: { id: "f", name: "Judy" } }], []);
+  expect(c).toMatchObject({ voiceId: "f", romanianVoice: false });
+});
+test("valid UUID overrides skip the catalogue", async () => {
+  let calls = 0;
+  const r = await resolveLiveAvatarIds(la, async () => { calls++; return new Response(); });
+  expect(calls).toBe(0);
+  expect(r.avatarId).toBe(la.avatarId);
+});
