@@ -60,7 +60,7 @@ export const TUTOR_MODELS = () =>
 type M = { role: "user" | "assistant"; content: string };
 
 /** Streams plain text deltas from Gemini (SSE). Throws AiError on HTTP failure. */
-export async function streamTutor(system: string, messages: M[]): Promise<ReadableStream<Uint8Array>> {
+export async function streamGemini(system: string, messages: M[]): Promise<ReadableStream<Uint8Array>> {
   const { eroareGemini, AiError } = await import("./ai-gateway.server");
   const key = process.env["GEMINI_API_KEY"];
   if (!key) throw new AiError("GEMINI_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
@@ -116,4 +116,70 @@ export async function streamTutor(system: string, messages: M[]): Promise<Readab
     },
     cancel() { void reader.cancel(); },
   });
+}
+
+/** Primary tutor model on the Lovable AI Gateway (≈0.8 s to first token measured). */
+export const GATEWAY_TUTOR_MODEL = () => process.env["PROFESOR_AI_GATEWAY_MODEL"] || "google/gemini-3-flash-preview";
+
+/** Streams plain text deltas from the Lovable AI Gateway (OpenAI-style SSE). */
+export async function streamGateway(system: string, messages: M[]): Promise<ReadableStream<Uint8Array>> {
+  const { AiError, eroareDinStatus } = await import("./ai-gateway.server");
+  const key = process.env["LOVABLE_API_KEY"];
+  if (!key) throw new AiError("LOVABLE_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
+  const greu = /demonstr|deriv|integr|limit[ae]|probabilit/i.test(messages[messages.length - 1]?.content ?? "");
+  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", "X-Lovable-AIG-SDK": "fetch" },
+    body: JSON.stringify({
+      model: GATEWAY_TUTOR_MODEL(),
+      stream: true,
+      reasoning_effort: greu ? "low" : "none",
+      max_tokens: 1400,
+      messages: [{ role: "system", content: system }, ...messages],
+    }),
+  }).catch(() => null);
+  if (!res || !res.ok || !res.body) {
+    const status = res?.status ?? 503;
+    console.warn(`[profesor-ai] gateway stream ${status}`);
+    throw eroareDinStatus(status, res?.headers.get("retry-after") ?? null);
+  }
+  const enc = new TextEncoder();
+  const dec = new TextDecoder();
+  const reader = res.body.getReader();
+  let buf = "";
+  return new ReadableStream<Uint8Array>({
+    async pull(ctrl) {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) return ctrl.close();
+        buf += dec.decode(value, { stream: true });
+        const lines = buf.split("\n");
+        buf = lines.pop() ?? "";
+        let sent = false;
+        for (const l of lines) {
+          const d = l.startsWith("data:") ? l.slice(5).trim() : "";
+          if (!d || d === "[DONE]") continue;
+          try {
+            const t = (JSON.parse(d) as { choices?: { delta?: { content?: string } }[] }).choices?.[0]?.delta?.content;
+            if (t) { ctrl.enqueue(enc.encode(t)); sent = true; }
+          } catch { /* partial frame */ }
+        }
+        if (sent) return;
+      }
+    },
+    cancel() { void reader.cancel(); },
+  });
+}
+
+/** Gateway first; Gemini key only as fallback when the gateway errors. */
+export async function streamTutor(system: string, messages: M[]): Promise<ReadableStream<Uint8Array>> {
+  try {
+    return await streamGateway(system, messages);
+  } catch (e) {
+    const { AiError } = await import("./ai-gateway.server");
+    if (!process.env["GEMINI_API_KEY"]) throw e;
+    void AiError;
+    console.warn("[profesor-ai] gateway indisponibil, trec la Gemini");
+    return streamGemini(system, messages);
+  }
 }
