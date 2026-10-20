@@ -523,7 +523,7 @@ export function SesiuneProfesorAi({
         </form>
         {modAvatar === "indisponibil" && (
           <p className="px-5 pb-3 text-[11px] text-muted-foreground">
-            Vocea dispozitivului nu este folosită ca înlocuitor al vocii realiste.
+            Avatarul video nu e disponibil: răspunsurile sunt citite cu vocea browserului.
           </p>
         )}
       </section>
