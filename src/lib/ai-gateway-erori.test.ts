@@ -93,6 +93,15 @@ describe("AI gateway — clasificarea erorilor furnizorului", () => {
       expect(e.userMessage).not.toContain("cheie-de-test");
     }
   });
+  it("403 cu credit_limit_reached = plafon de cheltuieli → tratat ca „credits”", async () => {
+    expect(eroareDinStatus(403, null, "credit_limit_reached").kind).toBe("credits");
+    g.fetch = (async () => {
+      apeluri++;
+      return new Response(JSON.stringify({ type: "credit_limit_reached" }), { status: 403 });
+    }) as unknown as typeof fetch;
+    expect((await eroare(callAi(cerere))).kind).toBe("credits");
+    expect((await aiIndisponibil())?.kind).toBe("credits"); // deschide pauza, ca la 402
+  });
   it("5xx = eroare temporară a furnizorului", () => {
     expect(eroareDinStatus(503, null).kind).toBe("upstream");
   });
