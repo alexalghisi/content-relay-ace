@@ -312,6 +312,10 @@ export function SesiuneProfesorAi({
   const startMic = useCallback(() => {
     handsFree.current = true;
     if (liveVoice.current && heygen.current) {
+      // Browser recognition would fight LiveAvatar for the microphone.
+      const old = sr.current;
+      sr.current = null;
+      old?.stop();
       setAsculta(true);
       void heygen.current.startListening().catch(() => {
         setAsculta(false);
