@@ -63,6 +63,10 @@ export function SesiuneProfesorAi({
   const [text, setText] = useState("");
   const [pending, setPending] = useState(false);
   const [eroare, setEroare] = useState("");
+  // Ultimul mesaj care n-a primit răspuns din cauza furnizorului — se poate retrimite manual.
+  const [deReluat, setDeReluat] = useState<{ text: string; ascuns: boolean; cod?: string } | null>(
+    null,
+  );
   const [asculta, setAsculta] = useState(false);
   const [sunet, setSunet] = useState(true);
   const [ramas, setRamas] = useState(() => Math.max(0, exp - Date.now()));
@@ -124,18 +128,24 @@ export function SesiuneProfesorAi({
     scroll.current?.scrollTo({ top: scroll.current.scrollHeight, behavior: "smooth" });
   }, [mesaje, pending]);
 
+  // Coadă de vorbire: salutul și primul răspuns se spun pe rând, fără să se taie unul pe altul.
+  const coada = useRef<Promise<void>>(Promise.resolve());
   const vorbeste = useCallback(
-    async (t: string) => {
-      if (!sunet) return;
-      if (heygen.current) {
-        try {
-          await heygen.current.speak({ text: t, taskType: "repeat" });
-          return;
-        } catch {
-          setModAvatar("animat");
+    (t: string) => {
+      if (!sunet) return Promise.resolve();
+      const spune = async () => {
+        if (heygen.current) {
+          try {
+            await heygen.current.speak({ text: t, taskType: "repeat" });
+            return;
+          } catch {
+            setModAvatar("animat");
+          }
         }
-      }
-      await voce.spune(t);
+        await voce.spune(t);
+      };
+      coada.current = coada.current.then(spune, spune);
+      return coada.current;
     },
     [sunet, voce],
   );
@@ -145,21 +155,33 @@ export function SesiuneProfesorAi({
       const c = continut.trim();
       if (!c || pending || terminat) return;
       setEroare("");
-      voce.opreste();
-      void heygen.current?.interrupt().catch(() => {});
+      if (!ascuns) {
+        // Elevul a vorbit: profesorul se oprește și ascultă.
+        coada.current = Promise.resolve();
+        voce.opreste();
+        void heygen.current?.interrupt().catch(() => {});
+      }
       const istoric: Msg[] = [...mesaje, { role: "user", content: c }];
       if (!ascuns) setMesaje(istoric);
       setPending(true);
       setEmotie("gandire");
       const r = await profesorAiRaspunde({
         data: { token, mesaje: fereastra(istoric) },
-      }).catch(() => ({ ok: false as const, error: "Conexiunea a eșuat. Încearcă din nou." }));
+      }).catch(() => ({
+        ok: false as const,
+        error: "Conexiunea a eșuat. Încearcă din nou.",
+        cod: "retea" as string | undefined,
+      }));
       setPending(false);
       if (!r.ok) {
         setEroare(r.error);
         setEmotie("neutru");
+        // Nu reîncercăm automat (fără bucle și fără cost ascuns); elevul apasă „Reîncearcă”.
+        setDeReluat({ text: c, ascuns, cod: r.cod });
+        if (!ascuns) setMesaje(mesaje);
         return;
       }
+      setDeReluat(null);
       const raspuns: Msg = { role: "assistant", content: r.data.vorbit, tabla: r.data.tabla };
       // Mesajul de pornire rămâne în istoric (pentru AI), dar nu se afișează ca replică a elevului.
       setMesaje(ascuns ? [{ role: "user", content: c }, raspuns] : [...istoric, raspuns]);
@@ -170,13 +192,25 @@ export function SesiuneProfesorAi({
     [mesaje, pending, terminat, token, voce, vorbeste],
   );
 
-  // Profesorul deschide lecția după ce avatarul e gata.
+  // Profesorul începe să vorbească singur imediat ce avatarul e gata: salutul se spune pe loc,
+  // iar prima întrebare a lecției vine de la AI imediat după. Dacă browserul nu permite încă
+  // sunet (pagină deschisă direct, fără click), cerem un singur click „Începe lecția”.
+  const [permisSunet, setPermisSunet] = useState(true);
+  useEffect(() => {
+    const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } })
+      .userActivation;
+    if (ua && !ua.hasBeenActive) setPermisSunet(false);
+  }, []);
   const pornit = useRef(false);
   useEffect(() => {
-    if (modAvatar === "incarcare" || pornit.current) return;
+    if (modAvatar === "incarcare" || !permisSunet || pornit.current) return;
     pornit.current = true;
+    setEmotie("zambet");
+    void vorbeste(
+      `Bună! Sunt profesorul tău de ${paMaterieName(config.materie).toLowerCase()}. Mă bucur că ești aici. Hai să începem!`,
+    );
     void trimite(START, true);
-  }, [modAvatar, trimite]);
+  }, [modAvatar, permisSunet, trimite, vorbeste, config.materie]);
 
   const microfon = () => {
     if (asculta) return sr.current?.stop();
@@ -236,6 +270,15 @@ export function SesiuneProfesorAi({
               <Loader2 className="h-8 w-8 animate-spin" aria-label="Se conectează profesorul" />
             </div>
           )}
+          {!permisSunet && modAvatar !== "incarcare" && (
+            <button
+              type="button"
+              onClick={() => setPermisSunet(true)}
+              className="absolute inset-0 grid place-items-center bg-black/35 text-lg font-bold text-white"
+            >
+              <span className="rounded-full bg-primary px-6 py-3 shadow-lg">▶ Începe lecția</span>
+            </button>
+          )}
           <div className="absolute left-3 top-3 flex flex-wrap gap-2 text-xs">
             <span className="rounded-full bg-black/55 px-3 py-1 font-semibold text-white">
               Profesor AI · {paMaterieName(config.materie)}
@@ -252,7 +295,7 @@ export function SesiuneProfesorAi({
           <div className="absolute right-3 top-3 flex items-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-full bg-black/55 px-3 py-1 text-xs font-semibold text-white">
               <Clock className="h-3.5 w-3.5" />{" "}
-              {gratuit ? "test · fără limită de timp" : `${min}:${String(sec).padStart(2, "0")}`}
+              {gratuit ? "cont de test · fără plată" : `${min}:${String(sec).padStart(2, "0")}`}
             </span>
             <button
               type="button"
@@ -297,9 +340,35 @@ export function SesiuneProfesorAi({
             ))}
           {pending && <p className="text-sm text-muted-foreground">Profesorul se gândește…</p>}
           {eroare && (
-            <p className="rounded-xl bg-destructive/10 px-4 py-2 text-sm text-destructive">
-              {eroare}
-            </p>
+            <div
+              role="alert"
+              className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive"
+            >
+              <p>{eroare}</p>
+              {deReluat && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const d = deReluat;
+                      setDeReluat(null);
+                      void trimite(d.text, d.ascuns);
+                    }}
+                    disabled={pending}
+                    className="btn-outline h-9 px-3 text-xs"
+                  >
+                    Reîncearcă
+                  </button>
+                  {(deReluat.cod === "credits" ||
+                    deReluat.cod === "auth" ||
+                    deReluat.cod === "config") && (
+                    <Link to="/meditatii" className="btn-outline h-9 px-3 text-xs">
+                      Cere un meditator real
+                    </Link>
+                  )}
+                </div>
+              )}
+            </div>
           )}
           {terminat && (
             <div className="rounded-2xl border border-border p-4 text-sm">

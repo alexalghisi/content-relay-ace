@@ -38,6 +38,7 @@ export function ConfiguratorProfesorAi() {
     gratuit: boolean;
     preturi: TabelPreturi;
     plataActiva: boolean;
+    aiDisponibil: boolean;
   } | null>(null);
   const [pending, setPending] = useState(false);
   const [eroare, setEroare] = useState("");
@@ -53,6 +54,13 @@ export function ConfiguratorProfesorAi() {
   const set = <K extends keyof PaConfig>(k: K, v: PaConfig[K]) => setCfg((c) => ({ ...c, [k]: v }));
 
   const porneste = async () => {
+    // Deblochează vocea în timpul click-ului (iPhone/Safari permit sunet doar după un gest),
+    // ca profesorul să poată vorbi singur când se deschide sesiunea.
+    try {
+      window.speechSynthesis?.speak(new SpeechSynthesisUtterance(""));
+    } catch {
+      /* fără sinteză vocală */
+    }
     setEroare("");
     setPending(true);
     const r = await profesorAiPorneste({ data: cfg }).catch(() => ({
@@ -177,7 +185,11 @@ export function ConfiguratorProfesorAi() {
           <button
             type="button"
             onClick={porneste}
-            disabled={pending || (!acces?.gratuit && acces?.plataActiva === false)}
+            disabled={
+              pending ||
+              acces?.aiDisponibil === false ||
+              (!acces?.gratuit && acces?.plataActiva === false)
+            }
             className="btn-primary h-12 px-6 disabled:opacity-60"
           >
             {pending ? (
@@ -192,6 +204,22 @@ export function ConfiguratorProfesorAi() {
           </button>
         )}
       </div>
+      {user && acces && !acces.aiDisponibil && (
+        <p role="alert" className="mt-3 rounded-xl bg-warning/10 px-4 py-2 text-sm text-foreground">
+          Profesorul AI este temporar indisponibil (creditele AI ale platformei s-au epuizat). Nu
+          poți porni o sesiune acum și nu ți se percepe nimic. Încearcă mai târziu sau{" "}
+          <Link to="/meditatii" className="font-semibold text-primary underline">
+            cere un meditator real
+          </Link>
+          .
+        </p>
+      )}
+      {user && acces?.gratuit && acces.aiDisponibil && (
+        <p className="mt-3 text-xs text-muted-foreground">
+          Cont de test: fără plată și fără limită zilnică internă. Funcționează cât timp platforma
+          are credite AI disponibile.
+        </p>
+      )}
       {user && acces && !acces.gratuit && !acces.plataActiva && (
         <p className="mt-3 text-sm text-muted-foreground">
           Plata cu cardul se activează în curând.

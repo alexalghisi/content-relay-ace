@@ -5,75 +5,246 @@
 export const AI_MODEL = "anthropic/claude-sonnet-5";
 const GATEWAY = "https://ai.gateway.lovable.dev/v1/messages";
 
+/** Tipul erorii AI — decide mesajul pentru elev, logarea și dacă se returnează cota internă. */
+export type AiErrorKind =
+  | "config" // lipsește cheia gateway-ului
+  | "auth" // cheie respinsă de gateway (401/403) — problemă de configurare, nu a elevului
+  | "credits" // 402: soldul AI al workspace-ului Lovable e epuizat
+  | "rate_limit" // 429: prea multe cereri la furnizor
+  | "upstream" // 5xx / rețea / stream întrerupt
+  | "refusal"
+  | "bad_response";
+
 export class AiError extends Error {
   constructor(
     message: string,
     public userMessage: string,
+    public kind: AiErrorKind = "upstream",
+    public retryAfterSec?: number,
   ) {
     super(message);
   }
 }
 
+// ── Disponibilitatea furnizorului (circuit breaker) ───────────────────
+// După un 402 (credite epuizate) nu mai trimitem fiecare mesaj la gateway: marcăm furnizorul
+// „indisponibil” în cache-ul edge pentru CREDITS_PAUSE_SEC. După expirare, următoarea cerere
+// reîncearcă real; dacă creditele au fost reîncărcate, totul reia singur, fără intervenție.
+export const CREDITS_PAUSE_SEC = 300;
+const STATUS_URL = "https://ai-status.meditatiidirect.ro/gateway";
+
+function edgeCache(): Cache | undefined {
+  try {
+    return (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
+  } catch {
+    return undefined;
+  }
+}
+
+export async function aiIndisponibil(): Promise<{ kind: AiErrorKind; until: number } | null> {
+  const c = edgeCache();
+  if (!c) return null;
+  try {
+    const hit = await c.match(new Request(STATUS_URL));
+    if (!hit) return null;
+    const v = (await hit.json()) as { kind: AiErrorKind; until: number };
+    return v.until > Date.now() ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+async function marcheazaIndisponibil(kind: AiErrorKind, sec: number) {
+  const c = edgeCache();
+  if (!c) return;
+  try {
+    await c.put(
+      new Request(STATUS_URL),
+      new Response(JSON.stringify({ kind, until: Date.now() + sec * 1000 }), {
+        headers: { "Cache-Control": `max-age=${sec}`, "Content-Type": "application/json" },
+      }),
+    );
+  } catch {
+    /* fără cache: doar nu scurtcircuităm */
+  }
+}
+
+async function marcheazaDisponibil() {
+  try {
+    await edgeCache()?.delete(new Request(STATUS_URL));
+  } catch {
+    /* ignorat */
+  }
+}
+
+export const MESAJ_CREDITE =
+  "Profesorul AI este temporar indisponibil: creditele AI ale platformei s-au epuizat. Nu ți s-a consumat nimic din limită; încearcă din nou puțin mai târziu.";
+
+/** Mapează un răspuns HTTP eșuat al gateway-ului într-o eroare controlată. Exportat pentru teste. */
+export function eroareDinStatus(status: number, retryAfter: string | null, tip = ""): AiError {
+  const ra = retryAfter && /^\d+$/.test(retryAfter) ? Number(retryAfter) : undefined;
+  // 402 = sold epuizat; 403 cu tip „credit_limit_reached” = plafonul de cheltuieli al workspace-ului.
+  if (status === 402 || (status === 403 && /credit|limit|disabled/i.test(tip)))
+    return new AiError(`gateway ${status} ${tip}`.trim(), MESAJ_CREDITE, "credits");
+  if (status === 429)
+    return new AiError(
+      `gateway ${status}`,
+      `Sunt multe cereri acum. Încearcă din nou peste ${ra && ra < 600 ? `${ra} secunde` : "un minut"}.`,
+      "rate_limit",
+      ra ?? 60,
+    );
+  if (status === 401 || status === 403)
+    return new AiError(
+      `gateway ${status}`,
+      "Funcția AI nu este configurată corect. Am anunțat administratorul.",
+      "auth",
+    );
+  return new AiError(
+    `gateway ${status}`,
+    "Serviciul AI nu a răspuns. Încearcă din nou.",
+    "upstream",
+  );
+}
+
 type Msg = { role: "user" | "assistant"; content: string };
 
-/** Traduce un răspuns de eroare al gateway-ului într-un AiError clar (fără a expune chei sau conținut). */
-export async function gatewayError(res: Response): Promise<AiError> {
-  const status = res.status;
-  let type = "";
+/** Tipul erorii din corpul JSON al gateway-ului (ex. „credit_limit_reached”); niciodată conținutul. */
+async function tipEroare(res: Response): Promise<string> {
   try {
     const j = (await res.json()) as { type?: string; error?: { type?: string } | string };
-    type = String(j?.type ?? (typeof j?.error === "object" ? j.error?.type : "") ?? "");
+    return String(j?.type ?? (typeof j?.error === "object" ? j.error?.type : "") ?? "");
   } catch {
-    /* corp ne-JSON */
+    return "";
   }
-  // Log operațional: doar status + tipul erorii, niciodată cheia sau mesajele elevului.
-  console.error(`[ai-gateway] status=${status} type=${type || "-"}`);
-  const tag = `gateway ${status}${type ? ` ${type}` : ""}`;
-  if (status === 401)
-    return new AiError(tag, "Funcția AI nu este configurată corect. Am anunțat echipa.");
-  if (status === 402)
-    return new AiError(
-      tag,
-      "Creditele AI ale platformei s-au terminat temporar. Nu e vina ta și nu ți se scade din sesiune — încearcă din nou puțin mai târziu.",
-    );
-  if (status === 403 && /credit|limit|disabled/i.test(type))
-    return new AiError(
-      tag,
-      "Limita de cheltuieli AI a platformei a fost atinsă. Încearcă din nou puțin mai târziu.",
-    );
-  if (status === 403) return new AiError(tag, "Serviciul AI a refuzat cererea.");
-  if (status === 429)
-    return new AiError(tag, "Sunt multe cereri acum. Încearcă din nou peste un minut.");
-  return new AiError(tag, "Serviciul AI nu a răspuns. Încearcă din nou.");
 }
 
 /** Apel non-interactiv; citește răspunsul în flux ca să nu depindă de limite de timp ale gateway-ului. */
-export async function callAi(
-  opts: {
-    system: string;
-    messages: Msg[];
-    maxTokens: number;
-  },
-  doFetch: typeof fetch = fetch,
-): Promise<string> {
+type AiOpts = { system: string; messages: Msg[]; maxTokens: number };
+
+const GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+/** Model Gemini (plan gratuit Google AI Studio = doar Flash). Suprascris cu GEMINI_MODEL. */
+export const geminiModel = () => process.env["GEMINI_MODEL"] || "gemini-flash-latest";
+const areGemini = () => !!process.env["GEMINI_API_KEY"];
+const areLovable = () => !!process.env["LOVABLE_API_KEY"];
+
+/** Erori după care încercăm furnizorul de rezervă (Gemini). Refuzurile de conținut nu. */
+const treceLaRezerva = (e: AiError) =>
+  ["credits", "rate_limit", "upstream", "auth", "config"].includes(e.kind);
+
+/**
+ * Poate răspunde AI-ul acum? Da dacă Gemini e configurat (rezervă) sau dacă Lovable e configurat
+ * și nu e în pauză după „credite epuizate”. Folosit înainte de a porni/încasa o sesiune.
+ */
+export async function aiStare(): Promise<
+  { ok: true } | { ok: false; kind: AiErrorKind; mesaj: string }
+> {
+  if (areGemini()) return { ok: true };
+  if (!areLovable())
+    return { ok: false, kind: "config", mesaj: "Profesorul AI nu este configurat încă." };
+  const pauza = await aiIndisponibil();
+  return pauza ? { ok: false, kind: pauza.kind, mesaj: MESAJ_CREDITE } : { ok: true };
+}
+
+/** Apel AI: Lovable AI Gateway; dacă e epuizat/indisponibil și există GEMINI_API_KEY → Gemini. */
+export async function callAi(opts: AiOpts): Promise<string> {
+  try {
+    return await callLovable(opts);
+  } catch (e) {
+    if (!(e instanceof AiError) || !areGemini() || !treceLaRezerva(e)) throw e;
+    return callGemini(opts);
+  }
+}
+
+/** Mapează un răspuns HTTP eșuat de la Gemini. Plan gratuit epuizat = 429 RESOURCE_EXHAUSTED. */
+export function eroareGemini(status: number, corp: string): AiError {
+  if (status === 400 && /API_KEY_INVALID|API key not valid/i.test(corp))
+    return eroareDinStatus(401, null);
+  if (status === 429) {
+    const m = corp.match(/"retryDelay"\s*:\s*"(\d+)(?:\.\d+)?s"/);
+    return eroareDinStatus(429, m ? m[1] : null);
+  }
+  return eroareDinStatus(status, null);
+}
+
+export async function callGemini(opts: AiOpts): Promise<string> {
+  const key = process.env["GEMINI_API_KEY"];
+  if (!key)
+    throw new AiError("GEMINI_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
+  let res: Response;
+  try {
+    res = await fetch(`${GEMINI_BASE}/${encodeURIComponent(geminiModel())}:generateContent`, {
+      method: "POST",
+      headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: opts.system }] },
+        contents: opts.messages.map((m) => ({
+          role: m.role === "assistant" ? "model" : "user",
+          parts: [{ text: m.content }],
+        })),
+        // Modelele Flash „gândesc” din bugetul de ieșire; lăsăm loc ca răspunsul să nu fie tăiat.
+        generationConfig: { maxOutputTokens: opts.maxTokens + 4096 },
+      }),
+    });
+  } catch {
+    throw new AiError("gemini network", "Serviciul AI nu a răspuns. Încearcă din nou.", "upstream");
+  }
+  if (!res.ok) {
+    const err = eroareGemini(res.status, await res.text().catch(() => ""));
+    console.warn(`[ai] gemini ${res.status} (${err.kind})`);
+    throw err;
+  }
+  type Part = { text?: string; thought?: boolean };
+  const j = (await res.json().catch(() => null)) as {
+    promptFeedback?: { blockReason?: string };
+    candidates?: { finishReason?: string; content?: { parts?: Part[] } }[];
+  } | null;
+  if (!j) throw new AiError("gemini json", "Serviciul AI a răspuns greșit.", "bad_response");
+  const c = j.candidates?.[0];
+  if (j.promptFeedback?.blockReason || /SAFETY|PROHIBITED|BLOCKLIST/.test(c?.finishReason ?? ""))
+    throw new AiError("gemini refusal", "Nu pot răspunde la această cerere.", "refusal");
+  const text = (c?.content?.parts ?? [])
+    .filter((p) => !p.thought && typeof p.text === "string")
+    .map((p) => p.text)
+    .join("")
+    .trim();
+  if (!text) throw new AiError("gemini empty", "Serviciul AI a răspuns greșit.", "bad_response");
+  return text;
+}
+
+async function callLovable(opts: AiOpts): Promise<string> {
   const apiKey = process.env["LOVABLE_API_KEY"];
-  if (!apiKey) throw new AiError("LOVABLE_API_KEY missing", "Funcția AI nu este configurată încă.");
-  const res = await doFetch(GATEWAY, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      "X-Lovable-AIG-SDK": "fetch",
-    },
-    body: JSON.stringify({
-      model: AI_MODEL,
-      max_tokens: opts.maxTokens,
-      stream: true,
-      system: opts.system,
-      messages: opts.messages,
-    }),
-  });
-  if (!res.ok || !res.body) throw await gatewayError(res);
+  if (!apiKey)
+    throw new AiError("LOVABLE_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
+  const pauza = await aiIndisponibil();
+  if (pauza) throw new AiError("gateway paused", MESAJ_CREDITE, pauza.kind);
+  let res: Response;
+  try {
+    res = await fetch(GATEWAY, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "X-Lovable-AIG-SDK": "fetch",
+      },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        max_tokens: opts.maxTokens,
+        stream: true,
+        system: opts.system,
+        messages: opts.messages,
+      }),
+    });
+  } catch {
+    throw new AiError("network", "Serviciul AI nu a răspuns. Încearcă din nou.", "upstream");
+  }
+  if (!res.ok || !res.body) {
+    const err = eroareDinStatus(res.status, res.headers.get("retry-after"), await tipEroare(res));
+    // Log sigur: doar codul și tipul — fără cheie, fără conținutul elevului.
+    console.warn(`[ai] gateway ${res.status} (${err.kind})`);
+    if (err.kind === "credits") await marcheazaIndisponibil("credits", CREDITS_PAUSE_SEC);
+    throw err;
+  }
+  await marcheazaDisponibil();
   const reader = res.body.getReader();
   const dec = new TextDecoder();
   let buf = "";
@@ -92,11 +263,12 @@ export async function callAi(
         if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta")
           text += ev.delta.text;
         else if (ev.type === "message_delta" && ev.delta?.stop_reason === "refusal")
-          throw new AiError("refusal", "Nu pot răspunde la această cerere.");
+          throw new AiError("refusal", "Nu pot răspunde la această cerere.", "refusal");
         else if (ev.type === "error")
           throw new AiError(
             "stream error",
             "Serviciul AI a întâmpinat o eroare. Încearcă din nou.",
+            "upstream",
           );
       } catch (e) {
         if (e instanceof AiError) throw e;
@@ -112,11 +284,19 @@ export function extractJson(text: string): unknown {
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
   if (start < 0 || end <= start)
-    throw new AiError("no json", "Răspunsul AI nu a putut fi citit. Încearcă din nou.");
+    throw new AiError(
+      "no json",
+      "Răspunsul AI nu a putut fi citit. Încearcă din nou.",
+      "bad_response",
+    );
   try {
     return JSON.parse(text.slice(start, end + 1));
   } catch {
-    throw new AiError("bad json", "Răspunsul AI nu a putut fi citit. Încearcă din nou.");
+    throw new AiError(
+      "bad json",
+      "Răspunsul AI nu a putut fi citit. Încearcă din nou.",
+      "bad_response",
+    );
   }
 }
 
@@ -147,6 +327,31 @@ export async function takeQuota(
     return { ok: true, left: limit };
   }
 }
+
+/**
+ * Returnează o unitate din cotă când cererea AI a eșuat din vina furnizorului (credite, 429, rețea),
+ * ca elevul să nu piardă mesaje din limita zilnică pentru răspunsuri pe care nu le-a primit.
+ */
+export async function refundQuota(userId: string, kind: string): Promise<void> {
+  try {
+    const c = edgeCache();
+    if (!c) return;
+    const req = new Request(`https://quota.meditatiidirect.ro/${kind}/${todayRo()}/${userId}`);
+    const hit = await c.match(req);
+    const used = hit ? Number(await hit.text()) || 0 : 0;
+    if (used <= 0) return;
+    await c.put(
+      req,
+      new Response(String(used - 1), { headers: { "Cache-Control": "max-age=90000" } }),
+    );
+  } catch {
+    /* best-effort */
+  }
+}
+
+/** Erori după care cota internă se returnează (elevul nu a primit răspuns din motive externe). */
+export const eroareFurnizor = (e: unknown) =>
+  e instanceof AiError && ["credits", "rate_limit", "upstream", "auth", "config"].includes(e.kind);
 
 // ── Token criptat (AES-GCM) ───────────────────────────────────────────
 // Testul generat (cu baremul) se trimite clientului doar criptat; la corectare îl decriptăm,
