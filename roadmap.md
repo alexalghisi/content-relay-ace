@@ -4,7 +4,8 @@
 - [x] Profesor AI: replici simple și deschiderea scurtate; eliminat salutul vocal dublu, modelul/plafonul/protecțiile păstrate. Întrebare reală 7+5: 3,40 sec înainte, 1,91 sec după, răspuns corect și fără erori; variația furnizorului nu permite garantarea timpului. Video neprobat deliberat; numai previzualizare.
 
 - [x] Profesor AI: corectată coada de vorbire, întrebările pot fi trimise și în timpul răspunsului, prioritate întrebării noi; 6 teste trec. Cont real: răspuns corect la 7+5, fără erori; doar previzualizare.
-- [ ] Profesor AI: voce naturală română, avatar fotorealist și întrerupere vocală automată — blocat: HeyGen streaming.create_token returnează 404 inclusiv cu accesul salvat. Nu s-a verificat o conversație audibilă; necesită confirmarea serviciului API disponibil de HeyGen (posibil LiveAvatar, migrarea neconfirmată). Fără înlocuitor desenat sau voce de dispozitiv.
+- [x] Profesor AI: integrare LiveAvatar pregătită (avatar video, voce, întrerupere prin voce); 20 teste trec.
+- [ ] Profesor AI: test complet cu voce, avatar și întrerupere — blocat: lipsesc cheia LiveAvatar și codurile avatarului/vocii alese în LiveAvatar. (vechi:) voce naturală română, avatar fotorealist și întrerupere vocală automată — blocat: HeyGen streaming.create_token returnează 404 inclusiv cu accesul salvat. Nu s-a verificat o conversație audibilă; necesită confirmarea serviciului API disponibil de HeyGen (posibil LiveAvatar, migrarea neconfirmată). Fără înlocuitor desenat sau voce de dispozitiv.
 
 - [x] Repară erorile document.cookie din cadrele Adsterra fără a elimina izolarea; 80 citiri/scrieri simulate în cadrul real fără cookie-uri persistate sau erori, verificare separată a scripturilor furnizorului fără erori; 10 teste trec. Test AI real generat cu cont conectat. Doar previzualizare; livrarea reclamelor nu este confirmată.
 
