@@ -28,7 +28,7 @@ const fereastra = (m: Msg[]) => {
 };
 
 const START =
-  "Începe sesiunea: salută-mă pe scurt, spune-mi cum lucrăm azi și pune-mi prima întrebare.";
+  "Începe sesiunea: un salut scurt și o singură întrebare despre ce vreau să învăț, fără prezentare.";
 const SCURTATURI = [
   "Nu am înțeles, explică altfel",
   "Dă-mi un exemplu",
@@ -245,9 +245,6 @@ export function SesiuneProfesorAi({
     if (modAvatar === "incarcare" || !permisSunet || pornit.current) return;
     pornit.current = true;
 
-    void vorbeste(
-      `Bună! Sunt profesorul tău de ${paMaterieName(config.materie).toLowerCase()}. Mă bucur că ești aici. Hai să începem!`,
-    );
     void trimite(START, true);
   }, [modAvatar, permisSunet, trimite, vorbeste, config.materie]);
 
