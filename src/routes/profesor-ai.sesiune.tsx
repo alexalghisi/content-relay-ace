@@ -1,0 +1,100 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { LoginGate } from "@/components/ai/login-gate";
+import { SesiuneProfesorAi } from "@/components/profesor-ai/sesiune";
+import { PA_TOKEN_KEY, salveazaToken } from "@/components/profesor-ai/configurator";
+import { profesorAiConfirma, profesorAiSesiune } from "@/lib/profesor-ai.functions";
+import type { PaConfig } from "@/lib/profesor-ai";
+
+type Search = { s?: string; plata?: string };
+
+export const Route = createFileRoute("/profesor-ai/sesiune")({
+  validateSearch: (q: Record<string, unknown>): Search => ({
+    s: typeof q.s === "string" ? q.s : undefined,
+    plata: typeof q.plata === "string" ? q.plata : undefined,
+  }),
+  head: () => ({
+    meta: [
+      { title: "Sesiune Profesor AI | MeditatiiDirect.ro" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+    links: [{ rel: "canonical", href: "https://meditatiidirect.ro/profesor-ai" }],
+  }),
+  component: () => (
+    <section className="container-page py-6 sm:py-10">
+      <LoginGate ce="începi sesiunea cu Profesorul AI">
+        <Pornire />
+      </LoginGate>
+    </section>
+  ),
+});
+
+function Pornire() {
+  const search = Route.useSearch();
+  const [stare, setStare] = useState<
+    | { tip: "incarcare" }
+    | { tip: "eroare"; mesaj: string }
+    | { tip: "gata"; token: string; config: PaConfig; exp: number; gratuit: boolean }
+  >({ tip: "incarcare" });
+
+  useEffect(() => {
+    let anulat = false;
+    (async () => {
+      let token = search.s;
+      if (!token && search.plata) {
+        const r = await profesorAiConfirma({ data: { plata: search.plata } }).catch(() => null);
+        if (!r || !r.ok)
+          return (
+            !anulat &&
+            setStare({ tip: "eroare", mesaj: r && !r.ok ? r.error : "Nu am putut verifica plata." })
+          );
+        token = r.data.token;
+        salveazaToken(token);
+      }
+      if (!token) {
+        try {
+          token = sessionStorage.getItem(PA_TOKEN_KEY) ?? undefined;
+        } catch {
+          token = undefined;
+        }
+      }
+      if (!token) return !anulat && setStare({ tip: "eroare", mesaj: "Nu ai o sesiune activă." });
+      const r = await profesorAiSesiune({ data: { token } }).catch(() => null);
+      if (anulat) return;
+      if (!r || !r.ok)
+        return setStare({
+          tip: "eroare",
+          mesaj: r && !r.ok ? r.error : "Sesiunea nu a putut fi deschisă.",
+        });
+      setStare({ tip: "gata", token, ...r.data });
+    })();
+    return () => {
+      anulat = true;
+    };
+  }, [search.s, search.plata]);
+
+  if (stare.tip === "incarcare")
+    return (
+      <div className="grid min-h-[50vh] place-items-center text-muted-foreground">
+        <Loader2 className="h-8 w-8 animate-spin" aria-label="Se pregătește sesiunea" />
+      </div>
+    );
+  if (stare.tip === "eroare")
+    return (
+      <div className="card-soft mx-auto max-w-lg p-8 text-center">
+        <h1 className="text-xl font-bold">{stare.mesaj}</h1>
+        <Link to="/profesor-ai" className="btn-primary mt-5 h-11 px-6">
+          Alege o sesiune
+        </Link>
+      </div>
+    );
+  return (
+    <SesiuneProfesorAi
+      token={stare.token}
+      config={stare.config}
+      exp={stare.exp}
+      gratuit={stare.gratuit}
+    />
+  );
+}

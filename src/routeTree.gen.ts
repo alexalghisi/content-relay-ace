@@ -112,6 +112,8 @@ import { Route as MesajeIdRouteImport } from './routes/mesaje.$id'
 import { Route as NewsletterConfirmRouteImport } from './routes/newsletter.confirm'
 import { Route as PreturiMeditatiiIndexRouteImport } from './routes/preturi-meditatii.index'
 import { Route as PreturiMeditatiiMaterieRouteImport } from './routes/preturi-meditatii.$materie'
+import { Route as ProfesorAiIndexRouteImport } from './routes/profesor-ai.index'
+import { Route as ProfesorAiSesiuneRouteImport } from './routes/profesor-ai.sesiune'
 import { Route as ProfesorIndexRouteImport } from './routes/profesor.index'
 import { Route as ProfesorSlugRouteImport } from './routes/profesor.$slug'
 import { Route as ProfesoriIndexRouteImport } from './routes/profesori.index'
@@ -669,6 +671,16 @@ const PreturiMeditatiiMaterieRoute = PreturiMeditatiiMaterieRouteImport.update({
   path: '/preturi-meditatii/$materie',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfesorAiIndexRoute = ProfesorAiIndexRouteImport.update({
+  id: '/profesor-ai/',
+  path: '/profesor-ai/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfesorAiSesiuneRoute = ProfesorAiSesiuneRouteImport.update({
+  id: '/profesor-ai/sesiune',
+  path: '/profesor-ai/sesiune',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfesorIndexRoute = ProfesorIndexRouteImport.update({
   id: '/profesor/',
   path: '/profesor/',
@@ -954,6 +966,7 @@ export interface FileRoutesByFullPath {
   '/mesaje/$id': typeof MesajeIdRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesor-ai/sesiune': typeof ProfesorAiSesiuneRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
@@ -964,6 +977,7 @@ export interface FileRoutesByFullPath {
   '/meditatii/': typeof MeditatiiIndexRoute
   '/mesaje/': typeof MesajeIndexRoute
   '/preturi-meditatii/': typeof PreturiMeditatiiIndexRoute
+  '/profesor-ai/': typeof ProfesorAiIndexRoute
   '/profesor/': typeof ProfesorIndexRoute
   '/profesori/': typeof ProfesoriIndexRoute
   '/rezolvari/': typeof RezolvariIndexRoute
@@ -1092,6 +1106,7 @@ export interface FileRoutesByTo {
   '/mesaje/$id': typeof MesajeIdRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesor-ai/sesiune': typeof ProfesorAiSesiuneRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
@@ -1102,6 +1117,7 @@ export interface FileRoutesByTo {
   '/meditatii': typeof MeditatiiIndexRoute
   '/mesaje': typeof MesajeIndexRoute
   '/preturi-meditatii': typeof PreturiMeditatiiIndexRoute
+  '/profesor-ai': typeof ProfesorAiIndexRoute
   '/profesor': typeof ProfesorIndexRoute
   '/profesori': typeof ProfesoriIndexRoute
   '/rezolvari': typeof RezolvariIndexRoute
@@ -1231,6 +1247,7 @@ export interface FileRoutesById {
   '/mesaje/$id': typeof MesajeIdRoute
   '/newsletter/confirm': typeof NewsletterConfirmRoute
   '/preturi-meditatii/$materie': typeof PreturiMeditatiiMaterieRoute
+  '/profesor-ai/sesiune': typeof ProfesorAiSesiuneRoute
   '/profesor/$slug': typeof ProfesorSlugRoute
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
@@ -1241,6 +1258,7 @@ export interface FileRoutesById {
   '/meditatii/': typeof MeditatiiIndexRoute
   '/mesaje/': typeof MesajeIndexRoute
   '/preturi-meditatii/': typeof PreturiMeditatiiIndexRoute
+  '/profesor-ai/': typeof ProfesorAiIndexRoute
   '/profesor/': typeof ProfesorIndexRoute
   '/profesori/': typeof ProfesoriIndexRoute
   '/rezolvari/': typeof RezolvariIndexRoute
@@ -1372,6 +1390,7 @@ export interface FileRouteTypes {
     | '/mesaje/$id'
     | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
+    | '/profesor-ai/sesiune'
     | '/profesor/$slug'
     | '/profesori/$oras'
     | '/scaner-lacune/$materie'
@@ -1382,6 +1401,7 @@ export interface FileRouteTypes {
     | '/meditatii/'
     | '/mesaje/'
     | '/preturi-meditatii/'
+    | '/profesor-ai/'
     | '/profesor/'
     | '/profesori/'
     | '/rezolvari/'
@@ -1510,6 +1530,7 @@ export interface FileRouteTypes {
     | '/mesaje/$id'
     | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
+    | '/profesor-ai/sesiune'
     | '/profesor/$slug'
     | '/profesori/$oras'
     | '/scaner-lacune/$materie'
@@ -1520,6 +1541,7 @@ export interface FileRouteTypes {
     | '/meditatii'
     | '/mesaje'
     | '/preturi-meditatii'
+    | '/profesor-ai'
     | '/profesor'
     | '/profesori'
     | '/rezolvari'
@@ -1648,6 +1670,7 @@ export interface FileRouteTypes {
     | '/mesaje/$id'
     | '/newsletter/confirm'
     | '/preturi-meditatii/$materie'
+    | '/profesor-ai/sesiune'
     | '/profesor/$slug'
     | '/profesori/$oras'
     | '/scaner-lacune/$materie'
@@ -1658,6 +1681,7 @@ export interface FileRouteTypes {
     | '/meditatii/'
     | '/mesaje/'
     | '/preturi-meditatii/'
+    | '/profesor-ai/'
     | '/profesor/'
     | '/profesori/'
     | '/rezolvari/'
@@ -1788,6 +1812,7 @@ export interface RootRouteChildren {
   MesajeIdRoute: typeof MesajeIdRoute
   NewsletterConfirmRoute: typeof NewsletterConfirmRoute
   PreturiMeditatiiMaterieRoute: typeof PreturiMeditatiiMaterieRoute
+  ProfesorAiSesiuneRoute: typeof ProfesorAiSesiuneRoute
   ProfesorSlugRoute: typeof ProfesorSlugRoute
   ProfesoriOrasRoute: typeof ProfesoriOrasRoute
   ScanerLacuneMaterieRoute: typeof ScanerLacuneMaterieRoute
@@ -1798,6 +1823,7 @@ export interface RootRouteChildren {
   MeditatiiIndexRoute: typeof MeditatiiIndexRoute
   MesajeIndexRoute: typeof MesajeIndexRoute
   PreturiMeditatiiIndexRoute: typeof PreturiMeditatiiIndexRoute
+  ProfesorAiIndexRoute: typeof ProfesorAiIndexRoute
   ProfesorIndexRoute: typeof ProfesorIndexRoute
   ProfesoriIndexRoute: typeof ProfesoriIndexRoute
   RezolvariIndexRoute: typeof RezolvariIndexRoute
@@ -2549,6 +2575,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreturiMeditatiiMaterieRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profesor-ai/': {
+      id: '/profesor-ai/'
+      path: '/profesor-ai'
+      fullPath: '/profesor-ai/'
+      preLoaderRoute: typeof ProfesorAiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profesor-ai/sesiune': {
+      id: '/profesor-ai/sesiune'
+      path: '/profesor-ai/sesiune'
+      fullPath: '/profesor-ai/sesiune'
+      preLoaderRoute: typeof ProfesorAiSesiuneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profesor/': {
       id: '/profesor/'
       path: '/profesor'
@@ -2916,6 +2956,7 @@ const rootRouteChildren: RootRouteChildren = {
   MesajeIdRoute: MesajeIdRoute,
   NewsletterConfirmRoute: NewsletterConfirmRoute,
   PreturiMeditatiiMaterieRoute: PreturiMeditatiiMaterieRoute,
+  ProfesorAiSesiuneRoute: ProfesorAiSesiuneRoute,
   ProfesorSlugRoute: ProfesorSlugRoute,
   ProfesoriOrasRoute: ProfesoriOrasRoute,
   ScanerLacuneMaterieRoute: ScanerLacuneMaterieRoute,
@@ -2926,6 +2967,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiIndexRoute: MeditatiiIndexRoute,
   MesajeIndexRoute: MesajeIndexRoute,
   PreturiMeditatiiIndexRoute: PreturiMeditatiiIndexRoute,
+  ProfesorAiIndexRoute: ProfesorAiIndexRoute,
   ProfesorIndexRoute: ProfesorIndexRoute,
   ProfesoriIndexRoute: ProfesoriIndexRoute,
   RezolvariIndexRoute: RezolvariIndexRoute,
