@@ -283,6 +283,7 @@ ${STIL[s.nivel] ?? ""}
 ${MOD[s.obiectiv] ?? ""}
 Reguli:
 - Este un dialog, nu un monolog. Răspunzi prioritar la întrebarea nouă a elevului; nu repeți salutul și nu continui explicația abandonată. După răspuns întrebi dacă reluați lecția. Ești un profesor virtual AI, nu o persoană reală.
+- Pentru o întrebare simplă, răspunzi imediat cu rezultatul și o singură explicație scurtă; nu adaugi prezentări, variante de lecție sau întrebări fără legătură. La pornire: un salut și o singură întrebare, fără prezentarea modului de lucru. Dezvolți doar când elevul cere sau problema o necesită.
 - Adaptezi explicațiile la nivelul elevului; verifici des dacă a înțeles, cu o întrebare scurtă; dai exemple și exerciții; corectezi răspunsurile și explici de ce.
 - Nu dai direct rezolvarea unei teme dacă elevul n-a încercat; îl ghidezi.
 - „vorbit” este ce spui cu voce tare: maxim 70 de cuvinte, propoziții naturale de vorbire, FĂRĂ Markdown, fără simboluri de formatare; citești formulele în cuvinte („x la pătrat”).
@@ -324,30 +325,11 @@ export const profesorAiAvatar = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ token: z.string().max(4000) }).parse(d))
   .handler(async ({ data, context }) => {
     const s = await citesteSesiune(data.token, context.userId);
-    const key = process.env["HEYGEN_API_KEY"];
-    if (!s || !key)
+    if (!s)
       return {
         heygen: null as null | { token: string; avatarId: string; voiceId?: string },
-        error: !s ? "Sesiunea nu este validă." : "Serviciul de avatar video nu este configurat.",
+        error: "Sesiunea nu este validă.",
       };
-    const res = await fetch("https://api.heygen.com/v1/streaming.create_token", {
-      method: "POST",
-      headers: { "x-api-key": key, "Content-Type": "application/json" },
-    }).catch(() => null);
-    if (!res?.ok) {
-      console.error(`[profesor-ai] avatar HTTP ${res?.status ?? "network"}`);
-      return { heygen: null, error: res?.status === 404
-        ? "Serviciul video HeyGen configurat nu este disponibil (404). Lecția poate continua în scris."
-        : "HeyGen nu a putut porni avatarul video. Lecția poate continua în scris." };
-    }
-    const j = (await res.json().catch(() => ({}))) as { data?: { token?: string } };
-    if (!j.data?.token) return { heygen: null, error: "HeyGen nu a emis accesul pentru avatarul video." };
-    return {
-      error: undefined,
-      heygen: {
-        token: j.data.token,
-        avatarId: process.env["HEYGEN_AVATAR_ID"] || "Ann_Therapist_public",
-        voiceId: process.env["HEYGEN_VOICE_ID"] || undefined,
-      },
-    };
+    const { createHeygenAccess } = await import("./profesor-ai-avatar.server");
+    return createHeygenAccess({ key: process.env["HEYGEN_API_KEY"], avatarId: process.env["HEYGEN_AVATAR_ID"], voiceId: process.env["HEYGEN_VOICE_ID"] });
   });
