@@ -126,7 +126,7 @@ export async function streamGateway(system: string, messages: M[]): Promise<Read
   const { AiError, eroareDinStatus } = await import("./ai-gateway.server");
   const key = process.env["LOVABLE_API_KEY"];
   if (!key) throw new AiError("LOVABLE_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
-  const greu = thinkingBudget(messages[messages.length - 1]?.content ?? "") > 0;
+  const greu = /demonstr|deriv|integr|limit[ae]|probabilit/i.test(messages[messages.length - 1]?.content ?? "");
   const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", "X-Lovable-AIG-SDK": "fetch" },
