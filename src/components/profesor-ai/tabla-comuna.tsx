@@ -3,7 +3,7 @@ import { Eraser, ImagePlus, Paperclip, Pencil, Send, Trash2, X } from "lucide-re
 import { Button } from "@/components/ui/button";
 
 type Fisier = { id: number; nume: string; url: string; imagine: boolean };
-const CULORI = ["currentColor", "hsl(var(--primary))", "hsl(var(--destructive))"];
+const CERNELURI = ["#111827", "#1d4ed8", "#dc2626"];
 
 /** Shared whiteboard: student draws, shares files, and sends a snapshot for the teacher to see. */
 export function TablaComuna({
@@ -58,9 +58,8 @@ export function TablaComuna({
     const x = canvas.current?.getContext("2d");
     const p = punct(e);
     if (!x || !ultim.current) return;
-    const stil = getComputedStyle(canvas.current!);
-    x.strokeStyle = unealta === "radiera" ? "#ffffff" : culoare === 0 ? stil.color : CULORI[culoare].startsWith("hsl") ? getComputedStyle(document.documentElement).getPropertyValue(culoare === 1 ? "--primary" : "--destructive").trim() || stil.color : stil.color;
-    if (x.strokeStyle === "#000000" && culoare !== 0) x.strokeStyle = culoare === 1 ? "#1d4ed8" : "#dc2626";
+    // The board is always a white sheet, so ink colours are fixed like real markers.
+    x.strokeStyle = unealta === "radiera" ? "#ffffff" : CERNELURI[culoare];
     x.lineWidth = (unealta === "radiera" ? 22 : 3.5) * devicePixelRatio;
     x.lineCap = "round";
     x.lineJoin = "round";
@@ -135,7 +134,8 @@ export function TablaComuna({
             type="button"
             aria-label={n}
             onClick={() => { setCuloare(i); setUnealta("creion"); }}
-            className={`h-7 w-7 rounded-full border-2 ${culoare === i ? "border-ring" : "border-border"} ${i === 0 ? "bg-foreground" : i === 1 ? "bg-primary" : "bg-destructive"}`}
+            style={{ backgroundColor: CERNELURI[i] }}
+            className={`h-7 w-7 rounded-full border-2 ${culoare === i ? "border-ring" : "border-border"}`}
           />
         ))}
         <label className="inline-flex h-9 cursor-pointer items-center gap-1 rounded-md border border-border px-3 text-xs font-medium">
@@ -149,7 +149,7 @@ export function TablaComuna({
           <Send className="mr-1 h-4 w-4" /> Arată profesoarei
         </Button>
       </div>
-      <div ref={wrap} className="relative flex-1 touch-none text-foreground">
+      <div ref={wrap} className="relative flex-1 touch-none">
         <canvas
           ref={canvas}
           className="absolute inset-0 h-full w-full cursor-crosshair rounded-b-3xl"
