@@ -97,7 +97,7 @@ export async function createLiveAvatarAccess(
     return unavailable("Avatarul și vocea din LiveAvatar trebuie alese înainte de pornire.");
   const call = (maxSeconds: number) => request(LIVEAVATAR_TOKEN_URL, {
     method: "POST",
-    headers: { "X-API-KEY": config.key, "Content-Type": "application/json", accept: "application/json" },
+    headers: { "X-API-KEY": config.key ?? "", "Content-Type": "application/json", accept: "application/json" },
     body: JSON.stringify({
       mode: "FULL",
       avatar_id: config.avatarId,
