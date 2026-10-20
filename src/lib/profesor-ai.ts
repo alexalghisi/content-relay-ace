@@ -76,4 +76,7 @@ export interface PaReplica {
   emotie: "zambet" | "gandire" | "incurajare" | "neutru";
 }
 
-export type PaResult<T> = { ok: true; data: T } | { ok: false; error: string };
+/** `cod` = tipul erorii AI (ex. „credits”, „rate_limit”), ca interfața să reacționeze corect. */
+export type PaResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; error: string; cod?: string; reiaPesteSec?: number };

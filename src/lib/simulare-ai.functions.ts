@@ -38,9 +38,18 @@ type Sigilat = { u: string; test: TestPublic; chei: Cheie[] };
 
 const fail = (e: unknown): { ok: false; error: string } => {
   const msg = (e as { userMessage?: string })?.userMessage;
-  console.error("[simulare-ai]", e);
+  const kind = (e as { kind?: string })?.kind;
+  // Log fără conținutul elevului: doar tipul erorii.
+  console.error("[simulare-ai]", kind ?? (e instanceof Error ? e.message : "eroare"));
   return { ok: false, error: msg || "A apărut o eroare. Încearcă din nou." };
 };
+
+/** Returnează cota dacă eșecul vine de la furnizor (credite, 429, rețea, configurare). */
+async function failCuRambursare(e: unknown, userId: string, kind: string) {
+  const { eroareFurnizor, refundQuota } = await import("./ai-gateway.server");
+  if (eroareFurnizor(e)) await refundQuota(userId, kind);
+  return fail(e);
+}
 
 const slugsPentru = (m: AiMaterie) =>
   BLOCAJE.filter((n) => (n.materie as string) === m).map((n) => `${n.slug} (${n.titlu})`);
@@ -195,7 +204,7 @@ Format JSON:
     } catch (e) {
       if (e instanceof z.ZodError)
         return { ok: false, error: "Testul generat nu a trecut verificarea. Încearcă din nou." };
-      return fail(e);
+      return failCuRambursare(e, context.userId, "test");
     }
   });
 
@@ -363,7 +372,7 @@ Format: {"itemi":[{"id":"d1","puncte":7,"unde":"...","ce":"...","deCe":"..."}],"
     } catch (e) {
       if (e instanceof z.ZodError)
         return { ok: false, error: "Corectarea nu a reușit. Încearcă din nou." };
-      return fail(e);
+      return failCuRambursare(e, context.userId, `corectare-${data.token.slice(0, 32)}`);
     }
   });
 
@@ -409,6 +418,6 @@ Reguli:
       if (!raspuns) return { ok: false, error: "Nu am primit un răspuns. Încearcă din nou." };
       return { ok: true, data: { raspuns }, ramase: q.left };
     } catch (e) {
-      return fail(e);
+      return failCuRambursare(e, context.userId, "meditator");
     }
   });

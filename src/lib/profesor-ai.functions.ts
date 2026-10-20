@@ -23,6 +23,8 @@ import {
 
 const SITE = "https://meditatiidirect.ro";
 const DEFAULT_FREE = "alexalghisi@gmail.com";
+/** Limita internă de mesaje pe zi pentru conturile plătitoare (anti-abuz și plafon de cost). */
+export const LIMITA_PROFESOR_ZI = 600;
 
 const configSchema = z.object({
   materie: z.enum(PA_MATERII.map((m) => m.slug) as [string, ...string[]]),
@@ -114,11 +116,16 @@ async function stripe(path: string, body?: URLSearchParams) {
 /** Ce vede utilizatorul în configurator: gratuit sau prețurile curente. */
 export const profesorAiAcces = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => ({
-    gratuit: await esteGratuit(context.userId),
-    preturi: tabelPreturi(),
-    plataActiva: !!process.env["STRIPE_SECRET_KEY"],
-  }));
+  .handler(async ({ context }) => {
+    const { aiStare } = await import("./ai-gateway.server");
+    return {
+      gratuit: await esteGratuit(context.userId),
+      preturi: tabelPreturi(),
+      plataActiva: !!process.env["STRIPE_SECRET_KEY"],
+      // Un furnizor AI poate răspunde acum (Lovable fără pauză sau rezerva Gemini).
+      aiDisponibil: (await aiStare()).ok,
+    };
+  });
 
 /** Pornește sesiunea: gratuit → token direct; altfel → link Stripe Checkout. */
 export const profesorAiPorneste = createServerFn({ method: "POST" })
@@ -127,6 +134,10 @@ export const profesorAiPorneste = createServerFn({ method: "POST" })
   .handler(
     async ({ data, context }): Promise<PaResult<{ token?: string; checkoutUrl?: string }>> => {
       const cfg = data as PaConfig;
+      // Nu pornim (și mai ales nu încasăm) o sesiune dacă furnizorul AI e indisponibil.
+      const { aiStare } = await import("./ai-gateway.server");
+      const stare = await aiStare();
+      if (!stare.ok) return { ok: false, error: stare.mesaj, cod: stare.kind };
       if (await esteGratuit(context.userId)) {
         return {
           ok: true,
@@ -252,11 +263,19 @@ export const profesorAiRaspunde = createServerFn({ method: "POST" })
   .handler(async ({ data, context }): Promise<PaResult<PaReplica>> => {
     const s = await citesteSesiune(data.token, context.userId);
     if (!s) return { ok: false, error: "Sesiunea s-a încheiat. Poți începe o sesiune nouă." };
+    let cotaLuata = false;
     try {
-      const { callAi, extractJson, takeQuota } = await import("./ai-gateway.server");
+      const ai = await import("./ai-gateway.server");
+      const { callAi, extractJson, takeQuota } = ai;
       if (!s.gratuit) {
-        const q = await takeQuota(context.userId, "profesor-ai", 600);
-        if (!q.ok) return { ok: false, error: "Ai atins limita zilnică de mesaje. Revino mâine." };
+        const q = await takeQuota(context.userId, "profesor-ai", LIMITA_PROFESOR_ZI);
+        if (!q.ok)
+          return {
+            ok: false,
+            error: `Ai atins limita de ${LIMITA_PROFESOR_ZI} de mesaje pe zi. Revino mâine.`,
+            cod: "limita_interna",
+          };
+        cotaLuata = true;
       }
       const system = `Ești „Profesorul AI” de pe MeditatiiDirect.ro: un profesor uman, cald, răbdător și entuziast, într-o sesiune live, video, față în față cu elevul. Vorbești în limba română, natural, ca un profesor bun la ore particulare.
 Sesiune: ${paMaterieName(s.materie)} · ${paNivelName(s.nivel)} · ${s.durata} minute.
@@ -288,11 +307,13 @@ Răspunzi DOAR cu JSON: {"vorbit": "...", "tabla": "...", "emotie": "..."}`;
         },
       };
     } catch (e) {
-      const msg =
-        e && typeof e === "object" && "userMessage" in e
-          ? String((e as { userMessage: string }).userMessage)
-          : "";
-      return { ok: false, error: msg || "A apărut o problemă. Încearcă din nou." };
+      const { AiError, eroareFurnizor, refundQuota } = await import("./ai-gateway.server");
+      // Elevul nu a primit răspuns din motive externe: îi returnăm mesajul din limita zilnică.
+      if (cotaLuata && eroareFurnizor(e)) await refundQuota(context.userId, "profesor-ai");
+      if (e instanceof AiError)
+        return { ok: false, error: e.userMessage, cod: e.kind, reiaPesteSec: e.retryAfterSec };
+      console.error("[profesor-ai] eroare neașteptată");
+      return { ok: false, error: "A apărut o problemă. Încearcă din nou.", cod: "necunoscut" };
     }
   });
 
