@@ -11,3 +11,4 @@
 - Loguri: doar status + tip (`[ai] gateway 402 (credits)`), niciodată cheia sau conținutul elevului.
 - Teste: `src/lib/ai-gateway-erori.test.ts`.
 - Rezervă gratuită: dacă există `GEMINI_API_KEY` (Google AI Studio, plan gratuit Flash), `callAi` trece automat pe Gemini când Lovable e epuizat/indisponibil (nu și la refuzuri de conținut). Model: `GEMINI_MODEL` (implicit `gemini-flash-latest`). `aiStare()` decide dacă se poate porni o sesiune.
+- vite.config.ts rewrites the LiveAvatar SDK's `events` import to the npm package; Vite otherwise stubs it as a Node builtin and the client build fails.
