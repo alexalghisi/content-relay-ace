@@ -105,7 +105,7 @@ export function SesiuneProfesorAi({
         const { heygen: h, error } = await profesorAiAvatar({ data: { token } });
         if (anulat) return;
         if (!h) { setAvatarError(error ?? "Avatarul video nu este disponibil."); return setModAvatar("indisponibil"); }
-        if (h.provider === "liveavatar") {
+        {
           const la = await import("@heygen/liveavatar-web-sdk");
           // Microfonul pornește doar la cererea elevului; vocea lui întrerupe profesorul.
           const s = new la.LiveAvatarSession(h.token, { autoKeepAlive: true, voiceChat: { defaultMuted: true } });
@@ -132,36 +132,7 @@ export function SesiuneProfesorAi({
           await s.start();
           if (anulat) return void s.stop();
           setModAvatar("realist");
-          return;
         }
-        const mod = await import("@heygen/streaming-avatar");
-        const av = new mod.default({ token: h.token });
-        heygen.current = av as unknown as HeyGen;
-        av.on(mod.StreamingEvents.STREAM_READY, (e: CustomEvent<MediaStream>) => {
-          if (video.current) {
-            video.current.srcObject = e.detail;
-            void video.current.play().catch(() => {});
-          }
-        });
-        av.on(mod.StreamingEvents.AVATAR_START_TALKING, () => setRealistVorbeste(true));
-        av.on(mod.StreamingEvents.AVATAR_STOP_TALKING, () => setRealistVorbeste(false));
-        av.on(mod.StreamingEvents.STREAM_DISCONNECTED, () => {
-          if (!anulat) { setAvatarError("Conexiunea video s-a închis."); setModAvatar("indisponibil"); }
-        });
-        await av.createStartAvatar({
-          quality: mod.AvatarQuality.High,
-          avatarName: h.avatarId,
-          language: "ro",
-          voice: {
-            voiceId: h.voiceId,
-            emotion: mod.VoiceEmotion.FRIENDLY,
-            rate: 1,
-          },
-          activityIdleTimeout: 600,
-        });
-        if (anulat) return void av.stopAvatar();
-        heygen.current = av as unknown as HeyGen;
-        setModAvatar("realist");
       } catch {
         void heygen.current?.stopAvatar().catch(() => {});
         heygen.current = null;
