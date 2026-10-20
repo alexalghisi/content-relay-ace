@@ -65,3 +65,13 @@ test("plan session cap from LiveAvatar is applied in exactly one repaired retry"
   expect(sent).toEqual([2100, 120]);
   expect(r.heygen?.token).toBe("tok");
 });
+
+test("session is Romanian: language ro and the multilingual ElevenLabs model", async () => {
+  let body: { avatar_persona?: { language?: string; voice_settings?: { model?: string } } } = {};
+  await createLiveAvatarAccess({ key: "k", avatarId: HANNAH_FRIENDLY, voiceId: HANNAH_VOICE }, async (_u, init) => {
+    body = JSON.parse(String(init?.body));
+    return Response.json({ data: { session_token: "t" } });
+  });
+  expect(body.avatar_persona?.language).toBe("ro");
+  expect(body.avatar_persona?.voice_settings?.model).toBe("eleven_multilingual_v2");
+});
