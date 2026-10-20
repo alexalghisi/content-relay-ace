@@ -91,17 +91,14 @@ function Page() {
             clar.
           </p>
           <div className="mt-6 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-            <video
-              className="aspect-video w-full bg-foreground object-cover"
-              poster="/promo-profesor-ai.jpg"
-              controls
-              playsInline
-              preload="metadata"
-              aria-label="Prezentare Profesor AI"
-            >
-              <source src="/promo-profesor-ai.webm" type="video/webm" />
-              <source src="/promo-profesor-ai.mp4" type="video/mp4" />
-            </video>
+            <img
+          className="aspect-video w-full bg-foreground object-cover"
+          src="/promo-profesor-ai.jpg"
+          width={1280}
+          height={720}
+          alt="Profesoara AI care îți predă lecția live, față în față"
+          loading="lazy"
+        />
           </div>
         </header>
         <div id="incepe">
