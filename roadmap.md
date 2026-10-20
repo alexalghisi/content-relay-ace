@@ -1,7 +1,7 @@
 # Roadmap
 
-- [ ] Profesor AI: întrerupere în timpul vorbirii și întrebări prioritare, fără reluarea replicilor vechi; teste.
-- [ ] Profesor AI: voce naturală română și avatar video fotorealist; verificare reală a serviciului și conversației.
+- [x] Profesor AI: corectată coada de vorbire, întrebările pot fi trimise și în timpul răspunsului, prioritate întrebării noi; 6 teste trec. Cont real: răspuns corect la 7+5, fără erori; doar previzualizare.
+- [ ] Profesor AI: voce naturală română, avatar fotorealist și întrerupere vocală automată — blocat: HeyGen streaming.create_token returnează 404 inclusiv cu accesul salvat. Nu s-a verificat o conversație audibilă; necesită confirmarea serviciului API disponibil de HeyGen (posibil LiveAvatar, migrarea neconfirmată). Fără înlocuitor desenat sau voce de dispozitiv.
 
 - [x] Repară erorile document.cookie din cadrele Adsterra fără a elimina izolarea; 80 citiri/scrieri simulate în cadrul real fără cookie-uri persistate sau erori, verificare separată a scripturilor furnizorului fără erori; 10 teste trec. Test AI real generat cu cont conectat. Doar previzualizare; livrarea reclamelor nu este confirmată.
 
