@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Repară erorile document.cookie din cadrele Adsterra fără a elimina izolarea; verifică în browser citirea/scrierea fără cookie-uri și generarea unui test AI real.
+
 - [x] Integrează Social Bar într-un cadru izolat și Smartlink etichetat pe paginile publice, mută native mai sus. Verificat la 1280 și 390 px: fără overflow sau erori, trei cadre nepopulate cu înălțime zero, link corect; 7 teste trec. Numai previzualizare, nepublicat.
 - [ ] Confirmă livrarea Social Bar și bannerelor — blocat de Adsterra: toate scripturile solicitate la verificarea din 18 octombrie răspund 200 cu 0 bytes pe calculator și telefon. Compatibilitatea Social Bar în cadru izolat și destinațiile Smartlink nu sunt confirmate de furnizor.
 
