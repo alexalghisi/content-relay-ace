@@ -29,8 +29,8 @@ test("valid token preserves both user selections and documented legacy request",
     expect(new Headers(init?.headers).has("x-api-key")).toBe(true);
     return Response.json({ data: { token: "test-session-token" } });
   });
-  expect(result.heygen?.avatarId).toBe("selected-avatar");
-  expect(result.heygen?.voiceId).toBe("selected-romanian-voice");
+  expect(result.heygen).toMatchObject({ provider: "heygen", avatarId: "selected-avatar" });
+  expect(result.heygen).toMatchObject({ voiceId: "selected-romanian-voice" });
 });
 test("malformed successful response is not successful access", async () => {
   const result = await createHeygenAccess(config, async () => Response.json({ data: { token: 123 } }));
