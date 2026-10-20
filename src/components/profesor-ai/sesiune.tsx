@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Clock, Loader2, Mic, MicOff, Send, Square, VideoOff, Volume2, VolumeX } from "lucide-react";
+import { Clock, Loader2, Mic, MicOff, Square, VideoOff, Volume2, VolumeX } from "lucide-react";
+import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
+import { TablaComuna } from "./tabla-comuna";
 import { Button } from "@/components/ui/button";
 import { createSpeechQueue, isEcho, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,13 +32,6 @@ const fereastra = (m: Msg[]) => {
 
 const START =
   "Începe sesiunea: un salut scurt și o singură întrebare despre ce vreau să învăț, fără prezentare.";
-const SCURTATURI = [
-  "Nu am înțeles, explică altfel",
-  "Dă-mi un exemplu",
-  "Dă-mi un exercițiu",
-  "Verifică-mi răspunsul",
-  "Mai simplu, te rog",
-];
 
 type SR = {
   lang: string;
@@ -63,7 +58,6 @@ export function SesiuneProfesorAi({
 }) {
   const [mesaje, setMesaje] = useState<Msg[]>([]);
   const [tabla, setTabla] = useState<string>("");
-  const [text, setText] = useState("");
   const [pending, setPending] = useState(false);
   const [eroare, setEroare] = useState("");
   const [deReluat, setDeReluat] = useState<{ text: string; ascuns: boolean; cod?: string } | null>(null);
@@ -81,7 +75,7 @@ export function SesiuneProfesorAi({
   const revision = useRef(0);
   const messagesRef = useRef<Msg[]>([]);
   const abortRef = useRef<AbortController | null>(null);
-  const sendRef = useRef<(text: string, ascuns?: boolean) => Promise<void>>(async () => {});
+  const sendRef = useRef<(text: string, ascuns?: boolean, imagine?: string) => Promise<void>>(async () => {});
   const handsFree = useRef(false);
   const liveVoice = useRef(false);
   const speakEnd = useRef<(() => void) | null>(null);
@@ -207,7 +201,7 @@ export function SesiuneProfesorAi({
   }, []);
 
   const trimite = useCallback(
-    async (continut: string, ascuns = false) => {
+    async (continut: string, ascuns = false, imagine?: string) => {
       const c = continut.trim();
       if (!c || terminat) return;
       interrupt(); // o întrebare nouă oprește orice răspuns în curs
@@ -240,7 +234,7 @@ export function SesiuneProfesorAi({
           method: "POST",
           signal: ctrl.signal,
           headers: { "content-type": "application/json", authorization: `Bearer ${sess.session?.access_token ?? ""}` },
-          body: JSON.stringify({ token, mesaje: fereastra(istoric) }),
+          body: JSON.stringify({ token, mesaje: fereastra(istoric), imagine }),
         });
         if (!res.ok || !res.body) {
           const j = (await res.json().catch(() => null)) as { error?: string; cod?: string } | null;
@@ -335,13 +329,23 @@ export function SesiuneProfesorAi({
     const rec = new Ctor();
     rec.lang = "ro-RO";
     rec.continuous = true;
-    rec.interimResults = false;
+    rec.interimResults = true;
     rec.onspeechstart = null;
     rec.onresult = (e) => {
-      const last = e.results[e.results.length - 1];
+      const last = e.results[e.results.length - 1] as ArrayLike<{ transcript: string }> & { isFinal?: boolean };
       const spus = last?.[0]?.transcript?.trim() ?? "";
       // Ignorăm ecoul vocii profesorului captat de microfon.
-      if (spus && !isEcho(spus, spokenNow.current)) void sendRef.current(spus);
+      if (!spus || isEcho(spus, spokenNow.current)) return;
+      if (!last.isFinal) {
+        // Elevul vorbește peste profesoară: o oprim imediat, ca la telefon.
+        if (spokenNow.current && spus.split(/\s+/).length >= 2) {
+          console.info("[voice] fallback barge-in");
+          interruptRef.current();
+        }
+        return;
+      }
+      console.info("[voice] fallback transcription", spus);
+      void sendRef.current(spus);
     };
     rec.onend = () => {
       if (handsFree.current && sr.current === rec) { try { rec.start(); return; } catch { /* fall through */ } }
@@ -382,12 +386,6 @@ export function SesiuneProfesorAi({
 
   const microfon = () => (asculta ? stopMic() : startMic());
 
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    const t = text;
-    setText("");
-    void trimite(t);
-  };
 
   const min = Math.floor(ramas / 60000);
   const sec = Math.floor((ramas % 60000) / 1000);
