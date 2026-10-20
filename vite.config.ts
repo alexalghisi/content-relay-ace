@@ -19,9 +19,10 @@ export default defineConfig({
     {
       name: "browser-events-polyfill",
       enforce: "pre",
-      resolveId(id) {
-        if (id === "events")
-          return fileURLToPath(new URL("./node_modules/events/events.js", import.meta.url));
+      transform(code, id) {
+        if (!id.includes("@heygen/liveavatar-web-sdk") || !code.includes("from 'events'")) return;
+        const target = fileURLToPath(new URL("./node_modules/events/events.js", import.meta.url));
+        return { code: code.replace(/from 'events'/g, `from ${JSON.stringify(target)}`), map: null };
       },
     },
   ],
