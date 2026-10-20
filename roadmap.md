@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Profesor AI: 404 diagnosticat în fluxul legacy; LiveAvatar documentează alt host, cheie și contract. Avatarul/vocea salvate rămân neschimbate, eliminat fallback implicit, erori 401/403/404/429 testate. Blocaj: acces LiveAvatar și compatibilitatea selecțiilor neconfirmate; conversația audibilă nu este verificată. Nu s-au repetat probele după 404.
+- [ ] Profesor AI: 404 diagnosticat în fluxul legacy; LiveAvatar documentează alt host, cheie și contract. Avatarul/vocea salvate rămân neschimbate, eliminat fallback implicit, erori 401/403/404/429 testate. Blocaj: utilizatorul a ales confirmarea de la HeyGen privind accesul Interactive Avatar și cauza 404, fără migrare acum; conversația audibilă nu este verificată. Nu s-au repetat probele după 404.
 - [x] Profesor AI: replici simple și deschiderea scurtate; eliminat salutul vocal dublu, modelul/plafonul/protecțiile păstrate. Întrebare reală 7+5: 3,40 sec înainte, 1,91 sec după, răspuns corect și fără erori; variația furnizorului nu permite garantarea timpului. Video neprobat deliberat; numai previzualizare.
 
 - [x] Profesor AI: corectată coada de vorbire, întrebările pot fi trimise și în timpul răspunsului, prioritate întrebării noi; 6 teste trec. Cont real: răspuns corect la 7+5, fără erori; doar previzualizare.
