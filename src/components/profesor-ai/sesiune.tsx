@@ -9,7 +9,6 @@ import {
   paNivelName,
   paObiectivName,
   type PaConfig,
-  type PaReplica,
 } from "@/lib/profesor-ai";
 
 type Msg = { role: "user" | "assistant"; content: string; tabla?: string };
@@ -62,7 +61,6 @@ export function SesiuneProfesorAi({
   gratuit: boolean;
 }) {
   const [mesaje, setMesaje] = useState<Msg[]>([]);
-  const [emotie, setEmotie] = useState<PaReplica["emotie"]>("zambet");
   const [tabla, setTabla] = useState<string>("");
   const [text, setText] = useState("");
   const [pending, setPending] = useState(false);
@@ -74,7 +72,8 @@ export function SesiuneProfesorAi({
   const [asculta, setAsculta] = useState(false);
   const [sunet, setSunet] = useState(true);
   const [ramas, setRamas] = useState(() => Math.max(0, exp - Date.now()));
-  const [modAvatar, setModAvatar] = useState<"incarcare" | "realist" | "animat">("incarcare");
+  const [modAvatar, setModAvatar] = useState<"incarcare" | "realist" | "indisponibil">("incarcare");
+  const [avatarError, setAvatarError] = useState("");
   const [realistVorbeste, setRealistVorbeste] = useState(false);
   const video = useRef<HTMLVideoElement>(null);
   const heygen = useRef<HeyGen | null>(null);
@@ -84,7 +83,7 @@ export function SesiuneProfesorAi({
   const processing = useRef(false);
   const revision = useRef(0);
   const messagesRef = useRef<Msg[]>([]);
-  const nextQuestion = useRef<{ text: string; ascuns: boolean } | null>(null);
+  const nextQuestion = useRef<{ text: string; ascuns: boolean }[]>([]);
   const sendRef = useRef<(text: string, ascuns?: boolean) => Promise<void>>(async () => {});
   const listening = useRef(false);
   const interrupt = useCallback(() => {
@@ -100,11 +99,12 @@ export function SesiuneProfesorAi({
     let anulat = false;
     (async () => {
       try {
-        const { heygen: h } = await profesorAiAvatar({ data: { token } });
+        const { heygen: h, error } = await profesorAiAvatar({ data: { token } });
         if (anulat) return;
-        if (!h) return setModAvatar("animat");
+        if (!h) { setAvatarError(error ?? "Avatarul video nu este disponibil."); return setModAvatar("indisponibil"); }
         const mod = await import("@heygen/streaming-avatar");
         const av = new mod.default({ token: h.token });
+        heygen.current = av as unknown as HeyGen;
         av.on(mod.StreamingEvents.STREAM_READY, (e: CustomEvent<MediaStream>) => {
           if (video.current) {
             video.current.srcObject = e.detail;
@@ -113,7 +113,9 @@ export function SesiuneProfesorAi({
         });
         av.on(mod.StreamingEvents.AVATAR_START_TALKING, () => setRealistVorbeste(true));
         av.on(mod.StreamingEvents.AVATAR_STOP_TALKING, () => setRealistVorbeste(false));
-        av.on(mod.StreamingEvents.STREAM_DISCONNECTED, () => setModAvatar("animat"));
+        av.on(mod.StreamingEvents.STREAM_DISCONNECTED, () => {
+          if (!anulat) { setAvatarError("Conexiunea video s-a închis."); setModAvatar("indisponibil"); }
+        });
         await av.createStartAvatar({
           quality: mod.AvatarQuality.High,
           avatarName: h.avatarId,
@@ -122,7 +124,6 @@ export function SesiuneProfesorAi({
             voiceId: h.voiceId,
             emotion: mod.VoiceEmotion.FRIENDLY,
             rate: 1,
-            model: mod.ElevenLabsModel.eleven_multilingual_v2,
           },
           activityIdleTimeout: 600,
         });
@@ -130,7 +131,9 @@ export function SesiuneProfesorAi({
         heygen.current = av as unknown as HeyGen;
         setModAvatar("realist");
       } catch {
-        if (!anulat) setModAvatar("animat");
+        void heygen.current?.stopAvatar().catch(() => {});
+        heygen.current = null;
+        if (!anulat) { setAvatarError("Nu am putut conecta avatarul video. Verifică accesul și configurația HeyGen."); setModAvatar("indisponibil"); }
       }
     })();
     return () => {
@@ -163,7 +166,7 @@ export function SesiuneProfesorAi({
             await heygen.current.speak({ text: t, taskType: "repeat" });
             return;
           } catch {
-            setModAvatar("animat");
+            setModAvatar("indisponibil");
           }
         }
 
@@ -179,7 +182,7 @@ export function SesiuneProfesorAi({
       if (!c || terminat) return;
       if (!ascuns) interrupt();
       if (processing.current) {
-        nextQuestion.current = { text: c, ascuns };
+        nextQuestion.current.push({ text: c, ascuns });
         return;
       }
       processing.current = true;
@@ -189,7 +192,7 @@ export function SesiuneProfesorAi({
       const istoric: Msg[] = [...previous, { role: "user", content: c }];
       if (!ascuns) setMesaje(istoric);
       setPending(true);
-      setEmotie("gandire");
+
       const r = await profesorAiRaspunde({
         data: { token, mesaje: fereastra(istoric) },
       }).catch(() => ({
@@ -199,16 +202,16 @@ export function SesiuneProfesorAi({
       }));
       processing.current = false;
       setPending(false);
-      const next = nextQuestion.current;
-      nextQuestion.current = null;
+      const next = nextQuestion.current.shift();
       if (next) {
+        messagesRef.current = istoric;
         void sendRef.current(next.text, next.ascuns);
         return;
       }
       if (currentRevision !== revision.current) return;
       if (!r.ok) {
         setEroare(r.error);
-        setEmotie("neutru");
+
         // Nu reîncercăm automat (fără bucle și fără cost ascuns); elevul apasă „Reîncearcă”.
         setDeReluat({ text: c, ascuns, cod: r.cod });
         if (!ascuns) setMesaje(previous);
@@ -220,7 +223,7 @@ export function SesiuneProfesorAi({
       messagesRef.current = [...istoric, raspuns];
       setMesaje(messagesRef.current);
       if (r.data.tabla) setTabla(r.data.tabla);
-      setEmotie(r.data.emotie);
+
       void vorbeste(r.data.vorbit);
     },
     [terminat, token, interrupt, vorbeste],
@@ -241,7 +244,7 @@ export function SesiuneProfesorAi({
   useEffect(() => {
     if (modAvatar === "incarcare" || !permisSunet || pornit.current) return;
     pornit.current = true;
-    setEmotie("zambet");
+
     void vorbeste(
       `Bună! Sunt profesorul tău de ${paMaterieName(config.materie).toLowerCase()}. Mă bucur că ești aici. Hai să începem!`,
     );
@@ -303,30 +306,29 @@ export function SesiuneProfesorAi({
     <div className="grid gap-4 lg:grid-cols-[1.35fr_1fr]">
       <section className="min-w-0 overflow-hidden rounded-3xl border border-border bg-foreground/95 shadow-[var(--shadow-card)]">
         <div className="relative aspect-[4/3] w-full sm:aspect-video">
-          {modAvatar === "realist" ? (
-            <video ref={video} autoPlay playsInline className="h-full w-full object-cover" />
-          ) : modAvatar === "animat" ? (
+          <video ref={video} autoPlay playsInline muted={!sunet} className={modAvatar === "realist" ? "h-full w-full object-cover" : "hidden"} />
+          {modAvatar === "indisponibil" ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center text-background">
               <VideoOff className="h-8 w-8" />
-              <p>Avatarul video și vocea realistă nu sunt disponibile momentan.</p>
+              <p>{avatarError || "Avatarul video și vocea realistă nu sunt disponibile momentan."}</p>
               <p className="text-sm">Poți continua lecția în scris.</p>
             </div>
-          ) : (
+          ) : modAvatar === "incarcare" ? (
             <div className="grid h-full place-items-center text-background/80">
               <Loader2 className="h-8 w-8 animate-spin" aria-label="Se conectează profesorul" />
             </div>
-          )}
+          ) : null}
           {!permisSunet && modAvatar !== "incarcare" && (
             <Button
               type="button"
               onClick={() => setPermisSunet(true)}
-              className="absolute inset-0 grid place-items-center bg-black/35 text-lg font-bold text-white"
+              className="absolute inset-0 grid place-items-center bg-foreground/35 text-lg font-bold text-background"
             >
               <span className="rounded-full bg-primary px-6 py-3 shadow-lg">▶ Începe lecția</span>
             </Button>
           )}
           <div className="absolute left-3 top-3 flex flex-wrap gap-2 text-xs">
-            <span className="rounded-full bg-black/55 px-3 py-1 font-semibold text-white">
+            <span className="rounded-full bg-foreground/55 px-3 py-1 font-semibold text-background">
               Profesor AI · {paMaterieName(config.materie)}
             </span>
             {vorbesteAcum && (
@@ -335,11 +337,11 @@ export function SesiuneProfesorAi({
               </span>
             )}
             {pending && (
-              <span className="rounded-full bg-black/55 px-3 py-1 text-white">se gândește…</span>
+              <span className="rounded-full bg-foreground/55 px-3 py-1 text-background">se gândește…</span>
             )}
           </div>
           <div className="absolute right-3 top-3 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-black/55 px-3 py-1 text-xs font-semibold text-white">
+            <span className="inline-flex items-center gap-1 rounded-full bg-foreground/55 px-3 py-1 text-xs font-semibold text-background">
               <Clock className="h-3.5 w-3.5" />{" "}
               {gratuit ? "cont de test · fără plată" : `${min}:${String(sec).padStart(2, "0")}`}
             </span>
@@ -350,18 +352,18 @@ export function SesiuneProfesorAi({
                 interrupt();
               }}
               aria-label={sunet ? "Oprește vocea" : "Pornește vocea"}
-              className="grid h-8 w-8 place-items-center rounded-full bg-black/55 text-white"
+              className="grid h-8 w-8 place-items-center rounded-full bg-foreground/55 text-background"
             >
               {sunet ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
             </Button>
           </div>
         </div>
         {tabla && (
-          <div className="border-t border-white/10 bg-[#13321f] px-5 py-4">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-200/80">
+          <div className="border-t border-border bg-foreground px-5 py-4">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-background/80">
               Tabla
             </p>
-            <pre className="mt-1 whitespace-pre-wrap font-mono text-sm leading-relaxed text-emerald-50">
+            <pre className="mt-1 whitespace-pre-wrap font-mono text-sm leading-relaxed text-background">
               {tabla}
             </pre>
           </div>
@@ -449,7 +451,7 @@ export function SesiuneProfesorAi({
             onClick={microfon}
             disabled={terminat}
             aria-label={asculta ? "Oprește microfonul" : "Vorbește cu profesorul"}
-            className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${asculta ? "bg-destructive text-white" : "bg-primary text-primary-foreground"} disabled:opacity-50`}
+            className={`grid h-11 w-11 shrink-0 place-items-center rounded-full ${asculta ? "bg-destructive text-background" : "bg-primary text-primary-foreground"} disabled:opacity-50`}
           >
             {asculta ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
           </Button>
@@ -459,7 +461,7 @@ export function SesiuneProfesorAi({
           <input
             id="pa-text"
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => { if (vorbesteAcum) interrupt(); setText(e.target.value); }}
             disabled={terminat}
             placeholder={asculta ? "Te ascult…" : "Scrie sau apasă microfonul și vorbește"}
             className="h-11 min-w-0 flex-1 rounded-full border border-border bg-background px-4 text-sm"
@@ -478,18 +480,16 @@ export function SesiuneProfesorAi({
               <Square className="h-4 w-4" />
             </Button>
           )}
-          { (
-            <Button
+          <Button
               type="submit"
               disabled={terminat || !text.trim()}
               aria-label="Trimite"
               className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border disabled:opacity-50"
             >
               <Send className="h-4 w-4" />
-            </Button>
-          )}
+          </Button>
         </form>
-        {modAvatar === "animat" && (
+        {modAvatar === "indisponibil" && (
           <p className="px-5 pb-3 text-[11px] text-muted-foreground">
             Vocea dispozitivului nu este folosită ca înlocuitor al vocii realiste.
           </p>

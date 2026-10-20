@@ -325,15 +325,24 @@ export const profesorAiAvatar = createServerFn({ method: "POST" })
     const s = await citesteSesiune(data.token, context.userId);
     const key = process.env["HEYGEN_API_KEY"];
     if (!s || !key)
-      return { heygen: null as null | { token: string; avatarId: string; voiceId?: string } };
+      return {
+        heygen: null as null | { token: string; avatarId: string; voiceId?: string },
+        error: !s ? "Sesiunea nu este validă." : "Serviciul de avatar video nu este configurat.",
+      };
     const res = await fetch("https://api.heygen.com/v1/streaming.create_token", {
       method: "POST",
       headers: { "x-api-key": key, "Content-Type": "application/json" },
     }).catch(() => null);
-    if (!res?.ok) return { heygen: null };
+    if (!res?.ok) {
+      console.error(`[profesor-ai] avatar HTTP ${res?.status ?? "network"}`);
+      return { heygen: null, error: res?.status === 404
+        ? "Serviciul video HeyGen configurat nu este disponibil (404). Lecția poate continua în scris."
+        : "HeyGen nu a putut porni avatarul video. Lecția poate continua în scris." };
+    }
     const j = (await res.json().catch(() => ({}))) as { data?: { token?: string } };
-    if (!j.data?.token) return { heygen: null };
+    if (!j.data?.token) return { heygen: null, error: "HeyGen nu a emis accesul pentru avatarul video." };
     return {
+      error: undefined,
       heygen: {
         token: j.data.token,
         avatarId: process.env["HEYGEN_AVATAR_ID"] || "Ann_Therapist_public",
