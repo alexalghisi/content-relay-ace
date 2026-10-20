@@ -16,8 +16,14 @@ export default defineConfig({
   vite: {
     // LiveAvatar SDK imports Node's "events"; resolve it to the browser-safe npm package
     // (an exact file path bypasses the empty builtin stub).
-    resolve: {
-      alias: [{ find: /^events$/, replacement: fileURLToPath(new URL("./node_modules/events/events.js", import.meta.url)) }],
-    },
+    plugins: [
+      {
+        name: "browser-events-polyfill",
+        enforce: "pre",
+        resolveId(id) {
+          if (id === "events") return fileURLToPath(new URL("./node_modules/events/events.js", import.meta.url));
+        },
+      },
+    ],
   },
 });
