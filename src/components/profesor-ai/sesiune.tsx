@@ -222,7 +222,7 @@ export function SesiuneProfesorAi({
       let rostit = false;
       const filler = window.setTimeout(() => {
         if (!rostit && rev === revision.current && !ascuns) { rostit = true; void vorbeste("Hmm, stai puțin."); }
-      }, 1500);
+      }, 2500);
       const fail = (error: string, cod?: string) => {
         if (rev !== revision.current) return;
         setEroare(error);
@@ -245,8 +245,8 @@ export function SesiuneProfesorAi({
             const r = await profesorAiRaspunde({ data: { token, mesaje: fereastra(istoric) } }).catch(() => null);
             if (rev !== revision.current) return;
             if (r?.ok) {
-              const { sentences, rest } = takeSentences(r.data.vorbit + " ");
-              for (const sn of [...sentences, rest.trim()].filter(Boolean)) { rostit = true; void vorbeste(sn); }
+              rostit = true;
+              void vorbeste(r.data.vorbit.replace(/[*#`_]/g, ""));
               if (r.data.tabla) setTabla(r.data.tabla);
               setDeReluat(null);
               messagesRef.current = [...istoric, { role: "assistant", content: r.data.vorbit, tabla: r.data.tabla }];
@@ -258,6 +258,7 @@ export function SesiuneProfesorAi({
         const reader = res.body.getReader();
         const dec = new TextDecoder();
         let full = "";
+        let restVorbit = "";
         let consumed = 0; // câte caractere din partea vorbită au fost deja trimise la voce
         const bubble = () => {
           const { spoken, board } = spokenPart(full);
@@ -279,11 +280,13 @@ export function SesiuneProfesorAi({
               const w = window as unknown as { __paFirstSentence?: number[] };
               (w.__paFirstSentence ??= []).push(Math.round(performance.now() - tSend));
             }
-            rostit = true;
-            void vorbeste(sn.replace(/[*#`_]/g, ""));
+            // Fluent speech: only the first sentence goes out alone (fast start); the rest is
+            // spoken as one continuous utterance, without pauses between sentences.
+            if (!rostit) { rostit = true; void vorbeste(sn.replace(/[*#`_]/g, "")); }
+            else restVorbit += " " + sn;
           }
           if (done) {
-            const tail = spoken.slice(consumed).trim();
+            const tail = (restVorbit + " " + spoken.slice(consumed)).replace(/[*#`_]/g, "").replace(/\s+/g, " ").trim();
             if (tail) { rostit = true; void vorbeste(tail); }
             break;
           }
