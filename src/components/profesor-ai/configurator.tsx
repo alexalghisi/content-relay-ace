@@ -199,7 +199,7 @@ export function ConfiguratorProfesorAi() {
             ) : (
               <CreditCard className="mr-2 h-4 w-4" />
             )}
-            {acces?.gratuit ? "Începe sesiunea (cont de test)" : `Plătește ${pret} lei și începe`}
+            {acces?.gratuit ? "Începe sesiunea (cont de test)" : "În curând"}
             <ArrowRight className="ml-2 h-4 w-4" />
           </button>
         )}
