@@ -4,6 +4,7 @@ import { faqJsonLd } from "@/components/seo-landing";
 import { BlocajeBreadcrumb } from "@/components/blocaje/blocaj-card";
 import { ConfiguratorProfesorAi } from "@/components/profesor-ai/configurator";
 import { breadcrumbLd, SITE } from "@/lib/blocaje-seo";
+import hannahDemo from "@/assets/hannah-matematica-demo.mp4.asset.json";
 
 const PATH = "/profesor-ai";
 const URL = `${SITE}${PATH}`;
@@ -47,6 +48,7 @@ export const Route = createFileRoute("/profesor-ai/")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: `${SITE}/promo-profesor-ai.jpg` },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
@@ -91,14 +93,21 @@ function Page() {
             clar.
           </p>
           <div className="mt-6 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-            <img
-          className="aspect-video w-full bg-foreground object-cover"
-          src="/promo-profesor-ai.jpg"
-          width={1280}
-          height={720}
-          alt="Profesoara AI care îți predă lecția live, față în față"
-          loading="lazy"
-        />
+            <video
+              className="aspect-video w-full bg-foreground object-cover"
+              poster="/promo-profesor-ai.jpg"
+              width={1280}
+              height={720}
+              autoPlay
+              muted
+              loop
+              playsInline
+              controls
+              preload="metadata"
+              aria-label="Exemplu video: Hannah explică o ecuație în română unui elev"
+            >
+              <source src={hannahDemo.url} type="video/mp4" />
+            </video>
           </div>
         </header>
         <div id="incepe">
