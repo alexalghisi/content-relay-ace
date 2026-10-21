@@ -75,11 +75,11 @@ function HomePage() {
     <section className="container-page py-12 sm:py-16">
       <div className="grid items-center gap-8 rounded-3xl border border-primary/15 bg-gradient-to-br from-primary-soft/70 to-card p-6 sm:p-10 lg:grid-cols-[1fr_1.15fr]">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full bg-[#facc15] px-3 py-1 text-xs font-bold text-[#1e1b4b]">NOU · PREMIUM</p>
-          <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Profesor AI: o lecție live, în română, oricând</h2>
+          <p className="inline-flex items-center gap-2 rounded-full bg-[#facc15] px-3 py-1 text-xs font-bold text-[#1e1b4b]">NOU · 15 MINUTE GRATUIT</p>
+          <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Profesor AI: primele 15 minute gratuit, live, în română</h2>
           <p className="mt-3 leading-7 text-muted-foreground">Alegi materia, nivelul și durata, apoi vorbești sau scrii. Profesorul îți explică, îți dă exerciții, te corectează și verifică dacă ai înțeles.</p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link to="/profesor-ai" className="btn-primary h-12 px-6">Începe o lecție cu Profesorul AI <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <Link to="/profesor-ai" className="btn-primary h-12 px-6">Începe lecția gratuită de 15 minute <ArrowRight className="ml-2 h-4 w-4" /></Link>
           </div>
         </div>
         <img

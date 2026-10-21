@@ -500,7 +500,8 @@ function CityPage() {
             <Link to="/profesor-ai" className="text-primary underline">
               Profesorul AI
             </Link>{" "}
-            explică pe loc orice lecție, la orice oră, alături de profesorii reali de pe platformă.
+            explică pe loc orice lecție, la orice oră; primele 15 minute sunt gratuite pentru
+            fiecare elev.
           </p>
         </section>
 
