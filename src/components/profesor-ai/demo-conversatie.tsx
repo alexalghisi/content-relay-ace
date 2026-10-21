@@ -106,7 +106,7 @@ export function DemoConversatie() {
         {tabla ? <>Tabla: {tabla}</> : <span className="opacity-60">Tabla</span>}
       </div>
       <div className="flex h-80 flex-col justify-end gap-2 overflow-hidden p-4">
-        {vizibile.slice(-6).map((r, i) => (
+        {vizibile.slice(-4).map((r, i) => (
           <div
             key={`${idx}-${n}-${i}`}
             className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-6 ${
