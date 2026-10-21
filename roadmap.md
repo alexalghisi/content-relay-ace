@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Repară activarea sunetului lecției pe iPhone; verifică pornirea din apăsare și blocarea redării. Confirmarea auditivă pe iPhone real necesită telefonul proprietarului.
+
 - [x] Ascunde invitația de instalare mobilă și rezervă testarea Profesor AI proprietarului; ceilalți văd „În curând”. Verificat în browser: acces citit pentru proprietar și pornire activă, vizitator anonim fără configurator sau sesiune, banner mobil absent; 28 teste trec. Numai previzualizare.
 
 - [x] Profesor AI: replici simple și deschiderea scurtate; eliminat salutul vocal dublu, modelul/plafonul/protecțiile păstrate. Întrebare reală 7+5: 3,40 sec înainte, 1,91 sec după, răspuns corect și fără erori; variația furnizorului nu permite garantarea timpului. Video neprobat deliberat; numai previzualizare.
