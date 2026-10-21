@@ -61,8 +61,8 @@ export const LECTII_GRATUITE_PE_ZI = () =>
   Math.max(0, Number(process.env["PROFESOR_AI_GRATIS_PE_ZI"] ?? 1)) || 1;
 export const MESAJ_PREMIUM =
   "Lecțiile de 30, 45 și 60 de minute vor fi disponibile cu contul Premium, în curând. Până atunci, lecția de 15 minute este gratuită.";
-export const MESAJ_LIMITA_GRATIS = (n: number) =>
-  `Ai folosit ${n === 1 ? "lecția gratuită" : `cele ${n} lecții gratuite`} de azi. Revino mâine sau cere un meditator real.`;
+export const MESAJ_LIMITA_GRATIS = (_n: number) =>
+  "Ai folosit deja lecția gratuită de 15 minute. Lecțiile mai lungi vin în curând; până atunci poți cere un meditator real.";
 
 async function sigileaza(cfg: PaConfig, uid: string, gratuit: boolean, exp: number) {
   const { seal } = await import("./ai-gateway.server");
