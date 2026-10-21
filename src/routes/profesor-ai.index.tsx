@@ -9,9 +9,9 @@ import hannahDemoWebm from "@/assets/hannah-matematica-demo.webm.asset.json";
 
 const PATH = "/profesor-ai";
 const URL = `${SITE}${PATH}`;
-const TITLE = "Profesor AI live, în română: lecții video interactive | MeditatiiDirect.ro";
+const TITLE = "Profesor AI gratuit 15 minute: lecție live, în română | MeditatiiDirect.ro";
 const DESCRIPTION =
-  "Profesorul AI îți predă live, cu voce în limba română: alegi materia, nivelul, durata și obiectivul, apoi vorbești sau scrii, primești explicații, exemple și exerciții corectate pe loc.";
+  "Primele 15 minute cu Profesorul AI sunt gratuite pentru fiecare elev: lecție live, cu voce în limba română, la orice materie. Explicații, exemple și exerciții corectate pe loc.";
 
 const FAQS = [
   {
@@ -20,7 +20,11 @@ const FAQS = [
   },
   {
     q: "Cât costă o lecție?",
-    a: "Lecția de 15 minute este gratuită pentru orice elev cu cont, fără card. Lecțiile de 30, 45 și 60 de minute vor fi disponibile cu contul Premium, pe care îl pregătim; nu există abonament ascuns.",
+    a: "Prima lecție de 15 minute este gratuită, fără card. Lecțiile de 30, 45 și 60 de minute vor putea fi cumpărate în curând; nu există abonament ascuns.",
+  },
+  {
+    q: "Cum primesc cele 15 minute gratuite?",
+    a: "Îți faci cont și îți verifici numărul de mobil cu un cod primit prin SMS. Lecția gratuită se acordă o singură dată pentru fiecare elev și fiecare număr de telefon.",
   },
   {
     q: "Pentru cine este?",
@@ -67,6 +71,13 @@ export const Route = createFileRoute("/profesor-ai/")({
           serviceType: "Meditații online cu profesor AI",
           description: DESCRIPTION,
           url: URL,
+          offers: {
+            "@type": "Offer",
+            name: "Prima lecție de 15 minute",
+            price: 0,
+            priceCurrency: "RON",
+            url: `${URL}#incepe`,
+          },
           areaServed: { "@type": "Country", name: "România" },
           provider: { "@id": `${SITE}/#org` },
         }),
@@ -83,10 +94,10 @@ function Page() {
       <div className="grid items-start gap-8 lg:grid-cols-[1.05fr_1fr]">
         <header>
           <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">
-            <BadgeCheck className="h-4 w-4" /> Lecție de probă gratuită · live · în limba română
+            <BadgeCheck className="h-4 w-4" /> Primele 15 minute gratuit · live · în limba română
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-            Profesorul AI: o lecție live, față în față, oricând
+            Profesorul AI: primele 15 minute gratuit, live, oricând
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
             Alegi materia, nivelul, durata și ce vrei să faci. Profesorul îți vorbește, te ascultă,

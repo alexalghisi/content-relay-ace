@@ -1,5 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seoPage } from "@/lib/seo-page";
+import { ghiduriPentruOras } from "@/data/ghiduri-locale";
+import { getSubjectSeo } from "@/data/subjects-seo";
+
+const GHIDURI = ghiduriPentruOras("cluj-napoca");
 
 const SCHOOLS = [
   "Colegiul Național „Emil Racoviță”",
@@ -14,7 +18,7 @@ const SCHOOLS = [
 
 export const Route = createFileRoute("/meditatii-cluj")(seoPage({
   path: "/meditatii-cluj",
-  title: "Meditații Cluj-Napoca — matematică, română, engleză, BAC și EN | MeditatiiDirect.ro",
+  title: "Meditații Cluj-Napoca: matematică, română, engleză, BAC, Evaluare Națională | la domiciliu sau online",
   description: "Meditații în Cluj-Napoca, la domiciliu sau online: postezi gratuit cererea, profesorii din Cluj îți trimit propuneri cu tarif și discuți direct în chat.",
   image: "https://meditatiidirect.ro/og/meditatii/cluj.jpg",
   h1: "Meditații în Cluj-Napoca",
@@ -40,6 +44,24 @@ export const Route = createFileRoute("/meditatii-cluj")(seoPage({
           <p>Mulți elevi de clasa a VIII-a din Cluj se pregătesc pentru admiterea la licee precum:</p>
           <ul className="mt-2 grid gap-1 sm:grid-cols-2">{SCHOOLS.map((s) => <li key={s}>• {s}</li>)}</ul>
           <p className="mt-3">Ultimele medii de admitere se verifică pe site-ul oficial al ISJ Cluj; repartizarea se face după media de la Evaluarea Națională. Vezi <Link to="/evaluare-nationala-cluj" className="text-primary underline">ghidul EN pentru Cluj</Link>.</p>
+        </>
+      ),
+    },
+    {
+      title: "Ghiduri pe materii pentru Cluj-Napoca",
+      body: (
+        <>
+          <p>Pentru fiecare materie avem o pagină cu profesorii din Cluj, tarifele reale de pe platformă și un ghid despre ce să ceri (examen, admitere, cartier, online):</p>
+          <ul className="mt-2 grid gap-1 sm:grid-cols-2">
+            {GHIDURI.map((g) => (
+              <li key={g.materie}>
+                •{" "}
+                <Link to="/meditatii/$materie/$oras" params={{ materie: g.materie, oras: "cluj-napoca" }} className="text-primary underline">
+                  Meditații {getSubjectSeo(g.materie)?.nameLower ?? g.materie} în Cluj-Napoca
+                </Link>
+              </li>
+            ))}
+          </ul>
         </>
       ),
     },
