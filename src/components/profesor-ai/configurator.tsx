@@ -59,7 +59,7 @@ export function ConfiguratorProfesorAi() {
   }, [user]);
 
   const premium = cfg.durata !== DURATA_GRATUITA;
-  const blocatPremium = !!user && !acces?.gratuit && premium && acces?.premiumActiv === false;
+  const durate = acces?.gratuit || acces?.premiumActiv ? PA_DURATE : [DURATA_GRATUITA];
   const lectieGratuita = !user || acces?.gratuit || premium ? null : acces?.lectieGratuita;
   const faraLectii = lectieGratuita === "folosita";
   const neverificat = lectieGratuita === "neverificat";
@@ -137,7 +137,7 @@ export function ConfiguratorProfesorAi() {
       <fieldset className="mt-5">
         <legend className="text-sm font-bold">Durata ședinței</legend>
         <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-5">
-          {PA_DURATE.map((d) => {
+          {durate.map((d) => {
             const esteGratuit = d === DURATA_GRATUITA;
             return (
               <button
@@ -215,9 +215,7 @@ export function ConfiguratorProfesorAi() {
           <button
             type="button"
             onClick={porneste}
-            disabled={
-              pending || acces?.aiDisponibil === false || blocatPremium || faraLectii || neverificat
-            }
+            disabled={pending || acces?.aiDisponibil === false || faraLectii || neverificat}
             className="btn-primary h-12 px-6 disabled:opacity-60"
           >
             {pending ? (
@@ -236,16 +234,10 @@ export function ConfiguratorProfesorAi() {
           </button>
         )}
       </div>
-      {blocatPremium && (
-        <p className="mt-3 text-sm text-muted-foreground">
-          Lecțiile de 30, 45, 60 și 90 de minute vor putea fi cumpărate cu contul Premium, în
-          curând. Până atunci, prima lecție de {DURATA_GRATUITA} minute este gratuită.
-        </p>
-      )}
       {faraLectii && (
         <p className="mt-3 text-sm text-muted-foreground">
-          Ai folosit deja lecția gratuită de {DURATA_GRATUITA} minute. Lecțiile mai lungi vor fi
-          disponibile cu contul Premium, în curând. Până atunci poți{" "}
+          Ai folosit deja lecția gratuită de {DURATA_GRATUITA} minute. Lecțiile de 30, 60, 90 și 120
+          de minute revin în curând. Până atunci poți{" "}
           <Link to="/meditatii" className="font-semibold text-primary underline">
             cere un meditator real
           </Link>
@@ -253,16 +245,6 @@ export function ConfiguratorProfesorAi() {
         </p>
       )}
       {neverificat && <VerificareTelefon onVerificat={incarcaAcces} />}
-      {user && acces && !acces.aiDisponibil && (
-        <p role="alert" className="mt-3 rounded-xl bg-warning/10 px-4 py-2 text-sm text-foreground">
-          Profesorul AI este temporar indisponibil (creditele AI ale platformei s-au epuizat). Nu
-          poți porni o sesiune acum și nu ți se percepe nimic. Încearcă mai târziu sau{" "}
-          <Link to="/meditatii" className="font-semibold text-primary underline">
-            cere un meditator real
-          </Link>
-          .
-        </p>
-      )}
       {user && acces?.gratuit && acces.aiDisponibil && (
         <p className="mt-3 text-xs text-muted-foreground">
           Cont de test: fără plată și fără limită zilnică internă. Funcționează cât timp platforma
