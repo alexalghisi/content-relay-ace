@@ -53,6 +53,16 @@ async function esteGratuit(userId: string): Promise<boolean> {
   return poateTestaProfesorAi(userId);
 }
 
+/** Lecția de probă: durata gratuită pentru orice elev cu cont; restul duratelor = Premium (în curând). */
+export const DURATA_GRATUITA: PaDurata = 15;
+/** Câte lecții gratuite de probă pe zi per cont (plafon de cost); suprascris cu PROFESOR_AI_GRATIS_PE_ZI. */
+export const LECTII_GRATUITE_PE_ZI = () =>
+  Math.max(0, Number(process.env["PROFESOR_AI_GRATIS_PE_ZI"] ?? 1)) || 1;
+export const MESAJ_PREMIUM =
+  "Lecțiile de 30, 45 și 60 de minute vor fi disponibile cu contul Premium, în curând. Până atunci, lecția de 15 minute este gratuită.";
+export const MESAJ_LIMITA_GRATIS = (n: number) =>
+  `Ai folosit ${n === 1 ? "lecția gratuită" : `cele ${n} lecții gratuite`} de azi. Revino mâine sau cere un meditator real.`;
+
 async function sigileaza(cfg: PaConfig, uid: string, gratuit: boolean, exp: number) {
   const { seal } = await import("./ai-gateway.server");
   const s: Sesiune = { kind: "profesor-ai", uid, gratuit, exp, ...cfg };
@@ -60,7 +70,6 @@ async function sigileaza(cfg: PaConfig, uid: string, gratuit: boolean, exp: numb
 }
 
 async function citesteSesiune(token: string, uid: string): Promise<Sesiune | null> {
-  if (!poateTestaProfesorAi(uid)) return null;
   const { unseal } = await import("./ai-gateway.server");
   const s = await unseal<Sesiune>(token);
   if (!s || s.kind !== "profesor-ai" || s.uid !== uid) return null;
@@ -110,12 +119,18 @@ async function stripe(path: string, body?: URLSearchParams) {
 export const profesorAiAcces = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { aiStare } = await import("./ai-gateway.server");
+    const { aiStare, cotaRamasa } = await import("./ai-gateway.server");
+    const limita = LECTII_GRATUITE_PE_ZI();
     return {
       poateTesta: poateTestaProfesorAi(context.userId),
       gratuit: await esteGratuit(context.userId),
       preturi: tabelPreturi(),
       plataActiva: !!process.env["STRIPE_SECRET_KEY"],
+      // Premium (30/45/60 min) nu se vinde încă: fără firmă, fără plăți.
+      premiumActiv: false,
+      durataGratuita: DURATA_GRATUITA,
+      lectiiGratuitePeZi: limita,
+      lectiiGratuiteRamase: await cotaRamasa(context.userId, "profesor-ai-gratis", limita),
       // Un furnizor AI poate răspunde acum (Lovable fără pauză sau rezerva Gemini).
       aiDisponibil: (await aiStare()).ok,
     };
@@ -128,9 +143,8 @@ export const profesorAiPorneste = createServerFn({ method: "POST" })
   .handler(
     async ({ data, context }): Promise<PaResult<{ token?: string; checkoutUrl?: string }>> => {
       const cfg = data as PaConfig;
-      if (!poateTestaProfesorAi(context.userId)) return { ok: false, error: "În curând" };
       // Nu pornim (și mai ales nu încasăm) o sesiune dacă furnizorul AI e indisponibil.
-      const { aiStare } = await import("./ai-gateway.server");
+      const { aiStare, takeQuota } = await import("./ai-gateway.server");
       const stare = await aiStare();
       if (!stare.ok) return { ok: false, error: stare.mesaj, cod: stare.kind };
       if (await esteGratuit(context.userId)) {
@@ -139,6 +153,16 @@ export const profesorAiPorneste = createServerFn({ method: "POST" })
           data: { token: await sigileaza(cfg, context.userId, true, Date.now() + 24 * 3600_000) },
         };
       }
+      // Elevi: lecția de 15 minute e gratuită (plafon pe zi); 30/45/60 = Premium, încă nevândut.
+      if (cfg.durata === DURATA_GRATUITA) {
+        const limita = LECTII_GRATUITE_PE_ZI();
+        const q = await takeQuota(context.userId, "profesor-ai-gratis", limita);
+        if (!q.ok) return { ok: false, error: MESAJ_LIMITA_GRATIS(limita), cod: "limita_gratis" };
+        const exp = Date.now() + (DURATA_GRATUITA + 2) * 60_000;
+        return { ok: true, data: { token: await sigileaza(cfg, context.userId, false, exp) } };
+      }
+      if (!process.env["STRIPE_SECRET_KEY"])
+        return { ok: false, error: MESAJ_PREMIUM, cod: "premium" };
       const lei = pretSesiune(cfg.materie, cfg.durata, tabelPreturi());
       const email = typeof context.claims.email === "string" ? context.claims.email : "";
       const p = new URLSearchParams({
@@ -183,7 +207,6 @@ export const profesorAiConfirma = createServerFn({ method: "POST" })
       .parse(d),
   )
   .handler(async ({ data, context }): Promise<PaResult<{ token: string; config: PaConfig }>> => {
-    if (!poateTestaProfesorAi(context.userId)) return { ok: false, error: "În curând" };
     const s = await stripe(`checkout/sessions/${data.plata}`);
     if (!s) return { ok: false, error: "Nu am putut verifica plata." };
     if (s.payment_status !== "paid") return { ok: false, error: "Plata nu a fost finalizată." };

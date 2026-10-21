@@ -4,7 +4,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { PaConfig } from "@/lib/profesor-ai";
-import { poateTestaProfesorAi } from "@/lib/profesor-ai-access";
 
 const body = z.object({
   token: z.string().max(4000),
@@ -34,7 +33,6 @@ export const Route = createFileRoute("/api/profesor-ai-stream")({
         const { data: cl } = await sb.auth.getClaims(jwt);
         const userId = typeof cl?.claims?.sub === "string" ? cl.claims.sub : undefined;
         if (!userId) return err(401, "Autentifică-te din nou.", "auth_user");
-        if (!poateTestaProfesorAi(userId)) return err(403, "În curând", "preview_only");
 
         const parsed = body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return err(400, "Cerere invalidă.");

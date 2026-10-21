@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { poateTestaProfesorAi } from "@/lib/profesor-ai-access";
 import { SesiuneProfesorAi } from "@/components/profesor-ai/sesiune";
 import { PA_TOKEN_KEY, salveazaToken } from "@/components/profesor-ai/configurator";
 import { profesorAiConfirma, profesorAiSesiune } from "@/lib/profesor-ai.functions";
@@ -37,7 +36,7 @@ export const Route = createFileRoute("/profesor-ai/sesiune")({
 function AccesTest() {
   const { user, loading } = useAuth();
   if (loading) return <div className="card-soft h-64 animate-pulse" aria-busy="true" />;
-  if (!poateTestaProfesorAi(user?.id)) return <h1 className="py-16 text-center text-2xl font-bold">În curând</h1>;
+  if (!user) return <h1 className="py-16 text-center text-2xl font-bold">Autentifică-te ca să începi lecția.</h1>;
   return <Pornire />;
 }
 
