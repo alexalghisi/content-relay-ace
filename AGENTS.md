@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Email signup stores the entered phone as unverified user metadata; Profesor AI pre-fills it but independently validates and verifies it by SMS before granting access. Never treat signup metadata as proof of phone ownership.
+
 - Daily SEO monitoring uses a secret-authenticated public hook, server-only Semrush and admin-readable snapshots to protect quota.
 - Claim each Romanian day with a unique report row before Semrush for idempotency.
 - Preserve TanStack leaf-route metadata and request-first subject CTAs; this keeps indexable subject content separate from the private proposal workflow.
@@ -18,5 +20,4 @@
 - Simulare AI (/simulare-ai) and Meditator AI (/meditator-ai) call the Lovable AI gateway only from server functions in src/lib/simulare-ai.functions.ts, behind requireSupabaseAuth and a per-account daily quota (edge-cache counter in src/lib/ai-gateway.server.ts). The generated test with its answer key travels to the browser only AES-GCM sealed; grading decrypts it, grades multiple choice deterministically and asks the model only for written answers (student text is delimited and treated as data). Pages stay public SSR SEO content; the AI widgets render only for signed-in users.
 - Profesor AI, avatar (LiveAvatar/HeyGen) and AI gateway error rules live in src/lib/AGENTS.md.
 - The mobile installation banner is temporarily unmounted from the shared root; preserve the PWA assets so existing installations remain usable.
-- Profesor AI acces: contul de test (poateTestaProfesorAi) = gratuit, orice durată. Elevii primesc lecția de DURATA_LECTIE_GRATUITA (15 min) o singură dată: email confirmat + mobil verificat prin cod SMS (GatewayAPI, cod sigilat AES-GCM, 10 min, max. CODURI_SMS_PE_ZI), înregistrat în `profesor_ai_lectii_gratuite` (un rând per cont și per hash de telefon, doar service_role; logica pură în src/lib/lectie-gratuita.ts). Acum se afișează doar 15 min; 30/60/90/120 apar când premiumActiv=true (fără prețuri afișate până la decizia proprietarului). Statistica de utilizare: /admin/profesor-ai. Nu reintroduce prețuri în UI fără decizia proprietarului.
-- Ghiduri locale (src/data/ghiduri-locale.ts): conținut editorial scris de mână pentru combinații materie × oraș cu cerere reală de căutare (Google Autocomplete RO). O combinație cu ghid este indexabilă și intră în sitemap chiar fără anunțuri; ghidurile nu conțin prețuri, număr de profesori sau recenzii (test în ghiduri-locale.test.ts) — datele de piață vin doar din DB.
+- Profesor AI acces: contul de test (poateTestaProfesorAi) = gratuit, orice durată. Elevii cu cont: lecția de DURATA_GRATUITA (15 min) e gratuită o singură dată, după verificare telefon SMS (profesor_ai_utilizatori, scrieri doar server-side cu admin client; reguli pure în profesor-ai-verificare.ts); 30/45/60 = „Premium · în curând” (premiumActiv=false, fără prețuri afișate) până există firmă și plăți. Nu reintroduce prețuri în UI fără decizia proprietarului.

@@ -775,24 +775,48 @@ export type Database = {
         }
         Relationships: []
       }
-      profesor_ai_lectii_gratuite: {
+      profesor_ai_utilizatori: {
         Row: {
-          folosita_la: string | null
-          telefon_hash: string
+          address: string | null
+          code_attempts: number
+          code_expires_at: string | null
+          code_hash: string | null
+          code_sent_at: string | null
+          created_at: string
+          free_lesson_used_at: string | null
+          last_lesson_at: string | null
+          lessons_started: number
+          phone: string | null
+          phone_verified_at: string | null
           user_id: string
-          verificat_la: string
         }
         Insert: {
-          folosita_la?: string | null
-          telefon_hash: string
+          address?: string | null
+          code_attempts?: number
+          code_expires_at?: string | null
+          code_hash?: string | null
+          code_sent_at?: string | null
+          created_at?: string
+          free_lesson_used_at?: string | null
+          last_lesson_at?: string | null
+          lessons_started?: number
+          phone?: string | null
+          phone_verified_at?: string | null
           user_id: string
-          verificat_la?: string
         }
         Update: {
-          folosita_la?: string | null
-          telefon_hash?: string
+          address?: string | null
+          code_attempts?: number
+          code_expires_at?: string | null
+          code_hash?: string | null
+          code_sent_at?: string | null
+          created_at?: string
+          free_lesson_used_at?: string | null
+          last_lesson_at?: string | null
+          lessons_started?: number
+          phone?: string | null
+          phone_verified_at?: string | null
           user_id?: string
-          verificat_la?: string
         }
         Relationships: []
       }
@@ -1439,6 +1463,16 @@ export type Database = {
           source_queue: string
         }
         Returns: number
+      }
+      profesor_ai_statistici: {
+        Args: never
+        Returns: {
+          au_folosit: number
+          confirmati: number
+          lectii: number
+          utilizatori: number
+          verificati: number
+        }[]
       }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }

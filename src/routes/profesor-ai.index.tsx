@@ -20,11 +20,11 @@ const FAQS = [
   },
   {
     q: "Cât costă o lecție?",
-    a: "Prima lecție de 15 minute este gratuită, fără card. Lecțiile de 30, 60, 90 și 120 de minute vor putea fi cumpărate în curând; nu există abonament ascuns.",
+    a: "Prima lecție de 15 minute este gratuită, fără card. Lecțiile de 30, 45 și 60 de minute vor putea fi cumpărate în curând; nu există abonament ascuns.",
   },
   {
     q: "Cum primesc cele 15 minute gratuite?",
-    a: "Îți faci cont, confirmi adresa de email și îți verifici numărul de mobil cu un cod primit prin SMS. Lecția gratuită se acordă o singură dată pentru fiecare elev și fiecare număr de telefon.",
+    a: "Îți faci cont și îți verifici numărul de mobil cu un cod primit prin SMS. Lecția gratuită se acordă o singură dată pentru fiecare elev și fiecare număr de telefon.",
   },
   {
     q: "Pentru cine este?",
