@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Crown, Loader2, Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { VerificareTelefon } from "./verificare-telefon";
 import { profesorAiAcces, profesorAiPorneste } from "@/lib/profesor-ai.functions";
 import {
   PA_DURATE,
@@ -41,24 +42,27 @@ export function ConfiguratorProfesorAi() {
     preturi: TabelPreturi;
     plataActiva: boolean;
     premiumActiv: boolean;
-    lectiiGratuitePeZi: number;
-    lectiiGratuiteRamase: number;
+    telefonVerificat: boolean;
+    lectiaGratuitaFolosita: boolean;
     aiDisponibil: boolean;
   } | null>(null);
   const [pending, setPending] = useState(false);
   const [eroare, setEroare] = useState("");
 
-  useEffect(() => {
-    if (!user) return setAcces(null);
+  const incarcaAcces = () =>
     profesorAiAcces()
       .then(setAcces)
       .catch(() => setAcces(null));
+  useEffect(() => {
+    if (!user) return setAcces(null);
+    incarcaAcces();
   }, [user]);
 
   // Fără cont de test: doar lecția de 15 minute se poate porni; restul = Premium, în curând.
   const premium = cfg.durata !== DURATA_GRATUITA;
   const blocatPremium = !!user && !acces?.gratuit && premium && acces?.premiumActiv === false;
-  const faraLectii = !!user && !acces?.gratuit && !premium && acces?.lectiiGratuiteRamase === 0;
+  const faraLectii = !!user && !acces?.gratuit && !premium && !!acces?.lectiaGratuitaFolosita;
+  const trebuieVerificat = !!user && !!acces && !acces.gratuit && !premium && !acces.telefonVerificat;
   const set = <K extends keyof PaConfig>(k: K, v: PaConfig[K]) => setCfg((c) => ({ ...c, [k]: v }));
 
   const porneste = async () => {
@@ -211,7 +215,7 @@ export function ConfiguratorProfesorAi() {
           <button
             type="button"
             onClick={porneste}
-            disabled={pending || acces?.aiDisponibil === false || blocatPremium || faraLectii}
+            disabled={pending || acces?.aiDisponibil === false || blocatPremium || faraLectii || trebuieVerificat}
             className="btn-primary h-12 px-6 disabled:opacity-60"
           >
             {pending ? (
@@ -238,17 +242,17 @@ export function ConfiguratorProfesorAi() {
       )}
       {faraLectii && (
         <p className="mt-3 text-sm text-muted-foreground">
-          Ai folosit lecția gratuită de azi. Revino mâine sau{" "}
+          Ai folosit deja lecția gratuită. Lecțiile mai lungi vin în curând; până atunci poți{" "}
           <Link to="/meditatii" className="font-semibold text-primary underline">
             cere un meditator real
           </Link>
           .
         </p>
       )}
+      {trebuieVerificat && <VerificareTelefon onVerificat={incarcaAcces} />}
       {user && acces && !acces.aiDisponibil && (
         <p role="alert" className="mt-3 rounded-xl bg-warning/10 px-4 py-2 text-sm text-foreground">
-          Profesorul AI este temporar indisponibil (creditele AI ale platformei s-au epuizat). Nu
-          poți porni o sesiune acum și nu ți se percepe nimic. Încearcă mai târziu sau{" "}
+          Profesorul AI este temporar indisponibil. Încearcă puțin mai târziu sau{" "}
           <Link to="/meditatii" className="font-semibold text-primary underline">
             cere un meditator real
           </Link>

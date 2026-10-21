@@ -5,6 +5,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { poateTestaProfesorAi } from "./profesor-ai-access";
+import { poatePrimiLectiaGratuita } from "./profesor-ai-verificare";
 import {
   PA_DURATE,
   PA_MATERII,
@@ -60,8 +61,8 @@ export const LECTII_GRATUITE_PE_ZI = () =>
   Math.max(0, Number(process.env["PROFESOR_AI_GRATIS_PE_ZI"] ?? 1)) || 1;
 export const MESAJ_PREMIUM =
   "Lecțiile de 30, 45 și 60 de minute vor fi disponibile cu contul Premium, în curând. Până atunci, lecția de 15 minute este gratuită.";
-export const MESAJ_LIMITA_GRATIS = (n: number) =>
-  `Ai folosit ${n === 1 ? "lecția gratuită" : `cele ${n} lecții gratuite`} de azi. Revino mâine sau cere un meditator real.`;
+export const MESAJ_LIMITA_GRATIS = (_n: number) =>
+  "Ai folosit deja lecția gratuită de 15 minute. Lecțiile mai lungi vin în curând; până atunci poți cere un meditator real.";
 
 async function sigileaza(cfg: PaConfig, uid: string, gratuit: boolean, exp: number) {
   const { seal } = await import("./ai-gateway.server");
@@ -119,8 +120,12 @@ async function stripe(path: string, body?: URLSearchParams) {
 export const profesorAiAcces = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { aiStare, cotaRamasa } = await import("./ai-gateway.server");
-    const limita = LECTII_GRATUITE_PE_ZI();
+    const { aiStare } = await import("./ai-gateway.server");
+    const { data: r } = await context.supabase
+      .from("profesor_ai_utilizatori")
+      .select("phone_verified_at, free_lesson_used_at")
+      .eq("user_id", context.userId)
+      .maybeSingle();
     return {
       poateTesta: poateTestaProfesorAi(context.userId),
       gratuit: await esteGratuit(context.userId),
@@ -129,8 +134,8 @@ export const profesorAiAcces = createServerFn({ method: "POST" })
       // Premium (30/45/60 min) nu se vinde încă: fără firmă, fără plăți.
       premiumActiv: false,
       durataGratuita: DURATA_GRATUITA,
-      lectiiGratuitePeZi: limita,
-      lectiiGratuiteRamase: await cotaRamasa(context.userId, "profesor-ai-gratis", limita),
+      telefonVerificat: !!r?.phone_verified_at,
+      lectiaGratuitaFolosita: !!r?.free_lesson_used_at,
       // Un furnizor AI poate răspunde acum (Lovable fără pauză sau rezerva Gemini).
       aiDisponibil: (await aiStare()).ok,
     };
@@ -153,11 +158,27 @@ export const profesorAiPorneste = createServerFn({ method: "POST" })
           data: { token: await sigileaza(cfg, context.userId, true, Date.now() + 24 * 3600_000) },
         };
       }
-      // Elevi: lecția de 15 minute e gratuită (plafon pe zi); 30/45/60 = Premium, încă nevândut.
+      // Elevi: lecția de 15 minute e gratuită o singură dată, cu telefonul verificat prin SMS.
       if (cfg.durata === DURATA_GRATUITA) {
-        const limita = LECTII_GRATUITE_PE_ZI();
-        const q = await takeQuota(context.userId, "profesor-ai-gratis", limita);
-        if (!q.ok) return { ok: false, error: MESAJ_LIMITA_GRATIS(limita), cod: "limita_gratis" };
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { data: r } = await supabaseAdmin
+          .from("profesor_ai_utilizatori")
+          .select("phone_verified_at, free_lesson_used_at, lessons_started")
+          .eq("user_id", context.userId)
+          .maybeSingle();
+        const st = poatePrimiLectiaGratuita(r);
+        if (st === "neverificat")
+          return { ok: false, error: "Verifică-ți telefonul ca să primești lecția gratuită.", cod: "neverificat" };
+        if (st === "folosita") return { ok: false, error: MESAJ_LIMITA_GRATIS(1), cod: "limita_gratis" };
+        const acum = new Date().toISOString();
+        const { data: luat } = await supabaseAdmin
+          .from("profesor_ai_utilizatori")
+          .update({ free_lesson_used_at: acum, last_lesson_at: acum, lessons_started: (r?.lessons_started ?? 0) + 1 })
+          .eq("user_id", context.userId)
+          .is("free_lesson_used_at", null)
+          .select("user_id");
+        if (!luat?.length) return { ok: false, error: MESAJ_LIMITA_GRATIS(1), cod: "limita_gratis" };
+        void takeQuota;
         const exp = Date.now() + (DURATA_GRATUITA + 2) * 60_000;
         return { ok: true, data: { token: await sigileaza(cfg, context.userId, false, exp) } };
       }

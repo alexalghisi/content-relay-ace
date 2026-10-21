@@ -97,6 +97,7 @@ import { Route as VarianteBacalaureatRouteImport } from './routes/variante-bacal
 import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-meditatii'
 import { Route as AdminBacCrawlerRouteImport } from './routes/admin.bac-crawler'
 import { Route as AdminMesajeRouteImport } from './routes/admin.mesaje'
+import { Route as AdminStatisticiRouteImport } from './routes/admin.statistici'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
 import { Route as ApiProfesorAiStreamRouteImport } from './routes/api/profesor-ai-stream'
 import { Route as BacIndexRouteImport } from './routes/bac.index'
@@ -597,6 +598,11 @@ const AdminMesajeRoute = AdminMesajeRouteImport.update({
   path: '/admin/mesaje',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminStatisticiRoute = AdminStatisticiRouteImport.update({
+  id: '/admin/statistici',
+  path: '/admin/statistici',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AnuntSlugRoute = AnuntSlugRouteImport.update({
   id: '/anunt/$slug',
   path: '/anunt/$slug',
@@ -963,6 +969,7 @@ export interface FileRoutesByFullPath {
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
+  '/admin/statistici': typeof AdminStatisticiRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -1105,6 +1112,7 @@ export interface FileRoutesByTo {
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
+  '/admin/statistici': typeof AdminStatisticiRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -1246,6 +1254,7 @@ export interface FileRoutesById {
   '/vreau-sa-dau-meditatii': typeof VreauSaDauMeditatiiRoute
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
+  '/admin/statistici': typeof AdminStatisticiRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -1390,6 +1399,7 @@ export interface FileRouteTypes {
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/admin/mesaje'
+    | '/admin/statistici'
     | '/anunt/$slug'
     | '/api/profesor-ai-stream'
     | '/bac/$materie'
@@ -1532,6 +1542,7 @@ export interface FileRouteTypes {
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/admin/mesaje'
+    | '/admin/statistici'
     | '/anunt/$slug'
     | '/api/profesor-ai-stream'
     | '/blog/$slug'
@@ -1672,6 +1683,7 @@ export interface FileRouteTypes {
     | '/vreau-sa-dau-meditatii'
     | '/admin/bac-crawler'
     | '/admin/mesaje'
+    | '/admin/statistici'
     | '/anunt/$slug'
     | '/api/profesor-ai-stream'
     | '/bac/$materie'
@@ -1815,6 +1827,7 @@ export interface RootRouteChildren {
   VreauSaDauMeditatiiRoute: typeof VreauSaDauMeditatiiRoute
   AdminBacCrawlerRoute: typeof AdminBacCrawlerRoute
   AdminMesajeRoute: typeof AdminMesajeRoute
+  AdminStatisticiRoute: typeof AdminStatisticiRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
   ApiProfesorAiStreamRoute: typeof ApiProfesorAiStreamRoute
   BacMaterieRoute: typeof BacMaterieRouteWithChildren
@@ -2483,6 +2496,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMesajeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/statistici': {
+      id: '/admin/statistici'
+      path: '/admin/statistici'
+      fullPath: '/admin/statistici'
+      preLoaderRoute: typeof AdminStatisticiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/anunt/$slug': {
       id: '/anunt/$slug'
       path: '/anunt/$slug'
@@ -2967,6 +2987,7 @@ const rootRouteChildren: RootRouteChildren = {
   VreauSaDauMeditatiiRoute: VreauSaDauMeditatiiRoute,
   AdminBacCrawlerRoute: AdminBacCrawlerRoute,
   AdminMesajeRoute: AdminMesajeRoute,
+  AdminStatisticiRoute: AdminStatisticiRoute,
   AnuntSlugRoute: AnuntSlugRoute,
   ApiProfesorAiStreamRoute: ApiProfesorAiStreamRoute,
   BacMaterieRoute: BacMaterieRouteWithChildren,

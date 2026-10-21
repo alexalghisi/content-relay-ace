@@ -134,6 +134,13 @@
       "when": 1791997820496,
       "tag": "0018_request_teacher_notified_at",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1792612493979,
+      "tag": "0019_migration",
+      "breakpoints": true
     }
   ]
 }
