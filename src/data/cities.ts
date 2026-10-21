@@ -52,7 +52,6 @@ export const CITIES: CityInfo[] = [
   { slug: "slobozia",        name: "Slobozia",        county: "Ialomița",   population: "45.000",      matchLocation: ["slobozia"], landmark: "CN Mihai Viteazul", priceIndex: 0.80 },
   { slug: "sfantu-gheorghe", name: "Sfântu Gheorghe", county: "Covasna",    population: "54.000",      matchLocation: ["sfântu gheorghe", "sfantu gheorghe", "sf. gheorghe"], landmark: "CN Mihai Viteazul", priceIndex: 0.82 },
   { slug: "turda",           name: "Turda",           county: "Cluj",       population: "43.000",      matchLocation: ["turda"], landmark: "CN Mihai Viteazul", priceIndex: 0.88 },
-  // Reședințe de județ lipsă + orașe mari (populație: recensământul 2021)
   { slug: "targu-jiu",       name: "Târgu Jiu",       county: "Gorj",       population: "73.500",      matchLocation: ["târgu jiu", "targu jiu", "tg jiu", "tg. jiu"], landmark: "CN Tudor Vladimirescu & Univ. Constantin Brâncuși", priceIndex: 0.88 },
   { slug: "alexandria",      name: "Alexandria",      county: "Teleorman",  population: "40.400",      matchLocation: ["alexandria"], landmark: "CN Alexandru Ioan Cuza", priceIndex: 0.82 },
   { slug: "miercurea-ciuc",  name: "Miercurea Ciuc",  county: "Harghita",   population: "34.500",      matchLocation: ["miercurea ciuc", "miercurea-ciuc"], landmark: "Liceul Teoretic Octavian Goga", priceIndex: 0.85 },
@@ -88,5 +87,4 @@ export const CITIES: CityInfo[] = [
 export const CITY_SLUGS = CITIES.map((c) => c.slug);
 export const getCityBySlug = (slug: string) => CITIES.find((c) => c.slug === slug);
 
-/** Alte orașe din același județ (pentru legături interne locale). */
 export const citiesInCounty = (city: CityInfo) => CITIES.filter((c) => c.county === city.county && c.slug !== city.slug);
