@@ -3,6 +3,8 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Crown, Loader2, Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { profesorAiAcces, profesorAiPorneste } from "@/lib/profesor-ai.functions";
+import { DURATA_LECTIE_GRATUITA, type StareLectieGratuita } from "@/lib/lectie-gratuita";
+import { VerificareTelefon } from "./verificare-telefon";
 import {
   PA_DURATE,
   PA_MATERII,
@@ -13,8 +15,7 @@ import {
   type TabelPreturi,
 } from "@/lib/profesor-ai";
 
-/** Durata lecției gratuite de probă; restul duratelor sunt Premium (în curând). */
-const DURATA_GRATUITA: PaDurata = 15;
+const DURATA_GRATUITA: PaDurata = DURATA_LECTIE_GRATUITA;
 
 export const PA_TOKEN_KEY = "profesor-ai-token";
 
@@ -41,24 +42,27 @@ export function ConfiguratorProfesorAi() {
     preturi: TabelPreturi;
     plataActiva: boolean;
     premiumActiv: boolean;
-    lectiiGratuitePeZi: number;
-    lectiiGratuiteRamase: number;
+    lectieGratuita: StareLectieGratuita;
     aiDisponibil: boolean;
   } | null>(null);
   const [pending, setPending] = useState(false);
   const [eroare, setEroare] = useState("");
 
-  useEffect(() => {
-    if (!user) return setAcces(null);
+  const incarcaAcces = () =>
     profesorAiAcces()
       .then(setAcces)
       .catch(() => setAcces(null));
+
+  useEffect(() => {
+    if (!user) return setAcces(null);
+    incarcaAcces();
   }, [user]);
 
-  // Fără cont de test: doar lecția de 15 minute se poate porni; restul = Premium, în curând.
   const premium = cfg.durata !== DURATA_GRATUITA;
   const blocatPremium = !!user && !acces?.gratuit && premium && acces?.premiumActiv === false;
-  const faraLectii = !!user && !acces?.gratuit && !premium && acces?.lectiiGratuiteRamase === 0;
+  const lectieGratuita = !user || acces?.gratuit || premium ? null : acces?.lectieGratuita;
+  const faraLectii = lectieGratuita === "folosita";
+  const neverificat = lectieGratuita === "neverificat";
   const set = <K extends keyof PaConfig>(k: K, v: PaConfig[K]) => setCfg((c) => ({ ...c, [k]: v }));
 
   const porneste = async () => {
@@ -132,7 +136,7 @@ export function ConfiguratorProfesorAi() {
 
       <fieldset className="mt-5">
         <legend className="text-sm font-bold">Durata ședinței</legend>
-        <div className="mt-2 grid grid-cols-4 gap-2">
+        <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-5">
           {PA_DURATE.map((d) => {
             const esteGratuit = d === DURATA_GRATUITA;
             return (
@@ -193,7 +197,7 @@ export function ConfiguratorProfesorAi() {
               ? `${cfg.durata} minute · fără plată și fără limită zilnică`
               : premium
                 ? `${cfg.durata} minute · disponibil cu contul Premium, pe care îl pregătim`
-                : `${cfg.durata} minute · lecție de probă, fără card${acces ? ` · ${acces.lectiiGratuitePeZi} pe zi` : ""}`}
+                : `${cfg.durata} minute · prima lecție, fără card, o singură dată pe elev`}
           </p>
         </div>
         {loading ? (
@@ -211,7 +215,9 @@ export function ConfiguratorProfesorAi() {
           <button
             type="button"
             onClick={porneste}
-            disabled={pending || acces?.aiDisponibil === false || blocatPremium || faraLectii}
+            disabled={
+              pending || acces?.aiDisponibil === false || blocatPremium || faraLectii || neverificat
+            }
             className="btn-primary h-12 px-6 disabled:opacity-60"
           >
             {pending ? (
@@ -232,19 +238,21 @@ export function ConfiguratorProfesorAi() {
       </div>
       {blocatPremium && (
         <p className="mt-3 text-sm text-muted-foreground">
-          Lecțiile de 30, 45 și 60 de minute vor fi disponibile cu contul Premium, în curând. Până
-          atunci poți face gratuit lecția de {DURATA_GRATUITA} minute.
+          Lecțiile de 30, 45, 60 și 90 de minute vor putea fi cumpărate cu contul Premium, în
+          curând. Până atunci, prima lecție de {DURATA_GRATUITA} minute este gratuită.
         </p>
       )}
       {faraLectii && (
         <p className="mt-3 text-sm text-muted-foreground">
-          Ai folosit lecția gratuită de azi. Revino mâine sau{" "}
+          Ai folosit deja lecția gratuită de {DURATA_GRATUITA} minute. Lecțiile mai lungi vor fi
+          disponibile cu contul Premium, în curând. Până atunci poți{" "}
           <Link to="/meditatii" className="font-semibold text-primary underline">
             cere un meditator real
           </Link>
           .
         </p>
       )}
+      {neverificat && <VerificareTelefon onVerificat={incarcaAcces} />}
       {user && acces && !acces.aiDisponibil && (
         <p role="alert" className="mt-3 rounded-xl bg-warning/10 px-4 py-2 text-sm text-foreground">
           Profesorul AI este temporar indisponibil (creditele AI ale platformei s-au epuizat). Nu
@@ -267,8 +275,9 @@ export function ConfiguratorProfesorAi() {
         </p>
       )}
       <p className="mt-4 text-xs text-muted-foreground">
-        Lecția de probă nu cere card. Profesorul AI poate greși; pentru pregătire de examen îți
-        recomandăm și un meditator real.
+        Prima lecție de {DURATA_GRATUITA} minute este gratuită, o singură dată pe elev, după
+        confirmarea emailului și a telefonului. Profesorul AI poate greși; pentru pregătire de
+        examen îți recomandăm și un meditator real.
       </p>
     </div>
   );
