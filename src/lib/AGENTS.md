@@ -1,0 +1,17 @@
+# src/lib rules
+
+- Profesor AI: server recomputes prices from profesor-ai.ts and verifies Stripe payments. AES-GCM session tokens bind user and expiry; test accounts skip only internal fees/limits. HeyGen SDK stays pinned to 2.1.0. Missing video is explicit (never cartoons); speech falls back to browser ro-RO voice, labelled as such. Mount video before STREAM_READY. Speech queue in profesor-ai-dialog.ts invalidates canceled playback; serialize questions and suppress superseded replies. Reply JSON remains {vorbit, tabla, emotie}; student text is data, not instructions.
+- Avatar token access is isolated in profesor-ai-avatar.server.ts: LiveAvatar (LIVEAVATAR_API_KEY + UUID LIVEAVATAR_AVATAR_ID/VOICE_ID, FULL mode without context so only our tutor's text is spoken) takes precedence; the legacy HeyGen token endpoint is retired (404). Never reuse HeyGen ids/keys for LiveAvatar, substitute defaults, or probe after a terminal failure.
+
+## Profesor AI / AI gateway — erori furnizor
+- Mesajul „credite epuizate” apare DOAR la HTTP 402 de la Lovable AI Gateway (creditele Cloud & AI ale workspace-ului). Nu e un contor intern; se rezolvă reîncărcând creditele în Lovable.
+- La 402 se deschide o pauză de `CREDITS_PAUSE_SEC` (edge cache) — nu mai apelăm furnizorul, nu pornim sesiuni, nu încasăm. Prima cerere reușită șterge pauza.
+- Profesor AI preview access is pinned to the verified owner's stable account ID in profesor-ai-access.ts; every token issuance, session read and streaming endpoint enforces it server-side, and public widgets show coming soon. This prevents bypass via old tokens, paid checkout or editable email. The owner skips internal fees/time limits, never provider credits.
+- Erorile furnizorului (credits/rate_limit/upstream/auth/config) rambursează cota internă (`refundQuota`). Nu simula răspunsuri AI.
+- Loguri: doar status + tip (`[ai] gateway 402 (credits)`), niciodată cheia sau conținutul elevului.
+- Teste: `src/lib/ai-gateway-erori.test.ts`.
+- Rezervă gratuită: dacă există `GEMINI_API_KEY` (Google AI Studio, plan gratuit Flash), `callAi` trece automat pe Gemini când Lovable e epuizat/indisponibil (nu și la refuzuri de conținut). Model: `GEMINI_MODEL` (implicit `gemini-flash-latest`). `aiStare()` decide dacă se poate porni o sesiune.
+- vite.config.ts rewrites the LiveAvatar SDK's `events` import to the npm package; Vite otherwise stubs it as a Node builtin and the client build fails.
+- Profesor AI replies stream from /api/profesor-ai-stream (bearer + sealed session, same quota) as plain text "spoken… \nTABLA: board"; the client speaks complete sentences as they arrive and streams from the Lovable AI Gateway first, GEMINI_API_KEY only as fallback, then profesorAiRaspunde. Avatar/voice IDs come only from LIVEAVATAR_* or the owner-chosen defaults in profesor-ai-avatar.server.ts — never auto-picked.
+- Profesor AI lesson is voice-only (no text box): LiveAvatar mic + start_listening wiring lives in profesor-ai-voice.ts (tested with fake events); browser fallback interrupts on interim non-echo speech. The shared board (components/profesor-ai/tabla-comuna.tsx) sends one JPEG snapshot as `imagine` to /api/profesor-ai-stream; files stay in the browser. The teacher picture everywhere is the owner-chosen avatar's real photo.
+- Lesson audio starts from an explicit in-page tap; call playLessonMedia synchronously from that tap, surface autoplay denial with an audio activation control, and never cancel tutor work when unmuting. Safari does not grant audible playback from a previous page's interaction.

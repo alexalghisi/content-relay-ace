@@ -4,6 +4,8 @@ import { faqJsonLd } from "@/components/seo-landing";
 import { BlocajeBreadcrumb } from "@/components/blocaje/blocaj-card";
 import { ConfiguratorProfesorAi } from "@/components/profesor-ai/configurator";
 import { breadcrumbLd, SITE } from "@/lib/blocaje-seo";
+import hannahDemo from "@/assets/hannah-matematica-demo.mp4.asset.json";
+import hannahDemoWebm from "@/assets/hannah-matematica-demo.webm.asset.json";
 
 const PATH = "/profesor-ai";
 const URL = `${SITE}${PATH}`;
@@ -17,8 +19,8 @@ const FAQS = [
     a: "O sesiune live cu un profesor virtual care vorbește în limba română. Îi poți vorbi la microfon sau îi poți scrie; îți explică, îți dă exemple și exerciții, te corectează și verifică dacă ai înțeles, adaptat nivelului tău.",
   },
   {
-    q: "Cât costă o sesiune?",
-    a: "Prețul depinde de materie și de durată și îl vezi înainte de plată, în configuratorul de pe această pagină. Plătești o singură dată, înainte de început; nu există abonament.",
+    q: "Cât costă o lecție?",
+    a: "Lecția de 15 minute este gratuită pentru orice elev cu cont, fără card. Lecțiile de 30, 45 și 60 de minute vor fi disponibile cu contul Premium, pe care îl pregătim; nu există abonament ascuns.",
   },
   {
     q: "Pentru cine este?",
@@ -47,6 +49,7 @@ export const Route = createFileRoute("/profesor-ai/")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: `${SITE}/promo-profesor-ai.jpg` },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
@@ -80,7 +83,7 @@ function Page() {
       <div className="grid items-start gap-8 lg:grid-cols-[1.05fr_1fr]">
         <header>
           <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">
-            <BadgeCheck className="h-4 w-4" /> Premium · live · în limba română
+            <BadgeCheck className="h-4 w-4" /> Lecție de probă gratuită · live · în limba română
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Profesorul AI: o lecție live, față în față, oricând
@@ -94,13 +97,18 @@ function Page() {
             <video
               className="aspect-video w-full bg-foreground object-cover"
               poster="/promo-profesor-ai.jpg"
-              controls
+              width={1280}
+              height={720}
+              autoPlay
+              muted
+              loop
               playsInline
+              controls
               preload="metadata"
-              aria-label="Prezentare Profesor AI"
+              aria-label="Exemplu video: Hannah explică o ecuație în română unui elev"
             >
-              <source src="/promo-profesor-ai.webm" type="video/webm" />
-              <source src="/promo-profesor-ai.mp4" type="video/mp4" />
+              <source src={hannahDemoWebm.url} type="video/webm" />
+              <source src={hannahDemo.url} type="video/mp4" />
             </video>
           </div>
         </header>

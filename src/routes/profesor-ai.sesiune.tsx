@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { LoginGate } from "@/components/ai/login-gate";
+import { useAuth } from "@/lib/auth";
 import { SesiuneProfesorAi } from "@/components/profesor-ai/sesiune";
 import { PA_TOKEN_KEY, salveazaToken } from "@/components/profesor-ai/configurator";
 import { profesorAiConfirma, profesorAiSesiune } from "@/lib/profesor-ai.functions";
@@ -17,18 +17,28 @@ export const Route = createFileRoute("/profesor-ai/sesiune")({
   head: () => ({
     meta: [
       { title: "Sesiune Profesor AI | MeditatiiDirect.ro" },
+      { name: "description", content: "Sesiunea ta privată cu Profesorul AI de pe MeditatiiDirect.ro." },
+      { property: "og:title", content: "Sesiune Profesor AI | MeditatiiDirect.ro" },
+      { property: "og:description", content: "Lecție privată cu întrebări și explicații adaptate nivelului tău." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/profesor-ai" }],
   }),
   component: () => (
     <section className="container-page py-6 sm:py-10">
-      <LoginGate ce="începi sesiunea cu Profesorul AI">
-        <Pornire />
-      </LoginGate>
+      <AccesTest />
     </section>
   ),
 });
+
+function AccesTest() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="card-soft h-64 animate-pulse" aria-busy="true" />;
+  if (!user) return <h1 className="py-16 text-center text-2xl font-bold">Autentifică-te ca să începi lecția.</h1>;
+  return <Pornire />;
+}
 
 function Pornire() {
   const search = Route.useSearch();

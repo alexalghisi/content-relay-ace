@@ -82,19 +82,14 @@ function HomePage() {
             <Link to="/profesor-ai" className="btn-primary h-12 px-6">Începe o lecție cu Profesorul AI <ArrowRight className="ml-2 h-4 w-4" /></Link>
           </div>
         </div>
-        <video
+        <img
           className="aspect-video w-full rounded-2xl bg-foreground object-cover shadow-[var(--shadow-card)]"
-          poster="/promo-profesor-ai.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label="Prezentare Profesor AI: alegi lecția, apoi profesorul îți explică și te corectează"
-        >
-          <source src="/promo-profesor-ai.webm" type="video/webm" />
-          <source src="/promo-profesor-ai.mp4" type="video/mp4" />
-        </video>
+          src="/promo-profesor-ai.jpg"
+          width={1280}
+          height={720}
+          alt="Profesoara AI care îți predă lecția live, față în față"
+          loading="lazy"
+        />
       </div>
     </section>
 

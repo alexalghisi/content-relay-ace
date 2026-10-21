@@ -1,7 +1,34 @@
 import { expect, test } from "bun:test";
 import { getAdsterraBanner } from "./adsterra";
-import { adsterraDocument } from "./adsterra-document";
+import { adsterraDocument, installAdCookieBoundary } from "./adsterra-document";
 import { ADSTERRA_SMARTLINK } from "./adsterra-document";
+
+test("opaque ad documents return no cookies and never persist provider writes", () => {
+  let writes = 0;
+  const doc = Object.defineProperty({}, "cookie", {
+    configurable: true,
+    get: () => { throw new DOMException("Opaque origin", "SecurityError"); },
+    set: () => { writes++; throw new DOMException("Opaque origin", "SecurityError"); },
+  }) as Document;
+  installAdCookieBoundary(doc);
+  expect(doc.cookie).toBe("");
+  doc.cookie = "tracking=example";
+  expect(doc.cookie).toBe("");
+  expect(writes).toBe(0);
+});
+
+test("cookie boundary does not override accessible cookies", () => {
+  const doc = { cookie: "existing=value" } as Document;
+  installAdCookieBoundary(doc);
+  expect(doc.cookie).toBe("existing=value");
+});
+
+test("cookie boundary does not conceal unrelated errors", () => {
+  const doc = Object.defineProperty({}, "cookie", {
+    get: () => { throw new TypeError("Unexpected failure"); },
+  }) as Document;
+  expect(() => installAdCookieBoundary(doc)).toThrow(TypeError);
+});
 
 test("social format uses exactly the supplied social zone without banner zones", () => {
   const document = adsterraDocument(false, false, true);

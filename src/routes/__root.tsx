@@ -17,7 +17,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { ADSENSE_CLIENT } from "@/components/ads/adsense";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 import { AdsterraMonetization } from "@/components/ads/adsterra";
-import { InstallAppBanner } from "@/components/install-app-banner";
 
 function NotFoundComponent() {
   return (
@@ -186,7 +185,6 @@ function RootComponent() {
           <SiteFooter />
         </div>
         <Toaster />
-        <InstallAppBanner />
       </AuthProvider>
     </QueryClientProvider>
   );

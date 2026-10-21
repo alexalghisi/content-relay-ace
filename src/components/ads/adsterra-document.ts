@@ -4,6 +4,22 @@ export function getAdsterraBanner(wide: boolean) {
     : { key: "0e3484e9a11e0faff6adb5a6f5a74348", width: 320, height: 50 };
 }
 
+/** Opaque ad frames have no cookie jar; never grant access to site cookies. */
+export function installAdCookieBoundary(doc: Document) {
+  try {
+    void doc.cookie;
+  } catch (error) {
+    if (!(error instanceof DOMException) || error.name !== "SecurityError") throw error;
+    Object.defineProperty(doc, "cookie", {
+      configurable: false,
+      get: () => "",
+      set: (_value: string) => { /* No persistence in an opaque frame. */ },
+    });
+  }
+}
+
+const cookieBoundary = `<script>(${installAdCookieBoundary.toString()})(document);</script>`;
+
 // Runs inside the opaque-origin sandbox. Script load alone is not an ad fill.
 const fillObserver = `<script>
 (() => {
@@ -51,5 +67,5 @@ export function adsterraDocument(banner: boolean, wide: boolean, social = false)
   const provider = social ? `<script data-cfasync="false" src="${ADSTERRA_SOCIAL_SCRIPT}"></script>` : banner
     ? `<script>atOptions=${JSON.stringify({ ...options, format: "iframe", params: {} })};</script><script src="${adsterraBannerScript(options.key)}"></script>`
     : `<script async="async" data-cfasync="false" src="${ADSTERRA_NATIVE_SCRIPT}"></script><div id="container-${ADSTERRA_NATIVE_ID}"></div>`;
-  return `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0}</style></head><body>${fillObserver}${provider}</body></html>`;
+  return `<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0}</style></head><body>${cookieBoundary}${fillObserver}${provider}</body></html>`;
 }

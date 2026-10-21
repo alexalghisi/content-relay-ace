@@ -328,6 +328,21 @@ export async function takeQuota(
   }
 }
 
+/** Câte unități mai are contul azi din limita dată (fără cache edge: toată limita). */
+export async function cotaRamasa(userId: string, kind: string, limit: number): Promise<number> {
+  try {
+    const c = edgeCache();
+    if (!c) return limit;
+    const hit = await c.match(
+      new Request(`https://quota.meditatiidirect.ro/${kind}/${todayRo()}/${userId}`),
+    );
+    const used = hit ? Number(await hit.text()) || 0 : 0;
+    return Math.max(0, limit - used);
+  } catch {
+    return limit;
+  }
+}
+
 /**
  * Returnează o unitate din cotă când cererea AI a eșuat din vina furnizorului (credite, 429, rețea),
  * ca elevul să nu piardă mesaje din limita zilnică pentru răspunsuri pe care nu le-a primit.

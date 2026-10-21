@@ -1,5 +1,18 @@
 # Roadmap
 
+- [x] Corectează activarea sunetului dintr-o apăsare în lecție, inclusiv în timpul conectării; 11 teste trec și browserul la 402×725 confirmă muted true → false, volum 1 și oprire/reluare. Build OK. Numai previzualizare.
+- [ ] Confirmă vocea audibilă pe iPhone real — browserul de test nu a conectat video LiveAvatar; activarea elementului audio este verificată, nu conversația audibilă.
+
+- [x] Ascunde invitația de instalare mobilă și rezervă testarea Profesor AI proprietarului; ceilalți văd „În curând”. Verificat în browser: acces citit pentru proprietar și pornire activă, vizitator anonim fără configurator sau sesiune, banner mobil absent; 28 teste trec. Numai previzualizare.
+
+- [x] Profesor AI: replici simple și deschiderea scurtate; eliminat salutul vocal dublu, modelul/plafonul/protecțiile păstrate. Întrebare reală 7+5: 3,40 sec înainte, 1,91 sec după, răspuns corect și fără erori; variația furnizorului nu permite garantarea timpului. Video neprobat deliberat; numai previzualizare.
+
+- [x] Profesor AI: corectată coada de vorbire, întrebările pot fi trimise și în timpul răspunsului, prioritate întrebării noi; 6 teste trec. Cont real: răspuns corect la 7+5, fără erori; doar previzualizare.
+- [x] Profesor AI: integrare LiveAvatar pregătită (avatar video, voce, întrerupere prin voce); 20 teste trec.
+- [ ] Profesor AI: test complet cu voce, avatar și întrerupere — blocat: lipsesc cheia LiveAvatar (app.liveavatar.com/developers) și codurile avatarului/vocii alese, din LiveAvatar. Vechiul serviciu HeyGen este retras (404).
+
+- [x] Repară erorile document.cookie din cadrele Adsterra fără a elimina izolarea; 80 citiri/scrieri simulate în cadrul real fără cookie-uri persistate sau erori, verificare separată a scripturilor furnizorului fără erori; 10 teste trec. Test AI real generat cu cont conectat. Doar previzualizare; livrarea reclamelor nu este confirmată.
+
 - [x] Integrează Social Bar într-un cadru izolat și Smartlink etichetat pe paginile publice, mută native mai sus. Verificat la 1280 și 390 px: fără overflow sau erori, trei cadre nepopulate cu înălțime zero, link corect; 7 teste trec. Numai previzualizare, nepublicat.
 - [ ] Confirmă livrarea Social Bar și bannerelor — blocat de Adsterra: toate scripturile solicitate la verificarea din 18 octombrie răspund 200 cu 0 bytes pe calculator și telefon. Compatibilitatea Social Bar în cadru izolat și destinațiile Smartlink nu sunt confirmate de furnizor.
 
