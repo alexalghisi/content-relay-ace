@@ -1,11 +1,37 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Copy, Megaphone } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const TITLE = "Kit de promovare — texte gata de postat | MeditatiiDirect.ro";
 const DESC = "Texte gata scrise pentru recrutarea profesorilor: grupuri Facebook, LinkedIn, WhatsApp, forumuri studențești și afiș pentru cancelarie.";
 
 const LINK = "https://meditatiidirect.ro/vreau-sa-dau-meditatii";
+
+const invitations = [
+  {
+    label: "WhatsApp — invitație personală",
+    text: `Salut, [Prenume]! Mai ai loc pentru elevi noi la [materie]? Pe Meditații Direct, elevii postează ce au nevoie, iar tu le trimiți propunerea ta. M-am gândit că ți-ar fi util:
+https://meditatiidirect.ro/cereri?utm_source=whatsapp&utm_medium=personal_message&utm_campaign=invitatie_profesori`,
+  },
+  {
+    label: "E-mail — invitație personală",
+    text: `Subiect: [Prenume], mai primești elevi la [materie]?
+
+Bună, [Prenume]!
+Îți scriu să te invit pe Meditații Direct. Elevii postează cereri de meditații, iar tu alegi cui răspunzi și propui tariful și programul tău. Contul este gratuit, fără comision.
+
+Poți vedea cererile după autentificare și completarea profilului de profesor:
+https://meditatiidirect.ro/cereri?utm_source=email&utm_medium=email&utm_campaign=invitatie_profesori
+
+Alessandro`,
+  },
+  {
+    label: "Grupuri de profesori — invitație scurtă",
+    text: `Bună, colegi! Am creat Meditații Direct: elevii postează cereri, iar profesorii răspund cu o propunere și stabilesc direct tariful și programul. Dacă mai primiți elevi, vă invit să aruncați o privire. Gratuit, fără comision:
+https://meditatiidirect.ro/cereri?utm_source=grup_profesori&utm_medium=social&utm_campaign=invitatie_profesori`,
+  },
+];
 
 const posts = [
   {
@@ -83,25 +109,33 @@ export const Route = createFileRoute("/kit-promovare")({
 
 function CopyBlock({ label, text }: { label: string; text: string }) {
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
   return (
     <div className="card-soft p-5">
       <div className="flex items-center justify-between gap-3">
         <h2 className="font-semibold">{label}</h2>
-        <button
+        <Button
           type="button"
+          variant="outline"
+          aria-label={`Copiază: ${label}`}
           className="btn-outline h-9 shrink-0 px-3 text-xs"
-          onClick={() => {
-            void navigator.clipboard?.writeText(text).then(() => {
+          onClick={async () => {
+            setCopyError(false);
+            try {
+              await navigator.clipboard.writeText(text);
               setCopied(true);
               setTimeout(() => setCopied(false), 2000);
-            });
+            } catch {
+              setCopyError(true);
+            }
           }}
         >
           {copied ? <Check className="mr-1 h-3.5 w-3.5" /> : <Copy className="mr-1 h-3.5 w-3.5" />}
           {copied ? "Copiat" : "Copiază"}
-        </button>
+        </Button>
       </div>
-      <p className="mt-3 whitespace-pre-line text-sm leading-6 text-muted-foreground">{text}</p>
+      <p className="mt-3 whitespace-pre-line break-words text-sm leading-6 text-muted-foreground">{text}</p>
+      {copyError && <p role="alert" className="mt-2 text-sm text-destructive">Nu s-a putut copia. Selectează mesajul și copiază-l manual.</p>}
     </div>
   );
 }
@@ -119,6 +153,13 @@ function KitPage() {
           Respectă regulile fiecărui grup și nu trimite mesaje nesolicitate către liste de contacte.
         </p>
       </header>
+
+      <section className="mt-10">
+        <h2 className="text-xl font-bold">Invitații personale pentru profesori</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {invitations.map((p) => <CopyBlock key={p.label} {...p} />)}
+        </div>
+      </section>
 
       <section className="mt-10 grid gap-4 md:grid-cols-2">
         {posts.map((p) => <CopyBlock key={p.label} {...p} />)}
