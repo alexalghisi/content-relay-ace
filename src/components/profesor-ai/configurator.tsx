@@ -193,7 +193,7 @@ export function ConfiguratorProfesorAi() {
               ? `${cfg.durata} minute · fără plată și fără limită zilnică`
               : premium
                 ? `${cfg.durata} minute · disponibil cu contul Premium, pe care îl pregătim`
-                : `${cfg.durata} minute · lecție de probă, fără card${acces ? ` · ${acces.lectiiGratuitePeZi} pe zi` : ""}`}
+                : `${cfg.durata} minute · lecție de probă, fără card`}
           </p>
         </div>
         {loading ? (
