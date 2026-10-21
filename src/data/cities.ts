@@ -52,7 +52,41 @@ export const CITIES: CityInfo[] = [
   { slug: "slobozia",        name: "Slobozia",        county: "Ialomița",   population: "45.000",      matchLocation: ["slobozia"], landmark: "CN Mihai Viteazul", priceIndex: 0.80 },
   { slug: "sfantu-gheorghe", name: "Sfântu Gheorghe", county: "Covasna",    population: "54.000",      matchLocation: ["sfântu gheorghe", "sfantu gheorghe", "sf. gheorghe"], landmark: "CN Mihai Viteazul", priceIndex: 0.82 },
   { slug: "turda",           name: "Turda",           county: "Cluj",       population: "43.000",      matchLocation: ["turda"], landmark: "CN Mihai Viteazul", priceIndex: 0.88 },
+  // Reședințe de județ lipsă + orașe mari (populație: recensământul 2021)
+  { slug: "targu-jiu",       name: "Târgu Jiu",       county: "Gorj",       population: "73.500",      matchLocation: ["târgu jiu", "targu jiu", "tg jiu", "tg. jiu"], landmark: "CN Tudor Vladimirescu & Univ. Constantin Brâncuși", priceIndex: 0.88 },
+  { slug: "alexandria",      name: "Alexandria",      county: "Teleorman",  population: "40.400",      matchLocation: ["alexandria"], landmark: "CN Alexandru Ioan Cuza", priceIndex: 0.82 },
+  { slug: "miercurea-ciuc",  name: "Miercurea Ciuc",  county: "Harghita",   population: "34.500",      matchLocation: ["miercurea ciuc", "miercurea-ciuc"], landmark: "Liceul Teoretic Octavian Goga", priceIndex: 0.85 },
+  { slug: "popesti-leordeni", name: "Popești-Leordeni", county: "Ilfov",   population: "53.400",      matchLocation: ["popești-leordeni", "popesti-leordeni", "popesti leordeni"], landmark: "zona metropolitană București", priceIndex: 1.10 },
+  { slug: "voluntari",       name: "Voluntari",       county: "Ilfov",      population: "47.400",      matchLocation: ["voluntari"], landmark: "zona metropolitană București", priceIndex: 1.15 },
+  { slug: "bragadiru",       name: "Bragadiru",       county: "Ilfov",      population: "40.100",      matchLocation: ["bragadiru"], landmark: "zona metropolitană București", priceIndex: 1.10 },
+  { slug: "floresti",        name: "Florești",        county: "Cluj",       population: "peste 50.000", matchLocation: ["florești", "floresti"], landmark: "zona metropolitană Cluj-Napoca", priceIndex: 1.10 },
+  { slug: "barlad",          name: "Bârlad",          county: "Vaslui",     population: "52.500",      matchLocation: ["bârlad", "barlad"], landmark: "CN Gheorghe Roșca Codreanu", priceIndex: 0.80 },
+  { slug: "roman",           name: "Roman",           county: "Neamț",      population: "48.600",      matchLocation: ["roman,", "mun. roman", "municipiul roman"], landmark: "CN Roman-Vodă", priceIndex: 0.82 },
+  { slug: "lugoj",           name: "Lugoj",           county: "Timiș",      population: "35.500",      matchLocation: ["lugoj"], landmark: "CN Coriolan Brediceanu", priceIndex: 0.85 },
+  { slug: "medgidia",        name: "Medgidia",        county: "Constanța",  population: "34.600",      matchLocation: ["medgidia"], landmark: "CN Kemal Atatürk", priceIndex: 0.82 },
+  { slug: "navodari",        name: "Năvodari",        county: "Constanța",  population: "34.400",      matchLocation: ["năvodari", "navodari"], landmark: "zona metropolitană Constanța", priceIndex: 0.90 },
+  { slug: "onesti",          name: "Onești",          county: "Bacău",      population: "34.000",      matchLocation: ["onești", "onesti"], landmark: "CN Dimitrie Cantemir", priceIndex: 0.82 },
+  { slug: "sighetu-marmatiei", name: "Sighetu Marmației", county: "Maramureș", population: "32.800", matchLocation: ["sighetu marmației", "sighetu marmatiei", "sighet"], landmark: "CN Dragoș Vodă", priceIndex: 0.82 },
+  { slug: "tecuci",          name: "Tecuci",          county: "Galați",     population: "32.800",      matchLocation: ["tecuci"], landmark: "CN Calistrat Hogaș", priceIndex: 0.80 },
+  { slug: "mangalia",        name: "Mangalia",        county: "Constanța",  population: "32.000",      matchLocation: ["mangalia"], landmark: "Liceul Teoretic Callatis", priceIndex: 0.88 },
+  { slug: "dej",             name: "Dej",             county: "Cluj",       population: "31.500",      matchLocation: ["dej"], landmark: "CN Andrei Mureșanu", priceIndex: 0.85 },
+  { slug: "odorheiu-secuiesc", name: "Odorheiu Secuiesc", county: "Harghita", population: "31.300",  matchLocation: ["odorheiu secuiesc", "odorhei"], landmark: "CN Tamási Áron", priceIndex: 0.85 },
+  { slug: "petrosani",       name: "Petroșani",       county: "Hunedoara",  population: "31.000",      matchLocation: ["petroșani", "petrosani"], landmark: "CN Mihai Eminescu & Univ. din Petroșani", priceIndex: 0.80 },
+  { slug: "pascani",         name: "Pașcani",         county: "Iași",       population: "30.800",      matchLocation: ["pașcani", "pascani"], landmark: "CN Mihail Sadoveanu", priceIndex: 0.80 },
+  { slug: "reghin",          name: "Reghin",          county: "Mureș",      population: "29.700",      matchLocation: ["reghin"], landmark: "CN Petru Maior", priceIndex: 0.82 },
+  { slug: "campina",         name: "Câmpina",         county: "Prahova",    population: "29.000",      matchLocation: ["câmpina", "campina"], landmark: "CN Nicolae Grigorescu", priceIndex: 0.85 },
+  { slug: "campulung",       name: "Câmpulung",       county: "Argeș",      population: "27.600",      matchLocation: ["câmpulung", "campulung"], landmark: "CN Dinicu Golescu", priceIndex: 0.82 },
+  { slug: "caracal",         name: "Caracal",         county: "Olt",        population: "27.400",      matchLocation: ["caracal"], landmark: "CN Ioniță Asan", priceIndex: 0.80 },
+  { slug: "fagaras",         name: "Făgăraș",         county: "Brașov",     population: "26.300",      matchLocation: ["făgăraș", "fagaras"], landmark: "CN Radu Negru", priceIndex: 0.85 },
+  { slug: "radauti",         name: "Rădăuți",         county: "Suceava",    population: "24.300",      matchLocation: ["rădăuți", "radauti"], landmark: "CN Eudoxiu Hurmuzachi", priceIndex: 0.80 },
+  { slug: "sighisoara",      name: "Sighișoara",      county: "Mureș",      population: "23.900",      matchLocation: ["sighișoara", "sighisoara"], landmark: "CN Mircea Eliade", priceIndex: 0.85 },
+  { slug: "falticeni",       name: "Fălticeni",       county: "Suceava",    population: "23.900",      matchLocation: ["fălticeni", "falticeni"], landmark: "CN Nicu Gane", priceIndex: 0.80 },
+  { slug: "campia-turzii",   name: "Câmpia Turzii",   county: "Cluj",       population: "20.600",      matchLocation: ["câmpia turzii", "campia turzii"], landmark: "Liceul Teoretic Pavel Dan", priceIndex: 0.85 },
+  { slug: "gherla",          name: "Gherla",          county: "Cluj",       population: "19.900",      matchLocation: ["gherla"], landmark: "Liceul Teoretic Petru Maior", priceIndex: 0.85 },
 ];
 
 export const CITY_SLUGS = CITIES.map((c) => c.slug);
 export const getCityBySlug = (slug: string) => CITIES.find((c) => c.slug === slug);
+
+/** Alte orașe din același județ (pentru legături interne locale). */
+export const citiesInCounty = (city: CityInfo) => CITIES.filter((c) => c.county === city.county && c.slug !== city.slug);
