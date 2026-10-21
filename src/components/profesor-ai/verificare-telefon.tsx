@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Loader2, ShieldCheck } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 import { confirmaCodTelefon, trimiteCodTelefon } from "@/lib/profesor-ai-verificare.functions";
 
 /** Verificare telefon (cod SMS) + adresă, cerută o singură dată înainte de lecția gratuită. */
 export function VerificareTelefon({ onVerificat }: { onVerificat: () => void }) {
-  const [phone, setPhone] = useState("");
+  const { user } = useAuth();
+  const [phone, setPhone] = useState(() => typeof user?.user_metadata?.phone === "string" ? user.user_metadata.phone : "");
   const [address, setAddress] = useState("");
   const [cod, setCod] = useState("");
   const [trimis, setTrimis] = useState(false);

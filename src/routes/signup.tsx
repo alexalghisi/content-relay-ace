@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { z } from "zod";
+import { signupSchema } from "@/lib/signup-validation";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
@@ -11,15 +11,13 @@ export const Route = createFileRoute("/signup")({
       { title: "Înscriere gratuită — MeditatiiDirect.ro" },
       { name: "description", content: "Creează un cont gratuit pe MeditatiiDirect.ro cu email sau Google și contactează profesori verificați în câteva secunde." },
       { name: "robots", content: "noindex, follow" },
+      { property: "og:title", content: "Înscriere gratuită — MeditatiiDirect.ro" },
+      { property: "og:description", content: "Creează contul tău cu email și telefon pe MeditatiiDirect.ro." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: SignupPage,
-});
-
-const schema = z.object({
-  name: z.string().trim().min(2, "Nume prea scurt").max(100),
-  email: z.string().trim().email("Email invalid").max(255),
-  password: z.string().min(6, "Parola minim 6 caractere").max(72),
 });
 
 function authErrorRo(message: string) {
@@ -36,6 +34,7 @@ function authErrorRo(message: string) {
 function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [pending, setPending] = useState(false);
@@ -43,13 +42,13 @@ function SignupPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = schema.safeParse({ name, email, password });
+    const parsed = signupSchema.safeParse({ name, email, phone, password });
     if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email: parsed.data.email,
       password: parsed.data.password,
-      options: { emailRedirectTo: `${window.location.origin}/`, data: { display_name: parsed.data.name } },
+      options: { emailRedirectTo: `${window.location.origin}/`, data: { display_name: parsed.data.name, phone: parsed.data.phone } },
     });
     setLoading(false);
     if (error) { toast.error(authErrorRo(error.message)); return; }
@@ -119,6 +118,10 @@ function SignupPage() {
         <div>
           <label className="text-sm font-medium">Email</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
+        </div>
+        <div>
+          <label htmlFor="signup-phone" className="text-sm font-medium">Telefon mobil</label>
+          <input id="signup-phone" type="tel" autoComplete="tel" maxLength={30} placeholder="07xx xxx xxx" value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <div>
           <label className="text-sm font-medium">Parolă</label>
