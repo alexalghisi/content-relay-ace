@@ -20,7 +20,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-xl">
-      <div className="container-page grid h-18 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 2xl:flex 2xl:justify-between">
+      <div className="container-page grid h-18 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 2xl:flex 2xl:max-w-none 2xl:justify-between">
         <Link to="/" className="flex min-w-0 items-center gap-2 font-bold xl:shrink-0">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[var(--shadow-pop)]">
             <GraduationCap className="h-5 w-5" />
