@@ -5,6 +5,7 @@ import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
 import { TablaComuna } from "./tabla-comuna";
 import { Button } from "@/components/ui/button";
 import { createSpeechQueue, isEcho, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
+import { playLessonMedia } from "@/lib/profesor-ai-audio";
 import { supabase } from "@/integrations/supabase/client";
 import { profesorAiAvatar, profesorAiRaspunde } from "@/lib/profesor-ai.functions";
 import {
@@ -63,6 +64,9 @@ export function SesiuneProfesorAi({
   const [deReluat, setDeReluat] = useState<{ text: string; ascuns: boolean; cod?: string } | null>(null);
   const [asculta, setAsculta] = useState(false);
   const [sunet, setSunet] = useState(true);
+  const [permisSunet, setPermisSunet] = useState(false);
+  const [sunetBlocat, setSunetBlocat] = useState(false);
+  const audioActivated = useRef(false);
   const [ramas, setRamas] = useState(() => Math.max(0, exp - Date.now()));
   const [modAvatar, setModAvatar] = useState<"incarcare" | "realist" | "indisponibil">("incarcare");
   const [avatarError, setAvatarError] = useState("");
@@ -144,7 +148,13 @@ export function SesiuneProfesorAi({
         };
         liveVoice.current = true;
         s.on(la.SessionEvent.SESSION_STREAM_READY, () => {
-          if (video.current) { s.attach(video.current); void video.current.play().catch(() => {}); }
+          const el = video.current;
+          if (el) {
+            s.attach(el);
+            void playLessonMedia(el, audioActivated.current && sunetRef.current).then((ok) => {
+              if (!anulat) setSunetBlocat(!ok && audioActivated.current && sunetRef.current);
+            });
+          }
         });
         s.on(la.SessionEvent.SESSION_DISCONNECTED, () => {
           console.info("[voice] in session.disconnected");
@@ -376,11 +386,22 @@ export function SesiuneProfesorAi({
     void heygen.current?.stopListening().catch(() => {});
   };
 
-  const [permisSunet, setPermisSunet] = useState(true);
-  useEffect(() => {
-    const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation;
-    if (ua && !ua.hasBeenActive) setPermisSunet(false);
-  }, []);
+  // A tap on a previous page is not enough for Safari's audible playback permission.
+  // Invoke playback and speech synthesis synchronously in this page's tap handler.
+  const activeazaSunet = () => {
+    audioActivated.current = true;
+    sunetRef.current = true;
+    setSunet(true);
+    setPermisSunet(true);
+    const el = video.current;
+    if (el) void playLessonMedia(el, true).then((ok) => setSunetBlocat(!ok && liveVoice.current));
+    const synth = window.speechSynthesis;
+    if (synth && !liveVoice.current) {
+      const unlock = new SpeechSynthesisUtterance(" ");
+      unlock.lang = "ro-RO";
+      synth.speak(unlock);
+    }
+  };
   const pornit = useRef(false);
   useEffect(() => {
     if (modAvatar === "incarcare" || !permisSunet || pornit.current) return;
@@ -403,7 +424,7 @@ export function SesiuneProfesorAi({
           {modAvatar !== "realist" && (
             <img src={hannah.url} alt="Profesoara ta AI" className="absolute inset-0 h-full w-full object-cover" />
           )}
-          <video ref={video} autoPlay playsInline muted={!sunet} poster={hannah.url} className={modAvatar === "realist" ? "h-full w-full object-cover" : "hidden"} />
+          <video ref={video} autoPlay playsInline muted={!permisSunet || !sunet} poster={hannah.url} className={modAvatar === "realist" ? "h-full w-full object-cover" : "hidden"} />
           {modAvatar === "indisponibil" ? (
             <div className="absolute inset-x-3 bottom-3 flex items-start gap-2 rounded-2xl bg-foreground/70 px-4 py-3 text-sm text-background">
               <VideoOff className="mt-0.5 h-4 w-4 shrink-0" />
@@ -414,13 +435,13 @@ export function SesiuneProfesorAi({
               <Loader2 className="h-8 w-8 animate-spin" aria-label="Se conectează profesoara" />
             </div>
           ) : null}
-          {!permisSunet && modAvatar !== "incarcare" && (
+          {(!permisSunet || sunetBlocat) && (
             <Button
               type="button"
-              onClick={() => setPermisSunet(true)}
+              onClick={activeazaSunet}
               className="absolute inset-0 grid h-full w-full place-items-center rounded-none bg-foreground/35 text-lg font-bold text-background"
             >
-              <span className="rounded-full bg-primary px-6 py-3 text-primary-foreground shadow-lg">▶ Începe lecția</span>
+              <span className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-primary-foreground shadow-lg"><Volume2 className="h-5 w-5" />{permisSunet ? "Activează sunetul" : "Începe lecția cu sunet"}</span>
             </Button>
           )}
           <div className="absolute left-3 top-3 flex flex-wrap gap-2 text-xs">
@@ -445,13 +466,16 @@ export function SesiuneProfesorAi({
             <Button
               type="button"
               onClick={() => {
-                setSunet((s) => !s);
-                interrupt();
+                if (!sunet || !permisSunet || sunetBlocat) { activeazaSunet(); return; }
+                sunetRef.current = false;
+                setSunet(false);
+                if (video.current) video.current.muted = true;
+                try { window.speechSynthesis?.cancel(); } catch { /* unavailable */ }
               }}
-              aria-label={sunet ? "Oprește vocea" : "Pornește vocea"}
+              aria-label={sunet && permisSunet && !sunetBlocat ? "Oprește vocea" : "Pornește vocea"}
               className="grid h-8 w-8 place-items-center rounded-full bg-foreground/55 text-background"
             >
-              {sunet ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              {sunet && permisSunet && !sunetBlocat ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
             </Button>
           </div>
         </div>

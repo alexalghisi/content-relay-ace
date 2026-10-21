@@ -1,5 +1,8 @@
 # Roadmap
 
+- [x] Corectează activarea sunetului dintr-o apăsare în lecție, inclusiv în timpul conectării; 11 teste trec și browserul la 402×725 confirmă muted true → false, volum 1 și oprire/reluare. Build OK. Numai previzualizare.
+- [ ] Confirmă vocea audibilă pe iPhone real — browserul de test nu a conectat video LiveAvatar; activarea elementului audio este verificată, nu conversația audibilă.
+
 - [x] Ascunde invitația de instalare mobilă și rezervă testarea Profesor AI proprietarului; ceilalți văd „În curând”. Verificat în browser: acces citit pentru proprietar și pornire activă, vizitator anonim fără configurator sau sesiune, banner mobil absent; 28 teste trec. Numai previzualizare.
 
 - [x] Profesor AI: replici simple și deschiderea scurtate; eliminat salutul vocal dublu, modelul/plafonul/protecțiile păstrate. Întrebare reală 7+5: 3,40 sec înainte, 1,91 sec după, răspuns corect și fără erori; variația furnizorului nu permite garantarea timpului. Video neprobat deliberat; numai previzualizare.
