@@ -20,7 +20,7 @@ const FAQS = [
   },
   {
     q: "Cât costă o lecție?",
-    a: "Prima lecție de 15 minute este gratuită, fără card. Lecțiile de 30, 45, 60 și 90 de minute vor putea fi cumpărate cu contul Premium, pe care îl pregătim; nu există abonament ascuns.",
+    a: "Prima lecție de 15 minute este gratuită, fără card. Lecțiile de 30, 60, 90 și 120 de minute vor putea fi cumpărate în curând; nu există abonament ascuns.",
   },
   {
     q: "Cum primesc cele 15 minute gratuite?",
