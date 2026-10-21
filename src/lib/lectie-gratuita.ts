@@ -44,3 +44,20 @@ export async function codCorect(
   if (!c || c.kind !== "cod-sms" || c.uid !== uid || acum > c.exp) return false;
   return c.codHash === (await hashCod(uid, cod.trim()));
 }
+
+export interface StatisticiLectie {
+  conturi: number;
+  verificate: number;
+  folosite: number;
+}
+
+export const procent = (parte: number, total: number) =>
+  total > 0 ? Math.round((parte / total) * 1000) / 10 : 0;
+
+export function rateUtilizare(s: StatisticiLectie) {
+  return {
+    verificareDinConturi: procent(s.verificate, s.conturi),
+    utilizareDinConturi: procent(s.folosite, s.conturi),
+    utilizareDinVerificate: procent(s.folosite, s.verificate),
+  };
+}

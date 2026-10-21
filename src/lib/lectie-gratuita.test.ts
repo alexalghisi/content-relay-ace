@@ -4,6 +4,7 @@ import {
   genereazaCod,
   hashCod,
   hashTelefon,
+  rateUtilizare,
   stareLectieGratuita,
   VALABILITATE_COD_MS,
   type CodSms,
@@ -50,5 +51,25 @@ describe("Codul SMS", () => {
     expect(await codCorect(c, UID, "123456", c.exp + 1)).toBe(false);
     expect(await codCorect(c, "22222222-2222-4222-8222-222222222222", "123456", 2_000)).toBe(false);
     expect(await codCorect(null, UID, "123456", 2_000)).toBe(false);
+  });
+});
+
+describe("Statistica de utilizare", () => {
+  it("calculează procentele cu o zecimală", () => {
+    expect(rateUtilizare({ conturi: 200, verificate: 50, folosite: 30 })).toEqual({
+      verificareDinConturi: 25,
+      utilizareDinConturi: 15,
+      utilizareDinVerificate: 60,
+    });
+    expect(rateUtilizare({ conturi: 3, verificate: 3, folosite: 1 }).utilizareDinConturi).toBe(
+      33.3,
+    );
+  });
+  it("întoarce 0% când nu există încă date", () => {
+    expect(rateUtilizare({ conturi: 0, verificate: 0, folosite: 0 })).toEqual({
+      verificareDinConturi: 0,
+      utilizareDinConturi: 0,
+      utilizareDinVerificate: 0,
+    });
   });
 });

@@ -9,9 +9,11 @@ import {
   genereazaCod,
   hashCod,
   hashTelefon,
+  rateUtilizare,
   stareLectieGratuita,
   type CodSms,
   type StareLectieGratuita,
+  type StatisticiLectie,
 } from "./lectie-gratuita";
 import type { PaResult } from "./profesor-ai";
 
@@ -106,3 +108,30 @@ export const lectieGratuitaVerificaCod = createServerFn({ method: "POST" })
       return { ok: false, error: "Acest număr a primit deja lecția gratuită pe alt cont." };
     return { ok: true, data: { minute: DURATA_LECTIE_GRATUITA } };
   });
+
+export const lectieGratuitaStatistici = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(
+    async ({ context }): Promise<PaResult<StatisticiLectie & ReturnType<typeof rateUtilizare>>> => {
+      const { data: esteAdmin } = await context.supabase.rpc("has_role", {
+        _user_id: context.userId,
+        _role: "admin",
+      });
+      if (!esteAdmin) return { ok: false, error: "Doar administratorul vede statisticile." };
+      const db = await admin();
+      const [utilizatori, verificate, folosite] = await Promise.all([
+        db.auth.admin.listUsers({ page: 1, perPage: 1 }),
+        db.from(TABEL).select("user_id", { count: "exact", head: true }),
+        db
+          .from(TABEL)
+          .select("user_id", { count: "exact", head: true })
+          .not("folosita_la", "is", null),
+      ]);
+      const s: StatisticiLectie = {
+        conturi: "total" in utilizatori.data ? utilizatori.data.total : 0,
+        verificate: verificate.count ?? 0,
+        folosite: folosite.count ?? 0,
+      };
+      return { ok: true, data: { ...s, ...rateUtilizare(s) } };
+    },
+  );

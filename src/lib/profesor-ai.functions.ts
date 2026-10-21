@@ -57,7 +57,7 @@ async function esteGratuit(userId: string): Promise<boolean> {
 
 export const DURATA_GRATUITA: PaDurata = DURATA_LECTIE_GRATUITA;
 export const MESAJ_PREMIUM =
-  "Lecțiile de 30, 45, 60 și 90 de minute vor putea fi cumpărate cu contul Premium, în curând. Până atunci, prima lecție de 15 minute este gratuită.";
+  "Acum fiecare elev are gratuit prima lecție de 15 minute. Lecțiile de 30, 60, 90 și 120 de minute revin în curând.";
 const MESAJ_NEVERIFICAT =
   "Verifică-ți numărul de telefon prin SMS ca să primești lecția gratuită de 15 minute.";
 const MESAJ_FOLOSITA =
