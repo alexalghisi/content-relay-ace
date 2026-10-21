@@ -6,7 +6,7 @@
 ## Profesor AI / AI gateway — erori furnizor
 - Mesajul „credite epuizate” apare DOAR la HTTP 402 de la Lovable AI Gateway (creditele Cloud & AI ale workspace-ului). Nu e un contor intern; se rezolvă reîncărcând creditele în Lovable.
 - La 402 se deschide o pauză de `CREDITS_PAUSE_SEC` (edge cache) — nu mai apelăm furnizorul, nu pornim sesiuni, nu încasăm. Prima cerere reușită șterge pauza.
-- Contul de test (PROFESOR_AI_FREE_EMAILS) = fără plată, fără limită zilnică internă, fără cronometru; NU ocolește creditele furnizorului. Nu scrie „nelimitat” în UI.
+- Profesor AI preview access is pinned to the verified owner's stable account ID in profesor-ai-access.ts; every token issuance, session read and streaming endpoint enforces it server-side, and public widgets show coming soon. This prevents bypass via old tokens, paid checkout or editable email. The owner skips internal fees/time limits, never provider credits.
 - Erorile furnizorului (credits/rate_limit/upstream/auth/config) rambursează cota internă (`refundQuota`). Nu simula răspunsuri AI.
 - Loguri: doar status + tip (`[ai] gateway 402 (credits)`), niciodată cheia sau conținutul elevului.
 - Teste: `src/lib/ai-gateway-erori.test.ts`.
