@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, CreditCard, Loader2, Sparkles } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { profesorAiAcces, profesorAiPorneste } from "@/lib/profesor-ai.functions";
+import { poateTestaProfesorAi } from "@/lib/profesor-ai-access";
 import {
   PA_DURATE,
   PA_MATERII,
@@ -35,6 +36,7 @@ export function ConfiguratorProfesorAi() {
     obiectiv: "lectie",
   });
   const [acces, setAcces] = useState<{
+    poateTesta: boolean;
     gratuit: boolean;
     preturi: TabelPreturi;
     plataActiva: boolean;
@@ -80,6 +82,11 @@ export function ConfiguratorProfesorAi() {
 
   const chip = (activ: boolean) =>
     `rounded-xl border px-3 py-2.5 text-left text-sm transition ${activ ? "border-primary bg-primary-soft font-semibold text-primary" : "border-border bg-background hover:border-primary/40"}`;
+
+  if (loading) return <div className="card-soft h-64 animate-pulse" aria-busy="true" />;
+  if (!poateTestaProfesorAi(user?.id)) {
+    return <div className="card-soft grid min-h-64 place-items-center p-7 text-center"><h2 className="text-2xl font-bold">În curând</h2></div>;
+  }
 
   return (
     <div className="card-soft p-5 sm:p-7">

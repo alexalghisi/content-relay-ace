@@ -4,6 +4,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { poateTestaProfesorAi } from "./profesor-ai-access";
 import {
   PA_DURATE,
   PA_MATERII,
@@ -22,7 +23,6 @@ import {
 } from "./profesor-ai";
 
 const SITE = "https://meditatiidirect.ro";
-const DEFAULT_FREE = "alexalghisi@gmail.com";
 /** Limita internă de mesaje pe zi pentru conturile plătitoare (anti-abuz și plafon de cost). */
 export const LIMITA_PROFESOR_ZI = 600;
 
@@ -48,17 +48,9 @@ function tabelPreturi(): TabelPreturi {
   }
 }
 
-/** Gratuit și nelimitat doar pentru conturile de test, cu email confirmat. */
+/** Temporary test access is pinned to the verified owner's stable account ID. */
 async function esteGratuit(userId: string): Promise<boolean> {
-  const allow = (process.env["PROFESOR_AI_FREE_EMAILS"] || DEFAULT_FREE)
-    .split(",")
-    .map((s) => s.trim().toLowerCase())
-    .filter(Boolean);
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data } = await supabaseAdmin.auth.admin.getUserById(userId);
-  const u = data.user;
-  if (!u?.email || !u.email_confirmed_at) return false;
-  return allow.includes(u.email.toLowerCase());
+  return poateTestaProfesorAi(userId);
 }
 
 async function sigileaza(cfg: PaConfig, uid: string, gratuit: boolean, exp: number) {
@@ -68,6 +60,7 @@ async function sigileaza(cfg: PaConfig, uid: string, gratuit: boolean, exp: numb
 }
 
 async function citesteSesiune(token: string, uid: string): Promise<Sesiune | null> {
+  if (!poateTestaProfesorAi(uid)) return null;
   const { unseal } = await import("./ai-gateway.server");
   const s = await unseal<Sesiune>(token);
   if (!s || s.kind !== "profesor-ai" || s.uid !== uid) return null;
@@ -119,6 +112,7 @@ export const profesorAiAcces = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { aiStare } = await import("./ai-gateway.server");
     return {
+      poateTesta: poateTestaProfesorAi(context.userId),
       gratuit: await esteGratuit(context.userId),
       preturi: tabelPreturi(),
       plataActiva: !!process.env["STRIPE_SECRET_KEY"],
@@ -134,6 +128,7 @@ export const profesorAiPorneste = createServerFn({ method: "POST" })
   .handler(
     async ({ data, context }): Promise<PaResult<{ token?: string; checkoutUrl?: string }>> => {
       const cfg = data as PaConfig;
+      if (!poateTestaProfesorAi(context.userId)) return { ok: false, error: "În curând" };
       // Nu pornim (și mai ales nu încasăm) o sesiune dacă furnizorul AI e indisponibil.
       const { aiStare } = await import("./ai-gateway.server");
       const stare = await aiStare();
@@ -188,6 +183,7 @@ export const profesorAiConfirma = createServerFn({ method: "POST" })
       .parse(d),
   )
   .handler(async ({ data, context }): Promise<PaResult<{ token: string; config: PaConfig }>> => {
+    if (!poateTestaProfesorAi(context.userId)) return { ok: false, error: "În curând" };
     const s = await stripe(`checkout/sessions/${data.plata}`);
     if (!s) return { ok: false, error: "Nu am putut verifica plata." };
     if (s.payment_status !== "paid") return { ok: false, error: "Plata nu a fost finalizată." };

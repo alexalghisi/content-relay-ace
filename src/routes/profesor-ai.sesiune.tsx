@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { LoginGate } from "@/components/ai/login-gate";
+import { useAuth } from "@/lib/auth";
+import { poateTestaProfesorAi } from "@/lib/profesor-ai-access";
 import { SesiuneProfesorAi } from "@/components/profesor-ai/sesiune";
 import { PA_TOKEN_KEY, salveazaToken } from "@/components/profesor-ai/configurator";
 import { profesorAiConfirma, profesorAiSesiune } from "@/lib/profesor-ai.functions";
@@ -28,12 +29,17 @@ export const Route = createFileRoute("/profesor-ai/sesiune")({
   }),
   component: () => (
     <section className="container-page py-6 sm:py-10">
-      <LoginGate ce="începi sesiunea cu Profesorul AI">
-        <Pornire />
-      </LoginGate>
+      <AccesTest />
     </section>
   ),
 });
+
+function AccesTest() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="card-soft h-64 animate-pulse" aria-busy="true" />;
+  if (!poateTestaProfesorAi(user?.id)) return <h1 className="py-16 text-center text-2xl font-bold">În curând</h1>;
+  return <Pornire />;
+}
 
 function Pornire() {
   const search = Route.useSearch();
