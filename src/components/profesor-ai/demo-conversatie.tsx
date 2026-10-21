@@ -64,6 +64,62 @@ const LECTII: Lectie[] = [
       { cine: "prof", text: "Exact! Reține trucul: din km/h în m/s împarți la 3,6." },
     ],
   },
+  {
+    materie: "Matematică M1",
+    nivel: "BAC · Analiză",
+    replici: [
+      { cine: "elev", text: "Am f(x) = x³ − 3x. Cum aflu punctele de extrem?" },
+      { cine: "prof", text: "Extremele apar unde derivata se anulează. Calculează tu f′(x).", tabla: "f(x) = x³ − 3x" },
+      { cine: "elev", text: "f′(x) = 3x² − 3." },
+      { cine: "prof", text: "Corect. Când e zero?", tabla: "f′(x) = 3x² − 3 = 3(x − 1)(x + 1)" },
+      { cine: "elev", text: "La x = 1 și x = −1." },
+      { cine: "prof", text: "Acum semnul: înainte de −1 derivata e pozitivă, între −1 și 1 negativă, după 1 pozitivă. Ce tip de punct e −1?", tabla: "x: −∞  −1  1  +∞ │ f′: +  0  −  0  +" },
+      { cine: "elev", text: "Funcția crește apoi scade, deci maxim." },
+      { cine: "prof", text: "Exact. Maxim în −1, cu f(−1) = 2, și minim în 1, cu f(1) = −2. Așa se punctează complet la BAC.", tabla: "Max (−1, 2) · Min (1, −2)" },
+    ],
+  },
+  {
+    materie: "Chimie",
+    nivel: "Clasa a 10-a",
+    replici: [
+      { cine: "elev", text: "Câte grame de apă se obțin din 4 g de hidrogen?" },
+      { cine: "prof", text: "Începem cu ecuația reacției. O poți scrie egalată?" },
+      { cine: "elev", text: "2H₂ + O₂ → 2H₂O." },
+      { cine: "prof", text: "Perfect. Câți moli înseamnă 4 g de H₂, dacă masa molară e 2?", tabla: "2H₂ + O₂ → 2H₂O" },
+      { cine: "elev", text: "2 moli." },
+      { cine: "prof", text: "Raportul dintre H₂ și H₂O e 2 la 2. Câți moli de apă rezultă?", tabla: "n(H₂) = 4 g : 2 g/mol = 2 mol" },
+      { cine: "elev", text: "Tot 2 moli, deci 2 ori 18 = 36 g." },
+      { cine: "prof", text: "Excelent! 36 de grame de apă. Data viitoare adăugăm un reactant în exces.", tabla: "m(H₂O) = 2 mol · 18 g/mol = 36 g" },
+    ],
+  },
+  {
+    materie: "Informatică",
+    nivel: "Clasa a 11-a",
+    replici: [
+      { cine: "elev", text: "Nu înțeleg recursivitatea. Cum calculez factorialul recursiv?" },
+      { cine: "prof", text: "Orice funcție recursivă are o condiție de oprire. Când e factorialul evident?", tabla: "n! = n · (n − 1)!" },
+      { cine: "elev", text: "Când n e 0, rezultatul e 1." },
+      { cine: "prof", text: "Exact, asta e cazul de bază. Altfel, funcția se cheamă pe ea însăși cu n − 1.", tabla: "int fact(int n) { if (n == 0) return 1; return n * fact(n - 1); }" },
+      { cine: "elev", text: "Deci fact(3) e 3 ori fact(2)?" },
+      { cine: "prof", text: "Da. Continuă tu lanțul până la capăt.", tabla: "fact(3) = 3 · fact(2)" },
+      { cine: "elev", text: "3 · 2 · 1 · fact(0), adică 6." },
+      { cine: "prof", text: "Perfect! Fără cazul de bază, funcția nu s-ar opri niciodată. Încercăm acum Fibonacci?" },
+    ],
+  },
+  {
+    materie: "Biologie",
+    nivel: "BAC · Genetică",
+    replici: [
+      { cine: "elev", text: "Ochii căprui (A) domină pe cei albaștri (a). Doi părinți Aa. Ce copii pot avea?" },
+      { cine: "prof", text: "Facem pătratul lui Punnett. Ce gameți dă fiecare părinte?", tabla: "Aa × Aa" },
+      { cine: "elev", text: "A și a." },
+      { cine: "prof", text: "Bine. Combină-i: ce genotipuri ies?", tabla: "AA · Aa · aA · aa" },
+      { cine: "elev", text: "Un AA, două Aa și un aa." },
+      { cine: "prof", text: "Corect. Ce procent dintre copii vor avea ochi albaștri?", tabla: "1 AA : 2 Aa : 1 aa" },
+      { cine: "elev", text: "Doar aa, deci 25%." },
+      { cine: "prof", text: "Exact: fenotipic 3 la 1, căprui față de albaștri. Așa se rezolvă subiectul III.", tabla: "75% căprui · 25% albaștri" },
+    ],
+  },
 ];
 
 export function DemoConversatie() {
