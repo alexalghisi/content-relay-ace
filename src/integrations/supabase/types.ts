@@ -775,6 +775,27 @@ export type Database = {
         }
         Relationships: []
       }
+      profesor_ai_lectii_gratuite: {
+        Row: {
+          folosita_la: string | null
+          telefon_hash: string
+          user_id: string
+          verificat_la: string
+        }
+        Insert: {
+          folosita_la?: string | null
+          telefon_hash: string
+          user_id: string
+          verificat_la?: string
+        }
+        Update: {
+          folosita_la?: string | null
+          telefon_hash?: string
+          user_id?: string
+          verificat_la?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
