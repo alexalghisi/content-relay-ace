@@ -4,8 +4,7 @@ import { faqJsonLd } from "@/components/seo-landing";
 import { BlocajeBreadcrumb } from "@/components/blocaje/blocaj-card";
 import { ConfiguratorProfesorAi } from "@/components/profesor-ai/configurator";
 import { breadcrumbLd, SITE } from "@/lib/blocaje-seo";
-import hannahDemo from "@/assets/hannah-matematica-demo.mp4.asset.json";
-import hannahDemoWebm from "@/assets/hannah-matematica-demo.webm.asset.json";
+import { DemoVideoProfesoara } from "@/components/profesor-ai/demo-video";
 
 const PATH = "/profesor-ai";
 const URL = `${SITE}${PATH}`;
@@ -104,24 +103,7 @@ function Page() {
             îți explică pe înțeles, îți dă exerciții și te corectează, cu răbdare, până când îți e
             clar.
           </p>
-          <div className="mt-6 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-            <video
-              className="aspect-video w-full bg-foreground object-cover"
-              poster="/promo-profesor-ai.jpg"
-              width={1280}
-              height={720}
-              autoPlay
-              muted
-              loop
-              playsInline
-              controls
-              preload="metadata"
-              aria-label="Exemplu video: Hannah explică o ecuație în română unui elev"
-            >
-              <source src={hannahDemoWebm.url} type="video/webm" />
-              <source src={hannahDemo.url} type="video/mp4" />
-            </video>
-          </div>
+          <DemoVideoProfesoara className="mt-6" />
         </header>
         <div id="incepe">
           <ConfiguratorProfesorAi />
