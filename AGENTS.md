@@ -21,3 +21,5 @@
 - Profesor AI, avatar (LiveAvatar/HeyGen) and AI gateway error rules live in src/lib/AGENTS.md.
 - The mobile installation banner is temporarily unmounted from the shared root; preserve the PWA assets so existing installations remain usable.
 - Profesor AI acces: contul de test (poateTestaProfesorAi) = gratuit, orice durată. Elevii cu cont: lecția de DURATA_GRATUITA (15 min) e gratuită o singură dată, după verificare telefon SMS (profesor_ai_utilizatori, scrieri doar server-side cu admin client; reguli pure în profesor-ai-verificare.ts); 30/45/60 = „Premium · în curând” (premiumActiv=false, fără prețuri afișate) până există firmă și plăți. Nu reintroduce prețuri în UI fără decizia proprietarului.
+
+- Profesor AI editorial demos use a shuffled lesson deck with last-lesson browser storage; never repeat before exhausting the deck or render a fixed first lesson before hydration.

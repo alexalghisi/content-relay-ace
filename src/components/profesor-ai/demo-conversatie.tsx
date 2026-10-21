@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshCw } from "lucide-react";
 
-type Replica = { cine: "elev" | "prof"; text: string; tabla?: string };
-type Lectie = { materie: string; nivel: string; replici: Replica[] };
+import { Button } from "@/components/ui/button";
+import { amestecaLectii, LECTII_SUPLIMENTARE, type Lectie } from "./demo-repertoriu";
 
 // Scripted example lessons (illustrative demo, not real student conversations).
-const LECTII: Lectie[] = [
+const LECTII_INITIALE: Lectie[] = [
   {
     materie: "Matematică",
     nivel: "Clasa a 8-a",
@@ -122,27 +122,46 @@ const LECTII: Lectie[] = [
   },
 ];
 
+const LECTII = [...LECTII_INITIALE, ...LECTII_SUPLIMENTARE];
+const ULTIMA_LECTIE = "profesor-ai-demo-ultima";
+
 export function DemoConversatie() {
   const [idx, setIdx] = useState<number | null>(null);
   const [n, setN] = useState(1);
 
-  useEffect(() => setIdx(Math.floor(Math.random() * LECTII.length)), []);
+  const ordine = useRef<number[]>([]);
+  const precedenta = useRef<number | null>(null);
+
+  const urmatoarea = useCallback(() => {
+    if (!ordine.current.length) {
+      ordine.current = amestecaLectii(LECTII.length, precedenta.current);
+    }
+    const noua = ordine.current.shift();
+    if (noua === undefined) return;
+    precedenta.current = noua;
+    try { localStorage.setItem(ULTIMA_LECTIE, String(noua)); } catch { /* Storage is optional. */ }
+    setIdx(noua);
+    setN(1);
+  }, []);
+
+  useEffect(() => {
+    try {
+      const ultima = localStorage.getItem(ULTIMA_LECTIE);
+      if (ultima !== null && /^\d+$/.test(ultima)) precedenta.current = Number(ultima);
+    } catch { /* Shuffle still works with storage disabled. */ }
+    urmatoarea();
+  }, [urmatoarea]);
 
   const lectie = LECTII[idx ?? 0];
   useEffect(() => {
     if (idx === null) return;
-    if (n >= lectie.replici.length) {
-      const t = setTimeout(() => urmatoarea(), 5000);
-      return () => clearTimeout(t);
-    }
-    const t = setTimeout(() => setN((x) => x + 1), 2200);
+    const t = n >= lectie.replici.length
+      ? setTimeout(urmatoarea, 5000)
+      : setTimeout(() => setN((x) => x + 1), 2200);
     return () => clearTimeout(t);
-  }, [n, idx]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [n, idx, lectie, urmatoarea]);
 
-  function urmatoarea() {
-    setIdx((i) => ((i ?? 0) + 1 + Math.floor(Math.random() * (LECTII.length - 1))) % LECTII.length);
-    setN(1);
-  }
+  if (idx === null) return <div className="card-soft h-[28rem] animate-pulse" aria-busy="true" aria-label="Se pregătește exemplul de lecție" />;
 
   const vizibile = lectie.replici.slice(0, n);
   const tabla = [...vizibile].reverse().find((r) => r.tabla)?.tabla;
@@ -154,9 +173,9 @@ export function DemoConversatie() {
         <p className="text-sm font-bold">
           Exemplu de lecție · {lectie.materie} <span className="font-normal text-muted-foreground">· {lectie.nivel}</span>
         </p>
-        <button type="button" onClick={urmatoarea} className="btn-outline h-8 px-3 text-xs">
+        <Button type="button" variant="outline" size="sm" onClick={urmatoarea} className="shrink-0">
           <RefreshCw className="mr-1 h-3 w-3" /> Altă lecție
-        </button>
+        </Button>
       </div>
       <div className="min-h-12 border-b border-border bg-foreground px-4 py-3 font-mono text-sm text-background">
         {tabla ? <>Tabla: {tabla}</> : <span className="opacity-60">Tabla</span>}
