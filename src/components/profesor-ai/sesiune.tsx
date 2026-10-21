@@ -435,7 +435,7 @@ export function SesiuneProfesorAi({
               <Loader2 className="h-8 w-8 animate-spin" aria-label="Se conectează profesoara" />
             </div>
           ) : null}
-          {(!permisSunet || sunetBlocat) && modAvatar !== "incarcare" && (
+          {(!permisSunet || sunetBlocat) && (
             <Button
               type="button"
               onClick={activeazaSunet}
