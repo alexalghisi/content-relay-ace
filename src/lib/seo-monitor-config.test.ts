@@ -5,7 +5,7 @@ import { SEO_DOMAINS, SEO_MARKET, providerFailure, romaniaReportDate } from "./s
 describe("Daily SEO monitoring", () => {
   test("tracks the site's Romanian competitors", () => {
     expect(SEO_MARKET).toBe("ro");
-    expect(SEO_DOMAINS).toEqual(["meditatiidirect.ro", "meditatii.ro", "anunturi-meditatii.ro", "superprof.ro"]);
+    expect(SEO_DOMAINS).toEqual(["meditatiidirect.ro", "meditatii.ro", "anunturi-meditatii.ro", "superprof.com.ro", "meetnlearn.ro", "yoolearn.ro"]);
   });
   test("groups runs by the Romanian day", () => {
     expect(romaniaReportDate(new Date("2026-10-08T22:00:00Z"))).toBe("2026-10-09");
