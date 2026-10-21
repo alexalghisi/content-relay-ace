@@ -5,6 +5,7 @@ import { BlocajeBreadcrumb } from "@/components/blocaje/blocaj-card";
 import { ConfiguratorProfesorAi } from "@/components/profesor-ai/configurator";
 import { breadcrumbLd, SITE } from "@/lib/blocaje-seo";
 import { DemoVideoProfesoara } from "@/components/profesor-ai/demo-video";
+import { DemoConversatie } from "@/components/profesor-ai/demo-conversatie";
 
 const PATH = "/profesor-ai";
 const URL = `${SITE}${PATH}`;
@@ -104,6 +105,9 @@ function Page() {
             clar.
           </p>
           <DemoVideoProfesoara className="mt-6" />
+          <div className="mt-6">
+            <DemoConversatie />
+          </div>
         </header>
         <div id="incepe">
           <ConfiguratorProfesorAi />
