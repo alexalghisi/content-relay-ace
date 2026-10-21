@@ -177,6 +177,10 @@ export function useVoceRo() {
   const spune = (text: string) =>
     new Promise<void>((resolve) => {
       if (typeof window === "undefined" || !window.speechSynthesis) return resolve();
+      const ss = window.speechSynthesis;
+      // iOS Safari: `speak()` imediat după `cancel()` este ignorat în tăcere; oprim doar dacă
+      // chiar vorbește și lăsăm o pauză scurtă înainte de noua replică.
+      const eraActiv = ss.speaking || ss.pending;
       opreste();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = "ro-RO";
@@ -199,9 +203,31 @@ export function useVoceRo() {
       };
       u.onend = gata;
       u.onerror = gata;
-      window.speechSynthesis.speak(u);
+      const porneste = () => {
+        ss.resume(); // iOS lasă uneori sinteza în pauză după o întrerupere
+        ss.speak(u);
+      };
+      if (eraActiv) window.setTimeout(porneste, 80);
+      else porneste();
     });
 
+  /**
+   * Deblochează vocea pe iPhone/iPad: Safari permite sinteza vocală doar după ce `speak()` a fost
+   * apelat sincron într-un gest al utilizatorului. De apelat din onClick/onTouchEnd.
+   */
+  const deblocheaza = () => {
+    try {
+      const ss = window.speechSynthesis;
+      if (!ss) return;
+      const u = new SpeechSynthesisUtterance(" ");
+      u.volume = 0;
+      ss.resume();
+      ss.speak(u);
+    } catch {
+      /* fără sinteză vocală */
+    }
+  };
+
   useEffect(() => opreste, []);
-  return { gura, vorbeste, spune, opreste };
+  return { gura, vorbeste, spune, opreste, deblocheaza };
 }
