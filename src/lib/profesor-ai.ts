@@ -19,7 +19,7 @@ export const PA_NIVELURI = [
 ] as const;
 export type PaNivel = (typeof PA_NIVELURI)[number]["slug"];
 
-export const PA_DURATE = [15, 30, 45, 60] as const;
+export const PA_DURATE = [15, 30, 45, 60, 90] as const;
 export type PaDurata = (typeof PA_DURATE)[number];
 
 export const PA_OBIECTIVE = [
@@ -42,11 +42,11 @@ export type TabelPreturi = Record<string, Partial<Record<`${PaDurata}`, number>>
 
 /** Prețuri implicite în lei per sesiune. „implicit” se aplică materiilor fără rând propriu. */
 export const PRETURI_IMPLICITE: TabelPreturi = {
-  implicit: { "15": 19, "30": 35, "45": 49, "60": 59 },
-  matematica: { "15": 22, "30": 39, "45": 55, "60": 69 },
-  fizica: { "15": 22, "30": 39, "45": 55, "60": 69 },
-  chimie: { "15": 22, "30": 39, "45": 55, "60": 69 },
-  informatica: { "15": 24, "30": 42, "45": 59, "60": 75 },
+  implicit: { "15": 19, "30": 35, "45": 49, "60": 59, "90": 85 },
+  matematica: { "15": 22, "30": 39, "45": 55, "60": 69, "90": 99 },
+  fizica: { "15": 22, "30": 39, "45": 55, "60": 69, "90": 99 },
+  chimie: { "15": 22, "30": 39, "45": 55, "60": 69, "90": 99 },
+  informatica: { "15": 24, "30": 42, "45": 59, "60": 75, "90": 109 },
 };
 
 export function pretSesiune(
