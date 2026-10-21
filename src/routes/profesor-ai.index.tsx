@@ -19,8 +19,8 @@ const FAQS = [
     a: "O sesiune live cu un profesor virtual care vorbește în limba română. Îi poți vorbi la microfon sau îi poți scrie; îți explică, îți dă exemple și exerciții, te corectează și verifică dacă ai înțeles, adaptat nivelului tău.",
   },
   {
-    q: "Cât costă o sesiune?",
-    a: "Prețul depinde de materie și de durată și îl vezi înainte de plată, în configuratorul de pe această pagină. Plătești o singură dată, înainte de început; nu există abonament.",
+    q: "Cât costă o lecție?",
+    a: "Lecția de 15 minute este gratuită pentru orice elev cu cont, fără card. Lecțiile de 30, 45 și 60 de minute vor fi disponibile cu contul Premium, pe care îl pregătim; nu există abonament ascuns.",
   },
   {
     q: "Pentru cine este?",
@@ -83,7 +83,7 @@ function Page() {
       <div className="grid items-start gap-8 lg:grid-cols-[1.05fr_1fr]">
         <header>
           <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">
-            <BadgeCheck className="h-4 w-4" /> Premium · live · în limba română
+            <BadgeCheck className="h-4 w-4" /> Lecție de probă gratuită · live · în limba română
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Profesorul AI: o lecție live, față în față, oricând
