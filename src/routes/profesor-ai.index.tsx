@@ -5,6 +5,7 @@ import { BlocajeBreadcrumb } from "@/components/blocaje/blocaj-card";
 import { ConfiguratorProfesorAi } from "@/components/profesor-ai/configurator";
 import { breadcrumbLd, SITE } from "@/lib/blocaje-seo";
 import hannahDemo from "@/assets/hannah-matematica-demo.mp4.asset.json";
+import hannahDemoWebm from "@/assets/hannah-matematica-demo.webm.asset.json";
 
 const PATH = "/profesor-ai";
 const URL = `${SITE}${PATH}`;
@@ -106,6 +107,7 @@ function Page() {
               preload="metadata"
               aria-label="Exemplu video: Hannah explică o ecuație în română unui elev"
             >
+              <source src={hannahDemoWebm.url} type="video/webm" />
               <source src={hannahDemo.url} type="video/mp4" />
             </video>
           </div>
