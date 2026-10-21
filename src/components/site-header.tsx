@@ -20,7 +20,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur-xl">
-      <div className="container-page grid h-18 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 xl:flex xl:justify-between">
+      <div className="container-page grid h-18 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 2xl:flex 2xl:max-w-none 2xl:justify-between">
         <Link to="/" className="flex min-w-0 items-center gap-2 font-bold xl:shrink-0">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[var(--shadow-pop)]">
             <GraduationCap className="h-5 w-5" />
@@ -30,7 +30,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden shrink-0 items-center gap-1 xl:flex">
+        <nav className="hidden shrink-0 items-center gap-1 2xl:flex">
           {NAV.map((n) => (
             <Link
               key={n.to}
@@ -43,7 +43,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden shrink-0 items-center gap-2 xl:flex">
+        <div className="hidden shrink-0 items-center gap-2 2xl:flex">
           {user ? (
             <>
               <Link to="/mesaje" className="btn-pill text-sm text-foreground/80 hover:text-foreground hover:bg-muted">Mesaje</Link>
@@ -55,20 +55,20 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <span className="hidden 2xl:block"><Link to="/login" className="btn-outline">Autentificare</Link></span>
+              <Link to="/login" className="btn-outline">Autentificare</Link>
               <Link to="/signup" className="btn-primary">Creează cont</Link>
               <Link to="/pentru-profesori" className="btn-outline border-primary text-primary">Devino profesor</Link>
             </>
           )}
         </div>
 
-          <button className="grid h-10 w-10 place-items-center rounded-lg border border-border xl:hidden" onClick={() => setOpen((v) => !v)} aria-label="Meniu">
+          <button className="grid h-10 w-10 place-items-center rounded-lg border border-border 2xl:hidden" onClick={() => setOpen((v) => !v)} aria-label="Meniu" aria-expanded={open}>
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background xl:hidden">
+        <div className="border-t border-border bg-background 2xl:hidden">
           <div className="container-page flex flex-col gap-1 py-3">
             {NAV.map((n) => (
               <Link key={n.to} to={n.to} className="inline-flex min-h-11 items-center justify-center rounded-lg px-3 py-2 text-center text-sm leading-5 hover:bg-muted" onClick={() => setOpen(false)}>
