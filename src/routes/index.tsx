@@ -7,6 +7,7 @@ import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
+import { DemoVideoProfesoara } from "@/components/profesor-ai/demo-video";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -82,14 +83,7 @@ function HomePage() {
             <Link to="/profesor-ai" className="btn-primary h-12 px-6">Începe lecția gratuită de 15 minute <ArrowRight className="ml-2 h-4 w-4" /></Link>
           </div>
         </div>
-        <img
-          className="aspect-video w-full rounded-2xl bg-foreground object-cover shadow-[var(--shadow-card)]"
-          src="/promo-profesor-ai.jpg"
-          width={1280}
-          height={720}
-          alt="Profesoara AI care îți predă lecția live, față în față"
-          loading="lazy"
-        />
+        <DemoVideoProfesoara />
       </div>
     </section>
 
