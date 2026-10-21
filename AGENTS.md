@@ -1,5 +1,7 @@
 # Architecture rules
 
+- Email signup stores the entered phone as unverified user metadata; Profesor AI pre-fills it but independently validates and verifies it by SMS before granting access. Never treat signup metadata as proof of phone ownership.
+
 - Daily SEO monitoring uses a secret-authenticated public hook, server-only Semrush and admin-readable snapshots to protect quota.
 - Claim each Romanian day with a unique report row before Semrush for idempotency.
 - Preserve TanStack leaf-route metadata and request-first subject CTAs; this keeps indexable subject content separate from the private proposal workflow.
