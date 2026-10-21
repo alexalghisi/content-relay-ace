@@ -45,7 +45,7 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
       <button
         type="button"
         onClick={comuta}
-        className={`absolute inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-center text-sm font-bold text-primary-foreground shadow-lg transition hover:opacity-90 ${
+        className={`absolute inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-center text-sm font-bold text-primary-foreground shadow-lg whitespace-nowrap transition hover:opacity-90 ${
           sunet ? "right-3 top-3 px-3 py-2" : "bottom-4 left-1/2 -translate-x-1/2 animate-pulse"
         }`}
         aria-pressed={sunet}
