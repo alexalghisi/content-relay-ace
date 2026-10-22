@@ -160,7 +160,7 @@ export function RezolvareVerificataView({ rezolvare, pdfSubiect }: { rezolvare: 
         <div>
           <p className="font-semibold">Subiectul oficial</p>
           <p className="mt-1 text-muted-foreground">
-            {r.proba}, Varianta {r.varianta}. {r.programa}.
+            {r.proba}, {r.varianta != null ? `Varianta ${r.varianta}` : "Simulare"}. {r.programa}.
           </p>
           <p className="mt-1 text-muted-foreground">Emitent: {r.sursa.emitent}.</p>
           <a href={pdfSubiect} target="_blank" rel="noopener" className="mt-2 inline-flex text-primary underline">

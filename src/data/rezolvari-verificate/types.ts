@@ -56,7 +56,8 @@ export interface RezolvareVerificata {
   /** Ce scrie pe subiect: proba, programa și varianta. */
   proba: string;
   programa: string;
-  varianta: number;
+  /** Numărul variantei de pe subiect; null când documentul nu are variantă (ex. simulările). */
+  varianta: number | null;
   specializare: string;
   titlu: string;
   descriere: string;

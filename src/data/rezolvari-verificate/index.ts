@@ -1,11 +1,18 @@
 import { INFORMATICA_2026_IUNIE } from "./informatica-2026-iunie";
+import { INFORMATICA_2025_SIMULARE } from "./informatica-2025-simulare";
 import { MATEMATICA_2024_AUGUST } from "./matematica-2024-august";
+import { MATEMATICA_2024_SIMULARE } from "./matematica-2024-simulare";
 import type { ItemRezolvat, RezolvareVerificata } from "./types";
 
 export type { ItemRezolvat, RezolvareVerificata } from "./types";
 
 /** Toate rezolvările din repo, indiferent de status (pentru teste și flux editorial). */
-export const TOATE_REZOLVARILE: RezolvareVerificata[] = [INFORMATICA_2026_IUNIE, MATEMATICA_2024_AUGUST];
+export const TOATE_REZOLVARILE: RezolvareVerificata[] = [
+  INFORMATICA_2026_IUNIE,
+  MATEMATICA_2024_AUGUST,
+  INFORMATICA_2025_SIMULARE,
+  MATEMATICA_2024_SIMULARE,
+];
 
 /** Doar cele publicate apar pe site, în sitemap și în contextul Meditatorului AI. */
 export const REZOLVARI_PUBLICATE = TOATE_REZOLVARILE.filter((r) => r.status === "publicat");
@@ -38,7 +45,7 @@ export function contextExercitiu(id: string, maxLen = 3900): string | null {
   if (!g) return null;
   const { rezolvare: r, item } = g;
   const linii = [
-    `Exercițiu din subiectul oficial de bacalaureat ${r.an}, ${r.proba}, Varianta ${r.varianta} (${r.programa}).`,
+    `Exercițiu din subiectul oficial de bacalaureat ${r.an}, ${r.proba}, ${r.varianta != null ? `Varianta ${r.varianta}` : "Simulare"} (${r.programa}).`,
     `${item.eticheta} (${item.puncte} p). Cerința, reformulată: ${item.cerinta}`,
     `Rezolvarea verificată MeditatiiDirect (nu este baremul oficial; elevul o poate vedea pe pagină):`,
     ...item.pasi.map((p, i) => `${i + 1}. ${p}`),

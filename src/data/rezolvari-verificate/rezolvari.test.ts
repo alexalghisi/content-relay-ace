@@ -54,15 +54,36 @@ describe("integritatea rezolvărilor verificate", () => {
     });
   }
 
-  test("codul C++ afișat este exact codul compilat și testat", () => {
-    const dir = join(ROOT, "scripts/verificare-rezolvari/informatica-2026-iunie");
-    const r = rezolvarePublicata("informatica", 2026, "iunie")!;
-    const surse = ["s2_1c.cpp", "s2_3.cpp", "s3_1.cpp", "s3_2.cpp", "s3_3.cpp"].map((f) =>
-      readFileSync(join(dir, f), "utf8"),
-    );
-    for (const item of r.sectiuni.flatMap((s) => s.itemi)) {
-      if (item.cod?.limbaj !== "cpp") continue;
-      expect(surse.some((s) => s.includes(item.cod!.sursa))).toBe(true);
+  const SURSE_CPP: { an: number; sesiune: string; dir: string; fisiere: string[] }[] = [
+    {
+      an: 2026,
+      sesiune: "iunie",
+      dir: "scripts/verificare-rezolvari/informatica-2026-iunie",
+      fisiere: ["s2_1c.cpp", "s2_3.cpp", "s3_1.cpp", "s3_2.cpp", "s3_3.cpp"],
+    },
+    {
+      an: 2025,
+      sesiune: "simulare",
+      dir: "scripts/verificare-rezolvari/informatica-2025-simulare",
+      fisiere: ["s2_1c.cpp", "s2_2.cpp", "s2_3.cpp", "s3_1.cpp", "s3_2.cpp", "s3_3.cpp"],
+    },
+  ];
+
+  for (const { an, sesiune, dir, fisiere } of SURSE_CPP) {
+    test(`informatica ${an} ${sesiune}: codul C++ afișat este exact codul compilat și testat`, () => {
+      const r = rezolvarePublicata("informatica", an, sesiune)!;
+      expect(r).toBeTruthy();
+      const surse = fisiere.map((f) => readFileSync(join(ROOT, dir, f), "utf8"));
+      const itemiCpp = r.sectiuni.flatMap((s) => s.itemi).filter((i) => i.cod?.limbaj === "cpp");
+      expect(itemiCpp.length).toBeGreaterThan(0);
+      for (const item of itemiCpp) expect(surse.some((s) => s.includes(item.cod!.sursa))).toBe(true);
+    });
+  }
+
+  test("orice rezolvare cu cod C++ are sursele înregistrate în testul de mai sus", () => {
+    for (const r of TOATE_REZOLVARILE) {
+      if (!r.sectiuni.some((s) => s.itemi.some((i) => i.cod?.limbaj === "cpp"))) continue;
+      expect(SURSE_CPP.some((c) => r.materie === "informatica" && c.an === r.an && c.sesiune === r.sesiune)).toBe(true);
     }
   });
 });
