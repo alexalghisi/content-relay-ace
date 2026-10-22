@@ -28,7 +28,7 @@ export function liveAvatarConfig(env: Record<string, string | undefined>) {
  * text our tutor sends, while LiveAvatar still detects and transcribes the student's voice.
  */
 export async function createLiveAvatarAccess(
-  config: { key?: string; avatarId?: string; voiceId?: string; maxSeconds?: number },
+  config: { key?: string; avatarId?: string; voiceId?: string; maxSeconds?: number; language?: string },
   request: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response> = fetch,
 ) {
   if (!config.key) return unavailable("Cheia LiveAvatar nu este configurată.");
@@ -42,7 +42,7 @@ export async function createLiveAvatarAccess(
       avatar_id: config.avatarId,
       // Romanian is mandatory: STT + TTS language "ro"; ElevenLabs multilingual model speaks
       // Romanian text with native pronunciation even for voices catalogued as English.
-      avatar_persona: { voice_id: config.voiceId, language: "ro", voice_settings: RO_VOICE_SETTINGS },
+      avatar_persona: { voice_id: config.voiceId, language: config.language ?? "ro", voice_settings: RO_VOICE_SETTINGS },
       video_settings: { quality: "high", encoding: "H264" },
       interactivity_type: "CONVERSATIONAL",
       max_session_duration: maxSeconds,
