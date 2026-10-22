@@ -5,6 +5,7 @@ import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
 import { TablaComuna } from "./tabla-comuna";
 import { Button } from "@/components/ui/button";
 import { createSpeechQueue, isEcho, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
+import { createTrimitereAnticipata, sttBrowserPreferat } from "@/lib/profesor-ai-ascultare";
 import { playLessonMedia } from "@/lib/profesor-ai-audio";
 import { supabase } from "@/integrations/supabase/client";
 import { profesorAiAvatar, profesorAiRaspunde } from "@/lib/profesor-ai.functions";
@@ -18,7 +19,6 @@ import {
   PA_TACERE,
   PA_TACERE_MAX,
   PA_TACERE_SEC,
-  paEsteControl,
 } from "@/lib/profesor-ai";
 
 type Msg = { role: "user" | "assistant"; content: string; tabla?: string };
@@ -78,7 +78,6 @@ export function SesiuneProfesorAi({
   const video = useRef<HTMLVideoElement>(null);
   const heygen = useRef<HeyGen | null>(null);
   const sr = useRef<SR | null>(null);
-  const scroll = useRef<HTMLDivElement>(null);
   const coada = useRef(createSpeechQueue());
   const revision = useRef(0);
   const messagesRef = useRef<Msg[]>([]);
@@ -188,10 +187,6 @@ export function SesiuneProfesorAi({
     return () => window.clearInterval(t);
   }, [exp, gratuit]);
 
-  useEffect(() => {
-    scroll.current?.scrollTo({ top: scroll.current.scrollHeight, behavior: "smooth" });
-  }, [mesaje, pending]);
-
   // Coadă de vorbire: propozițiile se spun pe rând, imediat ce sunt gata.
   const vorbeste = useCallback((t: string) => {
     const spune = async () => {
@@ -236,9 +231,11 @@ export function SesiuneProfesorAi({
       const ctrl = new AbortController();
       abortRef.current = ctrl;
       let rostit = false;
+      // A spoken filler only when the model is really slow: queued speech delays the real answer
+      // by its own length, so it must not fire around the usual time-to-first-sentence (~1.5 s).
       const filler = window.setTimeout(() => {
         if (!rostit && rev === revision.current && !ascuns) { rostit = true; void vorbeste("Hmm, stai puțin."); }
-      }, 2500);
+      }, 4500);
       const fail = (error: string, cod?: string) => {
         if (rev !== revision.current) return;
         setEroare(error);
@@ -326,8 +323,12 @@ export function SesiuneProfesorAi({
   // Ascultare continuă (mâini libere) cât timp sesiunea e pornită.
   const startMic = useCallback(() => {
     handsFree.current = true;
-    if (liveVoice.current && heygen.current) {
-      // Browser recognition would fight LiveAvatar for the microphone.
+    const W = window as unknown as { SpeechRecognition?: new () => SR; webkitSpeechRecognition?: new () => SR };
+    const Ctor = W.SpeechRecognition ?? W.webkitSpeechRecognition;
+    // Fast path: the browser's recognizer gives interim text, so the question is sent after a short
+    // pause and barge-in is immediate. The avatar's own (slower) STT is used only where the browser
+    // has none or cannot run it beside the video (iOS); the mic is then published to LiveAvatar.
+    if (liveVoice.current && heygen.current && !sttBrowserPreferat(navigator.userAgent, !!Ctor)) {
       const old = sr.current;
       sr.current = null;
       old?.stop();
@@ -339,11 +340,9 @@ export function SesiuneProfesorAi({
       });
       return;
     }
-    const W = window as unknown as { SpeechRecognition?: new () => SR; webkitSpeechRecognition?: new () => SR };
-    const Ctor = W.SpeechRecognition ?? W.webkitSpeechRecognition;
     if (!Ctor) {
       handsFree.current = false;
-      setEroare("Browserul tău nu suportă dictarea. Scrie întrebarea în căsuța de mai jos.");
+      setEroare("Browserul tău nu suportă dictarea. Folosește Chrome, Edge sau Safari ca să vorbești cu profesoara.");
       return;
     }
     sr.current?.stop();
@@ -352,6 +351,10 @@ export function SesiuneProfesorAi({
     rec.continuous = true;
     rec.interimResults = true;
     rec.onspeechstart = null;
+    const anticipat = createTrimitereAnticipata((t) => {
+      console.info("[voice] browser transcription", t);
+      void sendRef.current(t);
+    });
     rec.onresult = (e) => {
       const last = e.results[e.results.length - 1] as ArrayLike<{ transcript: string }> & { isFinal?: boolean };
       const spus = last?.[0]?.transcript?.trim() ?? "";
@@ -360,13 +363,14 @@ export function SesiuneProfesorAi({
       if (!last.isFinal) {
         // Elevul vorbește peste profesoară: o oprim imediat, ca la telefon.
         if (speakingRef.current && spus.split(/\s+/).length >= 2) {
-          console.info("[voice] fallback barge-in");
+          console.info("[voice] barge-in");
           interruptRef.current();
         }
+        // Trimitem întrebarea după o pauză scurtă, fără să așteptăm rezultatul „final” al browserului.
+        anticipat.interim(spus);
         return;
       }
-      console.info("[voice] fallback transcription", spus);
-      void sendRef.current(spus);
+      anticipat.final(spus);
     };
     rec.onend = () => {
       if (handsFree.current && sr.current === rec) { try { rec.start(); return; } catch { /* fall through */ } }
@@ -517,18 +521,8 @@ export function SesiuneProfesorAi({
         <div className="px-5 pt-3 text-xs text-muted-foreground">
           {paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min · {paLimba(config.limba).name} · poți vorbi peste profesoară ca s-o întrerupi
         </div>
-        <div ref={scroll} className="max-h-72 flex-1 space-y-3 overflow-y-auto px-5 py-3" aria-live="polite">
-          {mesaje
-            .filter((m) => !paEsteControl(m.content))
-            .map((m, i) => (
-              <div key={i} className={m.role === "user" ? "ml-auto max-w-[85%]" : "max-w-[90%]"}>
-                <p
-                  className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${m.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
-                >
-                  {m.content}
-                </p>
-              </div>
-            ))}
+        {/* The lesson is spoken: no transcript under the video, only the board (next panel), errors and the end of the session. */}
+        <div className={`space-y-3 px-5 ${eroare || terminat ? "py-3" : "pb-3"}`} aria-live="polite">
           {eroare && (
             <div role="alert" className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
               <p>{eroare}</p>

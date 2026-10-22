@@ -66,12 +66,24 @@ test("plan session cap from LiveAvatar is applied in exactly one repaired retry"
   expect(r.heygen?.token).toBe("tok");
 });
 
-test("session is Romanian: language ro and the multilingual ElevenLabs model", async () => {
+test("session is Romanian: language ro and the low-latency ElevenLabs flash model", async () => {
   let body: { avatar_persona?: { language?: string; voice_settings?: { model?: string } } } = {};
   await createLiveAvatarAccess({ key: "k", avatarId: HANNAH_FRIENDLY, voiceId: HANNAH_VOICE }, async (_u, init) => {
     body = JSON.parse(String(init?.body));
     return Response.json({ data: { session_token: "t" } });
   });
   expect(body.avatar_persona?.language).toBe("ro");
-  expect(body.avatar_persona?.voice_settings?.model).toBe("eleven_multilingual_v2");
+  expect(body.avatar_persona?.voice_settings?.model).toBe("eleven_flash_v2_5");
+});
+
+test("a rejected voice model is repaired once with the multilingual model, keeping the video", async () => {
+  const models: string[] = [];
+  const r = await createLiveAvatarAccess({ key: "k", avatarId: HANNAH_FRIENDLY, voiceId: HANNAH_VOICE }, async (_u, init) => {
+    models.push(JSON.parse(String(init?.body)).avatar_persona.voice_settings.model);
+    return models.length === 1
+      ? Response.json({ message: "voice_settings.model: unsupported model" }, { status: 400 })
+      : Response.json({ data: { session_token: "tok" } });
+  });
+  expect(models).toEqual(["eleven_flash_v2_5", "eleven_multilingual_v2"]);
+  expect(r.heygen?.token).toBe("tok");
 });
