@@ -1,0 +1,14 @@
+// Rezolvări verificate pentru subiectele oficiale de admitere. Înregistrează aici fiecare fișier nou.
+import type { RezolvareAdmitere } from "@/data/rezolvari-verificate/types";
+
+export const TOATE_REZOLVARILE_ADMITERE: RezolvareAdmitere[] = [];
+
+export const REZOLVARI_ADMITERE_PUBLICATE = TOATE_REZOLVARILE_ADMITERE.filter((r) => r.status === "publicat");
+
+export function rezolvareAdmitere(universitate: string, materie: string, an: number): RezolvareAdmitere | null {
+  return (
+    REZOLVARI_ADMITERE_PUBLICATE.find(
+      (r) => r.universitate === universitate && r.materie === materie && r.an === an,
+    ) ?? null
+  );
+}
