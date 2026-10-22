@@ -7,7 +7,8 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
   an: 2024,
   sesiune: "simulare",
   proba: "Proba E. c) — Matematică M_mate-info",
-  programa: "Filiera teoretică, profilul real, specializarea matematică-informatică; filiera vocațională, profilul militar, specializarea matematică-informatică",
+  programa:
+    "Filiera teoretică, profilul real, specializarea matematică-informatică; filiera vocațională, profilul militar, specializarea matematică-informatică",
   varianta: null,
   specializare: "mate-info",
   titlu: "Rezolvare simulare BAC Matematică M_mate-info 2024 — pas cu pas",
@@ -24,7 +25,8 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
   },
   sursa: {
     emitent: "Ministerul Educației — Centrul Național de Politici și Evaluare în Educație",
-    detalii: "Examenul național de bacalaureat 2024, Proba E. c), Matematică M_mate-info, Simulare (antetul documentului oficial). Documentul nu are număr de variantă.",
+    detalii:
+      "Examenul național de bacalaureat 2024, Proba E. c), Matematică M_mate-info, Simulare (antetul documentului oficial). Documentul nu are număr de variantă.",
   },
   verificari: [
     {
@@ -72,7 +74,10 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           ],
           raspuns: "**a ∈ {−1, 1}**",
           verificare: "SymPy rezolvă f(f(1)) = 1 în a și întoarce [−1, 1].",
-          greseli: ["Calculul f(1) · f(1) în loc de f(f(1)).", "Păstrarea doar a soluției pozitive."],
+          greseli: [
+            "Calculul f(1) · f(1) în loc de f(f(1)).",
+            "Păstrarea doar a soluției pozitive.",
+          ],
         },
         {
           id: "s1-3",
@@ -93,7 +98,8 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           id: "s1-4",
           eticheta: "Subiectul I, 4",
           puncte: 5,
-          cerinta: "Probabilitatea ca, alegând un număr n de două cifre, √(n + 100) să fie natural.",
+          cerinta:
+            "Probabilitatea ca, alegând un număr n de două cifre, √(n + 100) să fie natural.",
           ceSeCere: "Câte numere de două cifre fac din n + 100 un pătrat perfect.",
           notiuni: ["probabilitate clasică", "pătrate perfecte"],
           pasi: [
@@ -102,16 +108,24 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
             "Deci n ∈ {21, 44, 69, 96}: 4 cazuri favorabile. p = 4/90 = 2/45.",
           ],
           raspuns: "**p = 2/45**",
-          verificare: "Enumerare completă a numerelor de două cifre: exact 21, 44, 69, 96 dau pătrat perfect; 4/90 = 2/45.",
-          greseli: ["Numărarea a 89 de cazuri posibile (99 − 10) în loc de 90.", "Includerea lui 100 = 10² (n ar fi 0, care nu are două cifre)."],
+          verificare:
+            "Enumerare completă a numerelor de două cifre: exact 21, 44, 69, 96 dau pătrat perfect; 4/90 = 2/45.",
+          greseli: [
+            "Numărarea a 89 de cazuri posibile (99 − 10) în loc de 90.",
+            "Includerea lui 100 = 10² (n ar fi 0, care nu are două cifre).",
+          ],
         },
         {
           id: "s1-5",
           eticheta: "Subiectul I, 5",
           puncte: 5,
-          cerinta: "A(1, 4), B(4, 6), C(4, 2). Determinați coordonatele punctului D pentru care vectorul OD = ½(AB + AC).",
+          cerinta:
+            "A(1, 4), B(4, 6), C(4, 2). Determinați coordonatele punctului D pentru care vectorul OD = ½(AB + AC).",
           ceSeCere: "Coordonatele vectorilor, apoi media lor.",
-          notiuni: ["coordonatele vectorului AB = (x_B − x_A, y_B − y_A)", "vectorul de poziție OD are coordonatele lui D"],
+          notiuni: [
+            "coordonatele vectorului AB = (x_B − x_A, y_B − y_A)",
+            "vectorul de poziție OD are coordonatele lui D",
+          ],
           pasi: [
             "AB = (4 − 1, 6 − 4) = (3, 2) și AC = (4 − 1, 2 − 4) = (3, −2).",
             "AB + AC = (6, 0), deci ½(AB + AC) = (3, 0).",
@@ -128,10 +142,7 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           cerinta: "E(x) = tg x − 4 cos(x/2) · cos x, x ∈ (0, π/2). Arătați că E(π/3) = 0.",
           ceSeCere: "Valorile funcțiilor trigonometrice în π/3 și π/6.",
           notiuni: ["tg(π/3) = √3", "cos(π/6) = √3/2", "cos(π/3) = 1/2"],
-          pasi: [
-            "Pentru x = π/3, x/2 = π/6.",
-            "E(π/3) = √3 − 4 · (√3/2) · (1/2) = √3 − √3 = 0.",
-          ],
+          pasi: ["Pentru x = π/3, x/2 = π/6.", "E(π/3) = √3 − 4 · (√3/2) · (1/2) = √3 − √3 = 0."],
           raspuns: "**E(π/3) = 0**",
           verificare: "SymPy simplifică exact E(π/3) la 0.",
           greseli: ["cos(π/6) = 1/2 — confuzie între valorile lui sin și cos."],
@@ -155,7 +166,9 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           ],
           raspuns: "**det(A(0)) = 1**",
           verificare: "SymPy calculează det(A(0)) = 1.",
-          greseli: ["Semnul cofactorului: elementul de pe poziția (3,3) are semnul (+), dar elementul însuși este −1."],
+          greseli: [
+            "Semnul cofactorului: elementul de pe poziția (3,3) are semnul (+), dar elementul însuși este −1.",
+          ],
         },
         {
           id: "s2-1b",
@@ -171,14 +184,19 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
             "x² ≥ 0 și x² + 2 > 0, deci −x²(x² + 2) ≤ 0 pentru orice x real.",
           ],
           raspuns: "**det(A(x)·A(x) − I₃) = −x²(x² + 2) ≤ 0**",
-          verificare: "SymPy: matricea A(x)² − I₃ și determinantul ei coincid cu cele de mai sus, iar inecuația −x²(x² + 2) ≤ 0 are ca soluție tot ℝ.",
-          greseli: ["Scăderea lui 1 din toate elementele în loc de doar de pe diagonală.", "Calculul lui (det A(x))² − 1 — det(A² − I₃) nu se descompune așa."],
+          verificare:
+            "SymPy: matricea A(x)² − I₃ și determinantul ei coincid cu cele de mai sus, iar inecuația −x²(x² + 2) ≤ 0 are ca soluție tot ℝ.",
+          greseli: [
+            "Scăderea lui 1 din toate elementele în loc de doar de pe diagonală.",
+            "Calculul lui (det A(x))² − 1 — det(A² − I₃) nu se descompune așa.",
+          ],
         },
         {
           id: "s2-1c",
           eticheta: "Subiectul al II-lea, 1c",
           puncte: 5,
-          cerinta: "B are liniile (1, 0, 1), (0, 1, 0). Determinați X ∈ M₂,₃(ℝ) pentru care X · (A(0))⁻¹ = B · A(0).",
+          cerinta:
+            "B are liniile (1, 0, 1), (0, 1, 0). Determinați X ∈ M₂,₃(ℝ) pentru care X · (A(0))⁻¹ = B · A(0).",
           ceSeCere: "Înmulțești la dreapta cu A(0).",
           notiuni: ["X · M⁻¹ = C ⇒ X = C · M", "înmulțirea unei matrice 2×3 cu una 3×3"],
           pasi: [
@@ -188,7 +206,9 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           ],
           raspuns: "**X are liniile (2, −1, 1) și (−1, 1, 0)**",
           verificare: "SymPy: X · A(0)⁻¹ = B · A(0) pentru X-ul găsit.",
-          greseli: ["Înmulțirea la stânga cu A(0) — produsul A(0) · X nici nu este definit (3×3 cu 2×3)."],
+          greseli: [
+            "Înmulțirea la stânga cu A(0) — produsul A(0) · X nici nu este definit (3×3 cu 2×3).",
+          ],
         },
         {
           id: "s2-2a",
@@ -215,7 +235,9 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           ],
           raspuns: "**e = 0 este element neutru**",
           verificare: "SymPy: x ∗ 0 − x și 0 ∗ x − x se simplifică la 0 pentru x ≥ 0.",
-          greseli: ["Verificarea doar a lui x ∗ 0, fără a justifica și 0 ∗ x (sau comutativitatea)."],
+          greseli: [
+            "Verificarea doar a lui x ∗ 0, fără a justifica și 0 ∗ x (sau comutativitatea).",
+          ],
         },
         {
           id: "s2-2c",
@@ -232,8 +254,12 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
             "Cazul simetric |m − 2| = 3, |n − 2| = 2: m = 5 și n ∈ {0, 4}.",
           ],
           raspuns: "**(m, n) ∈ {(0, 5), (4, 5), (5, 0), (5, 4)}**",
-          verificare: "Forță brută pe toate perechile de naturale 0 ≤ m, n ≤ 1000 (din ecuație, m, n ≤ 5): exact cele patru perechi; identitatea pătratelor verificată simbolic.",
-          greseli: ["Uitarea lui 0 — 0 este număr natural și aparține lui M.", "Păstrarea perechilor cu −1."],
+          verificare:
+            "Forță brută pe toate perechile de naturale 0 ≤ m, n ≤ 1000 (din ecuație, m, n ≤ 5): exact cele patru perechi; identitatea pătratelor verificată simbolic.",
+          greseli: [
+            "Uitarea lui 0 — 0 este număr natural și aparține lui M.",
+            "Păstrarea perechilor cu −1.",
+          ],
         },
       ],
     },
@@ -254,7 +280,8 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
             "= (2x² + 6x + 4) / √(x² + 4) = 2(x² + 3x + 2) / √(x² + 4).",
           ],
           raspuns: "**f'(x) = 2(x² + 3x + 2)/√(x² + 4)**, x ∈ ℝ",
-          verificare: "SymPy: diferența dintre derivata calculată și expresia din enunț se simplifică la 0.",
+          verificare:
+            "SymPy: diferența dintre derivata calculată și expresia din enunț se simplifică la 0.",
           greseli: ["(√(x² + 4))' = 1/(2√(x² + 4)) — uitarea derivatei funcției de sub radical."],
         },
         {
@@ -270,7 +297,9 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           ],
           raspuns: "**f este crescătoare pe (−∞, −2] și pe [−1, +∞), descrescătoare pe [−2, −1]**",
           verificare: "SymPy: f' ≥ 0 exact pe (−∞, −2] ∪ [−1, +∞) și f' ≤ 0 exact pe [−2, −1].",
-          greseli: ["Inversarea semnului trinomului: e negativ între rădăcini, pozitiv în afara lor."],
+          greseli: [
+            "Inversarea semnului trinomului: e negativ între rădăcini, pozitiv în afara lor.",
+          ],
         },
         {
           id: "s3-1c",
@@ -278,7 +307,11 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           puncte: 5,
           cerinta: "Demonstrați că ecuația f(x) = m are soluție unică pentru orice număr întreg m.",
           ceSeCere: "Folosești monotonia, continuitatea și valorile în punctele de extrem.",
-          notiuni: ["funcție continuă strict monotonă pe un interval (bijecție pe imagine)", "limite la ±∞", "comparații cu radicali"],
+          notiuni: [
+            "funcție continuă strict monotonă pe un interval (bijecție pe imagine)",
+            "limite la ±∞",
+            "comparații cu radicali",
+          ],
           pasi: [
             "Valorile în punctele de extrem: f(−2) = 4√8 = 8√2 (maxim local), f(−1) = 5√5 (minim local).",
             "5√5 = √125 și 8√2 = √128, iar 121 < 125 < 128 < 144, deci 11 < 5√5 < 8√2 < 12: între ele nu există niciun număr întreg.",
@@ -287,7 +320,8 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
             "Dacă m ≥ 12: pe (−∞, −1], f(x) ≤ 8√2 < 12 ≤ m, fără soluții; pe [−1, +∞), f crește de la 5√5 < m la +∞, deci exact o soluție.",
           ],
           raspuns: "**Pentru orice m întreg, ecuația f(x) = m are exact o soluție reală.**",
-          verificare: "SymPy: valorile exacte f(−2) = 8√2, f(−1) = 5√5, inegalitățile 11 < 5√5 < 8√2 < 12 și limitele; control numeric: pentru fiecare m întreg de la −60 la 60, ecuația ridicată la pătrat (x + 6)²(x² + 4) = m², filtrată cu f(x) = m, are exact o rădăcină reală.",
+          verificare:
+            "SymPy: valorile exacte f(−2) = 8√2, f(−1) = 5√5, inegalitățile 11 < 5√5 < 8√2 < 12 și limitele; control numeric: pentru fiecare m întreg de la −60 la 60, ecuația ridicată la pătrat (x + 6)²(x² + 4) = m², filtrată cu f(x) = m, are exact o rădăcină reală.",
           greseli: [
             "Concluzia doar din limite (−∞ și +∞) — garantează existența, nu unicitatea.",
             "Uitarea faptului că m este întreg: pentru m ∈ (5√5, 8√2) ecuația are trei soluții.",
@@ -300,10 +334,7 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
           cerinta: "f(x) = (x + 1)/eˣ. Arătați că ∫₀⁴ eˣ f(x) dx = 12.",
           ceSeCere: "Simplifici integrandul și integrezi un polinom.",
           notiuni: ["eˣ · e⁻ˣ = 1", "formula Leibniz–Newton"],
-          pasi: [
-            "eˣ · f(x) = x + 1.",
-            "∫₀⁴ (x + 1) dx = (x²/2 + x) |₀⁴ = 8 + 4 = 12.",
-          ],
+          pasi: ["eˣ · f(x) = x + 1.", "∫₀⁴ (x + 1) dx = (x²/2 + x) |₀⁴ = 8 + 4 = 12."],
           raspuns: "**12**",
           verificare: "SymPy calculează integrala exact: 12.",
           greseli: ["Uitarea termenului x în primitivă (x²/2 + x)."],
@@ -320,14 +351,19 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
             "∫₀¹ f(x) dx = −(x + 2)e⁻ˣ |₀¹ = −3/e + 2 = (2e − 3)/e.",
           ],
           raspuns: "**(2e − 3)/e**",
-          verificare: "SymPy calculează integrala exact și verifică prin derivare că −(x + 2)e⁻ˣ este o primitivă a lui f.",
-          greseli: ["Primitiva lui e⁻ˣ scrisă e⁻ˣ (fără minus).", "Valoarea în 0 calculată ca 0 în loc de −2."],
+          verificare:
+            "SymPy calculează integrala exact și verifică prin derivare că −(x + 2)e⁻ˣ este o primitivă a lui f.",
+          greseli: [
+            "Primitiva lui e⁻ˣ scrisă e⁻ˣ (fără minus).",
+            "Valoarea în 0 calculată ca 0 în loc de −2.",
+          ],
         },
         {
           id: "s3-2c",
           eticheta: "Subiectul al III-lea, 2c",
           puncte: 5,
-          cerinta: "Pentru n natural, n ≥ 2, Iₙ = ∫₀¹ xⁿ⁻¹ / f(xⁿ) dx. Demonstrați că ln2/n ≤ Iₙ ≤ (e − 1)/n.",
+          cerinta:
+            "Pentru n natural, n ≥ 2, Iₙ = ∫₀¹ xⁿ⁻¹ / f(xⁿ) dx. Demonstrați că ln2/n ≤ Iₙ ≤ (e − 1)/n.",
           ceSeCere: "Schimbare de variabilă t = xⁿ, apoi încadrarea integrandului.",
           notiuni: ["schimbarea de variabilă", "monotonia integralei", "eᵗ ≥ 1 pentru t ≥ 0"],
           pasi: [
@@ -338,8 +374,12 @@ export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
             "Împărțind la n > 0: ln2/n ≤ Iₙ ≤ (e − 1)/n.",
           ],
           raspuns: "**ln2/n ≤ Iₙ ≤ (e − 1)/n** pentru orice n ≥ 2",
-          verificare: "SymPy: integralele marginilor sunt exact ln 2 și e − 1; numeric, pentru n = 2, …, 12, Iₙ coincide cu (1/n)∫₀¹ eᵗ/(t + 1) dt (cu 20 de zecimale) și respectă ambele inegalități.",
-          greseli: ["Uitarea factorului 1/n de la schimbarea de variabilă.", "1/f(xⁿ) scris (xⁿ + 1)/e^(xⁿ) — f este la numitor."],
+          verificare:
+            "SymPy: integralele marginilor sunt exact ln 2 și e − 1; numeric, pentru n = 2, …, 12, Iₙ coincide cu (1/n)∫₀¹ eᵗ/(t + 1) dt (cu 20 de zecimale) și respectă ambele inegalități.",
+          greseli: [
+            "Uitarea factorului 1/n de la schimbarea de variabilă.",
+            "1/f(xⁿ) scris (xⁿ + 1)/e^(xⁿ) — f este la numitor.",
+          ],
         },
       ],
     },

@@ -17,18 +17,30 @@ export const TOATE_REZOLVARILE: RezolvareVerificata[] = [
 /** Doar cele publicate apar pe site, în sitemap și în contextul Meditatorului AI. */
 export const REZOLVARI_PUBLICATE = TOATE_REZOLVARILE.filter((r) => r.status === "publicat");
 
-export const cheieRezolvare = (materie: string, an: number, sesiune: string) => `${materie}/${an}/${sesiune}`;
+export const cheieRezolvare = (materie: string, an: number, sesiune: string) =>
+  `${materie}/${an}/${sesiune}`;
 
-export function rezolvarePublicata(materie: string, an: number, sesiune: string): RezolvareVerificata | null {
-  return REZOLVARI_PUBLICATE.find((r) => r.materie === materie && r.an === an && r.sesiune === sesiune) ?? null;
+export function rezolvarePublicata(
+  materie: string,
+  an: number,
+  sesiune: string,
+): RezolvareVerificata | null {
+  return (
+    REZOLVARI_PUBLICATE.find(
+      (r) => r.materie === materie && r.an === an && r.sesiune === sesiune,
+    ) ?? null
+  );
 }
 
 /** Id global al unui exercițiu: "informatica/2026/iunie#s3-1". */
 export const idExercitiu = (r: RezolvareVerificata, item: ItemRezolvat) =>
   `${cheieRezolvare(r.materie, r.an, r.sesiune)}#${item.id}`;
-export const ID_EXERCITIU_RE = /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare)#([a-z0-9-]{1,20})$/;
+export const ID_EXERCITIU_RE =
+  /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare)#([a-z0-9-]{1,20})$/;
 
-export function gasesteExercitiu(id: string): { rezolvare: RezolvareVerificata; item: ItemRezolvat } | null {
+export function gasesteExercitiu(
+  id: string,
+): { rezolvare: RezolvareVerificata; item: ItemRezolvat } | null {
   const m = ID_EXERCITIU_RE.exec(id);
   if (!m) return null;
   const r = rezolvarePublicata(m[1], Number(m[2]), m[3]);

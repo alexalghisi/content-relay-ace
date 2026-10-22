@@ -1,5 +1,10 @@
 # Roadmap
 
+- [x] Audit de conținut pentru toate cele 288 de PDF-uri BAC găzduite (text citit din fiecare fișier): 134 trec, 154 ascunse (73 emitent neoficial — inclusiv o bibliografie a Bibliotecii Naționale și culegeri județene, 59 subiecte puse ca barem, 42 modele, 17 sesiune greșită, 16 an greșit). Baremele de altă specializare/variantă nu mai apar lângă subiect. Paginile, hub-urile și sitemap-ul folosesc aceeași regulă.
+- [x] 4 rezolvări originale verificate prin rulare (g++ / SymPy): Informatică 2026 iunie V4, Matematică M_tehnologic 2024 august V3, Informatică simulare 2025 (ISJ Brăila), Matematică M_mate-info simulare 2024; butoane Meditator AI pe fiecare exercițiu, context construit pe server.
+- [ ] Completare arhivă cu PDF-uri oficiale 2017–2026 lipsă (ex. Matematică/Informatică iunie 2025) — blocat: subiecte2024–2026.edu.ro dau eroare de certificat HTTPS în browser și nu sunt accesibile din mediul cloud; necesită descărcare manuală sau cheia de upload (service role).
+- [ ] Collab ↔ collaborare.ro: câmp `problemSlug` în setările camerei Collab + link „Deschide enunțul” — blocat pentru enunțuri în Collab: collaborare.ro nu are API/export de date și repo-ul sursă nu e accesibil din această sesiune.
+
 - [x] Corectează activarea sunetului dintr-o apăsare în lecție, inclusiv în timpul conectării; 11 teste trec și browserul la 402×725 confirmă muted true → false, volum 1 și oprire/reluare. Build OK. Numai previzualizare.
 - [ ] Confirmă vocea audibilă pe iPhone real — browserul de test nu a conectat video LiveAvatar; activarea elementului audio este verificată, nu conversația audibilă.
 

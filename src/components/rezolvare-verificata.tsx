@@ -6,7 +6,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Bot, CheckCircle2, FileCheck2, Lightbulb, ShieldCheck, TriangleAlert } from "lucide-react";
 import { MEDITATOR_CONTEXT_KEY } from "@/components/ai/simulare-ai";
-import { idExercitiu, type ItemRezolvat, type RezolvareVerificata } from "@/data/rezolvari-verificate";
+import {
+  idExercitiu,
+  type ItemRezolvat,
+  type RezolvareVerificata,
+} from "@/data/rezolvari-verificate";
 
 function Md({ text }: { text: string }) {
   return (
@@ -14,7 +18,9 @@ function Md({ text }: { text: string }) {
       remarkPlugins={[remarkGfm]}
       components={{
         p: ({ children }) => <span>{children}</span>,
-        code: ({ children }) => <code className="rounded bg-muted px-1 py-0.5 text-[0.9em]">{children}</code>,
+        code: ({ children }) => (
+          <code className="rounded bg-muted px-1 py-0.5 text-[0.9em]">{children}</code>
+        ),
         a: ({ href, children }) => (
           <a href={href} className="text-primary underline">
             {children}
@@ -28,23 +34,47 @@ function Md({ text }: { text: string }) {
 }
 
 const INTREBARI = (item: ItemRezolvat) => [
-  { eticheta: "Explică-mi mai simplu", text: `Explică-mi mai simplu ${item.eticheta}, pas cu pas.` },
-  { eticheta: "Dă-mi un indiciu", text: `Dă-mi doar un indiciu pentru ${item.eticheta}, fără să-mi spui răspunsul.` },
+  {
+    eticheta: "Explică-mi mai simplu",
+    text: `Explică-mi mai simplu ${item.eticheta}, pas cu pas.`,
+  },
+  {
+    eticheta: "Dă-mi un indiciu",
+    text: `Dă-mi doar un indiciu pentru ${item.eticheta}, fără să-mi spui răspunsul.`,
+  },
   { eticheta: "Altă metodă", text: `Arată-mi o altă metodă de rezolvare pentru ${item.eticheta}.` },
-  { eticheta: "Exercițiu asemănător", text: `Dă-mi un exercițiu asemănător cu ${item.eticheta}, să-l rezolv singur.` },
+  {
+    eticheta: "Exercițiu asemănător",
+    text: `Dă-mi un exercițiu asemănător cu ${item.eticheta}, să-l rezolv singur.`,
+  },
   ...(item.cod?.limbaj === "cpp"
-    ? [{ eticheta: "Explică-mi codul", text: `Explică-mi linie cu linie codul de la ${item.eticheta}.` }]
+    ? [
+        {
+          eticheta: "Explică-mi codul",
+          text: `Explică-mi linie cu linie codul de la ${item.eticheta}.`,
+        },
+      ]
     : []),
 ];
 
-function IntreabaMeditatorul({ rezolvare, item }: { rezolvare: RezolvareVerificata; item: ItemRezolvat }) {
+function IntreabaMeditatorul({
+  rezolvare,
+  item,
+}: {
+  rezolvare: RezolvareVerificata;
+  item: ItemRezolvat;
+}) {
   const navigate = useNavigate();
   const deschide = (intrebare: string) => {
     try {
       // Trimitem doar id-ul exercițiului; serverul construiește contextul din conținutul verificat.
       sessionStorage.setItem(
         MEDITATOR_CONTEXT_KEY,
-        JSON.stringify({ materie: rezolvare.materie, exercitiu: idExercitiu(rezolvare, item), intrebare }),
+        JSON.stringify({
+          materie: rezolvare.materie,
+          exercitiu: idExercitiu(rezolvare, item),
+          intrebare,
+        }),
       );
     } catch {
       /* fără sessionStorage: Meditatorul pornește fără context */
@@ -54,7 +84,8 @@ function IntreabaMeditatorul({ rezolvare, item }: { rezolvare: RezolvareVerifica
   return (
     <div className="mt-5 rounded-xl border border-primary/20 bg-primary-soft/30 p-4">
       <p className="flex items-center gap-2 text-sm font-medium">
-        <Bot className="h-4 w-4 text-primary" /> Nu e clar? Întreabă Meditatorul AI despre acest exercițiu
+        <Bot className="h-4 w-4 text-primary" /> Nu e clar? Întreabă Meditatorul AI despre acest
+        exercițiu
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         {INTREBARI(item).map((q) => (
@@ -69,7 +100,8 @@ function IntreabaMeditatorul({ rezolvare, item }: { rezolvare: RezolvareVerifica
         ))}
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
-        Necesită cont gratuit, cu un număr limitat de mesaje pe zi. AI-ul poate greși — rezolvarea verificată rămâne cea de pe această pagină.
+        Necesită cont gratuit, cu un număr limitat de mesaje pe zi. AI-ul poate greși — rezolvarea
+        verificată rămâne cea de pe această pagină.
       </p>
     </div>
   );
@@ -77,9 +109,14 @@ function IntreabaMeditatorul({ rezolvare, item }: { rezolvare: RezolvareVerifica
 
 function Item({ rezolvare, item }: { rezolvare: RezolvareVerificata; item: ItemRezolvat }) {
   return (
-    <section id={item.id} aria-labelledby={`${item.id}-h`} className="scroll-mt-24 border-t border-border pt-8">
+    <section
+      id={item.id}
+      aria-labelledby={`${item.id}-h`}
+      className="scroll-mt-24 border-t border-border pt-8"
+    >
       <h3 id={`${item.id}-h`} className="text-lg font-semibold">
-        {item.eticheta} <span className="text-sm font-normal text-muted-foreground">({item.puncte} p)</span>
+        {item.eticheta}{" "}
+        <span className="text-sm font-normal text-muted-foreground">({item.puncte} p)</span>
       </h3>
       <p className="mt-2 rounded-lg bg-muted/50 p-3 text-sm">
         <span className="font-medium">Cerința, pe scurt: </span>
@@ -152,7 +189,13 @@ function Item({ rezolvare, item }: { rezolvare: RezolvareVerificata; item: ItemR
   );
 }
 
-export function RezolvareVerificataView({ rezolvare, pdfSubiect }: { rezolvare: RezolvareVerificata; pdfSubiect: string }) {
+export function RezolvareVerificataView({
+  rezolvare,
+  pdfSubiect,
+}: {
+  rezolvare: RezolvareVerificata;
+  pdfSubiect: string;
+}) {
   const r = rezolvare;
   return (
     <>
@@ -163,7 +206,12 @@ export function RezolvareVerificataView({ rezolvare, pdfSubiect }: { rezolvare: 
             {r.proba}, {r.varianta != null ? `Varianta ${r.varianta}` : "Simulare"}. {r.programa}.
           </p>
           <p className="mt-1 text-muted-foreground">Emitent: {r.sursa.emitent}.</p>
-          <a href={pdfSubiect} target="_blank" rel="noopener" className="mt-2 inline-flex text-primary underline">
+          <a
+            href={pdfSubiect}
+            target="_blank"
+            rel="noopener"
+            className="mt-2 inline-flex text-primary underline"
+          >
             Deschide subiectul oficial (PDF)
           </a>
         </div>
@@ -174,7 +222,8 @@ export function RezolvareVerificataView({ rezolvare, pdfSubiect }: { rezolvare: 
           <ul className="mt-1 space-y-1 text-muted-foreground">
             {r.verificari.map((v) => (
               <li key={v.ce}>
-                <span className="font-medium text-foreground">{v.rezultat}</span> — {v.ce}. {v.metoda} ({v.data}).
+                <span className="font-medium text-foreground">{v.rezultat}</span> — {v.ce}.{" "}
+                {v.metoda} ({v.data}).
               </li>
             ))}
           </ul>
@@ -188,20 +237,25 @@ export function RezolvareVerificataView({ rezolvare, pdfSubiect }: { rezolvare: 
       <nav aria-label="Cuprins" className="mt-6 rounded-xl border border-border p-4 text-sm">
         <p className="font-semibold">Cuprins</p>
         <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
-          {r.sectiuni.flatMap((s) => s.itemi).map((i) => (
-            <li key={i.id}>
-              <a href={`#${i.id}`} className="text-primary hover:underline">
-                {i.eticheta.replace("Subiectul ", "")}
-              </a>
-            </li>
-          ))}
+          {r.sectiuni
+            .flatMap((s) => s.itemi)
+            .map((i) => (
+              <li key={i.id}>
+                <a href={`#${i.id}`} className="text-primary hover:underline">
+                  {i.eticheta.replace("Subiectul ", "")}
+                </a>
+              </li>
+            ))}
         </ul>
       </nav>
 
       {r.sectiuni.map((s) => (
         <section key={s.titlu} className="mt-10" aria-label={s.titlu}>
           <h2 className="text-2xl font-bold">
-            {s.titlu} <span className="text-base font-normal text-muted-foreground">({s.puncte} de puncte)</span>
+            {s.titlu}{" "}
+            <span className="text-base font-normal text-muted-foreground">
+              ({s.puncte} de puncte)
+            </span>
           </h2>
           <div className="mt-4 space-y-8">
             {s.itemi.map((i) => (

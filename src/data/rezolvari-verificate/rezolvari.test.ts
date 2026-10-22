@@ -76,14 +76,19 @@ describe("integritatea rezolvărilor verificate", () => {
       const surse = fisiere.map((f) => readFileSync(join(ROOT, dir, f), "utf8"));
       const itemiCpp = r.sectiuni.flatMap((s) => s.itemi).filter((i) => i.cod?.limbaj === "cpp");
       expect(itemiCpp.length).toBeGreaterThan(0);
-      for (const item of itemiCpp) expect(surse.some((s) => s.includes(item.cod!.sursa))).toBe(true);
+      for (const item of itemiCpp)
+        expect(surse.some((s) => s.includes(item.cod!.sursa))).toBe(true);
     });
   }
 
   test("orice rezolvare cu cod C++ are sursele înregistrate în testul de mai sus", () => {
     for (const r of TOATE_REZOLVARILE) {
       if (!r.sectiuni.some((s) => s.itemi.some((i) => i.cod?.limbaj === "cpp"))) continue;
-      expect(SURSE_CPP.some((c) => r.materie === "informatica" && c.an === r.an && c.sesiune === r.sesiune)).toBe(true);
+      expect(
+        SURSE_CPP.some(
+          (c) => r.materie === "informatica" && c.an === r.an && c.sesiune === r.sesiune,
+        ),
+      ).toBe(true);
     }
   });
 });

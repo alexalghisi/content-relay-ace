@@ -7,7 +7,8 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
   an: 2024,
   sesiune: "august",
   proba: "Proba E. c) — Matematică M_tehnologic",
-  programa: "Filiera tehnologică: profilul servicii, profilul resurse, profilul tehnic — toate calificările profesionale",
+  programa:
+    "Filiera tehnologică: profilul servicii, profilul resurse, profilul tehnic — toate calificările profesionale",
   varianta: 3,
   specializare: "tehnologic",
   titlu: "Rezolvare BAC Matematică M_tehnologic 2024 (august), Varianta 3 — pas cu pas",
@@ -24,7 +25,8 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
   },
   sursa: {
     emitent: "Ministerul Educației — Centrul Național de Politici și Evaluare în Educație",
-    detalii: "Examenul național de bacalaureat 2024, Proba E. c), Matematică M_tehnologic, Varianta 3 (antetul documentului oficial).",
+    detalii:
+      "Examenul național de bacalaureat 2024, Proba E. c), Matematică M_tehnologic, Varianta 3 (antetul documentului oficial).",
   },
   verificari: [
     {
@@ -80,13 +82,16 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
           ],
           raspuns: "**x = 2**",
           verificare: "SymPy rezolvă log₅(2x+1) − 1 = 0 și întoarce doar x = 2.",
-          greseli: ["Omiterea condiției de existență (aici nu schimbă rezultatul, dar se punctează la barem)."],
+          greseli: [
+            "Omiterea condiției de existență (aici nu schimbă rezultatul, dar se punctează la barem).",
+          ],
         },
         {
           id: "s1-4",
           eticheta: "Subiectul I, 4",
           puncte: 5,
-          cerinta: "Alegem un număr din A = {11, 21, 31, 41, 51, 61, 71, 81, 91}. Probabilitatea ca el să fie divizibil cu 3.",
+          cerinta:
+            "Alegem un număr din A = {11, 21, 31, 41, 51, 61, 71, 81, 91}. Probabilitatea ca el să fie divizibil cu 3.",
           ceSeCere: "Cazuri favorabile / cazuri posibile.",
           notiuni: ["probabilitate clasică", "criteriul de divizibilitate cu 3 (suma cifrelor)"],
           pasi: [
@@ -102,7 +107,8 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
           id: "s1-5",
           eticheta: "Subiectul I, 5",
           puncte: 5,
-          cerinta: "A(3, 1), B(m, 2), C(5, 3). Determinați m știind că B este mijlocul segmentului AC.",
+          cerinta:
+            "A(3, 1), B(m, 2), C(5, 3). Determinați m știind că B este mijlocul segmentului AC.",
           ceSeCere: "Coordonatele mijlocului unui segment.",
           notiuni: ["mijlocul segmentului: media coordonatelor"],
           pasi: [
@@ -117,7 +123,8 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
           id: "s1-6",
           eticheta: "Subiectul I, 6",
           puncte: 5,
-          cerinta: "Triunghiul ABC este dreptunghic în A, BC = 20, AC = 16. Arătați că perimetrul este 48.",
+          cerinta:
+            "Triunghiul ABC este dreptunghic în A, BC = 20, AC = 16. Arătați că perimetrul este 48.",
           ceSeCere: "Cateta lipsă cu teorema lui Pitagora, apoi suma laturilor.",
           notiuni: ["teorema lui Pitagora", "ipotenuza se opune unghiului drept"],
           pasi: [
@@ -169,7 +176,11 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
           puncte: 5,
           cerinta: "Determinați X ∈ M₂(ℝ) pentru care X · A(1) = A(3).",
           ceSeCere: "Înmulțești la dreapta cu inversa lui A(1).",
-          notiuni: ["matrice inversabilă (det ≠ 0)", "inversa unei matrice 2×2", "ecuații matriceale: X·A = B ⇒ X = B·A⁻¹"],
+          notiuni: [
+            "matrice inversabilă (det ≠ 0)",
+            "inversa unei matrice 2×2",
+            "ecuații matriceale: X·A = B ⇒ X = B·A⁻¹",
+          ],
           pasi: [
             "det(A(1)) = 2 ≠ 0, deci A(1) este inversabilă: A(1)⁻¹ = (1/2) · (1 −1; −1 3).",
             "X = A(3) · A(1)⁻¹ = (1/2) · (7 1; 1 3) · (1 −1; −1 3) = (1/2) · (6 −4; −2 8).",
@@ -177,8 +188,11 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
             "Ordinea contează: înmulțim cu inversa **la dreapta**, pentru că X stă în stânga lui A(1).",
           ],
           raspuns: "**X = (3 −2; −1 4)**",
-          verificare: "SymPy: X · A(1) = (3·3 − 2·1, 3·1 − 2·1; −1·3 + 4·1, −1·1 + 4·1) = (7 1; 1 3) = A(3).",
-          greseli: ["X = A(1)⁻¹ · A(3) (inversa la stânga) — dă altă matrice, care nu verifică ecuația."],
+          verificare:
+            "SymPy: X · A(1) = (3·3 − 2·1, 3·1 − 2·1; −1·3 + 4·1, −1·1 + 4·1) = (7 1; 1 3) = A(3).",
+          greseli: [
+            "X = A(1)⁻¹ · A(3) (inversa la stânga) — dă altă matrice, care nu verifică ecuația.",
+          ],
         },
         {
           id: "s2-2a",
@@ -208,17 +222,25 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
           id: "s2-2c",
           eticheta: "Subiectul al II-lea, 2c",
           puncte: 5,
-          cerinta: "Determinați m natural pentru care x₁² + x₂² + x₃² = 5 (x₁, x₂, x₃ rădăcinile lui f).",
+          cerinta:
+            "Determinați m natural pentru care x₁² + x₂² + x₃² = 5 (x₁, x₂, x₃ rădăcinile lui f).",
           ceSeCere: "Relațiile lui Viète și identitatea pentru suma pătratelor.",
-          notiuni: ["relațiile lui Viète pentru gradul 3", "x₁² + x₂² + x₃² = (x₁+x₂+x₃)² − 2(x₁x₂ + x₁x₃ + x₂x₃)"],
+          notiuni: [
+            "relațiile lui Viète pentru gradul 3",
+            "x₁² + x₂² + x₃² = (x₁+x₂+x₃)² − 2(x₁x₂ + x₁x₃ + x₂x₃)",
+          ],
           pasi: [
             "Viète: x₁ + x₂ + x₃ = −m și x₁x₂ + x₁x₃ + x₂x₃ = 2.",
             "x₁² + x₂² + x₃² = m² − 2 · 2 = m² − 4.",
             "m² − 4 = 5 ⇒ m² = 9 ⇒ m = 3 sau m = −3; m natural, deci m = 3.",
           ],
           raspuns: "**m = 3**",
-          verificare: "Simbolic: m² − 4 = 5 dă m ∈ {−3, 3}; numeric: pentru m = 3 am calculat cele trei rădăcini (una reală, două complexe) și suma pătratelor lor este 5.",
-          greseli: ["Semnul sumei rădăcinilor: x₁ + x₂ + x₃ = −m (nu m) — aici nu schimbă rezultatul, pentru că se ridică la pătrat.", "Păstrarea și a lui m = −3, care nu este natural."],
+          verificare:
+            "Simbolic: m² − 4 = 5 dă m ∈ {−3, 3}; numeric: pentru m = 3 am calculat cele trei rădăcini (una reală, două complexe) și suma pătratelor lor este 5.",
+          greseli: [
+            "Semnul sumei rădăcinilor: x₁ + x₂ + x₃ = −m (nu m) — aici nu schimbă rezultatul, pentru că se ridică la pătrat.",
+            "Păstrarea și a lui m = −3, care nu este natural.",
+          ],
         },
       ],
     },
@@ -238,7 +260,8 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
             "f'(x) = (2x(x² + 1) − x² · 2x) / (x² + 1)² = (2x³ + 2x − 2x³) / (x² + 1)² = 2x / (x² + 1)².",
           ],
           raspuns: "**f'(x) = 2x / (x² + 1)²**, x ∈ ℝ",
-          verificare: "SymPy: diferența dintre derivata calculată și 2x/(x²+1)² se simplifică la 0.",
+          verificare:
+            "SymPy: diferența dintre derivata calculată și 2x/(x²+1)² se simplifică la 0.",
           greseli: ["Inversarea termenilor de la numărător (uv' − u'v) — schimbă semnul."],
         },
         {
@@ -296,15 +319,22 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
           ],
           raspuns: "**e**",
           verificare: "SymPy calculează integrala exact: e.",
-          greseli: ["Integrarea separată a lui eˣ și a lui x (produsul nu se integrează factor cu factor)."],
+          greseli: [
+            "Integrarea separată a lui eˣ și a lui x (produsul nu se integrează factor cu factor).",
+          ],
         },
         {
           id: "s3-2c",
           eticheta: "Subiectul al III-lea, 2c",
           puncte: 5,
           cerinta: "Determinați a > 1 pentru care ∫₁ᵃ 2x · f(x²) / (x² + 1) dx = e(e³ − 1).",
-          ceSeCere: "Simplifici integrandul, recunoști o derivată compusă, rezolvi o ecuație exponențială.",
-          notiuni: ["f(x²) = e^(x²)(x² + 1)", "(e^(x²))' = 2x · e^(x²)", "injectivitatea funcției exponențiale"],
+          ceSeCere:
+            "Simplifici integrandul, recunoști o derivată compusă, rezolvi o ecuație exponențială.",
+          notiuni: [
+            "f(x²) = e^(x²)(x² + 1)",
+            "(e^(x²))' = 2x · e^(x²)",
+            "injectivitatea funcției exponențiale",
+          ],
           pasi: [
             "f(x²) = e^(x²) · (x² + 1), deci 2x · f(x²) / (x² + 1) = 2x · e^(x²).",
             "2x · e^(x²) este derivata lui e^(x²), deci integrala este e^(x²) |₁ᵃ = e^(a²) − e.",
@@ -312,8 +342,12 @@ export const MATEMATICA_2024_AUGUST: RezolvareVerificata = {
             "Cum a > 1, a = 2.",
           ],
           raspuns: "**a = 2**",
-          verificare: "SymPy calculează integrala ca funcție de a și rezolvă ecuația: singura soluție a > 1 este 2.",
-          greseli: ["Înlocuirea lui x² în f doar în exponent, uitând factorul (x² + 1).", "Păstrarea și a soluției a = −2, care nu respectă a > 1."],
+          verificare:
+            "SymPy calculează integrala ca funcție de a și rezolvă ecuația: singura soluție a > 1 este 2.",
+          greseli: [
+            "Înlocuirea lui x² în f doar în exponent, uitând factorul (x² + 1).",
+            "Păstrarea și a soluției a = −2, care nu respectă a > 1.",
+          ],
         },
       ],
     },

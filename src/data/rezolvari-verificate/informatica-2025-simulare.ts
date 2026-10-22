@@ -7,10 +7,12 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
   an: 2025,
   sesiune: "simulare",
   proba: "Proba E. d) — Informatică, limbajul C/C++",
-  programa: "Filiera teoretică, profil real, specializarea matematică-informatică / matematică-informatică intensiv informatică; filiera vocațională, profil militar, matematică-informatică",
+  programa:
+    "Filiera teoretică, profil real, specializarea matematică-informatică / matematică-informatică intensiv informatică; filiera vocațională, profil militar, matematică-informatică",
   varianta: null,
   specializare: "mate-info",
-  titlu: "Rezolvare simulare BAC Informatică 2025, mate-info — pas cu pas, cu cod C++ testat",
+  titlu:
+    "Rezolvare simulare BAC Informatică 2025 (ISJ Brăila), mate-info — pas cu pas, cu cod C++ testat",
   descriere:
     "Rezolvarea completă a simulării de bacalaureat la informatică din 2025 (mate-info, C/C++): grilele explicate, algoritmul care numără numerele prime dintr-un interval, structuri, completarea unui tablou bidimensional, subprogramul zero (zerourile finale ale unui produs), cuvintele „muzicale” dintr-un text și algoritmul eficient pentru semnalele laser din BAC.IN. Fiecare program a fost compilat și testat pe exemplele din enunț, pe cazuri limită și comparat cu implementări independente.",
   status: "publicat",
@@ -24,7 +26,8 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
   },
   sursa: {
     emitent: "Ministerul Educației — Inspectoratul Școlar Județean Brăila",
-    detalii: "Examenul național de bacalaureat 2025, Proba E. d), Informatică, limbajul C/C++, Simulare (antetul documentului). Documentul nu are număr de variantă.",
+    detalii:
+      "Examenul național de bacalaureat 2025, Proba E. d), Informatică, limbajul C/C++, Simulare (antetul documentului). Documentul nu are număr de variantă.",
   },
   verificari: [
     {
@@ -43,7 +46,8 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
     },
     {
       ce: "III.1 pe exemplul din enunț, numere negative, element 0 și 300 de vectori aleatori comparați cu produsul calculat exact în Python; III.2 pe exemplul din enunț și pe 200 de texte aleatoare comparate cu o implementare independentă; III.3 pe exemple, pe toate perechile cu m ≤ 30 și pe valori de ordinul 10⁶ / 10⁹",
-      metoda: "Programe C++ compilate și rulate; rezultatele așteptate generate independent în Python 3",
+      metoda:
+        "Programe C++ compilate și rulate; rezultatele așteptate generate independent în Python 3",
       comanda: VERIFICA,
       data: "2026-10-23",
       rezultat: "PASS",
@@ -79,7 +83,8 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
           id: "s1-2",
           eticheta: "Subiectul I, 2",
           puncte: 4,
-          cerinta: "struct interval { float s,d; } v[20]; — expresia care reprezintă extremitatea stângă a primului interval.",
+          cerinta:
+            "struct interval { float s,d; } v[20]; — expresia care reprezintă extremitatea stângă a primului interval.",
           ceSeCere: "Să accesezi un câmp al unui element dintr-un tablou de structuri.",
           notiuni: ["tablou de structuri", "operatorul `.`", "indexarea de la 0"],
           pasi: [
@@ -88,16 +93,23 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
             "s.v[0] și s(0).v nu au sens (s este un câmp, nu o variabilă); v(0) nu este sintaxa de indexare în C/C++.",
           ],
           raspuns: "**a** — v[0].s",
-          verificare: "Declarația din enunț și expresia v[0].s au fost compilate și folosite într-un program C++.",
+          verificare:
+            "Declarația din enunț și expresia v[0].s au fost compilate și folosite într-un program C++.",
           greseli: ["Inversarea ordinii (s.v[0]) — întâi alegi elementul tabloului, apoi câmpul."],
         },
         {
           id: "s1-3",
           eticheta: "Subiectul I, 3",
           puncte: 4,
-          cerinta: "Arbore cu 50 de noduri, rădăcina 1, tatăl nodului i este [i/2]. Lungimea lanțului dintre nodurile 14 și 47.",
-          ceSeCere: "Să urci din fiecare nod spre rădăcină până la primul strămoș comun și să numeri muchiile.",
-          notiuni: ["arbore cu rădăcină", "vectorul de tați", "lungimea unui lanț = numărul de muchii"],
+          cerinta:
+            "Arbore cu 50 de noduri, rădăcina 1, tatăl nodului i este [i/2]. Lungimea lanțului dintre nodurile 14 și 47.",
+          ceSeCere:
+            "Să urci din fiecare nod spre rădăcină până la primul strămoș comun și să numeri muchiile.",
+          notiuni: [
+            "arbore cu rădăcină",
+            "vectorul de tați",
+            "lungimea unui lanț = numărul de muchii",
+          ],
           pasi: [
             "Din 47 urcăm: 47 → 23 → 11 → 5 → 2 → 1 (5 muchii).",
             "Din 14 urcăm: 14 → 7 → 3 → 1 (3 muchii).",
@@ -105,14 +117,19 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
             "Lungimea: 5 + 3 = 8 muchii.",
           ],
           raspuns: "**b** — 8",
-          verificare: "Program C++: urcare simultană până la strămoșul comun (1) și calcul cu adâncimile nodurilor: 8.",
-          greseli: ["Numărarea nodurilor (9) în loc de muchii.", "Diferența 47 − 14 = 33 (varianta d) — numerotarea nu dă distanța."],
+          verificare:
+            "Program C++: urcare simultană până la strămoșul comun (1) și calcul cu adâncimile nodurilor: 8.",
+          greseli: [
+            "Numărarea nodurilor (9) în loc de muchii.",
+            "Diferența 47 − 14 = 33 (varianta d) — numerotarea nu dă distanța.",
+          ],
         },
         {
           id: "s1-4",
           eticheta: "Subiectul I, 4",
           puncte: 4,
-          cerinta: "f(n) întoarce (n%2)*(n%10)+f(n/10) pentru n≠0 și 0 pentru n=0. Valoarea lui f(1234).",
+          cerinta:
+            "f(n) întoarce (n%2)*(n%10)+f(n/10) pentru n≠0 și 0 pentru n=0. Valoarea lui f(1234).",
           ceSeCere: "Să observi că f adună cifrele impare ale lui n.",
           notiuni: ["recursivitate", "n%2 este 1 pentru cifră impară, 0 pentru pară"],
           pasi: [
@@ -121,14 +138,18 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
           ],
           raspuns: "**b** — 4",
           verificare: "Funcția din enunț a fost rulată în C++: f(1234) = 4.",
-          greseli: ["Adunarea tuturor cifrelor (10, varianta d) — cifrele pare sunt înmulțite cu n%2 = 0."],
+          greseli: [
+            "Adunarea tuturor cifrelor (10, varianta d) — cifrele pare sunt înmulțite cu n%2 = 0.",
+          ],
         },
         {
           id: "s1-5",
           eticheta: "Subiectul I, 5",
           puncte: 4,
-          cerinta: "Graf neorientat cu 7 noduri și 21 de muchii. Numărul minim de muchii de eliminat ca graful parțial să aibă două componente conexe, fiecare cu cel puțin două noduri.",
-          ceSeCere: "Să recunoști graful complet și să alegi împărțirea care taie cele mai puține muchii.",
+          cerinta:
+            "Graf neorientat cu 7 noduri și 21 de muchii. Numărul minim de muchii de eliminat ca graful parțial să aibă două componente conexe, fiecare cu cel puțin două noduri.",
+          ceSeCere:
+            "Să recunoști graful complet și să alegi împărțirea care taie cele mai puține muchii.",
           notiuni: ["graf complet: n(n−1)/2 muchii", "componentă conexă", "graf parțial"],
           pasi: [
             "7 · 6 / 2 = 21, deci graful este complet: oricare două noduri sunt unite printr-o muchie.",
@@ -136,8 +157,11 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
             "Cu k ≥ 2 și 7 − k ≥ 2: k = 2 → 10, k = 3 → 12. Minimul este 10.",
           ],
           raspuns: "**c** — 10",
-          verificare: "Forță brută în C++ peste toate cele 2²¹ grafuri parțiale: minimul de muchii eliminate pentru exact două componente conexe cu cel puțin două noduri fiecare este 10.",
-          greseli: ["Izolarea unui singur nod (6 muchii, varianta a) — dar atunci o componentă are un singur nod."],
+          verificare:
+            "Forță brută în C++ peste toate cele 2²¹ grafuri parțiale: minimul de muchii eliminate pentru exact două componente conexe cu cel puțin două noduri fiecare este 10.",
+          greseli: [
+            "Izolarea unui singur nod (6 muchii, varianta a) — dar atunci o componentă are un singur nod.",
+          ],
         },
       ],
     },
@@ -149,7 +173,8 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
           id: "s2-1a",
           eticheta: "Subiectul al II-lea, 1a",
           puncte: 6,
-          cerinta: "Pentru fiecare x de la n la m, dacă x ≥ 2, se caută cel mai mic divizor a ≥ 2 al lui x; dacă a = x, b crește. Se afișează b. Ce se afișează pentru n = 20, m = 30?",
+          cerinta:
+            "Pentru fiecare x de la n la m, dacă x ≥ 2, se caută cel mai mic divizor a ≥ 2 al lui x; dacă a = x, b crește. Se afișează b. Ce se afișează pentru n = 20, m = 30?",
           ceSeCere: "Să recunoști ce numără algoritmul și să aplici pe intervalul dat.",
           notiuni: ["cel mai mic divizor propriu", "număr prim"],
           pasi: [
@@ -158,14 +183,16 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
             "În [20, 30] numerele prime sunt 23 și 29.",
           ],
           raspuns: "Se afișează **2**.",
-          verificare: "Programul C++ de la punctul c, rulat cu 20 și 30, afișează 2; numărarea primelor din [20, 30] făcută separat în Python dă tot 2.",
+          verificare:
+            "Programul C++ de la punctul c, rulat cu 20 și 30, afișează 2; numărarea primelor din [20, 30] făcută separat în Python dă tot 2.",
           greseli: ["Numărarea și a lui 21 sau 27 — sunt divizibile cu 3, nu sunt prime."],
         },
         {
           id: "s2-1b",
           eticheta: "Subiectul al II-lea, 1b",
           puncte: 6,
-          cerinta: "Cele mai mici două valori întregi pozitive pentru n astfel încât, cu m = 22, să se afișeze 2.",
+          cerinta:
+            "Cele mai mici două valori întregi pozitive pentru n astfel încât, cu m = 22, să se afișeze 2.",
           ceSeCere: "Intervalul [n, 22] trebuie să conțină exact două numere prime.",
           notiuni: ["numere prime ≤ 22"],
           pasi: [
@@ -174,7 +201,8 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
             "Cele mai mici două valori: 14 și 15.",
           ],
           raspuns: "**14** și **15**",
-          verificare: "Am rulat programul pentru toate n de la 1 la 22 cu m = 22: afișează 2 exact pentru n = 14, 15, 16, 17.",
+          verificare:
+            "Am rulat programul pentru toate n de la 1 la 22 cu m = 22: afișează 2 exact pentru n = 14, 15, 16, 17.",
           greseli: ["Includerea lui 13: [13, 22] conține 13, 17, 19 — se afișează 3."],
         },
         {
@@ -188,7 +216,7 @@ export const INFORMATICA_2025_SIMULARE: RezolvareVerificata = {
             "`pentru x←n,m` devine `for (x = n; x <= m; x++)`.",
             "Al doilea `dacă` este în interiorul primului, deci ambele instrucțiuni stau în blocul lui `if (x >= 2)`.",
           ],
-          raspuns: "Programul de mai jos.",
+          raspuns: "Programul de mai sus.",
           cod: {
             limbaj: "cpp",
             sursa: `#include <iostream>
@@ -210,15 +238,19 @@ int main()
     return 0;
 }`,
           },
-          complexitate: "O((m − n) · m) în cel mai rău caz — pentru fiecare x se caută divizorul liniar.",
+          complexitate:
+            "O((m − n) · m) în cel mai rău caz — pentru fiecare x se caută divizorul liniar.",
           verificare: "Compilat fără avertismente (g++ -Wall -Werror) și rulat: 20 30 → 2.",
-          greseli: ["Scoaterea lui `if (x == a)` din blocul lui `if (x >= 2)` — pentru x = 0 sau 1, variabila a ar fi folosită neinițializată."],
+          greseli: [
+            "Scoaterea lui `if (x == a)` din blocul lui `if (x >= 2)` — pentru x = 0 sau 1, variabila a ar fi folosită neinițializată.",
+          ],
         },
         {
           id: "s2-1d",
           eticheta: "Subiectul al II-lea, 1d",
           puncte: 6,
-          cerinta: "Scrieți în pseudocod un algoritm echivalent, înlocuind structura pentru...execută cu o structură repetitivă de alt tip.",
+          cerinta:
+            "Scrieți în pseudocod un algoritm echivalent, înlocuind structura pentru...execută cu o structură repetitivă de alt tip.",
           ceSeCere: "O buclă cât timp cu inițializare înainte și incrementare la final.",
           notiuni: ["echivalența pentru ↔ cât timp", "structură cu test inițial"],
           pasi: [
@@ -226,7 +258,7 @@ int main()
             "Condiția de continuare este x ≤ m; testul fiind inițial, pentru n > m bucla nu s-ar executa (ca și for-ul).",
             "Incrementarea x ← x+1 se pune ultima în corpul buclei.",
           ],
-          raspuns: "Algoritmul echivalent de mai jos.",
+          raspuns: "Algoritmul echivalent de mai sus.",
           cod: {
             limbaj: "pseudocod",
             sursa: `citește n,m (numere naturale, n≤m)
@@ -246,14 +278,19 @@ x←n
 └■
 scrie b`,
           },
-          verificare: "Transcrierea în C++ a acestui algoritm a dat aceeași ieșire ca programul original pentru toate perechile 0 ≤ n ≤ m, cu n ≤ 40 și m ≤ 45.",
-          greseli: ["Uitarea lui x ← x+1 — buclă infinită.", "O buclă repetă...până când fără protecție — se execută o dată chiar dacă n > m."],
+          verificare:
+            "Transcrierea în C++ a acestui algoritm a dat aceeași ieșire ca programul original pentru toate perechile 0 ≤ n ≤ m, cu n ≤ 40 și m ≤ 45.",
+          greseli: [
+            "Uitarea lui x ← x+1 — buclă infinită.",
+            "O buclă repetă...până când fără protecție — se execută o dată chiar dacă n > m.",
+          ],
         },
         {
           id: "s2-2",
           eticheta: "Subiectul al II-lea, 2",
           puncte: 6,
-          cerinta: "Declarați variabila s (2 sportivi: vârstă și înălțime naturale de cel mult 3 cifre, greutate reală cu două zecimale), folosită ca s[0].varsta, s[0].inaltimea, s[1].greutatea, și scrieți secvența care afișează înălțimea sportivului mai tânăr; la vârstă egală, a celui cu greutatea mai mică.",
+          cerinta:
+            "Declarați variabila s (2 sportivi: vârstă și înălțime naturale de cel mult 3 cifre, greutate reală cu două zecimale), folosită ca s[0].varsta, s[0].inaltimea, s[1].greutatea, și scrieți secvența care afișează înălțimea sportivului mai tânăr; la vârstă egală, a celui cu greutatea mai mică.",
           ceSeCere: "Un tablou de 2 structuri și o decizie în trei pași.",
           notiuni: ["struct", "tablou de structuri", "if…else if"],
           pasi: [
@@ -261,7 +298,7 @@ scrie b`,
             "Comparăm întâi vârstele; doar dacă sunt egale comparăm greutățile.",
             "În programul de mai jos, declarația este structura de deasupra lui `main`, iar secvența cerută este blocul de `if`-uri; citirea este doar pentru testare.",
           ],
-          raspuns: "Declarația și secvența de mai jos.",
+          raspuns: "Declarația și secvența de mai sus.",
           cod: {
             limbaj: "cpp",
             sursa: `#include <iostream>
@@ -286,14 +323,19 @@ int main()
     return 0;
 }`,
           },
-          verificare: "Rulat pe patru cazuri: primul mai tânăr, al doilea mai tânăr, vârste egale cu fiecare dintre sportivi mai ușor — de fiecare dată s-a afișat înălțimea corectă.",
-          greseli: ["Declararea a două variabile separate în loc de tablou — expresia s[1].greutatea nu ar mai fi validă.", "Compararea greutăților și când vârstele diferă."],
+          verificare:
+            "Rulat pe patru cazuri: primul mai tânăr, al doilea mai tânăr, vârste egale cu fiecare dintre sportivi mai ușor — de fiecare dată s-a afișat înălțimea corectă.",
+          greseli: [
+            "Declararea a două variabile separate în loc de tablou — expresia s[1].greutatea nu ar mai fi validă.",
+            "Compararea greutăților și când vârstele diferă.",
+          ],
         },
         {
           id: "s2-3",
           eticheta: "Subiectul al II-lea, 3",
           puncte: 6,
-          cerinta: "Completați secvența for(i=0;i<6;i++) for(j=0;j<6;j++) … (fără alte variabile, cel mult 6 atribuiri) astfel încât tabloul a (6×6, inițial nul) să devină cel din enunț: prima și ultima linie pline cu 1, respectiv 6, iar pe liniile 1–4 valoarea i+1 pe coloanele 0, 1, 4, 5 și 0 pe coloanele 2, 3.",
+          cerinta:
+            "Completați secvența for(i=0;i<6;i++) for(j=0;j<6;j++) … (fără alte variabile, cel mult 6 atribuiri) astfel încât tabloul a (6×6, inițial nul) să devină cel din enunț: prima și ultima linie pline cu 1, respectiv 6, iar pe liniile 1–4 valoarea i+1 pe coloanele 0, 1, 4, 5 și 0 pe coloanele 2, 3.",
           ceSeCere: "O condiție care descrie pozițiile nenule și valoarea lor.",
           notiuni: ["tablou bidimensional", "condiții pe indici"],
           pasi: [
@@ -301,15 +343,19 @@ int main()
             "Pozițiile nenule: linia 0, linia 5 și coloanele 0, 1, 4, 5 (j < 2 sau j > 3).",
             "Restul rămân 0, cum erau inițial — nu e nevoie de atribuire. Folosim o singură atribuire.",
           ],
-          raspuns: "Secvența de mai jos.",
+          raspuns: "Secvența de mai sus.",
           cod: {
             limbaj: "cpp",
             sursa: `    for(i=0;i<6;i++)
         for(j=0;j<6;j++)
             if (i == 0 || i == 5 || j < 2 || j > 3) a[i][j] = i + 1;`,
           },
-          verificare: "Secvența a fost rulată pe un tablou inițial nul; tabloul afișat coincide linie cu linie cu cel din enunț.",
-          greseli: ["Folosirea lui j+1 în loc de i+1 — valorile depind de linie, nu de coloană.", "Condiția j < 2 && j > 3 (imposibilă) în loc de ||."],
+          verificare:
+            "Secvența a fost rulată pe un tablou inițial nul; tabloul afișat coincide linie cu linie cu cel din enunț.",
+          greseli: [
+            "Folosirea lui j+1 în loc de i+1 — valorile depind de linie, nu de coloană.",
+            "Condiția j < 2 && j > 3 (imposibilă) în loc de ||.",
+          ],
         },
       ],
     },
@@ -321,8 +367,10 @@ int main()
           id: "s3-1",
           eticheta: "Subiectul al III-lea, 1",
           puncte: 10,
-          cerinta: "Subprogramul zero(a, n, imp): a are cel mult 100 de numere întregi; imp = numărul de valori impare; returnează numărul de zerouri în care se termină produsul valorilor. Exemplu: (2, 25, 7, 6, 15, 9, 8) → imp = 4, returnează 3.",
-          ceSeCere: "Numărarea imparelor și a zerourilor finale ale produsului, fără a calcula produsul.",
+          cerinta:
+            "Subprogramul zero(a, n, imp): a are cel mult 100 de numere întregi; imp = numărul de valori impare; returnează numărul de zerouri în care se termină produsul valorilor. Exemplu: (2, 25, 7, 6, 15, 9, 8) → imp = 4, returnează 3.",
+          ceSeCere:
+            "Numărarea imparelor și a zerourilor finale ale produsului, fără a calcula produsul.",
           notiuni: ["10 = 2 · 5", "descompunere în factori", "transmitere prin referință"],
           pasi: [
             "Produsul a până la 100 de numere depășește orice tip întreg, deci nu îl calculăm.",
@@ -331,7 +379,7 @@ int main()
             "Dacă vectorul conține un 0, produsul este 0, care se scrie cu o singură cifră 0 (enunțul nu tratează explicit cazul; am ales această convenție).",
             "Exemplu: 2 (2¹), 25 (5²), 6 (2¹), 15 (5¹), 8 (2³) → 2⁵ și 5³ → 3 zerouri; impare: 25, 7, 15, 9 → imp = 4.",
           ],
-          raspuns: "Subprogramul de mai jos.",
+          raspuns: "Subprogramul de mai sus.",
           cod: {
             limbaj: "cpp",
             sursa: `int zero(int a[], int n, int &imp)
@@ -358,7 +406,8 @@ int main()
 }`,
           },
           complexitate: "O(n · log V), unde V este cea mai mare valoare absolută; memorie O(1).",
-          verificare: "Rulat pe exemplul din enunț (4 3), pe 1000 (0 3), pe valori negative și pe un vector cu 0; apoi pe 300 de vectori aleatori de până la 100 de elemente, comparați cu produsul calculat exact (întregi nelimitați) în Python.",
+          verificare:
+            "Rulat pe exemplul din enunț (4 3), pe 1000 (0 3), pe valori negative și pe un vector cu 0; apoi pe 300 de vectori aleatori de până la 100 de elemente, comparați cu produsul calculat exact (întregi nelimitați) în Python.",
           greseli: [
             "Calculul produsului într-un int sau long long — depășire chiar pentru vectori scurți.",
             "Numărarea doar a factorilor 5 — corect doar când sunt suficienți factori 2.",
@@ -368,17 +417,18 @@ int main()
           id: "s3-2",
           eticheta: "Subiectul al III-lea, 2",
           puncte: 10,
-          cerinta: "Un cuvânt e muzical dacă conține o notă din {do, re, mi, fa, sol, la, si}. Textul (cel mult 200 de caractere, litere mici, cuvinte separate prin spații și/sau virgule) se citește de la tastatură; se afișează numărul de cuvinte muzicale și cuvântul cu cele mai multe note distincte. Exemplu: „la orele de muzica fredonam doine, balade, solfegii si cantece remixate” → 8 fredonam (sau 8 remixate).",
+          cerinta:
+            "Un cuvânt e muzical dacă conține o notă din {do, re, mi, fa, sol, la, si}. Textul (cel mult 200 de caractere, litere mici, cuvinte separate prin spații și/sau virgule) se citește de la tastatură; se afișează numărul de cuvinte muzicale și cuvântul cu cele mai multe note distincte. Exemplu: „la orele de muzica fredonam doine, balade, solfegii si cantece remixate” → 8 fredonam (sau 8 remixate).",
           ceSeCere: "Împărțirea textului în cuvinte și căutarea fiecărei note în fiecare cuvânt.",
           notiuni: ["cin.getline", "strtok cu mai mulți separatori", "strstr", "strcpy"],
           pasi: [
             "Citim tot rândul cu `cin.getline` (cin >> s s-ar opri la primul spațiu).",
-            "`strtok(text, \" ,\")` separă cuvintele după spații și virgule, oricâte ar fi consecutive.",
+            '`strtok(text, " ,")` separă cuvintele după spații și virgule, oricâte ar fi consecutive.',
             "Pentru fiecare cuvânt numărăm notele distincte conținute: pentru fiecare dintre cele 7 note, `strstr` spune dacă apare.",
             "Cuvântul e muzical dacă numărul este cel puțin 1; reținem primul cuvânt cu numărul maxim (comparație strictă).",
             "Pe exemplu: muzicale sunt la, orele, fredonam, doine, balade, solfegii, si, remixate (8); fredonam (re, do) și remixate (re, mi) au câte 2 note, fredonam apare primul.",
           ],
-          raspuns: "Programul de mai jos.",
+          raspuns: "Programul de mai sus.",
           cod: {
             limbaj: "cpp",
             sursa: `#include <iostream>
@@ -412,8 +462,10 @@ int main()
     return 0;
 }`,
           },
-          complexitate: "O(L · 7), unde L este lungimea textului; memorie pentru două șiruri de 201 caractere.",
-          verificare: "Rulat pe exemplul din enunț (8 fredonam), pe text cu virgule și spații multiple, pe text fără cuvinte muzicale și pe 200 de texte aleatoare, comparate cu o implementare separată în Python.",
+          complexitate:
+            "O(L · 7), unde L este lungimea textului; memorie pentru două șiruri de 201 caractere.",
+          verificare:
+            "Rulat pe exemplul din enunț (8 fredonam), pe text cu virgule și spații multiple, pe text fără cuvinte muzicale și pe 200 de texte aleatoare, comparate cu o implementare separată în Python.",
           greseli: [
             "Numărarea aparițiilor în loc de note distincte (de exemplu „rere” ar număra 2).",
             "Separarea doar după spațiu — „doine,” ar deveni un cuvânt cu virgulă.",
@@ -423,7 +475,8 @@ int main()
           id: "s3-3",
           eticheta: "Subiectul al III-lea, 3",
           puncte: 10,
-          cerinta: "În minutul k laserul emite semnalele de culori 1, 2, …, k, deci șirul este 1 12 123 1234 … După m minute (m ≤ 10⁶, din BAC.IN), se cere culoarea celui de-al n-lea semnal (n ≤ 10⁹): „OK culoare” sau „EROARE” dacă nu a fost emis. Exemplu: m=5, n=14 → OK 4; m=5, n=24 → EROARE. Algoritm eficient în timp și memorie.",
+          cerinta:
+            "În minutul k laserul emite semnalele de culori 1, 2, …, k, deci șirul este 1 12 123 1234 … După m minute (m ≤ 10⁶, din BAC.IN), se cere culoarea celui de-al n-lea semnal (n ≤ 10⁹): „OK culoare” sau „EROARE” dacă nu a fost emis. Exemplu: m=5, n=14 → OK 4; m=5, n=24 → EROARE. Algoritm eficient în timp și memorie.",
           ceSeCere: "a) descrierea algoritmului și de ce e eficient; b) programul.",
           notiuni: ["sume 1 + 2 + … + k = k(k+1)/2", "simulare fără tablouri", "long long"],
           pasi: [
@@ -433,7 +486,8 @@ int main()
             "Pe exemplu: s ia valorile 1, 3, 6, 10, 15; la k = 5, s = 15 ≥ 14, culoarea este 14 − (15 − 5) = 4.",
             "s depășește n cu cel mult k, dar folosim long long ca să nu existe nicio grijă de depășire.",
           ],
-          raspuns: "Programul de mai jos (pentru m=5, n=14 afișează OK 4; pentru m=5, n=24 afișează EROARE).",
+          raspuns:
+            "Programul de mai jos (pentru m=5, n=14 afișează OK 4; pentru m=5, n=24 afișează EROARE).",
           cod: {
             limbaj: "cpp",
             sursa: `#include <fstream>
@@ -458,7 +512,8 @@ int main()
 }`,
           },
           complexitate: "Timp O(min(m, √n)), memorie O(1).",
-          verificare: "Rulat pe cele două exemple din enunț, pe cazurile limită (ultimul semnal emis, primul neemis, m = 1), pe toate perechile cu m ≤ 30 comparate cu șirul construit efectiv în Python și pe m = 10⁶, n = 10⁹ comparat cu o formulă închisă.",
+          verificare:
+            "Rulat pe cele două exemple din enunț, pe cazurile limită (ultimul semnal emis, primul neemis, m = 1), pe toate perechile cu m ≤ 30 comparate cu șirul construit efectiv în Python și pe m = 10⁶, n = 10⁹ comparat cu o formulă închisă.",
           greseli: [
             "Construirea șirului într-un tablou — pentru m = 10⁶ ar avea 5 · 10¹¹ elemente.",
             "Parcurgerea semnal cu semnal până la n — până la 10⁹ pași, ineficient.",

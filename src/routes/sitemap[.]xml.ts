@@ -245,12 +245,19 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         // Rezolvări publicate — doar cele făcute pe subiectul oficial
         try {
-          const { data: rezDb } = await supabaseAdmin
-            .from("bac_rezolvari")
-            .select("materie, an, sesiune, updated_at")
-            .eq("sursa", "subiect_oficial");
           // Rezolvările verificate din repo (src/data/rezolvari-verificate) + cele din DB, fără dubluri.
+          // Cele din repo apar chiar dacă citirea din DB eșuează.
           const { REZOLVARI_PUBLICATE } = await import("@/data/rezolvari-verificate");
+          let rezDb: { materie: string; an: number; sesiune: string; updated_at: string | null }[] = [];
+          try {
+            const { data } = await supabaseAdmin
+              .from("bac_rezolvari")
+              .select("materie, an, sesiune, updated_at")
+              .eq("sursa", "subiect_oficial");
+            rezDb = data ?? [];
+          } catch (err) {
+            console.error("sitemap rezolvari DB fetch failed", err);
+          }
           const statice = REZOLVARI_PUBLICATE.map((r) => ({ materie: r.materie, an: r.an, sesiune: r.sesiune, updated_at: r.actualizat }));
           const chei = new Set(statice.map((r) => `${r.materie}/${r.an}/${r.sesiune}`));
           const rez = [...statice, ...(rezDb ?? []).filter((r) => !chei.has(`${r.materie}/${r.an}/${r.sesiune}`))];

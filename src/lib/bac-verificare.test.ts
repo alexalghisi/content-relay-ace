@@ -32,11 +32,9 @@ describe("motiveFisier", () => {
   });
   test("neauditat → ascuns", () => expect(motiveFisier(undefined)).toEqual(["neauditat"]));
   test("an greșit, emitent neoficial, model", () => {
-    expect(motiveFisier({ ...baza, an_document: 2012, emitent_oficial: false, model_document: true })).toEqual([
-      "emitent",
-      "an",
-      "model",
-    ]);
+    expect(
+      motiveFisier({ ...baza, an_document: 2012, emitent_oficial: false, model_document: true }),
+    ).toEqual(["emitent", "an", "model"]);
   });
   test("subiect pus în locul baremului", () => {
     expect(motiveFisier({ ...baza, tip: "barem", tip_document: "subiect" })).toEqual(["tip"]);
@@ -50,9 +48,16 @@ describe("motiveFisier", () => {
 
 describe("motivePereche", () => {
   test("barem de la altă specializare/variantă nu se afișează lângă subiect", () => {
-    const barem = { ...baza, tip: "barem" as const, tip_document: "barem" as const, specializare: "st-nat" };
+    const barem = {
+      ...baza,
+      tip: "barem" as const,
+      tip_document: "barem" as const,
+      specializare: "st-nat",
+    };
     expect(motivePereche(baza, barem)).toEqual(["specializare"]);
-    expect(motivePereche(baza, { ...barem, specializare: "mate-info", varianta: 7 })).toEqual(["varianta"]);
+    expect(motivePereche(baza, { ...barem, specializare: "mate-info", varianta: 7 })).toEqual([
+      "varianta",
+    ]);
     expect(motivePereche(baza, { ...barem, specializare: null, varianta: null })).toEqual([]);
   });
 });
