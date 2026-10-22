@@ -13,6 +13,7 @@ import {
   paNivelName,
   paObiectivName,
   type PaConfig,
+  paLimba,
 } from "@/lib/profesor-ai";
 
 type Msg = { role: "user" | "assistant"; content: string; tabla?: string };
@@ -200,8 +201,8 @@ export function SesiuneProfesorAi({
       if (!synth) return marcheazaVorbire();
       await new Promise<void>((done) => {
         const u = new SpeechSynthesisUtterance(t);
-        u.lang = "ro-RO";
-        const v = synth.getVoices().find((x) => x.lang.toLowerCase().startsWith("ro"));
+        u.lang = paLimba(config.limba).bcp47;
+        const v = synth.getVoices().find((x) => x.lang.toLowerCase().startsWith(paLimba(config.limba).slug));
         if (v) u.voice = v;
         u.rate = 1.05;
         u.onstart = () => { setRealistVorbeste(true); marcheazaVorbire(); };
@@ -342,7 +343,7 @@ export function SesiuneProfesorAi({
     }
     sr.current?.stop();
     const rec = new Ctor();
-    rec.lang = "ro-RO";
+    rec.lang = paLimba(config.limba).bcp47;
     rec.continuous = true;
     rec.interimResults = true;
     rec.onspeechstart = null;
@@ -398,7 +399,7 @@ export function SesiuneProfesorAi({
     const synth = window.speechSynthesis;
     if (synth && !liveVoice.current) {
       const unlock = new SpeechSynthesisUtterance(" ");
-      unlock.lang = "ro-RO";
+      unlock.lang = paLimba(config.limba).bcp47;
       synth.speak(unlock);
     }
   };
@@ -500,7 +501,7 @@ export function SesiuneProfesorAi({
         </div>
 
         <div className="px-5 pt-3 text-xs text-muted-foreground">
-          {paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min · poți vorbi peste profesoară ca s-o întrerupi
+          {paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min · {paLimba(config.limba).name} · poți vorbi peste profesoară ca s-o întrerupi
         </div>
         <div ref={scroll} className="max-h-72 flex-1 space-y-3 overflow-y-auto px-5 py-3" aria-live="polite">
           {mesaje

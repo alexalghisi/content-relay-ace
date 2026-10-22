@@ -7,6 +7,7 @@ import { profesorAiAcces, profesorAiPorneste } from "@/lib/profesor-ai.functions
 import {
   PA_DURATE,
   PA_MATERII,
+  PA_LIMBI,
   PA_NIVELURI,
   PA_OBIECTIVE,
   type PaConfig,
@@ -35,6 +36,7 @@ export function ConfiguratorProfesorAi() {
     nivel: "gimnaziu",
     durata: DURATA_GRATUITA,
     obiectiv: "lectie",
+    limba: "ro",
   });
   const [acces, setAcces] = useState<{
     poateTesta: boolean;
@@ -97,7 +99,7 @@ export function ConfiguratorProfesorAi() {
 
   return (
     <div className="card-soft p-5 sm:p-7">
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-3">
         <div>
           <label htmlFor="pa-materie" className="text-sm font-bold">
             Materia
@@ -128,6 +130,23 @@ export function ConfiguratorProfesorAi() {
             {PA_NIVELURI.map((m) => (
               <option key={m.slug} value={m.slug}>
                 {m.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="pa-limba" className="text-sm font-bold">
+            Limba lecției
+          </label>
+          <select
+            id="pa-limba"
+            value={cfg.limba ?? "ro"}
+            onChange={(e) => set("limba", e.target.value as PaConfig["limba"])}
+            className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm"
+          >
+            {PA_LIMBI.map((l) => (
+              <option key={l.slug} value={l.slug}>
+                {l.name}
               </option>
             ))}
           </select>
