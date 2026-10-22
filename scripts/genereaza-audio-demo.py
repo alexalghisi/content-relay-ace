@@ -9,7 +9,7 @@ import hashlib, json, os, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "public", "demo-lectii")
 CACHE = os.path.join(ROOT, ".cache-audio-demo")
-VOCI = {"prof": ("ro-RO-AlinaNeural", "+0%", "+0Hz"), "elev": ("ro-RO-EmilNeural", "+6%", "+22Hz")}
+VOCI = {"prof": ("ro-RO-AlinaNeural", "+0%", "+0Hz"), "elev": ("ro-RO-EmilNeural", "+0%", "+0Hz")}
 PAUZA = 0.4
 
 # How symbols and formulas are read aloud (text on screen stays unchanged).
@@ -63,8 +63,11 @@ def main():
     os.makedirs(OUT, exist_ok=True); os.makedirs(CACHE, exist_ok=True)
     dump = os.path.join(CACHE, "dump.ts")
     open(dump, "w").write('import { LECTII, cheieLectie } from "../src/components/profesor-ai/demo-repertoriu";\n'
-                          'console.log(JSON.stringify(LECTII.map((l) => ({ k: cheieLectie(l), replici: l.replici }))));\n')
-    lectii = json.loads(subprocess.check_output(["bun", dump], cwd=ROOT))
+                          'import { ROSTIRE_BAC } from "../src/components/profesor-ai/lectii-bac";\n'
+                          'console.log(JSON.stringify({ rostire: ROSTIRE_BAC, lectii: LECTII.map((l) => ({ k: cheieLectie(l), replici: l.replici })) }));\n')
+    date = json.loads(subprocess.check_output(["bun", dump], cwd=ROOT))
+    ROSTIRE.update(date["rostire"])
+    lectii = date["lectii"]
     timpi = {}
     for l in lectii:
         t, seg, lista = 0.3, [], []
