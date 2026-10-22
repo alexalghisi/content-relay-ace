@@ -273,13 +273,26 @@ export const Route = createFileRoute("/sitemap.xml")({
 
 
 
+        // Rezolvări verificate la admitere (din repo; nu depind de DB)
+        {
+          const { REZOLVARI_ADMITERE_PUBLICATE } = await import("@/data/rezolvari-admitere");
+          for (const r of REZOLVARI_ADMITERE_PUBLICATE) {
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/rezolvari-admitere/${r.universitate}/${r.materie}/${r.an}</loc>\n    <lastmod>${r.actualizat}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+            );
+          }
+        }
+
         // Noua arhivă /subiecte-admitere/* — generată din tabelul admission_papers
         try {
           // /subiecte-admitere itself is already listed in STATIC_PATHS.
-          const { data: papers } = await supabaseAdmin
+          // Aceeași regulă ca paginile: doar documentele care trec auditul (src/lib/admitere-verificare.ts).
+          const { filtreazaAfisate } = await import("@/lib/admitere-verificare");
+          const { data: papersRaw } = await supabaseAdmin
             .from("admission_papers")
-            .select("university_slug, subject_slug, year, updated_at")
+            .select("university_slug, subject_slug, year, updated_at, storage_path")
             .eq("is_published", true);
+          const papers = filtreazaAfisate(papersRaw);
           const unis = new Set<string>();
           const unisSub = new Set<string>();
           const unisSubYear = new Set<string>();

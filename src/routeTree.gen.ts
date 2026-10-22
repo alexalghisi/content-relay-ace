@@ -147,6 +147,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as ResurseAdmitereFacultateAnRouteImport } from './routes/resurse.admitere.$facultate.$an'
 import { Route as ResurseBacMaterieAnRouteImport } from './routes/resurse.bac.$materie.$an'
+import { Route as RezolvariAdmitereUniversitateMaterieAnRouteImport } from './routes/rezolvari-admitere.$universitate.$materie.$an'
 import { Route as RezolvariMaterieAnSesiuneRouteImport } from './routes/rezolvari.$materie.$an.$sesiune'
 import { Route as SubiecteAdmitereUniversitateMaterieIndexRouteImport } from './routes/subiecte-admitere.$universitate.$materie.index'
 import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
@@ -861,6 +862,12 @@ const ResurseBacMaterieAnRoute = ResurseBacMaterieAnRouteImport.update({
   path: '/resurse/bac/$materie/$an',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RezolvariAdmitereUniversitateMaterieAnRoute =
+  RezolvariAdmitereUniversitateMaterieAnRouteImport.update({
+    id: '/rezolvari-admitere/$universitate/$materie/$an',
+    path: '/rezolvari-admitere/$universitate/$materie/$an',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const RezolvariMaterieAnSesiuneRoute =
   RezolvariMaterieAnSesiuneRouteImport.update({
     id: '/rezolvari/$materie/$an/$sesiune',
@@ -1018,6 +1025,7 @@ export interface FileRoutesByFullPath {
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/rezolvari-admitere/$universitate/$materie/$an': typeof RezolvariAdmitereUniversitateMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
   '/bac/$materie/$an/': typeof BacMaterieAnIndexRoute
@@ -1159,6 +1167,7 @@ export interface FileRoutesByTo {
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/rezolvari-admitere/$universitate/$materie/$an': typeof RezolvariAdmitereUniversitateMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
   '/bac/$materie/$an': typeof BacMaterieAnIndexRoute
@@ -1303,6 +1312,7 @@ export interface FileRoutesById {
   '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
   '/resurse/admitere/$facultate/$an': typeof ResurseAdmitereFacultateAnRoute
   '/resurse/bac/$materie/$an': typeof ResurseBacMaterieAnRoute
+  '/rezolvari-admitere/$universitate/$materie/$an': typeof RezolvariAdmitereUniversitateMaterieAnRoute
   '/rezolvari/$materie/$an/$sesiune': typeof RezolvariMaterieAnSesiuneRoute
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
   '/bac/$materie/$an/': typeof BacMaterieAnIndexRoute
@@ -1448,6 +1458,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/send'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/rezolvari-admitere/$universitate/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
     | '/bac/$materie/$an/'
@@ -1589,6 +1600,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/send'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/rezolvari-admitere/$universitate/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
     | '/bac/$materie/$an'
@@ -1732,6 +1744,7 @@ export interface FileRouteTypes {
     | '/lovable/email/transactional/send'
     | '/resurse/admitere/$facultate/$an'
     | '/resurse/bac/$materie/$an'
+    | '/rezolvari-admitere/$universitate/$materie/$an'
     | '/rezolvari/$materie/$an/$sesiune'
     | '/subiecte-admitere/$universitate/$materie/$an'
     | '/bac/$materie/$an/'
@@ -1873,6 +1886,7 @@ export interface RootRouteChildren {
   LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
   ResurseAdmitereFacultateAnRoute: typeof ResurseAdmitereFacultateAnRoute
   ResurseBacMaterieAnRoute: typeof ResurseBacMaterieAnRoute
+  RezolvariAdmitereUniversitateMaterieAnRoute: typeof RezolvariAdmitereUniversitateMaterieAnRoute
   RezolvariMaterieAnSesiuneRoute: typeof RezolvariMaterieAnSesiuneRoute
   SubiecteAdmitereUniversitateMaterieAnRoute: typeof SubiecteAdmitereUniversitateMaterieAnRoute
   SubiecteAdmitereUniversitateMaterieIndexRoute: typeof SubiecteAdmitereUniversitateMaterieIndexRoute
@@ -2846,6 +2860,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResurseBacMaterieAnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rezolvari-admitere/$universitate/$materie/$an': {
+      id: '/rezolvari-admitere/$universitate/$materie/$an'
+      path: '/rezolvari-admitere/$universitate/$materie/$an'
+      fullPath: '/rezolvari-admitere/$universitate/$materie/$an'
+      preLoaderRoute: typeof RezolvariAdmitereUniversitateMaterieAnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rezolvari/$materie/$an/$sesiune': {
       id: '/rezolvari/$materie/$an/$sesiune'
       path: '/rezolvari/$materie/$an/$sesiune'
@@ -3034,6 +3055,8 @@ const rootRouteChildren: RootRouteChildren = {
   LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
   ResurseAdmitereFacultateAnRoute: ResurseAdmitereFacultateAnRoute,
   ResurseBacMaterieAnRoute: ResurseBacMaterieAnRoute,
+  RezolvariAdmitereUniversitateMaterieAnRoute:
+    RezolvariAdmitereUniversitateMaterieAnRoute,
   RezolvariMaterieAnSesiuneRoute: RezolvariMaterieAnSesiuneRoute,
   SubiecteAdmitereUniversitateMaterieAnRoute:
     SubiecteAdmitereUniversitateMaterieAnRoute,

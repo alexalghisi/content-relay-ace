@@ -1,5 +1,6 @@
 // Catalog helpers pentru subiectele de admitere (tabel `admission_papers`).
 import { supabase } from "@/integrations/supabase/client";
+import { filtreazaAfisate } from "@/lib/admitere-verificare";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 export const ADMITERE_BUCKET = "admitere-pdfs";
@@ -44,11 +45,11 @@ export function buildStoragePath(uni: string, mat: string, year: number, type: s
 export async function listUniversities() {
   const { data, error } = await supabase
     .from("admission_papers")
-    .select("university_slug, university_name")
+    .select("university_slug, university_name, storage_path")
     .eq("is_published", true);
   if (error) throw error;
   const map = new Map<string, { slug: string; name: string; count: number }>();
-  for (const r of data ?? []) {
+  for (const r of filtreazaAfisate(data)) {
     const cur = map.get(r.university_slug);
     if (cur) cur.count += 1;
     else map.set(r.university_slug, { slug: r.university_slug, name: r.university_name, count: 1 });
@@ -59,13 +60,13 @@ export async function listUniversities() {
 export async function listSubjectsForUni(universitySlug: string) {
   const { data, error } = await supabase
     .from("admission_papers")
-    .select("subject_slug, subject_name, university_name")
+    .select("subject_slug, subject_name, university_name, storage_path")
     .eq("university_slug", universitySlug)
     .eq("is_published", true);
   if (error) throw error;
   const map = new Map<string, { slug: string; name: string; count: number }>();
   let universityName = "";
-  for (const r of data ?? []) {
+  for (const r of filtreazaAfisate(data)) {
     universityName = r.university_name;
     const cur = map.get(r.subject_slug);
     if (cur) cur.count += 1;
@@ -80,14 +81,14 @@ export async function listSubjectsForUni(universitySlug: string) {
 export async function listYearsForUniSubject(universitySlug: string, subjectSlug: string) {
   const { data, error } = await supabase
     .from("admission_papers")
-    .select("year, university_name, subject_name")
+    .select("year, university_name, subject_name, storage_path")
     .eq("university_slug", universitySlug)
     .eq("subject_slug", subjectSlug)
     .eq("is_published", true);
   if (error) throw error;
   const set = new Set<number>();
   let universityName = ""; let subjectName = "";
-  for (const r of data ?? []) {
+  for (const r of filtreazaAfisate(data)) {
     set.add(r.year); universityName = r.university_name; subjectName = r.subject_name;
   }
   return {
@@ -105,18 +106,18 @@ export async function getPapersForYear(universitySlug: string, subjectSlug: stri
     .eq("year", year)
     .eq("is_published", true);
   if (error) throw error;
-  return (data ?? []) as AdmissionPaper[];
+  return filtreazaAfisate(data as AdmissionPaper[] | null);
 }
 
 /** Toate materiile distincte din arhivă, pentru agregator-ul cross-universitate. */
 export async function listAllSubjects() {
   const { data, error } = await supabase
     .from("admission_papers")
-    .select("subject_slug, subject_name")
+    .select("subject_slug, subject_name, storage_path")
     .eq("is_published", true);
   if (error) throw error;
   const map = new Map<string, { slug: string; name: string; count: number }>();
-  for (const r of data ?? []) {
+  for (const r of filtreazaAfisate(data)) {
     const cur = map.get(r.subject_slug);
     if (cur) cur.count += 1;
     else map.set(r.subject_slug, { slug: r.subject_slug, name: r.subject_name, count: 1 });
@@ -128,13 +129,13 @@ export async function listAllSubjects() {
 export async function listUnisForSubject(subjectSlug: string) {
   const { data, error } = await supabase
     .from("admission_papers")
-    .select("university_slug, university_name, subject_name, year")
+    .select("university_slug, university_name, subject_name, year, storage_path")
     .eq("subject_slug", subjectSlug)
     .eq("is_published", true);
   if (error) throw error;
   const map = new Map<string, { slug: string; name: string; years: Set<number> }>();
   let subjectName = "";
-  for (const r of data ?? []) {
+  for (const r of filtreazaAfisate(data)) {
     subjectName = r.subject_name;
     const cur = map.get(r.university_slug);
     if (cur) cur.years.add(r.year);
@@ -152,13 +153,13 @@ export async function listUnisForSubject(subjectSlug: string) {
 export async function listRelatedUnisForSubject(subjectSlug: string, excludeUniSlug: string) {
   const { data, error } = await supabase
     .from("admission_papers")
-    .select("university_slug, university_name")
+    .select("university_slug, university_name, storage_path")
     .eq("subject_slug", subjectSlug)
     .eq("is_published", true)
     .neq("university_slug", excludeUniSlug);
   if (error) throw error;
   const map = new Map<string, { slug: string; name: string }>();
-  for (const r of data ?? []) {
+  for (const r of filtreazaAfisate(data)) {
     if (!map.has(r.university_slug)) map.set(r.university_slug, { slug: r.university_slug, name: r.university_name });
   }
   return Array.from(map.values());

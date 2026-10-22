@@ -78,3 +78,29 @@ export interface RezolvareVerificata {
   /** Notă generală de punctaj (doar ce reiese din regulile publice ale probei). */
   notaPunctaj: string;
 }
+
+/**
+ * Rezolvare pe un subiect oficial de ADMITERE la facultate (tabelul admission_papers, bucket admitere-pdfs).
+ * Aceleași reguli editoriale ca la BAC; documentul trebuie să treacă auditul din src/lib/admitere-verificare.ts.
+ */
+export interface RezolvareAdmitere extends Omit<RezolvareVerificata, "sesiune" | "documente"> {
+  examen: "admitere";
+  /** Slug-ul universității din admission_papers (ex. "upb"). */
+  universitate: string;
+  universitateNume: string;
+  /** Sesiunea din admission_papers (ex. "iulie"). */
+  sesiune: string;
+  documente: {
+    /** storage_path în bucketul admitere-pdfs. */
+    subiect: string;
+    /** Sursa oficială declarată în admission_papers.description (URL). */
+    sursaUrl: string;
+    notaBarem: string;
+  };
+  /** Total puncte pe itemi (la admitere diferă de la o universitate la alta). */
+  punctajTotal: number;
+}
+
+export type OriceRezolvare = RezolvareVerificata | RezolvareAdmitere;
+export const esteAdmitere = (r: OriceRezolvare): r is RezolvareAdmitere =>
+  (r as RezolvareAdmitere).examen === "admitere";

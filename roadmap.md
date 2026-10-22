@@ -1,5 +1,9 @@
 # Roadmap
 
+- [x] Admitere: audit de conținut pentru cele 57 de documente publicate; afișate doar cele cu sursă declarată și an confirmat (UPB de pe physics.pub.ro = oficial; UMF Cluj/Iași de pe submed.ro = „copie preluată”, simulările etichetate). Ascunse: Drept București (11 scanări fără sursă) și simulările UMF Timișoara fără sursă.
+- [x] Rezolvări verificate UPB 2025: Informatică (10 grile, cod rulat cu g++) și Matematică AAM (10 grile, SymPy), cu Meditator AI pe fiecare grilă.
+- [ ] Admitere: subiecte oficiale UBB, UTCN, ASE, UMF Cluj direct de pe site-urile universităților; sursa oficială pentru Drept București.
+
 - [x] Audit de conținut pentru toate cele 288 de PDF-uri BAC găzduite (text citit din fiecare fișier): 134 trec, 154 ascunse (73 emitent neoficial — inclusiv o bibliografie a Bibliotecii Naționale și culegeri județene, 59 subiecte puse ca barem, 42 modele, 17 sesiune greșită, 16 an greșit). Baremele de altă specializare/variantă nu mai apar lângă subiect. Paginile, hub-urile și sitemap-ul folosesc aceeași regulă.
 - [x] 4 rezolvări originale verificate prin rulare (g++ / SymPy): Informatică 2026 iunie V4, Matematică M_tehnologic 2024 august V3, Informatică simulare 2025 (ISJ Brăila), Matematică M_mate-info simulare 2024; butoane Meditator AI pe fiecare exercițiu, context construit pe server.
 - [ ] Completare arhivă cu PDF-uri oficiale 2017–2026 lipsă (ex. Matematică/Informatică iunie 2025) — blocat: subiecte2024–2026.edu.ro dau eroare de certificat HTTPS în browser și nu sunt accesibile din mediul cloud; necesită descărcare manuală sau cheia de upload (service role).
