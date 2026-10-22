@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { amestecaLectii, LECTII_SUPLIMENTARE } from "./demo-repertoriu";
+import { amestecaLectii, LECTII } from "./demo-repertoriu";
 
 describe("Demonstrații Profesor AI fără repetare", () => {
   test("parcurge fiecare lecție exact o dată într-un ciclu", () => {
@@ -16,9 +16,15 @@ describe("Demonstrații Profesor AI fără repetare", () => {
     expect(amestecaLectii(0, null)).toEqual([]);
   });
   test("repertoriul acoperă și materii diferite de matematică", () => {
-    const materii = new Set(LECTII_SUPLIMENTARE.map((lectie) => lectie.materie));
-    for (const materie of ["Istorie", "Geografie", "Informatică", "Chimie", "Biologie", "Limba română", "Engleză", "Economie", "Logică"]) {
+    const materii = new Set(LECTII.map((lectie) => lectie.materie));
+    for (const materie of ["Istorie", "Geografie", "Informatică", "Chimie", "Biologie", "Limba română", "Fizică", "Economie"]) {
       expect(materii.has(materie)).toBe(true);
+    }
+  });
+  test("fiecare lecție pornește de la un subiect oficial și o începe profesoara", () => {
+    for (const l of LECTII) {
+      expect(l.sursa ?? "").toMatch(/20\d\d/);
+      expect(l.replici[0].cine).toBe("prof");
     }
   });
 });
@@ -33,5 +39,11 @@ describe("Lecțiile video cu voce", () => {
       expect(existsSync(`public/demo-lectii/${cheie}.mp3`)).toBe(true);
     }
     expect(new Set(LECTII.map(cheieLectie)).size).toBe(LECTII.length);
+  });
+  test("fiecare lecție pornește de la un subiect oficial și o începe profesoara", () => {
+    for (const l of LECTII) {
+      expect(l.sursa ?? "").toMatch(/20\d\d/);
+      expect(l.replici[0].cine).toBe("prof");
+    }
   });
 });

@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Meditații online și în orașul tău: matematică, română, engleză, BAC | MeditatiiDirect.ro" },
-      { name: "description", content: "Spui în 2 minute ce meditații cauți, iar profesorii îți trimit oferte cu preț și program. Gratuit pentru elevi, fără comision, online sau în orașul tău. Subiecte BAC cu barem incluse." },
+      { name: "description", content: "Spui în 2 minute ce meditații cauți, iar profesorii îți trimit oferte cu preț și program. Gratuit pentru elevi, fără comision, online sau în orașul tău. Plus profesor individual cu AI, 24/7." },
       { property: "og:title", content: "Meditații Direct — primești oferte de la profesori, gratuit" },
       { property: "og:description", content: "Spui ce meditații cauți, profesorii îți trimit oferte cu preț și program. Gratuit, fără comision, online sau în orașul tău." },
       { property: "og:type", content: "website" },

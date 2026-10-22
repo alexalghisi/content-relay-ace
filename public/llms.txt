@@ -13,7 +13,7 @@ MeditatiiDirect.ro conectează elevi și părinți cu peste 1000 de meditatori v
 - [Cum funcționează](/cum-functioneaza): Pașii pentru a găsi un profesor.
 - [Prețuri meditații](/preturi-meditatii): Tarife orientative pe materie.
 - [Pentru profesori](/pentru-profesori): Cum publici un anunț.
-- [Profesor AI](/profesor-ai): Lecție live cu un profesor virtual, în limba română; primele 15 minute sunt gratuite pentru fiecare elev (telefon verificat prin SMS).
+- [Profesor AI](/profesor-ai): Profesor individual cu AI, disponibil la orice oră din zi și din noapte (24/7): lecție live cu voce, în română, pe itemi reali din variantele de bacalaureat și Evaluare Națională; primele 15 minute gratuite pentru fiecare elev (telefon verificat prin SMS).
 
 ## Materii populare
 

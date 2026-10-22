@@ -53,6 +53,11 @@ export async function createLiveAvatarAccess(
   }).catch(() => null);
   let secunde = config.maxSeconds ?? 1800;
   let res = await call(secunde);
+  // Eroare de rețea sau 5xx trecătoare la LiveAvatar: mai încercăm o dată înainte să renunțăm la video.
+  if (!res || res.status >= 500 || res.status === 429) {
+    await new Promise((r) => setTimeout(r, 1200));
+    res = await call(secunde);
+  }
   // The account plan caps session length: repair the request once with the cap LiveAvatar states.
   if (res?.status === 400) {
     const cap = /max_session_duration[^"]*maximum allowed \((\d+)s\)/.exec(await res.clone().text().catch(() => ""));
@@ -84,7 +89,7 @@ export async function createLiveAvatarAccess(
       return unavailable(`LiveAvatar nu acceptă avatarul sau vocea salvate.${ids} Poți continua în scris.`);
     if (res?.status === 429)
       return unavailable("LiveAvatar limitează momentan pornirea sesiunilor video. Încearcă mai târziu; poți continua în scris.");
-    return unavailable("LiveAvatar nu a putut porni avatarul video. Lecția poate continua în scris.");
+    return unavailable(`LiveAvatar nu a putut porni avatarul video (cod ${res?.status ?? "rețea"}). Lecția poate continua în scris.`);
   }
   const j = await res.json().catch(() => null) as { data?: { session_token?: unknown } } | null;
   const token = j?.data?.session_token;

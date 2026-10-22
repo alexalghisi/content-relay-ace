@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RefreshCw, Volume2, VolumeX } from "lucide-react";
+import { Mic, RefreshCw, Volume2, VolumeX } from "lucide-react";
 import hannahDemo from "@/assets/hannah-matematica-demo.mp4.asset.json";
 import hannahDemoWebm from "@/assets/hannah-matematica-demo.webm.asset.json";
 import { amestecaLectii, cheieLectie, LECTII } from "./demo-repertoriu";
@@ -11,7 +11,6 @@ const ULTIMUL_CLIP = "profesor-ai-clip-ultim";
 /** Muted talking loops; a different one is shown for every lesson (and on every visit). */
 export const CLIPURI = [
   { webm: hannahDemoWebm.url, mp4: hannahDemo.url, eticheta: "Hannah · Profesor AI" },
-  { webm: "/demo-video/profesoara-1.webm", mp4: "/demo-video/profesoara-1.mp4", eticheta: "Profesor AI" },
   { webm: "/demo-video/profesoara-2.webm", mp4: "/demo-video/profesoara-2.mp4", eticheta: "Profesor AI" },
   { webm: "/demo-video/profesoara-3.webm", mp4: "/demo-video/profesoara-3.mp4", eticheta: "Profesor AI" },
 ] as const;
@@ -138,7 +137,10 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
       const vorbeste = i >= 0 && lectie?.replici[i].cine === "prof" && t <= timpi.replici[i][1];
       if (v) {
         if (vorbeste && v.paused) v.play().catch(() => {});
-        if (!vorbeste && !v.paused) v.pause();
+        if (!vorbeste && !v.paused) {
+          v.pause();
+          v.currentTime = 0; // first frame = mouth closed, so she looks like she is listening, not frozen
+        }
       }
       if (t >= timpi.durata) {
         terminat = setTimeout(urmatoarea, 1200);
@@ -149,6 +151,20 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
     raf = requestAnimationFrame(pas);
     return () => { cancelAnimationFrame(raf); clearTimeout(terminat); };
   }, [timpi, lectie, urmatoarea]);
+
+  const pornesteCuSunet = () => {
+    const a = audio.current;
+    if (!a) return;
+    opritManual.current = false;
+    gataSunet.current = true;
+    a.muted = false;
+    a.volume = 1;
+    a.currentTime = 0;
+    baza.current = performance.now();
+    a.play().catch(() => {});
+    setLinie(-1);
+    setSunet(true);
+  };
 
   const comuta = () => {
     const a = audio.current;
@@ -215,6 +231,21 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
               </p>
             )}
           </div>
+
+          {!sunet && (
+            <button
+              type="button"
+              onClick={pornesteCuSunet}
+              className="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-xl ring-4 ring-white/40 animate-pulse"
+            >
+              <Volume2 className="h-5 w-5" /> Ascultă lecția
+            </button>
+          )}
+          {sunet && vorbitor === "elev" && (
+            <span className="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-semibold text-white">
+              <Mic className="h-4 w-4 animate-pulse text-amber-300" /> Profesoara ascultă…
+            </span>
+          )}
 
           <div className="absolute right-2 top-2 flex gap-2 sm:right-3 sm:top-3">
             <button

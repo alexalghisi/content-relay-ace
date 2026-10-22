@@ -163,8 +163,17 @@ export function SesiuneProfesorAi({
           console.info("[voice] in session.disconnected");
           if (!anulat && heygen.current) treceLaVoce("Sesiunea video s-a încheiat. Continuăm cu tabla și vocea în română.");
         });
-        await s.start();
+        try {
+          await s.start();
+        } catch {
+          await new Promise((r) => setTimeout(r, 1500));
+          if (anulat) return;
+          await s.start();
+        }
         if (anulat) return void s.stop();
+        // Închiderea tabului oprește sesiunea LiveAvatar, ca să nu rămână una „fantomă” care blochează următoarea.
+        const laInchidere = () => { void s.stop().catch(() => {}); };
+        window.addEventListener("pagehide", laInchidere, { once: true });
         setModAvatar("realist");
       } catch {
         void heygen.current?.stopAvatar().catch(() => {});
@@ -412,6 +421,16 @@ export function SesiuneProfesorAi({
       synth.speak(unlock);
     }
   };
+  // Sunet și microfon pornite din start: clicul de pe pagina anterioară (navigare în aceeași aplicație)
+  // păstrează permisiunea browserului; doar dacă browserul totuși blochează apare butonul de sunet.
+  const autoSunet = useRef(false);
+  useEffect(() => {
+    if (autoSunet.current) return;
+    autoSunet.current = true;
+    const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation;
+    if (!ua || ua.hasBeenActive) activeazaSunet();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const pornit = useRef(false);
   const tacereNr = useRef(0);
   // Elevul tace: după PA_TACERE_SEC de liniște (profesoara a terminat, microfonul ascultă),
