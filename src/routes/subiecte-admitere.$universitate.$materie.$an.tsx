@@ -2,6 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Download, FileText, ArrowLeft, GraduationCap, CheckCircle2, Link2 } from "lucide-react";
 import { getPapersForYear, paperPublicUrl, listRelatedUnisForSubject, listYearsForUniSubject, type AdmissionPaper } from "@/lib/admission-papers";
 import { LazyPdfPreview } from "@/components/lazy-pdf-preview";
+import { verdictAdmitere } from "@/lib/admitere-verificare";
+import { rezolvareAdmitere } from "@/data/rezolvari-admitere";
 
 type LoaderData = {
   universitate: string; materie: string; an: number;
@@ -34,7 +36,7 @@ export const Route = createFileRoute("/subiecte-admitere/$universitate/$materie/
     const { universitate, materie, an, universityName, subjectName, papers } = loaderData;
     const url = `https://meditatiidirect.ro/subiecte-admitere/${universitate}/${materie}/${an}`;
     const title = `Subiecte Admitere ${subjectName} ${universityName} ${an} (PDF) | MeditatiiDirect.ro`;
-    const desc = `Subiect oficial și barem la ${subjectName} pentru admiterea ${an} la ${universityName}. PDF gratuit, preview inline și descărcare directă.`;
+    const desc = `Subiect și barem la ${subjectName} pentru admiterea ${an} la ${universityName}. PDF gratuit, preview inline și descărcare directă.`;
     const subjectPaper = papers.find((p) => p.document_type === "subiect");
     const pdfUrl = subjectPaper ? paperPublicUrl(subjectPaper.storage_path) : url;
     return {
@@ -102,6 +104,8 @@ function PaperPage() {
   const { universitate, materie, an, papers, universityName, subjectName, relatedUnis, otherYears } = Route.useLoaderData();
   const subjectPaper = papers.find((p: AdmissionPaper) => p.document_type === "subiect");
   const baremPaper = papers.find((p: AdmissionPaper) => p.document_type === "barem");
+  const sursa = subjectPaper ? verdictAdmitere(subjectPaper.storage_path) : null;
+  const rezolvare = rezolvareAdmitere(universitate, materie, an);
   const rezolvarePaper = papers.find((p: AdmissionPaper) => p.document_type === "rezolvare");
   const previewUrl = subjectPaper ? paperPublicUrl(subjectPaper.storage_path) : null;
   return (
@@ -125,10 +129,31 @@ function PaperPage() {
         </p>
         <ul className="mt-4 grid gap-1.5 text-sm">
           <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> PDF găzduit pe serverele noastre — descărcare instant</li>
-          <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Subiect oficial publicat de {universityName}</li>
+          {sursa?.sursaUrl && (
+            <li className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-primary" />
+              <span>
+                {sursa.provenienta === "oficiala" ? <>Sursa oficială: </> : <>Copie preluată de pe {sursa.sursaDomeniu}, verificată după conținut: </>}
+                <a href={sursa.sursaUrl} target="_blank" rel="noopener nofollow" className="text-primary underline break-all">{sursa.sursaDomeniu}</a>
+              </span>
+            </li>
+          )}
+          {sursa?.simulare && (
+            <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Document de simulare a admiterii, nu subiectul din sesiunea de concurs</li>
+          )}
           <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Fără cont, fără reclame intruzive</li>
         </ul>
       </header>
+      {rezolvare && (
+        <section className="mt-8 rounded-2xl border border-primary/30 bg-primary-soft/40 p-6">
+          <h2 className="text-xl font-semibold">Rezolvare explicată pas cu pas, verificată</h2>
+          <p className="mt-2 text-muted-foreground">{rezolvare.descriere}</p>
+          <Link to="/rezolvari-admitere/$universitate/$materie/$an" params={{ universitate, materie, an: String(an) }}
+            className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+            Vezi rezolvarea →
+          </Link>
+        </section>
+      )}
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {[subjectPaper, baremPaper, rezolvarePaper].filter(Boolean).map((p) => {
           const paper = p as AdmissionPaper;
