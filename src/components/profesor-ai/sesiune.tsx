@@ -13,6 +13,7 @@ import {
   paNivelName,
   paObiectivName,
   type PaConfig,
+  paLimba,
 } from "@/lib/profesor-ai";
 
 type Msg = { role: "user" | "assistant"; content: string; tabla?: string };
