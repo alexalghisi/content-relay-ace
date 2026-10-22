@@ -22,3 +22,16 @@ describe("Demonstrații Profesor AI fără repetare", () => {
     }
   });
 });
+describe("Lecțiile video cu voce", () => {
+  test("fiecare lecție are fișier audio cu câte un interval pentru fiecare replică", async () => {
+    const { AUDIO_DEMO } = await import("./demo-audio.generated");
+    const { existsSync } = await import("node:fs");
+    const { LECTII, cheieLectie } = await import("./demo-repertoriu");
+    for (const lectie of LECTII) {
+      const cheie = cheieLectie(lectie);
+      expect(AUDIO_DEMO[cheie]?.replici.length).toBe(lectie.replici.length);
+      expect(existsSync(`public/demo-lectii/${cheie}.mp3`)).toBe(true);
+    }
+    expect(new Set(LECTII.map(cheieLectie)).size).toBe(LECTII.length);
+  });
+});
