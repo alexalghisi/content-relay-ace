@@ -27,7 +27,7 @@ const FAQS = [
   },
   {
     q: "Pentru cine este?",
-    a: "Pentru elevi din școala primară până la liceu și BAC, pentru studenți și pentru adulți care vor să învețe. Explicațiile se adaptează nivelului ales.",
+    a: "Pentru elevi din școala primară până la liceu și bacalaureat, pentru studenți și pentru adulți care vor să învețe. Explicațiile se adaptează nivelului ales.",
   },
   {
     q: "Înlocuiește un meditator real?",

@@ -27,7 +27,7 @@ ROSTIRE = {
     "f′(x) = 3x² − 3.": "f prim de x egal trei x pătrat minus trei.",
     "La x = 1 și x = −1.": "La x egal unu și x egal minus unu.",
     "Acum semnul: înainte de −1 derivata e pozitivă, între −1 și 1 negativă, după 1 pozitivă. Ce tip de punct e −1?": "Acum semnul: înainte de minus unu derivata e pozitivă, între minus unu și unu negativă, după unu pozitivă. Ce tip de punct e minus unu?",
-    "Exact. Maxim în −1, cu f(−1) = 2, și minim în 1, cu f(1) = −2. Așa se punctează complet la BAC.": "Exact. Maxim în minus unu, cu f de minus unu egal doi, și minim în unu, cu f de unu egal minus doi. Așa se punctează complet la bac.",
+    "Exact. Maxim în −1, cu f(−1) = 2, și minim în 1, cu f(1) = −2. Așa se punctează complet la bacalaureat.": "Exact. Maxim în minus unu, cu f de minus unu egal doi, și minim în unu, cu f de unu egal minus doi. Așa se punctează complet la bacalaureat.",
     "Câte grame de apă se obțin din 4 g de hidrogen?": "Câte grame de apă se obțin din patru grame de hidrogen?",
     "2H₂ + O₂ → 2H₂O.": "Doi H doi plus O doi dau doi H doi O.",
     "Perfect. Câți moli înseamnă 4 g de H₂, dacă masa molară e 2?": "Perfect. Câți moli înseamnă patru grame de H doi, dacă masa molară e doi?",
