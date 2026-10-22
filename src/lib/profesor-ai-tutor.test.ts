@@ -28,3 +28,14 @@ test("mesajele de control nu apar în transcript", () => {
 test("parseReply separă tabla", () => {
   expect(parseReply("Bună.\nTABLA: x² + 1")).toEqual({ vorbit: "Bună.", tabla: "x² + 1" });
 });
+
+describe("variatieOra", () => {
+  test("picks a different topic position and opening per session seed", async () => {
+    const { variatieOra } = await import("./profesor-ai-tutor.server");
+    const a = variatieOra(1_700_000_000_000);
+    const b = variatieOra(1_700_000_000_123);
+    expect(a).toContain("codul orei");
+    expect(a).not.toBe(b);
+    expect(tutorPrompt(cfg, 15, 42)).toContain("Varietate obligatorie");
+  });
+});
