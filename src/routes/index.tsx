@@ -7,7 +7,7 @@ import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
-import { DemoVideoProfesoara } from "@/components/profesor-ai/demo-video";
+import { DemoProfesorAiRotativ, TextRotativ, TITLURI_PROFESOR_AI, TEXTE_PROFESOR_AI } from "@/components/profesor-ai/demo-rotativ";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -77,13 +77,13 @@ function HomePage() {
       <div className="grid items-center gap-8 rounded-3xl border border-primary/15 bg-gradient-to-br from-primary-soft/70 to-card p-6 sm:p-10 lg:grid-cols-[1fr_1.15fr]">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full bg-[#facc15] px-3 py-1 text-xs font-bold text-[#1e1b4b]">NOU · 15 MINUTE GRATUIT</p>
-          <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Profesor AI: primele 15 minute gratuit, live, în română</h2>
-          <p className="mt-3 leading-7 text-muted-foreground">Alegi materia, nivelul și durata, apoi vorbești sau scrii. Profesorul îți explică, îți dă exerciții, te corectează și verifică dacă ai înțeles.</p>
+          <TextRotativ as="h2" cheie="profesor-ai-titlu" variante={TITLURI_PROFESOR_AI} className="mt-4 text-3xl font-bold sm:text-4xl" />
+          <TextRotativ cheie="profesor-ai-text" variante={TEXTE_PROFESOR_AI} className="mt-3 leading-7 text-muted-foreground" />
           <div className="mt-6 flex flex-wrap gap-3">
             <Link to="/profesor-ai" className="btn-primary h-12 px-6">Începe lecția gratuită de 15 minute <ArrowRight className="ml-2 h-4 w-4" /></Link>
           </div>
         </div>
-        <DemoVideoProfesoara />
+        <DemoProfesorAiRotativ />
       </div>
     </section>
 

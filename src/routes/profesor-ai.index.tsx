@@ -4,8 +4,7 @@ import { faqJsonLd } from "@/components/seo-landing";
 import { BlocajeBreadcrumb } from "@/components/blocaje/blocaj-card";
 import { ConfiguratorProfesorAi } from "@/components/profesor-ai/configurator";
 import { breadcrumbLd, SITE } from "@/lib/blocaje-seo";
-import { DemoVideoProfesoara } from "@/components/profesor-ai/demo-video";
-import { DemoConversatie } from "@/components/profesor-ai/demo-conversatie";
+import { DemoProfesorAiRotativ, TextRotativ, TEXTE_PROFESOR_AI } from "@/components/profesor-ai/demo-rotativ";
 
 const PATH = "/profesor-ai";
 const URL = `${SITE}${PATH}`;
@@ -99,15 +98,8 @@ function Page() {
           <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             Profesorul AI: primele 15 minute gratuit, live, oricând
           </h1>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            Alegi materia, nivelul, durata și ce vrei să faci. Profesorul îți vorbește, te ascultă,
-            îți explică pe înțeles, îți dă exerciții și te corectează, cu răbdare, până când îți e
-            clar.
-          </p>
-          <DemoVideoProfesoara className="mt-6" />
-          <div className="mt-6">
-            <DemoConversatie />
-          </div>
+          <TextRotativ cheie="profesor-ai-text" variante={TEXTE_PROFESOR_AI} className="mt-4 text-lg leading-relaxed text-muted-foreground" />
+          <DemoProfesorAiRotativ className="mt-6" />
         </header>
         <div id="incepe">
           <ConfiguratorProfesorAi />
