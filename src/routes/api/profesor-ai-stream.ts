@@ -51,7 +51,7 @@ export const Route = createFileRoute("/api/profesor-ai-stream")({
         }
         const t = await import("@/lib/profesor-ai-tutor.server");
         try {
-          const stream = await t.streamTutor(t.tutorPrompt(s, s.durata), parsed.data.mesaje, parsed.data.imagine);
+          const stream = await t.streamTutor(t.tutorPrompt(s, s.durata, s.exp), parsed.data.mesaje, parsed.data.imagine);
           return new Response(stream, {
             headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
           });

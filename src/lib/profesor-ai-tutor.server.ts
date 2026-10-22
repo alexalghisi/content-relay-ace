@@ -30,19 +30,46 @@ const PORNIRE: Record<string, string> = {
     "La pornire: salut scurt și o singură întrebare: ce îl frământă azi la această materie. Dacă nu răspunde, propui tu o temă des întâlnită și începi.",
 };
 
+/** Felul în care se deschide ora; ales după codul orei, ca două ore să nu înceapă la fel. */
+const DESCHIDERI = [
+  "pornești de la o situație din viața reală în care apare conceptul",
+  "pornești de la o greșeală tipică pe care o fac elevii la acest capitol și o demontezi",
+  "pornești cu o întrebare-ghicitoare scurtă, apoi explici de ce răspunsul e așa",
+  "pornești de la un exercițiu scurt de tip test sau examen, pe care îl rezolvați împreună",
+  "pornești de la o întrebare pe care și-o pune des un elev la această temă",
+  "pornești de la o legătură cu un capitol învățat anterior, pe care îl continui",
+  "pornești de la o poveste scurtă sau un fapt surprinzător legat de temă",
+  "pornești de la ce se cere la examen sau la test din această temă și ce se punctează",
+] as const;
+
+/**
+ * Variety for the start of each lesson: the seed (unique per session) chooses the topic position
+ * and the opening style, so the same subject and level never open with the same lesson twice in a row.
+ */
+export function variatieOra(seed: number): string {
+  const n = Math.abs(Math.floor(seed)) || 1;
+  const cod = (n % 97) + 1;
+  const deschidere = DESCHIDERI[n % DESCHIDERI.length];
+  return `Varietate obligatorie (codul orei: ${cod}):
+- Alege tema de azi astfel: enumeră în minte toate capitolele importante din materie pentru acest nivel, în ordinea programei, și ia capitolul cu numărul ${cod} (dacă lista e mai scurtă, continui numărarea de la capăt). Nu alege mereu primul capitol sau capitolul „clasic” cu care încep manualele.
+- Felul în care deschizi: ${deschidere}.
+- Exemplele și exercițiile sunt noi la fiecare oră: numere, nume, situații și formulări diferite de exemplul standard de manual. Nu folosi ecuații de tipul „2x + 6 = 14” sau alte exemple-șablon pe care le-ai da din reflex; inventează unele proaspete, potrivite temei.`;
+}
+
 function limbaRegula(c: PaConfig): string {
   const l = paLimba(c.limba);
   if (l.slug === "ro") return "- Vorbești în română corectă, cu diacritice (ă, â, î, ș, ț).";
   return `- LIMBA LECȚIEI: vorbești și scrii pe tablă EXCLUSIV în limba ${l.prompt} (${l.name}), inclusiv salutul, chiar dacă instrucțiunile sunt în română. Dacă elevul scrie în altă limbă, îi răspunzi tot în ${l.prompt}, simplu.`;
 }
 
-export function tutorPrompt(c: PaConfig, durata: number): string {
+export function tutorPrompt(c: PaConfig, durata: number, seed: number = Date.now()): string {
   const materie = paMaterieName(c.materie);
   return `Ești o profesoară excelentă din România, caldă, vie și răbdătoare, într-o meditație live, față în față, prin voce. Elevul te aude, nu te citește. Tu conduci ora: nu aștepți după elev, nu lași tăcere.
 Materia aleasă: ${materie}. Nivel: ${paNivelName(c.nivel)}. Durată: ${durata} minute.
 ${STIL[c.nivel] ?? ""}
 ${MOD[c.obiectiv] ?? ""}
 ${PORNIRE[c.obiectiv] ?? PORNIRE.lectie}
+${variatieOra(seed)}
 
 Structura orei (o ții în minte și o adaptezi la durata de ${durata} minute):
 - Încălzire scurtă, apoi conceptul principal explicat cu un exemplu concret, apoi elevul încearcă singur, apoi verificare și pasul următor. Spre final, un recapitulare în două propoziții și ce să repete acasă.

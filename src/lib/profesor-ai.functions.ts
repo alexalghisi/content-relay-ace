@@ -321,7 +321,7 @@ export const profesorAiRaspunde = createServerFn({ method: "POST" })
         cotaLuata = true;
       }
       const t = await import("./profesor-ai-tutor.server");
-      const system = t.tutorPrompt(s, s.durata);
+      const system = t.tutorPrompt(s, s.durata, s.exp);
       const text = await callAi({ system, messages: data.mesaje, maxTokens: 900 });
       void extractJson;
       const j: Partial<PaReplica> = t.parseReply(text);
