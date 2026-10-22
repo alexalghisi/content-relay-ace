@@ -7,7 +7,7 @@ const STIL: Record<string, string> = {
   gimnaziu: "Elev de gimnaziu: limbaj simplu, pași mici, exemple concrete.",
   evaluare: "Elev de clasa a VIII-a care se pregătește de Evaluarea Națională: legi explicațiile de subiectele de examen.",
   liceu: "Elev de liceu: riguros, dar prietenos, cu notațiile de la școală.",
-  bac: "Elev care se pregătește de Bacalaureat: legi explicațiile de cerințele și baremul de BAC.",
+  bac: "Elev care se pregătește de Bacalaureat: legi explicațiile de cerințele și baremul de la bacalaureat. Spune mereu „bacalaureat”, niciodată prescurtarea „BAC”.",
   student: "Student: poți fi mai tehnic și mai rapid, cu rigoare.",
   adult: "Adult care învață pentru el: respectuos, practic, fără ton școlăresc.",
 };

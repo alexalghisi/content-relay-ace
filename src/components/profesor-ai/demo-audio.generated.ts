@@ -2,7 +2,7 @@
 // [start, end] in seconds for each line of the lesson, matching public/demo-lectii/<cheie>.mp3.
 export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, number][] }> = {
  "matematica-clasa-a-8-a": {
-  "durata": 48.35,
+  "durata": 48.36,
   "replici": [
    [
     0.3,
@@ -30,19 +30,19 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ],
    [
     28.83,
-    38.17
+    38.18
    ],
    [
-    38.57,
-    42.49
+    38.58,
+    42.5
    ],
    [
-    42.89,
-    47.35
+    42.9,
+    47.36
    ]
   ]
  },
- "limba-romana-bac": {
+ "limba-romana-bacalaureat": {
   "durata": 38.09,
   "replici": [
    [
@@ -76,7 +76,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
   ]
  },
  "engleza-clasa-a-6-a": {
-  "durata": 37.09,
+  "durata": 37.08,
   "replici": [
    [
     0.3,
@@ -92,10 +92,10 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ],
    [
     12.01,
-    12.97
+    12.96
    ],
    [
-    13.37,
+    13.36,
     19.32
    ],
    [
@@ -108,11 +108,11 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ],
    [
     26.53,
-    29.59
+    29.58
    ],
    [
-    29.99,
-    36.09
+    29.98,
+    36.08
    ]
   ]
  },
@@ -157,8 +157,8 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "matematica-m1-bac-analiza": {
-  "durata": 43.06,
+ "matematica-m1-bacalaureat-analiza": {
+  "durata": 43.53,
   "replici": [
    [
     0.3,
@@ -174,10 +174,10 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ],
    [
     13.74,
-    15.95
+    15.96
    ],
    [
-    16.35,
+    16.36,
     18.63
    ],
    [
@@ -190,7 +190,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ],
    [
     31.78,
-    42.06
+    42.53
    ]
   ]
  },
@@ -268,7 +268,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "biologie-bac-genetica": {
+ "biologie-bacalaureat-genetica": {
   "durata": 37.53,
   "replici": [
    [
@@ -305,7 +305,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "istorie-bac-romania-moderna": {
+ "istorie-bacalaureat-romania-moderna": {
   "durata": 41.21,
   "replici": [
    [
@@ -338,7 +338,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "geografie-bac-clima": {
+ "geografie-bacalaureat-clima": {
   "durata": 45.04,
   "replici": [
    [
@@ -375,7 +375,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "informatica-bac-algoritmi": {
+ "informatica-bacalaureat-algoritmi": {
   "durata": 37.64,
   "replici": [
    [
@@ -416,7 +416,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "fizica-bac-circuite": {
+ "fizica-bacalaureat-circuite": {
   "durata": 40.03,
   "replici": [
    [
@@ -453,7 +453,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "chimie-bac-solutii": {
+ "chimie-bacalaureat-solutii": {
   "durata": 40.01,
   "replici": [
    [
@@ -494,7 +494,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "biologie-bac-fiziologie": {
+ "biologie-bacalaureat-fiziologie": {
   "durata": 42.77,
   "replici": [
    [
@@ -515,10 +515,10 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ],
    [
     24.41,
-    26.69
+    26.7
    ],
    [
-    27.09,
+    27.1,
     31.28
    ],
    [
@@ -531,7 +531,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "limba-romana-bac-poezie": {
+ "limba-romana-bacalaureat-poezie": {
   "durata": 35.7,
   "replici": [
    [
@@ -601,15 +601,15 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "matematica-bac-probabilitati": {
-  "durata": 43.38,
+ "matematica-bacalaureat-probabilitati": {
+  "durata": 43.39,
   "replici": [
    [
     0.3,
-    5.81
+    5.8
    ],
    [
-    6.21,
+    6.2,
     8.58
    ],
    [
@@ -630,19 +630,19 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ],
    [
     26.89,
-    33.89
+    33.9
    ],
    [
-    34.29,
+    34.3,
     37.35
    ],
    [
     37.75,
-    42.38
+    42.39
    ]
   ]
  },
- "matematica-m1-bac-integrale": {
+ "matematica-m1-bacalaureat-integrale": {
   "durata": 38.9,
   "replici": [
    [
@@ -679,7 +679,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "economie-bac-elasticitate": {
+ "economie-bacalaureat-elasticitate": {
   "durata": 40.18,
   "replici": [
    [
@@ -712,7 +712,7 @@ export const AUDIO_DEMO: Record<string, { durata: number; replici: [number, numb
    ]
   ]
  },
- "logica-bac-argumentare": {
+ "logica-bacalaureat-argumentare": {
   "durata": 37.76,
   "replici": [
    [

@@ -6,6 +6,22 @@ import { amestecaLectii, cheieLectie, LECTII } from "./demo-repertoriu";
 import { AUDIO_DEMO } from "./demo-audio.generated";
 
 const ULTIMA = "profesor-ai-video-ultima";
+const ULTIMUL_CLIP = "profesor-ai-clip-ultim";
+
+/** Muted talking loops; a different one is shown for every lesson (and on every visit). */
+export const CLIPURI = [
+  { webm: hannahDemoWebm.url, mp4: hannahDemo.url, eticheta: "Hannah · Profesor AI" },
+  { webm: "/demo-video/profesoara-1.webm", mp4: "/demo-video/profesoara-1.mp4", eticheta: "Profesor AI" },
+  { webm: "/demo-video/profesoara-2.webm", mp4: "/demo-video/profesoara-2.mp4", eticheta: "Profesor AI" },
+  { webm: "/demo-video/profesoara-3.webm", mp4: "/demo-video/profesoara-3.mp4", eticheta: "Profesor AI" },
+] as const;
+
+/** Next clip index: never the same clip twice in a row. */
+export function urmatorulClip(precedent: number | null, total = CLIPURI.length): number {
+  if (total <= 1) return 0;
+  if (precedent === null || !Number.isInteger(precedent) || precedent < 0 || precedent >= total) return Math.floor(Math.random() * total);
+  return (precedent + 1) % total;
+}
 
 /**
  * Voiced demo lesson (teacher + student) that rotates through the whole lesson deck:
@@ -19,6 +35,7 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
   const [idx, setIdx] = useState<number | null>(null);
   const [linie, setLinie] = useState(-1);
   const [sunet, setSunet] = useState(false);
+  const [clip, setClip] = useState<number | null>(null);
 
   const ordine = useRef<number[]>([]);
   const precedenta = useRef<number | null>(null);
@@ -32,6 +49,18 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
     if (noua === undefined) return;
     precedenta.current = noua;
     try { localStorage.setItem(ULTIMA, String(noua)); } catch { /* Storage is optional. */ }
+    setClip((c) => {
+      let anterior = c;
+      if (anterior === null) {
+        try {
+          const u = localStorage.getItem(ULTIMUL_CLIP);
+          if (u !== null && /^\d+$/.test(u)) anterior = Number(u);
+        } catch { /* Storage is optional. */ }
+      }
+      const nou = urmatorulClip(anterior);
+      try { localStorage.setItem(ULTIMUL_CLIP, String(nou)); } catch { /* Storage is optional. */ }
+      return nou;
+    });
     setIdx(noua);
     setLinie(-1);
   }, []);
@@ -146,6 +175,7 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
   return (
     <div className={`relative overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)] ${className}`}>
       <video
+        key={clip ?? "poster"}
         ref={video}
         className="aspect-video w-full bg-foreground object-cover"
         poster="/promo-profesor-ai.jpg"
@@ -157,8 +187,8 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
         preload="auto"
         aria-hidden="true"
       >
-        <source src={hannahDemoWebm.url} type="video/webm" />
-        <source src={hannahDemo.url} type="video/mp4" />
+        {clip !== null && <source src={CLIPURI[clip].webm} type="video/webm" />}
+        {clip !== null && <source src={CLIPURI[clip].mp4} type="video/mp4" />}
       </video>
       <audio ref={audio} preload="auto" onEnded={() => audio.current?.pause()} />
 
@@ -179,7 +209,7 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
             {replica && (
               <p key={`${idx}-${linie}`} className={`flex flex-col animate-in fade-in duration-300 ${vorbitor === "elev" ? "items-end text-right" : "items-start"}`}>
                 <span className={`mb-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide sm:text-[11px] ${vorbitor === "elev" ? "bg-amber-400 text-black" : "bg-sky-300 text-black"}`}>
-                  {vorbitor === "elev" ? "Elev" : "Hannah · Profesor AI"}
+                  {vorbitor === "elev" ? "Elev" : CLIPURI[clip ?? 0].eticheta}
                 </span>
                 <span className="max-w-[92%] text-[13px] font-medium leading-5 text-white sm:text-base sm:leading-6">{replica.text}</span>
               </p>

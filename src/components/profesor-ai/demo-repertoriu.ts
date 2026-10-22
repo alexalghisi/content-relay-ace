@@ -4,7 +4,7 @@ export type Lectie = { materie: string; nivel: string; replici: Replica[] };
 // Editorial examples, not recordings or generated student conversations.
 export const LECTII_SUPLIMENTARE: Lectie[] = [
   {
-    materie: "Istorie", nivel: "BAC · România modernă", replici: [
+    materie: "Istorie", nivel: "Bacalaureat · România modernă", replici: [
       { cine: "prof", text: "Cum ai demonstra că Unirea din 1859 a fost începutul unui proces, nu finalul lui?" },
       { cine: "elev", text: "Cuza a fost ales în ambele principate, dar instituțiile nu erau încă unite." },
       { cine: "prof", text: "Exact. Separă alegerea domnului de unificarea administrativă. Ce reper ai folosi pentru a doua?", tabla: "1859: dubla alegere → 1862: guvern și adunare unice" },
@@ -15,7 +15,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Geografie", nivel: "BAC · Climă", replici: [
+    materie: "Geografie", nivel: "Bacalaureat · Climă", replici: [
       { cine: "elev", text: "De ce plouă mai mult pe versantul vestic al unui munte decât în depresiunea de după el?" },
       { cine: "prof", text: "Urmărește o masă de aer umed care urcă muntele. Când urcă, se încălzește sau se răcește?", tabla: "Aer umed → ascensiune → răcire → condensare" },
       { cine: "elev", text: "Se răcește și vaporii condensează." },
@@ -27,7 +27,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Informatică", nivel: "BAC · Algoritmi", replici: [
+    materie: "Informatică", nivel: "Bacalaureat · Algoritmi", replici: [
       { cine: "prof", text: "Ai un milion de numere ordonate. Cum găsești un număr fără să le verifici pe toate?" },
       { cine: "elev", text: "Mă uit la numărul din mijloc." },
       { cine: "prof", text: "Și dacă ținta e mai mică?", tabla: "m = st + (dr − st) / 2" },
@@ -40,7 +40,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Fizică", nivel: "BAC · Circuite", replici: [
+    materie: "Fizică", nivel: "Bacalaureat · Circuite", replici: [
       { cine: "elev", text: "Am rezistențe de 6 și 3 ohmi în paralel, la 12 volți. Cum aflu curentul total?" },
       { cine: "prof", text: "În paralel, tensiunea este aceeași pe ambele ramuri. Ce curent trece prin fiecare?", tabla: "I₁ = U/R₁ · I₂ = U/R₂" },
       { cine: "elev", text: "2 amperi și 4 amperi." },
@@ -52,7 +52,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Chimie", nivel: "BAC · Soluții", replici: [
+    materie: "Chimie", nivel: "Bacalaureat · Soluții", replici: [
       { cine: "prof", text: "Diluezi 100 de mililitri de soluție 2 moli pe litru până la 500 de mililitri. Ce se păstrează?" },
       { cine: "elev", text: "Cantitatea de substanță dizolvată, dacă adaug doar apă." },
       { cine: "prof", text: "Da. Transformă primul volum în litri și calculează molii.", tabla: "n = c₁V₁ = 2 · 0,1 = 0,2 mol" },
@@ -65,7 +65,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Biologie", nivel: "BAC · Fiziologie", replici: [
+    materie: "Biologie", nivel: "Bacalaureat · Fiziologie", replici: [
       { cine: "elev", text: "Dacă arterele duc sânge oxigenat, de ce artera pulmonară duce sânge neoxigenat?" },
       { cine: "prof", text: "Ai găsit limita regulii. Arterele se definesc prin direcția circulației, nu prin oxigen. Din ce cameră pleacă artera pulmonară?", tabla: "Arteră: pleacă din inimă · venă: vine spre inimă" },
       { cine: "elev", text: "Din ventriculul drept." },
@@ -77,7 +77,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Limba română", nivel: "BAC · Poezie", replici: [
+    materie: "Limba română", nivel: "Bacalaureat · Poezie", replici: [
       { cine: "prof", text: "În „Plumb”, cum ai lega repetiția de starea eului liric, fără să spui doar că e o figură de stil?" },
       { cine: "elev", text: "Cuvântul repetat sugerează greutate și apăsare." },
       { cine: "prof", text: "Bun. Ce legătură vezi între decorul exterior și trăirea interioară?", tabla: "Decor funerar ↔ apăsare interioară · simbolism" },
@@ -100,7 +100,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Matematică", nivel: "BAC · Probabilități", replici: [
+    materie: "Matematică", nivel: "Bacalaureat · Probabilități", replici: [
       { cine: "prof", text: "Arunci două zaruri. Suma 7 și suma 12 sunt la fel de probabile?" },
       { cine: "elev", text: "Cred că da, fiecare e o sumă posibilă." },
       { cine: "prof", text: "Numărăm perechile, nu sumele. În câte moduri obții 12?", tabla: "36 de perechi ordonate echiprobabile" },
@@ -113,7 +113,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Matematică M1", nivel: "BAC · Integrale", replici: [
+    materie: "Matematică M1", nivel: "Bacalaureat · Integrale", replici: [
       { cine: "elev", text: "Integrala lui x de la minus unu la unu e zero. Înseamnă că aria e zero?" },
       { cine: "prof", text: "Nu: integrala ține cont de semn. Cum arată graficul pe cele două jumătăți?", tabla: "∫₋₁¹ x dx = 0" },
       { cine: "elev", text: "Sub axă în stânga și deasupra în dreapta." },
@@ -125,7 +125,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Economie", nivel: "BAC · Elasticitate", replici: [
+    materie: "Economie", nivel: "Bacalaureat · Elasticitate", replici: [
       { cine: "prof", text: "Prețul crește cu 10%, iar cantitatea cerută scade cu 20%. Venitul vânzătorului crește automat?" },
       { cine: "elev", text: "Nu sunt sigur. Prețul e mai mare, dar vinde mai puțin." },
       { cine: "prof", text: "Exact. Folosește 100 de lei și 100 de produse ca punct de plecare.", tabla: "V₀ = 100 · 100 = 10.000 lei" },
@@ -136,7 +136,7 @@ export const LECTII_SUPLIMENTARE: Lectie[] = [
     ],
   },
   {
-    materie: "Logică", nivel: "BAC · Argumentare", replici: [
+    materie: "Logică", nivel: "Bacalaureat · Argumentare", replici: [
       { cine: "elev", text: "Toți medicii sunt absolvenți. Ana e absolventă. Rezultă că Ana e medic?" },
       { cine: "prof", text: "Gândește-te la un absolvent de arhitectură. Respectă premisele fără să fie medic?", tabla: "Medici ⊆ Absolvenți" },
       { cine: "elev", text: "Da. Deci concluzia nu e obligatorie." },
@@ -166,7 +166,7 @@ export const LECTII_INITIALE: Lectie[] = [
   },
   {
     materie: "Limba română",
-    nivel: "BAC",
+    nivel: "Bacalaureat",
     replici: [
       { cine: "prof", text: "Salut! La ce te pot ajuta?" },
       { cine: "elev", text: "Cum încep un eseu despre „Moromeții”? Mereu mă blochez la introducere." },
@@ -209,7 +209,7 @@ export const LECTII_INITIALE: Lectie[] = [
   },
   {
     materie: "Matematică M1",
-    nivel: "BAC · Analiză",
+    nivel: "Bacalaureat · Analiză",
     replici: [
       { cine: "elev", text: "Am f(x) = x³ − 3x. Cum aflu punctele de extrem?" },
       { cine: "prof", text: "Extremele apar unde derivata se anulează. Calculează tu f′(x).", tabla: "f(x) = x³ − 3x" },
@@ -218,7 +218,7 @@ export const LECTII_INITIALE: Lectie[] = [
       { cine: "elev", text: "La x = 1 și x = −1." },
       { cine: "prof", text: "Acum semnul: înainte de −1 derivata e pozitivă, între −1 și 1 negativă, după 1 pozitivă. Ce tip de punct e −1?", tabla: "x: −∞  −1  1  +∞ │ f′: +  0  −  0  +" },
       { cine: "elev", text: "Funcția crește apoi scade, deci maxim." },
-      { cine: "prof", text: "Exact. Maxim în −1, cu f(−1) = 2, și minim în 1, cu f(1) = −2. Așa se punctează complet la BAC.", tabla: "Max (−1, 2) · Min (1, −2)" },
+      { cine: "prof", text: "Exact. Maxim în −1, cu f(−1) = 2, și minim în 1, cu f(1) = −2. Așa se punctează complet la bacalaureat.", tabla: "Max (−1, 2) · Min (1, −2)" },
     ],
   },
   {
@@ -251,7 +251,7 @@ export const LECTII_INITIALE: Lectie[] = [
   },
   {
     materie: "Biologie",
-    nivel: "BAC · Genetică",
+    nivel: "Bacalaureat · Genetică",
     replici: [
       { cine: "elev", text: "Ochii căprui (A) domină pe cei albaștri (a). Doi părinți Aa. Ce copii pot avea?" },
       { cine: "prof", text: "Facem pătratul lui Punnett. Ce gameți dă fiecare părinte?", tabla: "Aa × Aa" },
