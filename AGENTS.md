@@ -23,3 +23,4 @@
 - Profesor AI acces: contul de test (poateTestaProfesorAi) = gratuit, orice durată. Elevii cu cont: lecția de DURATA_GRATUITA (15 min) e gratuită o singură dată, după verificare telefon SMS (profesor_ai_utilizatori, scrieri doar server-side cu admin client; reguli pure în profesor-ai-verificare.ts); 30/45/60 = „Premium · în curând” (premiumActiv=false, fără prețuri afișate) până există firmă și plăți. Nu reintroduce prețuri în UI fără decizia proprietarului.
 
 - Profesor AI editorial demos use a shuffled lesson deck with last-lesson browser storage; never repeat before exhausting the deck or render a fixed first lesson before hydration.
+- Site UI language: cookie `md_lang` read isomorphically in the root beforeLoad (src/lib/i18n-context.tsx), strings in src/lib/i18n.ts (every locale must have every key; bun test enforces). Crawlers have no cookie, so indexed pages stay Romanian; per-language indexable URLs need their own prefixed routes + hreflang.
