@@ -17,17 +17,19 @@ import { Toaster } from "@/components/ui/sonner";
 import { ADSENSE_CLIENT } from "@/components/ads/adsense";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 import { AdsterraMonetization } from "@/components/ads/adsterra";
+import { I18nProvider, readLocale, useT } from "@/lib/i18n-context";
 
 function NotFoundComponent() {
+  const t = useT();
   return (
     <div className="flex min-h-[60vh] items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold">Pagina nu a fost găsită</h2>
+        <h2 className="mt-4 text-xl font-semibold">{t("err.404title")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Pagina căutată nu există sau a fost mutată.
+          {t("err.404text")}
         </p>
-        <Link to="/" className="btn-primary mt-6">Înapoi acasă</Link>
+        <Link to="/" className="btn-primary mt-6">{t("err.home")}</Link>
       </div>
     </div>
   );
@@ -36,16 +38,17 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
+  const t = useT();
   return (
     <div className="flex min-h-[60vh] items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold">A apărut o eroare</h1>
+        <h1 className="text-xl font-semibold">{t("err.title")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error instanceof Error ? error.message : String(error)}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button onClick={() => { router.invalidate(); reset(); }} className="btn-primary">
-            Încearcă din nou
+            {t("err.retry")}
           </button>
-          <Link to="/" className="btn-outline">Acasă</Link>
+          <Link to="/" className="btn-outline">{t("err.homeShort")}</Link>
         </div>
       </div>
     </div>
@@ -53,6 +56,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: () => ({ locale: readLocale() }),
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -158,8 +162,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
+  const { locale } = Route.useRouteContext();
   return (
-    <html lang="ro">
+    <html lang={locale ?? "ro"}>
       <head>
         <HeadContent />
       </head>
@@ -172,8 +177,9 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
+  const { queryClient, locale } = Route.useRouteContext();
   return (
+    <I18nProvider value={locale}>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <div className="flex min-h-screen flex-col">
@@ -187,5 +193,6 @@ function RootComponent() {
         <Toaster />
       </AuthProvider>
     </QueryClientProvider>
+    </I18nProvider>
   );
 }

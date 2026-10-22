@@ -3,10 +3,52 @@
 // fără deploy de cod prin secretul PROFESOR_AI_PRETURI (JSON cu aceeași formă, ex.
 // {"matematica":{"30":39},"implicit":{"60":69}}). Prețul afișat și cel încasat vin din aceeași funcție.
 
-import { AI_MATERII, type AiMaterie } from "./simulare-ai";
+export const PA_MATERII = [
+  { slug: "matematica", name: "Matematică" },
+  { slug: "romana", name: "Limba și literatura română" },
+  { slug: "engleza", name: "Limba engleză" },
+  { slug: "franceza", name: "Limba franceză" },
+  { slug: "germana", name: "Limba germană" },
+  { slug: "spaniola", name: "Limba spaniolă" },
+  { slug: "italiana", name: "Limba italiană" },
+  { slug: "latina", name: "Limba latină" },
+  { slug: "fizica", name: "Fizică" },
+  { slug: "chimie", name: "Chimie" },
+  { slug: "biologie", name: "Biologie" },
+  { slug: "informatica", name: "Informatică" },
+  { slug: "tic", name: "TIC (tehnologia informației)" },
+  { slug: "istorie", name: "Istorie" },
+  { slug: "geografie", name: "Geografie" },
+  { slug: "economie", name: "Economie" },
+  { slug: "filosofie", name: "Filosofie" },
+  { slug: "logica", name: "Logică și argumentare" },
+  { slug: "psihologie", name: "Psihologie" },
+  { slug: "sociologie", name: "Sociologie" },
+  { slug: "educatie-sociala", name: "Educație socială / civică" },
+  { slug: "stiinte", name: "Științe ale naturii (primar)" },
+  { slug: "comunicare", name: "Comunicare în limba română (primar)" },
+  { slug: "contabilitate", name: "Contabilitate" },
+  { slug: "statistica", name: "Statistică" },
+  { slug: "muzica", name: "Educație muzicală (teorie)" },
+  { slug: "arte", name: "Istoria artei" },
+  { slug: "religie", name: "Religie" },
+] as const;
+export type PaMaterie = (typeof PA_MATERII)[number]["slug"];
 
-export const PA_MATERII = AI_MATERII;
-export type PaMaterie = AiMaterie;
+/** Limba în care vorbește profesoara (voce, transcriere și text). */
+export const PA_LIMBI = [
+  { slug: "ro", name: "Română", bcp47: "ro-RO", prompt: "română" },
+  { slug: "en", name: "English", bcp47: "en-US", prompt: "engleză" },
+  { slug: "fr", name: "Français", bcp47: "fr-FR", prompt: "franceză" },
+  { slug: "de", name: "Deutsch", bcp47: "de-DE", prompt: "germană" },
+  { slug: "es", name: "Español", bcp47: "es-ES", prompt: "spaniolă" },
+  { slug: "it", name: "Italiano", bcp47: "it-IT", prompt: "italiană" },
+  { slug: "hu", name: "Magyar", bcp47: "hu-HU", prompt: "maghiară" },
+  { slug: "uk", name: "Українська", bcp47: "uk-UA", prompt: "ucraineană" },
+  { slug: "ru", name: "Русский", bcp47: "ru-RU", prompt: "rusă" },
+] as const;
+export type PaLimba = (typeof PA_LIMBI)[number]["slug"];
+export const paLimba = (s?: string) => PA_LIMBI.find((l) => l.slug === s) ?? PA_LIMBI[0];
 
 export const PA_NIVELURI = [
   { slug: "primar", name: "Școala primară (I–IV)" },
@@ -67,6 +109,8 @@ export interface PaConfig {
   nivel: PaNivel;
   durata: PaDurata;
   obiectiv: PaObiectiv;
+  /** Lipsă în sesiunile vechi = română. */
+  limba?: PaLimba;
 }
 
 /** Răspunsul profesorului: ce spune (vocea avatarului) și ce scrie pe tablă. */

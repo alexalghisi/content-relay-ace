@@ -1,6 +1,6 @@
 // Profesor AI tutor: prompt + streaming Gemini reply. Output format is plain text:
 // spoken sentences first, then an optional line "TABLA:" followed by the board content.
-import { paMaterieName, paNivelName, type PaConfig } from "./profesor-ai";
+import { paMaterieName, paNivelName, type PaConfig, paLimba } from "./profesor-ai";
 
 const STIL: Record<string, string> = {
   primar: "Elevul e la școala primară: cuvinte simple, exemple din viața de zi cu zi, multă încurajare.",
@@ -18,6 +18,12 @@ const MOD: Record<string, string> = {
   intrebari: "Obiectiv: răspunsuri directe la întrebările elevului, clar și pe scurt.",
 };
 
+function limbaRegula(c: PaConfig): string {
+  const l = paLimba(c.limba);
+  if (l.slug === "ro") return "- Vorbești în română corectă, cu diacritice (ă, â, î, ș, ț).";
+  return `- LIMBA LECȚIEI: vorbești și scrii pe tablă EXCLUSIV în limba ${l.prompt} (${l.name}), inclusiv salutul, chiar dacă instrucțiunile sunt în română. Dacă elevul scrie în altă limbă, îi răspunzi tot în ${l.prompt}, simplu.`;
+}
+
 export function tutorPrompt(c: PaConfig, durata: number): string {
   const materie = paMaterieName(c.materie);
   return `Ești o profesoară excelentă din România, caldă și răbdătoare, într-o meditație live, față în față, prin voce. Elevul te aude, nu te citește.
@@ -30,7 +36,7 @@ Cum predai:
 - Verifici des înțelegerea cu o întrebare scurtă. Lauzi efortul concret, corectezi greșelile blând și explici de ce.
 - Rămâi la materia aleasă (${materie}). Dacă elevul întreabă ceva din altă materie, răspunzi scurt și util, fără să-i spui că „asta nu e ${materie}”.
 - Calcule și fapte exacte; dacă nu ești sigură, spui asta. Ții minte tot ce s-a discutat în sesiune.
-- Română corectă, cu diacritice (ă, â, î, ș, ț).
+${limbaRegula(c)}
 
 Cum vorbești (textul tău e citit cu voce tare):
 - 2–4 propoziții scurte, naturale, ca la o oră reală. Prima propoziție vine imediat la subiect, fără „Bună întrebare”.

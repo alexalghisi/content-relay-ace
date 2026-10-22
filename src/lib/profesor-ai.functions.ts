@@ -9,6 +9,7 @@ import { poatePrimiLectiaGratuita } from "./profesor-ai-verificare";
 import {
   PA_DURATE,
   PA_MATERII,
+  PA_LIMBI,
   PA_NIVELURI,
   PA_OBIECTIVE,
   PRETURI_IMPLICITE,
@@ -32,6 +33,7 @@ const configSchema = z.object({
   nivel: z.enum(PA_NIVELURI.map((m) => m.slug) as [string, ...string[]]),
   durata: z.number().refine((d): d is PaDurata => (PA_DURATE as readonly number[]).includes(d)),
   obiectiv: z.enum(PA_OBIECTIVE.map((m) => m.slug) as [string, ...string[]]),
+  limba: z.enum(PA_LIMBI.map((m) => m.slug) as [string, ...string[]]).default("ro"),
 });
 
 type Sesiune = PaConfig & { kind: "profesor-ai"; uid: string; exp: number; gratuit: boolean };
@@ -198,6 +200,7 @@ export const profesorAiPorneste = createServerFn({ method: "POST" })
         cancel_url: `${SITE}/profesor-ai?anulat=1`,
         locale: "ro",
         "metadata[materie]": cfg.materie,
+        "metadata[limba]": cfg.limba ?? "ro",
         "metadata[nivel]": cfg.nivel,
         "metadata[durata]": String(cfg.durata),
         "metadata[obiectiv]": cfg.obiectiv,
@@ -253,10 +256,10 @@ export const profesorAiSesiune = createServerFn({ method: "POST" })
     }): Promise<PaResult<{ config: PaConfig; exp: number; gratuit: boolean }>> => {
       const s = await citesteSesiune(data.token, context.userId);
       if (!s) return { ok: false, error: "Sesiunea a expirat sau nu este validă." };
-      const { materie, nivel, durata, obiectiv } = s;
+      const { materie, nivel, durata, obiectiv, limba } = s;
       return {
         ok: true,
-        data: { config: { materie, nivel, durata, obiectiv }, exp: s.exp, gratuit: s.gratuit },
+        data: { config: { materie, nivel, durata, obiectiv, limba: limba ?? "ro" }, exp: s.exp, gratuit: s.gratuit },
       };
     },
   );
@@ -363,5 +366,6 @@ export const profesorAiAvatar = createServerFn({ method: "POST" })
     return av.createLiveAvatarAccess({
       ...av.liveAvatarConfig(process.env),
       maxSeconds: Math.min(3600, (s.durata + 5) * 60),
+      language: s.limba ?? "ro",
     });
   });

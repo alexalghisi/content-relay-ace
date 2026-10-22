@@ -49,3 +49,6 @@
 - [ ] Admitere medicină: grile reale pe discipline, calculator de admitere, pagină UMF Cluj
 - [ ] Pagină admin cu mesaje (inbox contact_messages) + cont admin@meditatiidirect.ro
 - [ ] Notificare e-mail profesori la cereri noi — blocat: necesită serviciu extern de campanii (sistemul intern nu permite e-mail în masă); utilizatorul alege serviciul
+
+- [x] Limba site-ului (9 limbi): meniu de limbă în antet pe toate paginile; meniul, subsolul și paginile de eroare traduse; alegerea se păstrează. 4 teste trec. Numai previzualizare.
+- [ ] Traducerea conținutului paginilor principale (acasă, cereri, cere ofertă, înscriere/autentificare, profesori, Profesor AI) în cele 9 limbi, cu adrese proprii pe limbă (/en/...) și hreflang — următoarea etapă.
