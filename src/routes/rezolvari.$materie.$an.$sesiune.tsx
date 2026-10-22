@@ -6,6 +6,8 @@ import { getRezolvare } from "@/lib/bac-content.functions";
 import { RezolvareContent } from "@/components/rezolvare-content";
 import { RezolvareComments } from "@/components/rezolvare-comments";
 import { NewsletterSignup } from "@/components/newsletter-signup";
+import { RezolvareVerificataView } from "@/components/rezolvare-verificata";
+import { rezolvarePublicata } from "@/data/rezolvari-verificate";
 
 const SITE = "https://meditatiidirect.ro";
 const SESSION_SLUGS = BAC_SESSIONS.map((s) => s.slug) as readonly string[];
@@ -18,18 +20,70 @@ export const Route = createFileRoute("/rezolvari/$materie/$an/$sesiune")({
     if (!SESSION_SLUGS.includes(params.sesiune)) throw notFound();
     const sesiune = params.sesiune as BacSessionSlug;
     const session = BAC_SESSIONS.find((s) => s.slug === sesiune)!;
+    // Rezolvările verificate din repo au prioritate; nu mai interogăm DB pentru ele.
+    const verificata = rezolvarePublicata(subject.slug, year, sesiune);
+    if (verificata) return { subject, year, sesiune, sessionLabel: session.label, rezolvare: null, verificata };
     let rezolvare: Awaited<ReturnType<typeof getRezolvare>>["rezolvare"] = null;
     try {
       ({ rezolvare } = await getRezolvare({ data: { materie: subject.slug, an: year, sesiune } }));
     } catch {
       rezolvare = null;
     }
-    return { subject, year, sesiune, sessionLabel: session.label, rezolvare };
+    return { subject, year, sesiune, sessionLabel: session.label, rezolvare, verificata: null };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Rezolvare indisponibilă" }, { name: "robots", content: "noindex" }] };
-    const { subject, year, sesiune, sessionLabel, rezolvare } = loaderData;
+    const { subject, year, sesiune, sessionLabel, rezolvare, verificata } = loaderData;
     const url = `${SITE}/rezolvari/${subject.slug}/${year}/${sesiune}`;
+    if (verificata) {
+      const title = `${verificata.titlu} | MeditatiiDirect.ro`;
+      return {
+        meta: [
+          { title },
+          { name: "description", content: verificata.descriere },
+          { property: "og:title", content: title },
+          { property: "og:description", content: verificata.descriere },
+          { property: "og:url", content: url },
+          { property: "og:type", content: "article" },
+          { name: "twitter:card", content: "summary_large_image" },
+          { name: "twitter:title", content: title },
+          { name: "twitter:description", content: verificata.descriere },
+        ],
+        links: [{ rel: "canonical", href: url }],
+        scripts: [
+          {
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": ["Article", "LearningResource"],
+              headline: verificata.titlu,
+              description: verificata.descriere,
+              url,
+              inLanguage: "ro-RO",
+              dateModified: verificata.actualizat,
+              learningResourceType: "Rezolvare explicată",
+              educationalLevel: "Liceu — Bacalaureat",
+              about: subject.name,
+              isAccessibleForFree: true,
+              author: { "@type": "Organization", name: "MeditatiiDirect", url: SITE },
+              publisher: { "@type": "Organization", name: "MeditatiiDirect", url: SITE },
+            }),
+          },
+          {
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Acasă", item: `${SITE}/` },
+                { "@type": "ListItem", position: 2, name: "Rezolvări BAC", item: `${SITE}/rezolvari` },
+                { "@type": "ListItem", position: 3, name: `${subject.name} ${year}`, item: url },
+              ],
+            }),
+          },
+        ],
+      };
+    }
     const title = `Rezolvare BAC ${subject.name} ${year} — ${sessionLabel}, pas cu pas | MeditatiiDirect.ro`;
     const desc = `Rezolvarea explicată la subiectele de bacalaureat, ${subject.nameLower} ${year}, ${sessionLabel.toLowerCase()}: raționament pas cu pas, răspuns final și greșeli frecvente.`;
     const meta = [
@@ -99,7 +153,7 @@ export const Route = createFileRoute("/rezolvari/$materie/$an/$sesiune")({
 });
 
 function RezolvarePage() {
-  const { subject, year, sesiune, sessionLabel, rezolvare } = Route.useLoaderData();
+  const { subject, year, sesiune, sessionLabel, rezolvare, verificata } = Route.useLoaderData();
 
   return (
     <main className="container-page py-10 lg:py-14">
@@ -118,8 +172,17 @@ function RezolvarePage() {
 
       <header className="mt-4 max-w-3xl">
         <h1 className="text-3xl font-bold sm:text-4xl">
-          Rezolvare BAC {subject.name} {year} — {sessionLabel}
+          {verificata
+            ? `Rezolvare BAC ${subject.name} ${year} — ${sessionLabel}, Varianta ${verificata.varianta ?? "simulare"}`
+            : `Rezolvare BAC ${subject.name} ${year} — ${sessionLabel}`}
         </h1>
+        {verificata && (
+          <p className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+            <span className="inline-flex items-center gap-1"><Gauge className="h-4 w-4 text-primary" /> Dificultate: {verificata.dificultate}</span>
+            <span className="inline-flex items-center gap-1"><Clock className="h-4 w-4 text-primary" /> Timp de lucru: {verificata.timpMinute} min</span>
+            <span className="rounded-full border border-primary/40 px-2 py-0.5 text-xs text-primary">Verificată · actualizată {verificata.actualizat}</span>
+          </p>
+        )}
         {rezolvare && (
           <p className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1"><Gauge className="h-4 w-4 text-primary" /> Dificultate: {rezolvare.dificultate}</span>
@@ -131,15 +194,29 @@ function RezolvarePage() {
         )}
       </header>
 
-      <div className="mt-6 flex items-start gap-3 rounded-xl border border-border bg-muted/40 p-4 text-sm">
+      {verificata && (
+        <>
+          <p className="mt-4 max-w-3xl text-muted-foreground">{verificata.descriere}</p>
+          <RezolvareVerificataView
+            rezolvare={verificata}
+            pdfSubiect={`https://gmgcufdfwwvfnnzfazae.supabase.co/storage/v1/object/public/bac-pdfs/${verificata.documente.subiect}`}
+          />
+          <p className="mt-6 text-sm text-muted-foreground">
+            Rezolvare originală MeditatiiDirect.ro, nu barem oficial. Ai găsit o greșeală?{" "}
+            <Link to="/contact" className="text-primary hover:underline">Semnalează-ne</Link> — o verificăm și o corectăm.
+          </p>
+        </>
+      )}
+
+      {!verificata && <div className="mt-6 flex items-start gap-3 rounded-xl border border-border bg-muted/40 p-4 text-sm">
         <AlertTriangle className="h-5 w-5 shrink-0 text-primary" />
         <p className="text-muted-foreground">
           Rezolvare generată și verificată editorial. Dacă găsești o eroare,{" "}
           <Link to="/contact" className="text-primary hover:underline">semnalează-ne</Link> — o corectăm rapid.
         </p>
-      </div>
+      </div>}
 
-      {rezolvare ? (
+      {verificata ? null : rezolvare ? (
         <RezolvareContent content={rezolvare.continut} />
       ) : (
         <section className="card-soft mt-8 p-6">

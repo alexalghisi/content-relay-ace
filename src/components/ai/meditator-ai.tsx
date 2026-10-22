@@ -19,6 +19,7 @@ const SUGESTII = [
 export function MeditatorAi() {
   const [materie, setMaterie] = useState<AiMaterie | "">("");
   const [context, setContext] = useState<string | undefined>();
+  const [exercitiu, setExercitiu] = useState<string | undefined>();
   const [mesaje, setMesaje] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
@@ -32,8 +33,13 @@ export function MeditatorAi() {
       const raw = sessionStorage.getItem(MEDITATOR_CONTEXT_KEY);
       if (!raw) return;
       sessionStorage.removeItem(MEDITATOR_CONTEXT_KEY);
-      const c = JSON.parse(raw) as { materie?: AiMaterie; context?: string };
+      const c = JSON.parse(raw) as { materie?: AiMaterie; context?: string; exercitiu?: string; intrebare?: string };
       if (c.materie) setMaterie(c.materie);
+      // Venit de pe o rezolvare BAC verificată: trimitem doar id-ul, contextul îl pune serverul.
+      if (c.exercitiu) {
+        setExercitiu(c.exercitiu);
+        setText((c.intrebare ?? "Explică-mi acest exercițiu pas cu pas.").slice(0, 500));
+      }
       if (c.context) {
         setContext(c.context);
         setText("Am terminat testul. Explică-mi, pe rând, greșelile pe care le-am făcut.");
@@ -58,7 +64,7 @@ export function MeditatorAi() {
     setEroare("");
     try {
       const r = await intreabaMeditatorul({
-        data: { materie: materie || undefined, context, mesaje: next },
+        data: { materie: materie || undefined, context, exercitiu, mesaje: next },
       });
       if (!r.ok) {
         setEroare(r.error);

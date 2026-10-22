@@ -5,6 +5,7 @@ import { ArrowLeft, Download, FileText, Lightbulb } from "lucide-react";
 import { getBacSubject, BAC_SESSIONS, BAC_YEARS, type BacSessionSlug } from "@/data/bac-catalog";
 import { getVariantaSesiune } from "@/lib/bac-content.functions";
 import { LazyPdfPreview } from "@/components/lazy-pdf-preview";
+import { MOTIVE, specializareLabel } from "@/lib/bac-verificare";
 
 const SITE = "https://meditatiidirect.ro";
 const SESSION_SLUGS = BAC_SESSIONS.map((s) => s.slug) as readonly string[];
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/bac/$materie/$an/$sesiune")({
       varianta: null,
       rezolvare: null,
       pdfs: { subiect: null, barem: null },
+      verificare: { subiect: null, barem: null, specializare: null, varianta: null, subiectAscuns: [], baremAscuns: [] },
     };
     try {
       db = await getVariantaSesiune({ data: { materie: subject.slug, an: year, sesiune } });
@@ -34,7 +36,7 @@ export const Route = createFileRoute("/bac/$materie/$an/$sesiune")({
     const { subject, year, sesiune, sessionLabel, db } = loaderData;
     const url = `${SITE}/bac/${subject.slug}/${year}/${sesiune}`;
     const title = `Subiecte BAC ${subject.name} ${year} — ${sessionLabel} (subiect + barem PDF) | MeditatiiDirect.ro`;
-    const desc = `Varianta de bacalaureat la ${subject.nameLower}, ${year}, ${sessionLabel.toLowerCase()}: subiectul și baremul de corectare în PDF, direct în pagină. Gratuit, fără cont.`;
+    const desc = `Varianta de bacalaureat la ${subject.nameLower}, ${year}, ${sessionLabel.toLowerCase()}: subiectul oficial în PDF, direct în pagină, cu baremul când corespunde variantei. Gratuit, fără cont.`;
     return {
       meta: [
         { title },
@@ -132,7 +134,21 @@ function VariantaPage() {
             ? <>Subiectul și baremul de corectare la <strong>{subject.nameLower}</strong>, sesiunea {sessionLabel.toLowerCase()} {year}. Le poți citi direct aici sau le descarci în PDF — sunt găzduite pe MeditatiiDirect.ro.</>
             : <>Încă nu avem în arhivă documentul verificat pentru <strong>{subject.nameLower}</strong>, {sessionLabel.toLowerCase()} {year}. Publicăm doar fișiere verificate — până atunci, încearcă altă sesiune sau alt an.</>}
         </p>
+        {subiect && (db.verificare.specializare || db.verificare.varianta) && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Document oficial verificat după conținut
+            {db.verificare.specializare ? ` · ${specializareLabel(db.verificare.specializare)}` : ""}
+            {db.verificare.varianta ? ` · Varianta ${db.verificare.varianta}` : ""}
+          </p>
+        )}
       </header>
+
+      {subiect && !barem && db.verificare.baremAscuns.length > 0 && (
+        <p className="mt-4 max-w-3xl rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+          Baremul din arhiva noastră pentru această sesiune nu este afișat: {db.verificare.baremAscuns.map((m) => MOTIVE[m]).join("; ")}.
+          Publicăm doar baremul care corespunde exact subiectului.
+        </p>
+      )}
 
       {subiect && (
         <section className="mt-8">

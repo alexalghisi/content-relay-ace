@@ -1,0 +1,387 @@
+import type { RezolvareVerificata } from "./types";
+
+const VERIFICA = "python3 -I scripts/verificare-rezolvari/matematica-2024-simulare/verifica.py";
+
+export const MATEMATICA_2024_SIMULARE: RezolvareVerificata = {
+  materie: "matematica",
+  an: 2024,
+  sesiune: "simulare",
+  proba: "Proba E. c) — Matematică M_mate-info",
+  programa:
+    "Filiera teoretică, profilul real, specializarea matematică-informatică; filiera vocațională, profilul militar, specializarea matematică-informatică",
+  varianta: null,
+  specializare: "mate-info",
+  titlu: "Rezolvare simulare BAC Matematică M_mate-info 2024 — pas cu pas",
+  descriere:
+    "Rezolvarea completă, explicată pas cu pas, a simulării naționale de bacalaureat la matematică M_mate-info pentru 2024: logaritmi, compunerea funcțiilor, ecuații exponențiale, probabilități, vectori, trigonometrie, matrice și determinanți, legi de compoziție, derivate, monotonie, numărul de soluții ale unei ecuații și integrale definite cu inegalități. Toate rezultatele au fost verificate simbolic și numeric.",
+  status: "publicat",
+  dificultate: "mediu",
+  timpMinute: 180,
+  actualizat: "2026-10-23",
+  documente: {
+    subiect: "matematica/2024/simulare-subiect.pdf",
+    notaBarem:
+      "Baremul din arhiva noastră pentru această simulare este pentru M_șt-nat (științe ale naturii), nu pentru M_mate-info, așa că nu îl afișăm lângă această rezolvare. Rezolvarea de mai jos este a noastră și nu înlocuiește baremul oficial.",
+  },
+  sursa: {
+    emitent: "Ministerul Educației — Centrul Național de Politici și Evaluare în Educație",
+    detalii:
+      "Examenul național de bacalaureat 2024, Proba E. c), Matematică M_mate-info, Simulare (antetul documentului oficial). Documentul nu are număr de variantă.",
+  },
+  verificari: [
+    {
+      ce: "Toate cele 15 rezultate: logaritmii, ecuația în a, ecuația exponențială, probabilitatea (enumerare), vectorii, E(π/3), determinanții, ecuația matriceală, legea de compoziție (cu forță brută pe naturale), derivata, monotonia, unicitatea soluției (inclusiv control numeric pentru m întreg între −60 și 60) și cele trei integrale",
+      metoda: "Calcul simbolic și numeric cu SymPy 1.14 (Python 3)",
+      comanda: VERIFICA,
+      data: "2026-10-23",
+      rezultat: "PASS",
+    },
+  ],
+  notaPunctaj:
+    "Fiecare item valorează 5 puncte: 3 subiecte × 30 de puncte, plus 10 din oficiu. La bacalaureat se punctează orice rezolvare corectă, chiar dacă diferă de cea de mai jos.",
+  sectiuni: [
+    {
+      titlu: "Subiectul I",
+      puncte: 30,
+      itemi: [
+        {
+          id: "s1-1",
+          eticheta: "Subiectul I, 1",
+          puncte: 5,
+          cerinta: "Arătați că (3 + lg(1/10)) · lg√10 = 1.",
+          ceSeCere: "Valorile a doi logaritmi zecimali simpli.",
+          notiuni: ["lg 10ᵏ = k", "√10 = 10^(1/2)"],
+          pasi: [
+            "lg(1/10) = lg 10⁻¹ = −1, deci paranteza este 3 − 1 = 2.",
+            "lg√10 = lg 10^(1/2) = 1/2.",
+            "2 · 1/2 = 1.",
+          ],
+          raspuns: "**1** — egalitatea este adevărată.",
+          verificare: "SymPy simplifică (3 + log₁₀(1/10)) · log₁₀(√10) − 1 la 0.",
+          greseli: ["lg(1/10) = 1/10 — logaritmul nu este fracția însăși."],
+        },
+        {
+          id: "s1-2",
+          eticheta: "Subiectul I, 2",
+          puncte: 5,
+          cerinta: "f(x) = x² + ax − 1. Determinați numerele reale a pentru care (f∘f)(1) = 1.",
+          ceSeCere: "Calculezi f(1), apoi f(f(1)), și rezolvi ecuația în a.",
+          notiuni: ["compunerea funcțiilor: (f∘f)(1) = f(f(1))"],
+          pasi: [
+            "f(1) = 1 + a − 1 = a.",
+            "(f∘f)(1) = f(a) = a² + a · a − 1 = 2a² − 1.",
+            "2a² − 1 = 1 ⇒ a² = 1 ⇒ a = −1 sau a = 1.",
+          ],
+          raspuns: "**a ∈ {−1, 1}**",
+          verificare: "SymPy rezolvă f(f(1)) = 1 în a și întoarce [−1, 1].",
+          greseli: [
+            "Calculul f(1) · f(1) în loc de f(f(1)).",
+            "Păstrarea doar a soluției pozitive.",
+          ],
+        },
+        {
+          id: "s1-3",
+          eticheta: "Subiectul I, 3",
+          puncte: 5,
+          cerinta: "Rezolvați în ℝ ecuația 2^(x+1) · 8^x = 32.",
+          ceSeCere: "Scrii totul ca puteri ale lui 2 și egalezi exponenții.",
+          notiuni: ["8 = 2³, 32 = 2⁵", "aᵐ · aⁿ = aᵐ⁺ⁿ", "injectivitatea funcției exponențiale"],
+          pasi: [
+            "8^x = (2³)^x = 2^(3x), deci membrul stâng este 2^(x+1+3x) = 2^(4x+1).",
+            "2^(4x+1) = 2⁵ ⇒ 4x + 1 = 5 ⇒ x = 1.",
+          ],
+          raspuns: "**x = 1**",
+          verificare: "SymPy rezolvă ecuația și întoarce doar x = 1; control: 2² · 8 = 32.",
+          greseli: ["Înmulțirea exponenților în loc de adunare: 2^((x+1)·3x)."],
+        },
+        {
+          id: "s1-4",
+          eticheta: "Subiectul I, 4",
+          puncte: 5,
+          cerinta:
+            "Probabilitatea ca, alegând un număr n de două cifre, √(n + 100) să fie natural.",
+          ceSeCere: "Câte numere de două cifre fac din n + 100 un pătrat perfect.",
+          notiuni: ["probabilitate clasică", "pătrate perfecte"],
+          pasi: [
+            "Cazuri posibile: numerele de la 10 la 99, adică 90.",
+            "n + 100 ia valori între 110 și 199; pătratele perfecte de acolo sunt 121, 144, 169, 196.",
+            "Deci n ∈ {21, 44, 69, 96}: 4 cazuri favorabile. p = 4/90 = 2/45.",
+          ],
+          raspuns: "**p = 2/45**",
+          verificare:
+            "Enumerare completă a numerelor de două cifre: exact 21, 44, 69, 96 dau pătrat perfect; 4/90 = 2/45.",
+          greseli: [
+            "Numărarea a 89 de cazuri posibile (99 − 10) în loc de 90.",
+            "Includerea lui 100 = 10² (n ar fi 0, care nu are două cifre).",
+          ],
+        },
+        {
+          id: "s1-5",
+          eticheta: "Subiectul I, 5",
+          puncte: 5,
+          cerinta:
+            "A(1, 4), B(4, 6), C(4, 2). Determinați coordonatele punctului D pentru care vectorul OD = ½(AB + AC).",
+          ceSeCere: "Coordonatele vectorilor, apoi media lor.",
+          notiuni: [
+            "coordonatele vectorului AB = (x_B − x_A, y_B − y_A)",
+            "vectorul de poziție OD are coordonatele lui D",
+          ],
+          pasi: [
+            "AB = (4 − 1, 6 − 4) = (3, 2) și AC = (4 − 1, 2 − 4) = (3, −2).",
+            "AB + AC = (6, 0), deci ½(AB + AC) = (3, 0).",
+            "OD are coordonatele punctului D, deci D(3, 0).",
+          ],
+          raspuns: "**D(3, 0)**",
+          verificare: "Calcul vectorial cu SymPy: ½((B − A) + (C − A)) = (3, 0).",
+          greseli: ["Scăderea în ordinea greșită (A − B) — schimbă semnele coordonatelor."],
+        },
+        {
+          id: "s1-6",
+          eticheta: "Subiectul I, 6",
+          puncte: 5,
+          cerinta: "E(x) = tg x − 4 cos(x/2) · cos x, x ∈ (0, π/2). Arătați că E(π/3) = 0.",
+          ceSeCere: "Valorile funcțiilor trigonometrice în π/3 și π/6.",
+          notiuni: ["tg(π/3) = √3", "cos(π/6) = √3/2", "cos(π/3) = 1/2"],
+          pasi: ["Pentru x = π/3, x/2 = π/6.", "E(π/3) = √3 − 4 · (√3/2) · (1/2) = √3 − √3 = 0."],
+          raspuns: "**E(π/3) = 0**",
+          verificare: "SymPy simplifică exact E(π/3) la 0.",
+          greseli: ["cos(π/6) = 1/2 — confuzie între valorile lui sin și cos."],
+        },
+      ],
+    },
+    {
+      titlu: "Subiectul al II-lea",
+      puncte: 30,
+      itemi: [
+        {
+          id: "s2-1a",
+          eticheta: "Subiectul al II-lea, 1a",
+          puncte: 5,
+          cerinta: "A(x) are liniile (1, −1, x), (−1, 0, 0), (x, 0, −1). Arătați că det(A(0)) = 1.",
+          ceSeCere: "Un determinant de ordinul 3.",
+          notiuni: ["dezvoltarea după o linie", "regula lui Sarrus"],
+          pasi: [
+            "A(0) are liniile (1, −1, 0), (−1, 0, 0), (0, 0, −1).",
+            "Dezvoltăm după linia a treia, care are un singur element nenul: det = (−1) · det(1 −1; −1 0) = (−1) · (0 − 1) = 1.",
+          ],
+          raspuns: "**det(A(0)) = 1**",
+          verificare: "SymPy calculează det(A(0)) = 1.",
+          greseli: [
+            "Semnul cofactorului: elementul de pe poziția (3,3) are semnul (+), dar elementul însuși este −1.",
+          ],
+        },
+        {
+          id: "s2-1b",
+          eticheta: "Subiectul al II-lea, 1b",
+          puncte: 5,
+          cerinta: "Arătați că det(A(x) · A(x) − I₃) ≤ 0 pentru orice x real.",
+          ceSeCere: "Calculezi A(x)², scazi I₃ și calculezi determinantul ca expresie în x.",
+          notiuni: ["înmulțirea matricelor 3×3", "determinant de ordinul 3"],
+          pasi: [
+            "A(x) · A(x) are liniile (x² + 2, −1, 0), (−1, 1, −x), (0, −x, x² + 1).",
+            "Scăzând I₃: liniile (x² + 1, −1, 0), (−1, 0, −x), (0, −x, x²).",
+            "Dezvoltăm după prima linie: (x² + 1)(0 · x² − x²) − (−1)((−1) · x² − 0) = −x²(x² + 1) − x² = −x²(x² + 2).",
+            "x² ≥ 0 și x² + 2 > 0, deci −x²(x² + 2) ≤ 0 pentru orice x real.",
+          ],
+          raspuns: "**det(A(x)·A(x) − I₃) = −x²(x² + 2) ≤ 0**",
+          verificare:
+            "SymPy: matricea A(x)² − I₃ și determinantul ei coincid cu cele de mai sus, iar inecuația −x²(x² + 2) ≤ 0 are ca soluție tot ℝ.",
+          greseli: [
+            "Scăderea lui 1 din toate elementele în loc de doar de pe diagonală.",
+            "Calculul lui (det A(x))² − 1 — det(A² − I₃) nu se descompune așa.",
+          ],
+        },
+        {
+          id: "s2-1c",
+          eticheta: "Subiectul al II-lea, 1c",
+          puncte: 5,
+          cerinta:
+            "B are liniile (1, 0, 1), (0, 1, 0). Determinați X ∈ M₂,₃(ℝ) pentru care X · (A(0))⁻¹ = B · A(0).",
+          ceSeCere: "Înmulțești la dreapta cu A(0).",
+          notiuni: ["X · M⁻¹ = C ⇒ X = C · M", "înmulțirea unei matrice 2×3 cu una 3×3"],
+          pasi: [
+            "A(0) este inversabilă (det = 1). Înmulțim egalitatea la dreapta cu A(0): X = B · A(0) · A(0) = B · A(0)².",
+            "A(0)² are liniile (2, −1, 0), (−1, 1, 0), (0, 0, 1).",
+            "B · A(0)²: prima linie = (2, −1, 0) + (0, 0, 1) = (2, −1, 1); a doua linie = (−1, 1, 0).",
+          ],
+          raspuns: "**X are liniile (2, −1, 1) și (−1, 1, 0)**",
+          verificare: "SymPy: X · A(0)⁻¹ = B · A(0) pentru X-ul găsit.",
+          greseli: [
+            "Înmulțirea la stânga cu A(0) — produsul A(0) · X nici nu este definit (3×3 cu 2×3).",
+          ],
+        },
+        {
+          id: "s2-2a",
+          eticheta: "Subiectul al II-lea, 2a",
+          puncte: 5,
+          cerinta: "Pe M = [0, +∞), x ∗ y = (x² + y² + x + y) / (x + y + 1). Arătați că 1 ∗ 2 = 2.",
+          ceSeCere: "Înlocuiești x = 1, y = 2.",
+          notiuni: ["lege de compoziție"],
+          pasi: ["1 ∗ 2 = (1 + 4 + 1 + 2) / (1 + 2 + 1) = 8/4 = 2."],
+          raspuns: "**1 ∗ 2 = 2**",
+          verificare: "Calcul exact cu fracții: 8/4 = 2.",
+          greseli: [],
+        },
+        {
+          id: "s2-2b",
+          eticheta: "Subiectul al II-lea, 2b",
+          puncte: 5,
+          cerinta: "Arătați că e = 0 este elementul neutru al legii ∗.",
+          ceSeCere: "x ∗ 0 = 0 ∗ x = x pentru orice x ∈ M.",
+          notiuni: ["element neutru", "comutativitate"],
+          pasi: [
+            "0 ∈ M și x ∗ 0 = (x² + x) / (x + 1) = x(x + 1) / (x + 1) = x, pentru orice x ≥ 0 (x + 1 > 0).",
+            "Expresia legii este simetrică în x și y, deci și 0 ∗ x = x.",
+          ],
+          raspuns: "**e = 0 este element neutru**",
+          verificare: "SymPy: x ∗ 0 − x și 0 ∗ x − x se simplifică la 0 pentru x ≥ 0.",
+          greseli: [
+            "Verificarea doar a lui x ∗ 0, fără a justifica și 0 ∗ x (sau comutativitatea).",
+          ],
+        },
+        {
+          id: "s2-2c",
+          eticheta: "Subiectul al II-lea, 2c",
+          puncte: 5,
+          cerinta: "Determinați perechile (m, n) de numere naturale pentru care m ∗ n = 5.",
+          ceSeCere: "Transformi ecuația într-o sumă de pătrate.",
+          notiuni: ["formarea pătratelor perfecte", "scrierea lui 13 ca sumă de două pătrate"],
+          pasi: [
+            "m ∗ n = 5 ⇔ m² + n² + m + n = 5m + 5n + 5 ⇔ m² − 4m + n² − 4n − 5 = 0.",
+            "Completăm pătratele: (m − 2)² + (n − 2)² = 13.",
+            "13 = 4 + 9 este singura scriere ca sumă de două pătrate perfecte, deci {|m − 2|, |n − 2|} = {2, 3}.",
+            "Cazul |m − 2| = 2, |n − 2| = 3: m ∈ {0, 4}, iar n ∈ {5, −1}, deci n = 5 (−1 nu e natural).",
+            "Cazul simetric |m − 2| = 3, |n − 2| = 2: m = 5 și n ∈ {0, 4}.",
+          ],
+          raspuns: "**(m, n) ∈ {(0, 5), (4, 5), (5, 0), (5, 4)}**",
+          verificare:
+            "Forță brută pe toate perechile de naturale 0 ≤ m, n ≤ 1000 (din ecuație, m, n ≤ 5): exact cele patru perechi; identitatea pătratelor verificată simbolic.",
+          greseli: [
+            "Uitarea lui 0 — 0 este număr natural și aparține lui M.",
+            "Păstrarea perechilor cu −1.",
+          ],
+        },
+      ],
+    },
+    {
+      titlu: "Subiectul al III-lea",
+      puncte: 30,
+      itemi: [
+        {
+          id: "s3-1a",
+          eticheta: "Subiectul al III-lea, 1a",
+          puncte: 5,
+          cerinta: "f(x) = (x + 6)√(x² + 4). Arătați că f'(x) = 2(x² + 3x + 2)/√(x² + 4).",
+          ceSeCere: "Derivata unui produs, cu derivata unui radical compus.",
+          notiuni: ["(uv)' = u'v + uv'", "(√u)' = u'/(2√u)"],
+          pasi: [
+            "(√(x² + 4))' = 2x / (2√(x² + 4)) = x / √(x² + 4).",
+            "f'(x) = √(x² + 4) + (x + 6) · x / √(x² + 4) = (x² + 4 + x² + 6x) / √(x² + 4).",
+            "= (2x² + 6x + 4) / √(x² + 4) = 2(x² + 3x + 2) / √(x² + 4).",
+          ],
+          raspuns: "**f'(x) = 2(x² + 3x + 2)/√(x² + 4)**, x ∈ ℝ",
+          verificare:
+            "SymPy: diferența dintre derivata calculată și expresia din enunț se simplifică la 0.",
+          greseli: ["(√(x² + 4))' = 1/(2√(x² + 4)) — uitarea derivatei funcției de sub radical."],
+        },
+        {
+          id: "s3-1b",
+          eticheta: "Subiectul al III-lea, 1b",
+          puncte: 5,
+          cerinta: "Determinați intervalele de monotonie ale funcției f.",
+          ceSeCere: "Semnul derivatei.",
+          notiuni: ["x² + 3x + 2 = (x + 1)(x + 2)", "semnul trinomului de gradul 2"],
+          pasi: [
+            "Numitorul √(x² + 4) > 0, deci semnul lui f' este semnul lui (x + 1)(x + 2).",
+            "f'(x) ≥ 0 pe (−∞, −2] și pe [−1, +∞); f'(x) ≤ 0 pe [−2, −1].",
+          ],
+          raspuns: "**f este crescătoare pe (−∞, −2] și pe [−1, +∞), descrescătoare pe [−2, −1]**",
+          verificare: "SymPy: f' ≥ 0 exact pe (−∞, −2] ∪ [−1, +∞) și f' ≤ 0 exact pe [−2, −1].",
+          greseli: [
+            "Inversarea semnului trinomului: e negativ între rădăcini, pozitiv în afara lor.",
+          ],
+        },
+        {
+          id: "s3-1c",
+          eticheta: "Subiectul al III-lea, 1c",
+          puncte: 5,
+          cerinta: "Demonstrați că ecuația f(x) = m are soluție unică pentru orice număr întreg m.",
+          ceSeCere: "Folosești monotonia, continuitatea și valorile în punctele de extrem.",
+          notiuni: [
+            "funcție continuă strict monotonă pe un interval (bijecție pe imagine)",
+            "limite la ±∞",
+            "comparații cu radicali",
+          ],
+          pasi: [
+            "Valorile în punctele de extrem: f(−2) = 4√8 = 8√2 (maxim local), f(−1) = 5√5 (minim local).",
+            "5√5 = √125 și 8√2 = √128, iar 121 < 125 < 128 < 144, deci 11 < 5√5 < 8√2 < 12: între ele nu există niciun număr întreg.",
+            "lim f la −∞ este −∞ și la +∞ este +∞. f este continuă și strict monotonă pe fiecare interval de monotonie (f' se anulează doar în −2 și −1).",
+            "Dacă m ≤ 11: pe [−2, +∞), f(x) ≥ 5√5 > 11 ≥ m, deci nu are soluții acolo; pe (−∞, −2], f crește de la −∞ la 8√2 > m, deci are exact o soluție.",
+            "Dacă m ≥ 12: pe (−∞, −1], f(x) ≤ 8√2 < 12 ≤ m, fără soluții; pe [−1, +∞), f crește de la 5√5 < m la +∞, deci exact o soluție.",
+          ],
+          raspuns: "**Pentru orice m întreg, ecuația f(x) = m are exact o soluție reală.**",
+          verificare:
+            "SymPy: valorile exacte f(−2) = 8√2, f(−1) = 5√5, inegalitățile 11 < 5√5 < 8√2 < 12 și limitele; control numeric: pentru fiecare m întreg de la −60 la 60, ecuația ridicată la pătrat (x + 6)²(x² + 4) = m², filtrată cu f(x) = m, are exact o rădăcină reală.",
+          greseli: [
+            "Concluzia doar din limite (−∞ și +∞) — garantează existența, nu unicitatea.",
+            "Uitarea faptului că m este întreg: pentru m ∈ (5√5, 8√2) ecuația are trei soluții.",
+          ],
+        },
+        {
+          id: "s3-2a",
+          eticheta: "Subiectul al III-lea, 2a",
+          puncte: 5,
+          cerinta: "f(x) = (x + 1)/eˣ. Arătați că ∫₀⁴ eˣ f(x) dx = 12.",
+          ceSeCere: "Simplifici integrandul și integrezi un polinom.",
+          notiuni: ["eˣ · e⁻ˣ = 1", "formula Leibniz–Newton"],
+          pasi: ["eˣ · f(x) = x + 1.", "∫₀⁴ (x + 1) dx = (x²/2 + x) |₀⁴ = 8 + 4 = 12."],
+          raspuns: "**12**",
+          verificare: "SymPy calculează integrala exact: 12.",
+          greseli: ["Uitarea termenului x în primitivă (x²/2 + x)."],
+        },
+        {
+          id: "s3-2b",
+          eticheta: "Subiectul al III-lea, 2b",
+          puncte: 5,
+          cerinta: "Arătați că ∫₀¹ f(x) dx = (2e − 3)/e.",
+          ceSeCere: "Integrare prin părți pentru (x + 1)e⁻ˣ.",
+          notiuni: ["integrarea prin părți", "primitiva lui e⁻ˣ este −e⁻ˣ"],
+          pasi: [
+            "Prin părți, cu u = x + 1 și v' = e⁻ˣ (v = −e⁻ˣ): ∫(x + 1)e⁻ˣ dx = −(x + 1)e⁻ˣ + ∫e⁻ˣ dx = −(x + 2)e⁻ˣ.",
+            "∫₀¹ f(x) dx = −(x + 2)e⁻ˣ |₀¹ = −3/e + 2 = (2e − 3)/e.",
+          ],
+          raspuns: "**(2e − 3)/e**",
+          verificare:
+            "SymPy calculează integrala exact și verifică prin derivare că −(x + 2)e⁻ˣ este o primitivă a lui f.",
+          greseli: [
+            "Primitiva lui e⁻ˣ scrisă e⁻ˣ (fără minus).",
+            "Valoarea în 0 calculată ca 0 în loc de −2.",
+          ],
+        },
+        {
+          id: "s3-2c",
+          eticheta: "Subiectul al III-lea, 2c",
+          puncte: 5,
+          cerinta:
+            "Pentru n natural, n ≥ 2, Iₙ = ∫₀¹ xⁿ⁻¹ / f(xⁿ) dx. Demonstrați că ln2/n ≤ Iₙ ≤ (e − 1)/n.",
+          ceSeCere: "Schimbare de variabilă t = xⁿ, apoi încadrarea integrandului.",
+          notiuni: ["schimbarea de variabilă", "monotonia integralei", "eᵗ ≥ 1 pentru t ≥ 0"],
+          pasi: [
+            "1/f(xⁿ) = e^(xⁿ)/(xⁿ + 1), deci Iₙ = ∫₀¹ xⁿ⁻¹ e^(xⁿ)/(xⁿ + 1) dx.",
+            "Cu t = xⁿ, dt = n xⁿ⁻¹ dx, iar t merge de la 0 la 1: Iₙ = (1/n) ∫₀¹ eᵗ/(t + 1) dt.",
+            "Pentru t ∈ [0, 1]: eᵗ ≥ 1, deci eᵗ/(t + 1) ≥ 1/(t + 1); și t + 1 ≥ 1, deci eᵗ/(t + 1) ≤ eᵗ.",
+            "Integrând pe [0, 1]: ln 2 = ∫₀¹ 1/(t + 1) dt ≤ ∫₀¹ eᵗ/(t + 1) dt ≤ ∫₀¹ eᵗ dt = e − 1.",
+            "Împărțind la n > 0: ln2/n ≤ Iₙ ≤ (e − 1)/n.",
+          ],
+          raspuns: "**ln2/n ≤ Iₙ ≤ (e − 1)/n** pentru orice n ≥ 2",
+          verificare:
+            "SymPy: integralele marginilor sunt exact ln 2 și e − 1; numeric, pentru n = 2, …, 12, Iₙ coincide cu (1/n)∫₀¹ eᵗ/(t + 1) dt (cu 20 de zecimale) și respectă ambele inegalități.",
+          greseli: [
+            "Uitarea factorului 1/n de la schimbarea de variabilă.",
+            "1/f(xⁿ) scris (xⁿ + 1)/e^(xⁿ) — f este la numitor.",
+          ],
+        },
+      ],
+    },
+  ],
+};
