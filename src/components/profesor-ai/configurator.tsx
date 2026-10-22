@@ -75,6 +75,11 @@ export function ConfiguratorProfesorAi() {
     } catch {
       /* fără sinteză vocală */
     }
+    // Cere acum (în gestul utilizatorului) acces la microfon, ca lecția să pornească direct cu microfonul deschis.
+    void navigator.mediaDevices
+      ?.getUserMedia({ audio: true })
+      .then((s) => s.getTracks().forEach((t) => t.stop()))
+      .catch(() => {});
     setEroare("");
     setPending(true);
     const r = await profesorAiPorneste({ data: cfg }).catch(() => ({
