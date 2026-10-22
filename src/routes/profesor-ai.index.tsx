@@ -8,14 +8,22 @@ import { DemoProfesorAiRotativ, TextRotativ, TEXTE_PROFESOR_AI } from "@/compone
 
 const PATH = "/profesor-ai";
 const URL = `${SITE}${PATH}`;
-const TITLE = "Profesor AI gratuit 15 minute: lecție live, în română | MeditatiiDirect.ro";
+const TITLE = "Profesor individual cu AI, 24/7: meditații la orice oră | MeditatiiDirect.ro";
 const DESCRIPTION =
-  "Primele 15 minute cu Profesorul AI sunt gratuite pentru fiecare elev: lecție live, cu voce în limba română, la orice materie. Explicații, exemple și exerciții corectate pe loc.";
+  "Profesor individual cu AI, disponibil la orice oră din zi și din noapte: lecție live, cu voce, în română, pe subiecte reale de bacalaureat și Evaluare Națională. Primele 15 minute gratuit.";
 
 const FAQS = [
   {
     q: "Ce este Profesorul AI?",
     a: "O sesiune live cu un profesor virtual care vorbește în limba română. Îi poți vorbi la microfon sau îi poți scrie; îți explică, îți dă exemple și exerciții, te corectează și verifică dacă ai înțeles, adaptat nivelului tău.",
+  },
+  {
+    q: "Pot face meditații noaptea sau în weekend?",
+    a: "Da. Profesorul AI e disponibil 24 de ore din 24, 7 zile din 7: la 6 dimineața înainte de teză sau la 2 noaptea înainte de bacalaureat. Nu trebuie să te programezi.",
+  },
+  {
+    q: "Lucrează pe subiecte reale de bacalaureat?",
+    a: "Da. Profesorul pornește de la itemi din variantele oficiale din anii trecuți (bacalaureat și Evaluare Națională), te lasă să încerci, te corectează și îți arată cum se punctează după barem.",
   },
   {
     q: "Cât costă o lecție?",
@@ -78,6 +86,12 @@ export const Route = createFileRoute("/profesor-ai/")({
             url: `${URL}#incepe`,
           },
           areaServed: { "@type": "Country", name: "România" },
+          hoursAvailable: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            opens: "00:00",
+            closes: "23:59",
+          },
           provider: { "@id": `${SITE}/#org` },
         }),
       },
@@ -96,7 +110,7 @@ function Page() {
             <BadgeCheck className="h-4 w-4" /> Primele 15 minute gratuit · live · în limba română
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-            Profesorul AI: primele 15 minute gratuit, live, oricând
+            Profesor individual cu AI, la orice oră din zi și din noapte
           </h1>
           <TextRotativ cheie="profesor-ai-text" variante={TEXTE_PROFESOR_AI} className="mt-4 text-lg leading-relaxed text-muted-foreground" />
           <DemoProfesorAiRotativ className="mt-6" />
