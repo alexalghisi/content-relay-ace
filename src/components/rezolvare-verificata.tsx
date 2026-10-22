@@ -6,11 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Bot, CheckCircle2, FileCheck2, Lightbulb, ShieldCheck, TriangleAlert } from "lucide-react";
 import { MEDITATOR_CONTEXT_KEY } from "@/components/ai/simulare-ai";
-import {
-  idExercitiu,
-  type ItemRezolvat,
-  type RezolvareVerificata,
-} from "@/data/rezolvari-verificate";
+import { idExercitiu, type ItemRezolvat, type OriceRezolvare } from "@/data/rezolvari-verificate";
 
 function Md({ text }: { text: string }) {
   return (
@@ -61,7 +57,7 @@ function IntreabaMeditatorul({
   rezolvare,
   item,
 }: {
-  rezolvare: RezolvareVerificata;
+  rezolvare: OriceRezolvare;
   item: ItemRezolvat;
 }) {
   const navigate = useNavigate();
@@ -107,7 +103,7 @@ function IntreabaMeditatorul({
   );
 }
 
-function Item({ rezolvare, item }: { rezolvare: RezolvareVerificata; item: ItemRezolvat }) {
+function Item({ rezolvare, item }: { rezolvare: OriceRezolvare; item: ItemRezolvat }) {
   return (
     <section
       id={item.id}
@@ -193,7 +189,7 @@ export function RezolvareVerificataView({
   rezolvare,
   pdfSubiect,
 }: {
-  rezolvare: RezolvareVerificata;
+  rezolvare: OriceRezolvare;
   pdfSubiect: string;
 }) {
   const r = rezolvare;
@@ -203,7 +199,8 @@ export function RezolvareVerificataView({
         <div>
           <p className="font-semibold">Subiectul oficial</p>
           <p className="mt-1 text-muted-foreground">
-            {r.proba}, {r.varianta != null ? `Varianta ${r.varianta}` : "Simulare"}. {r.programa}.
+            {r.proba}
+            {r.varianta != null ? `, Varianta ${r.varianta}` : ""}. {r.programa}.
           </p>
           <p className="mt-1 text-muted-foreground">Emitent: {r.sursa.emitent}.</p>
           <a

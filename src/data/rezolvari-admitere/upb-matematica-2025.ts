@@ -9,11 +9,14 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
   materie: "matematica",
   an: 2025,
   sesiune: "iulie",
-  proba: "Chestionar de concurs — Algebră și Elemente de Analiză Matematică (AAM), Varianta S, 14 iulie 2025",
-  programa: "Admitere UNSTPB: Algebră și Elemente de Analiză Matematică, test grilă cu 6 variante de răspuns",
+  proba:
+    "Chestionar de concurs — Algebră și Elemente de Analiză Matematică (AAM), Varianta S, 14 iulie 2025",
+  programa:
+    "Admitere UNSTPB: Algebră și Elemente de Analiză Matematică, test grilă cu 6 variante de răspuns",
   varianta: null,
   specializare: "admitere",
-  titlu: "Rezolvare admitere Politehnica București 2025 (iulie), Matematică AAM Varianta S — pas cu pas",
+  titlu:
+    "Rezolvare admitere Politehnica București 2025 (iulie), Matematică AAM Varianta S — pas cu pas",
   descriere:
     "Rezolvarea completă, explicată pas cu pas, a chestionarului de admitere UNSTPB din 14 iulie 2025 la Algebră și Elemente de Analiză Matematică, Varianta S: ecuații exponențiale, combinări, progresii, determinanți, derivate, limite, arii cu asimptote, relațiile lui Viète, parte întreagă și ecuații cu module. Toate cele 10 răspunsuri au fost verificate simbolic.",
   status: "publicat",
@@ -55,15 +58,23 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
           puncte: 9,
           cerinta: "Soluția ecuației 2ˣ⁺¹ + 2ˣ = 12.",
           ceSeCere: "Să găsești x scoțând factor comun puterea 2ˣ.",
-          notiuni: ["proprietățile puterilor", "ecuații exponențiale", "injectivitatea funcției exponențiale"],
+          notiuni: [
+            "proprietățile puterilor",
+            "ecuații exponențiale",
+            "injectivitatea funcției exponențiale",
+          ],
           pasi: [
             "2ˣ⁺¹ = 2 · 2ˣ, deci membrul stâng devine 2 · 2ˣ + 2ˣ = 3 · 2ˣ.",
             "3 · 2ˣ = 12 ⇒ 2ˣ = 4 = 2².",
             "Funcția exponențială este injectivă, deci x = 2.",
           ],
           raspuns: "**a) x = 2**",
-          verificare: "SymPy rezolvă 2ˣ⁺¹ + 2ˣ − 12 = 0 și întoarce o singură soluție, x = 2; controlul direct: 2³ + 2² = 8 + 4 = 12.",
-          greseli: ["Scrierea 2ˣ⁺¹ + 2ˣ = 2²ˣ⁺¹ (puterile nu se adună așa).", "Confuzia 2ˣ⁺¹ = 2ˣ + 1."],
+          verificare:
+            "SymPy rezolvă 2ˣ⁺¹ + 2ˣ − 12 = 0 și întoarce o singură soluție, x = 2; controlul direct: 2³ + 2² = 8 + 4 = 12.",
+          greseli: [
+            "Scrierea 2ˣ⁺¹ + 2ˣ = 2²ˣ⁺¹ (puterile nu se adună așa).",
+            "Confuzia 2ˣ⁺¹ = 2ˣ + 1.",
+          ],
         },
         {
           id: "q2",
@@ -71,7 +82,11 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
           puncte: 9,
           cerinta: "Numărul natural n pentru care C(n, 2) = 6.",
           ceSeCere: "Să scrii formula combinărilor și să rezolvi ecuația de gradul al doilea în n.",
-          notiuni: ["combinări: C(n, 2) = n(n − 1)/2", "condiția n ≥ 2", "ecuația de gradul al doilea"],
+          notiuni: [
+            "combinări: C(n, 2) = n(n − 1)/2",
+            "condiția n ≥ 2",
+            "ecuația de gradul al doilea",
+          ],
           pasi: [
             "Condiție: n natural, n ≥ 2.",
             "C(n, 2) = n(n − 1)/2 = 6 ⇒ n(n − 1) = 12 ⇒ n² − n − 12 = 0.",
@@ -79,7 +94,8 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
             "Doar n = 4 respectă condiția.",
           ],
           raspuns: "**a) n = 4**",
-          verificare: "SymPy: rădăcinile lui n(n − 1)/2 − 6 sunt −3 și 4; doar 4 este natural ≥ 2, iar binomial(4, 2) = 6.",
+          verificare:
+            "SymPy: rădăcinile lui n(n − 1)/2 − 6 sunt −3 și 4; doar 4 este natural ≥ 2, iar binomial(4, 2) = 6.",
           greseli: ["Folosirea aranjamentelor A(n, 2) = n(n − 1) = 6, de unde n = 3 (varianta c)."],
         },
         {
@@ -98,7 +114,8 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
           id: "q4",
           eticheta: "Problema 4",
           puncte: 9,
-          cerinta: "Rezolvați ecuația |x 6; 1 2| = 0 (determinant de ordinul 2, linia 1: x, 6; linia 2: 1, 2).",
+          cerinta:
+            "Rezolvați ecuația |x 6; 1 2| = 0 (determinant de ordinul 2, linia 1: x, 6; linia 2: 1, 2).",
           ceSeCere: "Să calculezi determinantul și să-l egalezi cu 0.",
           notiuni: ["determinantul de ordinul 2: ad − bc"],
           pasi: ["Determinantul este x · 2 − 6 · 1 = 2x − 6.", "2x − 6 = 0 ⇒ x = 3."],
@@ -131,7 +148,8 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
             "Simplificăm cu x − 2 (x ≠ 2): limita devine lim (x → 2) (x − 1) = 1.",
           ],
           raspuns: "**a) l = 1**",
-          verificare: "SymPy calculează limita direct: 1. Același rezultat dă și regula lui l'Hôpital: (2x − 3) în 2 = 1.",
+          verificare:
+            "SymPy calculează limita direct: 1. Același rezultat dă și regula lui l'Hôpital: (2x − 3) în 2 = 1.",
           greseli: ["Declararea limitei 0 pentru că numărătorul se anulează în 2."],
         },
         {
@@ -140,7 +158,8 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
           puncte: 9,
           cerinta:
             "f: (1, ∞) → ℝ, f(x) = x + 1/(x − 1). Aria suprafeței plane dintre graficul lui f, asimptota oblică și dreptele x = 2, x = 3.",
-          ceSeCere: "Să găsești asimptota oblică și să integrezi diferența dintre f și ea pe [2, 3].",
+          ceSeCere:
+            "Să găsești asimptota oblică și să integrezi diferența dintre f și ea pe [2, 3].",
           notiuni: [
             "asimptota oblică y = mx + n: m = lim f(x)/x, n = lim (f(x) − mx)",
             "aria dintre două grafice: ∫ |f − g|",
@@ -167,7 +186,11 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
           cerinta:
             "x₁, x₂, x₃ sunt rădăcinile lui f = X³ + mX + 6, m < 0. Dacă x₁⁴ + x₂⁴ + x₃⁴ = 98, calculați |x₁| + |x₂| + |x₃|.",
           ceSeCere: "Să exprimi suma puterilor a patra prin m, să afli m, apoi rădăcinile.",
-          notiuni: ["relațiile lui Viète", "sume de puteri ale rădăcinilor", "descompunerea polinomului"],
+          notiuni: [
+            "relațiile lui Viète",
+            "sume de puteri ale rădăcinilor",
+            "descompunerea polinomului",
+          ],
           pasi: [
             "Viète: s₁ = x₁ + x₂ + x₃ = 0, s₂ = x₁x₂ + x₁x₃ + x₂x₃ = m, s₃ = x₁x₂x₃ = −6.",
             "x₁² + x₂² + x₃² = s₁² − 2s₂ = −2m.",
@@ -191,7 +214,8 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
           puncte: 9,
           cerinta:
             "Numărul soluțiilor reale ale ecuației [(2x − 1)/3] + [(4x + 1)/6] = (5x − 4)/3, unde [a] este partea întreagă a lui a.",
-          ceSeCere: "Să observi că membrul drept trebuie să fie întreg, să mărginești acel întreg și să verifici fiecare caz.",
+          ceSeCere:
+            "Să observi că membrul drept trebuie să fie întreg, să mărginești acel întreg și să verifici fiecare caz.",
           notiuni: ["partea întreagă: a − 1 < [a] ≤ a", "substituția cu un număr întreg"],
           pasi: [
             "Membrul stâng e întreg, deci (5x − 4)/3 = k ∈ ℤ, adică x = (3k + 4)/5.",
@@ -214,10 +238,15 @@ export const UPB_MATEMATICA_2025: RezolvareAdmitere = {
           id: "q10",
           eticheta: "Problema 10",
           puncte: 9,
-          cerinta: "Valoarea parametrului real m pentru care ecuația ||x − 1| − 2| − 3| = mx are o infinitate de soluții.",
+          cerinta:
+            "Valoarea parametrului real m pentru care ecuația ||x − 1| − 2| − 3| = mx are o infinitate de soluții.",
           ceSeCere:
             "Să explicitezi funcția din stânga pe intervale și să găsești o porțiune de dreaptă care trece prin origine.",
-          notiuni: ["explicitarea modulului", "funcții liniare pe porțiuni", "intersecția a două drepte"],
+          notiuni: [
+            "explicitarea modulului",
+            "funcții liniare pe porțiuni",
+            "intersecția a două drepte",
+          ],
           pasi: [
             "Fie g(x) = ||x − 1| − 2| − 3|. Explicităm din interior spre exterior.",
             "x ≤ −4: g(x) = −x − 4; −4 ≤ x ≤ −1: g(x) = x + 4; −1 ≤ x ≤ 1: g(x) = 2 − x.",

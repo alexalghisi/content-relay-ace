@@ -44,7 +44,8 @@ export const UPB_INFORMATICA_2025: RezolvareAdmitere = {
     },
     {
       ce: "Itemii 4, 5, 6: frunzele din vectorul de tați, backtracking comparat cu enumerarea directă a primelor 300 de numere, forță brută pe toate mulțimile de 3 perechi",
-      metoda: "Programe C++ compilate și rulate; fiecare rezultat comparat cu o a doua metodă, independentă",
+      metoda:
+        "Programe C++ compilate și rulate; fiecare rezultat comparat cu o a doua metodă, independentă",
       comanda: VERIFICA,
       data: "2026-10-23",
       rezultat: "PASS",
@@ -84,8 +85,13 @@ export const UPB_INFORMATICA_2025: RezolvareAdmitere = {
           puncte: 9,
           cerinta:
             "Funcția este_lucratoare(zi) întoarce adevărat dacă zi % 7 nu e nici 0, nici 6; zile_lucratoare(an) numără zilele lucrătoare din 1..an. Cât întoarce zile_lucratoare(365)? Variante: 261, 258, 262, 200, 250, 251.",
-          ceSeCere: "Să numeri câte numere din 1..365 dau la împărțirea cu 7 restul 1, 2, 3, 4 sau 5.",
-          notiuni: ["operatorul `%`", "numărare pe perioade", "funcții care întorc o valoare logică"],
+          ceSeCere:
+            "Să numeri câte numere din 1..365 dau la împărțirea cu 7 restul 1, 2, 3, 4 sau 5.",
+          notiuni: [
+            "operatorul `%`",
+            "numărare pe perioade",
+            "funcții care întorc o valoare logică",
+          ],
           pasi: [
             "O zi e „lucrătoare” când restul la 7 este 1, 2, 3, 4 sau 5 — adică 5 resturi din 7.",
             "365 = 52·7 + 1, deci zilele 1..364 formează 52 de săptămâni complete, fiecare cu exact 5 zile lucrătoare: 52·5 = 260.",
@@ -151,8 +157,7 @@ export const UPB_INFORMATICA_2025: RezolvareAdmitere = {
           ],
           cod: {
             limbaj: "cpp",
-            sursa:
-              "for(i=0;i<n;i++) a[i]=a[b[n-i-1]-1];\n  for(i=0;i<n;i++) b[n-i-1]=b[a[i]-1];",
+            sursa: "for(i=0;i<n;i++) a[i]=a[b[n-i-1]-1];\n  for(i=0;i<n;i++) b[n-i-1]=b[a[i]-1];",
           },
         },
         {
@@ -228,7 +233,12 @@ export const UPB_INFORMATICA_2025: RezolvareAdmitere = {
             "Tipul Complex are câmpurile re, im; tipul ComplexSecv are n și tabloul elemente[100] de Complex. Pentru variabila CS, ce expresie testează că primul element din secvență este număr real?",
           ceSeCere:
             "Să accesezi corect primul element din tablou (indice 0 în C/C++) și să verifici că partea imaginară e 0.",
-          notiuni: ["struct / record", "tablou de structuri", "operatorul `.`", "număr complex real"],
+          notiuni: [
+            "struct / record",
+            "tablou de structuri",
+            "operatorul `.`",
+            "număr complex real",
+          ],
           pasi: [
             "Un număr complex re + im·i este real exact când im = 0.",
             "Tabloul se află în câmpul elemente, deci primul element este CS.elemente[0] în C/C++ (CS.elemente[1] în Pascal, unde indicii încep de la 1).",
@@ -317,7 +327,7 @@ export const UPB_INFORMATICA_2025: RezolvareAdmitere = {
           pasi: [
             "Bucla citește câte o linie la fiecare pas, deci după ea sir conține linia a 5-a (C/C++) sau a 7-a (Pascal).",
             "main.c: 1 `#include <stdio.h>`, 2 linie goală, 3 `int main() {`, 4 `FILE * file = …`, 5 `int i = 0;`.",
-            "main.cpp: 1 `#include <iostream>`, 2 `#include <fstream>`, 3 `std::ifstream file(\"main.cpp\");`, 4 `int main() {`, 5 `int i = 0;`.",
+            'main.cpp: 1 `#include <iostream>`, 2 `#include <fstream>`, 3 `std::ifstream file("main.cpp");`, 4 `int main() {`, 5 `int i = 0;`.',
             "main.pas: 1 `program Program1;`, 2 `var …`, 3 `i: Integer;`, 4 `begin`, 5 `assign(…)`, 6 `reset(f);`, 7 `i := 0;`.",
             "În toate cele trei variante se afișează linia de inițializare a lui i.",
           ],
@@ -331,7 +341,7 @@ export const UPB_INFORMATICA_2025: RezolvareAdmitere = {
           cod: {
             limbaj: "cpp",
             sursa:
-              "#include <iostream>\n#include <fstream>\nstd::ifstream file(\"main.cpp\");\nint main() {\n  int i = 0;\n  char sir[128];\n  while(i < 5) {\n    file.getline(sir, 128);\n    i++;\n  }\n  file.close();\n  std::cout << sir;\n  return 0;\n}",
+              '#include <iostream>\n#include <fstream>\nstd::ifstream file("main.cpp");\nint main() {\n  int i = 0;\n  char sir[128];\n  while(i < 5) {\n    file.getline(sir, 128);\n    i++;\n  }\n  file.close();\n  std::cout << sir;\n  return 0;\n}',
           },
         },
       ],

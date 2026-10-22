@@ -28,7 +28,8 @@ describe("UPB matematică 2025 (iulie), Varianta S", () => {
   });
 
   test("fiecare răspuns numește o variantă a)–f)", () => {
-    for (const it of r.sectiuni.flatMap((s) => s.itemi)) expect(it.raspuns).toMatch(/^\*\*[a-f]\) /);
+    for (const it of r.sectiuni.flatMap((s) => s.itemi))
+      expect(it.raspuns).toMatch(/^\*\*[a-f]\) /);
   });
 
   test("„publicat” cere verificări PASS cu script existent", () => {

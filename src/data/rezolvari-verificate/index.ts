@@ -2,9 +2,15 @@ import { INFORMATICA_2026_IUNIE } from "./informatica-2026-iunie";
 import { INFORMATICA_2025_SIMULARE } from "./informatica-2025-simulare";
 import { MATEMATICA_2024_AUGUST } from "./matematica-2024-august";
 import { MATEMATICA_2024_SIMULARE } from "./matematica-2024-simulare";
-import type { ItemRezolvat, RezolvareVerificata } from "./types";
+import { rezolvareAdmitere } from "@/data/rezolvari-admitere";
+import {
+  esteAdmitere,
+  type ItemRezolvat,
+  type OriceRezolvare,
+  type RezolvareVerificata,
+} from "./types";
 
-export type { ItemRezolvat, RezolvareVerificata } from "./types";
+export type { ItemRezolvat, OriceRezolvare, RezolvareAdmitere, RezolvareVerificata } from "./types";
 
 /** Toate rezolvările din repo, indiferent de status (pentru teste și flux editorial). */
 export const TOATE_REZOLVARILE: RezolvareVerificata[] = [
@@ -32,19 +38,32 @@ export function rezolvarePublicata(
   );
 }
 
-/** Id global al unui exercițiu: "informatica/2026/iunie#s3-1". */
-export const idExercitiu = (r: RezolvareVerificata, item: ItemRezolvat) =>
-  `${cheieRezolvare(r.materie, r.an, r.sesiune)}#${item.id}`;
+/** Id global al unui exercițiu: "informatica/2026/iunie#s3-1" (BAC) sau "admitere/upb/informatica/2025#q1". */
+export const idExercitiu = (r: OriceRezolvare, item: ItemRezolvat) =>
+  esteAdmitere(r)
+    ? `admitere/${r.universitate}/${r.materie}/${r.an}#${item.id}`
+    : `${cheieRezolvare(r.materie, r.an, r.sesiune)}#${item.id}`;
 export const ID_EXERCITIU_RE =
   /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare)#([a-z0-9-]{1,20})$/;
+const ID_ADMITERE_RE =
+  /^admitere\/([a-z0-9-]{1,40})\/([a-z0-9-]{1,40})\/(\d{4})#([a-z0-9-]{1,20})$/;
 
 export function gasesteExercitiu(
   id: string,
-): { rezolvare: RezolvareVerificata; item: ItemRezolvat } | null {
-  const m = ID_EXERCITIU_RE.exec(id);
-  if (!m) return null;
-  const r = rezolvarePublicata(m[1], Number(m[2]), m[3]);
-  const item = r?.sectiuni.flatMap((s) => s.itemi).find((i) => i.id === m[4]);
+): { rezolvare: OriceRezolvare; item: ItemRezolvat } | null {
+  let r: OriceRezolvare | null = null;
+  let itemId = "";
+  const a = ID_ADMITERE_RE.exec(id);
+  if (a) {
+    r = rezolvareAdmitere(a[1], a[2], Number(a[3]));
+    itemId = a[4];
+  } else {
+    const m = ID_EXERCITIU_RE.exec(id);
+    if (!m) return null;
+    r = rezolvarePublicata(m[1], Number(m[2]), m[3]);
+    itemId = m[4];
+  }
+  const item = r?.sectiuni.flatMap((s) => s.itemi).find((i) => i.id === itemId);
   return r && item ? { rezolvare: r, item } : null;
 }
 
@@ -57,7 +76,9 @@ export function contextExercitiu(id: string, maxLen = 3900): string | null {
   if (!g) return null;
   const { rezolvare: r, item } = g;
   const linii = [
-    `Exercițiu din subiectul oficial de bacalaureat ${r.an}, ${r.proba}, ${r.varianta != null ? `Varianta ${r.varianta}` : "Simulare"} (${r.programa}).`,
+    esteAdmitere(r)
+      ? `Exercițiu din subiectul de admitere ${r.an}, ${r.universitateNume}, ${r.proba} (${r.programa}).`
+      : `Exercițiu din subiectul oficial de bacalaureat ${r.an}, ${r.proba}, ${r.varianta != null ? `Varianta ${r.varianta}` : "Simulare"} (${r.programa}).`,
     `${item.eticheta} (${item.puncte} p). Cerința, reformulată: ${item.cerinta}`,
     `Rezolvarea verificată MeditatiiDirect (nu este baremul oficial; elevul o poate vedea pe pagină):`,
     ...item.pasi.map((p, i) => `${i + 1}. ${p}`),

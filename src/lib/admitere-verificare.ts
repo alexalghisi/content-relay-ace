@@ -60,7 +60,14 @@ export const esteDomeniuOficial = (host: string | null) =>
 
 export function verdictDocument(d: DocAdmitereAuditat | undefined): VerdictAdmitere {
   if (!d)
-    return { afisat: false, motive: ["neauditat"], provenienta: null, simulare: false, sursaUrl: null, sursaDomeniu: null };
+    return {
+      afisat: false,
+      motive: ["neauditat"],
+      provenienta: null,
+      simulare: false,
+      sursaUrl: null,
+      sursaDomeniu: null,
+    };
   const oficial = esteDomeniuOficial(d.sursa_domeniu);
   const motive: MotivAdmitere[] = [];
   // Fără sursă oficială, documentul trebuie să se confirme singur prin text (an + conținut).
@@ -81,7 +88,9 @@ export const verdictAdmitere = (path: string) => verdictDocument(DUPA_PATH.get(p
 export const esteAdmitereAfisat = (path: string) => verdictAdmitere(path).afisat;
 
 /** Filtrează rânduri din admission_papers la cele care trec auditul. */
-export function filtreazaAfisate<T extends { storage_path: string }>(rows: T[] | null | undefined): T[] {
+export function filtreazaAfisate<T extends { storage_path: string }>(
+  rows: T[] | null | undefined,
+): T[] {
   return (rows ?? []).filter((r) => esteAdmitereAfisat(r.storage_path));
 }
 
