@@ -34,7 +34,7 @@ export function TextRotativ({
 
 export const TITLURI_PROFESOR_AI = [
   "Profesor AI: primele 15 minute gratuit, live, în română",
-  "Blocat la o temă? Întreab-o pe Hannah, chiar acum",
+  "Blocat la o temă? Întreab-o pe profesoara AI, chiar acum",
   "O lecție adevărată, cu voce și tablă — 15 minute gratuit",
   "Pregătire pentru BAC sau test cu un profesor AI care te ascultă",
   "Pui întrebări oricând, o întrerupi oricând — ca la o meditație reală",
