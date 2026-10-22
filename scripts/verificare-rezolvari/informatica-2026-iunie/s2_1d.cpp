@@ -1,0 +1,24 @@
+// Varianta cu test final (do-while) pentru a doua structură repetitivă — trebuie să fie echivalentă cu s2_1c.
+#include <iostream>
+using namespace std;
+int main()
+{
+    int n, nr = 0, d = 2, p;
+    cin >> n;
+    while (d * d <= n)
+    {
+        p = 0;
+        if (n % d == 0)
+            do
+            {
+                p = 1;
+                n = n / d;
+            } while (n % d == 0);
+        nr = nr + p;
+        d = d + 1;
+    }
+    if (n != 1)
+        nr = nr + 1;
+    cout << nr;
+    return 0;
+}

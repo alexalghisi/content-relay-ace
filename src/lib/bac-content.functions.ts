@@ -4,6 +4,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { subiecteVerificate, verificaVarianta, type VariantaVerificata } from "@/lib/bac-verificare";
+import { REZOLVARI_PUBLICATE, rezolvarePublicata } from "@/data/rezolvari-verificate";
 
 /** Doar rezolvările făcute pe subiectul oficial (PDF verificat) sunt publice și indexabile. */
 export const REZOLVARE_SURSA_OFICIALA = "subiect_oficial";
@@ -46,13 +48,16 @@ export const getVariantaSesiune = createServerFn({ method: "GET" })
       sb.rpc("bac_pdf_names", { _prefix: prefix }),
     ]);
     const files = new Set((names ?? []) as string[]);
+    // Afișăm ca oficiale doar documentele care trec auditul de conținut (src/lib/bac-verificare.ts).
+    const verificare: VariantaVerificata = verificaVarianta(data.materie, data.an, data.sesiune, files);
+    const statica = rezolvarePublicata(data.materie, data.an, data.sesiune);
     return {
       varianta: varianta ?? null,
-      rezolvare: rezolvare ?? null,
-      pdfs: {
-        subiect: files.has(`${prefix}subiect.pdf`) ? `${prefix}subiect.pdf` : null,
-        barem: files.has(`${prefix}barem.pdf`) ? `${prefix}barem.pdf` : null,
-      },
+      rezolvare: statica
+        ? { slug: `rezolvare-${data.materie}-${data.an}-${data.sesiune}`, dificultate: statica.dificultate, timp_estimat_minute: statica.timpMinute, status: statica.status }
+        : (rezolvare ?? null),
+      pdfs: { subiect: verificare.subiect, barem: verificare.barem },
+      verificare,
     };
   });
 
@@ -79,7 +84,20 @@ export const listRezolvari = createServerFn({ method: "GET" }).handler(async () 
     .eq("sursa", REZOLVARE_SURSA_OFICIALA)
     .order("an", { ascending: false })
     .limit(500);
-  return { items: data ?? [] };
+  // Rezolvările verificate din repo au prioritate față de rândurile din DB pe aceeași variantă.
+  const statice = REZOLVARI_PUBLICATE.map((r) => ({
+    materie: r.materie,
+    an: r.an,
+    sesiune: r.sesiune,
+    dificultate: r.dificultate,
+    timp_estimat_minute: r.timpMinute,
+    status: "verificat",
+  }));
+  const chei = new Set(statice.map((r) => `${r.materie}/${r.an}/${r.sesiune}`));
+  const items = [...statice, ...(data ?? []).filter((r) => !chei.has(`${r.materie}/${r.an}/${r.sesiune}`))].sort(
+    (a, b) => b.an - a.an,
+  );
+  return { items };
 });
 
 const MaterieSchema = z.object({
@@ -98,7 +116,10 @@ export const getVarianteMaterie = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => MaterieSchema.parse(input))
   .handler(async ({ data }) => {
     const sb = publicClient();
-    const { data: names } = await sb.rpc("bac_pdf_names", { _prefix: `${data.materie}/` });
+    const { data: raw } = await sb.rpc("bac_pdf_names", { _prefix: `${data.materie}/` });
+    const all = (raw ?? []) as string[];
+    const ok = subiecteVerificate(all);
+    const names = all.filter((n) => ok.has(n) || (n.endsWith("-barem.pdf") && ok.has(n.replace(/-barem\.pdf$/, "-subiect.pdf"))));
     const byCombo = new Map<string, VariantaDisponibila>();
     for (const n of (names ?? []) as string[]) {
       const m = /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare)-(subiect|barem)\.pdf$/.exec(n);
@@ -111,7 +132,7 @@ export const getVarianteMaterie = createServerFn({ method: "GET" })
         are_barem: false,
       };
       if (m[4] === "subiect") row.subiect_path = n;
-      else row.are_barem = true;
+      else row.are_barem = verificaVarianta(data.materie, Number(m[2]), m[3] as VariantaDisponibila["sesiune"], new Set(all)).barem !== null;
       byCombo.set(key, row);
     }
     const variante = [...byCombo.values()]

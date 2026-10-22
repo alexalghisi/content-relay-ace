@@ -223,7 +223,9 @@ export const Route = createFileRoute("/sitemap.xml")({
           const { BAC_SUBJECTS, BAC_YEARS, BAC_SESSIONS } = await import("@/data/bac-catalog");
           // Doar sesiunile care au efectiv subiectul verificat în arhivă (restul sunt noindex).
           const { data: pdfNames } = await supabaseAdmin.rpc("bac_pdf_names", { _prefix: "" });
-          const pdfSet = new Set((pdfNames ?? []) as string[]);
+          // Aceeași regulă ca pagina: doar subiectele care trec auditul de conținut (src/lib/bac-verificare.ts).
+          const { subiecteVerificate } = await import("@/lib/bac-verificare");
+          const pdfSet = subiecteVerificate((pdfNames ?? []) as string[]);
           urls.push(`  <url>\n    <loc>${BASE_URL}/bac</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
           for (const s of BAC_SUBJECTS) {
             urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
@@ -243,11 +245,16 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         // Rezolvări publicate — doar cele făcute pe subiectul oficial
         try {
-          const { data: rez } = await supabaseAdmin
+          const { data: rezDb } = await supabaseAdmin
             .from("bac_rezolvari")
             .select("materie, an, sesiune, updated_at")
             .eq("sursa", "subiect_oficial");
-          for (const r of rez ?? []) {
+          // Rezolvările verificate din repo (src/data/rezolvari-verificate) + cele din DB, fără dubluri.
+          const { REZOLVARI_PUBLICATE } = await import("@/data/rezolvari-verificate");
+          const statice = REZOLVARI_PUBLICATE.map((r) => ({ materie: r.materie, an: r.an, sesiune: r.sesiune, updated_at: r.actualizat }));
+          const chei = new Set(statice.map((r) => `${r.materie}/${r.an}/${r.sesiune}`));
+          const rez = [...statice, ...(rezDb ?? []).filter((r) => !chei.has(`${r.materie}/${r.an}/${r.sesiune}`))];
+          for (const r of rez) {
             const last = r.updated_at ? new Date(r.updated_at).toISOString().slice(0, 10) : null;
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/rezolvari/${r.materie}/${r.an}/${r.sesiune}</loc>\n${last ? `    <lastmod>${last}</lastmod>\n` : ""}    <changefreq>monthly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
