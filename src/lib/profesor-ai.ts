@@ -124,3 +124,12 @@ export interface PaReplica {
 export type PaResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: string; cod?: string; reiaPesteSec?: number };
+
+/** Mesaje de control trimise de client (ascunse în transcript, nu sunt vorbe ale elevului). */
+export const PA_START = "[START] Începe ora.";
+export const PA_TACERE = "[TĂCERE] Elevul nu a spus nimic de ceva vreme.";
+/** Secunde de liniște (după ce profesoara a terminat de vorbit) până când reia singură. */
+export const PA_TACERE_SEC = 25;
+/** După atâtea reluări consecutive fără răspuns, profesoara nu mai insistă. */
+export const PA_TACERE_MAX = 2;
+export const paEsteControl = (text: string) => text === PA_START || text === PA_TACERE;
