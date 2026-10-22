@@ -14,6 +14,11 @@ import {
   paObiectivName,
   type PaConfig,
   paLimba,
+  PA_START,
+  PA_TACERE,
+  PA_TACERE_MAX,
+  PA_TACERE_SEC,
+  paEsteControl,
 } from "@/lib/profesor-ai";
 
 type Msg = { role: "user" | "assistant"; content: string; tabla?: string };
@@ -32,8 +37,6 @@ const fereastra = (m: Msg[]) => {
   return w.map(({ role, content }) => ({ role, content }));
 };
 
-const START =
-  "Începe sesiunea: un salut scurt și o singură întrebare despre ce vreau să învăț, fără prezentare.";
 
 type SR = {
   lang: string;
@@ -217,6 +220,8 @@ export function SesiuneProfesorAi({
     async (continut: string, ascuns = false, imagine?: string) => {
       const c = continut.trim();
       if (!c || terminat) return;
+      if (c === PA_TACERE) tacereNr.current += 1;
+      else if (!ascuns) tacereNr.current = 0;
       interrupt(); // o întrebare nouă oprește orice răspuns în curs
       const rev = revision.current;
       setEroare("");
@@ -404,10 +409,19 @@ export function SesiuneProfesorAi({
     }
   };
   const pornit = useRef(false);
+  const tacereNr = useRef(0);
+  // Elevul tace: după PA_TACERE_SEC de liniște (profesoara a terminat, microfonul ascultă),
+  // profesoara reia singură firul, ca la o oră reală. Nu insistă la nesfârșit.
+  useEffect(() => {
+    if (!pornit.current || terminat || pending || realistVorbeste || !asculta || eroare) return;
+    if (tacereNr.current >= PA_TACERE_MAX) return;
+    const t = window.setTimeout(() => void sendRef.current(PA_TACERE, true), PA_TACERE_SEC * 1000);
+    return () => window.clearTimeout(t);
+  }, [terminat, pending, realistVorbeste, asculta, eroare, mesaje]);
   useEffect(() => {
     if (modAvatar === "incarcare" || !permisSunet || pornit.current) return;
     pornit.current = true;
-    void trimite(START, true);
+    void trimite(PA_START, true);
     startMic();
   }, [modAvatar, permisSunet, trimite, startMic]);
 
@@ -505,7 +519,7 @@ export function SesiuneProfesorAi({
         </div>
         <div ref={scroll} className="max-h-72 flex-1 space-y-3 overflow-y-auto px-5 py-3" aria-live="polite">
           {mesaje
-            .filter((m) => m.content !== START)
+            .filter((m) => !paEsteControl(m.content))
             .map((m, i) => (
               <div key={i} className={m.role === "user" ? "ml-auto max-w-[85%]" : "max-w-[90%]"}>
                 <p
