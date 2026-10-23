@@ -486,15 +486,6 @@ export function SesiuneProfesorAi({
             <span className="rounded-full bg-foreground/55 px-3 py-1 font-semibold text-background">
               Profesor AI · {paMaterieName(config.materie)}
             </span>
-            {vorbesteAcum ? (
-              <span className="rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground">vorbește…</span>
-            ) : pending ? (
-              <span className="rounded-full bg-foreground/55 px-3 py-1 text-background">se gândește…</span>
-            ) : asculta ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-foreground/55 px-3 py-1 text-background">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-primary" /> te ascult…
-              </span>
-            ) : null}
           </div>
           <div className="absolute right-3 top-3 flex items-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-full bg-foreground/55 px-3 py-1 text-xs font-semibold text-background">
