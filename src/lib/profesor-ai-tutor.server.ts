@@ -187,8 +187,8 @@ export async function streamGemini(system: string, messages: M[], img?: Img): Pr
   });
 }
 
-/** Primary tutor model on the Lovable AI Gateway (≈0.8 s to first token measured). */
-export const GATEWAY_TUTOR_MODEL = () => process.env["PROFESOR_AI_GATEWAY_MODEL"] || "google/gemini-3-flash-preview";
+/** Primary tutor model on the Lovable AI Gateway. Measured live 23.10.2026 vs gemini-3-flash-preview, gpt-5-mini, claude-haiku-4-5/sonnet-5: ≈0.9–1.0 s to first token, best Romanian and the most precise questions. */
+export const GATEWAY_TUTOR_MODEL = () => process.env["PROFESOR_AI_GATEWAY_MODEL"] || "google/gemini-3.5-flash";
 
 /** Streams plain text deltas from the Lovable AI Gateway (OpenAI-style SSE). */
 export async function streamGateway(system: string, messages: M[], img?: Img, model = GATEWAY_TUTOR_MODEL()): Promise<ReadableStream<Uint8Array>> {
