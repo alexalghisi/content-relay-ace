@@ -4,7 +4,7 @@ import { Clock, Loader2, VideoOff, Volume2, VolumeX } from "lucide-react";
 import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
 import { TablaComuna } from "./tabla-comuna";
 import { Button } from "@/components/ui/button";
-import { createSpeechQueue, isEcho, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
+import { createEchoLog, createSpeechQueue, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
 import { createTrimitereAnticipata, sttBrowserPreferat } from "@/lib/profesor-ai-ascultare";
 import { playLessonMedia } from "@/lib/profesor-ai-audio";
 import { supabase } from "@/integrations/supabase/client";
@@ -87,6 +87,7 @@ export function SesiuneProfesorAi({
   const liveVoice = useRef(false);
   const speakEnd = useRef<(() => void) | null>(null);
   const spokenNow = useRef("");
+  const ecou = useRef(createEchoLog());
   const speakingRef = useRef(false);
   const sunetRef = useRef(sunet);
   sunetRef.current = sunet;
@@ -201,6 +202,7 @@ export function SesiuneProfesorAi({
     const spune = async () => {
       if (!sunetRef.current) return marcheazaVorbire();
       spokenNow.current = t;
+      ecou.current.add(t);
       if (heygen.current) {
         try { await heygen.current.speak({ text: t, taskType: "repeat" }); return; } catch { heygen.current = null; }
       }
@@ -367,11 +369,11 @@ export function SesiuneProfesorAi({
     rec.onresult = (e) => {
       const last = e.results[e.results.length - 1] as ArrayLike<{ transcript: string }> & { isFinal?: boolean };
       const spus = last?.[0]?.transcript?.trim() ?? "";
-      // Ignorăm ecoul vocii profesorului captat de microfon.
-      if (!spus || isEcho(spus, spokenNow.current)) return;
+      // Ignorăm ecoul vocii profesorului captat de microfon (difuzoare fără căști).
+      if (!spus || ecou.current.isEcho(spus, speakingRef.current)) return;
       if (!last.isFinal) {
-        // Elevul vorbește peste profesoară: o oprim imediat, ca la telefon.
-        if (speakingRef.current && spus.split(/\s+/).length >= 2) {
+        // Elevul vorbește peste profesoară: o oprim doar la vorbire reală (cel puțin 3 cuvinte care nu sunt ecou).
+        if (speakingRef.current && spus.split(/\s+/).length >= 3) {
           console.info("[voice] barge-in");
           interruptRef.current();
         }
