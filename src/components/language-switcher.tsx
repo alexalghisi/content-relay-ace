@@ -8,7 +8,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
   const t = useT();
   const router = useRouter();
   return (
-    <label className={`relative inline-flex h-10 items-center gap-1 rounded-full border border-border px-2 text-sm ${className}`}>
+    <label translate="no" className={`relative inline-flex h-10 items-center gap-1 rounded-full border border-border px-2 text-sm ${className}`}>
       <Globe className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
       <span className="sr-only">{t("ui.language")}</span>
       <select
