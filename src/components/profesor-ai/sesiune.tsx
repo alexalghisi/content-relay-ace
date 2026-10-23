@@ -294,7 +294,7 @@ export function SesiuneProfesorAi({
           if (rev !== revision.current) return void reader.cancel();
           if (value) full += dec.decode(value, { stream: true });
           const spoken = bubble();
-          const { sentences } = takeSentences(spoken.slice(consumed) + (done ? " " : ""));
+          const { sentences } = takeSentences(spoken.slice(consumed) + (done ? " " : ""), !rostit);
           for (const sn of sentences) {
             consumed = spoken.indexOf(sn, consumed) + sn.length;
             if (!primaGata) {

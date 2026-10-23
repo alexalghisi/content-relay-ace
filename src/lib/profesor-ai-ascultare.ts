@@ -4,7 +4,7 @@
 // Pure helpers (bun tests) over the session component's timers.
 
 /** Silence (no change in the interim text) after which the question is sent early. */
-export const STABIL_MS = 700;
+export const STABIL_MS = 400;
 
 const cuvinte = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").match(/[a-z0-9]+/g) ?? [];
