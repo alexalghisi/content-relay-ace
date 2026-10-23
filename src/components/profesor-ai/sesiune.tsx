@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Clock, Loader2, Mic, MicOff, Square, VideoOff, Volume2, VolumeX } from "lucide-react";
+import { Clock, Loader2, VideoOff, Volume2, VolumeX } from "lucide-react";
 import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
 import { TablaComuna } from "./tabla-comuna";
 import { Button } from "@/components/ui/button";
@@ -396,14 +396,6 @@ export function SesiuneProfesorAi({
   }, []);
   startRef.current = startMic;
 
-  const stopMic = () => {
-    handsFree.current = false;
-    setAsculta(false);
-    const r = sr.current;
-    sr.current = null;
-    r?.stop();
-    void heygen.current?.stopListening().catch(() => {});
-  };
 
   // A tap on a previous page is not enough for Safari's audible playback permission.
   // Invoke playback and speech synthesis synchronously in this page's tap handler.
@@ -427,10 +419,18 @@ export function SesiuneProfesorAi({
   useEffect(() => {
     if (autoSunet.current) return;
     autoSunet.current = true;
-    const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation;
-    if (!ua || ua.hasBeenActive) activeazaSunet();
+    activeazaSunet();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // If the browser still blocks sound, it turns on by itself at the first touch, click or key anywhere.
+  useEffect(() => {
+    if (!sunetBlocat) return;
+    const evs = ["pointerdown", "touchend", "keydown"] as const;
+    const pe = () => { evs.forEach((e) => window.removeEventListener(e, pe, true)); activeazaSunet(); };
+    evs.forEach((e) => window.addEventListener(e, pe, true));
+    return () => evs.forEach((e) => window.removeEventListener(e, pe, true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sunetBlocat]);
   const pornit = useRef(false);
   const tacereNr = useRef(0);
   // Elevul tace: după PA_TACERE_SEC de liniște (profesoara a terminat, microfonul ascultă),
@@ -448,7 +448,6 @@ export function SesiuneProfesorAi({
     startMic();
   }, [modAvatar, permisSunet, trimite, startMic]);
 
-  const microfon = () => (asculta ? stopMic() : startMic());
 
 
   const min = Math.floor(ramas / 60000);
@@ -473,15 +472,6 @@ export function SesiuneProfesorAi({
               <Loader2 className="h-8 w-8 animate-spin" aria-label="Se conectează profesoara" />
             </div>
           ) : null}
-          {(!permisSunet || sunetBlocat) && (
-            <Button
-              type="button"
-              onClick={activeazaSunet}
-              className="absolute inset-0 grid h-full w-full place-items-center rounded-none bg-foreground/35 text-lg font-bold text-background"
-            >
-              <span className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-primary-foreground shadow-lg"><Volume2 className="h-5 w-5" />{permisSunet ? "Activează sunetul" : "Începe lecția cu sunet"}</span>
-            </Button>
-          )}
           <div className="absolute left-3 top-3 flex flex-wrap gap-2 text-xs">
             <span className="rounded-full bg-foreground/55 px-3 py-1 font-semibold text-background">
               Profesor AI · {paMaterieName(config.materie)}
@@ -507,25 +497,6 @@ export function SesiuneProfesorAi({
               {sunet && permisSunet && !sunetBlocat ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
             </Button>
           </div>
-        </div>
-
-        <div className="flex items-center justify-center gap-3 border-b border-border px-4 py-3">
-          <Button
-            type="button"
-            onClick={microfon}
-            disabled={terminat}
-            aria-label={asculta ? "Oprește microfonul" : "Pornește microfonul"}
-            aria-pressed={asculta}
-            className={`h-12 gap-2 rounded-full px-6 ${asculta ? "bg-primary text-primary-foreground" : "bg-destructive text-background"}`}
-          >
-            {asculta ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
-            {asculta ? "Microfon pornit — vorbește oricând" : "Microfon oprit — apasă ca să vorbești"}
-          </Button>
-          {vorbesteAcum && (
-            <Button type="button" variant="outline" onClick={interrupt} aria-label="Oprește profesoara" className="h-12 w-12 rounded-full p-0">
-              <Square className="h-4 w-4" />
-            </Button>
-          )}
         </div>
 
         <div className="px-5 pt-3 text-xs text-muted-foreground">

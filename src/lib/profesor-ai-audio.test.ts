@@ -20,3 +20,14 @@ test("muting keeps video playing without audio", async () => {
   expect(await playLessonMedia(media, false)).toBe(true);
   expect(media.muted).toBe(true);
 });
+test("when sound is blocked the video still plays muted instead of freezing", async () => {
+  let n = 0;
+  const media = {
+    muted: false,
+    volume: 0,
+    play: async function (this: { muted: boolean }) { n++; if (!this.muted) throw new DOMException("x", "NotAllowedError"); },
+  } as unknown as HTMLMediaElement;
+  expect(await playLessonMedia(media, true)).toBe(false);
+  expect(media.muted).toBe(true);
+  expect(n).toBe(2);
+});

@@ -59,8 +59,12 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
     const v = video.current;
     if (!v || !lectie) return;
     v.currentTime = 0;
-    v.muted = !gataSunet.current || opritManual.current;
-    v.play().catch(() => {
+    // Always try with sound first (allowed on return visits / after any click on the site);
+    // if the browser blocks it, play muted and unmute at the first tap, click or key anywhere.
+    v.muted = opritManual.current;
+    v.play().then(() => {
+      if (!v.muted) { gataSunet.current = true; setSunet(true); }
+    }).catch(() => {
       v.muted = true;
       v.play().catch(() => {});
     });
@@ -98,19 +102,6 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
     let i = -1;
     timpi.replici.forEach(([s], k) => { if (t >= s) i = k; });
     setLinie((x) => (x === i ? x : i));
-  };
-
-  const pornesteCuSunet = () => {
-    const v = video.current;
-    if (!v) return;
-    opritManual.current = false;
-    gataSunet.current = true;
-    v.muted = false;
-    v.volume = 1;
-    v.currentTime = 0;
-    v.play().catch(() => {});
-    setLinie(-1);
-    setSunet(true);
   };
 
   const comuta = () => {
@@ -176,15 +167,6 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
             )}
           </div>
 
-          {!sunet && (
-            <button
-              type="button"
-              onClick={pornesteCuSunet}
-              className="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-xl ring-4 ring-white/40 animate-pulse"
-            >
-              <Volume2 className="h-5 w-5" /> Ascultă lecția
-            </button>
-          )}
 
           <div className="absolute right-2 top-2 flex gap-2 sm:right-3 sm:top-3">
             <button
