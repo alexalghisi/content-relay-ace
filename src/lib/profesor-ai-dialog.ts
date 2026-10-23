@@ -17,8 +17,15 @@ export function createSpeechQueue() {
     },
   };
 }
-/** Splits complete spoken sentences off a streaming buffer; the unfinished tail stays in `rest`. */
-export function takeSentences(buf: string): { sentences: string[]; rest: string } {
+/** Minimum words before the opening clause (up to a comma/colon) is spoken ahead of its sentence. */
+export const CLAUZA_MIN_CUVINTE = 5;
+
+/**
+ * Splits complete spoken sentences off a streaming buffer; the unfinished tail stays in `rest`.
+ * While nothing has been spoken yet (`inceput`), a long opening sentence is cut at its first comma
+ * or colon so the voice starts earlier; the pause there sounds natural.
+ */
+export function takeSentences(buf: string, inceput = false): { sentences: string[]; rest: string } {
   const sentences: string[] = [];
   const re = /[.!?…]+(?=\s)/g;
   let start = 0;
@@ -30,6 +37,17 @@ export function takeSentences(buf: string): { sentences: string[]; rest: string 
     if (s.split(/\s+/).length < 3 && sentences.length === 0 && start === 0 && buf.length - end < 200) continue;
     if (s) sentences.push(s);
     start = end;
+  }
+  if (inceput && sentences.length === 0 && start === 0) {
+    const c = /[,:;](?=\s)/.exec(buf);
+    if (c) {
+      const clauza = buf.slice(0, c.index + 1).trim();
+      const dupa = buf.slice(c.index + 1);
+      // Only when the clause is a real phrase and the sentence clearly goes on after it.
+      if (clauza.split(/\s+/).length >= CLAUZA_MIN_CUVINTE && dupa.trim().split(/\s+/).length >= 3 && !/\d[,:]$/.test(clauza)) {
+        return { sentences: [clauza], rest: dupa };
+      }
+    }
   }
   return { sentences, rest: buf.slice(start) };
 }

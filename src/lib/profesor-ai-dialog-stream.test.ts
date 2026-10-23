@@ -17,3 +17,13 @@ test("speaker echo of the professor is ignored, a real question is not", () => {
   expect(isEcho("trei ori patru fac doisprezece", "Trei ori patru fac doisprezece.")).toBe(true);
   expect(isEcho("cat face cinci plus sapte", "Trei ori patru fac doisprezece.")).toBe(false);
 });
+test("the opening clause of a long first sentence is spoken before the sentence ends", () => {
+  const r = takeSentences("E o întrebare foarte bună, pentru că dacă înțelegi logica din spate", true);
+  expect(r.sentences).toEqual(["E o întrebare foarte bună,"]);
+  expect(r.rest).toBe(" pentru că dacă înțelegi logica din spate");
+});
+test("short clauses, numbers and later sentences are not cut at commas", () => {
+  expect(takeSentences("Da, hai să vedem", true).sentences).toEqual([]);
+  expect(takeSentences("Avem 3,5 metri pe secundă și mergem", true).sentences).toEqual([]);
+  expect(takeSentences("Acum, după ce ai înțeles regula, trecem mai departe", false).sentences).toEqual([]);
+});
