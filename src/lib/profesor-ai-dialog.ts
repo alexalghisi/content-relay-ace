@@ -67,9 +67,31 @@ const words = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").match(/[a-z0-9]+/g) ?? [];
 
 /** True when the microphone most likely heard the professor's own voice (speaker echo). */
-export function isEcho(heard: string, spoken: string): boolean {
+export function isEcho(heard: string, spoken: string, prag = 0.6): boolean {
   const h = words(heard);
   if (!h.length || !spoken) return false;
   const s = new Set(words(spoken));
-  return h.filter((w) => s.has(w)).length / h.length >= 0.6;
+  return h.filter((w) => s.has(w)).length / h.length >= prag;
+}
+
+/** Window in which the professor's own speech can still come back through the microphone. */
+export const ECOU_MS = 20_000;
+
+/**
+ * Everything the professor said recently. Speakers without headphones feed her voice back into
+ * the microphone (sometimes seconds later, sometimes misheard), so echo is checked against the
+ * whole recent speech, not only the sentence playing now.
+ */
+export function createEchoLog(now: () => number = () => Date.now()) {
+  let items: { t: number; text: string }[] = [];
+  const recent = () => {
+    const lim = now() - ECOU_MS;
+    items = items.filter((x) => x.t >= lim);
+    return items.map((x) => x.text).join(" ");
+  };
+  return {
+    add(text: string) { items.push({ t: now(), text }); },
+    /** While she is speaking even a partial match is echo; afterwards the usual threshold applies. */
+    isEcho(heard: string, vorbesteAcum: boolean) { return isEcho(heard, recent(), vorbesteAcum ? 0.4 : 0.6); },
+  };
 }
