@@ -27,3 +27,16 @@ test("short clauses, numbers and later sentences are not cut at commas", () => {
   expect(takeSentences("Avem 3,5 metri pe secundă și mergem", true).sentences).toEqual([]);
   expect(takeSentences("Acum, după ce ai înțeles regula, trecem mai departe", false).sentences).toEqual([]);
 });
+test("echo of earlier sentences is still recognised as the professor's voice", async () => {
+  const { createEchoLog } = await import("./profesor-ai-dialog");
+  let t = 0;
+  const log = createEchoLog(() => t);
+  log.add("Exact, laturile paralele se numesc baze.");
+  log.add("Acum calculăm aria trapezului.");
+  t = 5_000;
+  expect(log.isEcho("laturile paralele se numesc", false)).toBe(true);
+  expect(log.isEcho("exact laturile alea", true)).toBe(true);
+  expect(log.isEcho("nu înțeleg de ce împărțim la doi", false)).toBe(false);
+  t = 60_000;
+  expect(log.isEcho("laturile paralele se numesc", false)).toBe(false);
+});
