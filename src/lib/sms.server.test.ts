@@ -17,7 +17,7 @@ describe("SMS delivery", () => {
     process.env["GATEWAYAPI_TOKEN"] = "test-only-not-a-provider-credential";
     let endpoint = "";
     let recipients: unknown = null;
-    globalThis.fetch = (async (input, init) => {
+    globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
       endpoint = String(input);
       recipients = JSON.parse(String(init?.body)).recipients;
       return new Response("{}", { status: 200 });
