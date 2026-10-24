@@ -18,9 +18,7 @@ type R = { ok: true; verificat?: boolean } | { ok: false; error: string };
 
 export const trimiteCodTelefon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) =>
-    z.object({ phone: z.string().max(30), address: z.string().max(300) }).parse(d),
-  )
+  .inputValidator((d) => z.object({ phone: z.string().max(30), address: z.string().max(300) }).parse(d))
   .handler(async ({ data, context }): Promise<R> => {
     const { normalizeRoPhone, sendSms } = await import("./sms.server");
     const phone = normalizeRoPhone(data.phone);
