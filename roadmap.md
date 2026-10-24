@@ -1,8 +1,8 @@
 # Roadmap
 
-- [ ] SMS: corectează urmărirea livrării (404 temporar ≠ eșec), separă acceptarea de livrare și retrimite un singur test la numărul internațional indicat.
+- [x] SMS: urmărire server-side cu ID, acceptare separată de livrare; retrimitere reală: POST 200, GET inițial 404, apoi GET 200 DELIVERED la reverificarea după 10 secunde. 13 teste trec; codul și cheia nu sunt expuse. Modificările sunt în previzualizare.
 - [x] SMS: domeniu GatewayAPI corectat la global (cheia existentă acceptată HTTP 200, respinsă UE HTTP 401); eliminată verificarea fără cod la eșec, 7 teste de regresie trec. Nu s-au trimis SMS-uri reale către utilizatori.
-- [ ] SMS: publicare și confirmare primire cod pe telefon real — modificările sunt în previzualizare; confirmarea primirii necesită testul utilizatorului.
+- [ ] SMS: publicare — modificările sunt în previzualizare; livrarea testului pe telefon real este confirmată de GatewayAPI (DELIVERED).
 
 - [x] Admitere: audit de conținut pentru cele 57 de documente publicate; afișate doar cele cu sursă declarată și an confirmat (UPB de pe physics.pub.ro = oficial; UMF Cluj/Iași de pe submed.ro = „copie preluată”, simulările etichetate). Ascunse: Drept București (11 scanări fără sursă) și simulările UMF Timișoara fără sursă.
 - [x] Rezolvări verificate UPB 2025: Informatică (10 grile, cod rulat cu g++) și Matematică AAM (10 grile, SymPy), cu Meditator AI pe fiecare grilă.

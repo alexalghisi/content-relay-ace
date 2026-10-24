@@ -92,7 +92,7 @@ export async function getSmsDelivery(messageId: number): Promise<SmsDelivery> {
       .filter((status): status is string => typeof status === "string")
       .map((status) => status.toUpperCase());
     // Expose only known status enums, never arbitrary provider strings/PII.
-    const known = statuses.filter((status) => ["DELIVERED", "UNDELIVERABLE", "REJECTED", "EXPIRED", "FAILED", "ACCEPTED", "QUEUED", "SENT", "ENROUTE", "UNKNOWN"].includes(status));
+    const known = statuses.filter((status) => ["DELIVERED", "UNDELIVERABLE", "REJECTED", "EXPIRED", "FAILED", "ACCEPTED", "WAITING", "QUEUED", "SENT", "ENROUTE", "UNKNOWN"].includes(status));
     const state = statuses.length > 0 && statuses.every((status) => status === "DELIVERED") ? "delivered"
       : statuses.some((status) => ["UNDELIVERABLE", "REJECTED", "EXPIRED", "FAILED"].includes(status)) ? "failed"
       : known.length === statuses.length && known.length > 0 ? "pending" : "unknown";
