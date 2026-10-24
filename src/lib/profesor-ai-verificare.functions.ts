@@ -55,13 +55,17 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
     if (error) return { ok: false, error: "Nu am putut salva datele. Încearcă din nou." };
     const trimise = await sendSms([phone], `Codul tau MeditatiiDirect: ${cod}. Valabil ${COD_VALABIL_MIN} minute.`);
     if (!trimise) {
-      // Furnizorul SMS nu e configurat sau a eșuat: nu blocăm elevul. Numărul rămâne unic
-      // (verificat mai sus + index unic), deci lecția gratuită tot nu se poate lua de două ori.
-      const { error: errVer } = await supabaseAdmin
+      // SMS indisponibil (GATEWAYAPI_TOKEN lipsă sau eroare la furnizor): nu blocăm lecția.
+      // Numărul + adresa rămân salvate; unicitatea numărului și limita de retrimitere se păstrează.
+      console.warn("profesor-ai: SMS indisponibil, verificare fără cod", {
+        user: context.userId,
+        smsConfigurat: !!process.env["GATEWAYAPI_TOKEN"],
+      });
+      const { error: e2 } = await supabaseAdmin
         .from("profesor_ai_utilizatori")
         .update({ phone_verified_at: new Date().toISOString(), code_hash: null, code_expires_at: null })
         .eq("user_id", context.userId);
-      if (errVer) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+      if (e2) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
       return { ok: true, verificat: true };
     }
     return { ok: true };
