@@ -1,4 +1,3 @@
-import { useRouter } from "@tanstack/react-router";
 import { Globe } from "lucide-react";
 import { LOCALES, parseLocale } from "@/lib/i18n";
 import { saveLocale, useLocale, useT } from "@/lib/i18n-context";
@@ -6,7 +5,6 @@ import { saveLocale, useLocale, useT } from "@/lib/i18n-context";
 export function LanguageSwitcher({ className = "" }: { className?: string }) {
   const locale = useLocale();
   const t = useT();
-  const router = useRouter();
   return (
     <label translate="no" className={`relative inline-flex h-10 items-center gap-1 rounded-full border border-border px-2 text-sm ${className}`}>
       <Globe className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
@@ -17,7 +15,8 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
         className="cursor-pointer bg-transparent pr-1 text-sm outline-none"
         onChange={(e) => {
           saveLocale(parseLocale(e.target.value));
-          router.invalidate();
+          // Full reload so every page part (header, content, cached data) restarts in the new language.
+          window.location.reload();
         }}
       >
         {LOCALES.map((l) => (
