@@ -19,6 +19,7 @@ export function VerificareTelefon({ onVerificat }: { onVerificat: () => void }) 
     const r = await trimiteCodTelefon({ data: { phone, address } }).catch(() => ({ ok: false as const, error: "Conexiunea a eșuat." }));
     setPending(false);
     if (!r.ok) return setEroare(r.error);
+    if ("verificat" in r && r.verificat) return onVerificat();
     setTrimis(true);
   };
   const confirma = async () => {

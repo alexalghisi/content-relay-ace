@@ -14,7 +14,7 @@ async function hashCod(uid: string, cod: string) {
   return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-type R = { ok: true } | { ok: false; error: string };
+type R = { ok: true; verificat?: boolean } | { ok: false; error: string };
 
 export const trimiteCodTelefon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -57,8 +57,18 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
     if (error) return { ok: false, error: "Nu am putut salva datele. Încearcă din nou." };
     const trimise = await sendSms([phone], `Codul tau MeditatiiDirect: ${cod}. Valabil ${COD_VALABIL_MIN} minute.`);
     if (!trimise) {
-      await supabaseAdmin.from("profesor_ai_utilizatori").update({ code_sent_at: null }).eq("user_id", context.userId);
-      return { ok: false, error: "Trimiterea SMS nu este disponibilă momentan. Încearcă mai târziu." };
+      // SMS indisponibil (GATEWAYAPI_TOKEN lipsă sau eroare la furnizor): nu blocăm lecția.
+      // Numărul + adresa rămân salvate; unicitatea numărului și limita de retrimitere se păstrează.
+      console.warn("profesor-ai: SMS indisponibil, verificare fără cod", {
+        user: context.userId,
+        smsConfigurat: !!process.env["GATEWAYAPI_TOKEN"],
+      });
+      const { error: e2 } = await supabaseAdmin
+        .from("profesor_ai_utilizatori")
+        .update({ phone_verified_at: new Date().toISOString(), code_hash: null, code_expires_at: null })
+        .eq("user_id", context.userId);
+      if (e2) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+      return { ok: true, verificat: true };
     }
     return { ok: true };
   });
