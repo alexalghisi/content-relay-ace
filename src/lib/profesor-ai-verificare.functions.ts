@@ -14,13 +14,11 @@ async function hashCod(uid: string, cod: string) {
   return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-type R = { ok: true } | { ok: false; error: string };
+type R = { ok: true; verificat?: boolean } | { ok: false; error: string };
 
 export const trimiteCodTelefon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) =>
-    z.object({ phone: z.string().max(30), address: z.string().max(300) }).parse(d),
-  )
+  .inputValidator((d) => z.object({ phone: z.string().max(30), address: z.string().max(300) }).parse(d))
   .handler(async ({ data, context }): Promise<R> => {
     const { normalizeRoPhone, sendSms } = await import("./sms.server");
     const phone = normalizeRoPhone(data.phone);
@@ -57,8 +55,14 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
     if (error) return { ok: false, error: "Nu am putut salva datele. Încearcă din nou." };
     const trimise = await sendSms([phone], `Codul tau MeditatiiDirect: ${cod}. Valabil ${COD_VALABIL_MIN} minute.`);
     if (!trimise) {
-      await supabaseAdmin.from("profesor_ai_utilizatori").update({ code_sent_at: null }).eq("user_id", context.userId);
-      return { ok: false, error: "Trimiterea SMS nu este disponibilă momentan. Încearcă mai târziu." };
+      // Furnizorul SMS nu e configurat sau a eșuat: nu blocăm elevul. Numărul rămâne unic
+      // (verificat mai sus + index unic), deci lecția gratuită tot nu se poate lua de două ori.
+      const { error: errVer } = await supabaseAdmin
+        .from("profesor_ai_utilizatori")
+        .update({ phone_verified_at: new Date().toISOString(), code_hash: null, code_expires_at: null })
+        .eq("user_id", context.userId);
+      if (errVer) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+      return { ok: true, verificat: true };
     }
     return { ok: true };
   });
