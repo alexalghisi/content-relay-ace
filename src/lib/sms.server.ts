@@ -2,16 +2,8 @@
 // Activ doar dacă secretul GATEWAYAPI_TOKEN este setat în Lovable Cloud; altfel nu face nimic.
 // Opțional: SMS_SENDER (max. 11 caractere alfanumerice), implicit „MeditatiiD”.
 
-/** Normalizează un număr românesc la formatul internațional fără „+” (ex. 40712345678). */
-export function normalizeRoPhone(raw: string | null | undefined): string | null {
-  if (!raw) return null;
-  let d = raw.replace(/[^\d+]/g, "");
-  if (d.startsWith("+")) d = d.slice(1);
-  if (d.startsWith("00")) d = d.slice(2);
-  if (d.startsWith("0") && d.length === 10) d = "40" + d.slice(1);
-  // Doar mobile RO (07xx) — SMS-urile către fix nu ajung.
-  return /^407\d{8}$/.test(d) ? d : null;
-}
+import { normalizeRoPhone } from "./phone";
+export { normalizeRoPhone } from "./phone";
 
 export type SmsSubmission = {
   accepted: number;

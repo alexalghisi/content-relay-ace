@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { signupSchema } from "@/lib/signup-validation";
+import { formatRoPhone } from "@/lib/phone";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
@@ -121,7 +122,7 @@ function SignupPage() {
         </div>
         <div>
           <label htmlFor="signup-phone" className="text-sm font-medium">Telefon mobil</label>
-          <input id="signup-phone" type="tel" autoComplete="tel" maxLength={30} placeholder="07xx xxx xxx" value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
+          <input id="signup-phone" type="tel" autoComplete="tel" maxLength={30} placeholder="07xx xxx xxx" value={phone} onChange={(e) => setPhone(e.target.value)} onBlur={() => setPhone(formatRoPhone(phone))} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <div>
           <label className="text-sm font-medium">Parolă</label>
