@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] SMS: corectează domeniul GatewayAPI (cheia existentă acceptată global HTTP 200, respinsă UE HTTP 401), elimină verificarea fără cod la eșec; teste de regresie și verificare furnizor fără mesaje către utilizatori.
+
 - [x] Admitere: audit de conținut pentru cele 57 de documente publicate; afișate doar cele cu sursă declarată și an confirmat (UPB de pe physics.pub.ro = oficial; UMF Cluj/Iași de pe submed.ro = „copie preluată”, simulările etichetate). Ascunse: Drept București (11 scanări fără sursă) și simulările UMF Timișoara fără sursă.
 - [x] Rezolvări verificate UPB 2025: Informatică (10 grile, cod rulat cu g++) și Matematică AAM (10 grile, SymPy), cu Meditator AI pe fiecare grilă.
 - [ ] Admitere: subiecte oficiale UBB, UTCN, ASE, UMF Cluj direct de pe site-urile universităților; sursa oficială pentru Drept București.
