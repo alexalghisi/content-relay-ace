@@ -1,4 +1,4 @@
-// Trimitere SMS prin GatewayAPI (furnizor UE, plată per mesaj, fără abonament).
+// Trimitere SMS prin GatewayAPI global (contul configurat nu este pe domeniul EU).
 // Activ doar dacă secretul GATEWAYAPI_TOKEN este setat în Lovable Cloud; altfel nu face nimic.
 // Opțional: SMS_SENDER (max. 11 caractere alfanumerice), implicit „MeditatiiD”.
 
@@ -21,7 +21,7 @@ export async function sendSms(recipients: string[], message: string): Promise<nu
   if (!token || !msisdns.length) return 0;
   const sender = (process.env["SMS_SENDER"] || "MeditatiiD").slice(0, 11);
   try {
-    const res = await fetch("https://gatewayapi.eu/rest/mtsms", {
+    const res = await fetch("https://gatewayapi.com/rest/mtsms", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Token ${token}` },
       body: JSON.stringify({
@@ -31,12 +31,13 @@ export async function sendSms(recipients: string[], message: string): Promise<nu
       }),
     });
     if (!res.ok) {
-      console.error("sms failed", res.status, await res.text().catch(() => ""));
+      // Nu logăm corpul furnizorului: poate include telefonul sau codul SMS.
+      console.error("sms failed", res.status);
       return 0;
     }
     return msisdns.length;
-  } catch (err) {
-    console.error("sms error", err);
+  } catch {
+    console.error("sms network error");
     return 0;
   }
 }
