@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { formatRoPhone } from "@/lib/phone";
 import { confirmaCodTelefon, trimiteCodTelefon } from "@/lib/profesor-ai-verificare.functions";
 
 /** Verificare telefon (cod SMS) + adresă, cerută o singură dată înainte de lecția gratuită. */
@@ -60,6 +61,7 @@ export function VerificareTelefon({ onVerificat }: { onVerificat: () => void }) 
               placeholder="07xx xxx xxx"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              onBlur={() => setPhone(formatRoPhone(phone))}
             />
           </label>
           <label className="text-sm font-semibold">

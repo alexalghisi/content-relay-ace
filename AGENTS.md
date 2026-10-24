@@ -14,6 +14,7 @@
 - Blog Markdown uses a safe GFM renderer without raw HTML; preserve complete paragraphs, lists, tables and source links.
 - Subdirectories have their own AGENTS.md; read them before changing files there.
 - SMS delivery tracking stays server-only: keep GatewayAPI submission IDs, distinguish accepted from DELIVERED, and recheck the same ID after archive 404 without resending; status availability is not proof of delivery or phone ownership.
+- Romanian phone normalization is shared through src/lib/phone.ts by signup, verification UI and SMS sending; this prevents country-prefix validation drift without treating formatting as ownership verification.
 
 - Harta Blocajelor (/harta-blocajelor) is static, hand-written content in src/data/blocaje (one node per concept, prerequisites as slugs, no teacher/price/review data); slugs are site-unique and bun tests enforce graph integrity. Its CTA pre-fills /meditatii via `blocaj=` without storing any student answers.
 - Student/teacher notifications: email via the Resend connector (RESEND_API_KEY) and SMS via GatewayAPI global (GATEWAYAPI_TOKEN, src/lib/sms.server.ts); the configured token authenticates on gatewayapi.com, not gatewayapi.eu. Both are no-ops when the secret is missing. SMS failure must never mark a phone verified; only successful code confirmation can do that. SMS logs contain status only, never provider bodies containing recipient/code data. Proposal notifications require the proposal author's auth, a 3-minute window and an edge-cache claim, so the endpoint cannot be used to spam students.
