@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Căsuță admin@meditatiidirect.ro: conectare Cloudflare cu permisiuni limitate la DNS pentru domeniu; alegere/activare serviciu de căsuță poștală, apoi confirmarea înregistrărilor exacte înainte de modificări. Blocat: conexiunea Cloudflare și contul serviciului de e-mail nu sunt încă disponibile.
+- [x] Explică formularul tokenului Cloudflare: Zone → DNS → Edit și Zone → Zone → Read, numai meditatiidirect.ro; fără Access: Apps sau Revoke.
 - [x] SMS: urmărire server-side cu ID, acceptare separată de livrare; retrimitere reală: POST 200, GET inițial 404, apoi GET 200 DELIVERED la reverificarea după 10 secunde. 13 teste trec; codul și cheia nu sunt expuse. Modificările sunt în previzualizare.
 - [x] SMS: domeniu GatewayAPI corectat la global (cheia existentă acceptată HTTP 200, respinsă UE HTTP 401); eliminată verificarea fără cod la eșec, 7 teste de regresie trec. Nu s-au trimis SMS-uri reale către utilizatori.
 - [ ] SMS: publicare — modificările sunt în previzualizare; livrarea testului pe telefon real este confirmată de GatewayAPI (DELIVERED).
