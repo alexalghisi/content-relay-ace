@@ -1,5 +1,6 @@
 # Roadmap
 
+- [ ] SMS: corectează urmărirea livrării (404 temporar ≠ eșec), separă acceptarea de livrare și retrimite un singur test la numărul internațional indicat.
 - [x] SMS: domeniu GatewayAPI corectat la global (cheia existentă acceptată HTTP 200, respinsă UE HTTP 401); eliminată verificarea fără cod la eșec, 7 teste de regresie trec. Nu s-au trimis SMS-uri reale către utilizatori.
 - [ ] SMS: publicare și confirmare primire cod pe telefon real — modificările sunt în previzualizare; confirmarea primirii necesită testul utilizatorului.
 
