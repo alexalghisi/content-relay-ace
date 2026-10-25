@@ -12,6 +12,13 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
+    // Route loaders (and the data they import) are split together with the page component,
+    // so per-page datasets are no longer shipped in the entry bundle of every page.
+    router: {
+      codeSplittingOptions: {
+        defaultBehavior: [["loader", "component"], ["errorComponent"], ["notFoundComponent"]],
+      },
+    },
   },
   // LiveAvatar SDK imports Node's "events"; resolve it to the browser-safe npm package
   // instead of Vite's empty builtin stub. Extra plugins must be passed here, not under `vite`.

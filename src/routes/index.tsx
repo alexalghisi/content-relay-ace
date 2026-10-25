@@ -1,7 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { ArrowRight, BadgeCheck, BookOpen, Check, Megaphone, MessageSquareText, ScanSearch, Search, ShieldCheck, Star, UserRound } from "lucide-react";
 import heroImg from "@/assets/hero-tutoring.jpg";
+import heroWebp from "@/assets/hero-tutoring.webp";
+import { useNearViewport } from "@/hooks/use-after-load";
 import tutoringVideo from "@/assets/tutoring-home-web.mp4.asset.json";
 import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
@@ -67,7 +69,12 @@ function HomePage() {
           <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Gratuit pentru elevi</span><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Propuneri clare, în scris</span><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Contact direct, fără intermediari</span></div>
         </div>
         <div className="relative hidden lg:block">
-          <img src={heroImg} alt="Elevă învață alături de un profesor la o ședință de meditații" width="960" height="720" className="aspect-[4/3] w-full rounded-2xl object-cover shadow-[var(--shadow-card)]" fetchPriority="high" />
+          {/* Hidden below lg: the mobile source is an empty pixel so phones never download the hero. */}
+          <picture>
+            <source media="(max-width: 1023.98px)" srcSet="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" />
+            <source type="image/webp" srcSet={heroWebp} />
+            <img src={heroImg} alt="Elevă învață alături de un profesor la o ședință de meditații" width="960" height="720" className="aspect-[4/3] w-full rounded-2xl object-cover shadow-[var(--shadow-card)]" fetchPriority="high" decoding="async" />
+          </picture>
            <div className="absolute -bottom-5 -left-5 flex items-center gap-3 rounded-xl border border-border bg-background p-4 shadow-[var(--shadow-card)]"><span className="grid h-10 w-10 place-items-center rounded-full bg-accent text-success"><BadgeCheck className="h-5 w-5" /></span><div><p className="text-sm font-bold">Alegi informat</p><p className="text-xs text-muted-foreground">Tarif, program și mesaj în propunere</p></div></div>
         </div>
       </div>
@@ -144,19 +151,7 @@ function HomePage() {
           <p className="mt-4 leading-7 text-background/75">Profesorul potrivit adaptează ritmul, explică pas cu pas și lasă elevului timp să înțeleagă. Tu postezi cererea, iar profesorii disponibili îți trimit propuneri clare.</p>
           <Link to="/meditatii" className="btn-primary mt-6 h-12 px-6">Cere o ofertă <ArrowRight className="ml-2 h-4 w-4" /></Link>
         </div>
-        <video
-          className="aspect-video w-full rounded-lg object-cover shadow-[var(--shadow-card)]"
-          poster={heroImg}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-label="Profesor explicând unui elev o problemă de matematică la o ședință de meditații acasă"
-        >
-          <source src={tutoringVideoWebm.url} type="video/webm" />
-          <source src={tutoringVideo.url} type="video/mp4" />
-        </video>
+        <TutoringVideo />
       </div>
     </section>
 
@@ -181,4 +176,35 @@ function HomePage() {
 
     <section className="container-page py-16"><div className="grid items-center gap-7 rounded-2xl border border-border bg-accent p-8 md:grid-cols-[1fr_auto] md:p-10"><div><div className="flex items-center gap-2 text-success"><UserRound className="h-5 w-5" /><span className="text-sm font-bold">Pentru profesori</span></div><h2 className="mt-3 text-3xl font-bold">Elevii vin cu cererea, tu vii cu propunerea</h2><p className="mt-3 max-w-2xl text-muted-foreground">Vezi cererile recente de la elevi și părinți, contactează-i direct și îți umpli programul fără intermediari.</p></div><Link to="/pentru-profesori" className="btn-primary h-12 px-7">Devino profesor <ArrowRight className="ml-2 h-4 w-4" /></Link></div></section>
   </>;
+}
+
+/**
+ * Below-the-fold looping clip. It is server-rendered with preload="none" (no bytes on first load)
+ * and starts playing once the page has loaded and the clip is near the viewport.
+ */
+function TutoringVideo() {
+  const [ref, near] = useNearViewport<HTMLVideoElement>("300px");
+  useEffect(() => {
+    const v = ref.current;
+    if (!near || !v) return;
+    v.muted = true;
+    v.play().catch(() => {});
+  }, [near, ref]);
+  return (
+    <video
+      ref={ref}
+      className="aspect-video w-full rounded-lg object-cover shadow-[var(--shadow-card)]"
+      poster={heroWebp}
+      muted
+      loop
+      playsInline
+      preload="none"
+      width={1280}
+      height={720}
+      aria-label="Profesor explicând unui elev o problemă de matematică la o ședință de meditații acasă"
+    >
+      <source src={tutoringVideoWebm.url} type="video/webm" />
+      <source src={tutoringVideo.url} type="video/mp4" />
+    </video>
+  );
 }

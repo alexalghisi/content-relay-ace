@@ -26,79 +26,16 @@ export const Route = createFileRoute("/harta-blocajelor/$materie/$blocaj")({
     const n = getBlocaj(params.blocaj);
     // Un slug există o singură dată pe site; URL-ul canonic îl are sub materia lui.
     if (!n || n.materie !== params.materie) throw notFound();
-    return { slug: n.slug };
+    // Head is built here so the blocaje dataset stays in this route's lazy chunk.
+    return { slug: n.slug, head: blocajHead(n.slug) };
   },
-  head: ({ loaderData }) => {
-    const n = loaderData ? getBlocaj(loaderData.slug) : undefined;
-    const m = n && getBlocajMaterie(n.materie);
-    if (!n || !m)
-      return {
-        meta: [
-          { title: "Pagina nu a fost găsită | MeditatiiDirect.ro" },
-          { name: "robots", content: "noindex" },
-        ],
-      };
-    const path = `/harta-blocajelor/${n.materie}/${n.slug}`;
-    const url = `${SITE}${path}`;
-    const title = `${n.titlu} (${m.nameLower}, ${claseLabel(n.clase)}) — ce noțiune îți lipsește | MeditatiiDirect.ro`;
-    const description = `„${n.blocaj}” ${
-      n.lipsa.length
-        ? `De obicei lipsește: ${prerequisitesOf(n)
-            .map((p) => p.titlu.toLowerCase())
-            .join(", ")}. `
-        : ""
-    }Explicație clară, exemplu rezolvat pas cu pas și un exercițiu de verificare.`;
-    return {
+  head: ({ loaderData }) =>
+    loaderData?.head ?? {
       meta: [
-        { title },
-        { name: "description", content: description.slice(0, 300) },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description.slice(0, 300) },
-        { property: "og:url", content: url },
-        { property: "og:type", content: "article" },
-        { name: "twitter:card", content: "summary" },
-        { name: "twitter:title", content: title },
-        { name: "twitter:description", content: description.slice(0, 300) },
+        { title: "Pagina nu a fost găsită | MeditatiiDirect.ro" },
+        { name: "robots", content: "noindex" },
       ],
-      links: [{ rel: "canonical", href: url }],
-      scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify(
-            breadcrumbLd([
-              { name: "Harta Blocajelor", path: "/harta-blocajelor" },
-              { name: m.name, path: `/harta-blocajelor/${m.slug}` },
-              { name: n.titlu, path },
-            ]),
-          ),
-        },
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LearningResource",
-            name: n.titlu,
-            headline: `${n.titlu} — explicație, exemplu rezolvat și verificare`,
-            description: description.slice(0, 300),
-            url,
-            inLanguage: "ro-RO",
-            learningResourceType: ["Explicație", "Exemplu rezolvat", "Exercițiu de verificare"],
-            educationalLevel: n.clase.map((c) => `Clasa a ${c}-a`),
-            about: { "@type": "Thing", name: m.name },
-            teaches: n.titlu,
-            audience: { "@type": "EducationalAudience", educationalRole: "student" },
-            isAccessibleForFree: true,
-            isPartOf: {
-              "@type": "CollectionPage",
-              name: "Harta Blocajelor",
-              url: `${SITE}/harta-blocajelor`,
-            },
-            publisher: { "@id": `${SITE}/#org` },
-          }),
-        },
-      ],
-    };
-  },
+    },
   notFoundComponent: () => (
     <div className="container-page py-16 text-center">
       <h1 className="text-2xl font-bold">Acest blocaj nu există încă pe hartă</h1>
@@ -312,4 +249,70 @@ function Page() {
       </div>
     </article>
   );
+}
+
+function blocajHead(slug: string) {
+  const n = getBlocaj(slug);
+  const m = n && getBlocajMaterie(n.materie);
+  if (!n || !m) return undefined;
+  const path = `/harta-blocajelor/${n.materie}/${n.slug}`;
+  const url = `${SITE}${path}`;
+  const title = `${n.titlu} (${m.nameLower}, ${claseLabel(n.clase)}) — ce noțiune îți lipsește | MeditatiiDirect.ro`;
+  const description = `„${n.blocaj}” ${
+    n.lipsa.length
+      ? `De obicei lipsește: ${prerequisitesOf(n)
+          .map((p) => p.titlu.toLowerCase())
+          .join(", ")}. `
+      : ""
+  }Explicație clară, exemplu rezolvat pas cu pas și un exercițiu de verificare.`;
+  return {
+    meta: [
+      { title },
+      { name: "description", content: description.slice(0, 300) },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description.slice(0, 300) },
+      { property: "og:url", content: url },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description.slice(0, 300) },
+    ],
+    links: [{ rel: "canonical", href: url }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(
+          breadcrumbLd([
+            { name: "Harta Blocajelor", path: "/harta-blocajelor" },
+            { name: m.name, path: `/harta-blocajelor/${m.slug}` },
+            { name: n.titlu, path },
+          ]),
+        ),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LearningResource",
+          name: n.titlu,
+          headline: `${n.titlu} — explicație, exemplu rezolvat și verificare`,
+          description: description.slice(0, 300),
+          url,
+          inLanguage: "ro-RO",
+          learningResourceType: ["Explicație", "Exemplu rezolvat", "Exercițiu de verificare"],
+          educationalLevel: n.clase.map((c) => `Clasa a ${c}-a`),
+          about: { "@type": "Thing", name: m.name },
+          teaches: n.titlu,
+          audience: { "@type": "EducationalAudience", educationalRole: "student" },
+          isAccessibleForFree: true,
+          isPartOf: {
+            "@type": "CollectionPage",
+            name: "Harta Blocajelor",
+            url: `${SITE}/harta-blocajelor`,
+          },
+          publisher: { "@id": `${SITE}/#org` },
+        }),
+      },
+    ],
+  };
 }

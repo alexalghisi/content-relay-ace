@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
+import { onPageIdle } from "@/hooks/use-after-load";
 
 /**
  * Google AdSense slot.
@@ -34,12 +35,16 @@ export function AdSenseSlot({
 
   useEffect(() => {
     if (!AD_SERVING_ENABLED || !CLIENT || !resolvedSlot) return;
-    try {
-      // @ts-expect-error adsbygoogle global injected by AdSense script
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {
-      /* no-op */
-    }
+    // Ads load only after the page is interactive and idle.
+    return onPageIdle(() => {
+      loadAdsenseScript();
+      try {
+        // @ts-expect-error adsbygoogle global injected by AdSense script
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch {
+        /* no-op */
+      }
+    }, 4000);
   }, [resolvedSlot]);
 
   if (!AD_SERVING_ENABLED || !CLIENT || !resolvedSlot) return null;
@@ -62,3 +67,13 @@ export function AdSenseSlot({
 }
 
 export const ADSENSE_CLIENT = CLIENT;
+
+function loadAdsenseScript() {
+  if (document.querySelector("script[data-adsbygoogle-lib]")) return;
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${CLIENT}`;
+  s.crossOrigin = "anonymous";
+  s.dataset.adsbygoogleLib = "1";
+  document.head.appendChild(s);
+}

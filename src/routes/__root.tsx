@@ -107,10 +107,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
-      { rel: "dns-prefetch", href: "https://pagead2.googlesyndication.com" },
-      { rel: "preconnect", href: "https://pagead2.googlesyndication.com", crossOrigin: "anonymous" },
-      { rel: "dns-prefetch", href: "https://www.googletagmanager.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      // No web fonts are loaded and ad scripts start only after the page is idle,
+      // so no early connections are opened for them (they compete with the first render on mobile).
+      ...(AD_SERVING_ENABLED ? [{ rel: "dns-prefetch", href: "https://pagead2.googlesyndication.com" }] : []),
       { rel: "alternate", hrefLang: "ro", href: "https://meditatiidirect.ro" },
       { rel: "alternate", hrefLang: "x-default", href: "https://meditatiidirect.ro" },
     ],
@@ -119,15 +118,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children:
           "window.addEventListener('vite:preloadError',function(e){try{if(sessionStorage.getItem('chunk-reload'))return;sessionStorage.setItem('chunk-reload','1')}catch(_){}e.preventDefault();location.reload()});",
       },
-      ...(AD_SERVING_ENABLED && ADSENSE_CLIENT
-        ? [
-            {
-              async: true,
-              src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
-              crossOrigin: "anonymous",
-            } as never,
-          ]
-        : []),
+      // The AdSense library is injected by AdSenseSlot once the page is idle (never render-blocking).
       {
         type: "application/ld+json",
         children: JSON.stringify({

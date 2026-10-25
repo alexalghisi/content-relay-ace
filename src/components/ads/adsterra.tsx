@@ -3,6 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { adsterraDocument, ADSTERRA_SMARTLINK } from "./adsterra-document";
+import { useAfterLoad } from "@/hooks/use-after-load";
 export { getAdsterraBanner } from "./adsterra-document";
 
 function AdsterraPlacement({ className = "", banner = false, mobileOnly = false, social = false }: { className?: string; banner?: boolean; mobileOnly?: boolean; social?: boolean }) {
@@ -11,6 +12,9 @@ function AdsterraPlacement({ className = "", banner = false, mobileOnly = false,
   // Wait for the viewport before requesting a banner: desktop must not
   // request the mobile zone first and immediately discard that impression.
   const [wide, setWide] = useState<boolean | null>(null);
+  // Provider frames are created only after the page has loaded and the browser is idle,
+  // so ad scripts never compete with the first render or hydration.
+  const idle = useAfterLoad(4000);
   useEffect(() => {
     const media = window.matchMedia("(min-width: 800px)");
     const update = () => setWide(media.matches);
@@ -32,7 +36,7 @@ function AdsterraPlacement({ className = "", banner = false, mobileOnly = false,
 
   return <aside aria-label={filled ? "Publicitate" : undefined} aria-hidden={!filled} data-adsterra-filled={filled} className={`relative mx-auto w-full overflow-hidden ${filled ? className : "h-0"}`}>
     {filled && <p className="mb-2 text-center text-xs text-muted-foreground">Publicitate</p>}
-    {(!banner || wide !== null) && <iframe ref={frameRef} key={social ? "social" : banner ? String(desktopBanner) : "native"} title={social ? "Social Bar Adsterra" : banner ? "Banner Adsterra" : "Reclame Adsterra"} srcDoc={adsterraDocument(banner, desktopBanner, social)} sandbox="allow-scripts allow-top-navigation-by-user-activation" referrerPolicy="strict-origin-when-cross-origin" tabIndex={filled ? 0 : -1} className={`${filled ? "" : "pointer-events-none absolute inset-x-0 top-0 opacity-0"} ${desktopBanner ? "mx-auto h-28 w-[748px] max-w-full border-0" : banner ? "mx-auto h-[70px] w-[340px] max-w-full border-0" : "h-80 w-full border-0"}`} />}
+    {idle && (!banner || wide !== null) && <iframe ref={frameRef} key={social ? "social" : banner ? String(desktopBanner) : "native"} title={social ? "Social Bar Adsterra" : banner ? "Banner Adsterra" : "Reclame Adsterra"} srcDoc={adsterraDocument(banner, desktopBanner, social)} sandbox="allow-scripts allow-top-navigation-by-user-activation" referrerPolicy="strict-origin-when-cross-origin" tabIndex={filled ? 0 : -1} className={`${filled ? "" : "pointer-events-none absolute inset-x-0 top-0 opacity-0"} ${desktopBanner ? "mx-auto h-28 w-[748px] max-w-full border-0" : banner ? "mx-auto h-[70px] w-[340px] max-w-full border-0" : "h-80 w-full border-0"}`} />}
   </aside>;
 }
 
