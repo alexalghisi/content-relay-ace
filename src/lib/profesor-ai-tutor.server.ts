@@ -115,7 +115,7 @@ export function thinkingBudget(last: string): number {
 
 /** Fastest strong model measured for this key (≈1.2 s to first token); later entries are fallbacks. */
 export const TUTOR_MODELS = () =>
-  [process.env["PROFESOR_AI_MODEL"], "gemini-3.5-flash", "gemini-flash-latest"].filter(Boolean) as string[];
+  [process.env["PROFESOR_AI_MODEL"], "gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-flash-latest"].filter(Boolean) as string[];
 
 type M = { role: "user" | "assistant"; content: string };
 /** Optional JPEG/PNG data URL (board drawing or shared photo) attached to the last student turn. */
@@ -304,13 +304,55 @@ export async function streamAnthropic(system: string, messages: M[], img: Img, m
 /** Models the owner may compare live (owner-only override on /api/profesor-ai-stream). */
 export const MODELE_TEST = /^(google|openai|anthropic)\/[a-z0-9.\-]+$/;
 
-/** Gateway first; Gemini key only as fallback when the gateway errors. */
+/** Waits for the first text chunk of a stream (so a provider that hangs or fails never wins). */
+async function primeStream(p: Promise<ReadableStream<Uint8Array>>, name: string) {
+  const stream = await p;
+  const reader = stream.getReader();
+  const { done, value } = await reader.read();
+  if (done || !value) { void reader.cancel().catch(() => {}); throw new Error(`${name}: flux gol`); }
+  return { reader, first: value, name };
+}
+
+/** How long a provider may take to its first token before the others are given the whole field. */
+export const PRIM_TOKEN_MAX_MS = 9000;
+
+/**
+ * Both providers are started at once and the first one to deliver a token speaks; the other is
+ * cancelled. The Lovable gateway is cheap but can be out of credits or slow (seen: 40 s average,
+ * half the calls failing), the direct Gemini key can hit its own quota — racing them keeps the
+ * lesson going whenever either works, and always at the fastest available speed.
+ */
 export async function streamTutor(system: string, messages: M[], img?: Img, model?: string): Promise<ReadableStream<Uint8Array>> {
+  const candidates: { name: string; start: () => Promise<ReadableStream<Uint8Array>> }[] = [];
+  if (process.env["LOVABLE_API_KEY"]) candidates.push({ name: "gateway", start: () => streamGateway(system, messages, img, model ?? GATEWAY_TUTOR_MODEL()) });
+  if (process.env["GEMINI_API_KEY"] && !model) candidates.push({ name: "gemini", start: () => streamGemini(system, messages, img) });
+  if (!candidates.length) return streamGateway(system, messages, img, model ?? GATEWAY_TUTOR_MODEL());
+  if (candidates.length === 1) return candidates[0].start();
+
+  const timeout = new Promise<never>((_, rej) => setTimeout(() => rej(new Error("primul token a întârziat")), PRIM_TOKEN_MAX_MS));
+  const primed = candidates.map((c) => primeStream(c.start(), c.name));
+  let winner: Awaited<ReturnType<typeof primeStream>>;
   try {
-    return await streamGateway(system, messages, img, model ?? GATEWAY_TUTOR_MODEL());
+    winner = await Promise.race([Promise.any(primed), timeout]);
   } catch (e) {
-    if (!process.env["GEMINI_API_KEY"] || model) throw e;
-    console.warn("[profesor-ai] gateway indisponibil, trec la Gemini");
-    return streamGemini(system, messages, img);
+    // Every provider failed (or none answered in time): surface the gateway's error, which carries
+    // the user-facing message; otherwise Gemini's.
+    const errs = await Promise.allSettled(primed.map((p) => Promise.race([p, timeout])));
+    for (const r of errs) if (r.status === "fulfilled") void r.value.reader.cancel().catch(() => {});
+    const firstErr = errs.find((r): r is PromiseRejectedResult => r.status === "rejected");
+    throw firstErr?.reason ?? e;
   }
+  for (const p of primed) p.then((o) => { if (o !== winner) void o.reader.cancel().catch(() => {}); }).catch(() => {});
+  console.info(`[profesor-ai] răspunde ${winner.name}`);
+  const reader = winner.reader;
+  let first: Uint8Array | null = winner.first;
+  return new ReadableStream<Uint8Array>({
+    async pull(ctrl) {
+      if (first) { ctrl.enqueue(first); first = null; return; }
+      const { done, value } = await reader.read();
+      if (done) return ctrl.close();
+      ctrl.enqueue(value);
+    },
+    cancel() { void reader.cancel(); },
+  });
 }

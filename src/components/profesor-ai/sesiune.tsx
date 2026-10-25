@@ -81,7 +81,7 @@ export function SesiuneProfesorAi({
   const revision = useRef(0);
   const messagesRef = useRef<Msg[]>([]);
   const abortRef = useRef<AbortController | null>(null);
-  const sendRef = useRef<(text: string, ascuns?: boolean, imagine?: string) => Promise<void>>(async () => {});
+  const sendRef = useRef<(text: string, ascuns?: boolean, imagine?: string, incercare?: number) => Promise<void>>(async () => {});
   const handsFree = useRef(false);
   const liveVoice = useRef(false);
   const speakEnd = useRef<(() => void) | null>(null);
@@ -222,7 +222,7 @@ export function SesiuneProfesorAi({
   }, []);
 
   const trimite = useCallback(
-    async (continut: string, ascuns = false, imagine?: string) => {
+    async (continut: string, ascuns = false, imagine?: string, incercare = 0) => {
       const c = continut.trim();
       if (!c || terminat) return;
       if (c === PA_TACERE) tacereNr.current += 1;
@@ -248,10 +248,17 @@ export function SesiuneProfesorAi({
       }, 4500);
       const fail = (error: string, cod?: string) => {
         if (rev !== revision.current) return;
-        setEroare(error);
-        setDeReluat({ text: c, ascuns, cod });
         messagesRef.current = previous;
         setMesaje(previous);
+        // A provider hiccup must not freeze the lesson: one silent retry after a short pause,
+        // then she says out loud that something went wrong instead of going quiet.
+        if (incercare === 0 && cod !== "limita_interna" && cod !== "auth" && cod !== "auth_user" && cod !== "config") {
+          window.setTimeout(() => { if (rev === revision.current) void sendRef.current(c, ascuns, imagine, 1); }, 1500);
+          return;
+        }
+        if (!ascuns) void vorbeste("Am o mică problemă tehnică. Mai spune o dată, te rog.");
+        setEroare(error);
+        setDeReluat({ text: c, ascuns, cod });
       };
       try {
         const { data: sess } = await supabase.auth.getSession();
