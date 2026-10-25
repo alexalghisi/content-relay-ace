@@ -1,13 +1,6 @@
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  Link,
-  createRootRouteWithContext,
-  useRouter,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
+import { Outlet, Link, createRootRouteWithContext, useRouter, HeadContent, Scripts } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth";
@@ -27,10 +20,10 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold">{t("err.404title")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {t("err.404text")}
-        </p>
-        <Link to="/" className="btn-primary mt-6">{t("err.home")}</Link>
+        <p className="mt-2 text-sm text-muted-foreground">{t("err.404text")}</p>
+        <Link to="/" className="btn-primary mt-6">
+          {t("err.home")}
+        </Link>
       </div>
     </div>
   );
@@ -39,17 +32,41 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
+  const rawMsg = error instanceof Error ? error.message : String(error);
+  // După un redeploy, fișierele JS vechi (hash vechi) nu mai există: reîncărcăm o dată pagina
+  // în loc să afișăm eroarea brută (Google o indexa ca text al paginii).
+  const isChunkError = /dynamically imported module|Importing a module script failed|error loading dynamically/i.test(
+    rawMsg,
+  );
+  if (isChunkError && typeof window !== "undefined") {
+    try {
+      if (!sessionStorage.getItem("chunk-reload")) {
+        sessionStorage.setItem("chunk-reload", "1");
+        window.location.reload();
+      }
+    } catch {
+      window.location.reload();
+    }
+  }
   const t = useT();
   return (
     <div className="flex min-h-[60vh] items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold">{t("err.title")}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error instanceof Error ? error.message : String(error)}</p>
+        {!isChunkError && <p className="mt-2 text-sm text-muted-foreground">{rawMsg}</p>}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button onClick={() => { router.invalidate(); reset(); }} className="btn-primary">
+          <button
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
+            className="btn-primary"
+          >
             {t("err.retry")}
           </button>
-          <Link to="/" className="btn-outline">{t("err.homeShort")}</Link>
+          <Link to="/" className="btn-outline">
+            {t("err.homeShort")}
+          </Link>
         </div>
       </div>
     </div>
@@ -91,71 +108,80 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "dns-prefetch", href: "https://pagead2.googlesyndication.com" },
-        { rel: "preconnect", href: "https://pagead2.googlesyndication.com", crossOrigin: "anonymous" },
-        { rel: "dns-prefetch", href: "https://www.googletagmanager.com" },
-        { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-        { rel: "alternate", hrefLang: "ro", href: "https://meditatiidirect.ro" },
-        { rel: "alternate", hrefLang: "x-default", href: "https://meditatiidirect.ro" },
-      ],
-      scripts: [
-        ...(AD_SERVING_ENABLED && ADSENSE_CLIENT
-          ? [{
+      { rel: "preconnect", href: "https://pagead2.googlesyndication.com", crossOrigin: "anonymous" },
+      { rel: "dns-prefetch", href: "https://www.googletagmanager.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "alternate", hrefLang: "ro", href: "https://meditatiidirect.ro" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://meditatiidirect.ro" },
+    ],
+    scripts: [
+      {
+        children:
+          "window.addEventListener('vite:preloadError',function(e){try{if(sessionStorage.getItem('chunk-reload'))return;sessionStorage.setItem('chunk-reload','1')}catch(_){}e.preventDefault();location.reload()});",
+      },
+      ...(AD_SERVING_ENABLED && ADSENSE_CLIENT
+        ? [
+            {
               async: true,
               src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
               crossOrigin: "anonymous",
-            } as never]
-          : []),
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@graph": [
-              {
-                "@type": "Organization",
-                "@id": "https://meditatiidirect.ro/#org",
-                name: "MeditatiiDirect",
-                url: "https://meditatiidirect.ro",
-                logo: "https://meditatiidirect.ro/apple-touch-icon.png",
-                sameAs: [],
-                description: "Platformă de anunțuri meditații cu profesori verificați din toată România. Contact direct, fără comision.",
+            } as never,
+          ]
+        : []),
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://meditatiidirect.ro/#org",
+              name: "MeditatiiDirect",
+              url: "https://meditatiidirect.ro",
+              logo: "https://meditatiidirect.ro/apple-touch-icon.png",
+              sameAs: [],
+              description:
+                "Platformă de anunțuri meditații cu profesori verificați din toată România. Contact direct, fără comision.",
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://meditatiidirect.ro/#website",
+              url: "https://meditatiidirect.ro",
+              name: "MeditatiiDirect.ro",
+              inLanguage: "ro-RO",
+              publisher: { "@id": "https://meditatiidirect.ro/#org" },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: "https://meditatiidirect.ro/meditatii?q={query}",
+                "query-input": "required name=query",
               },
-              {
-                "@type": "WebSite",
-                "@id": "https://meditatiidirect.ro/#website",
-                url: "https://meditatiidirect.ro",
-                name: "MeditatiiDirect.ro",
-                inLanguage: "ro-RO",
-                publisher: { "@id": "https://meditatiidirect.ro/#org" },
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: "https://meditatiidirect.ro/meditatii?q={query}",
-                  "query-input": "required name=query",
-                },
-              },
-              {
-                "@type": "EducationalOrganization",
-                "@id": "https://meditatiidirect.ro/#edu",
-                name: "MeditatiiDirect",
-                url: "https://meditatiidirect.ro",
-                logo: "https://meditatiidirect.ro/apple-touch-icon.png",
-                description: "Platformă educațională cu profesori particulari verificați pentru meditații online și la domiciliu — gimnaziu, liceu, BAC 2026, admitere facultate.",
-                areaServed: { "@type": "Country", name: "România" },
-                knowsLanguage: ["ro", "en"],
-                sameAs: [],
-              },
-              {
-                "@type": "LocalBusiness",
-                "@id": "https://meditatiidirect.ro/#business",
-                name: "MeditatiiDirect — Meditații România",
-                url: "https://meditatiidirect.ro",
-                areaServed: { "@type": "Country", name: "România" },
-                description: "Anunțuri meditații cu profesori verificați în București, Cluj, Iași, Timișoara, Brașov, Constanța și restul țării.",
-              },
-            ],
-          }),
-        },
-      ],
-    }),
+            },
+            {
+              "@type": "EducationalOrganization",
+              "@id": "https://meditatiidirect.ro/#edu",
+              name: "MeditatiiDirect",
+              url: "https://meditatiidirect.ro",
+              logo: "https://meditatiidirect.ro/apple-touch-icon.png",
+              description:
+                "Platformă educațională cu profesori particulari verificați pentru meditații online și la domiciliu — gimnaziu, liceu, BAC 2026, admitere facultate.",
+              areaServed: { "@type": "Country", name: "România" },
+              knowsLanguage: ["ro", "en"],
+              sameAs: [],
+            },
+            {
+              "@type": "LocalBusiness",
+              "@id": "https://meditatiidirect.ro/#business",
+              name: "MeditatiiDirect — Meditații România",
+              url: "https://meditatiidirect.ro",
+              areaServed: { "@type": "Country", name: "România" },
+              description:
+                "Anunțuri meditații cu profesori verificați în București, Cluj, Iași, Timișoara, Brașov, Constanța și restul țării.",
+            },
+          ],
+        }),
+      },
+    ],
+  }),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
@@ -181,20 +207,20 @@ function RootComponent() {
   const { queryClient, locale } = Route.useRouteContext();
   return (
     <I18nProvider value={locale}>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <AdsterraMonetization />
-          <SiteFooter />
-        </div>
-        <Toaster />
-        <TraducereAutomata locale={locale ?? "ro"} />
-      </AuthProvider>
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <div className="flex min-h-screen flex-col">
+            <SiteHeader />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <AdsterraMonetization />
+            <SiteFooter />
+          </div>
+          <Toaster />
+          <TraducereAutomata locale={locale ?? "ro"} />
+        </AuthProvider>
+      </QueryClientProvider>
     </I18nProvider>
   );
 }
