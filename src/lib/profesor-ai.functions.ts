@@ -33,7 +33,7 @@ const configSchema = z.object({
   nivel: z.enum(PA_NIVELURI.map((m) => m.slug) as [string, ...string[]]),
   durata: z.number().refine((d): d is PaDurata => (PA_DURATE as readonly number[]).includes(d)),
   obiectiv: z.enum(PA_OBIECTIVE.map((m) => m.slug) as [string, ...string[]]),
-  limba: z.enum(PA_LIMBI.map((m) => m.slug) as [string, ...string[]]).default("ro"),
+  limba: z.string().max(10).optional().transform(() => "ro" as const), // site doar în română
 });
 
 type Sesiune = PaConfig & { kind: "profesor-ai"; uid: string; exp: number; gratuit: boolean };

@@ -12,12 +12,14 @@ export const LIVE_VOICE = () => process.env["PROFESOR_AI_LIVE_VOICE"] || "Aoede"
 const TABLA_LIVE = `- Formulele, pașii, codul și enunțurile le scrii pe tablă cu funcția scrie_pe_tabla (text simplu, simboluri Unicode, fără LaTeX, maxim 12 rânduri; tabla se înlocuiește de fiecare dată). Nu citești tabla cu voce tare simbol cu simbol și nu scrii întrebări pe tablă.`;
 
 /** Same teacher as the text pipeline, adapted for a voice-native model with a board tool. */
+const DOAR_ROMANA = "LIMBA: vorbești EXCLUSIV în limba română, de la prima până la ultima replică. Chiar dacă elevul vorbește, citește sau pare să vorbească în italiană, engleză sau altă limbă, tu răspunzi tot în română. Nu schimbi niciodată limba. (Excepție: la ora de limbă străină poți spune cuvinte sau exemple în limba respectivă, dar explicațiile sunt în română.)";
+
 export function livePrompt(c: PaConfig, durata: number, seed: number): string {
-  return tutorPrompt(c, durata, seed)
+  return DOAR_ROMANA + "\n\n" + tutorPrompt({ ...c, limba: "ro" }, durata, seed)
     .split("\n")
     .map((l) => (l.includes("TABLA:") ? TABLA_LIVE : l))
     .join("\n") +
-    "\nVorbești natural și fluent, fără pauze lungi. Când elevul te întrerupe, te oprești și îl asculți.";
+    "\n" + DOAR_ROMANA + "\nVorbești natural și fluent, fără pauze lungi. Când elevul te întrerupe, te oprești și îl asculți.";
 }
 
 export const BOARD_TOOL = {
