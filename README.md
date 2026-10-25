@@ -12,6 +12,7 @@ Aplicația iOS pentru [https://meditatiidirect.ro](https://meditatiidirect.ro): 
 git clone https://github.com/alexalghisi/meditatiidirect-ios.git
 cd meditatiidirect-ios
 npm install
+npx cap sync ios
 npx cap open ios
 ```
 
