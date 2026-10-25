@@ -20,22 +20,31 @@ export async function sendSmsTracked(recipients: string[], message: string): Pro
   if (!token || !msisdns.length) return { accepted: 0, messageIds: [], httpStatus: null };
   const sender = (process.env["SMS_SENDER"] || "MeditatiiD").slice(0, 11);
   try {
-    const res = await fetch("https://gatewayapi.com/rest/mtsms", {
+    const body = JSON.stringify({
+      sender,
+      message: message.slice(0, 300),
+      recipients: msisdns.map((m) => ({ msisdn: Number(m) })),
+    });
+    const send = (host: string) => fetch(`https://${host}/rest/mtsms`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Token ${token}` },
-      body: JSON.stringify({
-        sender,
-        message: message.slice(0, 300),
-        recipients: msisdns.map((m) => ({ msisdn: Number(m) })),
-      }),
+      body,
     });
+    // GatewayAPI has separate global (.com) and EU (.eu) platforms; a token from one is
+    // "Invalid token" (401) on the other, so try the other platform before giving up.
+    let res = await send("gatewayapi.com");
+    if (res.status === 401 || res.status === 403) {
+      const eu = await send("gatewayapi.eu");
+      console.warn(`sms: gatewayapi.com ${res.status}, gatewayapi.eu ${eu.status}`);
+      res = eu;
+    }
     if (!res.ok) {
       // Nu logăm corpul furnizorului: poate include telefonul sau codul SMS.
       console.error("sms failed", res.status);
       return { accepted: 0, messageIds: [], httpStatus: res.status };
     }
-    const body = await res.json().catch(() => null);
-    const ids: unknown[] = Array.isArray(body?.ids) ? body.ids : [];
+    const raspuns = await res.json().catch(() => null);
+    const ids: unknown[] = Array.isArray(raspuns?.ids) ? raspuns.ids : [];
     return {
       accepted: msisdns.length,
       messageIds: ids.filter((id): id is number => typeof id === "number" && Number.isSafeInteger(id) && id > 0),
