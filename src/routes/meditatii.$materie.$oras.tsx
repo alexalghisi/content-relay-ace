@@ -39,9 +39,7 @@ async function fetchAdsForCombo(
 
   const { data } = await supabase
     .from("ads")
-    .select(
-      "id,title,seo_slug,price_per_hour,location,is_online,is_promoted,legacy_teachers(full_name,avatar_url)",
-    )
+    .select("id,title,seo_slug,price_per_hour,location,is_online,is_promoted,legacy_teachers(full_name,avatar_url)")
     .eq("status", "active")
     .in("subject_slug", subjectSlugs)
     .or(orFilter)
@@ -125,9 +123,7 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
       `Meditații ${subject.nameLower} ${city.name} — ${city.county}`,
       `${subject.name} particulară în ${city.name}: profesori verificați`,
     ];
-    const realBit = pr
-      ? ` Tarif median real ${pr.median} lei/oră (${pr.min}–${pr.max}, din ${pr.n} oferte).`
-      : "";
+    const realBit = pr ? ` Tarif median real ${pr.median} lei/oră (${pr.min}–${pr.max}, din ${pr.n} oferte).` : "";
     const descTemplates = [
       `${count} anunțuri active de ${subject.nameLower} pentru ${city.name}.${realBit} Online sau la domiciliu, fără comision.`,
       `Cauți meditații ${subject.nameLower} în ${city.name}? Postezi cererea gratuit și profesorii îți trimit propuneri cu dată și tarif.${realBit}`,
@@ -164,7 +160,11 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
         { name: "description", content: desc },
         // Thin content guard: fără profesori listați și fără ghid local, pagina nu intră în index
         // (dar linkurile sunt urmate). Un ghid scris de mână face pagina utilă și fără anunțuri.
-        ...(count < MIN_LISTINGS_FOR_INDEX && !ghid
+        // Doar anunțurile cu locație reală în oraș contează: anunțurile online apar în toate
+        // combinațiile și ar face sute de pagini aproape identice (conținut slab pentru AdSense).
+        ...(ads.filter((a) =>
+          city.matchLocation.some((m) => (a.location ?? "").toLowerCase().includes(m.toLowerCase())),
+        ).length < MIN_LISTINGS_FOR_INDEX && !ghid
           ? [{ name: "robots", content: "noindex, follow" }]
           : []),
         {
@@ -213,9 +213,7 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
               : {}),
           }),
         },
-        ...(itemListLd
-          ? [{ type: "application/ld+json", children: JSON.stringify(itemListLd) }]
-          : []),
+        ...(itemListLd ? [{ type: "application/ld+json", children: JSON.stringify(itemListLd) }] : []),
         { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
       ],
     };
@@ -231,9 +229,7 @@ function ComboPage() {
   const otherCities = CITIES.filter((c) => c.slug !== city.slug).slice(0, 8);
   const otherSubjects = SUBJECTS_SEO.filter((s) => s.slug !== subject.slug).slice(0, 8);
 
-  const seed = (subject.slug + city.slug)
-    .split("")
-    .reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+  const seed = (subject.slug + city.slug).split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
   const variant = seed % 4;
   const pr = stats.price;
   const h1Options = [
@@ -263,9 +259,7 @@ function ComboPage() {
           `${subject.name} pentru toate nivelurile: clasele V–XII, BAC 2026, admitere`,
           `Pentru elevii din ${city.name} și din liceele din ${city.county}`,
           `Online (Zoom / Google Meet) sau la domiciliu în ${city.name}`,
-          pr
-            ? `Tarif median real ${pr.median} lei/oră, din ${pr.n} oferte`
-            : `Tariful îl propune profesorul, tu alegi`,
+          pr ? `Tarif median real ${pr.median} lei/oră, din ${pr.n} oferte` : `Tariful îl propune profesorul, tu alegi`,
         ]}
         ctaPrimary={{
           to: "/meditatii",
@@ -334,9 +328,7 @@ function ComboPage() {
                     </div>
                   )}
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold truncate">
-                      {a.teacher_name ?? "Profesor verificat"}
-                    </p>
+                    <p className="text-sm font-semibold truncate">{a.teacher_name ?? "Profesor verificat"}</p>
                     <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
                       <BadgeCheck className="h-3 w-3 text-primary" /> Verificat
                     </p>
@@ -361,9 +353,7 @@ function ComboPage() {
                     )}
                   </span>
                   {a.price_per_hour && (
-                    <span className="text-base font-bold text-foreground">
-                      {a.price_per_hour} lei/h
-                    </span>
+                    <span className="text-base font-bold text-foreground">{a.price_per_hour} lei/h</span>
                   )}
                 </div>
               </Link>
@@ -389,8 +379,8 @@ function ComboPage() {
               Predai {subject.nameLower} în {city.name}?
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Creezi cont gratuit, completezi profilul și vezi cererile elevilor din {city.county}.
-              Fără comision — tu stabilești tariful.
+              Creezi cont gratuit, completezi profilul și vezi cererile elevilor din {city.county}. Fără comision — tu
+              stabilești tariful.
             </p>
           </div>
           <div className="flex gap-3">
