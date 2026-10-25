@@ -11,7 +11,6 @@ import { ADSENSE_CLIENT } from "@/components/ads/adsense";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 import { AdsterraMonetization } from "@/components/ads/adsterra";
 import { I18nProvider, readLocale, useT } from "@/lib/i18n-context";
-import { TraducereAutomata } from "@/components/traducere-automata";
 
 function NotFoundComponent() {
   const t = useT();
@@ -199,7 +198,6 @@ function RootComponent() {
             <SiteFooter />
           </div>
           <Toaster />
-          <TraducereAutomata locale={locale ?? "ro"} />
         </AuthProvider>
       </QueryClientProvider>
     </I18nProvider>

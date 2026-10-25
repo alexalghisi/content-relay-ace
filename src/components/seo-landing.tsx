@@ -3,6 +3,7 @@ import { ComboDataBlock } from "@/components/market-data";
 import type { ComboStats } from "@/lib/market-stats.functions";
 import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
+import { CautariPopulare } from "@/components/cautari-populare";
 import { AdSenseSlot } from "@/components/ads/adsense";
 import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 
@@ -168,6 +169,8 @@ export function SeoLanding(p: SeoLandingProps) {
           </div>
         </section>
       )}
+
+      <CautariPopulare className="mt-14" />
 
       <section className="mt-14 card-soft p-8 bg-gradient-to-br from-primary-soft to-card">
         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">

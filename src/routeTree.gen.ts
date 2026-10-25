@@ -21,6 +21,7 @@ import { Route as CalculatorMedieBacRouteImport } from './routes/calculator-medi
 import { Route as CalculatorNotaAdmitereRouteImport } from './routes/calculator-nota-admitere'
 import { Route as CastigaDinMeditatiiRouteImport } from './routes/castiga-din-meditatii'
 import { Route as CautProfesorRouteImport } from './routes/caut-profesor'
+import { Route as CentruMeditatiiRouteImport } from './routes/centru-meditatii'
 import { Route as CereriRouteImport } from './routes/cereri'
 import { Route as ConfidentialitateRouteImport } from './routes/confidentialitate'
 import { Route as ContRouteImport } from './routes/cont'
@@ -212,6 +213,11 @@ const CastigaDinMeditatiiRoute = CastigaDinMeditatiiRouteImport.update({
 const CautProfesorRoute = CautProfesorRouteImport.update({
   id: '/caut-profesor',
   path: '/caut-profesor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CentruMeditatiiRoute = CentruMeditatiiRouteImport.update({
+  id: '/centru-meditatii',
+  path: '/centru-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CereriRoute = CereriRouteImport.update({
@@ -906,6 +912,7 @@ export interface FileRoutesByFullPath {
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
+  '/centru-meditatii': typeof CentruMeditatiiRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
@@ -1051,6 +1058,7 @@ export interface FileRoutesByTo {
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
+  '/centru-meditatii': typeof CentruMeditatiiRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
@@ -1195,6 +1203,7 @@ export interface FileRoutesById {
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
+  '/centru-meditatii': typeof CentruMeditatiiRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
   '/cont': typeof ContRoute
@@ -1342,6 +1351,7 @@ export interface FileRouteTypes {
     | '/calculator-nota-admitere'
     | '/castiga-din-meditatii'
     | '/caut-profesor'
+    | '/centru-meditatii'
     | '/cereri'
     | '/confidentialitate'
     | '/cont'
@@ -1487,6 +1497,7 @@ export interface FileRouteTypes {
     | '/calculator-nota-admitere'
     | '/castiga-din-meditatii'
     | '/caut-profesor'
+    | '/centru-meditatii'
     | '/cereri'
     | '/confidentialitate'
     | '/cont'
@@ -1630,6 +1641,7 @@ export interface FileRouteTypes {
     | '/calculator-nota-admitere'
     | '/castiga-din-meditatii'
     | '/caut-profesor'
+    | '/centru-meditatii'
     | '/cereri'
     | '/confidentialitate'
     | '/cont'
@@ -1776,6 +1788,7 @@ export interface RootRouteChildren {
   CalculatorNotaAdmitereRoute: typeof CalculatorNotaAdmitereRoute
   CastigaDinMeditatiiRoute: typeof CastigaDinMeditatiiRoute
   CautProfesorRoute: typeof CautProfesorRoute
+  CentruMeditatiiRoute: typeof CentruMeditatiiRoute
   CereriRoute: typeof CereriRoute
   ConfidentialitateRoute: typeof ConfidentialitateRoute
   ContRoute: typeof ContRoute
@@ -1989,6 +2002,13 @@ declare module '@tanstack/react-router' {
       path: '/caut-profesor'
       fullPath: '/caut-profesor'
       preLoaderRoute: typeof CautProfesorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/centru-meditatii': {
+      id: '/centru-meditatii'
+      path: '/centru-meditatii'
+      fullPath: '/centru-meditatii'
+      preLoaderRoute: typeof CentruMeditatiiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cereri': {
@@ -2952,6 +2972,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalculatorNotaAdmitereRoute: CalculatorNotaAdmitereRoute,
   CastigaDinMeditatiiRoute: CastigaDinMeditatiiRoute,
   CautProfesorRoute: CautProfesorRoute,
+  CentruMeditatiiRoute: CentruMeditatiiRoute,
   CereriRoute: CereriRoute,
   ConfidentialitateRoute: ConfidentialitateRoute,
   ContRoute: ContRoute,

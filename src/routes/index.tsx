@@ -9,6 +9,7 @@ import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 import { faqJsonLd } from "@/lib/seo";
+import { CautariPopulare } from "@/components/cautari-populare";
 import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { DemoProfesorAiRotativ, TextRotativ, TITLURI_PROFESOR_AI, TEXTE_PROFESOR_AI } from "@/components/profesor-ai/demo-rotativ";
 
@@ -189,6 +190,8 @@ function HomePage() {
       <h2 className="mt-2 text-3xl font-bold">Meditații în orașul tău</h2>
       <div className="mt-6 flex flex-wrap gap-2">{CITIES.slice(0, 24).map((c) => <Link key={c.slug} to="/meditatii-in/$oras" params={{ oras: c.slug }} className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary/40 hover:text-primary">Meditații {c.name}</Link>)}<Link to="/meditatii-online" className="rounded-full border border-primary/40 bg-primary-soft px-4 py-2 text-sm font-semibold text-primary">Meditații online</Link></div>
     </section>
+
+    <CautariPopulare className="container-page pb-10" />
 
     <section className="container-page pb-6">
       <h2 className="text-3xl font-bold">Întrebări frecvente despre meditații</h2>

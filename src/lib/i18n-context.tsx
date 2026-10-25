@@ -1,11 +1,8 @@
 import { createContext, useContext } from "react";
-import { createIsomorphicFn } from "@tanstack/react-start";
-import { getRequestHeader } from "@tanstack/react-start/server";
-import { DEFAULT_LOCALE, LOCALE_COOKIE, localeFromCookieHeader, translate, type Locale, type MsgKey } from "./i18n";
+import { DEFAULT_LOCALE, LOCALE_COOKIE, translate, type Locale, type MsgKey } from "./i18n";
 
-export const readLocale = createIsomorphicFn()
-  .server((): Locale => localeFromCookieHeader(getRequestHeader("cookie")))
-  .client((): Locale => localeFromCookieHeader(document.cookie));
+// Site-ul este disponibil doar în limba română: limba nu mai poate fi schimbată (cookie-urile vechi sunt ignorate).
+export const readLocale = (): Locale => DEFAULT_LOCALE;
 
 export function saveLocale(locale: Locale) {
   document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=31536000; samesite=lax`;
