@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Clock, Loader2, VideoOff, Volume2, VolumeX } from "lucide-react";
 import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
-import { TablaComuna } from "./tabla-comuna";
 import { Button } from "@/components/ui/button";
 import { createEchoLog, createSpeechQueue, spokenPart, takeSentences } from "@/lib/profesor-ai-dialog";
 import { createTrimitereAnticipata, sttBrowserPreferat } from "@/lib/profesor-ai-ascultare";
@@ -529,7 +528,13 @@ export function SesiuneProfesorAi({
         <div className="px-5 pt-3 text-xs text-muted-foreground">
           {paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min · {paLimba(config.limba).name} · poți vorbi peste profesoară ca s-o întrerupi
         </div>
-        {/* The lesson is spoken: no transcript under the video, only the board (next panel), errors and the end of the session. */}
+        {/* Under the video: what the teacher writes (formulas, examples), then errors and the end of the session. */}
+        {tabla && (
+          <div className="mx-5 mt-3 rounded-2xl bg-muted px-4 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Profesoara a scris</p>
+            <pre className="mt-1 whitespace-pre-wrap font-sans text-base leading-relaxed">{tabla}</pre>
+          </div>
+        )}
         <div className={`space-y-3 px-5 ${eroare || terminat ? "py-3" : "pb-3"}`} aria-live="polite">
           {eroare && (
             <div role="alert" className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
@@ -573,17 +578,7 @@ export function SesiuneProfesorAi({
         </div>
       </section>
 
-      <section className="min-w-0 overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
-        <div className="border-b border-border px-5 py-3">
-          <h2 className="text-sm font-semibold">Tabla comună</h2>
-          <p className="text-xs text-muted-foreground">Desenează, pune o poză sau un fișier și arată-i profesoarei.</p>
-        </div>
-        <TablaComuna
-          textProfesor={tabla}
-          dezactivat={terminat}
-          onTrimite={(jpeg, descriere) => void trimite(descriere, false, jpeg)}
-        />
-      </section>
+
     </div>
   );
 }
