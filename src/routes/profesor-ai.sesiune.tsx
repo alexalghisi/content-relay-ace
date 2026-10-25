@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { SesiuneProfesorAi } from "@/components/profesor-ai/sesiune";
+import { SesiuneProfesorAiAuto } from "@/components/profesor-ai/sesiune-live";
 import { PA_TOKEN_KEY, salveazaToken } from "@/components/profesor-ai/configurator";
 import { profesorAiConfirma, profesorAiSesiune } from "@/lib/profesor-ai.functions";
 import type { PaConfig } from "@/lib/profesor-ai";
@@ -100,7 +100,7 @@ function Pornire() {
       </div>
     );
   return (
-    <SesiuneProfesorAi
+    <SesiuneProfesorAiAuto
       token={stare.token}
       config={stare.config}
       exp={stare.exp}

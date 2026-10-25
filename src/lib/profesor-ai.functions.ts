@@ -369,3 +369,27 @@ export const profesorAiAvatar = createServerFn({ method: "POST" })
       language: s.limba ?? "ro",
     });
   });
+
+/**
+ * Live lesson access: a single-use Gemini Live token plus the setup the client must send, and a
+ * LiveAvatar LITE token for the video (null → the voice still plays without video).
+ */
+export const profesorAiLive = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ token: z.string().max(4000) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const s = await citesteSesiune(data.token, context.userId);
+    if (!s) return { ok: false as const, error: "Sesiunea nu este validă." };
+    const live = await import("./profesor-ai-live.server");
+    const [g, avatar] = await Promise.all([
+      live.createGeminiLiveToken(s.durata),
+      live.createLiteAvatarToken(Math.min(3600, (s.durata + 5) * 60)),
+    ]);
+    if (!("token" in g)) return { ok: false as const, error: g.error };
+    return {
+      ok: true as const,
+      geminiToken: g.token,
+      setup: live.liveSetup(live.livePrompt(s, s.durata, s.exp)),
+      avatarToken: avatar,
+    };
+  });
