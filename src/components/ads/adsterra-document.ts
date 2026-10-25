@@ -38,7 +38,7 @@ const fillObserver = `<script>
     });
     const filled = Array.from(document.querySelectorAll('iframe,img,video,a')).some(node => {
       if (!visible(node)) return false;
-      if (node.tagName === 'IFRAME') return loadedFrames.has(node) && /^https?:/.test(node.src);
+      if (node.tagName === 'IFRAME') { if (/^https?:/.test(node.src)) return loadedFrames.has(node); try { const b = node.contentDocument && node.contentDocument.body; return !!b && b.innerHTML.length > 50; } catch (e) { return true; } }
       if (node.tagName === 'IMG') return node.complete && node.naturalWidth > 1;
       if (node.tagName === 'VIDEO') return node.readyState >= 2;
       return /^https?:/.test(node.href) && node.textContent.trim().length > 0;

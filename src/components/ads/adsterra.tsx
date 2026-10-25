@@ -38,7 +38,7 @@ function AdsterraPlacement({ className = "", banner = false, mobileOnly = false,
 
   return <aside aria-label={filled ? "Publicitate" : undefined} aria-hidden={!filled} data-adsterra-filled={filled} className={`relative mx-auto w-full overflow-hidden ${filled ? className : "h-0"}`}>
     {filled && <p className="mb-2 text-center text-xs text-muted-foreground">Publicitate</p>}
-    {idle && (!banner || wide !== null) && <iframe ref={frameRef} key={social ? "social" : banner ? String(desktopBanner) : "native"} title={social ? "Social Bar Adsterra" : banner ? "Banner Adsterra" : "Reclame Adsterra"} srcDoc={adsterraDocument(banner, desktopBanner, social)} sandbox="allow-scripts allow-top-navigation-by-user-activation" referrerPolicy="strict-origin-when-cross-origin" tabIndex={filled ? 0 : -1} className={`${filled ? "" : "pointer-events-none absolute inset-x-0 top-0 opacity-0"} ${desktopBanner ? "mx-auto h-28 w-[748px] max-w-full border-0" : banner ? "mx-auto h-[70px] w-[340px] max-w-full border-0" : "h-80 w-full border-0"}`} />}
+    {idle && (!banner || wide !== null) && <iframe ref={frameRef} key={social ? "social" : banner ? String(desktopBanner) : "native"} title={social ? "Social Bar Adsterra" : banner ? "Banner Adsterra" : "Reclame Adsterra"} srcDoc={adsterraDocument(banner, desktopBanner, social)} referrerPolicy="strict-origin-when-cross-origin" tabIndex={filled ? 0 : -1} className={`${filled ? "" : "pointer-events-none absolute inset-x-0 top-0 opacity-0"} ${desktopBanner ? "mx-auto h-28 w-[748px] max-w-full border-0" : banner ? "mx-auto h-[70px] w-[340px] max-w-full border-0" : "h-80 w-full border-0"}`} />}
   </aside>;
 }
 
