@@ -8,13 +8,14 @@ import tutoringVideo from "@/assets/tutoring-home-web.mp4.asset.json";
 import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
+import { faqJsonLd } from "@/lib/seo";
 import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { DemoProfesorAiRotativ, TextRotativ, TITLURI_PROFESOR_AI, TEXTE_PROFESOR_AI } from "@/components/profesor-ai/demo-rotativ";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meditații online și în orașul tău: matematică, română, engleză, BAC | MeditatiiDirect.ro" },
+      { title: "Meditații cu profesori verificați — online și în orașul tău | MeditatiiDirect.ro" },
       { name: "description", content: "Spui în 2 minute ce meditații cauți, iar profesorii îți trimit oferte cu preț și program. Gratuit pentru elevi, fără comision, online sau în orașul tău. Plus profesor individual cu AI, 24/7." },
       { property: "og:title", content: "Meditații Direct — primești oferte de la profesori, gratuit" },
       { property: "og:description", content: "Spui ce meditații cauți, profesorii îți trimit oferte cu preț și program. Gratuit, fără comision, online sau în orașul tău." },
@@ -25,9 +26,18 @@ export const Route = createFileRoute("/")({
       { name: "twitter:description", content: "Postezi gratuit cererea, primești propuneri cu tarif și program, discuți direct și evaluezi cu stele." },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/" }],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(HOME_FAQ)) }],
   }),
   component: HomePage,
 });
+
+const HOME_FAQ = [
+  { q: "Cât costă meditațiile?", a: "Tariful îl stabilește fiecare profesor și îl vezi scris în propunere înainte să alegi. Ca reper, o oră de meditații costă între 30 și 200 de lei, cu o medie de aproximativ 80 de lei, în funcție de materie, nivel, oraș și experiența profesorului. Pentru elevi, platforma este gratuită." },
+  { q: "Cum găsesc un profesor de meditații pe MeditatiiDirect?", a: "Descrii în 2 minute materia, nivelul, orașul sau varianta online și bugetul. Profesorii interesați îți trimit propuneri cu tarif și program, iar tu discuți direct cu ei și îl alegi pe cel potrivit." },
+  { q: "Meditațiile se pot face online?", a: "Da. Poți cere meditații online de oriunde din România sau meditații față în față, la profesor ori la domiciliu, în orașul tău." },
+  { q: "Pentru ce materii și examene găsesc meditații?", a: "Matematică, română, engleză, fizică, chimie, biologie, informatică și alte materii, de la gimnaziu la liceu, pentru Evaluarea Națională, Bacalaureat și admiterea la facultate." },
+  { q: "Plătesc comision platformei?", a: "Nu. Elevii nu plătesc nimic platformei, iar plata lecțiilor se face direct profesorului, fără intermediari." },
+];
 
 const LEVELS = ["Gimnaziu", "Evaluare Națională", "Liceu", "Bacalaureat", "Admitere facultate"];
 const LOCATIONS = [
@@ -58,7 +68,7 @@ function HomePage() {
       <div className="container-page grid min-h-[620px] items-center gap-10 py-12 lg:grid-cols-[1.05fr_.95fr] lg:py-18">
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-background px-3 py-1.5 text-xs font-semibold text-primary shadow-sm"><ShieldCheck className="h-4 w-4" /> Chat direct · evaluare în stele · fără comision</div>
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">Găsește profesorul perfect pentru <span className="text-primary">succesul tău</span></h1>
+          <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">Meditații cu profesori verificați, <span className="text-primary">online și în orașul tău</span></h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Cauți meditații la matematică, română, engleză sau pregătire pentru BAC? Descrii o singură dată ce ai nevoie, profesorii îți trimit propuneri cu tarif și program, discutați direct în chat, iar la final evaluezi colaborarea cu stele.</p>
           <form onSubmit={submit} className="mt-8 grid gap-2 rounded-2xl border border-border bg-background p-2 shadow-[var(--shadow-card)] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
             <select aria-label="Materie" value={subject} onChange={(e) => setSubject(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Materie</option>{POPULAR_SUBJECTS.map((item) => <option value={item.slug} key={item.slug}>{item.name}</option>)}</select>
@@ -172,6 +182,17 @@ function HomePage() {
           <Link to="/materii" className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"><h3 className="font-bold">Toate materiile</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Găsește rapid pagina dedicată materiei pe care o înveți.</p></Link>
         </div>
       </div>
+    </section>
+
+    <section className="container-page py-14">
+      <p className="text-sm font-semibold text-primary">Meditații în toată România</p>
+      <h2 className="mt-2 text-3xl font-bold">Meditații în orașul tău</h2>
+      <div className="mt-6 flex flex-wrap gap-2">{CITIES.slice(0, 24).map((c) => <Link key={c.slug} to="/meditatii-in/$oras" params={{ oras: c.slug }} className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary/40 hover:text-primary">Meditații {c.name}</Link>)}<Link to="/meditatii-online" className="rounded-full border border-primary/40 bg-primary-soft px-4 py-2 text-sm font-semibold text-primary">Meditații online</Link></div>
+    </section>
+
+    <section className="container-page pb-6">
+      <h2 className="text-3xl font-bold">Întrebări frecvente despre meditații</h2>
+      <div className="mt-6 grid gap-3">{HOME_FAQ.map((f) => <details key={f.q} className="rounded-lg border border-border bg-card p-5"><summary className="cursor-pointer font-semibold">{f.q}</summary><p className="mt-2 text-sm leading-6 text-muted-foreground">{f.a}</p></details>)}</div>
     </section>
 
     <section className="container-page py-16"><div className="grid items-center gap-7 rounded-2xl border border-border bg-accent p-8 md:grid-cols-[1fr_auto] md:p-10"><div><div className="flex items-center gap-2 text-success"><UserRound className="h-5 w-5" /><span className="text-sm font-bold">Pentru profesori</span></div><h2 className="mt-3 text-3xl font-bold">Elevii vin cu cererea, tu vii cu propunerea</h2><p className="mt-3 max-w-2xl text-muted-foreground">Vezi cererile recente de la elevi și părinți, contactează-i direct și îți umpli programul fără intermediari.</p></div><Link to="/pentru-profesori" className="btn-primary h-12 px-7">Devino profesor <ArrowRight className="ml-2 h-4 w-4" /></Link></div></section>
