@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { adsterraDocument, ADSTERRA_SMARTLINK } from "./adsterra-document";
+import { adsterraDocument, ADSTERRA_SMARTLINK, ADSTERRA_SOCIAL_SCRIPT } from "./adsterra-document";
+import { onPageIdle } from "@/hooks/use-after-load";
+import { ADSENSE_CLIENT } from "./adsense";
 import { useAfterLoad } from "@/hooks/use-after-load";
 export { getAdsterraBanner } from "./adsterra-document";
 
@@ -57,8 +59,26 @@ export function AdsterraBanner320({ className = "" }: { className?: string }) {
 }
 
 export function AdsterraSocialBar() {
-  // Fixed provider elements remain inside this frame, not over site content.
-  return <AdsterraPlacement social className="container-page py-6" />;
+  // Social Bar and AdSense auto ads are page-level scripts, injected once the page is idle.
+  useEffect(() => onPageIdle(() => {
+    if (!document.querySelector("script[data-adsterra-social]")) {
+      const s = document.createElement("script");
+      s.src = ADSTERRA_SOCIAL_SCRIPT;
+      s.async = true;
+      s.dataset.cfasync = "false";
+      s.dataset.adsterraSocial = "1";
+      document.body.appendChild(s);
+    }
+    if (!document.querySelector("script[data-adsbygoogle-lib]")) {
+      const g = document.createElement("script");
+      g.async = true;
+      g.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+      g.crossOrigin = "anonymous";
+      g.dataset.adsbygoogleLib = "1";
+      document.head.appendChild(g);
+    }
+  }, 4000), []);
+  return null;
 }
 
 export function AdsterraMonetization() {

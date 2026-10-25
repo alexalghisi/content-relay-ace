@@ -29,6 +29,7 @@ const fillObserver = `<script>
     const style = getComputedStyle(node);
     return box.width > 1 && box.height > 1 && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0;
   };
+  const box = (node) => { const r = node.getBoundingClientRect(); return r.width > 30 && r.height > 30; };
   const inspect = () => {
     document.querySelectorAll('iframe').forEach(frame => {
       if (!frame.dataset.observed) {
@@ -38,7 +39,7 @@ const fillObserver = `<script>
     });
     const filled = Array.from(document.querySelectorAll('iframe,img,video,a')).some(node => {
       if (!visible(node)) return false;
-      if (node.tagName === 'IFRAME') return loadedFrames.has(node) && /^https?:/.test(node.src);
+      if (node.tagName === 'IFRAME') return loadedFrames.has(node) || box(node);
       if (node.tagName === 'IMG') return node.complete && node.naturalWidth > 1;
       if (node.tagName === 'VIDEO') return node.readyState >= 2;
       return /^https?:/.test(node.href) && node.textContent.trim().length > 0;
