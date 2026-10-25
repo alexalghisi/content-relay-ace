@@ -8,10 +8,7 @@ import { CITIES, getCityBySlug } from "@/data/cities";
 
 const SITE = "https://meditatiidirect.ro";
 
-type Parsed =
-  | { kind: "combo"; materie: string; oras: string }
-  | { kind: "online"; materie: string }
-  | { kind: "none" };
+type Parsed = { kind: "combo"; materie: string; oras: string } | { kind: "online"; materie: string } | { kind: "none" };
 
 const CITY_ALIASES: Record<string, string> = {
   cluj: "cluj-napoca",
@@ -47,12 +44,30 @@ function build(parsed: Parsed) {
     const title = `Meditații ${s.name} Online — Profesori Verificați 2026`;
     const description = `Meditații ${s.nameLower} online cu profesori verificați din toată România. Lecții pe Zoom sau Meet, ${s.pretMin}–${s.pretMax} lei/oră, fără comision. Prima lecție se stabilește direct cu profesorul.`;
     const faqs: FaqItem[] = [
-      { q: `Cât costă o oră de meditații ${s.nameLower} online?`, a: `Tarifele pentru meditații ${s.nameLower} online pornesc de la ${s.pretMin} lei/oră pentru gimnaziu și ajung la ${s.pretMax} lei/oră pentru pregătire intensivă de BAC sau admitere. Media pe platformă este de aproximativ ${s.pretMediu} lei/oră.` },
-      { q: "Pe ce platformă se țin lecțiile online?", a: "Cei mai mulți profesori folosesc Zoom, Google Meet sau Microsoft Teams, împreună cu o tablă digitală. Aplicația se stabilește direct cu profesorul, înainte de prima ședință." },
-      { q: "Meditațiile online sunt la fel de eficiente ca cele față în față?", a: "Da, pentru majoritatea elevilor. Online se economisește timpul de transport, lecția poate fi înregistrată pentru recapitulare, iar accesul la profesori buni nu mai depinde de orașul în care locuiești." },
-      { q: "De ce am nevoie pentru o lecție online?", a: "Un laptop sau o tabletă, conexiune stabilă la internet, căști cu microfon și, ideal, un caiet sau o tabletă grafică pentru exerciții. Nu ai nevoie de niciun cont plătit." },
-      { q: "Cum plătesc profesorul?", a: "Plata se face direct între tine și profesor, prin transfer bancar sau altă metodă agreată de voi. MeditatiiDirect nu percepe comision și nu intermediază plățile." },
-      { q: `Pot găsi profesor de ${s.nameLower} pentru clasa a VIII-a sau BAC?`, a: `Da. Profesorii precizează în anunț nivelurile la care predau: gimnaziu, Evaluare Națională, liceu, Bacalaureat și pregătire pentru admitere.` },
+      {
+        q: `Cât costă o oră de meditații ${s.nameLower} online?`,
+        a: `Tarifele pentru meditații ${s.nameLower} online pornesc de la ${s.pretMin} lei/oră pentru gimnaziu și ajung la ${s.pretMax} lei/oră pentru pregătire intensivă de BAC sau admitere. Media pe platformă este de aproximativ ${s.pretMediu} lei/oră.`,
+      },
+      {
+        q: "Pe ce platformă se țin lecțiile online?",
+        a: "Cei mai mulți profesori folosesc Zoom, Google Meet sau Microsoft Teams, împreună cu o tablă digitală. Aplicația se stabilește direct cu profesorul, înainte de prima ședință.",
+      },
+      {
+        q: "Meditațiile online sunt la fel de eficiente ca cele față în față?",
+        a: "Da, pentru majoritatea elevilor. Online se economisește timpul de transport, lecția poate fi înregistrată pentru recapitulare, iar accesul la profesori buni nu mai depinde de orașul în care locuiești.",
+      },
+      {
+        q: "De ce am nevoie pentru o lecție online?",
+        a: "Un laptop sau o tabletă, conexiune stabilă la internet, căști cu microfon și, ideal, un caiet sau o tabletă grafică pentru exerciții. Nu ai nevoie de niciun cont plătit.",
+      },
+      {
+        q: "Cum plătesc profesorul?",
+        a: "Plata se face direct între tine și profesor, prin transfer bancar sau altă metodă agreată de voi. MeditatiiDirect nu percepe comision și nu intermediază plățile.",
+      },
+      {
+        q: `Pot găsi profesor de ${s.nameLower} pentru clasa a VIII-a sau BAC?`,
+        a: `Da. Profesorii precizează în anunț nivelurile la care predau: gimnaziu, Evaluare Națională, liceu, Bacalaureat și pregătire pentru admitere.`,
+      },
     ];
     return {
       url,
@@ -106,12 +121,30 @@ function build(parsed: Parsed) {
   const title = `Meditații ${s.name} ${c.name} — profesori verificați`;
   const description = `Meditații ${s.nameLower} în ${c.name}: profesori verificați, ${pMin}–${pMax} lei/oră, acasă sau online. Contactezi profesorul direct, fără comision. Anunțuri actualizate zilnic.`;
   const faqs: FaqItem[] = [
-    { q: `Cât costă meditațiile la ${s.nameLower} în ${c.name}?`, a: `În ${c.name} tarifele pentru meditații ${s.nameLower} sunt între ${pMin} și ${pMax} lei/oră, cu o medie de aproximativ ${pMed} lei/oră. Prețul depinde de nivel (gimnaziu, liceu, BAC, admitere), de experiența profesorului și de locul lecției.` },
-    { q: `Unde se țin meditațiile de ${s.nameLower} în ${c.name}?`, a: `Poți alege lecții la domiciliul profesorului, la tine acasă sau online. Mulți profesori din zona ${c.landmark} acceptă ambele variante, iar deplasarea poate fi inclusă sau taxată separat.` },
-    { q: "Cum știu că profesorul este de încredere?", a: "Fiecare profesor de pe MeditatiiDirect trece printr-o verificare a identității și a experienței didactice. În plus, poți citi recenziile lăsate de elevi și părinți în profilul profesorului." },
-    { q: `Câte ore de meditații la ${s.nameLower} sunt necesare?`, a: `Pentru recuperarea materiei curente, o ședință pe săptămână este de obicei suficientă. Pentru Evaluare Națională sau Bacalaureat, profesorii recomandă două ședințe săptămânal, începute cu cel puțin 4–6 luni înainte de examen.` },
-    { q: "Plătesc ceva platformei?", a: "Nu. Căutarea, contactarea profesorilor și publicarea anunțurilor de bază sunt gratuite. Plătești doar tariful convenit cu profesorul, direct lui." },
-    { q: `Găsesc profesori de ${s.nameLower} și în afara orașului ${c.name}?`, a: `Da. Dacă în ${c.name} nu găsești imediat profesorul potrivit, filtrează după meditații online — profesorii predau din toată România, iar disponibilitatea este mult mai mare.` },
+    {
+      q: `Cât costă meditațiile la ${s.nameLower} în ${c.name}?`,
+      a: `În ${c.name} tarifele pentru meditații ${s.nameLower} sunt între ${pMin} și ${pMax} lei/oră, cu o medie de aproximativ ${pMed} lei/oră. Prețul depinde de nivel (gimnaziu, liceu, BAC, admitere), de experiența profesorului și de locul lecției.`,
+    },
+    {
+      q: `Unde se țin meditațiile de ${s.nameLower} în ${c.name}?`,
+      a: `Poți alege lecții la domiciliul profesorului, la tine acasă sau online. Mulți profesori din zona ${c.landmark} acceptă ambele variante, iar deplasarea poate fi inclusă sau taxată separat.`,
+    },
+    {
+      q: "Cum știu că profesorul este de încredere?",
+      a: "Fiecare profesor de pe MeditatiiDirect trece printr-o verificare a identității și a experienței didactice. În plus, poți citi recenziile lăsate de elevi și părinți în profilul profesorului.",
+    },
+    {
+      q: `Câte ore de meditații la ${s.nameLower} sunt necesare?`,
+      a: `Pentru recuperarea materiei curente, o ședință pe săptămână este de obicei suficientă. Pentru Evaluare Națională sau Bacalaureat, profesorii recomandă două ședințe săptămânal, începute cu cel puțin 4–6 luni înainte de examen.`,
+    },
+    {
+      q: "Plătesc ceva platformei?",
+      a: "Nu. Căutarea, contactarea profesorilor și publicarea anunțurilor de bază sunt gratuite. Plătești doar tariful convenit cu profesorul, direct lui.",
+    },
+    {
+      q: `Găsesc profesori de ${s.nameLower} și în afara orașului ${c.name}?`,
+      a: `Da. Dacă în ${c.name} nu găsești imediat profesorul potrivit, filtrează după meditații online — profesorii predau din toată România, iar disponibilitatea este mult mai mare.`,
+    },
   ];
   return {
     url,
@@ -136,7 +169,11 @@ function build(parsed: Parsed) {
       description,
       url,
       provider: { "@id": `${SITE}/#org` },
-      areaServed: { "@type": "City", name: c.name, address: { "@type": "PostalAddress", addressLocality: c.name, addressRegion: c.county, addressCountry: "RO" } },
+      areaServed: {
+        "@type": "City",
+        name: c.name,
+        address: { "@type": "PostalAddress", addressLocality: c.name, addressRegion: c.county, addressCountry: "RO" },
+      },
       offers: {
         "@type": "AggregateOffer",
         priceCurrency: "RON",
@@ -174,10 +211,17 @@ export const Route = createFileRoute("/$")({
   head: ({ loaderData }) => {
     const data = loaderData ? build(parse(loaderData.path)) : null;
     if (!data) {
-      return { meta: [{ title: "Pagina nu a fost găsită — MeditatiiDirect.ro" }, { name: "robots", content: "noindex, follow" }] };
+      return {
+        meta: [
+          { title: "Pagina nu a fost găsită — MeditatiiDirect.ro" },
+          { name: "robots", content: "noindex, follow" },
+        ],
+      };
     }
     return {
       meta: [
+        // Paginile „materie-online” sunt șabloane aproape identice între materii → noindex.
+        ...(data.url.endsWith("-online") ? [{ name: "robots", content: "noindex, follow" }] : []),
         { title: data.title },
         { name: "description", content: data.description },
         { property: "og:title", content: data.title },
@@ -217,7 +261,11 @@ function SplatPage() {
             { to: "/preturi-meditatii", label: "Prețuri meditații" },
             { to: "/blog", label: "Blog" },
           ].map((l) => (
-            <Link key={l.to} to={l.to} className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary">
+            <Link
+              key={l.to}
+              to={l.to}
+              className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary"
+            >
               {l.label}
             </Link>
           ))}
@@ -258,8 +306,8 @@ function SplatPage() {
               <>
                 <p>
                   Meditațiile online la {s.nameLower} elimină timpul de deplasare și îți dau acces la profesori din
-                  toată țara, nu doar din orașul tău. Lecțiile se țin pe tablă digitală, cu materiale trimise înainte
-                  și exerciții rezolvate în timp real.
+                  toată țara, nu doar din orașul tău. Lecțiile se țin pe tablă digitală, cu materiale trimise înainte și
+                  exerciții rezolvate în timp real.
                 </p>
                 <p>
                   Este varianta preferată de elevii din localități mici, unde oferta locală de profesori este limitată.
@@ -277,9 +325,15 @@ function SplatPage() {
                   înainte de examen, cu simulări lunare pe modelul oficial.
                 </p>
                 <p>
-                  Vezi <Link to="/variante-bacalaureat" className="text-primary underline">variantele de bacalaureat</Link>{" "}
-                  și <Link to="/subiecte-bac-2026" className="text-primary underline">subiectele BAC 2026</Link> pentru
-                  a-ți evalua nivelul înainte de prima ședință.
+                  Vezi{" "}
+                  <Link to="/variante-bacalaureat" className="text-primary underline">
+                    variantele de bacalaureat
+                  </Link>{" "}
+                  și{" "}
+                  <Link to="/subiecte-bac-2026" className="text-primary underline">
+                    subiectele BAC 2026
+                  </Link>{" "}
+                  pentru a-ți evalua nivelul înainte de prima ședință.
                 </p>
               </>
             ),
@@ -289,12 +343,15 @@ function SplatPage() {
             body: (
               <>
                 <p>
-                  Compară experiența didactică, nivelurile la care predă, tariful și recenziile. Cere o ședință de
-                  probă și stabilește clar obiectivul: recuperare, menținerea mediei sau notă mare la examen.
+                  Compară experiența didactică, nivelurile la care predă, tariful și recenziile. Cere o ședință de probă
+                  și stabilește clar obiectivul: recuperare, menținerea mediei sau notă mare la examen.
                 </p>
                 <p>
                   Poți verifica tarifele actuale pe{" "}
-                  <Link to="/preturi-meditatii" className="text-primary underline">pagina de prețuri meditații</Link>.
+                  <Link to="/preturi-meditatii" className="text-primary underline">
+                    pagina de prețuri meditații
+                  </Link>
+                  .
                 </p>
               </>
             ),
