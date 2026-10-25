@@ -1,0 +1,18 @@
+{
+  "appId": "ro.meditatiidirect.app",
+  "appName": "MeditatiiDirect",
+  "webDir": "www",
+  "server": {
+    "url": "https://meditatiidirect.ro",
+    "allowNavigation": ["meditatiidirect.ro", "*.meditatiidirect.ro", "*.supabase.co", "accounts.google.com", "*.liveavatar.com", "*.heygen.com", "generativelanguage.googleapis.com", "checkout.stripe.com"],
+    "errorPath": "index.html"
+  },
+  "ios": {
+    "contentInset": "always",
+    "limitsNavigationsToAppBoundDomains": false,
+    "scheme": "MeditatiiDirect"
+  },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 800, "backgroundColor": "#ffffff" }
+  }
+}
