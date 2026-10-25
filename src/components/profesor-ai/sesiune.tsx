@@ -138,7 +138,8 @@ export function SesiuneProfesorAi({
         const { connectVoice } = await import("@/lib/profesor-ai-voice");
         const s = new la.LiveAvatarSession(h.token, { autoKeepAlive: true, voiceChat: { defaultMuted: true } });
         const v = connectVoice(s as unknown as import("@/lib/profesor-ai-voice").VoiceSession, {
-          onUserSpeechStart: () => interruptRef.current(),
+          // Nu oprim profesoara la orice zgomot/ecou detectat de VAD; o oprește doar o întrebare reală (trimite → interrupt).
+          onUserSpeechStart: () => {},
           onUserTranscript: (t) => void sendRef.current(t),
           onSpeaking: (on) => { setRealistVorbeste(on); if (on) marcheazaVorbire(); },
         });
