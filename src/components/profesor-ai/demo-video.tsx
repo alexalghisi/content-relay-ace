@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshCw, Volume2, VolumeX } from "lucide-react";
 import { amestecaLectii, cheieLectie, LECTII } from "./demo-repertoriu";
 import { VIDEO_DEMO } from "./demo-video-lectii.generated";
+import { useNearViewport } from "@/hooks/use-after-load";
 
 const ULTIMA = "profesor-ai-video-ultima";
 
@@ -30,6 +31,11 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
   const precedenta = useRef<number | null>(null);
   const opritManual = useRef(false);
   const gataSunet = useRef(false);
+  // The lesson video (2–3 MB) starts downloading only after the page has loaded and the player
+  // is near the viewport; it then starts on its own, exactly as before.
+  const [cadru, activ] = useNearViewport<HTMLDivElement>("200px");
+  const activRef = useRef(false);
+  activRef.current = activ;
 
   const urmatoarea = useCallback(() => {
     if (!LECTII_VIDEO.length) return;
@@ -57,7 +63,7 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
   // Start each lesson from the beginning, with sound if it is already allowed.
   useEffect(() => {
     const v = video.current;
-    if (!v || !lectie) return;
+    if (!v || !lectie || !activ) return;
     v.currentTime = 0;
     // Always try with sound first (allowed on return visits / after any click on the site);
     // if the browser blocks it, play muted and unmute at the first tap, click or key anywhere.
@@ -68,7 +74,7 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
       v.muted = true;
       v.play().catch(() => {});
     });
-  }, [cheie, lectie]);
+  }, [cheie, lectie, activ]);
 
   // Unmuted autoplay is often blocked: switch the voice on at the first interaction anywhere.
   useEffect(() => {
@@ -76,7 +82,7 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
     const scoate = () => evs.forEach((e) => window.removeEventListener(e, cuSunet, true));
     async function cuSunet() {
       const v = video.current;
-      if (!v || gataSunet.current || opritManual.current) return;
+      if (!v || !activRef.current || gataSunet.current || opritManual.current) return;
       v.muted = false;
       v.volume = 1;
       try {
@@ -125,17 +131,17 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
   const vorbitor = replica?.cine;
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)] ${className}`}>
+    <div ref={cadru} className={`relative overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)] ${className}`}>
       <video
         key={cheie || "poster"}
         ref={video}
         className="aspect-video w-full bg-foreground object-cover"
-        poster={cheie ? posterLectie(cheie) : "/promo-profesor-ai.jpg"}
+        poster={cheie ? posterLectie(cheie) : "/promo-profesor-ai-poster.webp"}
         width={854}
         height={480}
         muted
         playsInline
-        preload="auto"
+        preload={activ ? "auto" : "none"}
         onTimeUpdate={laTimp}
         onEnded={() => setTimeout(urmatoarea, 1200)}
         aria-hidden="true"

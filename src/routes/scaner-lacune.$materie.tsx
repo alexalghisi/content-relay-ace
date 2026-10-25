@@ -33,66 +33,16 @@ export const Route = createFileRoute("/scaner-lacune/$materie")({
   loader: ({ params }) => {
     const m = getBlocajMaterie(params.materie);
     if (!m) throw notFound();
-    return { materie: m.slug };
+    // Head is built here so the blocaje dataset stays in this route's lazy chunk.
+    return { materie: m.slug, head: scanerHead(m.slug) };
   },
-  head: ({ loaderData }) => {
-    const m = loaderData ? getBlocajMaterie(loaderData.materie) : undefined;
-    if (!m)
-      return {
-        meta: [
-          { title: "Pagina nu a fost găsită | MeditatiiDirect.ro" },
-          { name: "robots", content: "noindex" },
-        ],
-      };
-    const path = `/scaner-lacune/${m.slug}`;
-    const url = `${SITE}${path}`;
-    const n = learningOrder(m.slug).length;
-    const title = `Test de lacune la ${m.nameLower}: află de unde pornește blocajul | MeditatiiDirect.ro`;
-    const description = `Test gratuit, adaptiv: alegi capitolul la ${m.nameLower} care nu îți iese și afli în câteva întrebări ce noțiune îți lipsește de fapt. Primești traseul de recuperare în ordine, din ${n} noțiuni legate între ele.`;
-    return {
+  head: ({ loaderData }) =>
+    loaderData?.head ?? {
       meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url", content: url },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary" },
-        { name: "twitter:title", content: title },
-        { name: "twitter:description", content: description },
+        { title: "Pagina nu a fost găsită | MeditatiiDirect.ro" },
+        { name: "robots", content: "noindex" },
       ],
-      links: [{ rel: "canonical", href: url }],
-      scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify(
-            breadcrumbLd([
-              { name: "Scanerul de lacune", path: "/scaner-lacune" },
-              { name: m.name, path },
-            ]),
-          ),
-        },
-        { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqsFor(m.nameLower))) },
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            name: `Ordinea în care se învață noțiunile la ${m.nameLower}`,
-            url,
-            itemListOrder: "https://schema.org/ItemListOrderAscending",
-            numberOfItems: n,
-            itemListElement: learningOrder(m.slug).map((x, i) => ({
-              "@type": "ListItem",
-              position: i + 1,
-              name: x.titlu,
-              url: `${SITE}/harta-blocajelor/${x.materie}/${x.slug}`,
-            })),
-          }),
-        },
-      ],
-    };
-  },
+    },
   notFoundComponent: () => (
     <div className="container-page py-16 text-center">
       <h1 className="text-2xl font-bold">Nu avem încă scaner pentru această materie</h1>
@@ -224,4 +174,57 @@ function Page() {
       </section>
     </article>
   );
+}
+
+function scanerHead(slug: string) {
+  const m = getBlocajMaterie(slug);
+  if (!m) return undefined;
+  const path = `/scaner-lacune/${m.slug}`;
+  const url = `${SITE}${path}`;
+  const n = learningOrder(m.slug).length;
+  const title = `Test de lacune la ${m.nameLower}: află de unde pornește blocajul | MeditatiiDirect.ro`;
+  const description = `Test gratuit, adaptiv: alegi capitolul la ${m.nameLower} care nu îți iese și afli în câteva întrebări ce noțiune îți lipsește de fapt. Primești traseul de recuperare în ordine, din ${n} noțiuni legate între ele.`;
+  return {
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url", content: url },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+    ],
+    links: [{ rel: "canonical", href: url }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(
+          breadcrumbLd([
+            { name: "Scanerul de lacune", path: "/scaner-lacune" },
+            { name: m.name, path },
+          ]),
+        ),
+      },
+      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqsFor(m.nameLower))) },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: `Ordinea în care se învață noțiunile la ${m.nameLower}`,
+          url,
+          itemListOrder: "https://schema.org/ItemListOrderAscending",
+          numberOfItems: n,
+          itemListElement: learningOrder(m.slug).map((x, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: x.titlu,
+            url: `${SITE}/harta-blocajelor/${x.materie}/${x.slug}`,
+          })),
+        }),
+      },
+    ],
+  };
 }

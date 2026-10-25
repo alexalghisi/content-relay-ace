@@ -28,27 +28,9 @@ const FAQS = [
 ];
 
 export const Route = createFileRoute("/scaner-lacune/")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:url", content: URL },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
-    ],
-    links: [{ rel: "canonical", href: URL }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify(breadcrumbLd([{ name: "Scanerul de lacune", path: PATH }])),
-      },
-      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
-    ],
-  }),
+  // Head is built in the loader so the blocaje dataset stays in this route's lazy chunk.
+  loader: () => ({ head: scanerIndexHead() }),
+  head: ({ loaderData }) => loaderData?.head ?? {},
   component: Page,
 });
 
@@ -148,4 +130,28 @@ function Page() {
       </section>
     </article>
   );
+}
+
+function scanerIndexHead() {
+  return {
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:url", content: URL },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+    ],
+    links: [{ rel: "canonical", href: URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(breadcrumbLd([{ name: "Scanerul de lacune", path: PATH }])),
+      },
+      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
+    ],
+  };
 }

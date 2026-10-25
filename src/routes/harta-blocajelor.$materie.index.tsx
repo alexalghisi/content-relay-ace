@@ -15,67 +15,16 @@ export const Route = createFileRoute("/harta-blocajelor/$materie/")({
   loader: ({ params }) => {
     const m = getBlocajMaterie(params.materie);
     if (!m) throw notFound();
-    return { materie: m.slug };
+    // Head is built here so the blocaje dataset stays in this route's lazy chunk.
+    return { materie: m.slug, head: materieHead(m.slug) };
   },
-  head: ({ loaderData }) => {
-    const m = loaderData ? getBlocajMaterie(loaderData.materie) : undefined;
-    if (!m)
-      return {
-        meta: [
-          { title: "Pagina nu a fost găsită | MeditatiiDirect.ro" },
-          { name: "robots", content: "noindex" },
-        ],
-      };
-    const nodes = blocajeForMaterie(m.slug);
-    const path = `/harta-blocajelor/${m.slug}`;
-    const url = `${SITE}${path}`;
-    const title = `Harta Blocajelor la ${m.nameLower}: ${nodes.length} blocaje explicate | MeditatiiDirect.ro`;
-    const description = `Unde te blochezi la ${m.nameLower} și ce noțiune lipsește de obicei: ${nodes
-      .slice(0, 4)
-      .map((n) => n.titlu.toLowerCase())
-      .join(", ")} și altele. Explicație, exemplu rezolvat și verificare pentru fiecare.`;
-    return {
+  head: ({ loaderData }) =>
+    loaderData?.head ?? {
       meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url", content: url },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary" },
-        { name: "twitter:title", content: title },
-        { name: "twitter:description", content: description },
+        { title: "Pagina nu a fost găsită | MeditatiiDirect.ro" },
+        { name: "robots", content: "noindex" },
       ],
-      links: [{ rel: "canonical", href: url }],
-      scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify(
-            breadcrumbLd([
-              { name: "Harta Blocajelor", path: "/harta-blocajelor" },
-              { name: m.name, path },
-            ]),
-          ),
-        },
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            name: `Harta Blocajelor la ${m.nameLower}`,
-            url,
-            numberOfItems: nodes.length,
-            itemListElement: nodes.map((n, i) => ({
-              "@type": "ListItem",
-              position: i + 1,
-              name: n.titlu,
-              url: `${SITE}/harta-blocajelor/${n.materie}/${n.slug}`,
-            })),
-          }),
-        },
-      ],
-    };
-  },
+    },
   notFoundComponent: () => (
     <div className="container-page py-16 text-center">
       <h1 className="text-2xl font-bold">Nu avem încă o hartă pentru această materie</h1>
@@ -218,4 +167,58 @@ function Page() {
       </section>
     </article>
   );
+}
+
+function materieHead(slug: string) {
+  const m = getBlocajMaterie(slug);
+  if (!m) return undefined;
+  const nodes = blocajeForMaterie(m.slug);
+  const path = `/harta-blocajelor/${m.slug}`;
+  const url = `${SITE}${path}`;
+  const title = `Harta Blocajelor la ${m.nameLower}: ${nodes.length} blocaje explicate | MeditatiiDirect.ro`;
+  const description = `Unde te blochezi la ${m.nameLower} și ce noțiune lipsește de obicei: ${nodes
+    .slice(0, 4)
+    .map((n) => n.titlu.toLowerCase())
+    .join(", ")} și altele. Explicație, exemplu rezolvat și verificare pentru fiecare.`;
+  return {
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url", content: url },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+    ],
+    links: [{ rel: "canonical", href: url }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(
+          breadcrumbLd([
+            { name: "Harta Blocajelor", path: "/harta-blocajelor" },
+            { name: m.name, path },
+          ]),
+        ),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: `Harta Blocajelor la ${m.nameLower}`,
+          url,
+          numberOfItems: nodes.length,
+          itemListElement: nodes.map((n, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: n.titlu,
+            url: `${SITE}/harta-blocajelor/${n.materie}/${n.slug}`,
+          })),
+        }),
+      },
+    ],
+  };
 }

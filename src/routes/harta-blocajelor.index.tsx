@@ -39,40 +39,9 @@ const FAQS = [
 ];
 
 export const Route = createFileRoute("/harta-blocajelor/")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:url", content: URL },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
-    ],
-    links: [{ rel: "canonical", href: URL }],
-    scripts: [
-      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify(breadcrumbLd([{ name: "Harta Blocajelor", path: PATH }])),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          name: "Harta Blocajelor",
-          url: URL,
-          description: DESCRIPTION,
-          inLanguage: "ro-RO",
-          isPartOf: { "@id": `${SITE}/#website` },
-          about: BLOCAJE_MATERII.map((m) => ({ "@type": "Thing", name: m.name })),
-        }),
-      },
-    ],
-  }),
+  // Head is built in the loader so the blocaje dataset stays in this route's lazy chunk.
+  loader: () => ({ head: hartaIndexHead() }),
+  head: ({ loaderData }) => loaderData?.head ?? {},
   component: Page,
 });
 
@@ -287,4 +256,41 @@ function Page() {
       </section>
     </article>
   );
+}
+
+function hartaIndexHead() {
+  return {
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:url", content: URL },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+    ],
+    links: [{ rel: "canonical", href: URL }],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(breadcrumbLd([{ name: "Harta Blocajelor", path: PATH }])),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Harta Blocajelor",
+          url: URL,
+          description: DESCRIPTION,
+          inLanguage: "ro-RO",
+          isPartOf: { "@id": `${SITE}/#website` },
+          about: BLOCAJE_MATERII.map((m) => ({ "@type": "Thing", name: m.name })),
+        }),
+      },
+    ],
+  };
 }
