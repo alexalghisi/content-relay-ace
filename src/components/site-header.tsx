@@ -3,7 +3,6 @@ import { useAuth } from "@/lib/auth";
 import { useState } from "react";
 import { Menu, X, GraduationCap } from "lucide-react";
 import { NewRequestsBadge } from "@/components/new-requests-badge";
-import { LanguageSwitcher } from "@/components/language-switcher";
 import { useT } from "@/lib/i18n-context";
 import type { MsgKey } from "@/lib/i18n";
 
@@ -48,7 +47,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden shrink-0 items-center gap-2 2xl:flex">
-          <LanguageSwitcher />
           {user ? (
             <>
               <Link to="/mesaje" className="btn-pill text-sm text-foreground/80 hover:text-foreground hover:bg-muted">{t("auth.messages")}</Link>
@@ -67,7 +65,7 @@ export function SiteHeader() {
           )}
         </div>
 
-          <div className="flex items-center gap-2 2xl:hidden"><LanguageSwitcher />
+          <div className="flex items-center gap-2 2xl:hidden">
           <button className="grid h-10 w-10 place-items-center rounded-lg border border-border" onClick={() => setOpen((v) => !v)} aria-label={t("ui.menu")} aria-expanded={open}>
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button></div>
