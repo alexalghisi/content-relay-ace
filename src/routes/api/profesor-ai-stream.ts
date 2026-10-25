@@ -45,18 +45,22 @@ export const Route = createFileRoute("/api/profesor-ai-stream")({
           return err(403, "Sesiunea s-a încheiat. Poți începe o sesiune nouă.");
 
         const { LIMITA_PROFESOR_ZI } = await import("@/lib/profesor-ai.functions");
-        let quota = false;
-        if (!s.gratuit) {
-          const q = await ai.takeQuota(userId, "profesor-ai", LIMITA_PROFESOR_ZI);
-          if (!q.ok) return err(429, `Ai atins limita de ${LIMITA_PROFESOR_ZI} de mesaje pe zi. Revino mâine.`, "limita_interna");
-          quota = true;
-        }
         const t = await import("@/lib/profesor-ai-tutor.server");
+        const { poateTestaProfesorAi } = await import("@/lib/profesor-ai-access");
+        const m = parsed.data.model;
+        const model = m && poateTestaProfesorAi(userId) && t.MODELE_TEST.test(m) ? m : undefined;
+        // The quota check (a database round trip) runs in parallel with the model's first token.
+        const cota = s.gratuit ? Promise.resolve({ ok: true }) : ai.takeQuota(userId, "profesor-ai", LIMITA_PROFESOR_ZI);
+        const flux = t.streamTutor(t.tutorPrompt(s, s.durata, s.exp), parsed.data.mesaje, parsed.data.imagine, model);
+        flux.catch(() => {}); // handled below; avoids an unhandled rejection while the quota is checked
+        const q = await cota;
+        if (!q.ok) {
+          void flux.then((st) => st.cancel()).catch(() => {});
+          return err(429, `Ai atins limita de ${LIMITA_PROFESOR_ZI} de mesaje pe zi. Revino mâine.`, "limita_interna");
+        }
+        const quota = !s.gratuit;
         try {
-          const { poateTestaProfesorAi } = await import("@/lib/profesor-ai-access");
-          const m = parsed.data.model;
-          const model = m && poateTestaProfesorAi(userId) && t.MODELE_TEST.test(m) ? m : undefined;
-          const stream = await t.streamTutor(t.tutorPrompt(s, s.durata, s.exp), parsed.data.mesaje, parsed.data.imagine, model);
+          const stream = await flux;
           return new Response(stream, {
             headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
           });
