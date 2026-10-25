@@ -282,7 +282,6 @@ export function SesiuneProfesorAi({
         const reader = res.body.getReader();
         const dec = new TextDecoder();
         let full = "";
-        let restVorbit = "";
         let consumed = 0; // câte caractere din partea vorbită au fost deja trimise la voce
         let inAer = 0; // replici trimise la voce și încă nerostite până la capăt
         const spuneAcum = (t: string) => {
@@ -301,31 +300,43 @@ export function SesiuneProfesorAi({
           if (rev !== revision.current) return void reader.cancel();
           if (value) full += dec.decode(value, { stream: true });
           const spoken = bubble();
-          const { sentences } = takeSentences(spoken.slice(consumed) + (done ? " " : ""), !rostit);
-          for (const sn of sentences) {
-            consumed = spoken.indexOf(sn, consumed) + sn.length;
-            if (!primaGata) {
-              primaGata = true;
-              const w = window as unknown as { __paFirstSentence?: number[] };
-              (w.__paFirstSentence ??= []).push(Math.round(performance.now() - tSend));
+          // One fluent utterance: LiveAvatar needs ~2 s to start each spoken chunk, so sending the
+          // reply sentence by sentence made her stop and start. The spoken part is short (a few
+          // sentences, written in well under a second once the first token arrives), so it goes out
+          // whole as soon as it is complete (board started or reply finished). Only if the model is
+          // unusually slow does she start with the sentences already written.
+          const curat = (x: string) => x.replace(/[*#`_]/g, "").replace(/\s+/g, " ").trim();
+          const complet = done || spokenPart(full).board !== null;
+          const marcheazaPrima = () => {
+            if (primaGata) return;
+            primaGata = true;
+            const w = window as unknown as { __paFirstSentence?: number[] };
+            (w.__paFirstSentence ??= []).push(Math.round(performance.now() - tSend));
+          };
+          if (complet) {
+            const rest = curat(spoken.slice(consumed));
+            consumed = spoken.length;
+            if (rest) { rostit = true; marcheazaPrima(); void spuneAcum(rest); }
+          } else if (!rostit && performance.now() - tSend > 3500) {
+            const { sentences } = takeSentences(spoken.slice(consumed), true);
+            if (sentences.length) {
+              const last = sentences[sentences.length - 1];
+              consumed = spoken.indexOf(last, consumed) + last.length;
+              rostit = true;
+              marcheazaPrima();
+              void spuneAcum(curat(sentences.join(" ")));
             }
-            // Fast start: the first sentence goes out alone; later sentences are grouped and sent
-            // as soon as the voice is free, so she never waits for the whole reply to be written.
-            if (!rostit) { rostit = true; void spuneAcum(sn.replace(/[*#`_]/g, "")); }
-            else restVorbit += " " + sn;
-          }
-          // Flush what is ready when the voice has gone quiet, or when the spoken part is complete
-          // (the board starts): the board text is still streaming but nobody has to wait for it.
-          const tablaInceputa = spokenPart(full).board !== null;
-          if (!done && (restVorbit.trim() || (tablaInceputa && spoken.slice(consumed).trim())) && (inAer === 0 || tablaInceputa)) {
-            const bucata = (restVorbit + (tablaInceputa ? " " + spoken.slice(consumed) : "")).replace(/[*#`_]/g, "").replace(/\s+/g, " ").trim();
-            if (tablaInceputa) consumed = spoken.length;
-            restVorbit = "";
-            if (bucata) void spuneAcum(bucata);
           }
           if (done) {
-            const tail = (restVorbit + " " + spoken.slice(consumed)).replace(/[*#`_]/g, "").replace(/\s+/g, " ").trim();
-            if (tail) { rostit = true; void spuneAcum(tail); }
+            // The closing question belongs to the spoken part; if the model put it on the board,
+            // she still says it, otherwise the student would wait for a question never asked.
+            const tablaText = spokenPart(full).board ?? "";
+            const intrebari = tablaText
+              .split("\n")
+              .map((l) => l.trim())
+              .filter((l) => /\?$/.test(l) && l.split(/\s+/).length >= 4 && !spoken.includes(l));
+            const q = intrebari[intrebari.length - 1];
+            if (q) { rostit = true; void spuneAcum(curat(q)); }
             break;
           }
         }
@@ -471,7 +482,7 @@ export function SesiuneProfesorAi({
   const vorbesteAcum = modAvatar !== "incarcare" && realistVorbeste;
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
+    <div className="mx-auto grid w-full max-w-4xl gap-4">
       <section className="flex min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
         <div className="relative aspect-[4/3] w-full bg-foreground sm:aspect-video">
           {modAvatar !== "realist" && (

@@ -83,7 +83,7 @@ export function AdsterraSocialBar() {
 
 export function AdsterraMonetization() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  if (/^\/(admin|profesor|cont|chat|autentificare|inregistrare|cererea-mea)(\/|$)/.test(pathname)) return null;
+  if (/^\/(admin|profesor|profesor-ai\/sesiune|cont|chat|autentificare|inregistrare|cererea-mea)(\/|$)/.test(pathname)) return null;
   return <>
     <AdsterraSocialBar />
     <aside aria-label="Link publicitar" className="container-page flex flex-wrap items-center justify-center gap-3 py-4">
