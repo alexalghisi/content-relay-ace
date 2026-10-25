@@ -5,7 +5,6 @@ import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { consolidatedTarget } from "@/lib/seo-redirects";
 import { BLOCAJE, BLOCAJE_MATERII } from "@/data/blocaje";
 
-
 const BASE_URL = "https://meditatiidirect.ro";
 
 const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
@@ -110,23 +109,26 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         // Harta Blocajelor — conținut static, indexabil: o pagină pe materie + una pe blocaj
         for (const m of BLOCAJE_MATERII) {
-          urls.push(`  <url>\n    <loc>${BASE_URL}/harta-blocajelor/${m.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+          urls.push(
+            `  <url>\n    <loc>${BASE_URL}/harta-blocajelor/${m.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+          );
         }
         // Scanerul de lacune — o pagină indexabilă pe materie (?tinta= nu se listează)
         for (const m of BLOCAJE_MATERII) {
-          urls.push(`  <url>\n    <loc>${BASE_URL}/scaner-lacune/${m.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+          urls.push(
+            `  <url>\n    <loc>${BASE_URL}/scaner-lacune/${m.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+          );
         }
         for (const n of BLOCAJE) {
-          urls.push(`  <url>\n    <loc>${BASE_URL}/harta-blocajelor/${n.materie}/${n.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+          urls.push(
+            `  <url>\n    <loc>${BASE_URL}/harta-blocajelor/${n.materie}/${n.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+          );
         }
 
         try {
           // Query-string listings (/meditatii?materie=…) are canonicalised to /meditatii — not listed.
           // Per-ad pages — primary long-tail SEO surface
-          const { data: ads } = await supabaseAdmin
-            .from("ads")
-            .select("id,seo_slug,updated_at")
-            .eq("status", "active");
+          const { data: ads } = await supabaseAdmin.from("ads").select("id,seo_slug,updated_at").eq("status", "active");
           for (const a of ads ?? []) {
             const slug = a.seo_slug || a.id;
             const last = a.updated_at ? new Date(a.updated_at).toISOString().slice(0, 10) : null;
@@ -134,14 +136,18 @@ export const Route = createFileRoute("/sitemap.xml")({
               `  <url>\n    <loc>${BASE_URL}/anunt/${slug}</loc>\n${last ? `    <lastmod>${last}</lastmod>\n` : ""}    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
             );
           }
-          // Pagini materie online (SEO: "meditatii engleza online" etc.)
-          for (const sub of SUBJECTS_SEO) {
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/meditatii-${sub.slug}-online</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
-            );
-          }
-          // City landing pages + profesori per oraș (nou — 14 pagini SEO)
+          // Paginile „materie-online” sunt noindex (șabloane aproape identice) — nu se listează.
+          // Orașe: doar cele cu profesori locali reali (aceeași regulă ca pagina).
+          const { MIN_LISTINGS_FOR_INDEX: MIN_CITY } = await import("@/lib/market-stats.functions");
+          const { data: locRows } = await supabaseAdmin
+            .from("ads")
+            .select("location")
+            .eq("status", "active")
+            .limit(10000);
+          const locs = (locRows ?? []).map((r: { location: string | null }) => (r.location ?? "").toLowerCase());
           for (const c of CITIES) {
+            if (locs.filter((l) => c.matchLocation.some((m) => l.includes(m.toLowerCase()))).length < MIN_CITY)
+              continue;
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,
             );
@@ -162,7 +168,9 @@ export const Route = createFileRoute("/sitemap.xml")({
 
           // Blog posts
           const { data: posts } = await supabaseAdmin
-            .from("blog_posts").select("slug,updated_at").eq("is_published", true);
+            .from("blog_posts")
+            .select("slug,updated_at")
+            .eq("is_published", true);
           for (const p of posts ?? []) {
             const last = p.updated_at ? new Date(p.updated_at).toISOString().slice(0, 10) : null;
             urls.push(
@@ -178,18 +186,21 @@ export const Route = createFileRoute("/sitemap.xml")({
           const { BAC_ARCHIVE } = await import("@/data/bac-archive");
           // Resource pages without a hosted subject PDF are noindex — skip them.
           const { data: names } = await supabaseAdmin.rpc("bac_pdf_names", { _prefix: "" });
-          const have = new Set(((names ?? []) as string[])
-            .filter((n) => n.endsWith("-subiect.pdf")).map((n) => n.split("/").slice(0, 2).join("/")));
+          const have = new Set(
+            ((names ?? []) as string[])
+              .filter((n) => n.endsWith("-subiect.pdf"))
+              .map((n) => n.split("/").slice(0, 2).join("/")),
+          );
           for (const it of BAC_ARCHIVE) {
             const m = it.internal.match(/^\/resurse\/bac\/([^/]+)\/(\d{4})/);
             if (m && !have.has(`${m[1]}/${m[2]}`)) continue;
-            urls.push(`  <url>\n    <loc>${BASE_URL}${it.internal}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}${it.internal}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>0.6</priority>\n  </url>`,
+            );
           }
         } catch (err) {
           console.error("sitemap bac fetch failed", err);
         }
-
-
 
         // Combo materie × oraș — TOATE combinațiile (14 orașe × 11 materii = 154 pagini)
         // + pagini preț pe materie
@@ -198,19 +209,30 @@ export const Route = createFileRoute("/sitemap.xml")({
           const { CITIES } = await import("@/data/cities");
           // Same rule as the page: a combo with no active ads is noindex, so keep it out of the sitemap.
           const { data: adRows } = await supabaseAdmin
-            .from("ads").select("subject_slug,location,is_online").eq("status", "active").limit(10000);
+            .from("ads")
+            .select("subject_slug,location,is_online")
+            .eq("status", "active")
+            .limit(10000);
           const rows = (adRows ?? []) as { subject_slug: string | null; location: string | null; is_online: boolean }[];
           const { MIN_LISTINGS_FOR_INDEX } = await import("@/lib/market-stats.functions");
           const comboHasAds = (subs: string[], locs: string[]) =>
-            rows.filter((r) => r.subject_slug && subs.includes(r.subject_slug) &&
-              (r.is_online || locs.some((m) => (r.location ?? "").toLowerCase().includes(m.toLowerCase())))).length >= MIN_LISTINGS_FOR_INDEX;
+            rows.filter(
+              (r) =>
+                r.subject_slug &&
+                subs.includes(r.subject_slug) &&
+                locs.some((m) => (r.location ?? "").toLowerCase().includes(m.toLowerCase())),
+            ).length >= MIN_LISTINGS_FOR_INDEX;
           const { getGhidLocal } = await import("@/data/ghiduri-locale");
           for (const s of SUBJECTS_SEO) {
-            urls.push(`  <url>\n    <loc>${BASE_URL}/preturi-meditatii/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/preturi-meditatii/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+            );
             for (const c of CITIES) {
               // Combinațiile cu ghid local sunt indexabile și fără anunțuri (vezi ruta).
               if (!getGhidLocal(s.slug, c.slug) && !comboHasAds(s.dbSlugs, c.matchLocation)) continue;
-              urls.push(`  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+              urls.push(
+                `  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
+              );
             }
           }
         } catch (err) {
@@ -226,16 +248,26 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Aceeași regulă ca pagina: doar subiectele care trec auditul de conținut (src/lib/bac-verificare.ts).
           const { subiecteVerificate } = await import("@/lib/bac-verificare");
           const pdfSet = subiecteVerificate((pdfNames ?? []) as string[]);
-          urls.push(`  <url>\n    <loc>${BASE_URL}/bac</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`);
+          urls.push(
+            `  <url>\n    <loc>${BASE_URL}/bac</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
+          );
           for (const s of BAC_SUBJECTS) {
-            urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
-            urls.push(`  <url>\n    <loc>${BASE_URL}/simulare-bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+            );
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/simulare-bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
+            );
             for (const y of BAC_YEARS) {
               if (![...pdfSet].some((n) => n.startsWith(`${s.slug}/${y}/`) && n.endsWith("-subiect.pdf"))) continue;
-              urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+              urls.push(
+                `  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+              );
               for (const ses of BAC_SESSIONS) {
                 if (!pdfSet.has(`${s.slug}/${y}/${ses.slug}-subiect.pdf`)) continue;
-                urls.push(`  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}/${ses.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
+                urls.push(
+                  `  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}/${ses.slug}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+                );
               }
             }
           }
@@ -258,7 +290,12 @@ export const Route = createFileRoute("/sitemap.xml")({
           } catch (err) {
             console.error("sitemap rezolvari DB fetch failed", err);
           }
-          const statice = REZOLVARI_PUBLICATE.map((r) => ({ materie: r.materie, an: r.an, sesiune: r.sesiune, updated_at: r.actualizat }));
+          const statice = REZOLVARI_PUBLICATE.map((r) => ({
+            materie: r.materie,
+            an: r.an,
+            sesiune: r.sesiune,
+            updated_at: r.actualizat,
+          }));
           const chei = new Set(statice.map((r) => `${r.materie}/${r.an}/${r.sesiune}`));
           const rez = [...statice, ...(rezDb ?? []).filter((r) => !chei.has(`${r.materie}/${r.an}/${r.sesiune}`))];
           for (const r of rez) {
@@ -270,8 +307,6 @@ export const Route = createFileRoute("/sitemap.xml")({
         } catch (err) {
           console.error("sitemap rezolvari fetch failed", err);
         }
-
-
 
         // Rezolvări verificate la admitere (din repo; nu depind de DB)
         {
@@ -304,16 +339,24 @@ export const Route = createFileRoute("/sitemap.xml")({
             subjects.add(p.subject_slug);
           }
           for (const s of subjects) {
-            urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/materie/${s}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/subiecte-admitere/materie/${s}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+            );
           }
           for (const u of unis) {
-            urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${u}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${u}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+            );
           }
           for (const us of unisSub) {
-            urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${us}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${us}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+            );
           }
           for (const usy of unisSubYear) {
-            urls.push(`  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${usy}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`);
+            urls.push(
+              `  <url>\n    <loc>${BASE_URL}/subiecte-admitere/${usy}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+            );
           }
         } catch (err) {
           console.error("sitemap admission_papers fetch failed", err);
