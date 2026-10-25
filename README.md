@@ -9,7 +9,7 @@ Aplicația iOS pentru [https://meditatiidirect.ro](https://meditatiidirect.ro): 
 ## Rulează pe iPhone (Mac cu Xcode)
 
 ```bash
-git clone https://github.com/alexalghisi/meditatiidirect-ios.git
+git clone -b ios-app https://github.com/alexalghisi/content-relay-ace.git meditatiidirect-ios
 cd meditatiidirect-ios
 npm install
 npx cap sync ios
