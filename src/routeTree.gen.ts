@@ -100,6 +100,7 @@ import { Route as AdminBacCrawlerRouteImport } from './routes/admin.bac-crawler'
 import { Route as AdminMesajeRouteImport } from './routes/admin.mesaje'
 import { Route as AdminStatisticiRouteImport } from './routes/admin.statistici'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
+import { Route as ApiProfesorAiLogRouteImport } from './routes/api/profesor-ai-log'
 import { Route as ApiProfesorAiStreamRouteImport } from './routes/api/profesor-ai-stream'
 import { Route as ApiTraducereRouteImport } from './routes/api/traducere'
 import { Route as BacIndexRouteImport } from './routes/bac.index'
@@ -616,6 +617,11 @@ const AnuntSlugRoute = AnuntSlugRouteImport.update({
   path: '/anunt/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiProfesorAiLogRoute = ApiProfesorAiLogRouteImport.update({
+  id: '/api/profesor-ai-log',
+  path: '/api/profesor-ai-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiProfesorAiStreamRoute = ApiProfesorAiStreamRouteImport.update({
   id: '/api/profesor-ai-stream',
   path: '/api/profesor-ai-stream',
@@ -991,6 +997,7 @@ export interface FileRoutesByFullPath {
   '/admin/mesaje': typeof AdminMesajeRoute
   '/admin/statistici': typeof AdminStatisticiRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/api/profesor-ai-log': typeof ApiProfesorAiLogRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/api/traducere': typeof ApiTraducereRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -1137,6 +1144,7 @@ export interface FileRoutesByTo {
   '/admin/mesaje': typeof AdminMesajeRoute
   '/admin/statistici': typeof AdminStatisticiRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/api/profesor-ai-log': typeof ApiProfesorAiLogRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/api/traducere': typeof ApiTraducereRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -1282,6 +1290,7 @@ export interface FileRoutesById {
   '/admin/mesaje': typeof AdminMesajeRoute
   '/admin/statistici': typeof AdminStatisticiRoute
   '/anunt/$slug': typeof AnuntSlugRoute
+  '/api/profesor-ai-log': typeof ApiProfesorAiLogRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
   '/api/traducere': typeof ApiTraducereRoute
   '/bac/$materie': typeof BacMaterieRouteWithChildren
@@ -1430,6 +1439,7 @@ export interface FileRouteTypes {
     | '/admin/mesaje'
     | '/admin/statistici'
     | '/anunt/$slug'
+    | '/api/profesor-ai-log'
     | '/api/profesor-ai-stream'
     | '/api/traducere'
     | '/bac/$materie'
@@ -1576,6 +1586,7 @@ export interface FileRouteTypes {
     | '/admin/mesaje'
     | '/admin/statistici'
     | '/anunt/$slug'
+    | '/api/profesor-ai-log'
     | '/api/profesor-ai-stream'
     | '/api/traducere'
     | '/blog/$slug'
@@ -1720,6 +1731,7 @@ export interface FileRouteTypes {
     | '/admin/mesaje'
     | '/admin/statistici'
     | '/anunt/$slug'
+    | '/api/profesor-ai-log'
     | '/api/profesor-ai-stream'
     | '/api/traducere'
     | '/bac/$materie'
@@ -1867,6 +1879,7 @@ export interface RootRouteChildren {
   AdminMesajeRoute: typeof AdminMesajeRoute
   AdminStatisticiRoute: typeof AdminStatisticiRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
+  ApiProfesorAiLogRoute: typeof ApiProfesorAiLogRoute
   ApiProfesorAiStreamRoute: typeof ApiProfesorAiStreamRoute
   ApiTraducereRoute: typeof ApiTraducereRoute
   BacMaterieRoute: typeof BacMaterieRouteWithChildren
@@ -2557,6 +2570,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnuntSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/profesor-ai-log': {
+      id: '/api/profesor-ai-log'
+      path: '/api/profesor-ai-log'
+      fullPath: '/api/profesor-ai-log'
+      preLoaderRoute: typeof ApiProfesorAiLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/profesor-ai-stream': {
       id: '/api/profesor-ai-stream'
       path: '/api/profesor-ai-stream'
@@ -3051,6 +3071,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminMesajeRoute: AdminMesajeRoute,
   AdminStatisticiRoute: AdminStatisticiRoute,
   AnuntSlugRoute: AnuntSlugRoute,
+  ApiProfesorAiLogRoute: ApiProfesorAiLogRoute,
   ApiProfesorAiStreamRoute: ApiProfesorAiStreamRoute,
   ApiTraducereRoute: ApiTraducereRoute,
   BacMaterieRoute: BacMaterieRouteWithChildren,
