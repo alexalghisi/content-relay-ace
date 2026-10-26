@@ -43,7 +43,7 @@ export function liveSetup(system: string) {
     model: `models/${LIVE_MODEL()}`,
     generationConfig: {
       responseModalities: ["AUDIO"],
-      speechConfig: { languageCode: "ro-RO", voiceConfig: { prebuiltVoiceConfig: { voiceName: LIVE_VOICE() } } },
+      speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: LIVE_VOICE() } } },
     },
     systemInstruction: { parts: [{ text: system }] },
     tools: [BOARD_TOOL],
