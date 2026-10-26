@@ -543,6 +543,22 @@ export function SesiuneProfesorAi({
             <pre className="mt-1 whitespace-pre-wrap font-sans text-base leading-relaxed">{tabla}</pre>
           </div>
         )}
+        {!terminat && (
+          <form
+            className="mx-5 mt-3 flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const f = e.currentTarget.elements.namedItem("q") as HTMLInputElement;
+              const t = f.value.trim();
+              if (!t) return;
+              f.value = "";
+              void trimite(t);
+            }}
+          >
+            <input name="q" placeholder="Scrie aici întrebarea…" className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-background px-3 text-base" />
+            <Button type="submit" className="btn-primary h-11 px-4">Trimite</Button>
+          </form>
+        )}
         <div className={`space-y-3 px-5 ${eroare || terminat ? "py-3" : "pb-3"}`} aria-live="polite">
           {eroare && (
             <div role="alert" className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">

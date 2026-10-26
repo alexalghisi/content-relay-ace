@@ -5,6 +5,33 @@
 const WS =
   "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContentConstrained";
 
+/**
+ * iPhone/Safari only grants the microphone and audio playback reliably inside a tap. The lesson's
+ * start button calls this synchronously in its click handler; the lesson then reuses these.
+ */
+export const pregatit: { stream: Promise<MediaStream> | null; micCtx: AudioContext | null; playCtx: AudioContext | null } = {
+  stream: null, micCtx: null, playCtx: null,
+};
+export function deblocheazaAudioMicrofon() {
+  const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+  try { pregatit.micCtx ??= new AC(); void pregatit.micCtx.resume(); } catch { /* ignore */ }
+  try { pregatit.playCtx ??= new AC({ sampleRate: 24000 }); void pregatit.playCtx.resume(); } catch { /* ignore */ }
+  pregatit.stream ??= navigator.mediaDevices.getUserMedia({
+    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 },
+  });
+  pregatit.stream.catch(() => { pregatit.stream = null; });
+}
+async function micStream() {
+  if (pregatit.stream) { try { return await pregatit.stream; } catch { /* ask again */ } }
+  return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } });
+}
+function micContext() {
+  const c = pregatit.micCtx ?? new AudioContext();
+  pregatit.micCtx = null;
+  void c.resume();
+  return c;
+}
+
 export type LiveEvents = {
   onReady: () => void;
   onTeacherAudio: (pcm24kB64: string) => void;
@@ -143,10 +170,8 @@ export class LiveLesson {
   }
 
   private async startMic() {
-    this.stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 },
-    });
-    const ctx = new AudioContext();
+    this.stream = await micStream();
+    const ctx = micContext();
     this.ctx = ctx;
     const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
     await ctx.audioWorklet.addModule(url);
@@ -188,7 +213,8 @@ export class PcmPlayer {
   onPlaying: (on: boolean) => void = () => {};
 
   play(b64: string) {
-    this.ctx ??= new AudioContext({ sampleRate: 24000 });
+    this.ctx ??= pregatit.playCtx ?? new AudioContext({ sampleRate: 24000 });
+    pregatit.playCtx = null;
     const ctx = this.ctx;
     void ctx.resume();
     const u8 = bytesFromB64(b64);
@@ -350,10 +376,8 @@ export class OpenAiLesson {
   }
 
   private async startMic() {
-    this.stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 },
-    });
-    const ctx = new AudioContext();
+    this.stream = await micStream();
+    const ctx = micContext();
     this.ctx = ctx;
     const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
     await ctx.audioWorklet.addModule(url);

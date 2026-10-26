@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { profesorAiLive } from "@/lib/profesor-ai.functions";
 import { paMaterieName, paNivelName, paObiectivName, PA_START, PA_TACERE, PA_TACERE_MAX, PA_TACERE_SEC, type PaConfig } from "@/lib/profesor-ai";
 import { SesiuneProfesorAi } from "./sesiune";
+import { deblocheazaAudioMicrofon } from "@/lib/profesor-ai-live";
 import { FiguraSvg } from "./tabla-render";
 const TablaRender = lazy(() => import("./tabla-render"));
 
@@ -17,7 +18,31 @@ type Props = { token: string; config: PaConfig; exp: number; gratuit: boolean };
  */
 export function SesiuneProfesorAiAuto(p: Props) {
   const [clasic, setClasic] = useState(false);
+  const [pornit, setPornit] = useState(false);
   if (clasic) return <SesiuneProfesorAi {...p} />;
+  if (!pornit)
+    return (
+      <div className="mx-auto grid w-full max-w-4xl gap-4">
+        <section className="overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <div className="relative aspect-[4/3] w-full bg-foreground sm:aspect-video">
+            <img src={hannah.url} alt="Profesoara ta AI" className="absolute inset-0 h-full w-full object-cover" />
+            <div className="absolute inset-0 grid place-items-center bg-foreground/35 p-6">
+              <button
+                type="button"
+                onClick={() => {
+                  deblocheazaAudioMicrofon(); // synchronously inside the tap (iPhone)
+                  setPornit(true);
+                }}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-4 text-lg font-bold text-primary-foreground shadow-lg"
+              >
+                <Mic className="h-6 w-6" /> Începe lecția
+              </button>
+            </div>
+          </div>
+          <p className="px-5 py-3 text-sm text-muted-foreground">Apasă butonul și permite accesul la microfon. Vorbești liber cu profesoara; poți și să scrii.</p>
+        </section>
+      </div>
+    );
   return <SesiuneLive {...p} onFallback={() => setClasic(true)} />;
 }
 
@@ -27,6 +52,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
   const [vorbeste, setVorbeste] = useState(false);
   const [tabla, setTabla] = useState("");
   const [desen, setDesen] = useState("");
+  const [scris, setScris] = useState("");
   const [eroare, setEroare] = useState("");
   const [mut, setMut] = useState(false);
   const [ramas, setRamas] = useState(() => Math.max(0, exp - Date.now()));
@@ -189,6 +215,22 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
               </Suspense>
             )}
           </div>
+        )}
+        {stare === "live" && !terminat && (
+          <form
+            className="mx-5 mt-3 flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const t = scris.trim();
+              if (!t) return;
+              lesson.current?.sendText(t);
+              setScris("");
+              ultimaActivitate.current = Date.now();
+            }}
+          >
+            <input value={scris} onChange={(e) => setScris(e.target.value)} placeholder="Sau scrie aici întrebarea…" className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-background px-3 text-base" />
+            <Button type="submit" className="btn-primary h-11 px-4">Trimite</Button>
+          </form>
         )}
         <div className="space-y-3 px-5 py-3" aria-live="polite">
           {eroare && <div role="alert" className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">{eroare}</div>}
