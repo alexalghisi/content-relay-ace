@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Clock, Loader2, Mic, MicOff } from "lucide-react";
 import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { profesorAiLive } from "@/lib/profesor-ai.functions";
 import { paMaterieName, paNivelName, paObiectivName, PA_START, PA_TACERE, PA_TACERE_MAX, PA_TACERE_SEC, type PaConfig } from "@/lib/profesor-ai";
 import { SesiuneProfesorAi } from "./sesiune";
+import { FiguraSvg } from "./tabla-render";
+const TablaRender = lazy(() => import("./tabla-render"));
 
 type Props = { token: string; config: PaConfig; exp: number; gratuit: boolean };
 
@@ -24,12 +26,15 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
   const [video, setVideo] = useState(false);
   const [vorbeste, setVorbeste] = useState(false);
   const [tabla, setTabla] = useState("");
+  const [desen, setDesen] = useState("");
   const [eroare, setEroare] = useState("");
   const [mut, setMut] = useState(false);
   const [ramas, setRamas] = useState(() => Math.max(0, exp - Date.now()));
   const videoEl = useRef<HTMLVideoElement>(null);
   const lesson = useRef<import("@/lib/profesor-ai-live").LiveLesson | null>(null);
   const ultimaActivitate = useRef(Date.now());
+  const avatarVorbeste = useRef(false);
+  const playerVorbeste = useRef(false);
   const taceri = useRef(0);
   const terminat = !gratuit && ramas <= 0;
 
@@ -57,6 +62,14 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
           const sock = () => (s as unknown as { _sessionEventSocket?: WebSocket | null })._sessionEventSocket ?? null;
           if (sock()) {
             lip = new AvatarLipSync(sock);
+            // Avatar speaking state straight from LiveAvatar's events.
+            sock()?.addEventListener("message", (ev) => {
+              try {
+                const t = (JSON.parse(String(ev.data)) as { type?: string }).type;
+                if (t === "agent.speak_started") { avatarVorbeste.current = true; setVorbeste(true); }
+                if (t === "agent.speak_ended" || t === "agent.speak_interrupted") { avatarVorbeste.current = false; setVorbeste(false); ultimaActivitate.current = Date.now(); }
+              } catch { /* not JSON */ }
+            });
             setVideo(true);
             const ka = window.setInterval(() => lip?.keepAlive(), 60_000);
             curatenie.push(() => window.clearInterval(ka));
@@ -69,18 +82,19 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
         }
       }
       const player = new PcmPlayer();
-      player.onPlaying = (on) => { if (!lip) setVorbeste(on); };
+      player.onPlaying = (on) => { playerVorbeste.current = on; if (!lip) setVorbeste(on); };
       curatenie.push(() => player.close());
 
       const L = new LiveLesson(r.geminiToken, r.setup, {
         onReady: () => { gata = true; setStare("live"); },
         onTeacherAudio: (b64) => {
           ultimaActivitate.current = Date.now();
-          if (lip) { lip.push(b64); setVorbeste(true); } else player.play(b64);
+          if (lip) lip.push(b64); else player.play(b64);
         },
-        onTurnComplete: () => { lip?.end(); ultimaActivitate.current = Date.now(); if (lip) window.setTimeout(() => setVorbeste(false), 800); },
-        onInterrupted: () => { lip?.interrupt(); player.stop(); setVorbeste(false); },
+        onTurnComplete: () => { lip?.end(); ultimaActivitate.current = Date.now(); },
+        onInterrupted: () => { lip?.interrupt(); player.stop(); avatarVorbeste.current = false; setVorbeste(false); },
         onBoard: (t) => setTabla(t),
+        onDrawing: (svg) => setDesen(svg),
         onTeacherText: () => {},
         onStudentText: () => { ultimaActivitate.current = Date.now(); taceri.current = 0; },
         onError: (m) => {
@@ -92,6 +106,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
         },
         onClose: () => {},
       });
+      L.teacherSpeaking = () => avatarVorbeste.current || playerVorbeste.current;
       lesson.current = L;
       curatenie.push(() => L.stop());
       try {
@@ -112,7 +127,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
     if (stare !== "live") return;
     const t = window.setInterval(() => {
       if (vorbeste || terminat || taceri.current >= PA_TACERE_MAX) return;
-      if (Date.now() - ultimaActivitate.current > PA_TACERE_SEC * 1000) {
+      if (Date.now() - ultimaActivitate.current > (PA_TACERE_SEC + 35) * 1000) {
         taceri.current += 1;
         ultimaActivitate.current = Date.now();
         lesson.current?.sendText(PA_TACERE);
@@ -163,10 +178,15 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
         <div className="px-5 pt-3 text-xs text-muted-foreground">
           {paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min · Română · vorbește liber, o poți întrerupe oricând
         </div>
-        {tabla && (
+        {(tabla || desen) && (
           <div className="mx-5 mt-3 rounded-2xl bg-muted px-4 py-3">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Profesoara a scris</p>
-            <pre className="mt-1 whitespace-pre-wrap font-sans text-base leading-relaxed">{tabla}</pre>
+            {desen && <FiguraSvg svg={desen} />}
+            {tabla && (
+              <Suspense fallback={<pre className="mt-1 whitespace-pre-wrap font-sans text-base">{tabla}</pre>}>
+                <div className="mt-1"><TablaRender text={tabla} /></div>
+              </Suspense>
+            )}
           </div>
         )}
         <div className="space-y-3 px-5 py-3" aria-live="polite">

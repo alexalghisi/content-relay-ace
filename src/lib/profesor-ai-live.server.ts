@@ -9,7 +9,8 @@ export const LIVE_MODEL = () => process.env["PROFESOR_AI_LIVE_MODEL"] || "gemini
 /** Female Gemini voice; it speaks Romanian natively. */
 export const LIVE_VOICE = () => process.env["PROFESOR_AI_LIVE_VOICE"] || "Aoede";
 
-const TABLA_LIVE = `- Formulele, pașii, codul și enunțurile le scrii pe tablă cu funcția scrie_pe_tabla (text simplu, simboluri Unicode, fără LaTeX, maxim 12 rânduri; tabla se înlocuiește de fiecare dată). Nu citești tabla cu voce tare simbol cu simbol și nu scrii întrebări pe tablă.`;
+const TABLA_LIVE = `- Tabla: tot ce e vizual scrii pe tablă cu funcția scrie_pe_tabla (se înlocuiește de fiecare dată), în Markdown cu LaTeX. Matematica o scrii DOAR în LaTeX între $...$ (în rând) sau $$...$$ (pe rând separat): fracții \\frac{a}{b}, puteri, radicali, sisteme cu \\begin{cases}, iar o matrice 2×2 sau 3×3 ÎNTOTDEAUNA cu \\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix} (câte un rând al matricei pe fiecare rând), niciodată pe o singură linie. Datele pe coloane le pui în tabel Markdown (| col | col |), codul în bloc \`\`\` cu limbajul, pașii în listă numerotată. Maxim ~15 rânduri. Nu citești tabla simbol cu simbol și nu scrii întrebări pe tablă.
+- Desene: când ajută o imagine (figură geometrică, grafic de funcție, axă, schemă, circuit, celulă, hartă simplă), folosești funcția deseneaza cu un SVG simplu și corect (viewBox, linii, etichete text lizibile, fără script). Desenul apare sub video, lângă tablă.`;
 
 /** Same teacher as the text pipeline, adapted for a voice-native model with a board tool. */
 const DOAR_ROMANA = "LIMBA: vorbești EXCLUSIV în limba română, de la prima până la ultima replică. Chiar dacă elevul vorbește, citește sau pare să vorbească în italiană, engleză sau altă limbă, tu răspunzi tot în română. Nu schimbi niciodată limba. (Excepție: la ora de limbă străină poți spune cuvinte sau exemple în limba respectivă, dar explicațiile sunt în română.)";
@@ -19,7 +20,7 @@ export function livePrompt(c: PaConfig, durata: number, seed: number): string {
     .split("\n")
     .map((l) => (l.includes("TABLA:") ? TABLA_LIVE : l))
     .join("\n") +
-    "\n" + DOAR_ROMANA + "\nVorbești natural și fluent, fără pauze lungi. Când elevul te întrerupe, te oprești și îl asculți.";
+    "\n" + DOAR_ROMANA + "\nPEDAGOGIE: nu ceri niciodată rezultatul unui exercițiu înainte să fi explicat metoda. Ordinea e mereu: 1) explici ideea pe scurt, 2) rezolvi TU un exemplu complet, pas cu pas, scris pe tablă, 3) abia apoi dai elevului un exercițiu asemănător și îi spui „ia-ți timp, gândește-te, spune-mi când ai un răspuns”, 4) aștepți în liniște, 5) dacă greșește sau se blochează, îi dai un indiciu, nu rezultatul. Nu răspunzi tu în locul elevului și nu treci mai departe până nu încearcă.\nVorbești natural și fluent, fără pauze lungi. Când elevul te întrerupe, te oprești și îl asculți.";
 }
 
 export const BOARD_TOOL = {
@@ -27,7 +28,12 @@ export const BOARD_TOOL = {
     {
       name: "scrie_pe_tabla",
       description: "Scrie pe tabla elevului formule, pași, cod sau enunțuri (înlocuiește conținutul tablei).",
-      parameters: { type: "OBJECT", properties: { text: { type: "STRING", description: "Conținutul tablei" } }, required: ["text"] },
+      parameters: { type: "OBJECT", properties: { text: { type: "STRING", description: "Conținutul tablei: Markdown + LaTeX ($...$, $$...$$)" } }, required: ["text"] },
+    },
+    {
+      name: "deseneaza",
+      description: "Afișează elevului un desen: figură geometrică, grafic, schemă. Primește cod SVG complet.",
+      parameters: { type: "OBJECT", properties: { svg: { type: "STRING", description: "Cod SVG complet, <svg viewBox=...>...</svg>, fără script" } }, required: ["svg"] },
     },
   ],
 };

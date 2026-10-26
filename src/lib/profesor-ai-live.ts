@@ -11,6 +11,7 @@ export type LiveEvents = {
   onTurnComplete: () => void;
   onInterrupted: () => void;
   onBoard: (text: string) => void;
+  onDrawing: (svg: string) => void;
   onTeacherText: (t: string) => void;
   onStudentText: (t: string) => void;
   onError: (msg: string) => void;
@@ -30,7 +31,11 @@ class Mic extends AudioWorkletProcessor {
       this.buf.push(s < 0 ? s * 0x8000 : s * 0x7fff);
     }
     this.pos -= ch.length;
-    if (this.buf.length >= 1600) { this.port.postMessage(Int16Array.from(this.buf).buffer, []); this.buf = []; }
+    if (this.buf.length >= 1600) {
+      let e = 0; for (const v of this.buf) e += (v / 32768) * (v / 32768);
+      this.port.postMessage({ pcm: Int16Array.from(this.buf).buffer, rms: Math.sqrt(e / this.buf.length) });
+      this.buf = [];
+    }
     return true;
   }
 }
@@ -59,6 +64,8 @@ export class LiveLesson {
   private resumeHandle: string | null = null;
   private reconnects = 0;
   muted = false;
+  /** True while the teacher's voice is playing (avatar or speakers). */
+  teacherSpeaking: () => boolean = () => false;
 
   constructor(private token: string, private setup: Setup, private ev: LiveEvents) {}
 
@@ -96,8 +103,9 @@ export class LiveLesson {
         if (sc.turnComplete) this.ev.onTurnComplete();
       }
       if (m.toolCall?.functionCalls) {
-        const functionResponses = m.toolCall.functionCalls.map((f: { id: string; name: string; args?: { text?: string } }) => {
+        const functionResponses = m.toolCall.functionCalls.map((f: { id: string; name: string; args?: { text?: string; svg?: string } }) => {
           if (f.name === "scrie_pe_tabla" && f.args?.text) this.ev.onBoard(f.args.text);
+          if (f.name === "deseneaza" && f.args?.svg) this.ev.onDrawing(f.args.svg);
           return { id: f.id, name: f.name, response: { result: "ok" } };
         });
         this.send({ toolResponse: { functionResponses } });
@@ -146,9 +154,18 @@ export class LiveLesson {
     const src = ctx.createMediaStreamSource(this.stream);
     const node = new AudioWorkletNode(ctx, "pa-mic");
     this.node = node;
+    let loudFrames = 0;
     node.port.onmessage = (e) => {
       if (this.muted) return;
-      this.send({ realtimeInput: { audio: { data: b64FromBytes(new Uint8Array(e.data as ArrayBuffer)), mimeType: "audio/pcm;rate=16000" } } });
+      const { pcm, rms } = e.data as { pcm: ArrayBuffer; rms: number };
+      // While she speaks, her own voice leaks back into the mic (laptop speakers) and Gemini would
+      // take it as the student interrupting, cutting her off mid-sentence. So during her speech only
+      // clearly louder, sustained speech (the student talking over her) is passed through.
+      if (this.teacherSpeaking()) {
+        loudFrames = rms > 0.08 ? loudFrames + 1 : 0;
+        if (loudFrames < 3) return;
+      } else loudFrames = 0;
+      this.send({ realtimeInput: { audio: { data: b64FromBytes(new Uint8Array(pcm)), mimeType: "audio/pcm;rate=16000" } } });
     };
     src.connect(node);
   }
