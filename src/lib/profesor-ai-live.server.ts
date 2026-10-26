@@ -98,3 +98,49 @@ export async function createLiteAvatarToken(maxSeconds: number): Promise<string 
   const j = (await res.json().catch(() => null)) as { data?: { session_token?: string } } | null;
   return j?.data?.session_token ?? null;
 }
+
+export const OPENAI_MODEL = () => process.env["PROFESOR_AI_OPENAI_MODEL"] || "gpt-realtime-2.1";
+export const OPENAI_VOICE = () => process.env["PROFESOR_AI_OPENAI_VOICE"] || "marin";
+
+/** Short-lived OpenAI Realtime client secret with the whole session (prompt, voice, tools) baked in. */
+export async function createOpenAiSecret(system: string, minutes: number): Promise<{ token: string; model: string } | { error: string }> {
+  const key = process.env["OPENAI_API_KEY"];
+  if (!key) return { error: "OPENAI_API_KEY lipsește." };
+  const model = OPENAI_MODEL();
+  const tools = BOARD_TOOL.functionDeclarations.map((f) => ({
+    type: "function",
+    name: f.name,
+    description: f.description,
+    parameters: { type: "object", properties: Object.fromEntries(Object.entries(f.parameters.properties).map(([k, v]) => [k, { type: "string", description: v.description }])), required: f.parameters.required },
+  }));
+  const res = await fetch("https://api.openai.com/v1/realtime/client_secrets", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      expires_after: { anchor: "created_at", seconds: Math.min(7200, (minutes + 10) * 60) },
+      session: {
+        type: "realtime",
+        model,
+        instructions: system,
+        output_modalities: ["audio"],
+        audio: {
+          input: {
+            format: { type: "audio/pcm", rate: 24000 },
+            transcription: { model: "gpt-4o-mini-transcribe", language: "ro" },
+            noise_reduction: { type: "near_field" },
+            turn_detection: { type: "semantic_vad", eagerness: "low", create_response: true, interrupt_response: true },
+          },
+          output: { format: { type: "audio/pcm", rate: 24000 }, voice: OPENAI_VOICE() },
+        },
+        tools,
+        tool_choice: "auto",
+      },
+    }),
+  }).catch(() => null);
+  if (!res?.ok) {
+    console.warn(`[profesor-ai] openai secret HTTP ${res?.status ?? "network"} ${res ? (await res.text().catch(() => "")).slice(0, 300) : ""}`);
+    return { error: "OpenAI Realtime nu a emis accesul." };
+  }
+  const j = (await res.json().catch(() => null)) as { value?: string } | null;
+  return j?.value ? { token: j.value, model } : { error: "OpenAI Realtime nu a emis accesul." };
+}

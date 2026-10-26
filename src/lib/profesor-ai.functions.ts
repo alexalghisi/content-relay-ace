@@ -381,15 +381,14 @@ export const profesorAiLive = createServerFn({ method: "POST" })
     const s = await citesteSesiune(data.token, context.userId);
     if (!s) return { ok: false as const, error: "Sesiunea nu este validă." };
     const live = await import("./profesor-ai-live.server");
-    const [g, avatar] = await Promise.all([
-      live.createGeminiLiveToken(s.durata),
-      live.createLiteAvatarToken(Math.min(3600, (s.durata + 5) * 60)),
-    ]);
+    const prompt = live.livePrompt(s, s.durata, s.exp);
+    const avatarP = live.createLiteAvatarToken(Math.min(3600, (s.durata + 5) * 60));
+    // OpenAI Realtime first when its key is set; Gemini Live as the second choice.
+    if (process.env["OPENAI_API_KEY"]) {
+      const [o, avatar] = await Promise.all([live.createOpenAiSecret(prompt, s.durata), avatarP]);
+      if ("token" in o) return { ok: true as const, provider: "openai" as const, token: o.token, model: o.model, setup: null, avatarToken: avatar };
+    }
+    const [g, avatar] = await Promise.all([live.createGeminiLiveToken(s.durata), avatarP]);
     if (!("token" in g)) return { ok: false as const, error: g.error };
-    return {
-      ok: true as const,
-      geminiToken: g.token,
-      setup: live.liveSetup(live.livePrompt(s, s.durata, s.exp)),
-      avatarToken: avatar,
-    };
+    return { ok: true as const, provider: "gemini" as const, token: g.token, model: "", setup: live.liveSetup(prompt), avatarToken: avatar };
   });

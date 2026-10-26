@@ -20,7 +20,7 @@ export type LiveEvents = {
 
 const WORKLET = `
 class Mic extends AudioWorkletProcessor {
-  constructor() { super(); this.buf = []; this.ratio = sampleRate / 16000; this.pos = 0; }
+  constructor(o) { super(); const r = (o && o.processorOptions && o.processorOptions.rate) || 16000; this.buf = []; this.ratio = sampleRate / r; this.pos = 0; }
   process(inputs) {
     const ch = inputs[0] && inputs[0][0];
     if (!ch) return true;
@@ -263,4 +263,123 @@ export class AvatarLipSync {
   }
 
   keepAlive() { this.raw({ type: "session.keep_alive", event_id: this.id() }); }
+}
+
+
+/**
+ * OpenAI Realtime (speech-to-speech) over WebSocket with a short-lived client secret. Same events
+ * as LiveLesson; audio in and out is 24 kHz PCM, so the avatar lip-sync gets it unchanged.
+ */
+export class OpenAiLesson {
+  private ws: WebSocket | null = null;
+  private ctx: AudioContext | null = null;
+  private stream: MediaStream | null = null;
+  private node: AudioWorkletNode | null = null;
+  private closed = false;
+  muted = false;
+  teacherSpeaking: () => boolean = () => false;
+
+  constructor(private token: string, private model: string, private ev: LiveEvents) {}
+
+  async start(firstMessage: string) {
+    const ws = new WebSocket(`wss://api.openai.com/v1/realtime?model=${encodeURIComponent(this.model)}`, [
+      "realtime",
+      `openai-insecure-api-key.${this.token}`,
+    ]);
+    this.ws = ws;
+    let ready = false;
+    ws.onmessage = (e) => {
+      let m: Record<string, any>;
+      try { m = JSON.parse(String(e.data)); } catch { return; }
+      switch (m.type) {
+        case "session.created":
+          if (!ready) { ready = true; this.ev.onReady(); this.sendText(firstMessage); }
+          break;
+        case "response.output_audio.delta":
+          if (m.delta) this.ev.onTeacherAudio(m.delta);
+          break;
+        case "response.output_audio_transcript.delta":
+          if (m.delta) this.ev.onTeacherText(m.delta);
+          break;
+        case "conversation.item.input_audio_transcription.completed":
+          if (m.transcript) this.ev.onStudentText(m.transcript);
+          break;
+        case "input_audio_buffer.speech_started":
+          this.ev.onInterrupted();
+          break;
+        case "response.function_call_arguments.done": {
+          let args: { text?: string; svg?: string } = {};
+          try { args = JSON.parse(m.arguments || "{}"); } catch { /* ignore */ }
+          if (m.name === "scrie_pe_tabla" && args.text) this.ev.onBoard(args.text);
+          if (m.name === "deseneaza" && args.svg) this.ev.onDrawing(args.svg);
+          this.send({ type: "conversation.item.create", item: { type: "function_call_output", call_id: m.call_id, output: "ok" } });
+          this.pendingTool = true;
+          break;
+        }
+        case "response.done":
+          // After a board/drawing call the model continues speaking in a new response.
+          if (this.pendingTool) { this.pendingTool = false; this.send({ type: "response.create" }); }
+          else this.ev.onTurnComplete();
+          break;
+        case "error":
+          console.warn("[profesor-ai] openai realtime", m.error);
+          if (!ready || /api key|quota|billing|insufficient/i.test(JSON.stringify(m.error ?? ""))) {
+            this.ev.onError(m.error?.message ?? "OpenAI Realtime a refuzat conexiunea.");
+          }
+          break;
+      }
+    };
+    ws.onclose = (e) => {
+      if (this.closed || this.ws !== ws) return;
+      console.warn("[profesor-ai] openai închis", e.code, e.reason);
+      this.closed = true;
+      this.ev.onError(e.reason || "Conexiunea cu profesoara s-a întrerupt.");
+      this.ev.onClose();
+    };
+    await this.startMic();
+  }
+  private pendingTool = false;
+
+  private send(o: unknown) {
+    if (this.ws?.readyState === WebSocket.OPEN) this.ws.send(JSON.stringify(o));
+  }
+
+  sendText(text: string) {
+    this.send({ type: "conversation.item.create", item: { type: "message", role: "user", content: [{ type: "input_text", text }] } });
+    this.send({ type: "response.create" });
+  }
+
+  private async startMic() {
+    this.stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 },
+    });
+    const ctx = new AudioContext();
+    this.ctx = ctx;
+    const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
+    await ctx.audioWorklet.addModule(url);
+    URL.revokeObjectURL(url);
+    const src = ctx.createMediaStreamSource(this.stream);
+    const node = new AudioWorkletNode(ctx, "pa-mic", { processorOptions: { rate: 24000 } });
+    this.node = node;
+    let loudFrames = 0;
+    node.port.onmessage = (e) => {
+      if (this.muted) return;
+      const { pcm, rms } = e.data as { pcm: ArrayBuffer; rms: number };
+      if (this.teacherSpeaking()) {
+        loudFrames = rms > 0.08 ? loudFrames + 1 : 0;
+        if (loudFrames < 3) return;
+      } else loudFrames = 0;
+      this.send({ type: "input_audio_buffer.append", audio: b64FromBytes(new Uint8Array(pcm)) });
+    };
+    src.connect(node);
+  }
+
+  stop() {
+    this.closed = true;
+    try { this.ws?.close(); } catch { /* ignore */ }
+    this.ws = null;
+    this.node?.disconnect();
+    this.stream?.getTracks().forEach((t) => t.stop());
+    void this.ctx?.close().catch(() => {});
+  }
 }

@@ -31,7 +31,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
   const [mut, setMut] = useState(false);
   const [ramas, setRamas] = useState(() => Math.max(0, exp - Date.now()));
   const videoEl = useRef<HTMLVideoElement>(null);
-  const lesson = useRef<import("@/lib/profesor-ai-live").LiveLesson | null>(null);
+  const lesson = useRef<import("@/lib/profesor-ai-live").LiveLesson | import("@/lib/profesor-ai-live").OpenAiLesson | null>(null);
   const ultimaActivitate = useRef(Date.now());
   const avatarVorbeste = useRef(false);
   const playerVorbeste = useRef(false);
@@ -46,7 +46,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
       const r = await profesorAiLive({ data: { token } }).catch(() => null);
       if (anulat) return;
       if (!r?.ok) { console.warn("[profesor-ai] live indisponibil:", r?.error); return onFallback(); }
-      const { LiveLesson, PcmPlayer, AvatarLipSync } = await import("@/lib/profesor-ai-live");
+      const { LiveLesson, OpenAiLesson, PcmPlayer, AvatarLipSync } = await import("@/lib/profesor-ai-live");
 
       // Video avatar (optional): LITE session, we feed it Gemini's audio.
       let lip: InstanceType<typeof AvatarLipSync> | null = null;
@@ -85,7 +85,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
       player.onPlaying = (on) => { playerVorbeste.current = on; if (!lip) setVorbeste(on); };
       curatenie.push(() => player.close());
 
-      const L = new LiveLesson(r.geminiToken, r.setup, {
+      const evs: import("@/lib/profesor-ai-live").LiveEvents = {
         onReady: () => { gata = true; setStare("live"); },
         onTeacherAudio: (b64) => {
           ultimaActivitate.current = Date.now();
@@ -105,7 +105,8 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
           setStare("eroare");
         },
         onClose: () => {},
-      });
+      };
+      const L = r.provider === "openai" ? new OpenAiLesson(r.token, r.model, evs) : new LiveLesson(r.token, r.setup as Record<string, unknown>, evs);
       L.teacherSpeaking = () => avatarVorbeste.current || playerVorbeste.current;
       lesson.current = L;
       curatenie.push(() => L.stop());
