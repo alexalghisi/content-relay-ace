@@ -22,7 +22,15 @@ export function deblocheazaAudioMicrofon() {
   pregatit.stream.catch(() => { pregatit.stream = null; });
 }
 async function micStream() {
-  if (pregatit.stream) { try { return await pregatit.stream; } catch { /* ask again */ } }
+  // The prepared stream is single-use: stop() ends its tracks, so a later lesson must request a fresh one.
+  const cached = pregatit.stream;
+  pregatit.stream = null;
+  if (cached) {
+    try {
+      const s = await cached;
+      if (s.getAudioTracks().some((t) => t.readyState === "live")) return s;
+    } catch { /* ask again */ }
+  }
   return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } });
 }
 function micContext() {
