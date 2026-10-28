@@ -242,11 +242,9 @@ export function SesiuneProfesorAi({
       const ctrl = new AbortController();
       abortRef.current = ctrl;
       let rostit = false;
-      // A spoken filler only when the model is really slow: queued speech delays the real answer
-      // by its own length, so it must not fire around the usual time-to-first-sentence (~1.5 s).
-      const filler = window.setTimeout(() => {
-        if (!rostit && rev === revision.current && !ascuns) { rostit = true; void vorbeste("Hmm, stai puțin."); }
-      }, 4500);
+      // No spoken filler: queued filler speech delayed the real answer and repeated on every
+      // re-request, so the "thinking" state is shown visually only.
+      const filler = 0;
       const fail = (error: string, cod?: string) => {
         if (rev !== revision.current) return;
         messagesRef.current = previous;
