@@ -1,5 +1,8 @@
 # Roadmap
 
+- [ ] Evaluări autentice: formular rating 1–5 și recenzie pentru Profesor AI și acces la evaluarea profesorilor reali.
+- [ ] Profesor AI: investighează blocajele/vorbirea întreruptă, corectează cauzele și rulează teste de regresie; confirmarea audio live necesită o conversație reală.
+
 - [ ] Căsuță admin@meditatiidirect.ro: conectare Cloudflare cu permisiuni limitate la DNS pentru domeniu; alegere/activare serviciu de căsuță poștală, apoi confirmarea înregistrărilor exacte înainte de modificări. Blocat: conexiunea Cloudflare și contul serviciului de e-mail nu sunt încă disponibile.
 - [x] Explică formularul tokenului Cloudflare: Zone → DNS → Edit și Zone → Zone → Read, numai meditatiidirect.ro; fără Access: Apps sau Revoke.
 - [x] SMS: urmărire server-side cu ID, acceptare separată de livrare; retrimitere reală: POST 200, GET inițial 404, apoi GET 200 DELIVERED la reverificarea după 10 secunde. 13 teste trec; codul și cheia nu sunt expuse. Modificările sunt în previzualizare.
