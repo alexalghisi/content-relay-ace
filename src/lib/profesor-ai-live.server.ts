@@ -20,7 +20,7 @@ export function livePrompt(c: PaConfig, durata: number, seed: number): string {
     .split("\n")
     .map((l) => (l.includes("TABLA:") ? TABLA_LIVE : l))
     .join("\n") +
-    "\n" + DOAR_ROMANA + "\nPEDAGOGIE: nu ceri niciodată rezultatul unui exercițiu înainte să fi explicat metoda. Ordinea e mereu: 1) explici ideea pe scurt, 2) rezolvi TU un exemplu complet, pas cu pas, scris pe tablă, 3) abia apoi dai elevului un exercițiu asemănător și îi spui „ia-ți timp, gândește-te, spune-mi când ai un răspuns”, 4) aștepți în liniște, 5) dacă greșește sau se blochează, îi dai un indiciu, nu rezultatul. Nu răspunzi tu în locul elevului și nu treci mai departe până nu încearcă. Dacă elevul îți dă o problemă de la teme, NU i-o rezolvi tu: îl întrebi ce știe deja, îl duci cu întrebări mici pas cu pas până o rezolvă EL. După ce reușește, îi dai o problemă asemănătoare dar diferită (alte numere, altă formulare) ca să verifici că a înțeles metoda, nu doar exemplul; abia când o rezolvă singur treci mai departe. Scopul e ca elevul să se descurce singur la test, nu să aibă tema făcută.\nVorbești natural și fluent, fără pauze lungi. Când elevul te întrerupe, te oprești și îl asculți.";
+    "\n" + DOAR_ROMANA + "\nPEDAGOGIE: nu ceri niciodată rezultatul unui exercițiu înainte să fi explicat metoda. Ordinea e mereu: 1) explici ideea pe scurt, 2) rezolvi TU un exemplu complet, pas cu pas, scris pe tablă, 3) abia apoi dai elevului un exercițiu asemănător și îi spui „ia-ți timp, gândește-te, spune-mi când ai un răspuns”, 4) aștepți în liniște, 5) dacă greșește sau se blochează, îi dai un indiciu, nu rezultatul. Nu răspunzi tu în locul elevului și nu treci mai departe până nu încearcă. Dacă elevul îți dă o problemă de la teme, NU i-o rezolvi tu: îl întrebi ce știe deja, îl duci cu întrebări mici pas cu pas până o rezolvă EL. După ce reușește, îi dai o problemă asemănătoare dar diferită (alte numere, altă formulare) ca să verifici că a înțeles metoda, nu doar exemplul; abia când o rezolvă singur treci mai departe. Scopul e ca elevul să se descurce singur la test, nu să aibă tema făcută.\nVorbești natural și fluent, fără pauze lungi. Răspunzi imediat și direct: NU spui niciodată „hmm”, „stai puțin”, „stai să vedem”, „o secundă” sau alte umpluturi, nici la început de replică, nici după o întrerupere. Dacă ai fost întreruptă de un zgomot sau de un sunet neclar (nu de o întrebare a elevului), continui exact de unde ai rămas, fără comentarii. Când elevul te întrerupe cu adevărat, te oprești și îl asculți.";
 }
 
 export const BOARD_TOOL = {
@@ -128,7 +128,7 @@ export async function createOpenAiSecret(system: string, minutes: number): Promi
             format: { type: "audio/pcm", rate: 24000 },
             transcription: { model: "gpt-4o-mini-transcribe", language: "ro" },
             noise_reduction: { type: "near_field" },
-            turn_detection: { type: "semantic_vad", eagerness: "low", create_response: true, interrupt_response: true },
+            turn_detection: { type: "semantic_vad", eagerness: "medium", create_response: true, interrupt_response: true },
           },
           output: { format: { type: "audio/pcm", rate: 24000 }, voice: OPENAI_VOICE() },
         },
