@@ -88,6 +88,41 @@ export function bytesFromB64(b64: string): Uint8Array {
   return u8;
 }
 
+/**
+ * Echo gate for the mic while the teacher is speaking. Her voice leaks from the phone/laptop speaker
+ * back into the mic; if it reaches the model it counts as the student interrupting, so she stops
+ * mid-sentence (and often answers her own echo with "hmm, stai puțin"). While she speaks we only let
+ * through clearly loud speech sustained for OPEN_MS; the frames counted meanwhile are kept and sent
+ * once the gate opens (so the student's first words aren't lost), and it stays open HOLD_MS after the
+ * last loud frame so pauses between words don't chop the student's sentence.
+ */
+export const ECOU = { RMS: 0.12, OPEN_MS: 450, HOLD_MS: 1200 };
+export function creeazaPoartaEcou(frameMs: number, prag = ECOU) {
+  let loudMs = 0;
+  let deschisPana = 0;
+  let tampon: ArrayBuffer[] = [];
+  let ceas = 0;
+  /** Returns the frames to send now (possibly several, possibly none). */
+  return (pcm: ArrayBuffer, rms: number, profesoaraVorbeste: boolean): ArrayBuffer[] => {
+    ceas += frameMs;
+    if (!profesoaraVorbeste) { loudMs = 0; tampon = []; deschisPana = 0; return [pcm]; }
+    const tare = rms > prag.RMS;
+    if (ceas <= deschisPana) {
+      if (tare) deschisPana = ceas + prag.HOLD_MS;
+      return [pcm];
+    }
+    if (!tare) { loudMs = 0; tampon = []; return []; }
+    loudMs += frameMs;
+    tampon.push(pcm);
+    if (loudMs < prag.OPEN_MS) return [];
+    deschisPana = ceas + prag.HOLD_MS;
+    const out = tampon;
+    tampon = [];
+    loudMs = 0;
+    return out;
+  };
+}
+
 type Setup = Record<string, unknown>;
 
 export class LiveLesson {
@@ -187,18 +222,13 @@ export class LiveLesson {
     const src = ctx.createMediaStreamSource(this.stream);
     const node = new AudioWorkletNode(ctx, "pa-mic");
     this.node = node;
-    let loudFrames = 0;
+    const poarta = creeazaPoartaEcou(100); // 1600 samples at 16 kHz
     node.port.onmessage = (e) => {
       if (this.muted) return;
       const { pcm, rms } = e.data as { pcm: ArrayBuffer; rms: number };
-      // While she speaks, her own voice leaks back into the mic (laptop speakers) and Gemini would
-      // take it as the student interrupting, cutting her off mid-sentence. So during her speech only
-      // clearly louder, sustained speech (the student talking over her) is passed through.
-      if (this.teacherSpeaking()) {
-        loudFrames = rms > 0.08 ? loudFrames + 1 : 0;
-        if (loudFrames < 3) return;
-      } else loudFrames = 0;
-      this.send({ realtimeInput: { audio: { data: b64FromBytes(new Uint8Array(pcm)), mimeType: "audio/pcm;rate=16000" } } });
+      for (const f of poarta(pcm, rms, this.teacherSpeaking())) {
+        this.send({ realtimeInput: { audio: { data: b64FromBytes(new Uint8Array(f)), mimeType: "audio/pcm;rate=16000" } } });
+      }
     };
     src.connect(node);
   }
@@ -393,15 +423,13 @@ export class OpenAiLesson {
     const src = ctx.createMediaStreamSource(this.stream);
     const node = new AudioWorkletNode(ctx, "pa-mic", { processorOptions: { rate: 24000 } });
     this.node = node;
-    let loudFrames = 0;
+    const poarta = creeazaPoartaEcou(1600 / 24); // 1600 samples at 24 kHz ≈ 67 ms
     node.port.onmessage = (e) => {
       if (this.muted) return;
       const { pcm, rms } = e.data as { pcm: ArrayBuffer; rms: number };
-      if (this.teacherSpeaking()) {
-        loudFrames = rms > 0.08 ? loudFrames + 1 : 0;
-        if (loudFrames < 3) return;
-      } else loudFrames = 0;
-      this.send({ type: "input_audio_buffer.append", audio: b64FromBytes(new Uint8Array(pcm)) });
+      for (const f of poarta(pcm, rms, this.teacherSpeaking())) {
+        this.send({ type: "input_audio_buffer.append", audio: b64FromBytes(new Uint8Array(f)) });
+      }
     };
     src.connect(node);
   }
