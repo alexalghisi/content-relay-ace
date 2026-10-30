@@ -140,6 +140,8 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
           // Failed before the lesson really started → classic lesson.
           // OpenAI unusable (no credits, bad key) → retry with Gemini Live; otherwise the classic lesson.
           if (!gata) { L.stop(); return onFallback(r.provider); }
+          // OpenAI credits ran out mid-lesson → continue right away on Gemini Live.
+          if (r.provider === "openai" && /credit|quota|billing|insufficient/i.test(m)) { L.stop(); return onFallback("openai"); }
           setEroare("Conexiunea cu profesoara s-a întrerupt. Pornește o sesiune nouă.");
           setStare("eroare");
         },
