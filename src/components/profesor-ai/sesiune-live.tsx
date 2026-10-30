@@ -19,6 +19,7 @@ type Props = { token: string; config: PaConfig; exp: number; gratuit: boolean };
 export function SesiuneProfesorAiAuto(p: Props) {
   const [clasic, setClasic] = useState(false);
   const [pornit, setPornit] = useState(false);
+  const [evitaOpenAi, setEvitaOpenAi] = useState(false);
   if (clasic) return <SesiuneProfesorAi {...p} />;
   if (!pornit)
     return (
@@ -43,12 +44,19 @@ export function SesiuneProfesorAiAuto(p: Props) {
         </section>
       </div>
     );
-  return <SesiuneLive {...p} onFallback={() => setClasic(true)} />;
+  return (
+    <SesiuneLive
+      key={evitaOpenAi ? "gemini" : "auto"}
+      {...p}
+      evita={evitaOpenAi ? "openai" : undefined}
+      onFallback={(provider) => (provider === "openai" && !evitaOpenAi ? setEvitaOpenAi(true) : setClasic(true))}
+    />
+  );
 }
 
 const raporteaza = (m: string) => { try { void fetch("/api/profesor-ai-log", { method: "POST", body: m, keepalive: true }); } catch { /* ignore */ } };
 
-function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFallback: () => void }) {
+function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props & { onFallback: (provider?: string) => void; evita?: "openai" }) {
   const [stare, setStare] = useState<"conectare" | "live" | "eroare">("conectare");
   const [video, setVideo] = useState(false);
   const [vorbeste, setVorbeste] = useState(false);
@@ -71,7 +79,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
     let gata = false;
     const curatenie: (() => void)[] = [];
     (async () => {
-      const r = await profesorAiLive({ data: { token } }).catch(() => null);
+      const r = await profesorAiLive({ data: { token, evita } }).catch(() => null);
       if (anulat) return;
       if (!r?.ok) { raporteaza(`live indisponibil: ${r?.error}`); return onFallback(); }
       raporteaza(`live start provider=${r.provider} avatar=${!!r.avatarToken}`);
@@ -130,7 +138,8 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
           console.warn("[profesor-ai] live eroare:", m);
           raporteaza(`live eroare (gata=${gata}): ${m}`);
           // Failed before the lesson really started → classic lesson.
-          if (!gata) return onFallback();
+          // OpenAI unusable (no credits, bad key) → retry with Gemini Live; otherwise the classic lesson.
+          if (!gata) { L.stop(); return onFallback(r.provider); }
           setEroare("Conexiunea cu profesoara s-a întrerupt. Pornește o sesiune nouă.");
           setStare("eroare");
         },
@@ -148,7 +157,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback }: Props & { onFa
         setStare("eroare");
       }
       // If Gemini never answers the setup, fall back instead of a frozen screen.
-      window.setTimeout(() => { if (!gata && !anulat) { raporteaza("live timeout setup 12s"); L.stop(); onFallback(); } }, 12_000);
+      window.setTimeout(() => { if (!gata && !anulat) { raporteaza("live timeout setup 12s"); L.stop(); onFallback(r.provider); } }, 12_000);
     })();
     return () => { anulat = true; curatenie.forEach((f) => f()); lesson.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps

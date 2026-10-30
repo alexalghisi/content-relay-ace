@@ -376,7 +376,7 @@ export const profesorAiAvatar = createServerFn({ method: "POST" })
  */
 export const profesorAiLive = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ token: z.string().max(4000) }).parse(d))
+  .inputValidator((d) => z.object({ token: z.string().max(4000), evita: z.enum(["openai"]).optional() }).parse(d))
   .handler(async ({ data, context }) => {
     const s = await citesteSesiune(data.token, context.userId);
     if (!s) return { ok: false as const, error: "Sesiunea nu este validă." };
@@ -384,7 +384,7 @@ export const profesorAiLive = createServerFn({ method: "POST" })
     const prompt = live.livePrompt(s, s.durata, s.exp);
     const avatarP = live.createLiteAvatarToken(Math.min(3600, (s.durata + 5) * 60));
     // OpenAI Realtime first when its key is set; Gemini Live as the second choice.
-    if (process.env["OPENAI_API_KEY"]) {
+    if (process.env["OPENAI_API_KEY"] && data.evita !== "openai") {
       const [o, avatar] = await Promise.all([live.createOpenAiSecret(prompt, s.durata), avatarP]);
       if ("token" in o) return { ok: true as const, provider: "openai" as const, token: o.token, model: o.model, setup: null, avatarToken: avatar };
     }
