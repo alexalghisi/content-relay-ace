@@ -1,13 +1,18 @@
 // Helper compact pentru a defini o pagină SEO landing reutilizând <SeoLanding/>.
 // Reduce dramatic codul per rută — un fișier de rută devine ~10 linii.
-import { SeoLanding, faqJsonLd, type FaqItem, type SeoLandingProps } from "@/components/seo-landing";
+import {
+  SeoLanding,
+  faqJsonLd,
+  type FaqItem,
+  type SeoLandingProps,
+} from "@/components/seo-landing";
 
 import { subjectLoader } from "@/lib/subject-stats";
 
 const SITE = "https://meditatiidirect.ro";
 
 export interface SeoPageConfig {
-  path: string;            // ex: "/meditatii-chimie"
+  path: string; // ex: "/meditatii-chimie"
   title: string;
   description: string;
   h1: string;
@@ -19,10 +24,23 @@ export interface SeoPageConfig {
   ctaSecondary?: SeoLandingProps["ctaSecondary"];
   ctaFooter?: SeoLandingProps["ctaFooter"];
   sections?: SeoLandingProps["sections"];
-  image?: string;          // URL absolut 1200x630 pentru og:image
+  image?: string; // URL absolut 1200x630 pentru og:image
+  jsonLd?: object[]; // JSON-LD suplimentar (ex. Service)
 }
 
-const SUBJECT_OG = ["matematica", "romana", "engleza", "franceza", "germana", "biologie", "chimie", "fizica", "geografie", "istorie", "informatica"];
+const SUBJECT_OG = [
+  "matematica",
+  "romana",
+  "engleza",
+  "franceza",
+  "germana",
+  "biologie",
+  "chimie",
+  "fizica",
+  "geografie",
+  "istorie",
+  "informatica",
+];
 function defaultImage(path: string) {
   const m = /^\/meditatii-([a-z]+)$/.exec(path);
   return m && SUBJECT_OG.includes(m[1]) ? `${SITE}/og/meditatii/${m[1]}.jpg` : undefined;
@@ -55,9 +73,10 @@ export function seoPage(c: SeoPageConfig) {
           : []),
       ],
       links: [{ rel: "canonical", href: url }],
-      scripts: c.faqs
-        ? [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(c.faqs)) }]
-        : [],
+      scripts: [...(c.faqs ? [faqJsonLd(c.faqs)] : []), ...(c.jsonLd ?? [])].map((d) => ({
+        type: "application/ld+json",
+        children: JSON.stringify(d),
+      })),
     }),
     component: () => (
       <SeoLanding

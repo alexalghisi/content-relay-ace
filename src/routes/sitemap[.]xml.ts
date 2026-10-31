@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { CITIES } from "@/data/cities";
+import { ORASE_HUB } from "@/data/orase-hub";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { consolidatedTarget } from "@/lib/seo-redirects";
 import { BLOCAJE, BLOCAJE_MATERII } from "@/data/blocaje";
@@ -82,6 +83,11 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/calculator-media-evaluare-nationala", priority: "0.9", changefreq: "monthly" },
   { path: "/evaluare-nationala-cluj", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-cluj", priority: "0.9", changefreq: "weekly" },
+  ...ORASE_HUB.map((o) => ({
+    path: `/meditatii-${o.path}`,
+    priority: "0.85",
+    changefreq: "weekly",
+  })),
   { path: "/harta-blocajelor", priority: "0.9", changefreq: "weekly" },
   { path: "/profesor-ai", priority: "0.9", changefreq: "weekly" },
   { path: "/scaner-lacune", priority: "0.9", changefreq: "weekly" },
@@ -129,7 +135,10 @@ export const Route = createFileRoute("/sitemap.xml")({
         try {
           // Query-string listings (/meditatii?materie=…) are canonicalised to /meditatii — not listed.
           // Per-ad pages — primary long-tail SEO surface
-          const { data: ads } = await supabaseAdmin.from("ads").select("id,seo_slug,updated_at").eq("status", "active");
+          const { data: ads } = await supabaseAdmin
+            .from("ads")
+            .select("id,seo_slug,updated_at")
+            .eq("status", "active");
           for (const a of ads ?? []) {
             const slug = a.seo_slug || a.id;
             const last = a.updated_at ? new Date(a.updated_at).toISOString().slice(0, 10) : null;
@@ -145,9 +154,14 @@ export const Route = createFileRoute("/sitemap.xml")({
             .select("location")
             .eq("status", "active")
             .limit(10000);
-          const locs = (locRows ?? []).map((r: { location: string | null }) => (r.location ?? "").toLowerCase());
+          const locs = (locRows ?? []).map((r: { location: string | null }) =>
+            (r.location ?? "").toLowerCase(),
+          );
           for (const c of CITIES) {
-            if (locs.filter((l) => c.matchLocation.some((m) => l.includes(m.toLowerCase()))).length < MIN_CITY)
+            if (
+              locs.filter((l) => c.matchLocation.some((m) => l.includes(m.toLowerCase()))).length <
+              MIN_CITY
+            )
               continue;
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,
@@ -214,7 +228,11 @@ export const Route = createFileRoute("/sitemap.xml")({
             .select("subject_slug,location,is_online")
             .eq("status", "active")
             .limit(10000);
-          const rows = (adRows ?? []) as { subject_slug: string | null; location: string | null; is_online: boolean }[];
+          const rows = (adRows ?? []) as {
+            subject_slug: string | null;
+            location: string | null;
+            is_online: boolean;
+          }[];
           const { MIN_LISTINGS_FOR_INDEX } = await import("@/lib/market-stats.functions");
           const comboHasAds = (subs: string[], locs: string[]) =>
             rows.filter(
@@ -230,7 +248,8 @@ export const Route = createFileRoute("/sitemap.xml")({
             );
             for (const c of CITIES) {
               // Combinațiile cu ghid local sunt indexabile și fără anunțuri (vezi ruta).
-              if (!getGhidLocal(s.slug, c.slug) && !comboHasAds(s.dbSlugs, c.matchLocation)) continue;
+              if (!getGhidLocal(s.slug, c.slug) && !comboHasAds(s.dbSlugs, c.matchLocation))
+                continue;
               urls.push(
                 `  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
               );
@@ -260,7 +279,12 @@ export const Route = createFileRoute("/sitemap.xml")({
               `  <url>\n    <loc>${BASE_URL}/simulare-bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
             );
             for (const y of BAC_YEARS) {
-              if (![...pdfSet].some((n) => n.startsWith(`${s.slug}/${y}/`) && n.endsWith("-subiect.pdf"))) continue;
+              if (
+                ![...pdfSet].some(
+                  (n) => n.startsWith(`${s.slug}/${y}/`) && n.endsWith("-subiect.pdf"),
+                )
+              )
+                continue;
               urls.push(
                 `  <url>\n    <loc>${BASE_URL}/bac/${s.slug}/${y}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
               );
@@ -281,7 +305,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Rezolvările verificate din repo (src/data/rezolvari-verificate) + cele din DB, fără dubluri.
           // Cele din repo apar chiar dacă citirea din DB eșuează.
           const { REZOLVARI_PUBLICATE } = await import("@/data/rezolvari-verificate");
-          let rezDb: { materie: string; an: number; sesiune: string; updated_at: string | null }[] = [];
+          let rezDb: { materie: string; an: number; sesiune: string; updated_at: string | null }[] =
+            [];
           try {
             const { data } = await supabaseAdmin
               .from("bac_rezolvari")
@@ -298,7 +323,10 @@ export const Route = createFileRoute("/sitemap.xml")({
             updated_at: r.actualizat,
           }));
           const chei = new Set(statice.map((r) => `${r.materie}/${r.an}/${r.sesiune}`));
-          const rez = [...statice, ...(rezDb ?? []).filter((r) => !chei.has(`${r.materie}/${r.an}/${r.sesiune}`))];
+          const rez = [
+            ...statice,
+            ...(rezDb ?? []).filter((r) => !chei.has(`${r.materie}/${r.an}/${r.sesiune}`)),
+          ];
           for (const r of rez) {
             const last = r.updated_at ? new Date(r.updated_at).toISOString().slice(0, 10) : null;
             urls.push(

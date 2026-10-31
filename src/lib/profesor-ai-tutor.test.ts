@@ -36,6 +36,6 @@ describe("variatieOra", () => {
     const b = variatieOra(1_700_000_000_123);
     expect(a).toContain("codul orei");
     expect(a).not.toBe(b);
-    expect(tutorPrompt(cfg, 15, 42)).toContain("Varietate obligatorie");
+    expect(tutorPrompt(cfg, 15, 42)).toContain("Varietate (codul orei");
   });
 });
