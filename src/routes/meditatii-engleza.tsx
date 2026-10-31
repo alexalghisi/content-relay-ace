@@ -122,6 +122,8 @@ function Page() {
       ]}
       faqs={faqs}
       related={[
+        { to: "/meditatii-engleza-online", label: "Meditații engleză online" },
+        { to: "/meditatii-engleza-adulti", label: "Meditații engleză adulți" },
         { to: "/harta-blocajelor/engleza", label: "Harta Blocajelor engleză" },
         { to: "/meditatii-bac", label: "Meditații BAC" },
         { to: "/meditatii-romana", label: "Meditații română" },

@@ -46,6 +46,8 @@ export const Route = createFileRoute("/meditatii-bac")({
       ]}
       faqs={faqs}
       related={[
+        { to: "/meditatii-matematica-bac", label: "Meditații matematică BAC" },
+        { to: "/meditatii-romana-bac", label: "Meditații română BAC" },
         { to: "/simulari-bacalaureat-2026", label: "Simulări BAC 2026" },
         { to: "/variante-bacalaureat", label: "Variante BAC" },
         { to: "/subiecte-bac", label: "Subiecte BAC" },
