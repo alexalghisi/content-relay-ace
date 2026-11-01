@@ -2,12 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { sendSms } from "@/lib/sms.server";
-
-const esc = (s: string) =>
-  s.replace(
-    /[&<>"']/g,
-    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
-  );
+import {
+  htmlEmail,
+  linkCerere,
+  subiectEmail,
+  textEmail,
+  textSms,
+  type DatePropunere,
+} from "@/lib/notify-student-mesaje";
 
 /**
  * Deduplicare fără coloană nouă în DB: cache-ul edge al Cloudflare reține 1 h că o propunere a fost
@@ -58,15 +60,15 @@ export const notifyStudentOfProposal = createServerFn({ method: "POST" })
     ]);
     if (!req) return { email: 0, sms: 0 };
 
-    const link = `https://meditatiidirect.ro/cererea-mea/${req.id}${req.access_token ? `?t=${req.access_token}` : ""}`;
-    const prof = teacher?.display_name?.trim() || "Un profesor";
-    const details = [
-      prop.price_per_hour ? `${prop.price_per_hour} lei/oră` : "",
-      prop.proposed_date ? `din ${prop.proposed_date}` : "",
-      prop.proposed_time ? `ora ${String(prop.proposed_time).slice(0, 5)}` : "",
-    ]
-      .filter(Boolean)
-      .join(", ");
+    const mesaj: DatePropunere = {
+      numeElev: req.contact_name,
+      profesor: teacher?.display_name,
+      materie: req.subject,
+      pretPeOra: prop.price_per_hour,
+      data: prop.proposed_date,
+      ora: prop.proposed_time ? String(prop.proposed_time) : null,
+      link: linkCerere(req.id, req.access_token),
+    };
 
     let email = 0;
     const LOVABLE_API_KEY = process.env["LOVABLE_API_KEY"];
@@ -83,12 +85,9 @@ export const notifyStudentOfProposal = createServerFn({ method: "POST" })
         body: JSON.stringify({
           from,
           to: [req.contact_email],
-          subject: `Ai primit o propunere pentru meditații la ${req.subject}`,
-          html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:24px;color:#1f2937">
-<p>Bună, ${esc(req.contact_name || "")}!</p>
-<p><strong>${esc(prof)}</strong> ți-a trimis o propunere pentru cererea ta de meditații la <strong>${esc(req.subject)}</strong>${details ? ` (${esc(details)})` : ""}.</p>
-<p><a href="${link}" style="display:inline-block;background:#1d4ed8;color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none">Vezi propunerea și răspunde</a></p>
-<p style="font-size:12px;color:#6b7280">Linkul este privat — nu îl distribui. Primești acest e-mail pentru că ai postat o cerere pe meditatiidirect.ro.</p></div>`,
+          subject: subiectEmail(mesaj),
+          html: htmlEmail(mesaj),
+          text: textEmail(mesaj),
         }),
       }).catch(() => null);
       if (res?.ok) email = 1;
@@ -96,11 +95,6 @@ export const notifyStudentOfProposal = createServerFn({ method: "POST" })
         console.error("student email failed", res.status, await res.text().catch(() => ""));
     }
 
-    const sms = req.contact_phone
-      ? await sendSms(
-          [req.contact_phone],
-          `MeditatiiDirect: ai primit o propunere de la ${prof.slice(0, 40)} pentru ${req.subject}. Vezi: ${link}`,
-        )
-      : 0;
+    const sms = req.contact_phone ? await sendSms([req.contact_phone], textSms(mesaj)) : 0;
     return { email, sms };
   });

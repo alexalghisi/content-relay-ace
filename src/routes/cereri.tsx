@@ -56,13 +56,18 @@ function ProposalForm({ requestId, sent, onSent }: { requestId: string; sent: bo
       proposed_date: date || null,
       proposed_time: time || null,
     }).select("id").single();
-    setPending(false);
     if (insertError) {
+      setPending(false);
       setError(insertError.code === "23505" ? "Ai trimis deja o propunere la această cerere." : "Nu am putut trimite propunerea. Încearcă din nou.");
       return;
     }
-    // Anunțăm elevul pe email (și SMS, dacă a lăsat telefon) — nu blochează interfața.
-    if (inserted?.id) notifyStudentOfProposal({ data: { proposalId: inserted.id } }).catch(() => {});
+    // Anunțăm elevul pe email și SMS. Așteptăm cererea, ca să nu fie anulată când formularul se închide.
+    if (inserted?.id) {
+      await notifyStudentOfProposal({ data: { proposalId: inserted.id } }).catch((e) =>
+        console.error("notificare elev eșuată", e),
+      );
+    }
+    setPending(false);
     toast.success("Propunerea a fost trimisă!", { description: "Elevul a primit-o. O găsești în „Propunerile mele”, unde vezi și dacă te-a acceptat și ce notă ți-a dat." });
     onSent();
   };
