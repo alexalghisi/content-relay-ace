@@ -103,8 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg?v=3" },
-      { rel: "icon", type: "image/x-icon", href: "/favicon.ico?v=3", sizes: "48x48" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       // No web fonts are loaded and ad scripts start only after the page is idle,
