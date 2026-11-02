@@ -1,6 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#0B3D6E"/>
-  <path d="M32 15 6 26l26 11 22-9.3V40h4V26L32 15z" fill="#fff"/>
-  <path d="M17 33v9c0 4 7 8 15 8s15-4 15-8v-9l-15 6.4L17 33z" fill="#fff"/>
-  <circle cx="56" cy="42" r="3" fill="#FFC53D"/>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1565D8"/><stop offset="1" stop-color="#0B3D6E"/></linearGradient></defs>
+  <rect width="64" height="64" rx="12" fill="url(#g)"/>
+  <!-- open book -->
+  <path d="M3 22c10-3 20-2 29 4v33c-9-6-19-7-29-4z" fill="#fff"/>
+  <path d="M61 22c-10-3-20-2-29 4v33c9-6 19-7 29-4z" fill="#E8F0FF"/>
+  <path d="M32 26v33" stroke="#0B3D6E" stroke-width="2"/>
+  <!-- pencil -->
+  <g transform="rotate(35 44 20)">
+    <rect x="39" y="-4" width="10" height="30" rx="1.5" fill="#FFC53D"/>
+    <rect x="39" y="-4" width="10" height="6" rx="1.5" fill="#FF6B6B"/>
+    <path d="M39 26h10l-5 9z" fill="#F5D6A8"/>
+    <path d="M42.4 31.2h3.2L44 35z" fill="#222"/>
+  </g>
 </svg>
