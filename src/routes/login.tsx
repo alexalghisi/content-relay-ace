@@ -13,6 +13,10 @@ export const Route = createFileRoute("/login")({
       { title: "Autentificare — MeditatiiDirect.ro" },
       { name: "description", content: "Conectează-te în contul MeditatiiDirect.ro cu email sau Google. Acces rapid la mesajele cu profesorii." },
       { name: "robots", content: "noindex, follow" },
+      { property: "og:title", content: "Autentificare — MeditatiiDirect.ro" },
+      { property: "og:description", content: "Accesează contul și conversațiile tale pe MeditatiiDirect.ro." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: LoginPage,
@@ -53,7 +57,7 @@ function LoginPage() {
     const parsed = schema.safeParse({ email, password });
     if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword(parsed.data);
+    const { error } = await supabase.auth.signInWithPassword(parsed.data).catch(() => ({ error: { message: "Network error" } }));
     setLoading(false);
     if (error) {
       setNeedsConfirm(error.message.toLowerCase().includes("email not confirmed"));
@@ -67,10 +71,16 @@ function LoginPage() {
 
   const onGoogle = async () => {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (result.error) { toast.error("Eroare la conectare Google."); setLoading(false); return; }
-    if (result.redirected) return;
-    navigate({ to: "/" });
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+      if (result.error) { toast.error("Eroare la conectare Google."); return; }
+      if (result.redirected) return;
+      navigate({ to: "/" });
+    } catch {
+      toast.error("Conexiunea Google a eșuat. Încearcă din nou.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

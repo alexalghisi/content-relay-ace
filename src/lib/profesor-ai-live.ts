@@ -133,6 +133,7 @@ export class LiveLesson {
   private closed = false;
   private resumeHandle: string | null = null;
   private reconnects = 0;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   muted = false;
   /** True while the teacher's voice is playing (avatar or speakers). */
   teacherSpeaking: () => boolean = () => false;
@@ -145,15 +146,18 @@ export class LiveLesson {
   }
 
   private connect(firstMessage?: string) {
+    if (this.closed) return;
     const ws = new WebSocket(`${WS}?access_token=${encodeURIComponent(this.token)}`);
     this.ws = ws;
     ws.onopen = () => {
+      if (this.closed || this.ws !== ws) return;
       const setup = { ...this.setup } as Setup;
       if (this.resumeHandle) setup["sessionResumption"] = { handle: this.resumeHandle };
       ws.send(JSON.stringify({ setup }));
     };
     ws.onmessage = async (e) => {
       const raw = typeof e.data === "string" ? e.data : await (e.data as Blob).text();
+      if (this.closed || this.ws !== ws) return;
       let m: Record<string, any>;
       try { m = JSON.parse(raw); } catch { return; }
       if (m.setupComplete) {
@@ -200,7 +204,7 @@ export class LiveLesson {
     const old = this.ws;
     this.ws = null;
     try { old?.close(); } catch { /* ignore */ }
-    window.setTimeout(() => this.connect(), 400);
+    this.reconnectTimer = setTimeout(() => { this.reconnectTimer = null; this.connect(); }, 400);
   }
 
   private send(o: unknown) {
@@ -213,18 +217,20 @@ export class LiveLesson {
   }
 
   private async startMic() {
-    this.stream = await micStream();
+    const stream = await micStream();
+    if (this.closed) { stream.getTracks().forEach((t) => t.stop()); return; }
+    this.stream = stream;
     const ctx = micContext();
     this.ctx = ctx;
     const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
-    await ctx.audioWorklet.addModule(url);
-    URL.revokeObjectURL(url);
+    try { await ctx.audioWorklet.addModule(url); } finally { URL.revokeObjectURL(url); }
+    if (this.closed) { stream.getTracks().forEach((t) => t.stop()); await ctx.close().catch(() => {}); return; }
     const src = ctx.createMediaStreamSource(this.stream);
     const node = new AudioWorkletNode(ctx, "pa-mic");
     this.node = node;
     const poarta = creeazaPoartaEcou(100); // 1600 samples at 16 kHz
     node.port.onmessage = (e) => {
-      if (this.muted) return;
+      if (this.closed || this.muted) return;
       const { pcm, rms } = e.data as { pcm: ArrayBuffer; rms: number };
       for (const f of poarta(pcm, rms, this.teacherSpeaking())) {
         this.send({ realtimeInput: { audio: { data: b64FromBytes(new Uint8Array(f)), mimeType: "audio/pcm;rate=16000" } } });
@@ -235,6 +241,8 @@ export class LiveLesson {
 
   stop() {
     this.closed = true;
+    if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+    this.reconnectTimer = null;
     try { this.ws?.close(); } catch { /* ignore */ }
     this.ws = null;
     this.node?.disconnect();
@@ -289,40 +297,52 @@ export class AvatarLipSync {
   private pending: Uint8Array[] = [];
   private bytes = 0;
   private started = false;
+  private utteranceId: string | null = null;
+  get available() { return this.socket()?.readyState === WebSocket.OPEN; }
   constructor(private socket: () => WebSocket | null) {}
 
   private id() { return crypto.randomUUID?.() ?? String(Math.random()).slice(2); }
-  private raw(o: unknown) { const s = this.socket(); if (s?.readyState === WebSocket.OPEN) s.send(JSON.stringify(o)); }
+  private raw(o: unknown): boolean {
+    const s = this.socket();
+    if (s?.readyState !== WebSocket.OPEN) return false;
+    try { s.send(JSON.stringify(o)); return true; } catch { return false; }
+  }
 
   private flush() {
     if (!this.bytes) return;
     const all = new Uint8Array(this.bytes);
     let o = 0;
     for (const p of this.pending) { all.set(p, o); o += p.length; }
+    this.utteranceId ??= this.id();
+    if (!this.raw({ type: "agent.speak", event_id: this.utteranceId, audio: b64FromBytes(all) })) return false;
     this.pending = [];
     this.bytes = 0;
-    this.raw({ type: "agent.speak", event_id: this.id(), audio: b64FromBytes(all) });
     this.started = true;
+    return true;
   }
 
-  push(b64: string) {
+  push(b64: string): boolean {
+    if (!this.available) return false;
     const u8 = bytesFromB64(b64);
     this.pending.push(u8);
     this.bytes += u8.length;
     // First chunk early (~300 ms) so she starts moving fast, then ~1 s chunks.
-    if (this.bytes >= (this.started ? 48000 : 14400)) this.flush();
+    if (this.bytes >= (this.started ? 48000 : 14400)) return this.flush() !== false;
+    return true;
   }
 
   end() {
     this.flush();
-    if (this.started) this.raw({ type: "agent.speak_end", event_id: this.id() });
+    if (this.started) this.raw({ type: "agent.speak_end", event_id: this.utteranceId });
     this.started = false;
+    this.utteranceId = null;
   }
 
   interrupt() {
     this.pending = [];
     this.bytes = 0;
     this.started = false;
+    this.utteranceId = null;
     this.raw({ type: "agent.interrupt", event_id: this.id() });
   }
 
@@ -353,6 +373,7 @@ export class OpenAiLesson {
     this.ws = ws;
     let ready = false;
     ws.onmessage = (e) => {
+      if (this.closed || this.ws !== ws) return;
       let m: Record<string, any>;
       try { m = JSON.parse(String(e.data)); } catch { return; }
       switch (m.type) {
@@ -414,18 +435,20 @@ export class OpenAiLesson {
   }
 
   private async startMic() {
-    this.stream = await micStream();
+    const stream = await micStream();
+    if (this.closed) { stream.getTracks().forEach((t) => t.stop()); return; }
+    this.stream = stream;
     const ctx = micContext();
     this.ctx = ctx;
     const url = URL.createObjectURL(new Blob([WORKLET], { type: "application/javascript" }));
-    await ctx.audioWorklet.addModule(url);
-    URL.revokeObjectURL(url);
+    try { await ctx.audioWorklet.addModule(url); } finally { URL.revokeObjectURL(url); }
+    if (this.closed) { stream.getTracks().forEach((t) => t.stop()); await ctx.close().catch(() => {}); return; }
     const src = ctx.createMediaStreamSource(this.stream);
     const node = new AudioWorkletNode(ctx, "pa-mic", { processorOptions: { rate: 24000 } });
     this.node = node;
     const poarta = creeazaPoartaEcou(1600 / 24); // 1600 samples at 24 kHz ≈ 67 ms
     node.port.onmessage = (e) => {
-      if (this.muted) return;
+      if (this.closed || this.muted) return;
       const { pcm, rms } = e.data as { pcm: ArrayBuffer; rms: number };
       for (const f of poarta(pcm, rms, this.teacherSpeaking())) {
         this.send({ type: "input_audio_buffer.append", audio: b64FromBytes(new Uint8Array(f)) });

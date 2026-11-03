@@ -65,10 +65,16 @@ function SignupPage() {
 
   const onGoogle = async () => {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (result.error) { toast.error("Eroare la conectare Google."); setLoading(false); return; }
-    if (result.redirected) return;
-    navigate({ to: "/" });
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+      if (result.error) { toast.error("Eroare la conectare Google."); return; }
+      if (result.redirected) return;
+      navigate({ to: "/" });
+    } catch {
+      toast.error("Conexiunea Google a eșuat. Încearcă din nou.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (pending) {

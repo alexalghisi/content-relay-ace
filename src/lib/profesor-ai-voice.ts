@@ -39,17 +39,16 @@ export function connectVoice(s: VoiceSession, h: VoiceHandlers) {
 
   s.on(VOICE_EVENTS.USER_SPEAK_STARTED, () => {
     log("in user.speak_started");
-    try { s.interrupt(); log("out avatar.interrupt"); } catch { /* not connected */ }
-    finishSpeak();
+    // The caller validates barge-in; raw VAD may only be speaker echo.
     h.onUserSpeechStart();
   });
   s.on(VOICE_EVENTS.USER_TRANSCRIPTION, (e) => {
     const t = e?.text?.trim() ?? "";
-    log("in user.transcription", t);
+    log("in user.transcription", { characters: t.length });
     if (t) h.onUserTranscript(t);
   });
   s.on(VOICE_EVENTS.AVATAR_TRANSCRIPTION, (e) => {
-    log("in avatar.transcription", e?.text ?? "");
+    log("in avatar.transcription", { characters: e?.text?.length ?? 0 });
     if (e?.text) h.onAvatarTranscript?.(e.text);
   });
   s.on(VOICE_EVENTS.AVATAR_SPEAK_STARTED, () => { log("in avatar.speak_started"); h.onSpeaking(true); });
@@ -71,7 +70,7 @@ export function connectVoice(s: VoiceSession, h: VoiceHandlers) {
         const fin = () => { clearTimeout(t); if (speakDone === fin) speakDone = null; done(); };
         speakDone = fin;
         s.repeat(text);
-        log("out avatar.speak_text", text);
+        log("out avatar.speak_text", { characters: text.length });
       });
     },
     interrupt() {
