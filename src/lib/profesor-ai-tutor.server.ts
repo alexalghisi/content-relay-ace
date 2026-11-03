@@ -199,7 +199,7 @@ export const GATEWAY_TUTOR_MODEL = () => process.env["PROFESOR_AI_GATEWAY_MODEL"
 export async function streamGateway(system: string, messages: M[], img?: Img, model = GATEWAY_TUTOR_MODEL(), signal?: AbortSignal): Promise<ReadableStream<Uint8Array>> {
   if (model.startsWith("anthropic/")) return streamAnthropic(system, messages, img, model);
   const { AiError, eroareDinStatus } = await import("./ai-gateway.server");
-  const supported: ChatRequest["model"][] = ["google/gemini-3.5-flash", "google/gemini-3.6-flash", "google/gemini-3.7-flash", "google/gemini-3.8-flash", "google/gemini-3-flash-preview"];
+  const supported = ["google/gemini-3.5-flash", "google/gemini-3.6-flash", "google/gemini-3.7-flash", "google/gemini-3.8-flash", "google/gemini-3-flash-preview"] as const;
   const selected = supported.find((m) => m === model);
   if (!selected) throw new AiError("unsupported tutor contract", "Modelul configurat necesită un contract compatibil.", "config");
   try {

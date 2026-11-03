@@ -1,3 +1,4 @@
+import { ProfilePhotoGallery } from "@/components/profile-photo-gallery";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -167,8 +168,8 @@ function TeacherDashboard() {
       catch (err) { toast.error(err instanceof AvatarPrepError ? err.message : "Nu am putut procesa poza."); return; }
       const type = blob.type || "image/jpeg";
       const path = avatarStoragePath(user.id, "teacher", type);
-      const { error } = await supabase.storage.from("avatars").upload(path, blob, { cacheControl: "3600", upsert: false, contentType: type });
-      if (error) { toast.error(avatarUploadErrorRo(error.message)); return; }
+      const { uploadProfilePhoto } = await import("@/lib/profile-photo-upload");
+      await uploadProfilePhoto(blob, path, () => {}, new AbortController().signal);
       const url = supabase.storage.from("avatars").getPublicUrl(path).data.publicUrl;
       setProfile((p) => ({ ...p, avatar_url: url }));
       if (hasProfile) {
@@ -176,7 +177,7 @@ function TeacherDashboard() {
         if (dbErr) { toast.error("Poza a fost încărcată, dar nu am putut salva profilul. Apasă Salvează."); return; }
       }
       toast.success(hasProfile ? "Fotografia a fost salvată." : "Fotografie încărcată — salvează profilul.");
-    } finally {
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Încărcarea a eșuat."); } finally {
       setUploading(false);
     }
   };
@@ -332,6 +333,7 @@ function TeacherDashboard() {
             onSubmit={(e) => { e.preventDefault(); void saveProfile(); }}
             className="card-soft mt-6 space-y-4 p-5 sm:p-6"
           >
+            <ProfilePhotoGallery userId={user.id} primary={profile.avatar_url} onPrimary={(url) => setProfile((p) => ({ ...p, avatar_url: url }))} />
             <h2 className="inline-flex items-center gap-2 text-lg font-semibold"><GraduationCap className="h-4 w-4 text-primary" /> Profilul meu de profesor</h2>
             <div className={`flex flex-wrap items-center gap-4 rounded-xl border p-4 ${profile.avatar_url ? "border-border" : "border-primary/40 bg-primary-soft"}`}>
               {profile.avatar_url ? (

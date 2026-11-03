@@ -353,6 +353,7 @@ export function SesiuneProfesorAi({
       } catch (e) {
         if ((e as Error).name !== "AbortError") fail("Conexiunea a eșuat. Încearcă din nou.", "retea");
       } finally {
+        window.clearTimeout(deadline);
         window.clearTimeout(filler);
         if (rev === revision.current) setPending(false);
       }
