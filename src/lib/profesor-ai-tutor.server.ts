@@ -1,3 +1,5 @@
+import { streamChatCompletion, GatewayError, type ChatRequest } from "@lovable.dev/ai-gateway";
+import { readWithDeadline } from "./stream-deadline";
 // Profesor AI tutor: prompt + streaming Gemini reply. Output format is plain text:
 // spoken sentences first, then an optional line "TABLA:" followed by the board content.
 import { paMaterieName, paNivelName, type PaConfig, paLimba, PA_START, PA_TACERE } from "./profesor-ai";
@@ -125,7 +127,7 @@ export type Img = string | undefined;
 const splitImg = (img: string) => { const m = /^data:(image\/(?:jpeg|png|webp));base64,(.+)$/.exec(img); return m ? { mime: m[1], data: m[2] } : null; };
 
 /** Streams plain text deltas from Gemini (SSE). Throws AiError on HTTP failure. */
-export async function streamGemini(system: string, messages: M[], img?: Img): Promise<ReadableStream<Uint8Array>> {
+export async function streamGemini(system: string, messages: M[], img?: Img, signal?: AbortSignal): Promise<ReadableStream<Uint8Array>> {
   const { eroareGemini, AiError } = await import("./ai-gateway.server");
   const key = process.env["GEMINI_API_KEY"];
   if (!key) throw new AiError("GEMINI_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
@@ -135,6 +137,7 @@ export async function streamGemini(system: string, messages: M[], img?: Img): Pr
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`,
     {
       method: "POST",
+      signal,
       headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: system }] },
@@ -169,7 +172,7 @@ export async function streamGemini(system: string, messages: M[], img?: Img): Pr
     async pull(ctrl) {
       // Keep reading until at least one text delta is emitted (or the upstream ends).
       for (;;) {
-      const { done, value } = await reader.read();
+      const { done, value } = await readWithDeadline(reader, signal);
       if (done) return ctrl.close();
       let sent = false;
       buf += dec.decode(value, { stream: true });
@@ -193,61 +196,36 @@ export async function streamGemini(system: string, messages: M[], img?: Img): Pr
 export const GATEWAY_TUTOR_MODEL = () => process.env["PROFESOR_AI_GATEWAY_MODEL"] || "google/gemini-3.5-flash";
 
 /** Streams plain text deltas from the Lovable AI Gateway (OpenAI-style SSE). */
-export async function streamGateway(system: string, messages: M[], img?: Img, model = GATEWAY_TUTOR_MODEL()): Promise<ReadableStream<Uint8Array>> {
+export async function streamGateway(system: string, messages: M[], img?: Img, model = GATEWAY_TUTOR_MODEL(), signal?: AbortSignal): Promise<ReadableStream<Uint8Array>> {
   if (model.startsWith("anthropic/")) return streamAnthropic(system, messages, img, model);
   const { AiError, eroareDinStatus } = await import("./ai-gateway.server");
-  const key = process.env["LOVABLE_API_KEY"];
-  if (!key) throw new AiError("LOVABLE_API_KEY missing", "Funcția AI nu este configurată încă.", "config");
-  const greu = /demonstr|deriv|integr|limit[ae]|probabilit/i.test(messages[messages.length - 1]?.content ?? "");
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", "X-Lovable-AIG-SDK": "fetch" },
-    body: JSON.stringify({
-      model,
-      stream: true,
-      reasoning_effort: greu ? "low" : "none",
+  const supported: ChatRequest["model"][] = ["google/gemini-3.5-flash", "google/gemini-3.6-flash", "google/gemini-3.7-flash", "google/gemini-3.8-flash", "google/gemini-3-flash-preview"];
+  const selected = supported.find((m) => m === model);
+  if (!selected) throw new AiError("unsupported tutor contract", "Modelul configurat necesită un contract compatibil.", "config");
+  try {
+    const events = await streamChatCompletion({
+      model: selected,
       max_tokens: 1400,
-      messages: [
-        { role: "system", content: system },
-        ...messages.map((m, i) =>
-          img && i === messages.length - 1 && splitImg(img)
-            ? { role: m.role, content: [{ type: "text", text: m.content }, { type: "image_url", image_url: { url: img } }] }
-            : m,
-        ),
-      ],
-    }),
-  }).catch(() => null);
-  if (!res || !res.ok || !res.body) {
-    const status = res?.status ?? 503;
-    console.warn(`[profesor-ai] gateway stream ${status}`);
-    throw eroareDinStatus(status, res?.headers.get("retry-after") ?? null);
-  }
-  const enc = new TextEncoder();
-  const dec = new TextDecoder();
-  const reader = res.body.getReader();
-  let buf = "";
-  return new ReadableStream<Uint8Array>({
-    async pull(ctrl) {
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) return ctrl.close();
-        buf += dec.decode(value, { stream: true });
-        const lines = buf.split("\n");
-        buf = lines.pop() ?? "";
-        let sent = false;
-        for (const l of lines) {
-          const d = l.startsWith("data:") ? l.slice(5).trim() : "";
-          if (!d || d === "[DONE]") continue;
-          try {
-            const t = (JSON.parse(d) as { choices?: { delta?: { content?: string } }[] }).choices?.[0]?.delta?.content;
-            if (t) { ctrl.enqueue(enc.encode(t)); sent = true; }
-          } catch { /* partial frame */ }
-        }
-        if (sent) return;
-      }
-    },
-    cancel() { void reader.cancel(); },
-  });
+      reasoning_effort: /demonstr|deriv|integr|limit[ae]|probabilit/i.test(messages[messages.length - 1]?.content ?? "") ? "low" : "none",
+      messages: [{ role: "system", content: system }, ...messages.map((m, i) => img && i === messages.length - 1 && splitImg(img)
+        ? { role: m.role, content: [{ type: "text" as const, text: m.content }, { type: "image_url" as const, image_url: { url: img } }] } : m)],
+    }, { signal });
+    const iterator = events[Symbol.asyncIterator]();
+    const enc = new TextEncoder();
+    return new ReadableStream<Uint8Array>({
+      async pull(ctrl) {
+        try {
+          for (;;) {
+            const next = await iterator.next();
+            if (next.done) return ctrl.close();
+            const text = next.value.choices?.[0]?.delta?.content;
+            if (text) { ctrl.enqueue(enc.encode(text)); return; }
+          }
+        } catch (e) { ctrl.error(e instanceof GatewayError ? eroareDinStatus(e.httpStatus ?? 503, null) : e); }
+      },
+      async cancel() { await iterator.return?.(); },
+    });
+  } catch (e) { throw e instanceof GatewayError ? eroareDinStatus(e.httpStatus ?? 503, null) : e; }
 }
 
 /** Streams plain text deltas for Anthropic models through the gateway's Messages endpoint. */
@@ -306,55 +284,42 @@ export async function streamAnthropic(system: string, messages: M[], img: Img, m
 /** Models the owner may compare live (owner-only override on /api/profesor-ai-stream). */
 export const MODELE_TEST = /^(google|openai|anthropic)\/[a-z0-9.\-]+$/;
 
-/** Waits for the first text chunk of a stream (so a provider that hangs or fails never wins). */
-async function primeStream(p: Promise<ReadableStream<Uint8Array>>, name: string) {
-  const stream = await p;
-  const reader = stream.getReader();
-  const { done, value } = await reader.read();
-  if (done || !value) { void reader.cancel().catch(() => {}); throw new Error(`${name}: flux gol`); }
-  return { reader, first: value, name };
-}
-
-/** How long a provider may take to its first token before the others are given the whole field. */
+/** The same first-token and idle deadlines apply even when only one provider is available. */
 export const PRIM_TOKEN_MAX_MS = 9000;
-
-/**
- * Both providers are started at once and the first one to deliver a token speaks; the other is
- * cancelled. The Lovable gateway is cheap but can be out of credits or slow (seen: 40 s average,
- * half the calls failing), the direct Gemini key can hit its own quota — racing them keeps the
- * lesson going whenever either works, and always at the fastest available speed.
- */
-export async function streamTutor(system: string, messages: M[], img?: Img, model?: string): Promise<ReadableStream<Uint8Array>> {
-  const candidates: { name: string; start: () => Promise<ReadableStream<Uint8Array>> }[] = [];
-  if (process.env["LOVABLE_API_KEY"]) candidates.push({ name: "gateway", start: () => streamGateway(system, messages, img, model ?? GATEWAY_TUTOR_MODEL()) });
-  if (process.env["GEMINI_API_KEY"] && !model) candidates.push({ name: "gemini", start: () => streamGemini(system, messages, img) });
-  if (!candidates.length) return streamGateway(system, messages, img, model ?? GATEWAY_TUTOR_MODEL());
-  if (candidates.length === 1) return candidates[0].start();
-
-  const timeout = new Promise<never>((_, rej) => setTimeout(() => rej(new Error("primul token a întârziat")), PRIM_TOKEN_MAX_MS));
-  const primed = candidates.map((c) => primeStream(c.start(), c.name));
-  let winner: Awaited<ReturnType<typeof primeStream>>;
+export async function streamTutor(system: string, messages: M[], img?: Img, model?: string, signal?: AbortSignal): Promise<ReadableStream<Uint8Array>> {
+  const upstream = new AbortController();
+  const abort = () => upstream.abort();
+  signal?.addEventListener("abort", abort, { once: true });
+  if (signal?.aborted) upstream.abort();
+  const cleanup = () => { upstream.abort(); signal?.removeEventListener("abort", abort); };
+  let stream: ReadableStream<Uint8Array>;
   try {
-    winner = await Promise.race([Promise.any(primed), timeout]);
-  } catch (e) {
-    // Every provider failed (or none answered in time): surface the gateway's error, which carries
-    // the user-facing message; otherwise Gemini's.
-    const errs = await Promise.allSettled(primed.map((p) => Promise.race([p, timeout])));
-    for (const r of errs) if (r.status === "fulfilled") void r.value.reader.cancel().catch(() => {});
-    const firstErr = errs.find((r): r is PromiseRejectedResult => r.status === "rejected");
-    throw firstErr?.reason ?? e;
-  }
-  for (const p of primed) p.then((o) => { if (o !== winner) void o.reader.cancel().catch(() => {}); }).catch(() => {});
-  console.info(`[profesor-ai] răspunde ${winner.name}`);
-  const reader = winner.reader;
-  let first: Uint8Array | null = winner.first;
-  return new ReadableStream<Uint8Array>({
-    async pull(ctrl) {
-      if (first) { ctrl.enqueue(first); first = null; return; }
-      const { done, value } = await reader.read();
-      if (done) return ctrl.close();
-      ctrl.enqueue(value);
-    },
-    cancel() { void reader.cancel(); },
-  });
+    const firstDeadline = setTimeout(() => upstream.abort(), PRIM_TOKEN_MAX_MS);
+    try {
+      // Gateway remains primary. A definite pre-delivery provider failure may use Gemini;
+      // cancellation/timeouts/unknown network outcomes are never automatically replayed.
+      try { stream = await streamGateway(system, messages, img, model ?? GATEWAY_TUTOR_MODEL(), upstream.signal); }
+      catch (e) {
+        const { AiError } = await import("./ai-gateway.server");
+        if (!model && !upstream.signal.aborted && process.env["GEMINI_API_KEY"] && e instanceof AiError && ["credits", "config"].includes(e.kind))
+          stream = await streamGemini(system, messages, img, upstream.signal);
+        else throw e;
+      }
+      const reader = stream.getReader();
+      const primed = await readWithDeadline(reader, upstream.signal, PRIM_TOKEN_MAX_MS);
+      if (primed.done || !primed.value) { cleanup(); return new ReadableStream({ start(c) { c.close(); } }); }
+      let first: Uint8Array | undefined = primed.value;
+      return new ReadableStream<Uint8Array>({
+        async pull(ctrl) {
+          try {
+            if (first) { ctrl.enqueue(first); first = undefined; return; }
+            const next = await readWithDeadline(reader, upstream.signal);
+            if (next.done) { cleanup(); return ctrl.close(); }
+            ctrl.enqueue(next.value);
+          } catch (e) { cleanup(); ctrl.error(e); }
+        },
+        async cancel() { cleanup(); await reader.cancel().catch(() => {}); },
+      });
+    } finally { clearTimeout(firstDeadline); }
+  } catch (e) { cleanup(); throw e; }
 }
