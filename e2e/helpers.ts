@@ -19,6 +19,28 @@ export async function mockSupabase(page: Page, opts: { signupSession?: boolean }
       return route.fulfill({ status: 400, json: { error: "invalid_grant", error_description: "Invalid login credentials", msg: "Invalid login credentials" } });
     }
     if (url.includes("/auth/v1/user")) return route.fulfill({ json: fakeSession().user });
+    if (url.includes("/storage/v1/upload/resumable")) {
+      // TUS (upload resumabil): fișierul vine în cererea de creare; confirmăm tot.
+      const meta = Object.fromEntries((req.headers()["upload-metadata"] ?? "").split(",").filter(Boolean).map((kv) => {
+        const [k, v] = kv.trim().split(" ");
+        return [k, v ? Buffer.from(v, "base64").toString() : ""];
+      }));
+      const lungime = req.headers()["upload-length"] ?? String(body?.length ?? 0);
+      calls[calls.length - 1]!.url = `${url}#${meta["objectName"] ?? ""}`;
+      return route.fulfill({
+        status: req.method() === "POST" ? 201 : 204,
+        headers: {
+          "Tus-Resumable": "1.0.0",
+          "Upload-Offset": lungime,
+          Location: `${url}/e2e-upload`,
+          "Access-Control-Expose-Headers": "Location, Upload-Offset, Tus-Resumable",
+        },
+      });
+    }
+    if (url.includes("/rest/v1/profile_photos") && req.method() === "POST") {
+      const row = JSON.parse(req.postData() ?? "{}");
+      return route.fulfill({ status: 201, json: { id: "00000000-0000-4000-8000-0000000000f1", storage_path: row.storage_path } });
+    }
     if (url.includes("/storage/v1/object/avatars/")) {
       return route.fulfill({ json: { Key: url.split("/storage/v1/object/")[1], Id: "e2e" } });
     }

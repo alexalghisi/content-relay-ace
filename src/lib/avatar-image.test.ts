@@ -22,9 +22,9 @@ describe("checkAvatarFile", () => {
     expect(checkAvatarFile({ type: "", name: "IMG_0001.heic", size: 2 * MB })).toEqual({ ok: true, needsConversion: true });
   });
   test("JPEG de telefon peste limita bucketului nu mai e respins, se comprimă", () => {
-    expect(checkAvatarFile({ type: "image/jpeg", name: "camera.jpg", size: 6 * MB })).toEqual({ ok: true, needsConversion: false });
+    expect(checkAvatarFile({ type: "image/jpeg", name: "camera.jpg", size: 6 * MB })).toEqual({ ok: true, needsConversion: true });
   });
-  test("GIF se convertește în JPEG", () => {
+  test("GIF mic se urcă direct, fără conversie", () => {
     expect(checkAvatarFile({ type: "image/gif", name: "x.gif", size: 100 })).toEqual({ ok: true, needsConversion: false });
   });
   test("fișiere care nu sunt poze sunt respinse cu mesaj în română", () => {
@@ -43,8 +43,8 @@ describe("checkAvatarFile", () => {
 
 describe("scaledSize", () => {
   test("micșorează poze mari păstrând proporțiile", () => {
-    expect(scaledSize(4032, 3024)).toEqual({ width: 1024, height: 768 });
-    expect(scaledSize(3024, 4032)).toEqual({ width: 768, height: 1024 });
+    expect(scaledSize(4032, 3024)).toEqual({ width: 2560, height: 1920 });
+    expect(scaledSize(3024, 4032, 1024)).toEqual({ width: 768, height: 1024 });
   });
   test("nu mărește poze mici", () => {
     expect(scaledSize(300, 200)).toEqual({ width: 300, height: 200 });
@@ -77,6 +77,9 @@ describe("avatarUploadErrorRo", () => {
   });
 });
 
- test("original images above former 30 MB, 20 MB and 10 MB caps are never rejected or recompressed", () => {
-  for (const mb of [10, 20, 31, 100, 5000]) expect(checkAvatarFile({ type: "image/jpeg", name: "original.jpg", size: mb * MB })).toEqual({ ok: true, needsConversion: false });
+test("pozele mari nu sunt niciodată respinse: peste limita bucketului se micșorează în browser", () => {
+  for (const mb of [10, 20, 31, 100, 5000]) expect(checkAvatarFile({ type: "image/jpeg", name: "original.jpg", size: mb * MB })).toEqual({ ok: true, needsConversion: true });
+});
+test("originalul care încape în bucket se urcă neschimbat", () => {
+  for (const type of ["image/jpeg", "image/png", "image/webp", "image/gif"]) expect(checkAvatarFile({ type, name: "x", size: 2 * MB })).toEqual({ ok: true, needsConversion: false });
 });
