@@ -2,6 +2,25 @@ import { expect, test } from "@playwright/test";
 import { bigPhonePhoto, loginWithFakeSession, mockSupabase, waitForHydration } from "./helpers";
 
 test.describe("Încărcare poză de profil (bug raportat: nu se putea încărca poza)", () => {
+  test("transferul se recuperează după o eroare temporară", async ({ page }) => {
+    const calls = await mockSupabase(page);
+    let failedOnce = false;
+    await page.route("**/storage/v1/upload/resumable", async (route) => {
+      if (!failedOnce && route.request().method() === "POST") {
+        failedOnce = true;
+        return route.fulfill({ status: 503, body: "temporary unavailable" });
+      }
+      await route.fallback();
+    });
+    await page.route("**/_serverFn/**", (r) => r.abort());
+    await loginWithFakeSession(page);
+    await page.goto("/cont");
+    await waitForHydration(page, '[data-testid="avatar-input"]');
+    await page.getByTestId("avatar-input").setInputFiles({ name: "photo.png", mimeType: "image/png", buffer: Buffer.from("photo original bytes") });
+    await expect(page.getByAltText("Fotografie de profil", { exact: true })).toHaveCount(1, { timeout: 30_000 });
+    expect(failedOnce).toBe(true);
+    expect(calls.some((c) => c.url.includes("profile_photos") && c.method === "POST")).toBe(true);
+  });
   test("două poze mari păstrează originalul în transferuri reluabile și persistă după refresh", async ({ page }) => {
     const calls = await mockSupabase(page);
     await page.route("**/_serverFn/**", (r) => r.abort());
