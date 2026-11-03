@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { listPublicBlogPosts } from "@/lib/blog.functions";
 import { CalendarDays, Tag } from "lucide-react";
-import { AdsterraBanner728 } from "@/components/ads/adsterra";
+import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { AdSenseSlot } from "@/components/ads/adsense";
 
 const postsQuery = queryOptions({ queryKey: ["public-blog-posts"], queryFn: () => listPublicBlogPosts() });
@@ -36,6 +36,7 @@ function BlogIndex() {
         <p className="mt-3 text-lg text-muted-foreground">Articole concrete despre cum alegi un meditator, cât costă meditațiile, cum te pregătești pentru BAC, admitere la medicină, UPB, Drept și evaluare națională.</p>
       </header>
       <AdsterraBanner728 className="mt-8" />
+      <AdsterraNativeBanner className="mt-4" />
       {posts.length === 0 ? (
         <p className="mt-8 text-muted-foreground">Nu sunt articole publicate momentan.</p>
       ) : (

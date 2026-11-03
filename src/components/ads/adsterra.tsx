@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { adsterraDocument } from "./adsterra-document";
+import { ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { adsterraDocument, ADSTERRA_SMARTLINK } from "./adsterra-document";
 import { onPageIdle } from "@/hooks/use-after-load";
 import { ADSENSE_CLIENT } from "./adsense";
 import { useAfterLoad } from "@/hooks/use-after-load";
@@ -58,7 +60,7 @@ export function AdsterraBanner320({ className = "" }: { className?: string }) {
 
 export function AdSenseAutoAds() {
   // AdSense auto ads are a page-level script, injected once the page is idle.
-  // The Adsterra Social Bar and smartlink were removed to show fewer Adsterra ads.
+  // No invasive Adsterra formats: Social Bar (overlay), popunders and popups are never loaded.
   useEffect(() => onPageIdle(() => {
     if (!document.querySelector("script[data-adsbygoogle-lib]")) {
       const g = document.createElement("script");
@@ -75,5 +77,11 @@ export function AdSenseAutoAds() {
 export function AdsterraMonetization() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   if (/^\/(admin|profesor|profesor-ai|cont|chat|autentificare|inregistrare|cererea-mea)(\/|$)/.test(pathname)) return null;
-  return <AdSenseAutoAds />;
+  return <>
+    <AdSenseAutoAds />
+    <aside aria-label="Link publicitar" className="container-page flex flex-wrap items-center justify-center gap-3 py-4">
+      <span className="text-xs text-muted-foreground">Publicitate externă</span>
+      <Button asChild variant="outline"><a href={ADSTERRA_SMARTLINK} target="_blank" rel="sponsored noopener noreferrer nofollow">Oferte publicitare <ExternalLink /></a></Button>
+    </aside>
+  </>;
 }
