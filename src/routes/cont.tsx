@@ -3,10 +3,12 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { getMyPrivateProfile, deleteMyAccount } from "@/lib/security.functions";
+import { AVATAR_ACCEPT, AvatarPrepError, avatarStoragePath, avatarUploadErrorRo, prepareAvatarFile } from "@/lib/avatar-image";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
 import { User, Phone, MapPin, Mail, Lock, MessageCircle, LogOut, Save, Camera, Trash2 } from "lucide-react";
+import { erroareRo } from "@/lib/erori-ro";
 
 export const Route = createFileRoute("/cont")({
   head: () => ({ meta: [
@@ -35,6 +37,7 @@ function AccountPage() {
   const [newPassword, setNewPassword] = useState("");
   const [savingEmail, setSavingEmail] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleteText, setDeleteText] = useState("");
   const [deleting, setDeleting] = useState(false);
@@ -77,7 +80,7 @@ function AccountPage() {
       bio: parsed.data.bio || null,
     }, { onConflict: "user_id" });
     setSaving(false);
-    if (error) toast.error(error.message); else toast.success("Profil actualizat!");
+    if (error) toast.error(erroareRo(error.message)); else toast.success("Profil actualizat!");
   };
 
   const saveEmail = async (e: React.FormEvent) => {
@@ -87,7 +90,7 @@ function AccountPage() {
     setSavingEmail(true);
     const { error } = await supabase.auth.updateUser({ email: newEmail });
     setSavingEmail(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(erroareRo(error.message));
     else toast.success("Verifică noul email pentru confirmare.");
   };
 
@@ -97,31 +100,37 @@ function AccountPage() {
     setSavingPassword(true);
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     setSavingPassword(false);
-    if (error) toast.error(error.message);
+    if (error) toast.error(erroareRo(error.message));
     else { toast.success("Parolă schimbată!"); setNewPassword(""); }
   };
 
   const onAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
-    if (!file) return;
-    if (!/^image\/(jpeg|png|webp|gif)$/.test(file.type)) { toast.error("Format invalid. Folosește JPG, PNG, WEBP."); return; }
-    if (file.size > 3 * 1024 * 1024) { toast.error("Fișierul depășește 3 MB."); return; }
-    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const path = `${user.id}/avatar-${Date.now()}.${ext}`;
-    const { error: upErr } = await supabase.storage.from("avatars").upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
-    if (upErr) { toast.error(upErr.message); return; }
-    const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
-    const url = pub.publicUrl;
-    const { error: dbErr } = await supabase.from("profiles").upsert({ user_id: user.id, avatar_url: url }, { onConflict: "user_id" });
-    if (dbErr) { toast.error(dbErr.message); return; }
-    setProfile((p) => ({ ...p, avatar_url: url }));
-    toast.success("Fotografie actualizată!");
+    if (!file || uploadingAvatar) return;
+    setUploadingAvatar(true);
+    try {
+      let blob: Blob;
+      try { blob = await prepareAvatarFile(file); }
+      catch (err) { toast.error(err instanceof AvatarPrepError ? err.message : "Nu am putut procesa poza."); return; }
+      const type = blob.type || "image/jpeg";
+      const path = avatarStoragePath(user.id, "avatar", type);
+      const { error: upErr } = await supabase.storage.from("avatars").upload(path, blob, { cacheControl: "3600", upsert: false, contentType: type });
+      if (upErr) { toast.error(avatarUploadErrorRo(upErr.message)); return; }
+      const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
+      const url = pub.publicUrl;
+      const { error: dbErr } = await supabase.from("profiles").upsert({ user_id: user.id, avatar_url: url }, { onConflict: "user_id" });
+      if (dbErr) { toast.error("Poza a fost încărcată, dar nu am putut salva profilul. Mai încearcă."); return; }
+      setProfile((p) => ({ ...p, avatar_url: url }));
+      toast.success("Fotografie actualizată!");
+    } finally {
+      setUploadingAvatar(false);
+    }
   };
 
   const removeAvatar = async () => {
     const { error } = await supabase.from("profiles").update({ avatar_url: null }).eq("user_id", user.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(erroareRo(error.message)); return; }
     setProfile((p) => ({ ...p, avatar_url: null }));
     toast.success("Fotografie eliminată.");
   };
@@ -142,7 +151,7 @@ function AccountPage() {
       {/* Avatar */}
       <div className="card-soft mt-6 p-5 sm:p-6">
         <h2 className="text-lg font-semibold inline-flex items-center gap-2"><Camera className="h-4 w-4 text-primary" /> Fotografie de profil</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Este afișată pe anunțuri și mesaje. JPG/PNG/WEBP, max 3 MB.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Este afișată pe anunțuri și mesaje. Orice poză de pe telefon sau calculator (inclusiv iPhone) — o micșorăm automat.</p>
         <div className="mt-4 flex items-center gap-4">
           {profile.avatar_url ? (
             <img src={profile.avatar_url} alt="Avatar" className="h-20 w-20 rounded-full object-cover border border-border" />
@@ -153,8 +162,8 @@ function AccountPage() {
           )}
           <div className="flex flex-wrap gap-2">
             <label className="btn-primary h-10 inline-flex items-center gap-2 cursor-pointer">
-              <Camera className="h-4 w-4" /> {profile.avatar_url ? "Schimbă" : "Încarcă"}
-              <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={onAvatarFile} />
+              <Camera className="h-4 w-4" /> {uploadingAvatar ? "Se încarcă..." : profile.avatar_url ? "Schimbă" : "Încarcă"}
+              <input type="file" accept={AVATAR_ACCEPT} className="hidden" onChange={onAvatarFile} disabled={uploadingAvatar} data-testid="avatar-input" />
             </label>
             {profile.avatar_url && (
               <button onClick={removeAvatar} className="btn-outline h-10 inline-flex items-center gap-2 text-sm">

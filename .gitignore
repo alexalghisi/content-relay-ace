@@ -32,3 +32,7 @@ dist-ssr
 *.sw?
 .cache-audio-demo/
 .claude/
+
+# Playwright
+test-results/
+playwright-report/

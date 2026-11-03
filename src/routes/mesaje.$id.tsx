@@ -6,6 +6,7 @@ import { markConversationRead } from "@/lib/security.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Send, Video } from "lucide-react";
 import { toast } from "sonner";
+import { erroareRo } from "@/lib/erori-ro";
 
 export const Route = createFileRoute("/mesaje/$id")({
   head: () => ({ meta: [
@@ -74,7 +75,7 @@ function ChatThreadPage() {
     setSending(true);
     const { error } = await supabase.from("messages").insert({ conversation_id: conv.id, sender_id: user.id, body });
     setSending(false);
-    if (error) toast.error(error.message); else setText("");
+    if (error) toast.error(erroareRo(error.message)); else setText("");
   };
 
   if (loading || !conv) return <div className="container-page py-16 text-muted-foreground">Se încarcă...</div>;

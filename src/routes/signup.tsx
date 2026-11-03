@@ -113,20 +113,20 @@ function SignupPage() {
 
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <label className="text-sm font-medium">Nume</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
+          <label htmlFor="signup-name" className="text-sm font-medium">Nume</label>
+          <input id="signup-name" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <div>
-          <label className="text-sm font-medium">Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
+          <label htmlFor="signup-email" className="text-sm font-medium">Email</label>
+          <input id="signup-email" autoComplete="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <div>
           <label htmlFor="signup-phone" className="text-sm font-medium">Telefon mobil</label>
           <input id="signup-phone" type="tel" autoComplete="tel" maxLength={30} placeholder="07xx xxx xxx" value={phone} onChange={(e) => setPhone(e.target.value)} onBlur={() => setPhone(formatRoPhone(phone))} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <div>
-          <label className="text-sm font-medium">Parolă</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
+          <label htmlFor="signup-password" className="text-sm font-medium">Parolă</label>
+          <input id="signup-password" autoComplete="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
           <p className="mt-1 text-xs text-muted-foreground">Minim 6 caractere.</p>
         </div>
         <button type="submit" disabled={loading} className="btn-primary w-full h-12 disabled:opacity-60">

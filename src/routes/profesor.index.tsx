@@ -9,6 +9,8 @@ import { useAuth } from "@/lib/auth";
 import { CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { MyProposals } from "@/components/my-proposals";
+import { AVATAR_ACCEPT, AvatarPrepError, avatarStoragePath, avatarUploadErrorRo, prepareAvatarFile } from "@/lib/avatar-image";
+import { erroareRo } from "@/lib/erori-ro";
 
 export const Route = createFileRoute("/profesor/")({
   head: () => ({
@@ -157,18 +159,26 @@ function TeacherDashboard() {
   }
 
   const uploadAvatar = async (file: File) => {
-    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) { toast.error("Alege o imagine JPG, PNG sau WebP."); return; }
-    if (file.size > 3 * 1024 * 1024) { toast.error("Imaginea depășește 3 MB."); return; }
+    if (uploading) return;
     setUploading(true);
-    const ext = file.type.split("/")[1].replace("jpeg", "jpg");
-    const path = `${user.id}/teacher-${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from("avatars").upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
-    if (error) { setUploading(false); toast.error(error.message); return; }
-    const url = supabase.storage.from("avatars").getPublicUrl(path).data.publicUrl;
-    setProfile((p) => ({ ...p, avatar_url: url }));
-    if (hasProfile) await supabase.from("teacher_profiles").update({ avatar_url: url, updated_at: new Date().toISOString() }).eq("user_id", user.id);
-    setUploading(false);
-    toast.success(hasProfile ? "Fotografia a fost salvată." : "Fotografie încărcată — salvează profilul.");
+    try {
+      let blob: Blob;
+      try { blob = await prepareAvatarFile(file); }
+      catch (err) { toast.error(err instanceof AvatarPrepError ? err.message : "Nu am putut procesa poza."); return; }
+      const type = blob.type || "image/jpeg";
+      const path = avatarStoragePath(user.id, "teacher", type);
+      const { error } = await supabase.storage.from("avatars").upload(path, blob, { cacheControl: "3600", upsert: false, contentType: type });
+      if (error) { toast.error(avatarUploadErrorRo(error.message)); return; }
+      const url = supabase.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+      setProfile((p) => ({ ...p, avatar_url: url }));
+      if (hasProfile) {
+        const { error: dbErr } = await supabase.from("teacher_profiles").update({ avatar_url: url, updated_at: new Date().toISOString() }).eq("user_id", user.id);
+        if (dbErr) { toast.error("Poza a fost încărcată, dar nu am putut salva profilul. Apasă Salvează."); return; }
+      }
+      toast.success(hasProfile ? "Fotografia a fost salvată." : "Fotografie încărcată — salvează profilul.");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const saveProfile = async (publish?: boolean) => {
@@ -199,7 +209,7 @@ function TeacherDashboard() {
     };
     const { error } = await supabase.from("teacher_profiles").upsert(payload, { onConflict: "user_id" });
     setSaving(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(erroareRo(error.message)); return; }
     setHasProfile(true);
     setProfile((p) => ({ ...p, slug, is_published: payload.is_published }));
     toast.success(publish === true ? "Profil publicat!" : publish === false ? "Profil retras de pe site." : "Profil salvat.");
@@ -210,13 +220,13 @@ function TeacherDashboard() {
     const { data, error } = await supabase.from("teacher_availability")
       .insert({ user_id: user.id, ...newSlot })
       .select("id,weekday,start_time,end_time").single();
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(erroareRo(error.message)); return; }
     setSlots((s) => [...s, data as Slot].sort((a, b) => a.weekday - b.weekday || a.start_time.localeCompare(b.start_time)));
   };
 
   const removeSlot = async (id: string) => {
     const { error } = await supabase.from("teacher_availability").delete().eq("id", id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(erroareRo(error.message)); return; }
     setSlots((s) => s.filter((x) => x.id !== id));
   };
 
@@ -237,7 +247,7 @@ function TeacherDashboard() {
       ? supabase.from("teacher_offers").update(payload).eq("id", editingOfferId)
       : supabase.from("teacher_offers").insert(payload);
     const { data, error } = await query.select("*").single();
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(erroareRo(error.message)); return; }
     setOffers((current) => editingOfferId
       ? current.map((offer) => offer.id === editingOfferId ? data as Offer : offer)
       : [data as Offer, ...current]);
@@ -270,13 +280,13 @@ function TeacherDashboard() {
   const toggleOffer = async (offer: Offer) => {
     const status = offer.status === "published" ? "paused" : "published";
     const { error } = await supabase.from("teacher_offers").update({ status, updated_at: new Date().toISOString() }).eq("id", offer.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(erroareRo(error.message)); return; }
     setOffers((o) => o.map((x) => (x.id === offer.id ? { ...x, status } : x)));
   };
 
   const deleteOffer = async (id: string) => {
     const { error } = await supabase.from("teacher_offers").delete().eq("id", id);
-    if (error) { toast.error(error.message); return; }
+    if (error) { toast.error(erroareRo(error.message)); return; }
     setOffers((o) => o.filter((x) => x.id !== id));
   };
 
@@ -332,13 +342,13 @@ function TeacherDashboard() {
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold">Fotografie de profil {profile.avatar_url ? "" : "(recomandat)"}</p>
                 <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                  Profilurile cu fotografie reală inspiră mai multă încredere elevilor și părinților. Folosește o poză clară cu fața, JPG/PNG/WebP, max 3 MB.
+                  Profilurile cu fotografie reală inspiră mai multă încredere elevilor și părinților. Folosește o poză clară cu fața — merge orice poză de pe telefon, o micșorăm automat.
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <label className="btn-outline inline-flex h-9 cursor-pointer items-center gap-2 text-sm">
                     {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
                     {profile.avatar_url ? "Schimbă poza" : "Încarcă poza"}
-                    <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploading}
+                    <input type="file" accept={AVATAR_ACCEPT} data-testid="teacher-avatar-input" className="hidden" disabled={uploading}
                       onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void uploadAvatar(f); }} />
                   </label>
                   {profile.avatar_url && (

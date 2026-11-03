@@ -88,12 +88,12 @@ function LoginPage() {
 
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <label className="text-sm font-medium">Email</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
+          <label htmlFor="login-email" className="text-sm font-medium">Email</label>
+          <input id="login-email" autoComplete="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <div>
-          <label className="text-sm font-medium">Parolă</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
+          <label htmlFor="login-password" className="text-sm font-medium">Parolă</label>
+          <input id="login-password" autoComplete="current-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <button type="submit" disabled={loading} className="btn-primary w-full h-12 disabled:opacity-60">
           {loading ? "Se conectează..." : "Autentificare"}
