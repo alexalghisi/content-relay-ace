@@ -8,7 +8,7 @@ export const AVATAR_TARGET_MAX_BYTES = 1.5 * 1024 * 1024;
 /** Latura maximă a pozei salvate, în pixeli. */
 export const AVATAR_MAX_SIDE = 1024;
 
-const DIRECT_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif", "image/bmp", "image/tiff"] as const;
+const DIRECT_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
 const IMAGE_EXT = /\.(jpe?g|png|webp|gif|heic|heif|avif|bmp|tiff?)$/i;
 
 /** Valoarea atributului `accept` pentru input-urile de poză. */
@@ -91,7 +91,7 @@ async function decode(file: Blob): Promise<Decoded> {
 export class AvatarPrepError extends Error {}
 
 /**
- * Returnează un fișier gata de upload (≤ limita bucketului).
+ * Păstrează originalul; conversia fără pierderi se face doar când formatul nu este acceptat.
  * Aruncă AvatarPrepError cu mesaj în română dacă poza nu poate fi folosită.
  */
 export async function prepareAvatarFile(file: File): Promise<Blob> {
