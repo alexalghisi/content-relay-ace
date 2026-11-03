@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
 });
 
 const HOME_FAQ = [
-  { q: "Cât costă meditațiile?", a: "Tariful îl stabilește fiecare profesor și îl vezi scris în propunere înainte să alegi. Ca reper, o oră de meditații costă între 30 și 200 de lei, cu o medie de aproximativ 80 de lei, în funcție de materie, nivel, oraș și experiența profesorului. Pentru elevi, platforma este gratuită." },
+  { q: "Cât costă meditațiile?", a: "Tariful îl stabilește fiecare profesor și îl vezi scris în propunere înainte să alegi. Prețul depinde de materie, nivel, oraș și experiența profesorului. Pentru elevi, platforma este gratuită." },
   { q: "Cum găsesc un profesor de meditații pe MeditatiiDirect?", a: "Descrii în 2 minute materia, nivelul, orașul sau varianta online și bugetul. Profesorii interesați îți trimit propuneri cu tarif și program, iar tu discuți direct cu ei și îl alegi pe cel potrivit." },
   { q: "Meditațiile se pot face online?", a: "Da. Poți cere meditații online de oriunde din România sau meditații față în față, la profesor ori la domiciliu, în orașul tău." },
   { q: "Pentru ce materii și examene găsesc meditații?", a: "Matematică, română, engleză, fizică, chimie, biologie, informatică și alte materii, de la gimnaziu la liceu, pentru Evaluarea Națională, Bacalaureat și admiterea la facultate." },

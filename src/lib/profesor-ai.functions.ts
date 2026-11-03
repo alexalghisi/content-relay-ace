@@ -330,6 +330,8 @@ export const profesorAiRaspunde = createServerFn({ method: "POST" })
         .trim()
         .slice(0, 1200);
       if (!vorbit) return { ok: false, error: "Nu am primit un răspuns. Încearcă din nou." };
+      const { markAiReviewEligible } = await import("./profesor-ai-reviews.server");
+      await markAiReviewEligible(context.userId);
       return {
         ok: true,
         data: {
