@@ -69,8 +69,8 @@ export function htmlConfirmare(nume: string, link: string): string {
 }
 
 /**
- * Forma canonică a unui email, folosită pentru unicitatea conturilor (oglindă a public.email_canonic din
- * drizzle/migrations/0021_conturi_unice.sql). La Gmail punctele și +eticheta duc în aceeași căsuță.
+ * Forma canonică a unui email, folosită pentru unicitatea conturilor (src/lib/conturi-unice.ts).
+ * La Gmail punctele și +eticheta duc în aceeași căsuță.
  */
 export function emailCanonic(email: string): string {
   const e = email.trim().toLowerCase();
@@ -86,7 +86,8 @@ export function emailCanonic(email: string): string {
 }
 
 export const MESAJ_EMAIL_FOLOSIT = "Există deja un cont cu acest email. Autentifică-te.";
-export const MESAJ_TELEFON_FOLOSIT = "Acest număr de telefon este deja folosit de alt cont. Autentifică-te în contul existent.";
+export const MESAJ_TELEFON_FOLOSIT =
+  "Acest număr de telefon este deja înregistrat. Ai deja un cont, nu poți crea altul cu același număr — autentifică-te în contul existent.";
 
 /**
  * „exact”: Supabase are deja contul pe adresa asta; „varianta”: triggerul blocheaza_email_duplicat a refuzat

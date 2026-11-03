@@ -1,5 +1,6 @@
 import { describe, expect, it, mock, beforeEach } from "bun:test";
 import { readFileSync } from "node:fs";
+import { gasesteConflict } from "./conturi-unice";
 import {
   emailCanonic,
   esteEmailDuplicat,
@@ -22,19 +23,31 @@ describe("unicitate — reguli pure", () => {
     expect(esteEmailDuplicat("Database error saving new user")).toBe("varianta");
     expect(esteEmailDuplicat("Password should be at least 6 characters")).toBeNull();
   });
-  it("migrația SQL aplică aceleași reguli ca emailCanonic", () => {
+  it("migrația 0022 scoate triggerul care bloca toate înregistrările", () => {
     const sql = readFileSync(
-      new URL("../../drizzle/migrations/0021_conturi_unice.sql", import.meta.url),
+      new URL("../../drizzle/migrations/0022_scoate_trigger_email.sql", import.meta.url),
       "utf8",
     );
-    expect(sql).toContain("'gmail.com', 'googlemail.com'");
-    expect(sql).toContain("replace(split_part(local, '+', 1), '.', '')");
-    expect(sql).toContain("BEFORE INSERT OR UPDATE OF email ON auth.users");
+    expect(sql).toContain("DROP TRIGGER IF EXISTS blocheaza_email_duplicat ON auth.users");
     const journal = readFileSync(
       new URL("../../drizzle/migrations/meta/_journal.json", import.meta.url),
       "utf8",
     );
-    expect(journal).toContain("0021_conturi_unice");
+    expect(journal).toContain("0022_scoate_trigger_email");
+  });
+  it("gasesteConflict: telefonul are prioritate, emailul exact nu e „alt cont”", () => {
+    const conturi = [
+      { email: "ana.pop@gmail.com", metadataPhone: "40722123456" },
+      { email: "ion@yahoo.com", metadataPhone: "+40 733 000 111" },
+    ];
+    expect(gasesteConflict(conturi, "nou@example.ro", "0722 123 456")).toBe("telefon");
+    expect(gasesteConflict(conturi, "nou@example.ro", "0733000111")).toBe("telefon");
+    expect(gasesteConflict(conturi, "anapop+x@gmail.com", "0744555666")).toBe("email");
+    expect(gasesteConflict(conturi, "nou@example.ro", "0744555666")).toBeNull();
+    // Același email exact: fluxul existent retrimite confirmarea, nu e conflict.
+    expect(gasesteConflict(conturi, "ana.pop@gmail.com", "0722123456")).toBeNull();
+    // Telefon verificat prin SMS pe un cont fără metadată.
+    expect(gasesteConflict([], "nou@example.ro", "0755111222", ["40755111222"])).toBe("telefon");
   });
 });
 
@@ -48,31 +61,34 @@ mock.module("@tanstack/react-start", () => ({
 mock.module("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseAuth: {} }));
 
 const st = {
-  telefonVerificatDeAltul: false,
-  variantaEmail: false,
+  conturi: [] as { email: string; user_metadata: Record<string, unknown>; phone?: string }[],
+  verificate: [] as string[],
   generateError: null as null | { message: string; code?: string },
   existentConfirmat: false,
   apeluri: [] as string[],
 };
-const query = {
+// Chainable și „await”-abil: select("phone").not(...) întoarce telefoanele verificate.
+const query: Record<string, unknown> = {
   select: () => query,
   eq: () => query,
   not: () => query,
   neq: () => query,
   limit: () => query,
-  maybeSingle: async () => ({ data: st.telefonVerificatDeAltul ? { user_id: "alt-cont" } : null }),
+  maybeSingle: async () => ({ data: null }),
   upsert: async () => ({ error: null }),
   update: () => query,
+  then: (res: (v: unknown) => unknown) =>
+    res({ data: st.verificate.map((phone) => ({ phone })), error: null }),
 };
 mock.module("@/integrations/supabase/client.server", () => ({
   supabaseAdmin: {
     from: () => query,
-    rpc: async (fn: string) => {
-      st.apeluri.push(`rpc:${fn}`);
-      return { data: st.variantaEmail, error: null };
-    },
     auth: {
       admin: {
+        listUsers: async () => {
+          st.apeluri.push("listUsers");
+          return { data: { users: st.conturi }, error: null };
+        },
         generateLink: async ({ type }: { type: string }) => {
           st.apeluri.push(`generateLink:${type}`);
           if (type === "signup" && st.generateError) return { data: null, error: st.generateError };
@@ -121,35 +137,40 @@ const unic = (local: string, domeniu = "example.ro") => `${local}${++n}@${domeni
 describe("creeazaCont — un email și un telefon per cont", () => {
   beforeEach(() => {
     Object.assign(st, {
-      telefonVerificatDeAltul: false,
-      variantaEmail: false,
+      conturi: [],
+      verificate: [],
       generateError: null,
       existentConfirmat: false,
       apeluri: [],
     });
   });
 
-  it("cont nou valid → trimite emailul de confirmare", async () => {
+  it("emailuri diferite și telefon nou → contul se creează și pleacă emailul", async () => {
+    st.conturi = [{ email: "altcineva@yahoo.com", user_metadata: { phone: "40733000111" } }];
     const r = await inregistreaza(unic("ana"));
     expect(r).toEqual({ ok: true, stare: "trimis" });
     expect(st.apeluri).toContain("generateLink:signup");
     expect(st.apeluri).toContain("email");
   });
 
-  it("telefon deja verificat pe alt cont → refuzat, contul nu se creează", async () => {
-    st.telefonVerificatDeAltul = true;
+  it("telefon deja înregistrat pe alt cont (chiar neverificat) → mesaj clar, contul nu se creează", async () => {
+    st.conturi = [{ email: "primul@example.ro", user_metadata: { phone: "40722123456" } }];
     const r = await inregistreaza(unic("ana"));
-    expect(r.ok).toBe(false);
-    expect(r.stare).toBe("telefon");
-    expect(r.error).toBe(MESAJ_TELEFON_FOLOSIT);
+    expect(r).toEqual({ ok: false, stare: "telefon", error: MESAJ_TELEFON_FOLOSIT });
+    expect(r.error).toContain("deja înregistrat");
     expect(st.apeluri.some((a) => a.startsWith("generateLink"))).toBe(false);
   });
 
-  it("variantă Gmail a unui cont existent → refuzată înainte de creare", async () => {
-    st.variantaEmail = true;
-    const r = await inregistreaza(unic("ana.pop+x", "gmail.com"));
+  it("telefon verificat prin SMS pe alt cont → refuzat", async () => {
+    st.verificate = ["40722123456"];
+    const r = await inregistreaza(unic("ana"));
+    expect(r.stare).toBe("telefon");
+  });
+
+  it("variantă Gmail a unui cont existent → „există deja”", async () => {
+    st.conturi = [{ email: "anapop@gmail.com", user_metadata: {} }];
+    const r = await inregistreaza("ana.pop+x@gmail.com", "0744 555 666");
     expect(r).toMatchObject({ ok: false, stare: "exista", error: MESAJ_EMAIL_FOLOSIT });
-    expect(st.apeluri).toContain("rpc:exista_email_canonic");
     expect(st.apeluri).not.toContain("generateLink:signup");
   });
 
@@ -171,10 +192,11 @@ describe("creeazaCont — un email și un telefon per cont", () => {
     expect(st.apeluri).toContain("email");
   });
 
-  it("triggerul din baza de date blochează o variantă (cursă) → „există deja”", async () => {
+  it("eroare a bazei de date NU mai e raportată ca „cont existent”", async () => {
     st.generateError = { message: "Database error saving new user" };
     const r = await inregistreaza(unic("ana"));
-    expect(r).toMatchObject({ ok: false, stare: "exista", error: MESAJ_EMAIL_FOLOSIT });
-    expect(st.apeluri).not.toContain("generateLink:magiclink");
+    expect(r.ok).toBe(false);
+    expect(r.stare).toBeUndefined();
+    expect(r.error).not.toContain("Există deja");
   });
 });

@@ -29,12 +29,14 @@ function SignupPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [pending, setPending] = useState(false);
+  const [eroare, setEroare] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsed = signupSchema.safeParse({ name, email, phone, password });
     if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
+    setEroare(null);
     setLoading(true);
     const r = await creeazaCont({
       data: { name, email, phone, password, origin: window.location.origin },
@@ -42,6 +44,11 @@ function SignupPage() {
     setLoading(false);
     if (r.ok) {
       setPending(true);
+      return;
+    }
+    if (r.stare === "telefon") {
+      setEroare(r.error);
+      toast.error(r.error);
       return;
     }
     if (r.stare === "exista") {
@@ -125,6 +132,12 @@ function SignupPage() {
           <PasswordInput id="signup-password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
           <p className="mt-1 text-xs text-muted-foreground">Minim 6 caractere.</p>
         </div>
+        {eroare && (
+          <p role="alert" className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
+            {eroare}{" "}
+            <Link to="/login" className="font-medium underline">Autentificare</Link>
+          </p>
+        )}
         <button type="submit" disabled={loading} className="btn-primary w-full h-12 disabled:opacity-60">
           {loading ? "Se creează..." : "Creează cont gratuit"}
         </button>

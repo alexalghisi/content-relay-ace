@@ -54,7 +54,7 @@ test.describe("Înscriere și autentificare", () => {
   test("telefon folosit deja de alt cont → mesaj clar, rămâne pe formular", async ({ page }) => {
     await mockSupabase(page);
     await page.route("**/_serverFn/**", (route) =>
-      route.fulfill(serverFnResult({ ok: false, stare: "telefon", error: "Acest număr de telefon este deja folosit de alt cont. Autentifică-te în contul existent." })),
+      route.fulfill(serverFnResult({ ok: false, stare: "telefon", error: "Acest număr de telefon este deja înregistrat. Ai deja un cont, nu poți crea altul cu același număr — autentifică-te în contul existent." })),
     );
     await page.goto("/signup");
     await waitForHydration(page);
@@ -63,7 +63,8 @@ test.describe("Înscriere și autentificare", () => {
     await page.getByLabel("Telefon mobil").fill("0722 123 456");
     await page.getByLabel("Parolă").fill("parola123");
     await page.getByRole("button", { name: "Creează cont gratuit" }).click();
-    await expect(page.getByText(/deja folosit de alt cont/)).toBeVisible();
+    await expect(page.getByRole("alert").filter({ hasText: "deja înregistrat" })).toBeVisible();
+    await expect(page.getByRole("alert").getByRole("link", { name: "Autentificare" })).toBeVisible();
     await expect(page).toHaveURL(/\/signup$/);
     await expect(page.getByRole("heading", { name: "Verifică-ți emailul" })).toHaveCount(0);
   });
