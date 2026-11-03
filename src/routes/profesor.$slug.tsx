@@ -134,6 +134,7 @@ function PublicTeacherPage() {
           <p className="mt-1 text-sm text-muted-foreground">
             {rating ? <>★ {rating.avg.toFixed(1)} / 5 · {rating.count} {rating.count === 1 ? "evaluare" : "evaluări"} de la elevi</> : "Încă nu are evaluări de la elevi"}
           </p>
+          <details className="mt-2 text-sm"><summary className="cursor-pointer text-primary">Cum las o evaluare?</summary><p className="mt-2 text-muted-foreground">Evaluează discuția cu profesorul din linkul privat al cererii tale, primit prin e-mail. Evaluarea și comentariul se salvează lângă propunerea lui.</p></details>
           <div className="mt-2 flex flex-wrap gap-3 text-sm text-muted-foreground">
             {profile.city && <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4" /> {profile.city}</span>}
             {profile.online_available && <span className="inline-flex items-center gap-1 text-primary"><Video className="h-4 w-4" /> Online</span>}

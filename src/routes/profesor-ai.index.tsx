@@ -1,3 +1,4 @@
+import { AiReviews } from "@/components/profesor-ai/reviews";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BadgeCheck, Mic, MonitorPlay, PencilLine, Repeat2 } from "lucide-react";
 import { faqJsonLd } from "@/components/seo-landing";
@@ -43,7 +44,7 @@ const FAQS = [
   },
   {
     q: "Ce se întâmplă cu ce spun la microfon?",
-    a: "Vocea ta e transformată în text de browser și trimisă profesorului doar ca să-ți răspundă. Nu publicăm conversațiile și nu îți cerem date personale în sesiune.",
+    a: "Vocea ta este procesată de serviciul conversațional pentru transcriere și răspuns; în modul de rezervă, transcrierea poate fi făcută de browser. Nu publicăm conversațiile și nu îți cerem date personale în sesiune.",
   },
 ];
 
@@ -56,11 +57,9 @@ export const Route = createFileRoute("/profesor-ai/")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: URL },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: `${SITE}/promo-profesor-ai.jpg` },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
-      { name: "twitter:image", content: `${SITE}/promo-profesor-ai.jpg` },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
@@ -119,6 +118,8 @@ function Page() {
           <ConfiguratorProfesorAi />
         </div>
       </div>
+
+      <AiReviews />
 
       <section className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[

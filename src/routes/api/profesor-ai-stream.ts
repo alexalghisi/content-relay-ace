@@ -49,18 +49,29 @@ export const Route = createFileRoute("/api/profesor-ai-stream")({
         const { poateTestaProfesorAi } = await import("@/lib/profesor-ai-access");
         const m = parsed.data.model;
         const model = m && poateTestaProfesorAi(userId) && t.MODELE_TEST.test(m) ? m : undefined;
-        // The quota check (a database round trip) runs in parallel with the model's first token.
-        const cota = s.gratuit ? Promise.resolve({ ok: true }) : ai.takeQuota(userId, "profesor-ai", LIMITA_PROFESOR_ZI);
-        const flux = t.streamTutor(t.tutorPrompt(s, s.durata, s.exp), parsed.data.mesaje, parsed.data.imagine, model);
-        flux.catch(() => {}); // handled below; avoids an unhandled rejection while the quota is checked
-        const q = await cota;
-        if (!q.ok) {
-          void flux.then((st) => st.cancel()).catch(() => {});
-          return err(429, `Ai atins limita de ${LIMITA_PROFESOR_ZI} de mesaje pe zi. Revino mâine.`, "limita_interna");
-        }
+        const q = s.gratuit ? { ok: true } : await ai.takeQuota(userId, "profesor-ai", LIMITA_PROFESOR_ZI);
+        if (!q.ok) return err(429, `Ai atins limita de ${LIMITA_PROFESOR_ZI} de mesaje pe zi. Revino mâine.`, "limita_interna");
         const quota = !s.gratuit;
         try {
-          const stream = await flux;
+          const upstream = await t.streamTutor(t.tutorPrompt(s, s.durata, s.exp), parsed.data.mesaje, parsed.data.imagine, model, request.signal);
+          const reader = upstream.getReader();
+          let delivered = false;
+          const stream = new ReadableStream<Uint8Array>({
+            async pull(ctrl) {
+              try {
+                const { done, value } = await reader.read();
+                if (done) {
+                  if (delivered && !request.signal.aborted) {
+                    const { markAiReviewEligible } = await import("@/lib/profesor-ai-reviews.server");
+                    await markAiReviewEligible(userId);
+                  }
+                  ctrl.close(); return;
+                }
+                delivered = true; ctrl.enqueue(value);
+              } catch (e) { if (quota && ai.eroareFurnizor(e)) await ai.refundQuota(userId, "profesor-ai"); ctrl.error(e); }
+            },
+            async cancel() { await reader.cancel().catch(() => {}); },
+          });
           return new Response(stream, {
             headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
           });

@@ -22,10 +22,10 @@ describe("checkAvatarFile", () => {
     expect(checkAvatarFile({ type: "", name: "IMG_0001.heic", size: 2 * MB })).toEqual({ ok: true, needsConversion: true });
   });
   test("JPEG de telefon peste limita bucketului nu mai e respins, se comprimă", () => {
-    expect(checkAvatarFile({ type: "image/jpeg", name: "camera.jpg", size: 6 * MB })).toEqual({ ok: true, needsConversion: true });
+    expect(checkAvatarFile({ type: "image/jpeg", name: "camera.jpg", size: 6 * MB })).toEqual({ ok: true, needsConversion: false });
   });
   test("GIF se convertește în JPEG", () => {
-    expect(checkAvatarFile({ type: "image/gif", name: "x.gif", size: 100 })).toEqual({ ok: true, needsConversion: true });
+    expect(checkAvatarFile({ type: "image/gif", name: "x.gif", size: 100 })).toEqual({ ok: true, needsConversion: false });
   });
   test("fișiere care nu sunt poze sunt respinse cu mesaj în română", () => {
     const r = checkAvatarFile({ type: "application/pdf", name: "cv.pdf", size: 1000 });
@@ -34,7 +34,7 @@ describe("checkAvatarFile", () => {
   });
   test("fișier gol sau uriaș e respins", () => {
     expect(checkAvatarFile({ type: "image/png", name: "a.png", size: 0 }).ok).toBe(false);
-    expect(checkAvatarFile({ type: "image/png", name: "a.png", size: 31 * MB }).ok).toBe(false);
+    expect(checkAvatarFile({ type: "image/png", name: "a.png", size: 31 * MB }).ok).toBe(true);
   });
   test("ținta de comprimare e sub limita bucketului", () => {
     expect(AVATAR_TARGET_MAX_BYTES).toBeLessThan(AVATAR_BUCKET_MAX_BYTES);
@@ -75,4 +75,8 @@ describe("avatarUploadErrorRo", () => {
     expect(avatarUploadErrorRo("new row violates row-level security policy")).toContain("Reautentifică");
     expect(avatarUploadErrorRo(undefined)).toContain("Nu am putut");
   });
+});
+
+ test("original images above former 30 MB, 20 MB and 10 MB caps are never rejected or recompressed", () => {
+  for (const mb of [10, 20, 31, 100, 5000]) expect(checkAvatarFile({ type: "image/jpeg", name: "original.jpg", size: mb * MB })).toEqual({ ok: true, needsConversion: false });
 });

@@ -141,6 +141,13 @@
       "when": 1792612493979,
       "tag": "0019_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1793727018458,
+      "tag": "0020_profile_photos_and_ai_reviews",
+      "breakpoints": true
     }
   ]
 }

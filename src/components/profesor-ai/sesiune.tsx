@@ -1,3 +1,4 @@
+import { readWithDeadline } from "@/lib/stream-deadline";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Clock, Loader2, VideoOff, Volume2, VolumeX } from "lucide-react";
@@ -183,6 +184,8 @@ export function SesiuneProfesorAi({
     })();
     return () => {
       anulat = true;
+      abortRef.current?.abort();
+      revision.current += 1;
       coada.current.cancel();
       handsFree.current = false;
       sr.current?.stop();
@@ -245,16 +248,13 @@ export function SesiuneProfesorAi({
       // No spoken filler: queued filler speech delayed the real answer and repeated on every
       // re-request, so the "thinking" state is shown visually only.
       const filler = 0;
+      const deadline = window.setTimeout(() => ctrl.abort(), 20_000);
       const fail = (error: string, cod?: string) => {
         if (rev !== revision.current) return;
         messagesRef.current = previous;
         setMesaje(previous);
         // A provider hiccup must not freeze the lesson: one silent retry after a short pause,
         // then she says out loud that something went wrong instead of going quiet.
-        if (incercare === 0 && cod !== "limita_interna" && cod !== "auth" && cod !== "auth_user" && cod !== "config") {
-          window.setTimeout(() => { if (rev === revision.current) void sendRef.current(c, ascuns, imagine, 1); }, 1500);
-          return;
-        }
         if (!ascuns) void vorbeste("Am o mică problemă tehnică. Mai spune o dată, te rog.");
         setEroare(error);
         setDeReluat({ text: c, ascuns, cod });
@@ -301,7 +301,7 @@ export function SesiuneProfesorAi({
           return spoken;
         };
         for (;;) {
-          const { done, value } = await reader.read();
+          const { done, value } = await readWithDeadline(reader, ctrl.signal, 12000);
           if (rev !== revision.current) return void reader.cancel();
           if (value) full += dec.decode(value, { stream: true });
           const spoken = bubble();
@@ -322,7 +322,7 @@ export function SesiuneProfesorAi({
             const rest = curat(spoken.slice(consumed));
             consumed = spoken.length;
             if (rest) { rostit = true; marcheazaPrima(); void spuneAcum(rest); }
-          } else if (!rostit && performance.now() - tSend > 3500) {
+          } else if (!rostit) {
             const { sentences } = takeSentences(spoken.slice(consumed), true);
             if (sentences.length) {
               const last = sentences[sentences.length - 1];
@@ -353,6 +353,7 @@ export function SesiuneProfesorAi({
       } catch (e) {
         if ((e as Error).name !== "AbortError") fail("Conexiunea a eșuat. Încearcă din nou.", "retea");
       } finally {
+        window.clearTimeout(deadline);
         window.clearTimeout(filler);
         if (rev === revision.current) setPending(false);
       }
@@ -393,10 +394,12 @@ export function SesiuneProfesorAi({
     rec.interimResults = true;
     rec.onspeechstart = null;
     const anticipat = createTrimitereAnticipata((t) => {
-      console.info("[voice] browser transcription", t);
+      if (sr.current !== rec || !handsFree.current) return;
+      console.info("[voice] browser transcription", { characters: t.length });
       void sendRef.current(t);
     });
     rec.onresult = (e) => {
+      if (sr.current !== rec || !handsFree.current) { anticipat.reset(); return; }
       const last = e.results[e.results.length - 1] as ArrayLike<{ transcript: string }> & { isFinal?: boolean };
       const spus = last?.[0]?.transcript?.trim() ?? "";
       // Ignorăm ecoul vocii profesorului captat de microfon (difuzoare fără căști).

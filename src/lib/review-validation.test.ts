@@ -1,0 +1,6 @@
+import { expect, test } from "bun:test";
+import { reviewSchema, reviewEligible, proposalRatingSaved } from "./review-validation";
+test("reviews require a completed successful tutor exchange", () => { expect(reviewEligible(false)).toBe(false); expect(reviewEligible(true)).toBe(true); });
+test("ratings are integers from 1 to 5", () => { for (const rating of [0, 6, 2.5]) expect(reviewSchema.safeParse({ rating }).success).toBe(false); for (const rating of [1, 2, 3, 4, 5]) expect(reviewSchema.safeParse({ rating }).success).toBe(true); });
+test("comments cannot exceed 500 characters and client identity is rejected", () => { expect(reviewSchema.safeParse({ rating: 3, comment: "a".repeat(501) }).success).toBe(false); expect(reviewSchema.safeParse({ rating: 3, user_id: "other" }).success).toBe(false); });
+test("a wrong-request or nonexistent proposal must never report saved", () => { expect(proposalRatingSaved(null, [])).toBe(false); expect(proposalRatingSaved(new Error("failed"), [{}])).toBe(false); expect(proposalRatingSaved(null, [{}])).toBe(true); });

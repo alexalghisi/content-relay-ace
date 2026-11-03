@@ -1,11 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const getMyPrivateProfile = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin
       .from("profiles")
       .select("display_name,phone,city,bio,avatar_url")
@@ -22,6 +22,7 @@ export const markConversationRead = createServerFn({ method: "POST" })
     z.object({ conversationId: z.string().uuid() }).parse(input),
   )
   .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: conversation, error: readError } = await supabaseAdmin
       .from("conversations")
       .select("id,student_id,teacher_id")
@@ -59,6 +60,7 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
     z.object({ confirm: z.literal("STERGE") }).parse(input),
   )
   .handler(async ({ context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const uid = context.userId;
 
     // Conversații + mesaje
@@ -72,6 +74,18 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
       await supabaseAdmin.from("conversations").delete().in("id", convIds);
     }
 
+    // User-owned galleries and reviews use plain UUIDs, so clean them explicitly.
+    for (;;) {
+      const { data: objects, error: listError } = await supabaseAdmin.storage.from("avatars").list(uid, { limit: 100 });
+      if (listError) throw new Error("Nu am putut verifica fotografiile contului.");
+      if (!objects?.length) break;
+      const { error: removeError } = await supabaseAdmin.storage.from("avatars").remove(objects.map((o) => `${uid}/${o.name}`));
+      if (removeError) throw new Error("Nu am putut șterge fotografiile contului.");
+    }
+    for (const table of ["profile_photos", "profesor_ai_reviews", "profesor_ai_review_eligibility"] as const) {
+      const { error: cleanupError } = await supabaseAdmin.from(table).delete().eq("user_id", uid);
+      if (cleanupError) throw new Error("Nu am putut șterge datele contului.");
+    }
     // Profil
     await supabaseAdmin.from("profiles").delete().eq("user_id", uid);
     await supabaseAdmin.from("user_roles").delete().eq("user_id", uid);

@@ -1,3 +1,4 @@
+import { proposalRatingSaved } from "./review-validation";
 import { createServerFn } from "@tanstack/react-start";
 
 export interface PublicProposal {
@@ -122,13 +123,14 @@ export const rateProposal = createServerFn({ method: "POST" })
 
     if (!req || !req.access_token || req.access_token !== data.token) return { ok: false };
 
-    const { error } = await supabaseAdmin
+    const { data: updated, error } = await supabaseAdmin
       .from("teacher_proposals")
       .update({ rating: data.rating, rating_comment: data.comment, rated_at: new Date().toISOString() })
       .eq("id", data.proposalId)
-      .eq("request_id", data.requestId);
+      .eq("request_id", data.requestId)
+      .select("id");
 
-    return { ok: !error };
+    return { ok: Boolean(proposalRatingSaved(error, updated)) };
   });
 
 /** Elevul acceptă o propunere: cererea se închide și dispare din lista profesorilor. */

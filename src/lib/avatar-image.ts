@@ -1,21 +1,14 @@
-/**
- * Pregătirea pozei de profil înainte de upload în bucketul `avatars`.
- *
- * De ce: pozele de pe telefon (mai ales iPhone) sunt des HEIC/HEIF sau JPEG de 3–8 MB,
- * iar bucketul acceptă doar JPEG/PNG/WEBP/GIF de max. 3 MB. Le redimensionăm și le
- * convertim în browser la JPEG, ca utilizatorul să poată încărca orice poză.
- */
+/** Preserve original image bytes and dimensions; only browser-incompatible formats are converted losslessly to PNG. */
 
-/** Limita bucketului `avatars` (file_size_limit din migrare). */
+/** Legacy export for older callers; NOT an upload limit. */
 export const AVATAR_BUCKET_MAX_BYTES = 3 * 1024 * 1024;
 /** Ținta după comprimare — sub limita bucketului, cu marjă. */
 export const AVATAR_TARGET_MAX_BYTES = 1.5 * 1024 * 1024;
-/** Fișier brut acceptat înainte de conversie (poze RAW/HEIC mari de pe telefon). */
-export const AVATAR_INPUT_MAX_BYTES = 30 * 1024 * 1024;
+
 /** Latura maximă a pozei salvate, în pixeli. */
 export const AVATAR_MAX_SIDE = 1024;
 
-const DIRECT_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
+const DIRECT_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
 const IMAGE_EXT = /\.(jpe?g|png|webp|gif|heic|heif|avif|bmp|tiff?)$/i;
 
 /** Valoarea atributului `accept` pentru input-urile de poză. */
@@ -31,8 +24,7 @@ export function checkAvatarFile(file: { type: string; name: string; size: number
   const looksLikeImage = type.startsWith("image/") || ((type === "" || type === "application/octet-stream") && IMAGE_EXT.test(file.name));
   if (!looksLikeImage) return { ok: false, error: "Alege o fotografie (JPG, PNG, WEBP sau HEIC de pe iPhone)." };
   if (file.size <= 0) return { ok: false, error: "Fișierul este gol. Alege altă fotografie." };
-  if (file.size > AVATAR_INPUT_MAX_BYTES) return { ok: false, error: "Fotografia este prea mare (peste 30 MB). Alege alta." };
-  const direct = (DIRECT_TYPES as readonly string[]).includes(type) && file.size <= AVATAR_TARGET_MAX_BYTES;
+  const direct = (DIRECT_TYPES as readonly string[]).includes(type);
   return { ok: true, needsConversion: !direct };
 }
 
@@ -47,6 +39,10 @@ export function scaledSize(width: number, height: number, maxSide = AVATAR_MAX_S
 export function extensionForType(type: string): string {
   if (type === "image/png") return "png";
   if (type === "image/webp") return "webp";
+  if (type === "image/gif") return "gif";
+  if (type === "image/avif") return "avif";
+  if (type === "image/bmp") return "bmp";
+  if (type === "image/tiff") return "tiff";
   return "jpg";
 }
 
@@ -92,14 +88,10 @@ async function decode(file: Blob): Promise<Decoded> {
   }
 }
 
-function toBlob(canvas: HTMLCanvasElement, quality: number): Promise<Blob | null> {
-  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", quality));
-}
-
 export class AvatarPrepError extends Error {}
 
 /**
- * Returnează un fișier gata de upload (≤ limita bucketului).
+ * Păstrează originalul; conversia fără pierderi se face doar când formatul nu este acceptat.
  * Aruncă AvatarPrepError cu mesaj în română dacă poza nu poate fi folosită.
  */
 export async function prepareAvatarFile(file: File): Promise<Blob> {
@@ -114,21 +106,17 @@ export async function prepareAvatarFile(file: File): Promise<Blob> {
     throw new AvatarPrepError("Nu am putut citi această poză. Fă o captură de ecran a ei sau alege o poză JPG/PNG.");
   }
   try {
-    const { width, height } = scaledSize(decoded.width, decoded.height);
+    const { width, height } = decoded;
     if (!width || !height) throw new AvatarPrepError("Poza pare deteriorată. Alege alta.");
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new AvatarPrepError("Browserul nu poate procesa poza. Încearcă din alt browser.");
-    ctx.fillStyle = "#ffffff"; // fundal alb pentru PNG transparent → JPEG
-    ctx.fillRect(0, 0, width, height);
     ctx.drawImage(decoded.source, 0, 0, width, height);
-    for (const q of [0.85, 0.7, 0.55]) {
-      const blob = await toBlob(canvas, q);
-      if (blob && blob.size <= AVATAR_BUCKET_MAX_BYTES) return blob;
-    }
-    throw new AvatarPrepError("Fotografia este prea mare chiar și după comprimare. Alege alta.");
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+    if (!blob) throw new AvatarPrepError("Conversia fotografiei a eșuat. Alege JPG sau PNG.");
+    return blob;
   } finally {
     decoded.close();
   }
