@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { retrimiteConfirmare } from "@/lib/inregistrare.functions";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
 
@@ -39,13 +40,10 @@ function LoginPage() {
 
   const onResend = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.resend({
-      type: "signup",
-      email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/` },
-    });
+    const r = await retrimiteConfirmare({ data: { email: email.trim(), origin: window.location.origin } })
+      .catch(() => ({ ok: false as const, error: "Conexiunea a eșuat.", stare: undefined }));
     setLoading(false);
-    if (error) { toast.error(authErrorRo(error.message)); return; }
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success("Ți-am trimis un email nou de confirmare.");
   };
 

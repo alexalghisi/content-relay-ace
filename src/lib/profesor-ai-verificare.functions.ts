@@ -18,12 +18,13 @@ type R = { ok: true; verificat?: boolean } | { ok: false; error: string };
 
 export const trimiteCodTelefon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ phone: z.string().max(30), address: z.string().max(300) }).parse(d))
+  .inputValidator((d) => z.object({ phone: z.string().max(30), address: z.string().max(300).optional() }).parse(d))
   .handler(async ({ data, context }): Promise<R> => {
     const { normalizeRoPhone, sendSms } = await import("./sms.server");
     const phone = normalizeRoPhone(data.phone);
     if (!phone) return { ok: false, error: "Introdu un număr de mobil românesc valid (07xx xxx xxx)." };
-    if (!adresaValida(data.address))
+    // Adresa e cerută doar în fluxul Profesor AI; la înregistrare se verifică doar telefonul.
+    if (data.address !== undefined && !adresaValida(data.address))
       return { ok: false, error: "Introdu adresa completă (stradă, număr, localitate)." };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rand } = await supabaseAdmin
@@ -46,7 +47,7 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
     const { error } = await supabaseAdmin.from("profesor_ai_utilizatori").upsert({
       user_id: context.userId,
       phone,
-      address: data.address.trim(),
+      ...(data.address !== undefined ? { address: data.address.trim() } : {}),
       code_hash: await hashCod(context.userId, cod),
       code_expires_at: new Date(Date.now() + COD_VALABIL_MIN * 60_000).toISOString(),
       code_attempts: 0,

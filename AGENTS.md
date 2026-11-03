@@ -1,5 +1,6 @@
 # Architecture rules
 
+- Signup runs server-side (src/lib/inregistrare.functions.ts): admin.generateLink creates the user and our own email provider (Resend, then Lovable Emails) sends the confirmation link to /confirmare-cont, which verifies the token and then asks for the SMS phone code. Never go back to supabase.auth.signUp/resend: the default Supabase mailer has no SMTP and only delivers to project team members.
 - Email signup stores the entered phone as unverified user metadata; Profesor AI pre-fills it but independently validates and verifies it by SMS before granting access. Never treat signup metadata as proof of phone ownership.
 
 - Daily SEO monitoring uses a secret-authenticated public hook, server-only Semrush and admin-readable snapshots to protect quota.
