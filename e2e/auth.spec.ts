@@ -51,6 +51,23 @@ test.describe("Înscriere și autentificare", () => {
     await expect(page).toHaveURL(/\/login$/);
   });
 
+  test("telefon folosit deja de alt cont → mesaj clar, rămâne pe formular", async ({ page }) => {
+    await mockSupabase(page);
+    await page.route("**/_serverFn/**", (route) =>
+      route.fulfill(serverFnResult({ ok: false, stare: "telefon", error: "Acest număr de telefon este deja folosit de alt cont. Autentifică-te în contul existent." })),
+    );
+    await page.goto("/signup");
+    await waitForHydration(page);
+    await page.getByLabel("Nume").fill("Marga Test");
+    await page.getByLabel("Email").fill("alt@example.com");
+    await page.getByLabel("Telefon mobil").fill("0722 123 456");
+    await page.getByLabel("Parolă").fill("parola123");
+    await page.getByRole("button", { name: "Creează cont gratuit" }).click();
+    await expect(page.getByText(/deja folosit de alt cont/)).toBeVisible();
+    await expect(page).toHaveURL(/\/signup$/);
+    await expect(page.getByRole("heading", { name: "Verifică-ți emailul" })).toHaveCount(0);
+  });
+
   test("emailul nu a plecat → rămâne ecranul de confirmare cu retrimitere funcțională", async ({ page }) => {
     await mockSupabase(page);
     let n = 0;
@@ -89,7 +106,8 @@ test.describe("Înscriere și autentificare", () => {
       return route.fulfill(serverFnResult(sms.length === 1 ? { ok: true } : { ok: true }));
     });
     await page.goto("/confirmare-cont?token_hash=abc123&type=signup");
-    await expect(page.getByRole("heading", { name: "Email confirmat" })).toBeVisible();
+    // Fără formular de așteptat: dev serverul rece poate hidrata pagina în peste 15 s.
+    await expect(page.getByRole("heading", { name: "Email confirmat" })).toBeVisible({ timeout: 60_000 });
     await expect(page).toHaveURL(/\/confirmare-cont$/); // tokenul dispare din URL
     await expect(page.getByLabel("Adresa")).toHaveCount(0); // la înregistrare nu cerem adresa
     await expect(page.getByLabel("Telefon mobil")).toHaveValue("+40722123456");
@@ -106,7 +124,7 @@ test.describe("Înscriere și autentificare", () => {
     await page.route("**/auth/v1/verify**", (route) =>
       route.fulfill({ status: 403, json: { code: 403, error_code: "otp_expired", msg: "Email link is invalid or has expired" } }));
     await page.goto("/confirmare-cont?token_hash=expirat&type=signup");
-    await expect(page.getByRole("heading", { name: "Linkul nu mai este valabil" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Linkul nu mai este valabil" })).toBeVisible({ timeout: 60_000 });
   });
 
   test("login cu parolă greșită → mesaj în română", async ({ page }) => {
