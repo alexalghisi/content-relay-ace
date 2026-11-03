@@ -88,6 +88,7 @@ function EvaluareNationalaHub() {
         <Link to="/calculator-media-evaluare-nationala" className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
           <Calculator className="h-4 w-4" /> Calculator medie Evaluarea Națională
         </Link>
+        <Link to="/calendar-evaluare-nationala-2027" className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">Calendar EN 2027</Link>
         <Link to="/meditatii-evaluare-nationala" className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">
           <FileText className="h-4 w-4" /> Profesori pentru Evaluarea Națională
         </Link>

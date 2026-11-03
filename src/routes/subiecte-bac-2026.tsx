@@ -42,6 +42,7 @@ export const Route = createFileRoute("/subiecte-bac-2026")({
       ]}
       faqs={FAQS}
       related={[
+        { to: "/calendar-bac-2027", label: "Calendar BAC 2027" },
         { to: "/variante-bacalaureat", label: "Arhivă BAC 2010-2026" },
         { to: "/rezultate-bac-2026", label: "Rezultate BAC 2026" },
         { to: "/meditatii-matematica", label: "Meditații matematică" },

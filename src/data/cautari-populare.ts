@@ -1,6 +1,8 @@
-// Căutări reale din Google Search Console (ultimele 90 de zile), scrise exact cum le tastează
+// Căutări reale din Google Search Console (ultimele 90 de zile) + tendințe sezoniere (calendar 2027), scrise exact cum le tastează
 // oamenii: fără diacritice. Le afișăm ca linkuri ca Google să lege paginile de aceste formulări.
 export const CAUTARI_POPULARE: { q: string; href: string }[] = [
+  { q: "calendar bac 2027", href: "/calendar-bac-2027" },
+  { q: "simulare evaluare nationala 2027", href: "/calendar-evaluare-nationala-2027" },
   { q: "meditatii", href: "/meditatii" },
   { q: "meditatii online", href: "/meditatii-online" },
   { q: "platforma meditatii online", href: "/platforma-meditatii-online" },
