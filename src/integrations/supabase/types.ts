@@ -775,6 +775,45 @@ export type Database = {
         }
         Relationships: []
       }
+      profesor_ai_review_eligibility: {
+        Row: {
+          first_success_at: string
+          user_id: string
+        }
+        Insert: {
+          first_success_at?: string
+          user_id: string
+        }
+        Update: {
+          first_success_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profesor_ai_reviews: {
+        Row: {
+          comment: string
+          created_at: string
+          rating: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string
+          created_at?: string
+          rating: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          rating?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profesor_ai_utilizatori: {
         Row: {
           address: string | null
@@ -816,6 +855,27 @@ export type Database = {
           lessons_started?: number
           phone?: string | null
           phone_verified_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profile_photos: {
+        Row: {
+          created_at: string
+          id: string
+          storage_path: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          storage_path: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          storage_path?: string
           user_id?: string
         }
         Relationships: []
