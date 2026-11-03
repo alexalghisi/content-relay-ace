@@ -1,0 +1,3 @@
+[test]
+# Testele Playwright (e2e/) rulează cu `npm run test:e2e`, nu cu bun test.
+root = "src"

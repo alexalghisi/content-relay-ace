@@ -12,7 +12,9 @@ mock.module("@tanstack/react-start", () => ({
   },
 }));
 mock.module("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseAuth: {} }));
-mock.module("./sms.server", () => ({ normalizeRoPhone: () => "40712345678", sendSms: async () => 0 }));
+// No mock.module("./sms.server"): Bun module mocks are global across test files and broke
+// signup/SMS suites depending on file order. The real sendSms runs; the provider call is
+// made to fail via a fetch stub scoped to this test.
 
 const writes: Record<string, unknown>[] = [];
 const query = {
@@ -28,6 +30,11 @@ mock.module("@/integrations/supabase/client.server", () => ({ supabaseAdmin: { f
 
 describe("Phone ownership when SMS fails", () => {
   it("never grants verification or writes phone_verified_at after failed delivery", async () => {
+    const realFetch = globalThis.fetch;
+    const realToken = process.env["GATEWAYAPI_TOKEN"];
+    process.env["GATEWAYAPI_TOKEN"] = "test-token";
+    globalThis.fetch = (async () => new Response("{}", { status: 401 })) as unknown as typeof fetch;
+    try {
     const { trimiteCodTelefon } = await import("./profesor-ai-verificare.functions");
     const handler = trimiteCodTelefon as unknown as (input: {
       data: { phone: string; address: string }; context: { userId: string };
@@ -40,5 +47,10 @@ describe("Phone ownership when SMS fails", () => {
     expect(result.verificat).not.toBe(true);
     expect(writes.length).toBe(1);
     expect(writes.some((write) => "phone_verified_at" in write)).toBe(false);
+    } finally {
+      globalThis.fetch = realFetch;
+      if (realToken === undefined) delete process.env["GATEWAYAPI_TOKEN"];
+      else process.env["GATEWAYAPI_TOKEN"] = realToken;
+    }
   });
 });

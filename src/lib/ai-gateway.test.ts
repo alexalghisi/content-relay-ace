@@ -8,7 +8,11 @@ describe("Simulare AI — utilitare", () => {
     const t = await seal({ u: "user-1", chei: [{ id: "g1", corect: 2 }] });
     expect(t).not.toContain("corect");
     expect(await unseal<unknown>(t)).toEqual({ u: "user-1", chei: [{ id: "g1", corect: 2 }] });
-    const bad = t.slice(0, -2) + (t.endsWith("A") ? "BB" : "AA");
+    // Flip a character in the middle: the last base64 chars may carry only ignored padding
+    // bits, so tampering there sometimes decodes to identical bytes (flaky in CI).
+    const mid = Math.floor(t.length / 2);
+    const bad = t.slice(0, mid) + (t[mid] === "A" ? "B" : "A") + t.slice(mid + 1);
+    expect(bad).not.toBe(t);
     expect(await unseal(bad)).toBeNull();
     expect(await unseal("nimic")).toBeNull();
   });
