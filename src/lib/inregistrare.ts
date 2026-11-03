@@ -68,6 +68,38 @@ export function htmlConfirmare(nume: string, link: string): string {
 </div></body></html>`;
 }
 
+/**
+ * Forma canonică a unui email, folosită pentru unicitatea conturilor (oglindă a public.email_canonic din
+ * drizzle/migrations/0021_conturi_unice.sql). La Gmail punctele și +eticheta duc în aceeași căsuță.
+ */
+export function emailCanonic(email: string): string {
+  const e = email.trim().toLowerCase();
+  const at = e.lastIndexOf("@");
+  if (at < 0) return e;
+  let local = e.slice(0, at);
+  let domeniu = e.slice(at + 1);
+  if (domeniu === "gmail.com" || domeniu === "googlemail.com") {
+    local = local.split("+")[0].replace(/\./g, "");
+    domeniu = "gmail.com";
+  }
+  return `${local}@${domeniu}`;
+}
+
+export const MESAJ_EMAIL_FOLOSIT = "Există deja un cont cu acest email. Autentifică-te.";
+export const MESAJ_TELEFON_FOLOSIT = "Acest număr de telefon este deja folosit de alt cont. Autentifică-te în contul existent.";
+
+/**
+ * „exact”: Supabase are deja contul pe adresa asta; „varianta”: triggerul blocheaza_email_duplicat a refuzat
+ * o variantă a unui email existent (Supabase o raportează ca „Database error saving new user”).
+ */
+export function esteEmailDuplicat(message: string, code?: string): "exact" | "varianta" | null {
+  const m = message.toLowerCase();
+  if (code === "email_exists" || (m.includes("already") && (m.includes("registered") || m.includes("exists"))))
+    return "exact";
+  if (m.includes("email_duplicat") || m.includes("database error saving new user")) return "varianta";
+  return null;
+}
+
 /** Mesaje Supabase Auth (engleză) → română, fără a expune textul brut. */
 export function eroareInregistrareRo(message: string): string {
   const m = message.toLowerCase();

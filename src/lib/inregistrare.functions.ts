@@ -2,7 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { signupSchema } from "./signup-validation";
 import {
+  MESAJ_EMAIL_FOLOSIT,
+  MESAJ_TELEFON_FOLOSIT,
+  emailCanonic,
   eroareInregistrareRo,
+  esteEmailDuplicat,
   htmlConfirmare,
   linkConfirmare,
   subiectConfirmare,
@@ -26,7 +30,7 @@ async function claimFereastra(key: string, sec = 60): Promise<boolean> {
 
 type Rezultat =
   | { ok: true; stare: "trimis" | "retrimis" }
-  | { ok: false; error: string; stare?: "exista" | "netrimis" };
+  | { ok: false; error: string; stare?: "exista" | "netrimis" | "telefon" };
 
 async function trimiteConfirmare(email: string, nume: string, origin: string, tokenHash: string, tip: TipConfirmare) {
   const { trimiteEmailCont } = await import("./email-cont.server");
@@ -45,7 +49,7 @@ async function retrimitePentruExistent(email: string, origin: string): Promise<R
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin.auth.admin.generateLink({ type: "magiclink", email });
   if (error || !data?.user) return { ok: false, error: "Nu am găsit un cont cu acest email.", stare: "netrimis" };
-  if (data.user.email_confirmed_at) return { ok: false, error: "Există deja un cont cu acest email. Autentifică-te.", stare: "exista" };
+  if (data.user.email_confirmed_at) return { ok: false, error: MESAJ_EMAIL_FOLOSIT, stare: "exista" };
   const nume = typeof data.user.user_metadata?.display_name === "string" ? data.user.user_metadata.display_name : "";
   const trimis = await trimiteConfirmare(email, nume, origin, data.properties.hashed_token, "magiclink");
   return trimis
@@ -84,6 +88,24 @@ async function creeaza(data: { name: string; email: string; phone: string; passw
       return { ok: false, error: "Ți-am trimis deja un email acum câteva secunde. Verifică și folderul Spam." };
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Un număr de telefon = un singur cont (cel verificat prin SMS îl deține).
+    const { data: telefonOcupat } = await supabaseAdmin
+      .from("profesor_ai_utilizatori")
+      .select("user_id")
+      .eq("phone", parsed.data.phone)
+      .not("phone_verified_at", "is", null)
+      .limit(1)
+      .maybeSingle();
+    if (telefonOcupat) return { ok: false, error: MESAJ_TELEFON_FOLOSIT, stare: "telefon" };
+
+    // Un email = un singur cont, inclusiv variantele Gmail (puncte, +eticheta). Același email exact
+    // ajunge mai jos la retrimiterea confirmării, ca un cont neconfirmat să poată fi activat.
+    if (emailCanonic(email).endsWith("@gmail.com")) {
+      const { data: varianta } = await supabaseAdmin.rpc("exista_email_canonic", { p_email: email });
+      if (varianta) return { ok: false, error: MESAJ_EMAIL_FOLOSIT, stare: "exista" };
+    }
+
     const { data: link, error } = await supabaseAdmin.auth.admin.generateLink({
       type: "signup",
       email,
@@ -91,9 +113,10 @@ async function creeaza(data: { name: string; email: string; phone: string; passw
       options: { data: { display_name: parsed.data.name, phone: parsed.data.phone } },
     });
     if (error) {
-      const msg = error.message.toLowerCase();
-      if (msg.includes("already") || (error as { code?: string }).code === "email_exists")
-        return retrimitePentruExistent(email, data.origin);
+      const dup = esteEmailDuplicat(error.message, (error as { code?: string }).code);
+      if (dup === "exact") return retrimitePentruExistent(email, data.origin);
+      // Trigger-ul blocheaza_email_duplicat a refuzat o variantă a unui email existent.
+      if (dup === "varianta") return { ok: false, error: MESAJ_EMAIL_FOLOSIT, stare: "exista" };
       console.error(`[inregistrare] generateLink ${(error as { status?: number }).status ?? ""}`);
       return { ok: false, error: eroareInregistrareRo(error.message) };
     }
