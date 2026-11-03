@@ -5,6 +5,7 @@ import { formatRoPhone } from "@/lib/phone";
 import { creeazaCont, retrimiteConfirmare } from "@/lib/inregistrare.functions";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
+import { PasswordInput } from "@/components/password-input";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
@@ -115,7 +116,7 @@ function SignupPage() {
         </div>
         <div>
           <label htmlFor="signup-password" className="text-sm font-medium">Parolă</label>
-          <input id="signup-password" autoComplete="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
+          <PasswordInput id="signup-password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
           <p className="mt-1 text-xs text-muted-foreground">Minim 6 caractere.</p>
         </div>
         <button type="submit" disabled={loading} className="btn-primary w-full h-12 disabled:opacity-60">

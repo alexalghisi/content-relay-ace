@@ -1,3 +1,4 @@
+import { PasswordInput } from "@/components/password-input";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
@@ -212,7 +213,7 @@ function AccountPage() {
         <form onSubmit={savePassword} className="card-soft mt-6 p-5 sm:p-6 space-y-4">
           <h2 className="text-lg font-semibold inline-flex items-center gap-2"><Lock className="h-4 w-4 text-primary" /> Parolă</h2>
           <Field label="Parolă nouă">
-            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Minim 6 caractere" className="field-input" />
+            <PasswordInput aria-label="Parolă nouă" autoComplete="new-password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Minim 6 caractere" className="field-input" />
           </Field>
           <button type="submit" disabled={savingPassword} className="btn-outline h-11 disabled:opacity-60">
             {savingPassword ? "Se schimbă..." : "Schimbă parola"}

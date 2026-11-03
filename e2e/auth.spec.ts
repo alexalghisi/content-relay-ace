@@ -119,3 +119,17 @@ test.describe("Înscriere și autentificare", () => {
     await expect(page.getByText("Email sau parolă greșite.")).toBeVisible();
   });
 });
+
+test("parola se poate afișa ca utilizatorul să verifice ce a tastat", async ({ page }) => {
+  await mockSupabase(page);
+  await page.goto("/signup");
+  await waitForHydration(page);
+  const parola = page.getByLabel("Parolă", { exact: true });
+  await parola.fill("Parola123");
+  await expect(parola).toHaveAttribute("type", "password");
+  await page.getByRole("button", { name: "Arată parola" }).click();
+  await expect(parola).toHaveAttribute("type", "text");
+  await expect(parola).toHaveValue("Parola123");
+  await page.getByRole("button", { name: "Ascunde parola" }).click();
+  await expect(parola).toHaveAttribute("type", "password");
+});

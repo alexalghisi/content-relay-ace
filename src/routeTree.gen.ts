@@ -19,6 +19,8 @@ import { Route as AnunturiMeditatiiBacRouteImport } from './routes/anunturi-medi
 import { Route as CalculatorMediaEvaluareNationalaRouteImport } from './routes/calculator-media-evaluare-nationala'
 import { Route as CalculatorMedieBacRouteImport } from './routes/calculator-medie-bac'
 import { Route as CalculatorNotaAdmitereRouteImport } from './routes/calculator-nota-admitere'
+import { Route as CalendarBac2027RouteImport } from './routes/calendar-bac-2027'
+import { Route as CalendarEvaluareNationala2027RouteImport } from './routes/calendar-evaluare-nationala-2027'
 import { Route as CastigaDinMeditatiiRouteImport } from './routes/castiga-din-meditatii'
 import { Route as CautProfesorRouteImport } from './routes/caut-profesor'
 import { Route as CentruMeditatiiRouteImport } from './routes/centru-meditatii'
@@ -228,6 +230,17 @@ const CalculatorNotaAdmitereRoute = CalculatorNotaAdmitereRouteImport.update({
   path: '/calculator-nota-admitere',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CalendarBac2027Route = CalendarBac2027RouteImport.update({
+  id: '/calendar-bac-2027',
+  path: '/calendar-bac-2027',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarEvaluareNationala2027Route =
+  CalendarEvaluareNationala2027RouteImport.update({
+    id: '/calendar-evaluare-nationala-2027',
+    path: '/calendar-evaluare-nationala-2027',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CastigaDinMeditatiiRoute = CastigaDinMeditatiiRouteImport.update({
   id: '/castiga-din-meditatii',
   path: '/castiga-din-meditatii',
@@ -1048,6 +1061,8 @@ export interface FileRoutesByFullPath {
   '/calculator-media-evaluare-nationala': typeof CalculatorMediaEvaluareNationalaRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
+  '/calendar-bac-2027': typeof CalendarBac2027Route
+  '/calendar-evaluare-nationala-2027': typeof CalendarEvaluareNationala2027Route
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
   '/centru-meditatii': typeof CentruMeditatiiRoute
@@ -1217,6 +1232,8 @@ export interface FileRoutesByTo {
   '/calculator-media-evaluare-nationala': typeof CalculatorMediaEvaluareNationalaRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
+  '/calendar-bac-2027': typeof CalendarBac2027Route
+  '/calendar-evaluare-nationala-2027': typeof CalendarEvaluareNationala2027Route
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
   '/centru-meditatii': typeof CentruMeditatiiRoute
@@ -1385,6 +1402,8 @@ export interface FileRoutesById {
   '/calculator-media-evaluare-nationala': typeof CalculatorMediaEvaluareNationalaRoute
   '/calculator-medie-bac': typeof CalculatorMedieBacRoute
   '/calculator-nota-admitere': typeof CalculatorNotaAdmitereRoute
+  '/calendar-bac-2027': typeof CalendarBac2027Route
+  '/calendar-evaluare-nationala-2027': typeof CalendarEvaluareNationala2027Route
   '/castiga-din-meditatii': typeof CastigaDinMeditatiiRoute
   '/caut-profesor': typeof CautProfesorRoute
   '/centru-meditatii': typeof CentruMeditatiiRoute
@@ -1556,6 +1575,8 @@ export interface FileRouteTypes {
     | '/calculator-media-evaluare-nationala'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
+    | '/calendar-bac-2027'
+    | '/calendar-evaluare-nationala-2027'
     | '/castiga-din-meditatii'
     | '/caut-profesor'
     | '/centru-meditatii'
@@ -1725,6 +1746,8 @@ export interface FileRouteTypes {
     | '/calculator-media-evaluare-nationala'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
+    | '/calendar-bac-2027'
+    | '/calendar-evaluare-nationala-2027'
     | '/castiga-din-meditatii'
     | '/caut-profesor'
     | '/centru-meditatii'
@@ -1892,6 +1915,8 @@ export interface FileRouteTypes {
     | '/calculator-media-evaluare-nationala'
     | '/calculator-medie-bac'
     | '/calculator-nota-admitere'
+    | '/calendar-bac-2027'
+    | '/calendar-evaluare-nationala-2027'
     | '/castiga-din-meditatii'
     | '/caut-profesor'
     | '/centru-meditatii'
@@ -2062,6 +2087,8 @@ export interface RootRouteChildren {
   CalculatorMediaEvaluareNationalaRoute: typeof CalculatorMediaEvaluareNationalaRoute
   CalculatorMedieBacRoute: typeof CalculatorMedieBacRoute
   CalculatorNotaAdmitereRoute: typeof CalculatorNotaAdmitereRoute
+  CalendarBac2027Route: typeof CalendarBac2027Route
+  CalendarEvaluareNationala2027Route: typeof CalendarEvaluareNationala2027Route
   CastigaDinMeditatiiRoute: typeof CastigaDinMeditatiiRoute
   CautProfesorRoute: typeof CautProfesorRoute
   CentruMeditatiiRoute: typeof CentruMeditatiiRoute
@@ -2287,6 +2314,20 @@ declare module '@tanstack/react-router' {
       path: '/calculator-nota-admitere'
       fullPath: '/calculator-nota-admitere'
       preLoaderRoute: typeof CalculatorNotaAdmitereRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar-bac-2027': {
+      id: '/calendar-bac-2027'
+      path: '/calendar-bac-2027'
+      fullPath: '/calendar-bac-2027'
+      preLoaderRoute: typeof CalendarBac2027RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar-evaluare-nationala-2027': {
+      id: '/calendar-evaluare-nationala-2027'
+      path: '/calendar-evaluare-nationala-2027'
+      fullPath: '/calendar-evaluare-nationala-2027'
+      preLoaderRoute: typeof CalendarEvaluareNationala2027RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/castiga-din-meditatii': {
@@ -3430,6 +3471,8 @@ const rootRouteChildren: RootRouteChildren = {
   CalculatorMediaEvaluareNationalaRoute: CalculatorMediaEvaluareNationalaRoute,
   CalculatorMedieBacRoute: CalculatorMedieBacRoute,
   CalculatorNotaAdmitereRoute: CalculatorNotaAdmitereRoute,
+  CalendarBac2027Route: CalendarBac2027Route,
+  CalendarEvaluareNationala2027Route: CalendarEvaluareNationala2027Route,
   CastigaDinMeditatiiRoute: CastigaDinMeditatiiRoute,
   CautProfesorRoute: CautProfesorRoute,
   CentruMeditatiiRoute: CentruMeditatiiRoute,
