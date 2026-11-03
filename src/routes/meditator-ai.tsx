@@ -11,7 +11,7 @@ const PATH = "/meditator-ai";
 const URL = `${SITE}${PATH}`;
 const TITLE = "Meditator AI gratuit: explicații pas cu pas la orice materie | MeditatiiDirect.ro";
 const DESCRIPTION =
-  "Întreabă Meditatorul AI orice de la școală: matematică, română, engleză, fizică, chimie, biologie, informatică. Explică pas cu pas, pe programa din România, și te ajută să înțelegi, nu doar să copiezi rezultatul.";
+  "Meditatorul AI explică pas cu pas, pe programa din România, la matematică, română, engleză, fizică, chimie, biologie și informatică — ca să înțelegi, nu să copiezi.";
 
 const FAQS = [
   {

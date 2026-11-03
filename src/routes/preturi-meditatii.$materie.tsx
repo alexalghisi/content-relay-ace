@@ -81,7 +81,7 @@ function PricePage() {
         <div className="card-soft p-5">
           <p className="text-sm text-muted-foreground">Maxim</p>
           <p className="mt-1 text-3xl font-bold text-primary">{subject.pretMax} lei</p>
-          <p className="text-xs text-muted-foreground">/oră — titulari, pregătire olimpiadă</p>
+          <p className="text-xs text-muted-foreground">/oră — capătul de sus al tarifelor din anunțuri</p>
         </div>
       </section>
 

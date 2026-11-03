@@ -5,7 +5,7 @@ import { BAC_ARCHIVE } from "@/data/bac-archive";
 
 const URL = "https://meditatiidirect.ro/subiecte-bac";
 const TITLE = "Subiecte BAC 2001–2026 — Toate materiile, subiecte și bareme PDF | MeditatiiDirect.ro";
-const DESC = "Subiecte BAC oficiale 2001–2026 la matematică, română, biologie, fizică, chimie, informatică, istorie, geografie. Subiecte + bareme PDF gratuit, fără cont. Cea mai mare arhivă de subiecte bacalaureat din România.";
+const DESC = "Subiecte BAC oficiale 2001–2026 la matematică, română, biologie, fizică, chimie, informatică, istorie și geografie, cu bareme PDF. Gratuit, fără cont.";
 
 const faqs = [
   { q: "Ce subiecte BAC găsesc pe MeditatiiDirect.ro?", a: "Toate subiectele oficiale de bacalaureat date de Ministerul Educației din 2001 până în 2026, la 15+ materii: matematică (M1, M2, M3), limba română, biologie, fizică, chimie, informatică (C/C++), istorie, geografie, logică, psihologie, economie, sociologie, filosofie. Subiectele și baremele complete, în PDF, găzduite direct pe platforma noastră." },

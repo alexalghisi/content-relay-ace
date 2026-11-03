@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as AdmitereRouteImport } from './routes/admitere'
 import { Route as AdmitereFacultate2026RouteImport } from './routes/admitere-facultate-2026'
+import { Route as AdmitereLiceu2027RouteImport } from './routes/admitere-liceu-2027'
 import { Route as AdsDottxtRouteImport } from './routes/ads[.]txt'
 import { Route as AnunturiMeditatiiRouteImport } from './routes/anunturi-meditatii'
 import { Route as AnunturiMeditatiiBacRouteImport } from './routes/anunturi-meditatii-bac'
@@ -197,6 +198,11 @@ const AdmitereRoute = AdmitereRouteImport.update({
 const AdmitereFacultate2026Route = AdmitereFacultate2026RouteImport.update({
   id: '/admitere-facultate-2026',
   path: '/admitere-facultate-2026',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmitereLiceu2027Route = AdmitereLiceu2027RouteImport.update({
+  id: '/admitere-liceu-2027',
+  path: '/admitere-liceu-2027',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdsDottxtRoute = AdsDottxtRouteImport.update({
@@ -1055,6 +1061,7 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/admitere': typeof AdmitereRoute
   '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
+  '/admitere-liceu-2027': typeof AdmitereLiceu2027Route
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
@@ -1226,6 +1233,7 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/admitere': typeof AdmitereRoute
   '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
+  '/admitere-liceu-2027': typeof AdmitereLiceu2027Route
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
@@ -1396,6 +1404,7 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/admitere': typeof AdmitereRoute
   '/admitere-facultate-2026': typeof AdmitereFacultate2026Route
+  '/admitere-liceu-2027': typeof AdmitereLiceu2027Route
   '/ads.txt': typeof AdsDottxtRoute
   '/anunturi-meditatii': typeof AnunturiMeditatiiRoute
   '/anunturi-meditatii-bac': typeof AnunturiMeditatiiBacRoute
@@ -1569,6 +1578,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/admitere'
     | '/admitere-facultate-2026'
+    | '/admitere-liceu-2027'
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
@@ -1740,6 +1750,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/admitere'
     | '/admitere-facultate-2026'
+    | '/admitere-liceu-2027'
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
@@ -1909,6 +1920,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/admitere'
     | '/admitere-facultate-2026'
+    | '/admitere-liceu-2027'
     | '/ads.txt'
     | '/anunturi-meditatii'
     | '/anunturi-meditatii-bac'
@@ -2081,6 +2093,7 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   AdmitereRoute: typeof AdmitereRoute
   AdmitereFacultate2026Route: typeof AdmitereFacultate2026Route
+  AdmitereLiceu2027Route: typeof AdmitereLiceu2027Route
   AdsDottxtRoute: typeof AdsDottxtRoute
   AnunturiMeditatiiRoute: typeof AnunturiMeditatiiRoute
   AnunturiMeditatiiBacRoute: typeof AnunturiMeditatiiBacRoute
@@ -2272,6 +2285,13 @@ declare module '@tanstack/react-router' {
       path: '/admitere-facultate-2026'
       fullPath: '/admitere-facultate-2026'
       preLoaderRoute: typeof AdmitereFacultate2026RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admitere-liceu-2027': {
+      id: '/admitere-liceu-2027'
+      path: '/admitere-liceu-2027'
+      fullPath: '/admitere-liceu-2027'
+      preLoaderRoute: typeof AdmitereLiceu2027RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ads.txt': {
@@ -3465,6 +3485,7 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   AdmitereRoute: AdmitereRoute,
   AdmitereFacultate2026Route: AdmitereFacultate2026Route,
+  AdmitereLiceu2027Route: AdmitereLiceu2027Route,
   AdsDottxtRoute: AdsDottxtRoute,
   AnunturiMeditatiiRoute: AnunturiMeditatiiRoute,
   AnunturiMeditatiiBacRoute: AnunturiMeditatiiBacRoute,

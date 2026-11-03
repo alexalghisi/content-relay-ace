@@ -11,7 +11,7 @@ const faqs = [
   { q: "Ce variante BAC găsesc aici?", a: "Subiecte și bareme oficiale + modele de antrenament la 11 materii (matematică M1/M2, română, biologie, fizică, chimie, informatică, istorie, geografie, logică, psihologie) pentru fiecare an din 2010 până în 2026 — peste 370 de PDF-uri gratuite." },
   { q: "Cum folosesc cel mai bine aceste variante?", a: "Începe cu variantele de simulare ale anului în curs, apoi rezolvă cronologic invers: 2026 → 2010. Verifică-te pe barem după fiecare subiect și lucrează cu un meditator pe punctele slabe." },
   { q: "Sunt subiectele identice cu cele oficiale de la MEN?", a: "Da — toate subiectele și baremele sunt cele oficiale ale Ministerului Educației, scanate și găzduite direct pe MeditatiiDirect.ro pentru descărcare imediată." },
-  { q: "De unde iau profesor pentru pregătirea BAC?", a: "Pe MeditatiiDirect.ro găsești peste 1000 de meditatori verificați pentru bacalaureat, cu profil afișat, materii, prețuri și recenzii. Contact direct, fără comision." },
+  { q: "De unde iau profesor pentru pregătirea BAC?", a: "Pe MeditatiiDirect.ro postezi gratuit o cerere pentru materia de BAC și primești propuneri de la profesori verificați, cu profil, materii și preț. Contact direct, fără comision." },
 ];
 
 export const Route = createFileRoute("/variante-bacalaureat")({

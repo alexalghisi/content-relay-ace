@@ -3,7 +3,7 @@ import { Search, MessageCircle, Send, Star, Shield, Wallet } from "lucide-react"
 
 const URL = "https://meditatiidirect.ro/cum-functioneaza";
 const TITLE = "Cum funcționează MeditatiiDirect.ro — cerere, propuneri, chat direct și evaluare în stele";
-const DESC = "Un mod nou de a găsi meditații: postezi o cerere, profesorii verificați îți trimit propuneri cu dată, oră și tarif, discutați direct în chat, iar la final evaluezi colaborarea cu stele. Gratuit, fără comision.";
+const DESC = "Postezi gratuit o cerere de meditații, profesorii verificați îți trimit propuneri cu dată, oră și tarif, discutați în chat, iar la final evaluezi cu stele. Fără comision.";
 
 const faqs = [
   { q: "Cum funcționează, pe scurt?", a: "Nu mai cauți prin zeci de profile. Descrii o singură dată ce ai nevoie (materie, nivel, oraș sau online, buget), iar profesorii verificați interesați îți trimit propuneri cu dată, oră, tarif și un mesaj. Tu alegi și continui discuția direct cu profesorul." },

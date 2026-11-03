@@ -8,11 +8,11 @@ import { BadgeCheck, Star } from "lucide-react";
 
 const URL_ = "https://meditatiidirect.ro/profesori";
 const TITLE = "Profesori Particulari Verificați — Meditații în România | MeditatiiDirect";
-const DESC = "Profesori particulari verificați pentru meditații: profesori de matematică, română, engleză, fizică, informatică, BAC și admitere. Contact direct cu profesorul, recenzii reale, fără comision, de la 30 lei/oră.";
+const DESC = "Profesori particulari verificați pentru meditații: profesori de matematică, română, engleză, fizică, informatică, BAC și admitere. Contact direct cu profesorul, recenzii reale, fără comision.";
 
 const faqs = [
   { q: "Sunt profesorii verificați?", a: "Da. Verificăm manual identitatea, diploma și experiența fiecărui profesor înainte ca profilul să fie publicat. Profesorii validați au badge „Verificat\" pe pagină." },
-  { q: "Cât costă o oră cu un profesor particular?", a: "Tarifele pornesc de la 30 lei/oră (gimnaziu, provincie) și ajung la 200 lei/oră pentru profesori titulari cu rezultate la BAC sau admitere la Medicină în București." },
+  { q: "Cât costă o oră cu un profesor particular?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunere înainte să accepți. Tarifele reale din anunțurile de pe site sunt pe pagina Prețuri meditații, pe materii și orașe." },
   { q: "Pot lucra cu un profesor doar online?", a: "Da. Filtrul „Online\" îți arată toți profesorii care fac meditații pe Zoom, Google Meet sau platforme similare, indiferent de oraș." },
   { q: "Cum aleg cel mai bun profesor?", a: "Compară experiența, recenziile, prețul și disponibilitatea. Fă o oră de probă cu 2–3 candidați înainte să te decizi pe termen lung." },
   { q: "Plătesc vreun comision platformei?", a: "Nu. Contactul și plata se fac direct cu profesorul. MeditatiiDirect.ro nu percepe comision din ședință." },

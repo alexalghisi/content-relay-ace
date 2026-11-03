@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seoPage } from "@/lib/seo-page";
+import { CUM_FUNCTIONEAZA } from "@/data/continut-pagini";
 
 export const Route = createFileRoute("/meditatii-biologie")(seoPage({
   path: "/meditatii-biologie",
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/meditatii-biologie")(seoPage({
   sections: [
     { title: "Programa BAC: alege varianta potrivită", body: <><p>La biologie, verifică programa pentru anatomie și fiziologie umană, genetică și ecologie umană sau pentru biologie vegetală și animală. Precizează varianta în cerere și lucrează pe subiecte corespunzătoare.</p><p>Consultă <Link to="/bac" className="text-primary underline">arhiva BAC</Link> și <Link to="/rezolvari" className="text-primary underline">rezolvările explicate</Link>.</p></> },
     { title: "Admitere medicină: bibliografia contează", body: <p>Fiecare facultate stabilește bibliografia și regulile examenului. Include universitatea și ediția materialelor în cerere. Cere profesorului explicații pentru fiecare răspuns din grile, nu doar cheia corectă, și verifică periodic capitolele în care repeți greșeli.</p> },
+    CUM_FUNCTIONEAZA,
   ],
   faqs: [
     { q: "Câte ore de meditații biologie pentru admitere UMF?", a: "Numărul de ore depinde de nivelul inițial, programa facultății și timpul de studiu individual. Cere o evaluare inițială și un plan cu recapitulări și teste; nu există un număr de ședințe care garantează admiterea." },

@@ -2,13 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-bac";
-const TITLE = "Meditații BAC 2026 — Pregătire bacalaureat cu profesori verificați | MeditatiiDirect.ro";
-const DESC = "Meditații BAC 2026 la matematică, română, biologie, fizică, chimie, informatică, istorie. Profesori verificați + variante simulare PDF gratuit.";
+const TITLE = "Meditații BAC 2027 — profesori verificați la toate materiile, online sau acasă";
+const DESC = "Meditații pentru BAC 2027 la română, matematică, biologie, chimie, fizică, informatică, istorie, geografie. Postezi gratuit cererea și primești propuneri de la profesori verificați.";
 
 const faqs = [
-  { q: "Cât costă o oră de meditații BAC?", a: "Tarifele orientative: 50–80 lei/oră pentru materii uzuale, 80–150 lei/oră pentru pregătire intensivă cu profesori titulari de top." },
-  { q: "Câte ore de meditații BAC sunt necesare?", a: "În medie 1–2 ore/săptămână pe materie, începute cu 6–9 luni înainte. Pentru recuperare intensivă în ultimele 2 luni, 4 ore/săptămână." },
-  { q: "Pot face meditații BAC online?", a: "Da, peste 60% din meditațiile BAC se fac astăzi online prin Zoom sau Meet. Calitatea este similară cu cea la domiciliu, iar tarifele sunt deseori mai mici." },
+  { q: "Cât costă o oră de meditații BAC?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii, sunt pe pagina Prețuri meditații." },
+  { q: "Câte ore de meditații BAC sunt necesare?", a: "Depinde de nivelul de pornire și de nota țintă. De obicei se lucrează una-două ședințe pe săptămână la materia de examen, plus variante rezolvate singur între ședințe. Profesorul îți propune ritmul după prima ședință." },
+  { q: "Pot face meditații BAC online?", a: "Da. Ședința se ține pe Zoom sau Google Meet, cu tablă comună pentru exerciții, și nu pierzi timp pe drum. Spune în cerere că vrei online și primești propuneri din toată țara." },
 ];
 
 export const Route = createFileRoute("/meditatii-bac")({
@@ -26,8 +26,8 @@ export const Route = createFileRoute("/meditatii-bac")({
   component: () => (
     <SeoLanding
       pageUrl={URL}
-      h1="Meditații BAC 2026"
-      intro="Pregătire completă pentru bacalaureatul 2026 cu profesori verificați. Toate materiile, toate filierele — real, uman, tehnologic. Online sau la domiciliu."
+      h1="Meditații BAC 2027"
+      intro="Profesori verificați pentru bacalaureatul 2027, la proba ta: simularea e în 22–25 martie, probele scrise în 14–18 iunie 2027. Toate materiile, toate filierele — real, uman, tehnologic. Online sau la domiciliu."
       bullets={[
         "Matematică M_mate-info, M_șt-nat, M_pedagogic, M_tehnologic",
         "Română — proba scrisă și orală",

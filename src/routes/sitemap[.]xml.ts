@@ -72,6 +72,7 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/simulare-drept-2026", priority: "0.8", changefreq: "weekly" },
   { path: "/calendar-bac-2027", priority: "0.99", changefreq: "weekly" },
   { path: "/calendar-evaluare-nationala-2027", priority: "0.99", changefreq: "weekly" },
+  { path: "/admitere-liceu-2027", priority: "0.95", changefreq: "weekly" },
   { path: "/rezultate-bac-2026", priority: "0.98", changefreq: "daily" },
   { path: "/subiecte-bac-2026", priority: "0.98", changefreq: "daily" },
   { path: "/admitere-facultate-2026", priority: "0.95", changefreq: "daily" },

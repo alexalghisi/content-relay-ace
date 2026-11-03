@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { seoPage } from "@/lib/seo-page";
+import { SECTIUNI } from "@/data/continut-pagini";
 
 export const Route = createFileRoute("/meditatii-clasa-8")(seoPage({
   path: "/meditatii-clasa-8",
@@ -7,7 +8,8 @@ export const Route = createFileRoute("/meditatii-clasa-8")(seoPage({
   description: "Meditații clasa a 8-a pentru Evaluare Națională 2026 la matematică și română. Profesori verificați, online sau la domiciliu.",
   h1: "Meditații clasa a 8-a — Evaluare Națională 2026",
   intro: "Pregătire intensivă pentru EN 2026: matematică, română, recuperare materie și simulări săptămânale. Plan personalizat per elev.",
-  bullets: ["Matematică EN — algebră + geometrie", "Română EN — text literar + redactare", "Simulări săptămânale + corectare", "Profesori titulari cu experiență EN"],
+  bullets: ["Matematică EN — algebră + geometrie", "Română EN — text literar + redactare", "Simulări săptămânale + corectare", "Lucru pe subiectele oficiale din anii trecuți"],
+  sections: SECTIUNI["meditatii-clasa-8"],
   faqs: [
     { q: "Când să încep meditațiile pentru Evaluare Națională?", a: "Ideal din clasa a 7-a sau începutul clasei a 8-a. Pentru recuperare, minim 4–6 luni înainte de examen, cu 2 ore/săptămână per materie." },
   ],
