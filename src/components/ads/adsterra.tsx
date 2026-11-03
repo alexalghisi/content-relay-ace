@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { adsterraDocument, ADSTERRA_SMARTLINK, ADSTERRA_SOCIAL_SCRIPT } from "./adsterra-document";
+import { adsterraDocument } from "./adsterra-document";
 import { onPageIdle } from "@/hooks/use-after-load";
 import { ADSENSE_CLIENT } from "./adsense";
 import { useAfterLoad } from "@/hooks/use-after-load";
@@ -58,17 +56,10 @@ export function AdsterraBanner320({ className = "" }: { className?: string }) {
   return <AdsterraPlacement banner mobileOnly className={className} />;
 }
 
-export function AdsterraSocialBar() {
-  // Social Bar and AdSense auto ads are page-level scripts, injected once the page is idle.
+export function AdSenseAutoAds() {
+  // AdSense auto ads are a page-level script, injected once the page is idle.
+  // The Adsterra Social Bar and smartlink were removed to show fewer Adsterra ads.
   useEffect(() => onPageIdle(() => {
-    if (!document.querySelector("script[data-adsterra-social]")) {
-      const s = document.createElement("script");
-      s.src = ADSTERRA_SOCIAL_SCRIPT;
-      s.async = true;
-      s.dataset.cfasync = "false";
-      s.dataset.adsterraSocial = "1";
-      document.body.appendChild(s);
-    }
     if (!document.querySelector("script[data-adsbygoogle-lib]")) {
       const g = document.createElement("script");
       g.async = true;
@@ -84,11 +75,5 @@ export function AdsterraSocialBar() {
 export function AdsterraMonetization() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   if (/^\/(admin|profesor|profesor-ai|cont|chat|autentificare|inregistrare|cererea-mea)(\/|$)/.test(pathname)) return null;
-  return <>
-    <AdsterraSocialBar />
-    <aside aria-label="Link publicitar" className="container-page flex flex-wrap items-center justify-center gap-3 py-4">
-      <span className="text-xs text-muted-foreground">Publicitate externă</span>
-      <Button asChild variant="outline"><a href={ADSTERRA_SMARTLINK} target="_blank" rel="sponsored noopener noreferrer nofollow">Oferte publicitare <ExternalLink /></a></Button>
-    </aside>
-  </>;
+  return <AdSenseAutoAds />;
 }
