@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { getMyPrivateProfile, deleteMyAccount } from "@/lib/security.functions";
-import { AVATAR_ACCEPT, AvatarPrepError, avatarStoragePath, avatarUploadErrorRo, prepareAvatarFile } from "@/lib/avatar-image";
+import { ProfilePhotoGallery } from "@/components/profile-photo-gallery";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -15,6 +15,11 @@ export const Route = createFileRoute("/cont")({
   head: () => ({ meta: [
     { title: "Contul meu — MeditatiiDirect.ro" },
     { name: "robots", content: "noindex, nofollow" },
+    { name: "description", content: "Gestionează profilul, fotografiile și datele contului MeditatiiDirect.ro." },
+    { property: "og:title", content: "Contul meu — MeditatiiDirect.ro" },
+    { property: "og:description", content: "Gestionează contul și fotografiile tale." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
     ]}),
   component: AccountPage,
 });
@@ -38,7 +43,7 @@ function AccountPage() {
   const [newPassword, setNewPassword] = useState("");
   const [savingEmail, setSavingEmail] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
-  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleteText, setDeleteText] = useState("");
   const [deleting, setDeleting] = useState(false);
@@ -99,41 +104,10 @@ function AccountPage() {
     e.preventDefault();
     if (newPassword.length < 6) { toast.error("Parola minim 6 caractere"); return; }
     setSavingPassword(true);
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    const { error } = await supabase.auth.updateUser({ password: newPassword, current_password: currentPassword });
     setSavingPassword(false);
     if (error) toast.error(erroareRo(error.message));
     else { toast.success("Parolă schimbată!"); setNewPassword(""); }
-  };
-
-  const onAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file || uploadingAvatar) return;
-    setUploadingAvatar(true);
-    try {
-      let blob: Blob;
-      try { blob = await prepareAvatarFile(file); }
-      catch (err) { toast.error(err instanceof AvatarPrepError ? err.message : "Nu am putut procesa poza."); return; }
-      const type = blob.type || "image/jpeg";
-      const path = avatarStoragePath(user.id, "avatar", type);
-      const { error: upErr } = await supabase.storage.from("avatars").upload(path, blob, { cacheControl: "3600", upsert: false, contentType: type });
-      if (upErr) { toast.error(avatarUploadErrorRo(upErr.message)); return; }
-      const { data: pub } = supabase.storage.from("avatars").getPublicUrl(path);
-      const url = pub.publicUrl;
-      const { error: dbErr } = await supabase.from("profiles").upsert({ user_id: user.id, avatar_url: url }, { onConflict: "user_id" });
-      if (dbErr) { toast.error("Poza a fost încărcată, dar nu am putut salva profilul. Mai încearcă."); return; }
-      setProfile((p) => ({ ...p, avatar_url: url }));
-      toast.success("Fotografie actualizată!");
-    } finally {
-      setUploadingAvatar(false);
-    }
-  };
-
-  const removeAvatar = async () => {
-    const { error } = await supabase.from("profiles").update({ avatar_url: null }).eq("user_id", user.id);
-    if (error) { toast.error(erroareRo(error.message)); return; }
-    setProfile((p) => ({ ...p, avatar_url: null }));
-    toast.success("Fotografie eliminată.");
   };
 
   return (
@@ -149,31 +123,7 @@ function AccountPage() {
         </div>
       </div>
 
-      {/* Avatar */}
-      <div className="card-soft mt-6 p-5 sm:p-6">
-        <h2 className="text-lg font-semibold inline-flex items-center gap-2"><Camera className="h-4 w-4 text-primary" /> Fotografie de profil</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Este afișată pe anunțuri și mesaje. Orice poză de pe telefon sau calculator (inclusiv iPhone) — o micșorăm automat.</p>
-        <div className="mt-4 flex items-center gap-4">
-          {profile.avatar_url ? (
-            <img src={profile.avatar_url} alt="Avatar" className="h-20 w-20 rounded-full object-cover border border-border" />
-          ) : (
-            <div className="h-20 w-20 rounded-full bg-muted grid place-items-center text-muted-foreground">
-              <User className="h-8 w-8" />
-            </div>
-          )}
-          <div className="flex flex-wrap gap-2">
-            <label className="btn-primary h-10 inline-flex items-center gap-2 cursor-pointer">
-              <Camera className="h-4 w-4" /> {uploadingAvatar ? "Se încarcă..." : profile.avatar_url ? "Schimbă" : "Încarcă"}
-              <input type="file" accept={AVATAR_ACCEPT} className="hidden" onChange={onAvatarFile} disabled={uploadingAvatar} data-testid="avatar-input" />
-            </label>
-            {profile.avatar_url && (
-              <button onClick={removeAvatar} className="btn-outline h-10 inline-flex items-center gap-2 text-sm">
-                <Trash2 className="h-4 w-4" /> Elimină
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+      <ProfilePhotoGallery userId={user.id} primary={profile.avatar_url} onPrimary={(url) => setProfile((p) => ({ ...p, avatar_url: url }))} />
 
       {/* Profile */}
       <form onSubmit={saveProfile} className="card-soft mt-6 p-5 sm:p-6 space-y-4">
@@ -212,6 +162,7 @@ function AccountPage() {
       {!isGoogleUser && (
         <form onSubmit={savePassword} className="card-soft mt-6 p-5 sm:p-6 space-y-4">
           <h2 className="text-lg font-semibold inline-flex items-center gap-2"><Lock className="h-4 w-4 text-primary" /> Parolă</h2>
+          <Field label="Parola actuală"><PasswordInput aria-label="Parola actuală" autoComplete="current-password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="field-input" required /></Field>
           <Field label="Parolă nouă">
             <PasswordInput aria-label="Parolă nouă" autoComplete="new-password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Minim 6 caractere" className="field-input" />
           </Field>
