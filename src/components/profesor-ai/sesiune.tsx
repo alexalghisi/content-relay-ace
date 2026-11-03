@@ -248,7 +248,8 @@ export function SesiuneProfesorAi({
       // No spoken filler: queued filler speech delayed the real answer and repeated on every
       // re-request, so the "thinking" state is shown visually only.
       const filler = 0;
-      const deadline = window.setTimeout(() => ctrl.abort(), 20_000);
+      let timedOut = false;
+      const deadline = window.setTimeout(() => { timedOut = true; ctrl.abort(); }, 20_000);
       const fail = (error: string, cod?: string) => {
         if (rev !== revision.current) return;
         messagesRef.current = previous;
@@ -351,7 +352,8 @@ export function SesiuneProfesorAi({
         messagesRef.current = [...istoric, { role: "assistant", content: spoken.trim(), tabla: board?.trim() || undefined }];
         setMesaje(messagesRef.current);
       } catch (e) {
-        if ((e as Error).name !== "AbortError") fail("Conexiunea a eșuat. Încearcă din nou.", "retea");
+        if (timedOut) fail("Răspunsul a întârziat prea mult. Poți reîncerca întrebarea.", "timeout");
+        else if ((e as Error).name !== "AbortError") fail("Conexiunea a eșuat. Încearcă din nou.", "retea");
       } finally {
         window.clearTimeout(deadline);
         window.clearTimeout(filler);

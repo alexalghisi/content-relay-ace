@@ -1,10 +1,15 @@
 # Roadmap
 
-- [ ] Cerințe document 3 noiembrie: audit și remediere înscriere e-mail/Google, profiluri și fotografii multiple cu progres/reîncercare, fără limite arbitrare de mărime; documentează limitele furnizorului.
-- [ ] Cerințe document 3 noiembrie: audit SEO, integrare conținut furnizat extern fără duplicate, teste complete și monitorizare zilnică reală cu notificări.
-- [ ] Cerințe document 3 noiembrie: publicare după verificări și raport live; sincronizarea/îmbinarea Git se face prin Lovable, nu prin comenzi Git manuale.
-- [ ] Evaluări autentice: formular rating 1–5 și recenzie pentru Profesor AI și acces la evaluarea profesorilor reali.
-- [ ] Profesor AI: investighează blocajele/vorbirea întreruptă, corectează cauzele și rulează teste de regresie; confirmarea audio live necesită o conversație reală.
+- [x] Fotografii multiple: transfer TUS cu progres/reîncercare, originale JPG/PNG/WebP/GIF păstrate, alte formate convertite fără pierderi; limita de 3 MB a bucketului eliminată. Transfer real + refresh + ștergere verificate cu contul proprietarului; teste originale multiple desktop/telefon trec. Limita globală a furnizorului nu este încă verificată; nu sunt promise încărcări nelimitate.
+- [ ] Autentificare e-mail/Google reală: remediate stările la erori; 16 teste simulate de înscriere/confirmare/login trec. Blocat pentru confirmare reală: nu există sesiune Google interactivă sau acces la confirmarea unui cont de test nou; nu declara OAuth verificat.
+- [x] Audit SEO public: șase pagini live cu titluri unice, OG, canonical, limba ro și un H1; robots, sitemap 752 URL-uri unice, /subiecte-admitere o singură dată, 404 real verificate. Search Console confirmă prima pagină indexată; fără garanții de clasament.
+- [ ] Integrare conținut extern — blocat: raportul Semrush atașat menționat și textele Claude nu au fost furnizate.
+- [ ] Monitorizare zilnică: workflow GitHub pregătit cu teste, verificări SEO live, raport și issue la eșec; rularea programată/notificările nu pot fi confirmate fără repo GitHub conectat. Monitorizarea Semrush existentă rulează, dar eșuează cu TOTAL LIMIT EXCEEDED; necesită refacerea cotei la furnizor.
+- [ ] Publicare solicitată 3 noiembrie: verificarea live încă nu arată formularul nou de recenzii; finalizarea publicării nu este confirmată. Commit/push/merge și programarea GitHub nu pot fi confirmate fără acces la repository.
+- [x] Evaluări: formular rating 1–5 și recenzie editabilă Profesor AI (după răspuns confirmat pe server), profesori reali din linkul cererii; update zero rânduri nu mai pretinde salvare. 4 regresii trec; panoul real AI eligibil verificat după răspuns corect.
+- [ ] Evaluări pentru sesiunile vocale AI directe — blocat: confirmarea utilizării ajunge numai în browser, nu pe server; nu acorda eligibilitate din afirmații client nevalidate.
+- [x] Profesor AI: fragmente avatar cu același ID, întrerupere numai validată, pornire limitată și fallback PCM, anulare la închidere, timeout primul token/idle pentru un singur furnizor, fără rerulări automate ambigue; teste trec. Răspuns real 7+5 corect (doisprezece), ~1,5 s; nu verifică vocea audibilă.
+- [ ] Profesor AI: conversație reală cu avatar/voce/întrerupere, două lecții succesive și iPhone — blocat: testele browser nu confirmă sunet audibil și microfonul uman.
 
 - [ ] Căsuță admin@meditatiidirect.ro: conectare Cloudflare cu permisiuni limitate la DNS pentru domeniu; alegere/activare serviciu de căsuță poștală, apoi confirmarea înregistrărilor exacte înainte de modificări. Blocat: conexiunea Cloudflare și contul serviciului de e-mail nu sunt încă disponibile.
 - [x] Explică formularul tokenului Cloudflare: Zone → DNS → Edit și Zone → Zone → Read, numai meditatiidirect.ro; fără Access: Apps sau Revoke.
