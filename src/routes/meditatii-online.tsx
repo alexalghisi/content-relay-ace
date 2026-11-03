@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-online";
-const TITLE = "Meditații Online 2026 — Profesori Particulari Verificați pe Zoom & Meet | De la 30 lei";
-const DESCRIPTION = "★ Meditații online cu profesori verificați din toată România: matematică, română, engleză, fizică, informatică, BAC, admitere. Zoom/Meet, contact direct, FĂRĂ comision, de la 30 lei/oră.";
+const TITLE = "Meditații Online 2026 — Profesori Particulari Verificați pe Zoom & Meet";
+const DESCRIPTION = "★ Meditații online cu profesori verificați din toată România: matematică, română, engleză, fizică, informatică, BAC, admitere. Zoom/Meet, contact direct, fără comision.";
 
 const FAQS: FaqItem[] = [
-  { q: "Cât costă o meditație online?", a: "Tarifele pentru meditații online încep de la 30 lei/oră pentru gimnaziu, 50–100 lei/oră pentru liceu și BAC, și 100–200 lei/oră pentru pregătire de admitere la Medicină, UPB, ASE sau Drept. Plătești direct profesorului — fără comision." },
+  { q: "Cât costă o meditație online?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii și orașe, sunt pe pagina Prețuri meditații." },
   { q: "Pe ce platformă se țin meditațiile online?", a: "Majoritatea profesorilor folosesc Zoom, Google Meet, Microsoft Teams sau Skype. Pentru materii care necesită scris (matematică, fizică, chimie), profesorii folosesc tabletă grafică sau aplicații de whiteboard precum Miro, Jamboard sau OpenBoard." },
   { q: "Meditațiile online sunt la fel de eficiente ca cele față în față?", a: "Da. Studiile arată că meditațiile online 1-la-1 au aceeași eficiență ca cele față în față, cu avantajul că poți alege profesori din toată țara, economisești timpul de transport și înregistrezi lecția pentru recapitulare." },
   { q: "Am nevoie de echipament special pentru o meditație online?", a: "Suficient un laptop sau tabletă, microfon (cel încorporat e ok) și conexiune stabilă la internet. Pentru matematică și științe e util un caiet și o cameră bună sau o tabletă grafică pentru a scrie." },
@@ -55,7 +55,7 @@ function Page() {
       pageUrl={PAGE_URL}
       breadcrumbParent={{ name: "Meditații", url: "https://meditatiidirect.ro/meditatii" }}
       h1="Meditații online cu profesori verificați — toată România"
-      intro="MeditatiiDirect.ro îți oferă acces direct la peste 1000 de profesori verificați care țin meditații online prin Zoom, Google Meet, Skype sau Whiteboard. Indiferent că ești în București, Cluj, Iași, Timișoara, Brașov, Constanța sau într-o comună mică, ai acces la profesori de top din întreaga țară. Contact direct, fără comision, de la 30 lei/oră."
+      intro="MeditatiiDirect.ro te pune în legătură cu profesori verificați care țin meditații online prin Zoom sau Google Meet. Indiferent că ești în București, Cluj, Iași sau într-o comună mică, primești propuneri de la profesori din toată țara. Contact direct, fără comision."
       bullets={[
         "Profesori verificați manual, cu recenzii reale de la elevi",
         "Lecții 1-la-1 pe Zoom, Google Meet, Teams sau Skype",

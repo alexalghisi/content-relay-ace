@@ -62,6 +62,7 @@ export const Route = createFileRoute("/calendar-evaluare-nationala-2027")({
       faqs={FAQS}
       related={[
         { to: "/calendar-bac-2027", label: "Calendar BAC 2027" },
+        { to: "/admitere-liceu-2027", label: "Admitere liceu 2027" },
         { to: "/evaluare-nationala", label: "Evaluare Națională — subiecte" },
         { to: "/meditatii-clasa-8", label: "Meditații clasa a VIII-a" },
         { to: "/calculator-media-evaluare-nationala", label: "Calculator medie EN" },

@@ -17,7 +17,7 @@ const PATH = "/harta-blocajelor";
 const URL = `${SITE}${PATH}`;
 const TITLE = "Harta Blocajelor — află ce noțiune îți lipsește | MeditatiiDirect.ro";
 const DESCRIPTION =
-  "Te-ai blocat la un exercițiu? Alege materia, clasa și blocajul: afli noțiunea care lipsește de obicei, primești o explicație clară, un exemplu rezolvat și o verificare scurtă. Matematică, română, fizică, chimie, engleză, informatică.";
+  "Te-ai blocat la un exercițiu? Află noțiunea care lipsește, cu explicație, exemplu rezolvat și verificare scurtă. Matematică, română, fizică, chimie, engleză, informatică.";
 
 const FAQS = [
   {

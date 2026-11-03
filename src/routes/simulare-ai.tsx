@@ -11,7 +11,7 @@ const PATH = "/simulare-ai";
 const URL = `${SITE}${PATH}`;
 const TITLE = "Simulare test online cu corectare AI: notă + explicații | MeditatiiDirect.ro";
 const DESCRIPTION =
-  "Alegi materia, clasa și durata, iar AI-ul îți generează un test nou, cu cronometru. La final primești nota și afli, pentru fiecare greșeală, unde ai greșit, ce și de ce. Gratuit, pentru clasele V–XII, Evaluare Națională și BAC.";
+  "Simulare cu AI pentru BAC, Evaluare Națională și clasele V–XII: test nou, cu cronometru, apoi nota și explicația fiecărei greșeli. Gratuit.";
 
 const FAQS = [
   {

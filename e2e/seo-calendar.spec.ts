@@ -19,3 +19,23 @@ for (const p of [
     await expect(page.getByText(p.data).first()).toBeVisible();
   });
 }
+
+for (const p of [
+  { url: "/meditatii-evaluare-nationala", h1: /Meditații pentru Evaluarea Națională 2027/, text: "Ce se dă la Evaluarea Națională" },
+  { url: "/admitere-liceu-2027", h1: /Admitere liceu 2027/, text: "OME 6060/2025" },
+  { url: "/meditatii-chimie", h1: /Meditații chimie/, text: "Cum găsești profesorul pe MeditatiiDirect" },
+  { url: "/profesor-particular", h1: /Profesor particular/, text: "Cum alegi un profesor particular" },
+]) {
+  test(`${p.url}: conținut real în HTML-ul inițial + FAQ JSON-LD`, async ({ page }) => {
+    await mockSupabase(page);
+    await page.route("**/_serverFn/**", (r) => r.abort());
+    const res = await page.goto(p.url);
+    expect(res?.status()).toBe(200);
+    const html = await res!.text();
+    expect(html).toContain(p.text);
+    expect(html).toContain(`<link rel="canonical" href="https://meditatiidirect.ro${p.url}"`);
+    expect(html).toContain('"@type":"FAQPage"');
+    expect(html).not.toMatch(/peste 1000|doctoranzi|mii de elevi/);
+    await expect(page.getByRole("heading", { level: 1, name: p.h1 })).toBeVisible();
+  });
+}

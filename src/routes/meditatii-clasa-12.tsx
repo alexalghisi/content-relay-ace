@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { seoPage } from "@/lib/seo-page";
+import { SECTIUNI } from "@/data/continut-pagini";
 
 export const Route = createFileRoute("/meditatii-clasa-12")(seoPage({
   path: "/meditatii-clasa-12",
@@ -8,6 +9,7 @@ export const Route = createFileRoute("/meditatii-clasa-12")(seoPage({
   h1: "Meditații clasa a 12-a — BAC + admitere 2026",
   intro: "Pregătire dublă pentru BAC 2026 și admitere la facultate (medicină, politehnică, drept, ASE). Plan strategic personalizat.",
   bullets: ["BAC toate filierele", "Admitere facultate paralel cu BAC", "Simulări lunare", "profesori particulari verificați"],
+  sections: SECTIUNI["meditatii-clasa-12"],
   related: [
     { to: "/meditatii-bac", label: "Meditații BAC" },
     { to: "/meditatii-admitere-medicina", label: "Admitere medicină" },

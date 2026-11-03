@@ -4,7 +4,7 @@ import { seoPage } from "@/lib/seo-page";
 export const Route = createFileRoute("/meditatii-particulare")(seoPage({
   path: "/meditatii-particulare",
   title: "Meditații Particulare — Profesori Verificați, Fără Comision | MeditatiiDirect.ro",
-  description: "★ Meditații particulare cu profesori verificați din toată România. Toate materiile, toate nivelurile. Acasă sau online. Contact direct, fără comision, de la 30 lei/oră.",
+  description: "★ Meditații particulare cu profesori verificați din toată România. Toate materiile, toate nivelurile. Acasă sau online. Contact direct, fără comision.",
   h1: "Meditații particulare — toată România",
   intro: "Cea mai mare platformă de meditații particulare din România. profesori particulari verificați, 20+ materii, contact direct fără intermediari. Pentru școală, gimnaziu, liceu, BAC și admitere.",
   bullets: [
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/meditatii-particulare")(seoPage({
   ],
   faqs: [
     { q: "Ce înseamnă meditații particulare?", a: "Sunt lecții individuale sau în grup mic, predate de un profesor în afara orelor de școală. Tu alegi profesorul, programul și locul (acasă, la profesor sau online)." },
-    { q: "Cât costă o oră de meditații particulare?", a: "Între 30 și 200 lei/oră, în funcție de materie, nivel (gimnaziu / liceu / admitere) și experiența profesorului." },
+    { q: "Cât costă o oră de meditații particulare?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii și orașe, sunt pe pagina Prețuri meditații." },
   ],
   related: [
     { to: "/meditatii-private", label: "Meditații private 1-la-1" },

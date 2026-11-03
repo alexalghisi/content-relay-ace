@@ -3,6 +3,8 @@
 export const CAUTARI_POPULARE: { q: string; href: string }[] = [
   { q: "calendar bac 2027", href: "/calendar-bac-2027" },
   { q: "simulare evaluare nationala 2027", href: "/calendar-evaluare-nationala-2027" },
+  { q: "admitere liceu 2027", href: "/admitere-liceu-2027" },
+  { q: "pregatire evaluare nationala", href: "/meditatii-evaluare-nationala" },
   { q: "meditatii", href: "/meditatii" },
   { q: "meditatii online", href: "/meditatii-online" },
   { q: "platforma meditatii online", href: "/platforma-meditatii-online" },

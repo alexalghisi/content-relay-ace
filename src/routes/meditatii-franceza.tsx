@@ -2,13 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-franceza";
-const TITLE = "Meditații Franceză 2026 — Online & Acasă | A1-C2, DELF, BAC | De la 50 lei";
+const TITLE = "Meditații Franceză 2026 — Online & Acasă | A1-C2, DELF, BAC";
 const DESC = "★ Meditații limba franceză online sau la domiciliu: A1–C2, DELF, DALF, BAC, conversație. Profesori nativi și români verificați, contact direct, FĂRĂ comision.";
 
 const faqs = [
   { q: "Ce niveluri acoperă meditațiile de franceză?", a: "De la începător absolut (A1) până la nivel avansat (C2), inclusiv pregătire pentru examenele DELF, DALF, TCF și BAC." },
   { q: "Pot face meditații franceză cu profesor nativ?", a: "Da. Pe MeditatiiDirect.ro găsești atât profesori nativi (din Franța, Belgia, Quebec) cât și români cu certificări recunoscute internațional." },
-  { q: "Cât costă meditațiile de franceză?", a: "Tarifele variază între 50 și 120 lei/oră, în funcție de nivelul predat, experiența profesorului și formatul (online sau la domiciliu)." },
+  { q: "Cât costă meditațiile de franceză?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii și orașe, sunt pe pagina Prețuri meditații." },
 ];
 
 export const Route = createFileRoute("/meditatii-franceza")({

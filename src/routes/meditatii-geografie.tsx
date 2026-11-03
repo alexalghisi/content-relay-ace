@@ -6,7 +6,7 @@ export const Route = createFileRoute("/meditatii-geografie")(seoPage({
   title: "Meditații Geografie — BAC și olimpiadă | MeditatiiDirect.ro",
   description: "Meditații geografie pentru BAC, olimpiadă și admitere. Geografie fizică, umană și economică cu profesori verificați.",
   h1: "Meditații geografie cu profesori verificați",
-  intro: "Pregătire pentru BAC geografie (Europa și România), olimpiadă, admitere la geografie/turism. Profesori titulari și autori de manuale.",
+  intro: "Pregătire pentru BAC geografie (Europa și România), olimpiadă, admitere la geografie/turism. Online sau la domiciliu.",
   bullets: ["BAC geografie integral", "Olimpiadă județeană & națională", "Hărți, climatologie, geomorfologie"],
   related: [
     { to: "/meditatii-istorie", label: "Meditații istorie" },

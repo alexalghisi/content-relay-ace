@@ -53,7 +53,7 @@ function DesprePage() {
 
       <h2 className="mt-10 text-2xl font-bold">Echipa editorială</h2>
       <p className="mt-3 text-foreground/90 leading-relaxed">
-        Conținutul educațional publicat pe blog și pe paginile de resurse este scris și verificat de o echipă de profesori titulari cu experiență în pregătirea pentru examenele naționale. Toate subiectele de bacalaureat urcate pe platformă sunt versiunile oficiale publicate de Ministerul Educației și verificate manual înainte de publicare.
+        Conținutul educațional publicat pe blog și pe paginile de resurse este verificat înainte de publicare, iar soluțiile marcate „verificat” sunt testate pe subiectele oficiale. Toate subiectele de bacalaureat urcate pe platformă sunt versiunile oficiale publicate de Ministerul Educației și verificate manual înainte de publicare.
       </p>
 
       <h2 className="mt-10 text-2xl font-bold">Contact</h2>

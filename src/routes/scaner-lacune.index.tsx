@@ -10,7 +10,7 @@ const PATH = "/scaner-lacune";
 const URL = `${SITE}${PATH}`;
 const TITLE = "Scanerul de lacune — test gratuit: ce noțiune îți lipsește | MeditatiiDirect.ro";
 const DESCRIPTION =
-  "Test adaptiv gratuit la matematică, română, fizică, chimie, engleză și informatică: pornești de la capitolul care nu îți iese și afli în câteva întrebări noțiunea care lipsește de fapt, plus traseul de recuperare în ordine.";
+  "Test adaptiv gratuit la matematică, română, fizică, chimie, engleză și informatică: afli în câteva întrebări ce noțiune îți lipsește și ce recuperezi întâi.";
 
 const FAQS = [
   {

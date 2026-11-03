@@ -3,7 +3,7 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/ofer-meditatii";
 const TITLE = "Ofer meditații — Publică anunț gratuit | MeditatiiDirect.ro";
-const DESC = "Ești profesor și vrei să oferi meditații? Publică gratuit primul anunț, ajungi în fața a mii de elevi, încasezi direct, fără comision.";
+const DESC = "Ești profesor și vrei să oferi meditații? Publică gratuit primul anunț, primești cererile elevilor din zona și materiile tale, încasezi direct, fără comision.";
 
 const faqs = [
   { q: "Cât costă să public un anunț de meditații?", a: "Publicarea anunțurilor de bază este gratuită. Plătești doar dacă vrei să-ți promovezi anunțul în primele rezultate." },
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/ofer-meditatii")({
     <SeoLanding
       pageUrl={URL}
       h1="Ofer meditații — publică anunț gratuit"
-      intro="Ești profesor sau student avansat și vrei să oferi meditații? Publică gratuit anunțul tău pe MeditatiiDirect.ro și ajungi în fața a mii de elevi care caută activ profesori."
+      intro="Ești profesor sau student avansat și vrei să oferi meditații? Publică gratuit anunțul tău pe MeditatiiDirect.ro și primești cererile elevilor care caută profesor la materiile tale."
       bullets={[
         "Anunț gratuit, fără limită de durată",
         "Profil verificat cu badge de încredere",

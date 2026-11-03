@@ -3,10 +3,10 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-la-domiciliu";
 const TITLE = "Meditații la domiciliu 2026 — Profesori care vin acasă | MeditatiiDirect.ro";
-const DESC = "Meditații la domiciliu cu profesori verificați care vin acasă la tine: matematică, română, engleză, fizică. București, Cluj, Iași, Timișoara. De la 40 lei/oră, contact direct.";
+const DESC = "Meditații la domiciliu cu profesori verificați care vin acasă la tine: matematică, română, engleză, fizică. București, Cluj, Iași, Timișoara. Contact direct, fără comision.";
 
 const faqs = [
-  { q: "Cât costă o meditație la domiciliu?", a: "Tarifele pentru meditații la domiciliu pornesc de la 40 lei/oră pentru clasele gimnaziale și ajung la 150-200 lei/oră pentru pregătire BAC sau admitere. Profesorul poate include un mic supliment pentru deplasare în funcție de distanță." },
+  { q: "Cât costă o meditație la domiciliu?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii și orașe, sunt pe pagina Prețuri meditații. La domiciliu, unii profesori adaugă costul deplasării — întreabă înainte." },
   { q: "În ce orașe găsesc profesori care vin acasă?", a: "Avem profesori care oferă meditații la domiciliu în București (toate sectoarele), Cluj-Napoca, Iași, Timișoara, Brașov, Constanța, Sibiu, Oradea, Craiova, Ploiești și majoritatea reședințelor de județ." },
   { q: "Cât durează o ședință de meditații la domiciliu?", a: "Standard 60 sau 90 de minute. Pentru elevii de gimnaziu recomandăm 60 min, iar pentru BAC/admitere 90-120 min, pentru a avea timp atât de teorie cât și de probleme aplicate." },
   { q: "Profesorul vine cu materiale didactice?", a: "Da, profesorii verificați aduc culegeri, fișe de lucru, subiecte rezolvate și planuri de pregătire personalizate, adaptate nivelului elevului." },
