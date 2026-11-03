@@ -4,8 +4,21 @@ import { useAuth } from "@/lib/auth";
 import { formatRoPhone } from "@/lib/phone";
 import { confirmaCodTelefon, trimiteCodTelefon } from "@/lib/profesor-ai-verificare.functions";
 
-/** Verificare telefon (cod SMS) + adresă, cerută o singură dată înainte de lecția gratuită. */
-export function VerificareTelefon({ onVerificat }: { onVerificat: () => void }) {
+/**
+ * Verificare telefon (cod SMS), o singură dată per cont. În Profesor AI cere și adresa;
+ * după înregistrare (cuAdresa=false) cere doar telefonul.
+ */
+export function VerificareTelefon({
+  onVerificat,
+  cuAdresa = true,
+  titlu = "Verifică-ți telefonul pentru lecția gratuită",
+  descriere = "O singură lecție gratuită per persoană. Un număr de telefon poate fi folosit o singură dată.",
+}: {
+  onVerificat: () => void;
+  cuAdresa?: boolean;
+  titlu?: string;
+  descriere?: string;
+}) {
   const { user } = useAuth();
   const [phone, setPhone] = useState(() =>
     typeof user?.user_metadata?.phone === "string" ? user.user_metadata.phone : "",
@@ -19,7 +32,7 @@ export function VerificareTelefon({ onVerificat }: { onVerificat: () => void }) 
   const trimite = async () => {
     setEroare("");
     setPending(true);
-    const r = await trimiteCodTelefon({ data: { phone, address } }).catch(() => ({
+    const r = await trimiteCodTelefon({ data: cuAdresa ? { phone, address } : { phone } }).catch(() => ({
       ok: false as const,
       error: "Conexiunea a eșuat.",
     }));
@@ -45,11 +58,9 @@ export function VerificareTelefon({ onVerificat }: { onVerificat: () => void }) 
     <div className="mt-5 rounded-2xl border border-primary/30 bg-primary-soft/40 p-4">
       <p className="flex items-center gap-2 text-sm font-bold">
         <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
-        Verifică-ți telefonul pentru lecția gratuită
+        {titlu}
       </p>
-      <p className="mt-1 text-xs text-muted-foreground">
-        O singură lecție gratuită per persoană. Un număr de telefon poate fi folosit o singură dată.
-      </p>
+      <p className="mt-1 text-xs text-muted-foreground">{descriere}</p>
       {!trimis ? (
         <div className="mt-3 grid gap-3">
           <label className="text-sm font-semibold">
@@ -64,7 +75,7 @@ export function VerificareTelefon({ onVerificat }: { onVerificat: () => void }) 
               onBlur={() => setPhone(formatRoPhone(phone))}
             />
           </label>
-          <label className="text-sm font-semibold">
+          {cuAdresa && <label className="text-sm font-semibold">
             Adresa
             <input
               className={input}
@@ -73,7 +84,7 @@ export function VerificareTelefon({ onVerificat }: { onVerificat: () => void }) 
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
-          </label>
+          </label>}
           <button
             type="button"
             onClick={trimite}

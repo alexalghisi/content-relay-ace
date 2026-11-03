@@ -81,3 +81,25 @@ export async function waitForHydration(page: Page, selector = "form") {
     return !!el && Object.keys(el).some((k) => k.startsWith("__reactFiber") || k.startsWith("__reactProps"));
   }, selector, { timeout: 60_000 });
 }
+
+/**
+ * Răspuns simulat pentru un server function TanStack Start (format seroval, x-tss-serialized),
+ * ca testele să nu atingă backend-ul real. Acceptă doar obiecte plate cu string/boolean.
+ */
+export function serverFnResult(result: Record<string, string | boolean>) {
+  const enc = (v: string | boolean) => (typeof v === "string" ? { t: 1, s: v } : { t: 2, s: v ? 2 : 3 });
+  const keys = Object.keys(result);
+  return {
+    status: 200,
+    headers: { "content-type": "application/json", "x-tss-serialized": "true" },
+    body: JSON.stringify({
+      t: 10, i: 0,
+      p: { k: ["result", "error", "context"], v: [
+        { t: 10, i: 1, p: { k: keys, v: keys.map((k) => enc(result[k]!)) }, o: 0 },
+        { t: 2, s: 1 },
+        { t: 11, i: 2, p: { k: [], v: [] }, o: 0 },
+      ] },
+      o: 0,
+    }),
+  };
+}

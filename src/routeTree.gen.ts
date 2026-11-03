@@ -24,6 +24,7 @@ import { Route as CautProfesorRouteImport } from './routes/caut-profesor'
 import { Route as CentruMeditatiiRouteImport } from './routes/centru-meditatii'
 import { Route as CereriRouteImport } from './routes/cereri'
 import { Route as ConfidentialitateRouteImport } from './routes/confidentialitate'
+import { Route as ConfirmareContRouteImport } from './routes/confirmare-cont'
 import { Route as ContRouteImport } from './routes/cont'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CumFunctioneazaRouteImport } from './routes/cum-functioneaza'
@@ -250,6 +251,11 @@ const CereriRoute = CereriRouteImport.update({
 const ConfidentialitateRoute = ConfidentialitateRouteImport.update({
   id: '/confidentialitate',
   path: '/confidentialitate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfirmareContRoute = ConfirmareContRouteImport.update({
+  id: '/confirmare-cont',
+  path: '/confirmare-cont',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContRoute = ContRouteImport.update({
@@ -1047,6 +1053,7 @@ export interface FileRoutesByFullPath {
   '/centru-meditatii': typeof CentruMeditatiiRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
+  '/confirmare-cont': typeof ConfirmareContRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
   '/cum-functioneaza': typeof CumFunctioneazaRoute
@@ -1215,6 +1222,7 @@ export interface FileRoutesByTo {
   '/centru-meditatii': typeof CentruMeditatiiRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
+  '/confirmare-cont': typeof ConfirmareContRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
   '/cum-functioneaza': typeof CumFunctioneazaRoute
@@ -1382,6 +1390,7 @@ export interface FileRoutesById {
   '/centru-meditatii': typeof CentruMeditatiiRoute
   '/cereri': typeof CereriRoute
   '/confidentialitate': typeof ConfidentialitateRoute
+  '/confirmare-cont': typeof ConfirmareContRoute
   '/cont': typeof ContRoute
   '/contact': typeof ContactRoute
   '/cum-functioneaza': typeof CumFunctioneazaRoute
@@ -1552,6 +1561,7 @@ export interface FileRouteTypes {
     | '/centru-meditatii'
     | '/cereri'
     | '/confidentialitate'
+    | '/confirmare-cont'
     | '/cont'
     | '/contact'
     | '/cum-functioneaza'
@@ -1720,6 +1730,7 @@ export interface FileRouteTypes {
     | '/centru-meditatii'
     | '/cereri'
     | '/confidentialitate'
+    | '/confirmare-cont'
     | '/cont'
     | '/contact'
     | '/cum-functioneaza'
@@ -1886,6 +1897,7 @@ export interface FileRouteTypes {
     | '/centru-meditatii'
     | '/cereri'
     | '/confidentialitate'
+    | '/confirmare-cont'
     | '/cont'
     | '/contact'
     | '/cum-functioneaza'
@@ -2055,6 +2067,7 @@ export interface RootRouteChildren {
   CentruMeditatiiRoute: typeof CentruMeditatiiRoute
   CereriRoute: typeof CereriRoute
   ConfidentialitateRoute: typeof ConfidentialitateRoute
+  ConfirmareContRoute: typeof ConfirmareContRoute
   ContRoute: typeof ContRoute
   ContactRoute: typeof ContactRoute
   CumFunctioneazaRoute: typeof CumFunctioneazaRoute
@@ -2309,6 +2322,13 @@ declare module '@tanstack/react-router' {
       path: '/confidentialitate'
       fullPath: '/confidentialitate'
       preLoaderRoute: typeof ConfidentialitateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confirmare-cont': {
+      id: '/confirmare-cont'
+      path: '/confirmare-cont'
+      fullPath: '/confirmare-cont'
+      preLoaderRoute: typeof ConfirmareContRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cont': {
@@ -3415,6 +3435,7 @@ const rootRouteChildren: RootRouteChildren = {
   CentruMeditatiiRoute: CentruMeditatiiRoute,
   CereriRoute: CereriRoute,
   ConfidentialitateRoute: ConfidentialitateRoute,
+  ConfirmareContRoute: ConfirmareContRoute,
   ContRoute: ContRoute,
   ContactRoute: ContactRoute,
   CumFunctioneazaRoute: CumFunctioneazaRoute,

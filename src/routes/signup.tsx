@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { signupSchema } from "@/lib/signup-validation";
 import { formatRoPhone } from "@/lib/phone";
-import { supabase } from "@/integrations/supabase/client";
+import { creeazaCont, retrimiteConfirmare } from "@/lib/inregistrare.functions";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
 
@@ -21,17 +21,6 @@ export const Route = createFileRoute("/signup")({
   component: SignupPage,
 });
 
-function authErrorRo(message: string) {
-  const m = message.toLowerCase();
-  if (m.includes("email not confirmed")) return "Contul nu este confirmat încă. Deschide emailul primit de la noi și apasă linkul de confirmare.";
-  if (m.includes("invalid login credentials")) return "Email sau parolă greșite.";
-  if (m.includes("user already registered") || m.includes("already been registered")) return "Există deja un cont cu acest email. Autentifică-te.";
-  if (m.includes("password")) return "Parola nu este acceptată. Folosește minim 6 caractere.";
-  if (m.includes("rate limit") || m.includes("too many")) return "Prea multe încercări. Mai încearcă peste câteva minute.";
-  if (m.includes("token") || m.includes("expired")) return "Linkul de confirmare a expirat sau a fost deja folosit. Trimite-ți unul nou.";
-  return "A apărut o eroare. Mai încearcă o dată.";
-}
-
 function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -46,30 +35,30 @@ function SignupPage() {
     const parsed = signupSchema.safeParse({ name, email, phone, password });
     if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      options: { emailRedirectTo: `${window.location.origin}/`, data: { display_name: parsed.data.name, phone: parsed.data.phone } },
-    });
+    const r = await creeazaCont({
+      data: { name, email, phone, password, origin: window.location.origin },
+    }).catch(() => ({ ok: false as const, error: "Conexiunea a eșuat. Verifică internetul și încearcă din nou.", stare: undefined }));
     setLoading(false);
-    if (error) { toast.error(authErrorRo(error.message)); return; }
-    if (data.session) {
-      toast.success("Cont creat!");
-      navigate({ to: "/" });
+    if (r.ok) {
+      setPending(true);
       return;
     }
-    setPending(true);
+    if (r.stare === "exista") {
+      toast.error(r.error);
+      navigate({ to: "/login" });
+      return;
+    }
+    // Contul există, dar emailul n-a plecat: rămânem pe ecranul de confirmare, cu retrimitere.
+    if (r.stare === "netrimis") setPending(true);
+    toast.error(r.error);
   };
 
   const onResend = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.resend({
-      type: "signup",
-      email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/` },
-    });
+    const r = await retrimiteConfirmare({ data: { email: email.trim(), origin: window.location.origin } })
+      .catch(() => ({ ok: false as const, error: "Conexiunea a eșuat.", stare: undefined }));
     setLoading(false);
-    if (error) { toast.error(authErrorRo(error.message)); return; }
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success("Ți-am trimis un email nou de confirmare.");
   };
 
