@@ -4,7 +4,6 @@ import { signupSchema } from "./signup-validation";
 import {
   MESAJ_EMAIL_FOLOSIT,
   MESAJ_TELEFON_FOLOSIT,
-  emailCanonic,
   eroareInregistrareRo,
   esteEmailDuplicat,
   htmlConfirmare,
@@ -26,6 +25,28 @@ async function claimFereastra(key: string, sec = 60): Promise<boolean> {
   } catch {
     return true;
   }
+}
+
+/** Citește conturile existente (API admin) și telefoanele verificate prin SMS. */
+async function conflictCont(email: string, telefon: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { gasesteConflict } = await import("./conturi-unice");
+  const conturi: { email?: string | null; phone?: string | null; metadataPhone?: unknown }[] = [];
+  for (let page = 1; page <= 50; page++) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 });
+    if (error) {
+      console.error(`[inregistrare] listUsers ${error.message.slice(0, 80)}`);
+      break;
+    }
+    for (const u of data.users) conturi.push({ email: u.email, phone: u.phone, metadataPhone: u.user_metadata?.phone });
+    if (data.users.length < 1000) break;
+  }
+  const { data: verificate } = await supabaseAdmin
+    .from("profesor_ai_utilizatori")
+    .select("phone")
+    .not("phone_verified_at", "is", null);
+  const telefoane = (verificate ?? []).map((r) => r.phone).filter((p): p is string => !!p);
+  return gasesteConflict(conturi, email, telefon, telefoane);
 }
 
 type Rezultat =
@@ -89,22 +110,10 @@ async function creeaza(data: { name: string; email: string; phone: string; passw
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Un număr de telefon = un singur cont (cel verificat prin SMS îl deține).
-    const { data: telefonOcupat } = await supabaseAdmin
-      .from("profesor_ai_utilizatori")
-      .select("user_id")
-      .eq("phone", parsed.data.phone)
-      .not("phone_verified_at", "is", null)
-      .limit(1)
-      .maybeSingle();
-    if (telefonOcupat) return { ok: false, error: MESAJ_TELEFON_FOLOSIT, stare: "telefon" };
-
-    // Un email = un singur cont, inclusiv variantele Gmail (puncte, +eticheta). Același email exact
-    // ajunge mai jos la retrimiterea confirmării, ca un cont neconfirmat să poată fi activat.
-    if (emailCanonic(email).endsWith("@gmail.com")) {
-      const { data: varianta } = await supabaseAdmin.rpc("exista_email_canonic", { p_email: email });
-      if (varianta) return { ok: false, error: MESAJ_EMAIL_FOLOSIT, stare: "exista" };
-    }
+    // Un email și un telefon per cont, verificat înainte de creare (telefonul are prioritate).
+    const conflict = await conflictCont(email, parsed.data.phone);
+    if (conflict === "telefon") return { ok: false, error: MESAJ_TELEFON_FOLOSIT, stare: "telefon" };
+    if (conflict === "email") return { ok: false, error: MESAJ_EMAIL_FOLOSIT, stare: "exista" };
 
     const { data: link, error } = await supabaseAdmin.auth.admin.generateLink({
       type: "signup",
@@ -113,11 +122,10 @@ async function creeaza(data: { name: string; email: string; phone: string; passw
       options: { data: { display_name: parsed.data.name, phone: parsed.data.phone } },
     });
     if (error) {
-      const dup = esteEmailDuplicat(error.message, (error as { code?: string }).code);
-      if (dup === "exact") return retrimitePentruExistent(email, data.origin);
-      // Trigger-ul blocheaza_email_duplicat a refuzat o variantă a unui email existent.
-      if (dup === "varianta") return { ok: false, error: MESAJ_EMAIL_FOLOSIT, stare: "exista" };
-      console.error(`[inregistrare] generateLink ${(error as { status?: number }).status ?? ""}`);
+      if (esteEmailDuplicat(error.message, (error as { code?: string }).code) === "exact")
+        return retrimitePentruExistent(email, data.origin);
+      // Altă eroare (ex. baza de date) NU înseamnă cont existent: o logăm și spunem adevărul.
+      console.error(`[inregistrare] generateLink ${(error as { status?: number }).status ?? ""} ${error.message.slice(0, 120)}`);
       return { ok: false, error: eroareInregistrareRo(error.message) };
     }
     const trimis = await trimiteConfirmare(email, parsed.data.name, data.origin, link.properties.hashed_token, "signup");

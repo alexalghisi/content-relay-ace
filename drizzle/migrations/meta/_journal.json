@@ -155,6 +155,13 @@
       "when": 1793800000000,
       "tag": "0021_conturi_unice",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1793810000000,
+      "tag": "0022_scoate_trigger_email",
+      "breakpoints": true
     }
   ]
 }
