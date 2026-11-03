@@ -14,7 +14,8 @@ test.describe("Încărcare poză de profil (bug raportat: nu se putea încărca 
     expect(photo.length).toBeGreaterThan(3 * 1024 * 1024); // peste vechea limită de 3 MB
 
     await page.getByTestId("avatar-input").setInputFiles({ name: "IMG_4021.png", mimeType: "image/png", buffer: photo });
-    await expect(page.getByText("Fotografie actualizată!")).toBeVisible();
+    // first upload also pays the cold dev-server compile + canvas resize → generous timeout
+    await expect(page.getByText("Fotografie actualizată!")).toBeVisible({ timeout: 45_000 });
 
     const upload = calls.find((c) => c.url.includes("/storage/v1/object/avatars/"));
     expect(upload, "trebuie să existe un upload în bucketul avatars").toBeTruthy();
