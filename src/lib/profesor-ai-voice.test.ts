@@ -26,7 +26,7 @@ test("three spoken questions → three spoken answers, listening restarted each 
   const asked: string[] = [];
   let aborts = 0;
   const v = connectVoice(s, {
-    onUserSpeechStart: () => aborts++,
+    onUserSpeechStart: () => { aborts++; v.interrupt(); },
     onUserTranscript: (t) => { asked.push(t); void v.speak(`Răspuns la: ${t}`); },
     onSpeaking: () => {},
     log: () => {},
@@ -59,4 +59,19 @@ test("empty transcription is ignored and a muted mic does not re-listen", async 
   expect(asked).toEqual([]);
   expect(out).not.toContain("start_listening");
   void v;
+});
+
+ test("raw speech detection does not cut off an utterance unless caller validates interruption", async () => {
+  const { s, out, emit } = fake();
+  const v = connectVoice(s, { onUserSpeechStart: () => {}, onUserTranscript: () => {}, onSpeaking: () => {}, log: () => {} });
+  let finished = false;
+  const pending = v.speak("Continuăm explicația fără întrerupere.").then(() => { finished = true; });
+  emit("user.speak_started");
+  await Promise.resolve();
+  expect(out).not.toContain("interrupt");
+  expect(finished).toBe(false);
+  v.interrupt();
+  await pending;
+  expect(finished).toBe(true);
+  expect(out.at(-1)).toBe("interrupt");
 });
