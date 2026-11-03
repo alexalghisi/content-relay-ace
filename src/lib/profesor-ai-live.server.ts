@@ -60,6 +60,7 @@ export async function createGeminiLiveToken(minutes: number): Promise<{ token: s
   const now = Date.now();
   const res = await fetch("https://generativelanguage.googleapis.com/v1beta/auth_tokens", {
     method: "POST",
+    signal: AbortSignal.timeout(8000),
     headers: { "x-goog-api-key": key, "Content-Type": "application/json" },
     body: JSON.stringify({
       // Reconnects (session resumption) need a few extra uses.
@@ -83,6 +84,7 @@ export async function createLiteAvatarToken(maxSeconds: number): Promise<string 
   if (!cfg.key || !cfg.avatarId) return null;
   const call = (secunde: number) => fetch(LIVEAVATAR_TOKEN_URL, {
     method: "POST",
+    signal: AbortSignal.timeout(8000),
     headers: { "X-API-KEY": cfg.key ?? "", "Content-Type": "application/json", accept: "application/json" },
     body: JSON.stringify({ mode: "LITE", avatar_id: cfg.avatarId, video_settings: { quality: "high", encoding: "H264" }, max_session_duration: secunde }),
   }).catch(() => null);
@@ -115,6 +117,7 @@ export async function createOpenAiSecret(system: string, minutes: number): Promi
   }));
   const res = await fetch("https://api.openai.com/v1/realtime/client_secrets", {
     method: "POST",
+    signal: AbortSignal.timeout(8000),
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       expires_after: { anchor: "created_at", seconds: Math.min(7200, (minutes + 10) * 60) },

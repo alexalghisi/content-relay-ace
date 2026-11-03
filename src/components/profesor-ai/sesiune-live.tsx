@@ -78,6 +78,15 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
     let anulat = false;
     let gata = false;
     const curatenie: (() => void)[] = [];
+    const deadline = window.setTimeout(() => {
+      if (!gata && !anulat) {
+        anulat = true;
+        curatenie.forEach((f) => f());
+        raporteaza("live timeout startup");
+        onFallback();
+      }
+    }, 20_000);
+    curatenie.push(() => window.clearTimeout(deadline));
     (async () => {
       const r = await profesorAiLive({ data: { token, evita } }).catch(() => null);
       if (anulat) return;
@@ -85,6 +94,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
       raporteaza(`live start provider=${r.provider} avatar=${!!r.avatarToken}`);
       const { LiveLesson, OpenAiLesson, PcmPlayer, AvatarLipSync } = await import("@/lib/profesor-ai-live");
 
+      if (anulat) return;
       // Video avatar (optional): LITE session, we feed it Gemini's audio.
       let lip: InstanceType<typeof AvatarLipSync> | null = null;
       if (r.avatarToken) {
@@ -94,7 +104,12 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
           s.on(la.SessionEvent.SESSION_STREAM_READY, () => {
             if (videoEl.current) { s.attach(videoEl.current); videoEl.current.muted = false; void videoEl.current.play().catch(() => {}); }
           });
-          await s.start();
+          const stop = () => { void s.stop().catch(() => {}); };
+          curatenie.push(stop);
+          await Promise.race([s.start(), new Promise<never>((_, reject) => {
+            const t = window.setTimeout(() => { stop(); reject(new Error("avatar timeout")); }, 5000);
+            curatenie.push(() => window.clearTimeout(t));
+          })]);
           if (anulat) { void s.stop(); return; }
           const sock = () => (s as unknown as { _sessionEventSocket?: WebSocket | null })._sessionEventSocket ?? null;
           if (sock()) {
@@ -111,39 +126,42 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
             const ka = window.setInterval(() => lip?.keepAlive(), 60_000);
             curatenie.push(() => window.clearInterval(ka));
           }
-          const stop = () => { void s.stop().catch(() => {}); };
           window.addEventListener("pagehide", stop, { once: true });
-          curatenie.push(stop);
+          curatenie.push(() => window.removeEventListener("pagehide", stop));
         } catch (e) {
           console.warn("[profesor-ai] avatar LITE indisponibil, continuăm doar cu voce", e);
         }
       }
+      if (anulat) return;
       const player = new PcmPlayer();
       player.onPlaying = (on) => { playerVorbeste.current = on; if (!lip) setVorbeste(on); };
       curatenie.push(() => player.close());
 
       const evs: import("@/lib/profesor-ai-live").LiveEvents = {
-        onReady: () => { gata = true; setStare("live"); },
+        onReady: () => { if (anulat) return; gata = true; window.clearTimeout(deadline); setStare("live"); },
         onTeacherAudio: (b64) => {
           ultimaActivitate.current = Date.now();
-          if (lip) lip.push(b64); else player.play(b64);
+          if (anulat) return;
+          if (lip && !lip.push(b64)) { lip.interrupt(); lip = null; avatarVorbeste.current = false; setVideo(false); }
+          if (!lip) player.play(b64);
         },
-        onTurnComplete: () => { lip?.end(); ultimaActivitate.current = Date.now(); },
+        onTurnComplete: () => { if (anulat) return; lip?.end(); ultimaActivitate.current = Date.now(); },
         onInterrupted: () => { lip?.interrupt(); player.stop(); avatarVorbeste.current = false; setVorbeste(false); },
         onBoard: (t) => setTabla(t),
         onDrawing: (svg) => setDesen(svg),
         onTeacherText: () => {},
         onStudentText: () => { ultimaActivitate.current = Date.now(); taceri.current = 0; },
         onError: (m) => {
-          console.warn("[profesor-ai] live eroare:", m);
+          if (anulat) return;
+          console.warn("[profesor-ai] live eroare");
           raporteaza(`live eroare (gata=${gata}): ${m}`);
           // Failed before the lesson really started → classic lesson.
           // OpenAI unusable (no credits, bad key) → retry with Gemini Live; otherwise the classic lesson.
           if (!gata) { L.stop(); return onFallback(r.provider); }
           // OpenAI credits ran out mid-lesson → continue right away on Gemini Live.
           if (r.provider === "openai" && /credit|quota|billing|insufficient/i.test(m)) { L.stop(); return onFallback("openai"); }
-          setEroare("Conexiunea cu profesoara s-a întrerupt. Pornește o sesiune nouă.");
-          setStare("eroare");
+          L.stop();
+          return onFallback(r.provider);
         },
         onClose: () => {},
       };
@@ -159,7 +177,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
         setStare("eroare");
       }
       // If Gemini never answers the setup, fall back instead of a frozen screen.
-      window.setTimeout(() => { if (!gata && !anulat) { raporteaza("live timeout setup 12s"); L.stop(); onFallback(r.provider); } }, 12_000);
+      if (anulat) L.stop();
     })();
     return () => { anulat = true; curatenie.forEach((f) => f()); lesson.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
