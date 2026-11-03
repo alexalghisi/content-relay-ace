@@ -9,7 +9,7 @@ export async function uploadProfilePhoto(file: Blob, path: string, progress: (n:
   if (signal.aborted) throw new DOMException("Anulat", "AbortError");
   const url = import.meta.env.VITE_SUPABASE_URL;
   const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) throw new Error("Le service de chargement n’est pas configuré.");
+  if (!url || !key) throw new Error("Serviciul de încărcare nu este configurat.");
   await new Promise<void>((resolve, reject) => {
     const cleanup = () => signal.removeEventListener("abort", cancel);
     const upload = new Upload(file, {

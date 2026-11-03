@@ -24,11 +24,11 @@ export async function mockSupabase(page: Page, opts: { signupSession?: boolean }
     if (url.includes("/storage/v1/upload/resumable")) {
       if (req.method() === "POST") {
         uploadOffset = body?.length ?? 0;
-        return route.fulfill({ status: 201, headers: { location: `https://${SUPABASE_REF}.supabase.co/storage/v1/upload/resumable/e2e`, "tus-resumable": "1.0.0", "upload-offset": String(uploadOffset) } });
+        return route.fulfill({ status: 201, headers: { location: `https://${SUPABASE_REF}.supabase.co/storage/v1/upload/resumable/e2e`, "access-control-expose-headers": "location,upload-offset,tus-resumable", "tus-resumable": "1.0.0", "upload-offset": String(uploadOffset) } });
       }
-      if (req.method() === "HEAD") return route.fulfill({ status: 200, headers: { "tus-resumable": "1.0.0", "upload-offset": String(uploadOffset) } });
+      if (req.method() === "HEAD") return route.fulfill({ status: 200, headers: { "access-control-expose-headers": "location,upload-offset,tus-resumable", "tus-resumable": "1.0.0", "upload-offset": String(uploadOffset) } });
       uploadOffset += body?.length ?? 0;
-      return route.fulfill({ status: 204, headers: { "tus-resumable": "1.0.0", "upload-offset": String(uploadOffset) } });
+      return route.fulfill({ status: 204, headers: { "access-control-expose-headers": "location,upload-offset,tus-resumable", "tus-resumable": "1.0.0", "upload-offset": String(uploadOffset) } });
     }
     if (url.includes("/rest/v1/profile_photos")) {
       if (req.method() === "POST") { const value = JSON.parse(req.postData() ?? "{}"); const photo = { id: String(photos.length + 1), storage_path: value.storage_path }; photos.push(photo); return route.fulfill({ status: 201, json: photo }); }
