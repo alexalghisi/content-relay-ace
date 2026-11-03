@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen } from "lucide-react";
 import { BAC_SUBJECTS } from "@/data/bac-catalog";
 import { getArhivaBAC } from "@/lib/bac-content.functions";
-import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
+import { AdsterraBanner728 } from "@/components/ads/adsterra";
 import { AdSenseSlot } from "@/components/ads/adsense";
 import { BacCountdown } from "@/components/bac-countdown";
 import { NewsletterSignup } from "@/components/newsletter-signup";
@@ -100,7 +100,6 @@ function BacHub() {
         </ul>
       </section>
       <NewsletterSignup className="mt-12" />
-      <AdsterraNativeBanner className="mt-10" />
       <AdSenseSlot format="auto" className="mt-6" />
     </main>
   );

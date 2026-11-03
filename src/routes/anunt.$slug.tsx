@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { MapPin, Wifi, BadgeCheck, Clock, GraduationCap, ArrowLeft, Phone, MessageCircle, Star, CalendarCheck } from "lucide-react";
-import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
+import { AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { toast } from "sonner";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
@@ -215,7 +215,6 @@ function AdPage() {
               <p className="mt-2 leading-relaxed text-muted-foreground">Lecțiile sunt adaptate obiectivului elevului și includ explicații, exerciții aplicate și feedback la finalul fiecărei ședințe. Detaliile exacte se stabilesc direct cu profesorul.</p>
             </div>
 
-            <div className="mt-10"><AdsterraNativeBanner /></div>
           </div>
 
           {/* Sticky contact card */}

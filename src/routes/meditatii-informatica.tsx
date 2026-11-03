@@ -1,7 +1,7 @@
 import { subjectLoader } from "@/lib/subject-stats";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
-import { AdsterraNativeBanner, AdsterraBanner728 } from "@/components/ads/adsterra";
+import { AdsterraBanner728 } from "@/components/ads/adsterra";
 
 const URL = "https://meditatiidirect.ro/meditatii-informatica";
 const TITLE = "Meditații informatică — C++, BAC, admitere și online | MeditatiiDirect.ro";
@@ -73,7 +73,6 @@ function Page() {
       />
       <div className="container-page">
         <AdsterraBanner728 />
-        <AdsterraNativeBanner />
       </div>
     </>
   );

@@ -10,7 +10,7 @@ import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 import { faqJsonLd } from "@/lib/seo";
 import { CautariPopulare } from "@/components/cautari-populare";
-import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
+import { AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { DemoProfesorAiRotativ, TextRotativ, TITLURI_PROFESOR_AI, TEXTE_PROFESOR_AI } from "@/components/profesor-ai/demo-rotativ";
 
 export const Route = createFileRoute("/")({
@@ -139,7 +139,6 @@ function HomePage() {
       { icon: Star, title: "Evaluezi cu stele", text: "După discuție, acorzi de la 1 la 5 stele colaborării. Evaluări din interacțiuni reale, nu recenzii inventate." },
     ].map((item, index) => <div key={item.title} className="relative rounded-xl border border-border bg-card p-7 text-center"><span className="absolute right-4 top-4 text-4xl font-bold text-primary-soft">0{index + 1}</span><span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary"><item.icon className="h-5 w-5" /></span><h3 className="mt-5 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{item.text}</p></div>)}</div><div className="mt-9 text-center"><Link to="/meditatii" className="btn-primary h-12 px-7">Postează cererea ta <ArrowRight className="ml-2 h-4 w-4" /></Link> <Link to="/cum-functioneaza" className="btn-outline h-12 px-7">Cum funcționează</Link></div></div></section>
 
-    <AdsterraNativeBanner className="container-page py-6" />
 
     <section className="container-page py-16">
       <div className="rounded-2xl border border-primary/15 bg-primary-soft/40 p-8 md:p-10">
