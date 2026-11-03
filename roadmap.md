@@ -1,5 +1,8 @@
 # Roadmap
 
+- [ ] Cerințe document 3 noiembrie: audit și remediere înscriere e-mail/Google, profiluri și fotografii multiple cu progres/reîncercare, fără limite arbitrare de mărime; documentează limitele furnizorului.
+- [ ] Cerințe document 3 noiembrie: audit SEO, integrare conținut furnizat extern fără duplicate, teste complete și monitorizare zilnică reală cu notificări.
+- [ ] Cerințe document 3 noiembrie: publicare după verificări și raport live; sincronizarea/îmbinarea Git se face prin Lovable, nu prin comenzi Git manuale.
 - [ ] Evaluări autentice: formular rating 1–5 și recenzie pentru Profesor AI și acces la evaluarea profesorilor reali.
 - [ ] Profesor AI: investighează blocajele/vorbirea întreruptă, corectează cauzele și rulează teste de regresie; confirmarea audio live necesită o conversație reală.
 
