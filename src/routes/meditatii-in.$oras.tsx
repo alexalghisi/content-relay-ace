@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Wifi, BadgeCheck, Star } from "lucide-react";
-import { AdsterraBannerResponsive } from "@/components/ads/adsterra";
+import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { CITIES, getCityBySlug, citiesInCounty, type CityInfo } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { faqJsonLd } from "@/components/seo-landing";
@@ -433,6 +433,7 @@ function CityPage() {
         )}
 
         <div className="my-10">
+          <AdsterraNativeBanner />
         </div>
 
         <section className="mt-10 max-w-3xl">
