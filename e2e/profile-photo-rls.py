@@ -44,7 +44,7 @@ async def main():
             await page.get_by_test_id("avatar-input").set_input_files(str(photo))
             await page.wait_for_function("""async (count) => {
               const {supabase:s} = await import('/src/integrations/supabase/client.ts');
-              const r = await s.from('profile_photos').select('id');
+              const r = await s.from('profile_photos').select('id').eq('user_id',(await s.auth.getUser()).data.user.id);
               return !r.error && r.data.length === count + 1;
             }""", arg=len(initial["photos"]), timeout=45000)
             await page.reload()
@@ -52,7 +52,7 @@ async def main():
             result = await page.evaluate("""async (initial) => {
               const {supabase:s} = await import('/src/integrations/supabase/client.ts');
               await s.auth.getUser();
-              const r = await s.from('profile_photos').select('id,storage_path');
+              const r = await s.from('profile_photos').select('id,storage_path').eq('user_id',initial.id);
               const added = r.data.filter(p => !initial.photos.some(old => old.id === p.id));
               if (added.length !== 1) throw Error('Photo did not persist');
               const listing = await s.storage.from('avatars').list(initial.id);
@@ -74,7 +74,7 @@ async def main():
             await page.evaluate("""async initial => {
               const {supabase:s} = await import('/src/integrations/supabase/client.ts');
               await s.auth.getUser();
-              const r = await s.from('profile_photos').select('id,storage_path');
+              const r = await s.from('profile_photos').select('id,storage_path').eq('user_id',initial.id);
               const added = (r.data || []).filter(p => !initial.photos.some(old => old.id === p.id));
               for (const photo of added) {
                 const storage = await s.storage.from('avatars').remove([photo.storage_path]);
