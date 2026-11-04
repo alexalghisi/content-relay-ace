@@ -11,6 +11,22 @@ export type SmsSubmission = {
   httpStatus: number | null;
 };
 
+/**
+ * Textul care pleacă efectiv: fără diacritice (GSM-7: un SMS are 160 de caractere, nu 70) și fără
+ * linkuri — GatewayAPI respinge orice SMS cu link neaprobat (status REJECTED, eroarea 0x1903).
+ */
+export function textSmsSigur(message: string): string {
+  return message
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\b(?:https?:\/\/|www\.)\S+/gi, "")
+    .replace(/\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:ro|com|eu|net|org)(?:\/\S*)?/gi, "")
+    .replace(/[ \t]+([.,:;!?])/g, "$1")
+    .replace(/:\s*$/, ".")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 /** Acceptarea de către API nu confirmă livrarea pe telefon. ID-urile rămân server-side. */
 export async function sendSmsTracked(recipients: string[], message: string): Promise<SmsSubmission> {
   const token = process.env["GATEWAYAPI_TOKEN"];
@@ -22,7 +38,7 @@ export async function sendSmsTracked(recipients: string[], message: string): Pro
   try {
     const body = JSON.stringify({
       sender,
-      message: message.slice(0, 300),
+      message: textSmsSigur(message).slice(0, 300),
       recipients: msisdns.map((m) => ({ msisdn: Number(m) })),
     });
     const send = (host: string) => fetch(`https://${host}/rest/mtsms`, {

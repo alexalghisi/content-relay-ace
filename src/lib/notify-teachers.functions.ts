@@ -57,7 +57,8 @@ export const notifyTeachersOfRequest = createServerFn({ method: "POST" })
     const subject = `Un elev caută meditații la ${req.subject}${where ? " " + where : ""}`;
     const url = "https://meditatiidirect.ro/cereri";
     // SMS doar primilor 25 de profesori potriviți, ca să țină costul sub control.
-    const sms = await sendSms(phones.slice(0, 25), `MeditatiiDirect: elev nou caută meditații la ${req.subject}${where ? " " + where : ""}. Trimite propunerea: ${url}`);
+    // Fără link în SMS: GatewayAPI respinge mesajele cu linkuri neaprobate (0x1903); linkul e în email.
+    const sms = await sendSms(phones.slice(0, 25), `MeditatiiDirect: elev nou caută meditații la ${req.subject}${where ? " " + where : ""}. Intra in contul de profesor, la Cereri, ca sa trimiti propunerea.`);
     if (!canEmail || !list.length) return { sent: 0, sms };
     const from = process.env["RESEND_FROM"] || "MeditatiiDirect <cereri@meditatiidirect.ro>";
 

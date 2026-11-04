@@ -100,10 +100,12 @@ export async function waitForHydration(page: Page, selector = "form") {
 
 /**
  * Răspuns simulat pentru un server function TanStack Start (format seroval, x-tss-serialized),
- * ca testele să nu atingă backend-ul real. Acceptă doar obiecte plate cu string/boolean.
+ * ca testele să nu atingă backend-ul real. Acceptă doar obiecte plate cu text, număr sau boolean.
  */
-export function serverFnResult(result: Record<string, string | boolean>) {
-  const enc = (v: string | boolean) => (typeof v === "string" ? { t: 1, s: v } : { t: 2, s: v ? 2 : 3 });
+export function serverFnResult(result: Record<string, string | boolean | number>) {
+  // seroval: 0 = număr, 1 = text, 2 = constantă (2 = true, 3 = false)
+  const enc = (v: string | boolean | number) =>
+    typeof v === "number" ? { t: 0, s: v } : typeof v === "string" ? { t: 1, s: v } : { t: 2, s: v ? 2 : 3 };
   const keys = Object.keys(result);
   return {
     status: 200,

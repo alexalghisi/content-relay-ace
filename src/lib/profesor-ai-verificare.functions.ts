@@ -14,7 +14,9 @@ async function hashCod(uid: string, cod: string) {
   return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-type R = { ok: true; verificat?: boolean } | { ok: false; error: string };
+type R =
+  | { ok: true; verificat?: boolean; dejaTrimis?: boolean; retrimitereIn?: number }
+  | { ok: false; error: string };
 
 export const trimiteCodTelefon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -29,12 +31,18 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rand } = await supabaseAdmin
       .from("profesor_ai_utilizatori")
-      .select("phone_verified_at, code_sent_at")
+      .select("phone, phone_verified_at, code_sent_at, code_expires_at")
       .eq("user_id", context.userId)
       .maybeSingle();
-    if (rand?.phone_verified_at) return { ok: true };
-    if (rand?.code_sent_at && Date.now() - Date.parse(rand.code_sent_at) < RETRIMITERE_SEC * 1000)
-      return { ok: false, error: "Așteaptă un minut înainte să ceri un cod nou." };
+    if (rand?.phone_verified_at) return { ok: true, verificat: true };
+    const trecut = rand?.code_sent_at ? Date.now() - Date.parse(rand.code_sent_at) : Infinity;
+    if (trecut < RETRIMITERE_SEC * 1000) {
+      const retrimitereIn = Math.ceil((RETRIMITERE_SEC * 1000 - trecut) / 1000);
+      // Codul trimis acum câteva secunde e încă valabil: utilizatorul îl introduce, nu primește o eroare.
+      const valabil = rand?.code_expires_at ? Date.parse(rand.code_expires_at) > Date.now() : false;
+      if (rand?.phone === phone && valabil) return { ok: true, dejaTrimis: true, retrimitereIn };
+      return { ok: false, error: `Poți cere un cod nou în ${retrimitereIn} secunde.` };
+    }
     const { data: ocupat } = await supabaseAdmin
       .from("profesor_ai_utilizatori")
       .select("user_id")
@@ -58,9 +66,11 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
     if (!trimise) {
       // Eșecul trimiterii nu dovedește proprietatea telefonului; păstrăm verificarea prin cod.
       console.warn("profesor-ai: SMS indisponibil, telefon neverificat");
-      return { ok: false, error: "SMS-ul nu a putut fi trimis. Încearcă din nou peste un minut." };
+      // Nu blocăm o nouă încercare cu limita de un minut: codul nu a plecat.
+      await supabaseAdmin.from("profesor_ai_utilizatori").update({ code_sent_at: null, code_hash: null }).eq("user_id", context.userId);
+      return { ok: false, error: "SMS-ul nu a putut fi trimis. Verifică numărul și încearcă din nou." };
     }
-    return { ok: true };
+    return { ok: true, retrimitereIn: RETRIMITERE_SEC };
   });
 
 export const confirmaCodTelefon = createServerFn({ method: "POST" })
