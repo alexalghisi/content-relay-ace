@@ -1,5 +1,8 @@
 # Roadmap
 
+- [ ] 4 noiembrie: investighează cele 84 SMS-uri nelivrate din captura GatewayAPI; verifică cele trei corecții monitoring cu teste unitare/funcționale/e2e.
+- [ ] 4 noiembrie: sincronizare/push/merge GitHub dacă există acces și fără conflicte, apoi publicare Lovable; raportează separat limitările furnizorilor și testelor reale.
+
 - [x] Monitoring: politică SELECT numai pentru propriul folder avatars aplicată și confirmată în DB; transfer real, refresh și curățare cu admin trec, 4 teste UI trec. Test opt-in e2e/profile-photo-rls.py păstrat.
 - [ ] Monitoring: confirmare completă fotografii cu utilizator obișnuit — blocat: singura sesiune autorizată disponibilă este admin; nu modifica rolul și nu alege alt cont fără aprobarea utilizatorului.
 - [x] Monitoring: reîncercarea înscrierii după conflict/generare/livrare eșuată nu păstrează cheia; cooldown 60 s doar la succes și mesaj neutru pentru cerere în curs. Handler real testat cu furnizori simulați.
