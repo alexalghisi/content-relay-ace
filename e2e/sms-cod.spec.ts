@@ -37,8 +37,10 @@ test.describe("Cod SMS la înscriere", () => {
     await expect(retrimite).toHaveText(/în \d s/);
     await expect(retrimite).toBeEnabled({ timeout: 6000 });
     await retrimite.click();
+    // Așteaptă a doua cerere și noua numărătoare (răspunsul 2 are retrimitereIn: 60).
+    await expect.poll(() => cereri.length).toBe(2);
+    await expect(retrimite).toHaveText(/în \d+ s/);
     await expect(page.getByLabel("Codul primit prin SMS")).toBeVisible();
-    expect(cereri.length).toBe(2);
     await expect(page.getByText("Așteaptă un minut")).toHaveCount(0);
   });
 
