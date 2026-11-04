@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { getSupabase, useAuth } from "@/lib/auth";
 
 const KEY = "md-cereri-seen";
 
@@ -19,12 +18,12 @@ export function NewRequestsBadge() {
       return;
     }
     const since = localStorage.getItem(KEY) ?? new Date(Date.now() - 7 * 864e5).toISOString();
-    supabase
+    void getSupabase().then((supabase) => supabase
       .from("student_requests")
       .select("id", { count: "exact", head: true })
       .eq("status", "open")
       .gt("created_at", since)
-      .then(({ count: c }) => setCount(c ?? 0));
+      .then(({ count: c }) => setCount(c ?? 0)));
   }, [user, path]);
 
   if (!user || count === 0) return null;

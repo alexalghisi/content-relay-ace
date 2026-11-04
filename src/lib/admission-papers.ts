@@ -1,5 +1,7 @@
 // Catalog helpers pentru subiectele de admitere (tabel `admission_papers`).
-import { supabase } from "@/integrations/supabase/client";
+// Clientul Supabase se încarcă la primul apel (funcțiile sunt oricum asincrone), ca modulul să nu-l
+// aducă în pachetul principal al fiecărei pagini.
+const db = () => import("@/integrations/supabase/client").then((m) => m.supabase);
 import { filtreazaAfisate } from "@/lib/admitere-verificare";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
@@ -43,7 +45,7 @@ export function buildStoragePath(uni: string, mat: string, year: number, type: s
 }
 
 export async function listUniversities() {
-  const { data, error } = await supabase
+  const { data, error } = await (await db())
     .from("admission_papers")
     .select("university_slug, university_name, storage_path")
     .eq("is_published", true);
@@ -58,7 +60,7 @@ export async function listUniversities() {
 }
 
 export async function listSubjectsForUni(universitySlug: string) {
-  const { data, error } = await supabase
+  const { data, error } = await (await db())
     .from("admission_papers")
     .select("subject_slug, subject_name, university_name, storage_path")
     .eq("university_slug", universitySlug)
@@ -79,7 +81,7 @@ export async function listSubjectsForUni(universitySlug: string) {
 }
 
 export async function listYearsForUniSubject(universitySlug: string, subjectSlug: string) {
-  const { data, error } = await supabase
+  const { data, error } = await (await db())
     .from("admission_papers")
     .select("year, university_name, subject_name, storage_path")
     .eq("university_slug", universitySlug)
@@ -98,7 +100,7 @@ export async function listYearsForUniSubject(universitySlug: string, subjectSlug
 }
 
 export async function getPapersForYear(universitySlug: string, subjectSlug: string, year: number) {
-  const { data, error } = await supabase
+  const { data, error } = await (await db())
     .from("admission_papers")
     .select("*")
     .eq("university_slug", universitySlug)
@@ -111,7 +113,7 @@ export async function getPapersForYear(universitySlug: string, subjectSlug: stri
 
 /** Toate materiile distincte din arhivă, pentru agregator-ul cross-universitate. */
 export async function listAllSubjects() {
-  const { data, error } = await supabase
+  const { data, error } = await (await db())
     .from("admission_papers")
     .select("subject_slug, subject_name, storage_path")
     .eq("is_published", true);
@@ -127,7 +129,7 @@ export async function listAllSubjects() {
 
 /** Universități + ani disponibili pentru o materie (pagina agregator /materie/$materie). */
 export async function listUnisForSubject(subjectSlug: string) {
-  const { data, error } = await supabase
+  const { data, error } = await (await db())
     .from("admission_papers")
     .select("university_slug, university_name, subject_name, year, storage_path")
     .eq("subject_slug", subjectSlug)
@@ -151,7 +153,7 @@ export async function listUnisForSubject(subjectSlug: string) {
 
 /** Alte universități care au aceeași materie — pentru cross-link pe pagina anuală. */
 export async function listRelatedUnisForSubject(subjectSlug: string, excludeUniSlug: string) {
-  const { data, error } = await supabase
+  const { data, error } = await (await db())
     .from("admission_papers")
     .select("university_slug, university_name, storage_path")
     .eq("subject_slug", subjectSlug)
