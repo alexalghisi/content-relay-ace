@@ -158,14 +158,12 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
           // Failed before the lesson really started → classic lesson.
           // OpenAI unusable (no credits, bad key) → retry with Gemini Live; otherwise the classic lesson.
           if (!gata) { L.stop(); return onFallback(r.provider); }
-          // OpenAI credits ran out mid-lesson → continue right away on Gemini Live.
-          if (r.provider === "openai" && /credit|quota|billing|insufficient/i.test(m)) { L.stop(); return onFallback("openai"); }
           L.stop();
           return onFallback(r.provider);
         },
         onClose: () => {},
       };
-      const L = r.provider === "openai" ? new OpenAiLesson(r.token, r.model, evs) : new LiveLesson(r.token, r.setup as Record<string, unknown>, evs);
+      const L = new LiveLesson(r.token, r.setup as Record<string, unknown>, evs);
       L.teacherSpeaking = () => avatarVorbeste.current || playerVorbeste.current;
       lesson.current = L;
       curatenie.push(() => L.stop());
