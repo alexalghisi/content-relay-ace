@@ -77,7 +77,12 @@ mock.module("@tanstack/react-start", () => ({
 mock.module("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseAuth: {} }));
 
 const st = {
-  conturi: [] as { email: string; user_metadata: Record<string, unknown>; phone?: string }[],
+  conturi: [] as {
+    email: string;
+    user_metadata: Record<string, unknown>;
+    email_confirmed_at?: string;
+    phone?: string;
+  }[],
   verificate: [] as string[],
   generateError: null as null | { message: string; code?: string },
   existentConfirmat: false,
@@ -142,7 +147,7 @@ async function inregistreaza(email: string, phone = "0722 123 456"): Promise<R> 
       name: "Ana Pop",
       email,
       phone,
-      password: "parola123",
+      password: "Zq7!meditatii-test-unica",
       origin: "https://meditatiidirect.ro",
     },
   });
@@ -246,6 +251,16 @@ describe("creeazaCont — un email și un telefon per cont", () => {
     const r = await inregistreaza("ana.pop+x@gmail.com", "0744 555 666");
     expect(r).toMatchObject({ ok: false, stare: "exista", error: MESAJ_EMAIL_FOLOSIT });
     expect(st.apeluri).not.toContain("generateLink:signup");
+  });
+
+  it("contul existent (ex. creat cu Google) e găsit în listă → „există deja”, fără cont nou", async () => {
+    st.conturi = [
+      { email: "alexalghisi@gmail.com", email_confirmed_at: "2026-01-01", user_metadata: {} },
+    ];
+    const r = await inregistreaza("alexalghisi@gmail.com", "0770763175");
+    expect(r).toMatchObject({ ok: false, stare: "exista", error: MESAJ_EMAIL_FOLOSIT });
+    expect(st.apeluri).not.toContain("generateLink:signup");
+    expect(st.apeluri).not.toContain("email");
   });
 
   it("email exact existent și confirmat → „există deja”, fără email nou", async () => {
