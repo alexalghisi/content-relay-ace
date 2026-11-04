@@ -17,18 +17,51 @@ mock.module("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseA
 // made to fail via a fetch stub scoped to this test.
 
 const writes: Record<string, unknown>[] = [];
+let occupied = false;
+let selected = "";
 const query = {
-  select: () => query,
+  select: (columns: string) => { selected = columns; return query; },
   eq: () => query,
   not: () => query,
   neq: () => query,
-  maybeSingle: async () => ({ data: null }),
+  maybeSingle: async () => ({ data: selected === "user_id" && occupied ? { user_id: "other-user" } : null }),
   upsert: async (value: Record<string, unknown>) => { writes.push(value); return { error: null }; },
   update: (value: Record<string, unknown>) => { writes.push(value); return query; },
 };
 mock.module("@/integrations/supabase/client.server", () => ({ supabaseAdmin: { from: () => query } }));
 
 describe("Phone ownership when SMS fails", () => {
+  it("the reusable test number still sends a code and requires valid confirmation", async () => {
+    const realFetch = globalThis.fetch;
+    const realToken = process.env["GATEWAYAPI_TOKEN"];
+    process.env["GATEWAYAPI_TOKEN"] = "test-token";
+    occupied = true;
+    writes.length = 0;
+    let sends = 0;
+    globalThis.fetch = (async () => { sends++; return new Response('{"ids":[123]}', { status: 200 }); }) as unknown as typeof fetch;
+    try {
+      const { trimiteCodTelefon, confirmaCodTelefon } = await import("./profesor-ai-verificare.functions");
+      const handler = trimiteCodTelefon as unknown as (input: {
+        data: { phone: string }; context: { userId: string };
+      }) => Promise<{ ok: boolean; verificat?: boolean }>;
+      const result = await handler({ data: { phone: "0770763175" }, context: { userId: "test-user" } });
+      expect(result.ok).toBe(true);
+      expect(result.verificat).not.toBe(true);
+      expect(sends).toBe(1);
+      expect(writes[0]?.phone).toBe("40770763175");
+      expect(writes.some((write) => "phone_verified_at" in write)).toBe(false);
+      const confirm = confirmaCodTelefon as unknown as (input: {
+        data: { cod: string }; context: { userId: string };
+      }) => Promise<{ ok: boolean }>;
+      expect((await confirm({ data: { cod: "000000" }, context: { userId: "test-user" } })).ok).toBe(false);
+    } finally {
+      occupied = false;
+      writes.length = 0;
+      globalThis.fetch = realFetch;
+      if (realToken === undefined) delete process.env["GATEWAYAPI_TOKEN"];
+      else process.env["GATEWAYAPI_TOKEN"] = realToken;
+    }
+  });
   it("never grants verification or writes phone_verified_at after failed delivery", async () => {
     const realFetch = globalThis.fetch;
     const realToken = process.env["GATEWAYAPI_TOKEN"];

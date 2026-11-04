@@ -10,6 +10,11 @@ export type ContExistent = {
 
 export type Conflict = "telefon" | "email" | null;
 
+/** Excepție de unicitate pentru testarea SMS; nu dovedește proprietatea și nu acordă acces. */
+export function telefonTestReutilizabil(telefon: string): boolean {
+  return normalizeRoPhone(telefon) === "40770763175";
+}
+
 /**
  * Un email și un telefon per cont. Telefonul are prioritate: dacă numărul e deja pe alt cont, persoana are
  * deja cont. Contul cu exact același email nu e „alt cont” — fluxul existent îi retrimite confirmarea.
@@ -25,7 +30,7 @@ export function gasesteConflict(
   const canonic = emailCanonic(exact);
   const tel = normalizeRoPhone(telefon);
   const altele = conturi.filter((c) => (c.email ?? "").trim().toLowerCase() !== exact);
-  if (tel) {
+  if (tel && !telefonTestReutilizabil(tel)) {
     if (telefoaneVerificate.some((t) => normalizeRoPhone(t) === tel)) {
       // Numărul verificat e chiar al contului cu același email? Atunci nu e conflict.
       const alAcestuiCont = conturi.some(
