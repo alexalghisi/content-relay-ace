@@ -162,6 +162,13 @@
       "when": 1793810000000,
       "tag": "0022_scoate_trigger_email",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1793810000001,
+      "tag": "0023_test_phone_uniqueness_exception",
+      "breakpoints": true
     }
   ]
 }

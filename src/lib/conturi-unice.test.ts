@@ -9,6 +9,16 @@ import {
 } from "./inregistrare";
 
 describe("unicitate — reguli pure", () => {
+  it("numărul proprietarului poate fi reutilizat în toate formatele românești", () => {
+    const conturi = [{ email: "primul@example.ro", metadataPhone: "40770763175" }];
+    for (const phone of ["0770763175", "+40770763175", "40770763175", "0770 763 175"]) {
+      expect(gasesteConflict(conturi, "nou@example.ro", phone, ["40770763175"])).toBeNull();
+    }
+  });
+  it("excepția telefonului nu permite dublarea emailului Gmail", () => {
+    expect(gasesteConflict([{ email: "ana.pop@gmail.com", metadataPhone: "40770763175" }],
+      "anapop+test@gmail.com", "0770763175", ["40770763175"])).toBe("email");
+  });
   it("emailCanonic: litere mici, iar la Gmail fără puncte și fără +eticheta", () => {
     expect(emailCanonic("  Ana.Pop@Example.ro ")).toBe("ana.pop@example.ro");
     expect(emailCanonic("ana.pop+test@gmail.com")).toBe("anapop@gmail.com");
@@ -165,6 +175,15 @@ describe("creeazaCont — un email și un telefon per cont", () => {
     st.verificate = ["40722123456"];
     const r = await inregistreaza(unic("ana"));
     expect(r.stare).toBe("telefon");
+  });
+
+  it("numărul de test deja verificat permite crearea contului și trimite confirmarea email", async () => {
+    st.conturi = [{ email: "primul@example.ro", user_metadata: { phone: "40770763175" } }];
+    st.verificate = ["40770763175"];
+    const r = await inregistreaza(unic("test-proprietar"), "0770763175");
+    expect(r).toEqual({ ok: true, stare: "trimis" });
+    expect(st.apeluri).toContain("generateLink:signup");
+    expect(st.apeluri).toContain("email");
   });
 
   it("variantă Gmail a unui cont existent → „există deja”", async () => {

@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { telefonTestReutilizabil } from "./conturi-unice";
 import {
   COD_INCERCARI_MAX,
   COD_VALABIL_MIN,
@@ -50,7 +51,7 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
       .not("phone_verified_at", "is", null)
       .neq("user_id", context.userId)
       .maybeSingle();
-    if (ocupat) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+    if (ocupat && !telefonTestReutilizabil(phone)) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
     const cod = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, "0");
     const { error } = await supabaseAdmin.from("profesor_ai_utilizatori").upsert({
       user_id: context.userId,
