@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
-import { onPageIdle } from "@/hooks/use-after-load";
+import { onAdsReady } from "@/hooks/use-after-load";
 
 /**
  * Google AdSense slot.
@@ -35,8 +35,8 @@ export function AdSenseSlot({
 
   useEffect(() => {
     if (!AD_SERVING_ENABLED || !CLIENT || !resolvedSlot) return;
-    // Ads load only after the page is interactive and idle.
-    return onPageIdle(() => {
+    // Reclamele pornesc la prima interacțiune sau după ADS_FALLBACK_MS (vezi onAdsReady).
+    return onAdsReady(() => {
       loadAdsenseScript();
       try {
         // @ts-expect-error adsbygoogle global injected by AdSense script
@@ -44,7 +44,7 @@ export function AdSenseSlot({
       } catch {
         /* no-op */
       }
-    }, 4000);
+    });
   }, [resolvedSlot]);
 
   if (!AD_SERVING_ENABLED || !CLIENT || !resolvedSlot) return null;

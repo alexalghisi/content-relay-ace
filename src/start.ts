@@ -1,6 +1,7 @@
 import { createStart, createMiddleware } from "@tanstack/react-start";
 
-import { attachSupabaseAuth } from "./integrations/supabase/auth-attacher";
+// Varianta leneșă a lui integrations/supabase/auth-attacher (vezi src/lib/auth-attacher-lazy.ts).
+import { attachSupabaseAuthLazy } from "./lib/auth-attacher-lazy";
 import { renderErrorPage } from "./lib/error-page";
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
@@ -20,5 +21,5 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [errorMiddleware],
-  functionMiddleware: [attachSupabaseAuth],
+  functionMiddleware: [attachSupabaseAuthLazy],
 }));

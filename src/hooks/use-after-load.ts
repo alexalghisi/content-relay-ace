@@ -61,3 +61,57 @@ export function useNearViewport<T extends Element>(rootMargin = "300px"): [RefOb
   }, [near, rootMargin]);
   return [ref, near && loaded];
 }
+
+/**
+ * Reclamele (AdSense + Adsterra) pornesc la prima interacțiune (atingere, scroll, tastă) sau, pentru
+ * vizitatorii care doar citesc, la ADS_FALLBACK_MS după încărcare. Scripturile de reclame costau ~1,5 s
+ * de procesor pe telefon exact în secundele în care pagina trebuie să răspundă; așa rămân afișate
+ * tuturor vizitatorilor (fără banner de consimțământ), dar nu mai concurează cu prima afișare.
+ */
+export const ADS_FALLBACK_MS = 12_000;
+const EVENIMENTE_INTERACTIUNE = ["pointerdown", "touchstart", "keydown", "scroll", "wheel"] as const;
+let reclamePornite = false;
+const asteptari = new Set<() => void>();
+
+function pornesteReclame() {
+  if (reclamePornite) return;
+  reclamePornite = true;
+  for (const ev of EVENIMENTE_INTERACTIUNE) window.removeEventListener(ev, pornesteReclame);
+  const cbs = [...asteptari];
+  asteptari.clear();
+  // După interacțiune, în timpul liber al procesorului: nu încetinim chiar gestul utilizatorului.
+  onPageIdle(() => cbs.forEach((cb) => cb()), 1000);
+}
+
+let initializat = false;
+function initReclame() {
+  if (initializat || typeof window === "undefined") return;
+  initializat = true;
+  for (const ev of EVENIMENTE_INTERACTIUNE) window.addEventListener(ev, pornesteReclame, { once: true, passive: true });
+  const laIncarcare = () => setTimeout(pornesteReclame, ADS_FALLBACK_MS);
+  if (document.readyState === "complete") laIncarcare();
+  else window.addEventListener("load", laIncarcare, { once: true });
+}
+
+/** Rulează `cb` când reclamele au voie să pornească. Întoarce funcția de anulare. */
+export function onAdsReady(cb: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  initReclame();
+  if (reclamePornite) return onPageIdle(cb, 1000);
+  asteptari.add(cb);
+  return () => { asteptari.delete(cb); };
+}
+
+/** Varianta hook: false până când reclamele au voie să pornească (și în SSR). */
+export function useAdsReady(): boolean {
+  const [ready, setReady] = useState(false);
+  useEffect(() => onAdsReady(() => setReady(true)), []);
+  return ready;
+}
+
+/** Doar pentru teste. */
+export function __resetAdsForTests() {
+  reclamePornite = false;
+  initializat = false;
+  asteptari.clear();
+}

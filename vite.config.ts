@@ -24,6 +24,18 @@ export default defineConfig({
   // instead of Vite's empty builtin stub. Extra plugins must be passed here, not under `vite`.
   plugins: [
     {
+      // The generated Supabase client only builds the real client lazily (Proxy on first use), but
+      // Rollup cannot know that and kept it — with auth/realtime/storage, ~45 KB gzip — in the entry
+      // bundle of every page via unused imports left in split route files. Declaring these modules
+      // side-effect free lets unused imports drop, so public pages load Supabase only when needed.
+      name: "supabase-client-pure",
+      transform(code, id) {
+        if (/\/src\/integrations\/supabase\/(client|previewAuthStorage)\.ts$/.test(id)) {
+          return { code, map: null, moduleSideEffects: false };
+        }
+      },
+    },
+    {
       name: "browser-events-polyfill",
       enforce: "pre",
       transform(code, id) {

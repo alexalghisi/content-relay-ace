@@ -3,9 +3,8 @@ import { useRouterState } from "@tanstack/react-router";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { adsterraDocument, ADSTERRA_SMARTLINK } from "./adsterra-document";
-import { onPageIdle } from "@/hooks/use-after-load";
+import { onAdsReady, useAdsReady } from "@/hooks/use-after-load";
 import { ADSENSE_CLIENT } from "./adsense";
-import { useAfterLoad } from "@/hooks/use-after-load";
 export { getAdsterraBanner } from "./adsterra-document";
 
 function AdsterraPlacement({ className = "", banner = false, mobileOnly = false, social = false }: { className?: string; banner?: boolean; mobileOnly?: boolean; social?: boolean }) {
@@ -14,9 +13,9 @@ function AdsterraPlacement({ className = "", banner = false, mobileOnly = false,
   // Wait for the viewport before requesting a banner: desktop must not
   // request the mobile zone first and immediately discard that impression.
   const [wide, setWide] = useState<boolean | null>(null);
-  // Provider frames are created only after the page has loaded and the browser is idle,
-  // so ad scripts never compete with the first render or hydration.
-  const idle = useAfterLoad(4000);
+  // Provider frames are created at the first interaction (or ADS_FALLBACK_MS after load),
+  // so ad scripts never compete with the first render, hydration or the first taps.
+  const idle = useAdsReady();
   useEffect(() => {
     const media = window.matchMedia("(min-width: 800px)");
     const update = () => setWide(media.matches);
@@ -61,7 +60,7 @@ export function AdsterraBanner320({ className = "" }: { className?: string }) {
 export function AdSenseAutoAds() {
   // AdSense auto ads are a page-level script, injected once the page is idle.
   // No invasive Adsterra formats: Social Bar (overlay), popunders and popups are never loaded.
-  useEffect(() => onPageIdle(() => {
+  useEffect(() => onAdsReady(() => {
     if (!document.querySelector("script[data-adsbygoogle-lib]")) {
       const g = document.createElement("script");
       g.async = true;
@@ -70,7 +69,7 @@ export function AdSenseAutoAds() {
       g.dataset.adsbygoogleLib = "1";
       document.head.appendChild(g);
     }
-  }, 4000), []);
+  }), []);
   return null;
 }
 
