@@ -176,6 +176,13 @@
       "when": 1793810000002,
       "tag": "0024_avatars_owner_read",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1793830000000,
+      "tag": "0025_second_test_phone",
+      "breakpoints": true
     }
   ]
 }

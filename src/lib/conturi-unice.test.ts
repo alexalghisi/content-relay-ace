@@ -282,3 +282,11 @@ t("al doilea număr de test e nelimitat", () => {
   e(t2("0744340622")).toBe(true);
   e(t2("0744340623")).toBe(false);
 });
+
+t("indexul unic din DB exceptează ambele numere de test", () => {
+  const sql = readFileSync(
+    new URL("../../drizzle/migrations/0025_second_test_phone.sql", import.meta.url),
+    "utf8",
+  );
+  for (const n of ["40770763175", "40744340622"]) e(sql).toContain(`'${n}'`);
+});
