@@ -1,4 +1,7 @@
 import { describe, expect, it } from "bun:test";
+import { motivParolaSlaba } from "./parola";
+import { eroareInregistrareRo } from "./inregistrare";
+import { erroareRo } from "./erori-ro";
 import { eroareParolaRo, htmlResetare, linkResetare, textResetare, verificaParolaNoua } from "./parola";
 
 describe("am uitat parola", () => {
@@ -25,5 +28,35 @@ describe("am uitat parola", () => {
     expect(eroareParolaRo("New password should be different from the old password.")).toContain("diferită");
     expect(eroareParolaRo("Auth session missing!")).toContain("expirat");
     expect(eroareParolaRo("ceva necunoscut")).not.toContain("necunoscut");
+  });
+});
+
+describe("parolă respinsă de Supabase → motivul exact", () => {
+  it("parolă din listele de parole furate (ex. 1234567)", () => {
+    const r = motivParolaSlaba("Password is known to be weak and easy to guess, please choose a different one.")!;
+    expect(r).toContain("parole furate");
+    expect(r).not.toContain("minim 6");
+  });
+  it("lipsesc litere / cifre: spune exact ce să adaugi", () => {
+    expect(motivParolaSlaba("Password should contain at least one character of each: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ, 0123456789"))
+      .toBe("Parola trebuie să conțină cel puțin o literă și o cifră (0–9).");
+    expect(motivParolaSlaba("Password should contain at least one character of each: abcdefghijklmnopqrstuvwxyz, ABCDEFGHIJKLMNOPQRSTUVWXYZ, 0123456789"))
+      .toBe("Parola trebuie să conțină cel puțin o literă mică (a–z), o literă mare (A–Z) și o cifră (0–9).");
+    expect(motivParolaSlaba("Password should contain at least one character of each: abcdefghijklmnopqrstuvwxyz, ABCDEFGHIJKLMNOPQRSTUVWXYZ, 0123456789, !@#$%^&*()_+-=[]{};'\\:\"|<>?,./`~"))
+      .toContain("și un simbol");
+  });
+  it("lungime + caractere în același mesaj", () => {
+    expect(motivParolaSlaba("Password should be at least 8 characters. Password should contain at least one character of each: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ, 0123456789"))
+      .toBe("Parola trebuie să aibă cel puțin 8 caractere și să conțină cel puțin o literă și o cifră (0–9).");
+  });
+  it("mesaje care nu sunt despre parolă → null", () => {
+    expect(motivParolaSlaba("Invalid login credentials")).toBeNull();
+  });
+  it("același motiv exact la înscriere, resetare și în cont", () => {
+    const msg = "Password should contain at least one character of each: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ, 0123456789";
+    const asteptat = "Parola trebuie să conțină cel puțin o literă și o cifră (0–9).";
+    expect(eroareParolaRo(msg)).toBe(asteptat);
+    expect(eroareInregistrareRo(msg)).toBe(asteptat);
+    expect(erroareRo(msg)).toBe(asteptat);
   });
 });

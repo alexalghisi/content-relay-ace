@@ -85,7 +85,7 @@ function ResetareParola() {
       {stare === "formular" && (
         <>
           <h1 className="text-3xl font-bold">Alege o parolă nouă</h1>
-          <p className="mt-2 text-muted-foreground">Minim {PAROLA_MIN} caractere. O vei folosi de acum la autentificare.</p>
+          <p className="mt-2 text-muted-foreground">Minim {PAROLA_MIN} caractere. Evită parolele simple, ca 123456 — dacă parola nu e acceptată, îți spunem exact ce să schimbi.</p>
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <div>
               <label htmlFor="parola-noua" className="text-sm font-medium">Parola nouă</label>

@@ -75,3 +75,21 @@ test.describe("Am uitat parola", () => {
     await expect(page.getByRole("heading", { name: "Ai uitat parola?" })).toBeVisible();
   });
 });
+
+test("parolă respinsă de Supabase (1234567) → motivul exact, nu „minim 6 caractere”", async ({ page }) => {
+  await mockSupabase(page);
+  const now = Math.floor(Date.now() / 1000);
+  await page.route("**/auth/v1/verify**", (route) => route.fulfill({ json: {
+    access_token: "e2e.fake.token", refresh_token: "r", token_type: "bearer", expires_in: 3600, expires_at: now + 3600,
+    user: { id: "00000000-0000-4000-8000-000000000e2e", aud: "authenticated", role: "authenticated", email: "marga@example.com", app_metadata: {}, user_metadata: {}, created_at: new Date().toISOString() },
+  } }));
+  await page.route("**/auth/v1/user", (route) => route.request().method() === "PUT"
+    ? route.fulfill({ status: 422, json: { code: 422, error_code: "weak_password", msg: "Password is known to be weak and easy to guess, please choose a different one.", weak_password: { reasons: ["pwned"] } } })
+    : route.fallback());
+  await page.goto("/resetare-parola?token_hash=abc&type=recovery");
+  await page.getByLabel("Parola nouă", { exact: true }).fill("1234567");
+  await page.getByLabel("Scrie din nou parola nouă").fill("1234567");
+  await page.getByRole("button", { name: "Salvează parola nouă" }).click();
+  await expect(page.getByRole("alert")).toContainText("parole furate");
+  await expect(page.getByRole("alert")).not.toContainText("minim 6");
+});
