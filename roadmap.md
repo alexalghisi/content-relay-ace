@@ -1,8 +1,9 @@
 # Roadmap
 
-- [ ] Monitoring: permite citirea propriilor fișiere avatars pentru salvarea fotografiilor, verifică izolarea între utilizatori.
-- [ ] Monitoring: elimină blocarea reîncercării înscrierii după eșec, păstrând protecția împotriva trimiterilor repetate.
-- [ ] Monitoring: aplică limita AI numai așteptării inițiale/inactivității, nu întregului răspuns; adaugă regresii.
+- [x] Monitoring: politică SELECT numai pentru propriul folder avatars aplicată și confirmată în DB; transfer real, refresh și curățare cu admin trec, 4 teste UI trec. Test opt-in e2e/profile-photo-rls.py păstrat.
+- [ ] Monitoring: confirmare completă fotografii cu utilizator obișnuit — blocat: singura sesiune autorizată disponibilă este admin; nu modifica rolul și nu alege alt cont fără aprobarea utilizatorului.
+- [x] Monitoring: reîncercarea înscrierii după conflict/generare/livrare eșuată nu păstrează cheia; cooldown 60 s doar la succes și mesaj neutru pentru cerere în curs. Handler real testat cu furnizori simulați.
+- [x] Monitoring: limita AI se aplică numai conectării, apoi inactivității pe fiecare fragment; flux activ peste limită testat. 47 regresii trec, build OK. Modificările codului nu sunt publicate; conversația audibilă nu este verificată.
 
 - [x] Numărul proprietarului reutilizabil la înscriere și SMS, indexul unic actualizat; confirmarea emailului/codului rămâne obligatorie, fără privilegii din număr. 28 teste trec, build OK; nu s-a creat cont nou și nu s-a trimis SMS real în această intervenție. Codul necesită publicare.
 
