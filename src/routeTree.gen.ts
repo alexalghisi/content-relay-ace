@@ -52,6 +52,7 @@ import { Route as MeditatiiBaiaMareRouteImport } from './routes/meditatii-baia-m
 import { Route as MeditatiiBiologieRouteImport } from './routes/meditatii-biologie'
 import { Route as MeditatiiBrasovRouteImport } from './routes/meditatii-brasov'
 import { Route as MeditatiiBucurestiRouteImport } from './routes/meditatii-bucuresti'
+import { Route as MeditatiiBucurestiSectoareRouteImport } from './routes/meditatii-bucuresti-sectoare'
 import { Route as MeditatiiChimieRouteImport } from './routes/meditatii-chimie'
 import { Route as MeditatiiClasa12RouteImport } from './routes/meditatii-clasa-12'
 import { Route as MeditatiiClasa8RouteImport } from './routes/meditatii-clasa-8'
@@ -99,6 +100,7 @@ import { Route as OreOnlineRouteImport } from './routes/ore-online'
 import { Route as ParolaUitataRouteImport } from './routes/parola-uitata'
 import { Route as ParteneriRouteImport } from './routes/parteneri'
 import { Route as PentruProfesoriRouteImport } from './routes/pentru-profesori'
+import { Route as PfaMeditatiiRouteImport } from './routes/pfa-meditatii'
 import { Route as PlatformaMeditatiiOnlineRouteImport } from './routes/platforma-meditatii-online'
 import { Route as PoliticaCookiesRouteImport } from './routes/politica-cookies'
 import { Route as PregatireAdmitereMedicinaRouteImport } from './routes/pregatire-admitere-medicina'
@@ -402,6 +404,12 @@ const MeditatiiBucurestiRoute = MeditatiiBucurestiRouteImport.update({
   path: '/meditatii-bucuresti',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeditatiiBucurestiSectoareRoute =
+  MeditatiiBucurestiSectoareRouteImport.update({
+    id: '/meditatii-bucuresti-sectoare',
+    path: '/meditatii-bucuresti-sectoare',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MeditatiiChimieRoute = MeditatiiChimieRouteImport.update({
   id: '/meditatii-chimie',
   path: '/meditatii-chimie',
@@ -636,6 +644,11 @@ const ParteneriRoute = ParteneriRouteImport.update({
 const PentruProfesoriRoute = PentruProfesoriRouteImport.update({
   id: '/pentru-profesori',
   path: '/pentru-profesori',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PfaMeditatiiRoute = PfaMeditatiiRouteImport.update({
+  id: '/pfa-meditatii',
+  path: '/pfa-meditatii',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlatformaMeditatiiOnlineRoute =
@@ -1112,6 +1125,7 @@ export interface FileRoutesByFullPath {
   '/meditatii-biologie': typeof MeditatiiBiologieRoute
   '/meditatii-brasov': typeof MeditatiiBrasovRoute
   '/meditatii-bucuresti': typeof MeditatiiBucurestiRoute
+  '/meditatii-bucuresti-sectoare': typeof MeditatiiBucurestiSectoareRoute
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
@@ -1159,6 +1173,7 @@ export interface FileRoutesByFullPath {
   '/parola-uitata': typeof ParolaUitataRoute
   '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
+  '/pfa-meditatii': typeof PfaMeditatiiRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/politica-cookies': typeof PoliticaCookiesRoute
   '/pregatire-admitere-medicina': typeof PregatireAdmitereMedicinaRoute
@@ -1286,6 +1301,7 @@ export interface FileRoutesByTo {
   '/meditatii-biologie': typeof MeditatiiBiologieRoute
   '/meditatii-brasov': typeof MeditatiiBrasovRoute
   '/meditatii-bucuresti': typeof MeditatiiBucurestiRoute
+  '/meditatii-bucuresti-sectoare': typeof MeditatiiBucurestiSectoareRoute
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
@@ -1333,6 +1349,7 @@ export interface FileRoutesByTo {
   '/parola-uitata': typeof ParolaUitataRoute
   '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
+  '/pfa-meditatii': typeof PfaMeditatiiRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/politica-cookies': typeof PoliticaCookiesRoute
   '/pregatire-admitere-medicina': typeof PregatireAdmitereMedicinaRoute
@@ -1459,6 +1476,7 @@ export interface FileRoutesById {
   '/meditatii-biologie': typeof MeditatiiBiologieRoute
   '/meditatii-brasov': typeof MeditatiiBrasovRoute
   '/meditatii-bucuresti': typeof MeditatiiBucurestiRoute
+  '/meditatii-bucuresti-sectoare': typeof MeditatiiBucurestiSectoareRoute
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
@@ -1506,6 +1524,7 @@ export interface FileRoutesById {
   '/parola-uitata': typeof ParolaUitataRoute
   '/parteneri': typeof ParteneriRoute
   '/pentru-profesori': typeof PentruProfesoriRoute
+  '/pfa-meditatii': typeof PfaMeditatiiRoute
   '/platforma-meditatii-online': typeof PlatformaMeditatiiOnlineRoute
   '/politica-cookies': typeof PoliticaCookiesRoute
   '/pregatire-admitere-medicina': typeof PregatireAdmitereMedicinaRoute
@@ -1635,6 +1654,7 @@ export interface FileRouteTypes {
     | '/meditatii-biologie'
     | '/meditatii-brasov'
     | '/meditatii-bucuresti'
+    | '/meditatii-bucuresti-sectoare'
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
@@ -1682,6 +1702,7 @@ export interface FileRouteTypes {
     | '/parola-uitata'
     | '/parteneri'
     | '/pentru-profesori'
+    | '/pfa-meditatii'
     | '/platforma-meditatii-online'
     | '/politica-cookies'
     | '/pregatire-admitere-medicina'
@@ -1809,6 +1830,7 @@ export interface FileRouteTypes {
     | '/meditatii-biologie'
     | '/meditatii-brasov'
     | '/meditatii-bucuresti'
+    | '/meditatii-bucuresti-sectoare'
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
@@ -1856,6 +1878,7 @@ export interface FileRouteTypes {
     | '/parola-uitata'
     | '/parteneri'
     | '/pentru-profesori'
+    | '/pfa-meditatii'
     | '/platforma-meditatii-online'
     | '/politica-cookies'
     | '/pregatire-admitere-medicina'
@@ -1981,6 +2004,7 @@ export interface FileRouteTypes {
     | '/meditatii-biologie'
     | '/meditatii-brasov'
     | '/meditatii-bucuresti'
+    | '/meditatii-bucuresti-sectoare'
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
@@ -2028,6 +2052,7 @@ export interface FileRouteTypes {
     | '/parola-uitata'
     | '/parteneri'
     | '/pentru-profesori'
+    | '/pfa-meditatii'
     | '/platforma-meditatii-online'
     | '/politica-cookies'
     | '/pregatire-admitere-medicina'
@@ -2156,6 +2181,7 @@ export interface RootRouteChildren {
   MeditatiiBiologieRoute: typeof MeditatiiBiologieRoute
   MeditatiiBrasovRoute: typeof MeditatiiBrasovRoute
   MeditatiiBucurestiRoute: typeof MeditatiiBucurestiRoute
+  MeditatiiBucurestiSectoareRoute: typeof MeditatiiBucurestiSectoareRoute
   MeditatiiChimieRoute: typeof MeditatiiChimieRoute
   MeditatiiClasa12Route: typeof MeditatiiClasa12Route
   MeditatiiClasa8Route: typeof MeditatiiClasa8Route
@@ -2203,6 +2229,7 @@ export interface RootRouteChildren {
   ParolaUitataRoute: typeof ParolaUitataRoute
   ParteneriRoute: typeof ParteneriRoute
   PentruProfesoriRoute: typeof PentruProfesoriRoute
+  PfaMeditatiiRoute: typeof PfaMeditatiiRoute
   PlatformaMeditatiiOnlineRoute: typeof PlatformaMeditatiiOnlineRoute
   PoliticaCookiesRoute: typeof PoliticaCookiesRoute
   PregatireAdmitereMedicinaRoute: typeof PregatireAdmitereMedicinaRoute
@@ -2586,6 +2613,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeditatiiBucurestiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/meditatii-bucuresti-sectoare': {
+      id: '/meditatii-bucuresti-sectoare'
+      path: '/meditatii-bucuresti-sectoare'
+      fullPath: '/meditatii-bucuresti-sectoare'
+      preLoaderRoute: typeof MeditatiiBucurestiSectoareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/meditatii-chimie': {
       id: '/meditatii-chimie'
       path: '/meditatii-chimie'
@@ -2913,6 +2947,13 @@ declare module '@tanstack/react-router' {
       path: '/pentru-profesori'
       fullPath: '/pentru-profesori'
       preLoaderRoute: typeof PentruProfesoriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pfa-meditatii': {
+      id: '/pfa-meditatii'
+      path: '/pfa-meditatii'
+      fullPath: '/pfa-meditatii'
+      preLoaderRoute: typeof PfaMeditatiiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/platforma-meditatii-online': {
@@ -3564,6 +3605,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiBiologieRoute: MeditatiiBiologieRoute,
   MeditatiiBrasovRoute: MeditatiiBrasovRoute,
   MeditatiiBucurestiRoute: MeditatiiBucurestiRoute,
+  MeditatiiBucurestiSectoareRoute: MeditatiiBucurestiSectoareRoute,
   MeditatiiChimieRoute: MeditatiiChimieRoute,
   MeditatiiClasa12Route: MeditatiiClasa12Route,
   MeditatiiClasa8Route: MeditatiiClasa8Route,
@@ -3611,6 +3653,7 @@ const rootRouteChildren: RootRouteChildren = {
   ParolaUitataRoute: ParolaUitataRoute,
   ParteneriRoute: ParteneriRoute,
   PentruProfesoriRoute: PentruProfesoriRoute,
+  PfaMeditatiiRoute: PfaMeditatiiRoute,
   PlatformaMeditatiiOnlineRoute: PlatformaMeditatiiOnlineRoute,
   PoliticaCookiesRoute: PoliticaCookiesRoute,
   PregatireAdmitereMedicinaRoute: PregatireAdmitereMedicinaRoute,
