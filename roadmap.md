@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Monitoring: permite citirea propriilor fișiere avatars pentru salvarea fotografiilor, verifică izolarea între utilizatori.
+- [ ] Monitoring: elimină blocarea reîncercării înscrierii după eșec, păstrând protecția împotriva trimiterilor repetate.
+- [ ] Monitoring: aplică limita AI numai așteptării inițiale/inactivității, nu întregului răspuns; adaugă regresii.
+
 - [x] Numărul proprietarului reutilizabil la înscriere și SMS, indexul unic actualizat; confirmarea emailului/codului rămâne obligatorie, fără privilegii din număr. 28 teste trec, build OK; nu s-a creat cont nou și nu s-a trimis SMS real în această intervenție. Codul necesită publicare.
 
 - [x] Fotografii multiple: transfer TUS cu progres/reîncercare, originale JPG/PNG/WebP/GIF păstrate, alte formate convertite fără pierderi; limita de 3 MB a bucketului eliminată. Transfer real + refresh + ștergere verificate cu contul proprietarului; teste originale multiple desktop/telefon trec. Limita globală a furnizorului nu este încă verificată; nu sunt promise încărcări nelimitate.
