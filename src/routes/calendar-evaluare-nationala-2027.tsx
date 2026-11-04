@@ -4,6 +4,7 @@ import { CalendarExamen } from "@/components/calendar-examen";
 import { EN_2027, SURSE_EN_2027 } from "@/data/calendar-2027";
 
 const URL = "https://meditatiidirect.ro/calendar-evaluare-nationala-2027";
+const IMAGE = "https://meditatiidirect.ro/og/calendar/calendar-evaluare-nationala-2027.jpg";
 const TITLE = "Calendar Evaluare Națională 2027: simulare 16-18 martie, examen 22-25 iunie";
 const DESC = "Evaluarea Națională 2027 clasa a VIII-a: simularea (16-18 martie), examenul la română (22 iunie) și matematică (24 iunie), rezultate 30 iunie, contestații și rezultate finale 7 iulie.";
 
@@ -22,16 +23,25 @@ export const Route = createFileRoute("/calendar-evaluare-nationala-2027")({
       { name: "keywords", content: "evaluare nationala 2027, calendar evaluare nationala 2027, simulare evaluare nationala 2027, cand este evaluarea nationala 2027, en 2027, simulare clasa a 8 a 2027, rezultate evaluare nationala 2027, meditatii evaluare nationala" },
       { property: "og:title", content: TITLE }, { property: "og:description", content: DESC },
       { property: "og:url", content: URL }, { property: "og:type", content: "article" },
+      { property: "og:image", content: IMAGE }, { property: "og:image:width", content: "1200" }, { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" }, { name: "twitter:image", content: IMAGE },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
+      // Article, nu Event: rich result-ul „Event” e pentru evenimente publice cu bilete și artiști
+      // (Google cere offers/performer); un examen național nu le are, iar a le inventa ar fi date false.
       { type: "application/ld+json", children: JSON.stringify({
-        "@context": "https://schema.org", "@type": "Event", name: "Evaluarea Națională 2027 — clasa a VIII-a",
-        startDate: "2027-06-22", endDate: "2027-06-25", eventStatus: "https://schema.org/EventScheduled",
-        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-        location: { "@type": "Place", name: "Centrele de examen din România", address: { "@type": "PostalAddress", addressCountry: "RO" } },
-        organizer: { "@type": "Organization", name: "Ministerul Educației", url: "https://www.edu.ro" },
+        "@context": "https://schema.org", "@type": "Article",
+        headline: "Calendar Evaluarea Națională 2027 (clasa a VIII-a)",
+        description: DESC,
+        image: [IMAGE],
+        datePublished: "2026-11-03",
+        dateModified: "2026-11-04",
+        inLanguage: "ro",
+        mainEntityOfPage: URL,
+        author: { "@type": "Organization", name: "MeditatiiDirect.ro", url: "https://meditatiidirect.ro" },
+        publisher: { "@type": "Organization", name: "MeditatiiDirect.ro", logo: { "@type": "ImageObject", url: "https://meditatiidirect.ro/apple-touch-icon.png" } },
       }) },
     ],
   }),

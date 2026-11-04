@@ -14,7 +14,14 @@ for (const p of [
     expect(html).toContain(p.data);
     expect(html).toContain(`<link rel="canonical" href="https://meditatiidirect.ro${p.url}"`);
     expect(html).toContain('"@type":"FAQPage"');
-    expect(html).toContain('"@type":"Event"');
+    // Article, nu Event (Google cerea offers/performer, care nu există pentru un examen)
+    expect(html).toContain('"@type":"Article"');
+    expect(html).not.toContain('"@type":"Event"');
+    const img = /<meta property="og:image" content="([^"]+)"/.exec(html)?.[1];
+    expect(img).toBe(`https://meditatiidirect.ro/og/calendar${p.url}.jpg`);
+    const r = await page.request.get(new URL(img!).pathname);
+    expect(r.status()).toBe(200);
+    expect(r.headers()["content-type"]).toContain("image/jpeg");
     await expect(page.getByRole("heading", { level: 1, name: p.h1 })).toBeVisible();
     await expect(page.getByText(p.data).first()).toBeVisible();
   });
