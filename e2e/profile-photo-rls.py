@@ -51,6 +51,7 @@ async def main():
             await page.get_by_test_id("avatar-input").wait_for(state="attached")
             result = await page.evaluate("""async (initial) => {
               const {supabase:s} = await import('/src/integrations/supabase/client.ts');
+              await s.auth.getUser();
               const r = await s.from('profile_photos').select('id,storage_path');
               const added = r.data.filter(p => !initial.photos.some(old => old.id === p.id));
               if (added.length !== 1) throw Error('Photo did not persist');
@@ -72,6 +73,7 @@ async def main():
         finally:
             await page.evaluate("""async initial => {
               const {supabase:s} = await import('/src/integrations/supabase/client.ts');
+              await s.auth.getUser();
               const r = await s.from('profile_photos').select('id,storage_path');
               const added = (r.data || []).filter(p => !initial.photos.some(old => old.id === p.id));
               for (const photo of added) {
