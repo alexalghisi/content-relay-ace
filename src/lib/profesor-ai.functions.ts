@@ -385,11 +385,7 @@ export const profesorAiLive = createServerFn({ method: "POST" })
     const live = await import("./profesor-ai-live.server");
     const prompt = live.livePrompt(s, s.durata, s.exp);
     const avatarP = live.createLiteAvatarToken(Math.min(3600, (s.durata + 5) * 60));
-    // OpenAI Realtime first when its key is set; Gemini Live as the second choice.
-    if (process.env["OPENAI_API_KEY"] && data.evita !== "openai") {
-      const [o, avatar] = await Promise.all([live.createOpenAiSecret(prompt, s.durata), avatarP]);
-      if ("token" in o) return { ok: true as const, provider: "openai" as const, token: o.token, model: o.model, setup: null, avatarToken: avatar };
-    }
+    // Direct OpenAI Realtime (own key) was removed; live voice uses Gemini Live.
     const [g, avatar] = await Promise.all([live.createGeminiLiveToken(s.durata), avatarP]);
     if (!("token" in g)) return { ok: false as const, error: g.error };
     return { ok: true as const, provider: "gemini" as const, token: g.token, model: "", setup: live.liveSetup(prompt), avatarToken: avatar };
