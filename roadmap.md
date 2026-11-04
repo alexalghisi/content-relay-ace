@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Permite reutilizarea numărului proprietarului pentru testarea înscrierii și SMS, fără a ocoli confirmarea e-mailului/codului; verifică regresiile și explică providerul.
+- [x] Numărul proprietarului reutilizabil la înscriere și SMS, indexul unic actualizat; confirmarea emailului/codului rămâne obligatorie, fără privilegii din număr. 28 teste trec, build OK; nu s-a creat cont nou și nu s-a trimis SMS real în această intervenție. Codul necesită publicare.
 
 - [x] Fotografii multiple: transfer TUS cu progres/reîncercare, originale JPG/PNG/WebP/GIF păstrate, alte formate convertite fără pierderi; limita de 3 MB a bucketului eliminată. Transfer real + refresh + ștergere verificate cu contul proprietarului; teste originale multiple desktop/telefon trec. Limita globală a furnizorului nu este încă verificată; nu sunt promise încărcări nelimitate.
 - [ ] Autentificare e-mail/Google reală: remediate stările la erori; 16 teste simulate de înscriere/confirmare/login trec. Blocat pentru confirmare reală: nu există sesiune Google interactivă sau acces la confirmarea unui cont de test nou; nu declara OAuth verificat.
