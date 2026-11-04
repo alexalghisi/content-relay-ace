@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { formatRoPhone } from "@/lib/phone";
@@ -28,6 +28,14 @@ export function VerificareTelefon({
   const [trimis, setTrimis] = useState(false);
   const [pending, setPending] = useState(false);
   const [eroare, setEroare] = useState("");
+  const [info, setInfo] = useState("");
+  const [retrimitereIn, setRetrimitereIn] = useState(0);
+
+  useEffect(() => {
+    if (retrimitereIn <= 0) return;
+    const t = setTimeout(() => setRetrimitereIn((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [retrimitereIn]);
 
   const trimite = async () => {
     setEroare("");
@@ -38,7 +46,15 @@ export function VerificareTelefon({
     }));
     setPending(false);
     if (!r.ok) return setEroare(r.error);
-    if ("verificat" in r && r.verificat) return onVerificat();
+    if (r.verificat) return onVerificat();
+    const numar = formatRoPhone(phone);
+    setInfo(
+      r.dejaTrimis
+        ? `Ți-am trimis deja un cod la ${numar} acum câteva secunde. Introdu-l mai jos.`
+        : `Am trimis codul prin SMS la ${numar}.`,
+    );
+    setRetrimitereIn(r.retrimitereIn ?? 0);
+    setCod("");
     setTrimis(true);
   };
   const confirma = async () => {
@@ -96,6 +112,11 @@ export function VerificareTelefon({
         </div>
       ) : (
         <div className="mt-3 grid gap-3">
+          {info && <p role="status" className="rounded-xl bg-primary/10 px-4 py-2 text-sm">{info}</p>}
+          <p className="text-xs text-muted-foreground">
+            SMS-ul vine de la expeditorul <strong>MeditatiiD</strong>. Pe iPhone, dacă nu îl vezi, caută în Mesaje → Filtre →
+            Expeditori necunoscuți.
+          </p>
           <label className="text-sm font-semibold">
             Codul primit prin SMS
             <input
@@ -115,9 +136,19 @@ export function VerificareTelefon({
           >
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Confirmă codul
           </button>
-          <button type="button" onClick={() => setTrimis(false)} className="text-xs text-primary underline">
-            Schimbă numărul sau retrimite codul
-          </button>
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <button
+              type="button"
+              onClick={trimite}
+              disabled={pending || retrimitereIn > 0}
+              className="text-primary underline disabled:text-muted-foreground disabled:no-underline"
+            >
+              {retrimitereIn > 0 ? `Retrimite codul în ${retrimitereIn} s` : "Retrimite codul"}
+            </button>
+            <button type="button" onClick={() => { setTrimis(false); setInfo(""); setEroare(""); }} className="text-primary underline">
+              Schimbă numărul
+            </button>
+          </div>
         </div>
       )}
       {eroare && <p className="mt-3 rounded-xl bg-destructive/10 px-4 py-2 text-sm text-destructive">{eroare}</p>}

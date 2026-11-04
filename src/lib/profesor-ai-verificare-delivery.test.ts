@@ -45,7 +45,9 @@ describe("Phone ownership when SMS fails", () => {
     });
     expect(result.ok).toBe(false);
     expect(result.verificat).not.toBe(true);
-    expect(writes.length).toBe(1);
+    // 1) codul salvat, 2) codul anulat după eșecul SMS (ca o nouă încercare să nu fie blocată un minut)
+    expect(writes.length).toBe(2);
+    expect(writes[1]).toEqual({ code_sent_at: null, code_hash: null });
     expect(writes.some((write) => "phone_verified_at" in write)).toBe(false);
     } finally {
       globalThis.fetch = realFetch;

@@ -69,5 +69,6 @@ Echipa MeditatiiDirect.ro`;
 export function textSms(d: DatePropunere): string {
   const fara = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
   const prof = fara(numeProfesor(d.profesor)).slice(0, 40);
-  return `MeditatiiDirect: ${prof} vrea sa-ti fie profesor la ${fara(d.materie)}. Vezi propunerea: ${d.link}`;
+  // Fără link: GatewayAPI respinge SMS-urile cu linkuri neaprobate (eroarea 0x1903). Linkul e în email.
+  return `MeditatiiDirect: ${prof} vrea sa-ti fie profesor la ${fara(d.materie)}. Vezi propunerea in emailul primit de la MeditatiiDirect sau in contul tau, la Cererea mea.`;
 }

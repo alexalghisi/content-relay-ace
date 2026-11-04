@@ -51,10 +51,10 @@ describe("notificare propunere", () => {
     expect(h).toContain("a&amp;b");
   });
 
-  test("SMS fără diacritice, cu link", () => {
+  test("SMS fără diacritice și fără link (GatewayAPI respinge linkurile)", () => {
     const s = textSms(baza);
     expect(s).toBe(
-      "MeditatiiDirect: Alessandro vrea sa-ti fie profesor la Informatica. Vezi propunerea: https://meditatiidirect.ro/cererea-mea/abc?t=tok",
+      "MeditatiiDirect: Alessandro vrea sa-ti fie profesor la Informatica. Vezi propunerea in emailul primit de la MeditatiiDirect sau in contul tau, la Cererea mea.",
     );
     expect(/[ăâîșțĂÂÎȘȚ]/.test(s)).toBe(false);
   });
