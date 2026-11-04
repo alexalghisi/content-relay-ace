@@ -21,11 +21,14 @@ type R =
 
 export const trimiteCodTelefon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ phone: z.string().max(30), address: z.string().max(300).optional() }).parse(d))
+  .inputValidator((d) =>
+    z.object({ phone: z.string().max(30), address: z.string().max(300).optional() }).parse(d),
+  )
   .handler(async ({ data, context }): Promise<R> => {
     const { normalizeRoPhone, sendSms } = await import("./sms.server");
     const phone = normalizeRoPhone(data.phone);
-    if (!phone) return { ok: false, error: "Introdu un număr de mobil românesc valid (07xx xxx xxx)." };
+    if (!phone)
+      return { ok: false, error: "Introdu un număr de mobil românesc valid (07xx xxx xxx)." };
     // Adresa e cerută doar în fluxul Profesor AI; la înregistrare se verifică doar telefonul.
     if (data.address !== undefined && !adresaValida(data.address))
       return { ok: false, error: "Introdu adresa completă (stradă, număr, localitate)." };
@@ -54,7 +57,8 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
       .not("phone_verified_at", "is", null)
       .neq("user_id", context.userId)
       .maybeSingle();
-    if (ocupat && !telefonTestReutilizabil(phone)) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+    if (ocupat && !telefonTestReutilizabil(phone))
+      return { ok: false, error: "Acest număr este deja folosit de alt cont." };
     const cod = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, "0");
     const { error } = await supabaseAdmin.from("profesor_ai_utilizatori").upsert({
       user_id: context.userId,
@@ -66,13 +70,22 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
       code_sent_at: new Date().toISOString(),
     });
     if (error) return { ok: false, error: "Nu am putut salva datele. Încearcă din nou." };
-    const trimise = await sendSms([phone], `Codul tau MeditatiiDirect: ${cod}. Valabil ${COD_VALABIL_MIN} minute.`);
+    const trimise = await sendSms(
+      [phone],
+      `Codul tau MeditatiiDirect: ${cod}. Valabil ${COD_VALABIL_MIN} minute.`,
+    );
     if (!trimise) {
       // Eșecul trimiterii nu dovedește proprietatea telefonului; păstrăm verificarea prin cod.
       console.warn("profesor-ai: SMS indisponibil, telefon neverificat");
       // Nu blocăm o nouă încercare cu limita de un minut: codul nu a plecat.
-      await supabaseAdmin.from("profesor_ai_utilizatori").update({ code_sent_at: null, code_hash: null }).eq("user_id", context.userId);
-      return { ok: false, error: "SMS-ul nu a putut fi trimis. Verifică numărul și încearcă din nou." };
+      await supabaseAdmin
+        .from("profesor_ai_utilizatori")
+        .update({ code_sent_at: null, code_hash: null })
+        .eq("user_id", context.userId);
+      return {
+        ok: false,
+        error: "SMS-ul nu a putut fi trimis. Verifică numărul și încearcă din nou.",
+      };
     }
     return { ok: true, retrimitereIn: test ? 0 : RETRIMITERE_SEC };
   });
@@ -97,12 +110,47 @@ export const confirmaCodTelefon = createServerFn({ method: "POST" })
         .from("profesor_ai_utilizatori")
         .update({ code_attempts: s.code_attempts + 1 })
         .eq("user_id", context.userId);
-      return { ok: false, error: `Cod greșit. Mai ai ${COD_INCERCARI_MAX - s.code_attempts - 1} încercări.` };
+      return {
+        ok: false,
+        error: `Cod greșit. Mai ai ${COD_INCERCARI_MAX - s.code_attempts - 1} încercări.`,
+      };
     }
-    const { error } = await supabaseAdmin
-      .from("profesor_ai_utilizatori")
-      .update({ phone_verified_at: new Date().toISOString(), code_hash: null, code_expires_at: null })
-      .eq("user_id", context.userId);
-    if (error) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
-    return { ok: true };
+    const marcheaza = () =>
+      supabaseAdmin
+        .from("profesor_ai_utilizatori")
+        .update({
+          phone_verified_at: new Date().toISOString(),
+          code_hash: null,
+          code_expires_at: null,
+        })
+        .eq("user_id", context.userId);
+    const elibereaza = () =>
+      supabaseAdmin
+        .from("profesor_ai_utilizatori")
+        .update({ phone_verified_at: null })
+        .eq("phone", s.phone ?? "")
+        .neq("user_id", context.userId);
+    return confirmaVerificarea(
+      s.phone ?? "",
+      async () => (await marcheaza()).error,
+      async () => (await elibereaza()).error,
+    );
   });
+
+type Eroare = { code?: string; message?: string } | null;
+
+/**
+ * Numerele de test ale proprietarului pot fi verificate pe oricâte conturi: dacă indexul unic din DB
+ * încă refuză, eliberăm verificarea celorlalte conturi cu același număr și reîncercăm.
+ * Numerele reale rămân strict un singur cont.
+ */
+export async function confirmaVerificarea(
+  phone: string,
+  marcheaza: () => Promise<Eroare>,
+  elibereaza: () => Promise<Eroare>,
+): Promise<R> {
+  let error = await marcheaza();
+  if (error && telefonTestReutilizabil(phone) && !(await elibereaza())) error = await marcheaza();
+  if (error) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+  return { ok: true };
+}
