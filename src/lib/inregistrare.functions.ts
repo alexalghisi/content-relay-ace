@@ -154,3 +154,36 @@ export const retrimiteConfirmare = createServerFn({ method: "POST" })
     if (!r.ok && r.error.startsWith("Nu am găsit")) return { ok: true, stare: "retrimis" };
     return r;
   });
+
+/**
+ * „Am uitat parola”: generează linkul de recuperare pe server și îl trimite prin providerul nostru
+ * (nu prin mailerul implicit Supabase). Nu dezvăluie dacă adresa are cont: răspunsul e același.
+ */
+export const trimiteResetareParola = createServerFn({ method: "POST" })
+  .inputValidator((d) => z.object({ email: z.string().trim().email().max(255), origin: z.string().max(200) }).parse(d))
+  .handler(async ({ data }): Promise<{ ok: true } | { ok: false; error: string }> => {
+    const email = data.email.toLowerCase();
+    if (!(await claimFereastra(`reset:${email}`)))
+      return { ok: false, error: "Ți-am trimis deja un email acum câteva secunde. Așteaptă un minut și verifică și folderul Spam." };
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: link, error } = await supabaseAdmin.auth.admin.generateLink({ type: "recovery", email });
+      // Adresă fără cont (sau cont doar cu Google): același răspuns, ca să nu se poată afla cine are cont.
+      if (error || !link?.user) return { ok: true };
+      const { linkResetare, subiectResetare, htmlResetare, textResetare } = await import("./parola");
+      const { trimiteEmailCont } = await import("./email-cont.server");
+      const nume = typeof link.user.user_metadata?.display_name === "string" ? link.user.user_metadata.display_name : "";
+      const url = linkResetare(data.origin, link.properties.hashed_token);
+      const trimis = await trimiteEmailCont({
+        to: email,
+        subject: subiectResetare(),
+        html: htmlResetare(nume, url),
+        text: textResetare(nume, url),
+        label: "resetare-parola",
+      });
+      return trimis ? { ok: true } : { ok: false, error: "Emailul nu a putut fi trimis acum. Încearcă din nou peste un minut." };
+    } catch (e) {
+      console.error(`[resetare-parola] ${(e as Error)?.name ?? "error"}`);
+      return { ok: false, error: "Resetarea parolei nu este disponibilă momentan. Încearcă din nou peste câteva minute." };
+    }
+  });

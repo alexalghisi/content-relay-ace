@@ -30,7 +30,7 @@ const schema = z.object({
 function authErrorRo(message: string) {
   const m = message.toLowerCase();
   if (m.includes("email not confirmed")) return "Contul nu este confirmat încă. Deschide emailul de confirmare sau cere unul nou mai jos.";
-  if (m.includes("invalid login credentials")) return "Email sau parolă greșite.";
+  if (m.includes("invalid login credentials")) return "Email sau parolă greșite. Dacă ai uitat parola, apasă „Ai uitat parola?”.";
   if (m.includes("rate limit") || m.includes("too many")) return "Prea multe încercări. Mai încearcă peste câteva minute.";
   if (m.includes("token") || m.includes("expired")) return "Linkul de confirmare a expirat sau a fost deja folosit. Cere unul nou mai jos.";
   return "A apărut o eroare. Mai încearcă o dată.";
@@ -101,7 +101,10 @@ function LoginPage() {
           <input id="login-email" autoComplete="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <div>
-          <label htmlFor="login-password" className="text-sm font-medium">Parolă</label>
+          <div className="flex items-baseline justify-between gap-3">
+            <label htmlFor="login-password" className="text-sm font-medium">Parolă</label>
+            <Link to="/parola-uitata" search={{ email: email.trim() || undefined }} className="text-sm text-primary font-medium hover:underline">Ai uitat parola?</Link>
+          </div>
           <PasswordInput id="login-password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
         <button type="submit" disabled={loading} className="btn-primary w-full h-12 disabled:opacity-60">
