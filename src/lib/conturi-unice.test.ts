@@ -1,4 +1,4 @@
-import { describe, expect, it, mock, beforeEach } from "bun:test";
+import { describe, expect, it, mock, beforeEach, afterEach } from "bun:test";
 import { readFileSync } from "node:fs";
 import { gasesteConflict } from "./conturi-unice";
 import {
@@ -76,6 +76,7 @@ const st = {
   generateError: null as null | { message: string; code?: string },
   existentConfirmat: false,
   apeluri: [] as string[],
+  emailSent: true,
 };
 // Chainable și „await”-abil: select("phone").not(...) întoarce telefoanele verificate.
 const query: Record<string, unknown> = {
@@ -122,7 +123,7 @@ mock.module("@/integrations/supabase/client.server", () => ({
 mock.module("./email-cont.server", () => ({
   trimiteEmailCont: async () => {
     st.apeluri.push("email");
-    return true;
+    return st.emailSent;
   },
 }));
 
@@ -152,7 +153,48 @@ describe("creeazaCont — un email și un telefon per cont", () => {
       generateError: null,
       existentConfirmat: false,
       apeluri: [],
+      emailSent: true,
     });
+  });
+
+  const originalCaches = Object.getOwnPropertyDescriptor(globalThis, "caches");
+  afterEach(() => {
+    if (originalCaches) Object.defineProperty(globalThis, "caches", originalCaches);
+    else Reflect.deleteProperty(globalThis, "caches");
+  });
+  function enableEdgeCache() {
+    const entries = new Map<string, Response>();
+    Object.defineProperty(globalThis, "caches", { configurable: true, value: { default: {
+      match: async (r: Request) => entries.get(r.url)?.clone(),
+      put: async (r: Request, response: Response) => { entries.set(r.url, response.clone()); },
+      delete: async (r: Request) => entries.delete(r.url),
+    } } });
+  }
+  it("same email retries immediately after correcting a conflicting phone", async () => {
+    enableEdgeCache();
+    const email = unic("retry-phone");
+    st.conturi = [{ email: "other@example.ro", user_metadata: { phone: "40722123456" } }];
+    expect((await inregistreaza(email)).stare).toBe("telefon");
+    expect(await inregistreaza(email, "0744555666")).toEqual({ ok: true, stare: "trimis" });
+    expect(st.apeluri.filter((a) => a === "email")).toHaveLength(1);
+  });
+  it("same email retries after generation fails without an email being sent", async () => {
+    enableEdgeCache();
+    const email = unic("retry-generation");
+    st.generateError = { message: "upstream unavailable" };
+    expect((await inregistreaza(email)).ok).toBe(false);
+    st.generateError = null;
+    expect(await inregistreaza(email)).toEqual({ ok: true, stare: "trimis" });
+    expect(st.apeluri.filter((a) => a === "email")).toHaveLength(1);
+  });
+  it("delivery failure releases signup cooldown", async () => {
+    enableEdgeCache();
+    const email = unic("retry-delivery");
+    st.emailSent = false;
+    expect((await inregistreaza(email)).stare).toBe("netrimis");
+    st.emailSent = true;
+    st.generateError = { message: "already registered", code: "email_exists" };
+    expect(await inregistreaza(email)).toEqual({ ok: true, stare: "retrimis" });
   });
 
   it("emailuri diferite și telefon nou → contul se creează și pleacă emailul", async () => {
