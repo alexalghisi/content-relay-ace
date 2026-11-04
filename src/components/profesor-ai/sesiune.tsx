@@ -1,4 +1,4 @@
-import { readWithDeadline } from "@/lib/stream-deadline";
+import { readWithDeadline, withInitialDeadline } from "@/lib/stream-deadline";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Clock, Loader2, VideoOff, Volume2, VolumeX } from "lucide-react";
@@ -248,8 +248,6 @@ export function SesiuneProfesorAi({
       // No spoken filler: queued filler speech delayed the real answer and repeated on every
       // re-request, so the "thinking" state is shown visually only.
       const filler = 0;
-      let timedOut = false;
-      const deadline = window.setTimeout(() => { timedOut = true; ctrl.abort(); }, 20_000);
       const fail = (error: string, cod?: string) => {
         if (rev !== revision.current) return;
         messagesRef.current = previous;
@@ -261,12 +259,14 @@ export function SesiuneProfesorAi({
         setDeReluat({ text: c, ascuns, cod });
       };
       try {
-        const { data: sess } = await supabase.auth.getSession();
-        const res = await fetch("/api/profesor-ai-stream", {
+        const res = await withInitialDeadline(ctrl, async () => {
+          const { data: sess } = await supabase.auth.getSession();
+          return fetch("/api/profesor-ai-stream", {
           method: "POST",
           signal: ctrl.signal,
           headers: { "content-type": "application/json", authorization: `Bearer ${sess.session?.access_token ?? ""}` },
           body: JSON.stringify({ token, mesaje: fereastra(istoric), imagine }),
+          });
         });
         if (!res.ok || !res.body) {
           const j = (await res.json().catch(() => null)) as { error?: string; cod?: string } | null;
@@ -352,10 +352,9 @@ export function SesiuneProfesorAi({
         messagesRef.current = [...istoric, { role: "assistant", content: spoken.trim(), tabla: board?.trim() || undefined }];
         setMesaje(messagesRef.current);
       } catch (e) {
-        if (timedOut) fail("Răspunsul a întârziat prea mult. Poți reîncerca întrebarea.", "timeout");
+        if ((e as Error).name === "TimeoutError") fail("Răspunsul a întârziat prea mult. Poți reîncerca întrebarea.", "timeout");
         else if ((e as Error).name !== "AbortError") fail("Conexiunea a eșuat. Încearcă din nou.", "retea");
       } finally {
-        window.clearTimeout(deadline);
         window.clearTimeout(filler);
         if (rev === revision.current) setPending(false);
       }

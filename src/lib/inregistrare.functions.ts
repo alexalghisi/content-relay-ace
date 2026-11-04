@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { signupSchema } from "./signup-validation";
+import { cuFereastraEmail } from "./inregistrare-fereastra";
 import {
   MESAJ_EMAIL_FOLOSIT,
   MESAJ_TELEFON_FOLOSIT,
@@ -105,9 +106,6 @@ async function creeaza(data: { name: string; email: string; phone: string; passw
     const parsed = signupSchema.safeParse(data);
     if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Date invalide." };
     const email = parsed.data.email.toLowerCase();
-    if (!(await claimFereastra(`signup:${email}`)))
-      return { ok: false, error: "Ți-am trimis deja un email acum câteva secunde. Verifică și folderul Spam." };
-
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Un email și un telefon per cont, verificat înainte de creare (telefonul are prioritate).
@@ -115,6 +113,8 @@ async function creeaza(data: { name: string; email: string; phone: string; passw
     if (conflict === "telefon") return { ok: false, error: MESAJ_TELEFON_FOLOSIT, stare: "telefon" };
     if (conflict === "email") return { ok: false, error: MESAJ_EMAIL_FOLOSIT, stare: "exista" };
 
+    const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
+    return cuFereastraEmail<Rezultat>(cache, `signup:${email}`, async () => {
     const { data: link, error } = await supabaseAdmin.auth.admin.generateLink({
       type: "signup",
       email,
@@ -136,6 +136,7 @@ async function creeaza(data: { name: string; email: string; phone: string; passw
         error: "Contul a fost creat, dar emailul de confirmare nu a putut fi trimis. Apasă „Trimite din nou emailul”.",
       };
     return { ok: true, stare: "trimis" };
+    }, { ok: false, error: "O cerere recentă este în curs sau a fost deja procesată. Așteaptă un minut înainte să reîncerci." });
 }
 
 /** „Trimite din nou emailul” din /signup și /login. Nu dezvăluie dacă adresa există. */
