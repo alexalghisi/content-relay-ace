@@ -47,6 +47,8 @@ async def main():
               const r = await s.from('profile_photos').select('id').eq('user_id',(await s.auth.getUser()).data.user.id);
               return !r.error && r.data.length === count + 1;
             }""", arg=len(initial["photos"]), timeout=45000)
+            await page.get_by_role("progressbar", name="Progres încărcare").wait_for(state="detached", timeout=45000)
+            await page.get_by_alt_text("Fotografie de profil", exact=True).first.wait_for()
             await page.reload()
             await page.get_by_test_id("avatar-input").wait_for(state="attached")
             result = await page.evaluate("""async (initial) => {
