@@ -1,5 +1,6 @@
 # Architecture rules
 
+- Password reset uses the same channel: trimiteResetareParola (admin.generateLink type recovery + our email provider) → /resetare-parola verifies the token and sets the new password; /parola-uitata never reveals whether an email has an account.
 - Signup runs server-side (src/lib/inregistrare.functions.ts): admin.generateLink creates the user and our own email provider (Resend, then Lovable Emails) sends the confirmation link to /confirmare-cont, which verifies the token and then asks for the SMS phone code. Never go back to supabase.auth.signUp/resend: the default Supabase mailer has no SMTP and only delivers to project team members.
 - One account per email and per phone: creeazaCont checks before creating (src/lib/conturi-unice.ts, admin listUsers + SMS-verified phones); the phone wins (message: number already registered) and Gmail variants (dots, +tag) count as the same email. Do not put triggers on auth.users for this (0021 broke every signup, 0022 drops it), and never report a generic DB error as "account exists".
 - Email signup stores the entered phone as unverified user metadata; Profesor AI pre-fills it but independently validates and verifies it by SMS before granting access. Never treat signup metadata as proof of phone ownership.
