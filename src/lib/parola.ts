@@ -4,6 +4,8 @@
  * nostru de email, ca la înscriere: mailerul implicit Supabase nu livrează utilizatorilor reali.
  */
 import { originSigur } from "./inregistrare";
+import { motivParolaSlaba } from "./parola-slaba";
+export { motivParolaSlaba };
 
 export const PAROLA_MIN = 6;
 
@@ -54,11 +56,12 @@ export function verificaParolaNoua(parola: string, confirmare: string): string |
   return null;
 }
 
-/** Erorile Supabase la schimbarea parolei → română. */
+/** Erorile Supabase la schimbarea parolei → română, cu motivul exact când parola e respinsă. */
 export function eroareParolaRo(message: string): string {
   const m = message.toLowerCase();
   if (m.includes("same") || m.includes("different from the old")) return "Parola nouă trebuie să fie diferită de cea veche.";
-  if (m.includes("weak") || m.includes("at least") || m.includes("characters")) return `Parola este prea slabă. Folosește minim ${PAROLA_MIN} caractere.`;
+  const slaba = motivParolaSlaba(message);
+  if (slaba) return slaba;
   if (m.includes("session") || m.includes("jwt") || m.includes("expired") || m.includes("reauthentication"))
     return "Linkul de resetare a expirat. Cere unul nou.";
   if (m.includes("rate limit") || m.includes("too many")) return "Prea multe încercări. Mai încearcă peste câteva minute.";

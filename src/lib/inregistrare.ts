@@ -1,3 +1,4 @@
+import { motivParolaSlaba } from "./parola-slaba";
 /**
  * Reguli pure pentru fluxul de înregistrare (testate cu bun).
  *
@@ -106,7 +107,9 @@ export function eroareInregistrareRo(message: string): string {
   const m = message.toLowerCase();
   if (m.includes("already") && (m.includes("registered") || m.includes("exists")))
     return "Există deja un cont cu acest email. Autentifică-te.";
-  if (m.includes("password")) return "Parola nu este acceptată. Folosește minim 6 caractere.";
+  const slaba = motivParolaSlaba(message);
+  if (slaba) return slaba;
+  if (m.includes("password")) return "Parola nu este acceptată. Alege altă parolă.";
   if (m.includes("rate limit") || m.includes("too many")) return "Prea multe încercări. Mai încearcă peste câteva minute.";
   if (m.includes("invalid") && m.includes("email")) return "Adresa de email nu este validă.";
   return "Nu am putut crea contul. Mai încearcă o dată.";
