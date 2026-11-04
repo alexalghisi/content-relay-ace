@@ -43,4 +43,18 @@ export const CAUTARI_POPULARE: { q: string; href: string }[] = [
   { q: "meditatii brasov", href: "/meditatii-in/brasov" },
   { q: "meditatii constanta", href: "/meditatii-in/constanta" },
   { q: "meditatii sibiu", href: "/meditatii-in/sibiu" },
+  // Google Trends RO (nov 2026, ultimele 12 luni): top și în creștere.
+  { q: "meditatii matematica iasi", href: "/meditatii/matematica/iasi" },
+  { q: "meditatii matematica bucuresti", href: "/meditatii/matematica/bucuresti" },
+  { q: "meditatii matematica cluj", href: "/meditatii/matematica/cluj-napoca" },
+  { q: "meditatii matematica brasov", href: "/meditatii/matematica/brasov" },
+  { q: "meditatii matematica constanta", href: "/meditatii/matematica/constanta" },
+  { q: "meditatii matematica timisoara", href: "/meditatii/matematica/timisoara" },
+  { q: "meditatii matematica sector 6", href: "/meditatii-bucuresti-sectoare" },
+  { q: "meditatii matematica sector 3", href: "/meditatii-bucuresti-sectoare" },
+  { q: "meditatii matematica sector 4", href: "/meditatii-bucuresti-sectoare" },
+  { q: "meditatii germana bucuresti", href: "/meditatii/germana/bucuresti" },
+  { q: "meditatii medicina", href: "/meditatii-admitere-medicina" },
+  { q: "meditatii istorie", href: "/meditatii-istorie" },
+  { q: "pfa meditatii", href: "/pfa-meditatii" },
 ];
