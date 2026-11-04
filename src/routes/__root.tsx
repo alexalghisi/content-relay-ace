@@ -103,8 +103,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      // Favicon = toca de absolvire (decizia proprietarului). Formate cerute de Google (multiplu de 48 px)
+      // + `?v=` nou: Google și Chrome pe iPhone țineau în cache vechea iconiță cu inimă; la schimbarea
+      // iconiței, mărește versiunea ca să fie descărcată din nou.
+      { rel: "icon", href: "/favicon.ico?v=3", sizes: "48x48" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg?v=3" },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: "/icon-192.png?v=3" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png?v=3" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       // No web fonts are loaded and ad scripts start only after the page is idle,
       // so no early connections are opened for them (they compete with the first render on mobile).
