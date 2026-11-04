@@ -19,18 +19,55 @@ mock.module("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseA
 const writes: Record<string, unknown>[] = [];
 let occupied = false;
 let selected = "";
+let ownRow: Record<string, unknown> | null = null;
 const query = {
   select: (columns: string) => { selected = columns; return query; },
   eq: () => query,
   not: () => query,
   neq: () => query,
-  maybeSingle: async () => ({ data: selected === "user_id" && occupied ? { user_id: "other-user" } : null }),
+  maybeSingle: async () => ({
+    data: selected === "user_id" ? (occupied ? { user_id: "other-user" } : null) : selected.includes("code_sent_at") ? ownRow : null,
+  }),
   upsert: async (value: Record<string, unknown>) => { writes.push(value); return { error: null }; },
   update: (value: Record<string, unknown>) => { writes.push(value); return query; },
 };
 mock.module("@/integrations/supabase/client.server", () => ({ supabaseAdmin: { from: () => query } }));
 
 describe("Phone ownership when SMS fails", () => {
+  it("numărul de test primește SMS de câte ori e cerut: fără limita de un minut, și pe cont deja verificat", async () => {
+    const realFetch = globalThis.fetch;
+    const realToken = process.env["GATEWAYAPI_TOKEN"];
+    process.env["GATEWAYAPI_TOKEN"] = "test-token";
+    let sends = 0;
+    globalThis.fetch = (async () => { sends++; return new Response('{"ids":[1]}', { status: 200 }); }) as unknown as typeof fetch;
+    const recent = { phone: "40770763175", phone_verified_at: new Date().toISOString(), code_sent_at: new Date(Date.now() - 5000).toISOString(), code_expires_at: new Date(Date.now() + 500000).toISOString() };
+    try {
+      const { trimiteCodTelefon } = await import("./profesor-ai-verificare.functions");
+      const send = trimiteCodTelefon as unknown as (input: { data: { phone: string }; context: { userId: string } }) =>
+        Promise<{ ok: boolean; verificat?: boolean; dejaTrimis?: boolean; retrimitereIn?: number }>;
+      ownRow = recent;
+      for (const phone of ["0770763175", "+40770763175", "0770763175"]) {
+        const r = await send({ data: { phone }, context: { userId: "u" } });
+        expect(r.ok).toBe(true);
+        expect(r.verificat).not.toBe(true);
+        expect(r.dejaTrimis).not.toBe(true);
+        expect(r.retrimitereIn).toBe(0);
+      }
+      expect(sends).toBe(3);
+      // Orice alt număr păstrează regulile: cont verificat → fără SMS; cod recent → fără SMS nou.
+      ownRow = { ...recent, phone: "40712345678" };
+      expect((await send({ data: { phone: "0712345678" }, context: { userId: "u" } })).verificat).toBe(true);
+      ownRow = { ...recent, phone: "40712345678", phone_verified_at: null };
+      expect((await send({ data: { phone: "0712345678" }, context: { userId: "u" } })).dejaTrimis).toBe(true);
+      expect(sends).toBe(3);
+    } finally {
+      ownRow = null;
+      writes.length = 0;
+      globalThis.fetch = realFetch;
+      if (realToken === undefined) delete process.env["GATEWAYAPI_TOKEN"];
+      else process.env["GATEWAYAPI_TOKEN"] = realToken;
+    }
+  });
   it("the reusable test number still sends a code and requires valid confirmation", async () => {
     const realFetch = globalThis.fetch;
     const realToken = process.env["GATEWAYAPI_TOKEN"];

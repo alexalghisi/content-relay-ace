@@ -35,9 +35,12 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
       .select("phone, phone_verified_at, code_sent_at, code_expires_at")
       .eq("user_id", context.userId)
       .maybeSingle();
-    if (rand?.phone_verified_at) return { ok: true, verificat: true };
+    // Numărul de test al proprietarului: SMS de câte ori vrea (fără limita de un minut, și pe conturi deja
+    // verificate). Nu acordă acces: fiecare cont tot trebuie să introducă propriul cod primit.
+    const test = telefonTestReutilizabil(phone);
+    if (rand?.phone_verified_at && !test) return { ok: true, verificat: true };
     const trecut = rand?.code_sent_at ? Date.now() - Date.parse(rand.code_sent_at) : Infinity;
-    if (trecut < RETRIMITERE_SEC * 1000) {
+    if (!test && trecut < RETRIMITERE_SEC * 1000) {
       const retrimitereIn = Math.ceil((RETRIMITERE_SEC * 1000 - trecut) / 1000);
       // Codul trimis acum câteva secunde e încă valabil: utilizatorul îl introduce, nu primește o eroare.
       const valabil = rand?.code_expires_at ? Date.parse(rand.code_expires_at) > Date.now() : false;
@@ -71,7 +74,7 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
       await supabaseAdmin.from("profesor_ai_utilizatori").update({ code_sent_at: null, code_hash: null }).eq("user_id", context.userId);
       return { ok: false, error: "SMS-ul nu a putut fi trimis. Verifică numărul și încearcă din nou." };
     }
-    return { ok: true, retrimitereIn: RETRIMITERE_SEC };
+    return { ok: true, retrimitereIn: test ? 0 : RETRIMITERE_SEC };
   });
 
 export const confirmaCodTelefon = createServerFn({ method: "POST" })
