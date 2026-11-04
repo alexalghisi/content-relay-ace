@@ -12,7 +12,8 @@ export type Conflict = "telefon" | "email" | null;
 
 /** Excepție de unicitate pentru testarea SMS; nu dovedește proprietatea și nu acordă acces. */
 export function telefonTestReutilizabil(telefon: string): boolean {
-  return normalizeRoPhone(telefon) === "40770763175";
+  const n = normalizeRoPhone(telefon);
+  return n === "40770763175" || n === "40744340622";
 }
 
 /**

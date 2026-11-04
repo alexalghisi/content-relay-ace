@@ -16,8 +16,14 @@ describe("unicitate — reguli pure", () => {
     }
   });
   it("excepția telefonului nu permite dublarea emailului Gmail", () => {
-    expect(gasesteConflict([{ email: "ana.pop@gmail.com", metadataPhone: "40770763175" }],
-      "anapop+test@gmail.com", "0770763175", ["40770763175"])).toBe("email");
+    expect(
+      gasesteConflict(
+        [{ email: "ana.pop@gmail.com", metadataPhone: "40770763175" }],
+        "anapop+test@gmail.com",
+        "0770763175",
+        ["40770763175"],
+      ),
+    ).toBe("email");
   });
   it("emailCanonic: litere mici, iar la Gmail fără puncte și fără +eticheta", () => {
     expect(emailCanonic("  Ana.Pop@Example.ro ")).toBe("ana.pop@example.ro");
@@ -164,11 +170,18 @@ describe("creeazaCont — un email și un telefon per cont", () => {
   });
   function enableEdgeCache() {
     const entries = new Map<string, Response>();
-    Object.defineProperty(globalThis, "caches", { configurable: true, value: { default: {
-      match: async (r: Request) => entries.get(r.url)?.clone(),
-      put: async (r: Request, response: Response) => { entries.set(r.url, response.clone()); },
-      delete: async (r: Request) => entries.delete(r.url),
-    } } });
+    Object.defineProperty(globalThis, "caches", {
+      configurable: true,
+      value: {
+        default: {
+          match: async (r: Request) => entries.get(r.url)?.clone(),
+          put: async (r: Request, response: Response) => {
+            entries.set(r.url, response.clone());
+          },
+          delete: async (r: Request) => entries.delete(r.url),
+        },
+      },
+    });
   }
   it("same email retries immediately after correcting a conflicting phone", async () => {
     enableEdgeCache();
@@ -260,4 +273,12 @@ describe("creeazaCont — un email și un telefon per cont", () => {
     expect(r.stare).toBeUndefined();
     expect(r.error).not.toContain("Există deja");
   });
+});
+
+import { telefonTestReutilizabil as t2 } from "./conturi-unice";
+import { test as t, expect as e } from "bun:test";
+t("al doilea număr de test e nelimitat", () => {
+  e(t2("+40 744 340 622")).toBe(true);
+  e(t2("0744340622")).toBe(true);
+  e(t2("0744340623")).toBe(false);
 });
