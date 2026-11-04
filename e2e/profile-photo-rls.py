@@ -28,7 +28,7 @@ async def main():
         await page.goto("http://localhost:8080")
         await page.evaluate("([k,v]) => localStorage.setItem(k,v)", [minted["storage_key"], json.dumps(session)])
         await page.goto("http://localhost:8080/cont")
-        await page.get_by_test_id("avatar-input").wait_for()
+        await page.get_by_test_id("avatar-input").wait_for(state="attached")
         initial = await page.evaluate("""async () => {
           const {supabase: s} = await import('/src/integrations/supabase/client.ts');
           const {data: auth} = await s.auth.getUser();
@@ -48,7 +48,7 @@ async def main():
               return !r.error && r.data.length === count + 1;
             }""", arg=len(initial["photos"]), timeout=45000)
             await page.reload()
-            await page.get_by_test_id("avatar-input").wait_for()
+            await page.get_by_test_id("avatar-input").wait_for(state="attached")
             result = await page.evaluate("""async (initial) => {
               const {supabase:s} = await import('/src/integrations/supabase/client.ts');
               const r = await s.from('profile_photos').select('id,storage_path');
