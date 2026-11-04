@@ -1,9 +1,17 @@
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Outlet, Link, createRootRouteWithContext, useRouter, HeadContent, Scripts } from "@tanstack/react-router";
+import {
+  Outlet,
+  Link,
+  createRootRouteWithContext,
+  useRouter,
+  HeadContent,
+  Scripts,
+} from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/lib/auth";
+import { GardaTelefon } from "@/components/garda-telefon";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
@@ -34,9 +42,10 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const rawMsg = error instanceof Error ? error.message : String(error);
   // După un redeploy, fișierele JS vechi (hash vechi) nu mai există: reîncărcăm o dată pagina
   // în loc să afișăm eroarea brută (Google o indexa ca text al paginii).
-  const isChunkError = /dynamically imported module|Importing a module script failed|error loading dynamically/i.test(
-    rawMsg,
-  );
+  const isChunkError =
+    /dynamically imported module|Importing a module script failed|error loading dynamically/i.test(
+      rawMsg,
+    );
   if (isChunkError && typeof window !== "undefined") {
     try {
       if (!sessionStorage.getItem("chunk-reload")) {
@@ -82,7 +91,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Pagina nu a fost găsită | MeditatiiDirect.ro" },
       { name: "author", content: "MeditatiiDirect" },
       { name: "language", content: "ro" },
-      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
       { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1" },
       { name: "theme-color", content: "#0ea5e9" },
       { name: "mobile-web-app-capable", content: "yes" },
@@ -113,7 +125,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/manifest.webmanifest" },
       // No web fonts are loaded and ad scripts start only after the page is idle,
       // so no early connections are opened for them (they compete with the first render on mobile).
-      ...(AD_SERVING_ENABLED ? [{ rel: "dns-prefetch", href: "https://pagead2.googlesyndication.com" }] : []),
+      ...(AD_SERVING_ENABLED
+        ? [{ rel: "dns-prefetch", href: "https://pagead2.googlesyndication.com" }]
+        : []),
       { rel: "alternate", hrefLang: "ro", href: "https://meditatiidirect.ro" },
       { rel: "alternate", hrefLang: "x-default", href: "https://meditatiidirect.ro" },
     ],
@@ -194,6 +208,7 @@ function RootComponent() {
     <I18nProvider value={locale}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
+          <GardaTelefon />
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
             <main className="flex-1">
