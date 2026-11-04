@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
-import { bearerHeaders } from "./auth-attacher-lazy";
+import { bearerHeaders } from "./auth-bearer";
 
 describe("antetul de autentificare pentru apelurile către server", () => {
   it("trimite tokenul sesiunii", async () => {

@@ -1,18 +1,5 @@
 import { createMiddleware } from "@tanstack/react-start";
-
-/**
- * Antetul Authorization pentru apelurile către server. Clientul Supabase se încarcă la primul apel
- * (import dinamic), nu în pachetul principal al fiecărei pagini.
- */
-export async function bearerHeaders(
-  load: () => Promise<{ auth: { getSession: () => Promise<{ data: { session: { access_token?: string } | null } }> } }> =
-    () => import("@/integrations/supabase/client").then((m) => m.supabase),
-): Promise<Record<string, string>> {
-  const supabase = await load();
-  const { data } = await supabase.auth.getSession();
-  const token = data.session?.access_token;
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
+import { bearerHeaders } from "./auth-bearer";
 
 /**
  * Echivalentul lui integrations/supabase/auth-attacher.ts (fișier generat), dar fără import static al
