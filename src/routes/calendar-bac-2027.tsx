@@ -4,6 +4,7 @@ import { CalendarExamen } from "@/components/calendar-examen";
 import { BAC_2027, SURSE_BAC_2027 } from "@/data/calendar-2027";
 
 const URL = "https://meditatiidirect.ro/calendar-bac-2027";
+const IMAGE = "https://meditatiidirect.ro/og/calendar/calendar-bac-2027.jpg";
 const TITLE = "Calendar BAC 2027 oficial: simulare 22-25 martie, probe scrise 14-18 iunie";
 const DESC = "Calendarul Bacalaureat 2027: simularea BAC (22-25 martie), probele orale din aprilie, probele scrise 14-18 iunie, rezultate 23 iunie și contestații. Plan de pregătire pe luni.";
 
@@ -23,16 +24,25 @@ export const Route = createFileRoute("/calendar-bac-2027")({
       { name: "keywords", content: "calendar bac 2027, bac 2027, simulare bac 2027, calendar bacalaureat 2027, cand este bacul 2027, data bac 2027, simulare bacalaureat 2027, probe orale bac 2027, rezultate bac 2027, meditatii bac 2027" },
       { property: "og:title", content: TITLE }, { property: "og:description", content: DESC },
       { property: "og:url", content: URL }, { property: "og:type", content: "article" },
+      { property: "og:image", content: IMAGE }, { property: "og:image:width", content: "1200" }, { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" }, { name: "twitter:image", content: IMAGE },
     ],
     links: [{ rel: "canonical", href: URL }],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
+      // Article, nu Event: rich result-ul „Event” e pentru evenimente publice cu bilete și artiști
+      // (Google cere offers/performer); un examen național nu le are, iar a le inventa ar fi date false.
       { type: "application/ld+json", children: JSON.stringify({
-        "@context": "https://schema.org", "@type": "Event", name: "Bacalaureat 2027 — probele scrise",
-        startDate: "2027-06-14", endDate: "2027-06-18", eventStatus: "https://schema.org/EventScheduled",
-        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-        location: { "@type": "Place", name: "Centrele de examen din România", address: { "@type": "PostalAddress", addressCountry: "RO" } },
-        organizer: { "@type": "Organization", name: "Ministerul Educației", url: "https://www.edu.ro" },
+        "@context": "https://schema.org", "@type": "Article",
+        headline: "Calendar BAC 2027: simulare, probe orale și probe scrise",
+        description: DESC,
+        image: [IMAGE],
+        datePublished: "2026-11-03",
+        dateModified: "2026-11-04",
+        inLanguage: "ro",
+        mainEntityOfPage: URL,
+        author: { "@type": "Organization", name: "MeditatiiDirect.ro", url: "https://meditatiidirect.ro" },
+        publisher: { "@type": "Organization", name: "MeditatiiDirect.ro", logo: { "@type": "ImageObject", url: "https://meditatiidirect.ro/apple-touch-icon.png" } },
       }) },
     ],
   }),
