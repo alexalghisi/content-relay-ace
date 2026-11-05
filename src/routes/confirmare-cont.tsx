@@ -4,6 +4,10 @@ import { CheckCircle2, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { VerificareTelefon } from "@/components/profesor-ai/verificare-telefon";
+import { TELEFON_LA_INREGISTRARE } from "@/lib/telefon-inregistrare";
+
+// Fără telefon obligatoriu, contul e gata imediat după confirmarea emailului.
+const DUPA_EMAIL = TELEFON_LA_INREGISTRARE ? "telefon" : "gata";
 
 export const Route = createFileRoute("/confirmare-cont")({
   validateSearch: z.object({
@@ -32,19 +36,19 @@ function ConfirmareCont() {
     (async () => {
       if (!token_hash) {
         const { data } = await supabase.auth.getSession();
-        setStare(data.session ? "telefon" : "eroare");
+        setStare(data.session ? DUPA_EMAIL : "eroare");
         return;
       }
       // "email" acoperă atât confirmarea de înregistrare, cât și linkul retrimis (magiclink).
       const { error } = await supabase.auth.verifyOtp({ token_hash, type: "email" });
       if (error) {
         const { data } = await supabase.auth.getSession();
-        setStare(data.session ? "telefon" : "eroare");
+        setStare(data.session ? DUPA_EMAIL : "eroare");
         return;
       }
       // Tokenul nu mai rămâne în bara de adrese / istoric.
       window.history.replaceState(null, "", "/confirmare-cont");
-      setStare("telefon");
+      setStare(DUPA_EMAIL);
     })();
   }, [token_hash]);
 
@@ -88,7 +92,9 @@ function ConfirmareCont() {
           <h1 className="flex items-center gap-2 text-3xl font-bold">
             <CheckCircle2 className="h-7 w-7 text-primary" aria-hidden="true" /> Contul este gata
           </h1>
-          <p className="mt-3 text-muted-foreground">Emailul și telefonul sunt confirmate.</p>
+          <p className="mt-3 text-muted-foreground">
+            {TELEFON_LA_INREGISTRARE ? "Emailul și telefonul sunt confirmate." : "Emailul este confirmat."}
+          </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link to="/meditatii" className="btn-primary h-12 px-7">
               Postează o cerere

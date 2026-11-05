@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { signupSchema } from "@/lib/signup-validation";
 import { formatRoPhone } from "@/lib/phone";
+import { TELEFON_LA_INREGISTRARE } from "@/lib/telefon-inregistrare";
 import { creeazaCont, retrimiteConfirmare } from "@/lib/inregistrare.functions";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/signup")({
       { name: "description", content: "Creează un cont gratuit pe MeditatiiDirect.ro cu email sau Google și contactează profesori verificați în câteva secunde." },
       { name: "robots", content: "noindex, follow" },
       { property: "og:title", content: "Înscriere gratuită — MeditatiiDirect.ro" },
-      { property: "og:description", content: "Creează contul tău cu email și telefon pe MeditatiiDirect.ro." },
+      { property: "og:description", content: "Creează-ți gratuit contul pe MeditatiiDirect.ro." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -123,10 +124,12 @@ function SignupPage() {
           <label htmlFor="signup-email" className="text-sm font-medium">Email</label>
           <input id="signup-email" autoComplete="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
-        <div>
+        {TELEFON_LA_INREGISTRARE && (
+          <div>
           <label htmlFor="signup-phone" className="text-sm font-medium">Telefon mobil</label>
           <input id="signup-phone" type="tel" autoComplete="tel" maxLength={30} placeholder="07xx xxx xxx" value={phone} onChange={(e) => setPhone(e.target.value)} onBlur={() => setPhone(formatRoPhone(phone))} className="mt-1 w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
         </div>
+        )}
         <div>
           <label htmlFor="signup-password" className="text-sm font-medium">Parolă</label>
           <PasswordInput id="signup-password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full h-11 rounded-xl border border-border bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required />
