@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { sendSms } from "@/lib/sms.server";
+import { normalizeRoPhone, sendSms } from "@/lib/sms.server";
 
 const norm = (s: string) =>
   s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/^limba\s+/, "").trim();
@@ -34,6 +34,12 @@ export const notifyTeachersOfRequest = createServerFn({ method: "POST" })
     const { data: teachers } = await supabaseAdmin
       .from("teacher_profiles")
       .select("user_id,display_name,subjects,contact_email,contact_phone");
+    // Telefoanele verificate prin SMS (Profesor AI / înscriere) — folosite când profilul nu are telefon.
+    const { data: verificate } = await supabaseAdmin
+      .from("profesor_ai_utilizatori")
+      .select("user_id,phone")
+      .not("phone_verified_at", "is", null);
+    const telVerificat = new Map((verificate ?? []).map((r) => [r.user_id as string, r.phone as string | null]));
     const emails = new Set<string>();
     const list: { to: string; name: string }[] = [];
     const phones: string[] = [];
@@ -43,12 +49,15 @@ export const notifyTeachersOfRequest = createServerFn({ method: "POST" })
         return n && (n === subj || n.includes(subj) || subj.includes(n));
       });
       if (!match) continue;
-      if (t.contact_phone) phones.push(t.contact_phone);
+      let tel = normalizeRoPhone(t.contact_phone) ?? normalizeRoPhone(telVerificat.get(t.user_id));
       let to = t.contact_email?.trim();
-      if (!to) {
+      if (!to || !tel) {
         const { data: u } = await supabaseAdmin.auth.admin.getUserById(t.user_id);
-        to = u.user?.email ?? undefined;
+        if (!to) to = u.user?.email ?? undefined;
+        // Ultima variantă: telefonul introdus la înregistrare (metadată), doar pentru notificări.
+        if (!tel) tel = normalizeRoPhone(u.user?.phone) ?? normalizeRoPhone(u.user?.user_metadata?.phone as string | undefined);
       }
+      if (tel && !phones.includes(tel)) phones.push(tel);
       if (!to || emails.has(to.toLowerCase())) continue;
       emails.add(to.toLowerCase());
       list.push({ to, name: t.display_name });

@@ -2,17 +2,11 @@ import { expect, test } from "@playwright/test";
 import { mockSupabase, serverFnResult, waitForHydration } from "./helpers";
 
 test.describe("Înscriere și autentificare", () => {
-  test("telefon invalid → mesaj de eroare, nicio cerere de înscriere", async ({ page }) => {
-    const calls = await mockSupabase(page);
+  test("înscrierea nu mai cere telefon (temporar)", async ({ page }) => {
+    await mockSupabase(page);
     await page.goto("/signup");
     await waitForHydration(page);
-    await page.getByLabel("Nume").fill("Marga Test");
-    await page.getByLabel("Email").fill("marga@example.com");
-    await page.getByLabel("Telefon mobil").fill("12345");
-    await page.getByLabel("Parolă").fill("parola123");
-    await page.getByRole("button", { name: "Creează cont gratuit" }).click();
-    await expect(page.getByText(/telefon mobil românesc valid/)).toBeVisible();
-    expect(calls.some((c) => c.url.includes("/auth/v1/signup"))).toBe(false);
+    await expect(page.getByLabel("Telefon mobil")).toHaveCount(0);
   });
 
   test("înscriere validă → serverul creează contul și trimite emailul → ecranul de confirmare", async ({ page }) => {
@@ -26,13 +20,11 @@ test.describe("Înscriere și autentificare", () => {
     await waitForHydration(page);
     await page.getByLabel("Nume").fill("Marga Test");
     await page.getByLabel("Email").fill("marga@example.com");
-    await page.getByLabel("Telefon mobil").fill("0722 123 456");
     await page.getByLabel("Parolă").fill("parola123");
     await page.getByRole("button", { name: "Creează cont gratuit" }).click();
     await expect(page.getByRole("heading", { name: "Verifică-ți emailul" })).toBeVisible();
     expect(trimise.length).toBe(1);
     expect(trimise[0]).toContain("marga@example.com");
-    expect(trimise[0]).toContain("+40722123456");
   });
 
   test("email existent și confirmat → mesaj clar și trimitere la login", async ({ page }) => {
@@ -44,7 +36,6 @@ test.describe("Înscriere și autentificare", () => {
     await waitForHydration(page);
     await page.getByLabel("Nume").fill("Marga Test");
     await page.getByLabel("Email").fill("marga@example.com");
-    await page.getByLabel("Telefon mobil").fill("0722 123 456");
     await page.getByLabel("Parolă").fill("parola123");
     await page.getByRole("button", { name: "Creează cont gratuit" }).click();
     await expect(page.getByText("Există deja un cont cu acest email. Autentifică-te.")).toBeVisible();
@@ -60,7 +51,6 @@ test.describe("Înscriere și autentificare", () => {
     await waitForHydration(page);
     await page.getByLabel("Nume").fill("Marga Test");
     await page.getByLabel("Email").fill("alt@example.com");
-    await page.getByLabel("Telefon mobil").fill("0722 123 456");
     await page.getByLabel("Parolă").fill("parola123");
     await page.getByRole("button", { name: "Creează cont gratuit" }).click();
     await expect(page.getByRole("alert").filter({ hasText: "deja înregistrat" })).toBeVisible();
@@ -82,7 +72,6 @@ test.describe("Înscriere și autentificare", () => {
     await waitForHydration(page);
     await page.getByLabel("Nume").fill("Marga Test");
     await page.getByLabel("Email").fill("marga@example.com");
-    await page.getByLabel("Telefon mobil").fill("0722 123 456");
     await page.getByLabel("Parolă").fill("parola123");
     await page.getByRole("button", { name: "Creează cont gratuit" }).click();
     await expect(page.getByRole("heading", { name: "Verifică-ți emailul" })).toBeVisible();
@@ -91,33 +80,20 @@ test.describe("Înscriere și autentificare", () => {
     expect(n).toBe(2);
   });
 
-  test("link de confirmare → email confirmat → pasul cu codul SMS", async ({ page }) => {
+  test("link de confirmare → contul e gata direct, fără pasul SMS", async ({ page }) => {
     await mockSupabase(page);
     await page.route("**/auth/v1/verify**", (route) => {
       const now = Math.floor(Date.now() / 1000);
       return route.fulfill({ json: {
         access_token: "e2e.fake.token", refresh_token: "r", token_type: "bearer", expires_in: 3600, expires_at: now + 3600,
         user: { id: "00000000-0000-4000-8000-000000000e2e", aud: "authenticated", role: "authenticated", email: "marga@example.com",
-          app_metadata: {}, user_metadata: { display_name: "Marga Test", phone: "+40722123456" }, created_at: new Date().toISOString() },
+          app_metadata: {}, user_metadata: { display_name: "Marga Test" }, created_at: new Date().toISOString() },
       } });
     });
-    const sms: string[] = [];
-    await page.route("**/_serverFn/**", (route) => {
-      sms.push(route.request().postData() ?? "");
-      return route.fulfill(serverFnResult(sms.length === 1 ? { ok: true } : { ok: true }));
-    });
     await page.goto("/confirmare-cont?token_hash=abc123&type=signup");
-    // Fără formular de așteptat: dev serverul rece poate hidrata pagina în peste 15 s.
-    await expect(page.getByRole("heading", { name: "Email confirmat" })).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByRole("heading", { name: "Contul este gata" })).toBeVisible({ timeout: 60_000 });
     await expect(page).toHaveURL(/\/confirmare-cont$/); // tokenul dispare din URL
-    await expect(page.getByLabel("Adresa")).toHaveCount(0); // la înregistrare nu cerem adresa
-    await expect(page.getByLabel("Telefon mobil")).toHaveValue("+40722123456");
-    await page.getByRole("button", { name: "Continuă" }).click();
-    await page.getByLabel("Codul primit prin SMS").fill("123456");
-    await page.getByRole("button", { name: "Confirmă codul" }).click();
-    await expect(page.getByRole("heading", { name: "Contul este gata" })).toBeVisible();
-    expect(sms.length).toBe(2);
-    expect(sms[0]).not.toContain("address");
+    await expect(page.getByLabel("Codul primit prin SMS")).toHaveCount(0);
   });
 
   test("link expirat → mesaj clar, fără ecran alb", async ({ page }) => {

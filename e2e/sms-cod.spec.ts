@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { mockSupabase, serverFnResult } from "./helpers";
+import { TELEFON_LA_INREGISTRARE } from "../src/lib/telefon-inregistrare";
 
 const sesiune = () => {
   const now = Math.floor(Date.now() / 1000);
@@ -26,6 +27,8 @@ async function laPasulTelefon(page: import("@playwright/test").Page, raspunsuri:
 }
 
 test.describe("Cod SMS la înscriere", () => {
+  // Pasul SMS e oprit temporar la înscriere (TELEFON_LA_INREGISTRARE=false).
+  test.skip(!TELEFON_LA_INREGISTRARE, "verificarea SMS la înscriere e oprită temporar");
   test("după trimitere: unde vine SMS-ul + retrimitere cu numărătoare, fără eroare „Așteaptă un minut”", async ({ page }) => {
     const cereri = await laPasulTelefon(page, [{ ok: true, retrimitereIn: 3 }, { ok: true, retrimitereIn: 60 }]);
     await page.getByRole("button", { name: "Continuă" }).click();
