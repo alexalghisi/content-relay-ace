@@ -12,6 +12,7 @@ import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { MyProposals } from "@/components/my-proposals";
 import { AVATAR_ACCEPT, AvatarPrepError, avatarStoragePath, avatarUploadErrorRo, prepareAvatarFile } from "@/lib/avatar-image";
 import { erroareRo } from "@/lib/erori-ro";
+import { formatRoPhone, normalizeRoPhone } from "@/lib/phone";
 
 export const Route = createFileRoute("/profesor/")({
   head: () => ({
@@ -186,6 +187,11 @@ function TeacherDashboard() {
     if (publish === true && !profile.avatar_url) toast.info("Recomandare: adaugă o fotografie de profil — elevii aleg mai ușor un profesor cu poză.");
     if (profile.display_name.trim().length < 2) { toast.error("Completează numele."); return; }
     if (!profile.subjects.trim()) { toast.error("Adaugă cel puțin o materie."); return; }
+    // Telefonul e opțional; dacă e completat, trebuie să fie un mobil valid, ca să primească SMS cu cererile noi.
+    if (profile.contact_phone.trim() && !/^407\d{8}$/.test(normalizeRoPhone(profile.contact_phone) ?? "")) {
+      toast.error("Telefonul nu e valid (07xx xxx xxx). Lasă câmpul gol sau corectează-l.");
+      return;
+    }
     const slug = profile.slug || `${slugify(profile.display_name)}-${user.id.slice(0, 6)}`;
     setSaving(true);
     const payload = {
@@ -427,8 +433,8 @@ function TeacherDashboard() {
               <Field label="Email de contact">
                 <input type="email" className="field-input" value={profile.contact_email} onChange={(e) => setProfile({ ...profile, contact_email: e.target.value })} />
               </Field>
-              <Field label="Telefon (vizibil doar utilizatorilor autentificați)">
-                <input className="field-input" value={profile.contact_phone} onChange={(e) => setProfile({ ...profile, contact_phone: e.target.value })} />
+              <Field label="Telefon mobil (opțional — primești prin SMS cererile noi; vizibil doar utilizatorilor autentificați)">
+                <input type="tel" autoComplete="tel" placeholder="07xx xxx xxx" className="field-input" value={profile.contact_phone} onChange={(e) => setProfile({ ...profile, contact_phone: e.target.value })} onBlur={() => setProfile((p) => ({ ...p, contact_phone: formatRoPhone(p.contact_phone) }))} />
               </Field>
             </div>
             <button type="submit" disabled={saving} className="btn-primary inline-flex h-11 items-center gap-2 disabled:opacity-60">
