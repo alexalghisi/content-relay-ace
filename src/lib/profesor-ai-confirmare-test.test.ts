@@ -1,5 +1,18 @@
 import { describe, expect, it, mock } from "bun:test";
 
+// Același mock ca în profesor-ai-verificare-delivery.test.ts: modulele Bun sunt partajate între fișiere,
+// iar dacă acest fișier încarcă primul modulul cu createServerFn real, testele de livrare SMS pică
+// („No Start context found”) în funcție de ordinea fișierelor.
+mock.module("@tanstack/react-start", () => ({
+  createServerFn: () => {
+    const builder = {
+      middleware: () => builder,
+      inputValidator: () => builder,
+      handler: (fn: unknown) => fn,
+    };
+    return builder;
+  },
+}));
 mock.module("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseAuth: {} }));
 const { confirmaVerificarea } = await import("./profesor-ai-verificare.functions");
 
