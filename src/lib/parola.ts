@@ -3,7 +3,7 @@
  * Linkul de resetare e generat pe server (admin.generateLink type "recovery") și trimis prin providerul
  * nostru de email, ca la înscriere: mailerul implicit Supabase nu livrează utilizatorilor reali.
  */
-import { originSigur } from "./inregistrare";
+import { originSigur, salut } from "./inregistrare";
 import { motivParolaSlaba } from "./parola-slaba";
 export { motivParolaSlaba };
 
@@ -18,7 +18,10 @@ export function linkResetare(origin: string, tokenHash: string): string {
 }
 
 const esc = (s: string) =>
-  s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+  s.replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+  );
 
 export function subiectResetare(): string {
   return "Resetează parola contului MeditatiiDirect.ro";
@@ -26,7 +29,7 @@ export function subiectResetare(): string {
 
 export function textResetare(nume: string, link: string): string {
   return [
-    `Bună, ${nume || "acolo"}!`,
+    salut(nume),
     "",
     "Ai cerut resetarea parolei pentru contul tău MeditatiiDirect.ro.",
     "Deschide linkul de mai jos și alege o parolă nouă (linkul e valabil o oră și se poate folosi o singură dată):",
@@ -40,7 +43,7 @@ export function htmlResetare(nume: string, link: string): string {
   const l = esc(link);
   return `<!doctype html><html lang="ro"><body style="margin:0;background:#f6f7fb;font-family:Arial,Helvetica,sans-serif;color:#111">
 <div style="max-width:520px;margin:0 auto;padding:32px 20px">
-<h1 style="font-size:22px;margin:0 0 16px">Bună, ${esc(nume || "acolo")}!</h1>
+<h1 style="font-size:22px;margin:0 0 16px">${esc(salut(nume))}</h1>
 <p style="font-size:15px;line-height:1.6">Ai cerut resetarea parolei pentru contul tău <strong>MeditatiiDirect.ro</strong>.</p>
 <p style="margin:28px 0"><a href="${l}" style="background:#2563eb;color:#fff;text-decoration:none;padding:14px 24px;border-radius:999px;font-weight:bold;display:inline-block">Alege o parolă nouă</a></p>
 <p style="font-size:13px;line-height:1.6;color:#555">Dacă butonul nu merge, copiază linkul în browser:<br><a href="${l}" style="color:#2563eb;word-break:break-all">${l}</a></p>
@@ -59,11 +62,18 @@ export function verificaParolaNoua(parola: string, confirmare: string): string |
 /** Erorile Supabase la schimbarea parolei → română, cu motivul exact când parola e respinsă. */
 export function eroareParolaRo(message: string): string {
   const m = message.toLowerCase();
-  if (m.includes("same") || m.includes("different from the old")) return "Parola nouă trebuie să fie diferită de cea veche.";
+  if (m.includes("same") || m.includes("different from the old"))
+    return "Parola nouă trebuie să fie diferită de cea veche.";
   const slaba = motivParolaSlaba(message);
   if (slaba) return slaba;
-  if (m.includes("session") || m.includes("jwt") || m.includes("expired") || m.includes("reauthentication"))
+  if (
+    m.includes("session") ||
+    m.includes("jwt") ||
+    m.includes("expired") ||
+    m.includes("reauthentication")
+  )
     return "Linkul de resetare a expirat. Cere unul nou.";
-  if (m.includes("rate limit") || m.includes("too many")) return "Prea multe încercări. Mai încearcă peste câteva minute.";
+  if (m.includes("rate limit") || m.includes("too many"))
+    return "Prea multe încercări. Mai încearcă peste câteva minute.";
   return "Nu am putut schimba parola. Mai încearcă o dată.";
 }

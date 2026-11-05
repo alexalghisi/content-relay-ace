@@ -21,7 +21,8 @@ export function originSigur(origin: string | null | undefined): string {
           host === "www.meditatiidirect.ro" ||
           host.endsWith(".lovable.app") ||
           host.endsWith(".lovableproject.com"))) ||
-      ((u.protocol === "http:" || u.protocol === "https:") && (host === "localhost" || host === "127.0.0.1"));
+      ((u.protocol === "http:" || u.protocol === "https:") &&
+        (host === "localhost" || host === "127.0.0.1"));
     return ok ? u.origin : SITE_URL;
   } catch {
     return SITE_URL;
@@ -38,8 +39,32 @@ export function linkConfirmare(origin: string, tokenHash: string, tip: TipConfir
   return u.toString();
 }
 
+/**
+ * Numele cu care salutăm utilizatorul în emailuri: numele din cont (înscriere), apoi cel de la Google
+ * (full_name / name / given_name), apoi partea din fața „@” a emailului — niciodată „acolo”.
+ */
+export function numeSalut(
+  meta: Record<string, unknown> | null | undefined,
+  email?: string | null,
+): string {
+  for (const k of ["display_name", "full_name", "name", "given_name"]) {
+    const v = meta?.[k];
+    if (typeof v === "string" && v.trim()) return v.trim().slice(0, 60);
+  }
+  const local = (email ?? "").split("@")[0]?.split("+")[0]?.trim() ?? "";
+  return local.slice(0, 60);
+}
+
+/** „Bună, Ana!” sau, fără niciun nume, „Bună!”. */
+export function salut(nume: string): string {
+  return nume.trim() ? `Bună, ${nume.trim()}!` : "Bună!";
+}
+
 const esc = (s: string) =>
-  s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+  s.replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+  );
 
 export function subiectConfirmare(): string {
   return "Confirmă-ți contul MeditatiiDirect.ro";
@@ -47,7 +72,7 @@ export function subiectConfirmare(): string {
 
 export function textConfirmare(nume: string, link: string): string {
   return [
-    `Bună, ${nume || "acolo"}!`,
+    salut(nume),
     "",
     "Mulțumim că ți-ai creat cont pe MeditatiiDirect.ro.",
     "Confirmă adresa de email deschizând linkul de mai jos (valabil 24 de ore):",
@@ -61,7 +86,7 @@ export function htmlConfirmare(nume: string, link: string): string {
   const l = esc(link);
   return `<!doctype html><html lang="ro"><body style="margin:0;background:#f6f7fb;font-family:Arial,Helvetica,sans-serif;color:#111">
 <div style="max-width:520px;margin:0 auto;padding:32px 20px">
-<h1 style="font-size:22px;margin:0 0 16px">Bună, ${esc(nume || "acolo")}!</h1>
+<h1 style="font-size:22px;margin:0 0 16px">${esc(salut(nume))}</h1>
 <p style="font-size:15px;line-height:1.6">Mulțumim că ți-ai creat cont pe <strong>MeditatiiDirect.ro</strong>. Confirmă adresa de email ca să-ți activezi contul.</p>
 <p style="margin:28px 0"><a href="${l}" style="background:#2563eb;color:#fff;text-decoration:none;padding:14px 24px;border-radius:999px;font-weight:bold;display:inline-block">Confirmă contul</a></p>
 <p style="font-size:13px;line-height:1.6;color:#555">Dacă butonul nu merge, copiază linkul în browser:<br><a href="${l}" style="color:#2563eb;word-break:break-all">${l}</a></p>
@@ -96,9 +121,13 @@ export const MESAJ_TELEFON_FOLOSIT =
  */
 export function esteEmailDuplicat(message: string, code?: string): "exact" | "varianta" | null {
   const m = message.toLowerCase();
-  if (code === "email_exists" || (m.includes("already") && (m.includes("registered") || m.includes("exists"))))
+  if (
+    code === "email_exists" ||
+    (m.includes("already") && (m.includes("registered") || m.includes("exists")))
+  )
     return "exact";
-  if (m.includes("email_duplicat") || m.includes("database error saving new user")) return "varianta";
+  if (m.includes("email_duplicat") || m.includes("database error saving new user"))
+    return "varianta";
   return null;
 }
 
@@ -110,7 +139,8 @@ export function eroareInregistrareRo(message: string): string {
   const slaba = motivParolaSlaba(message);
   if (slaba) return slaba;
   if (m.includes("password")) return "Parola nu este acceptată. Alege altă parolă.";
-  if (m.includes("rate limit") || m.includes("too many")) return "Prea multe încercări. Mai încearcă peste câteva minute.";
+  if (m.includes("rate limit") || m.includes("too many"))
+    return "Prea multe încercări. Mai încearcă peste câteva minute.";
   if (m.includes("invalid") && m.includes("email")) return "Adresa de email nu este validă.";
   return "Nu am putut crea contul. Mai încearcă o dată.";
 }

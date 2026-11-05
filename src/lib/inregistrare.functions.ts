@@ -9,6 +9,7 @@ import {
   eroareInregistrareRo,
   esteEmailDuplicat,
   htmlConfirmare,
+  numeSalut,
   linkConfirmare,
   subiectConfirmare,
   textConfirmare,
@@ -97,10 +98,7 @@ async function retrimitePentruExistent(email: string, origin: string): Promise<R
     return { ok: false, error: "Nu am găsit un cont cu acest email.", stare: "netrimis" };
   if (data.user.email_confirmed_at)
     return { ok: false, error: MESAJ_EMAIL_FOLOSIT, stare: "exista" };
-  const nume =
-    typeof data.user.user_metadata?.display_name === "string"
-      ? data.user.user_metadata.display_name
-      : "";
+  const nume = numeSalut(data.user.user_metadata, data.user.email ?? email);
   const trimis = await trimiteConfirmare(
     email,
     nume,
@@ -262,10 +260,7 @@ export const trimiteResetareParola = createServerFn({ method: "POST" })
       const { linkResetare, subiectResetare, htmlResetare, textResetare } =
         await import("./parola");
       const { trimiteEmailCont } = await import("./email-cont.server");
-      const nume =
-        typeof link.user.user_metadata?.display_name === "string"
-          ? link.user.user_metadata.display_name
-          : "";
+      const nume = numeSalut(link.user.user_metadata, link.user.email ?? email);
       const url = linkResetare(data.origin, link.properties.hashed_token);
       const trimis = await trimiteEmailCont({
         to: email,
