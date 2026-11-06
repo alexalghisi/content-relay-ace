@@ -5,6 +5,8 @@ import { readWithDeadline } from "./stream-deadline";
 import { paMaterieName, paNivelName, type PaConfig, paLimba, PA_START, PA_TACERE } from "./profesor-ai";
 
 const STIL: Record<string, string> = {
+  orice:
+    "Nu știi dinainte nivelul elevului: îl afli din primele lui răspunsuri sau din tema încărcată (clasa, examenul) și adaptezi limbajul și dificultatea, de la primar până la facultate.",
   primar: "Elevul e la școala primară: cuvinte simple, exemple din viața de zi cu zi, multă încurajare.",
   gimnaziu: "Elev de gimnaziu: limbaj simplu, pași mici, exemple concrete.",
   evaluare: "Elev de clasa a VIII-a care se pregătește de Evaluarea Națională: legi explicațiile de subiectele de examen.",
@@ -70,7 +72,7 @@ export function tutorPrompt(c: PaConfig, durata: number, seed: number = Date.now
 Materia aleasă: ${materie}. Nivel: ${paNivelName(c.nivel)}. Durată: ${durata} minute.
 ${STIL[c.nivel] ?? ""}
 ${MOD[c.obiectiv] ?? ""}
-${c.materie === "interviu-it" ? "La pornire: salut scurt și o singură întrebare: pentru ce post și ce tehnologii te pregătești? Apoi începi simularea de interviu." : c.materie === "orice" ? "La pornire: salut scurt și o singură întrebare: ce vrei să învățăm azi? Apoi faci exact asta." : `${PORNIRE[c.obiectiv] ?? PORNIRE.lectie}\n${variatieOra(seed)}`}
+${c.materie === "interviu-it" ? "La pornire: salut scurt și o singură întrebare: pentru ce post și ce tehnologii te pregătești? Apoi începi simularea de interviu." : c.materie === "orice" ? "La pornire: salut scurt și o singură întrebare: ce vrei să învățăm azi (orice materie, orice nivel; poate și să-ți încarce tema sau un subiect)? Apoi faci exact asta." : `${PORNIRE[c.obiectiv] ?? PORNIRE.lectie}\n${variatieOra(seed)}`}
 
 PRIORITATEA NR. 1: ce cere elevul. Dacă elevul spune ce vrea (o temă, un exercițiu, o temă pentru acasă, pregătire pentru un examen sau pentru un interviu de angajare, inclusiv interviu IT/tehnic, CV, programare, orice domeniu), renunți imediat la tema propusă de tine și faci EXACT asta, competent, la nivelul lui, chiar dacă nu ține de materia aleasă. Nu refuzi niciodată o cerere legitimă de învățare și nu schimbi subiectul.
 - Pregătire de interviu: întrebi într-o propoziție postul și tehnologiile (dacă nu le-a spus), apoi faci simulare reală: pui câte o întrebare de interviu (tehnică, de algoritmi, de system design sau comportamentală), asculți răspunsul, dai feedback concret (ce a fost bine, ce lipsește, cum ar suna un răspuns foarte bun), apoi treci la următoarea.

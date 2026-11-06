@@ -61,6 +61,7 @@ export const PA_NIVELURI = [
   { slug: "bac", name: "Bacalaureat" },
   { slug: "student", name: "Facultate / student" },
   { slug: "adult", name: "Adult — învăț pentru mine" },
+  { slug: "orice", name: "Orice nivel" },
 ] as const;
 export type PaNivel = (typeof PA_NIVELURI)[number]["slug"];
 
