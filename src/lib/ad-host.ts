@@ -6,6 +6,13 @@
 export const AD_PRODUCTION_DOMAINS = ["meditatiidirect.ro"] as const;
 
 export function isAdProductionHost(hostname?: string): boolean {
+  // Dev-server-only switch so the e2e suite can exercise ad loading on 127.0.0.1.
+  if (
+    import.meta.env.DEV &&
+    typeof window !== "undefined" &&
+    (window as Window & { __E2E_FORCE_ADS__?: boolean }).__E2E_FORCE_ADS__
+  )
+    return true;
   const host = (
     hostname ?? (typeof window === "undefined" ? "" : window.location.hostname)
   ).toLowerCase();
