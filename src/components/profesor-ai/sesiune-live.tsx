@@ -55,6 +55,31 @@ export function SesiuneProfesorAiAuto(p: Props) {
   );
 }
 
+/** LiveKit join regularly needs 6–12 s. */
+const AVATAR_TERMEN_MS = 20_000;
+
+/**
+ * Waits for `start` but gives up after `ms` (calling `onTimeout`). The timer is always cleared once
+ * `start` settles — before, it stayed armed and stopped a working avatar 5 s into every lesson,
+ * so the teacher spoke over a frozen picture.
+ */
+export async function pornesteCuTermen<T>(start: Promise<T>, ms: number, onTimeout: () => void): Promise<T> {
+  let t: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      start,
+      new Promise<never>((_, reject) => {
+        t = setTimeout(() => {
+          onTimeout();
+          reject(new Error("avatar timeout"));
+        }, ms);
+      }),
+    ]);
+  } finally {
+    clearTimeout(t);
+  }
+}
+
 const raporteaza = (m: string) => { try { void fetch("/api/profesor-ai-log", { method: "POST", body: m, keepalive: true }); } catch { /* ignore */ } };
 
 function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props & { onFallback: (provider?: string) => void; evita?: "openai" }) {
@@ -110,12 +135,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
           });
           const stop = () => { void s.stop().catch(() => {}); };
           curatenie.push(stop);
-          await Promise.race([s.start(), new Promise<never>((_, reject) => {
-            // LiveKit join regularly needs 6–12 s; at 5 s the avatar was stopped and the lesson ran
-            // as voice over a still photo (no lip movement).
-            const t = window.setTimeout(() => { stop(); reject(new Error("avatar timeout")); }, 20_000);
-            curatenie.push(() => window.clearTimeout(t));
-          })]);
+          await pornesteCuTermen(s.start(), AVATAR_TERMEN_MS, stop);
           if (anulat) { void s.stop(); return; }
           const sock = () => (s as unknown as { _sessionEventSocket?: WebSocket | null })._sessionEventSocket ?? null;
           if (sock()) {
