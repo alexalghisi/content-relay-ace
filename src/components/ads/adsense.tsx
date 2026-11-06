@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 import { onAdsReady } from "@/hooks/use-after-load";
+import { isAdProductionHost } from "@/lib/ad-host";
 
 /**
  * Google AdSense slot.
@@ -69,6 +70,7 @@ export function AdSenseSlot({
 export const ADSENSE_CLIENT = CLIENT;
 
 function loadAdsenseScript() {
+  if (!isAdProductionHost()) return;
   if (document.querySelector("script[data-adsbygoogle-lib]")) return;
   const s = document.createElement("script");
   s.async = true;

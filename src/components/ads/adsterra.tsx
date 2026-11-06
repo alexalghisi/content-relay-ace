@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { adsterraDocument, ADSTERRA_SMARTLINK } from "./adsterra-document";
 import { onAdsReady, useAdsReady } from "@/hooks/use-after-load";
 import { ADSENSE_CLIENT } from "./adsense";
+import { isAdProductionHost } from "@/lib/ad-host";
 export { getAdsterraBanner } from "./adsterra-document";
 
 function AdsterraPlacement({ className = "", banner = false, mobileOnly = false, social = false }: { className?: string; banner?: boolean; mobileOnly?: boolean; social?: boolean }) {
@@ -61,6 +62,7 @@ export function AdSenseAutoAds() {
   // AdSense auto ads are a page-level script, injected once the page is idle.
   // No invasive Adsterra formats: Social Bar (overlay), popunders and popups are never loaded.
   useEffect(() => onAdsReady(() => {
+    if (!isAdProductionHost()) return;
     if (!document.querySelector("script[data-adsbygoogle-lib]")) {
       const g = document.createElement("script");
       g.async = true;
