@@ -117,6 +117,7 @@ import { Route as SimulareBacalaureatRouteImport } from './routes/simulare-bacal
 import { Route as SimulareDrept2026RouteImport } from './routes/simulare-drept-2026'
 import { Route as SimulareUtcn2026RouteImport } from './routes/simulare-utcn-2026'
 import { Route as SimulariBacalaureat2026RouteImport } from './routes/simulari-bacalaureat-2026'
+import { Route as SitemapSubiecteBacDotxmlRouteImport } from './routes/sitemap-subiecte-bac[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SubiecteBacRouteImport } from './routes/subiecte-bac'
 import { Route as SubiecteBac2026RouteImport } from './routes/subiecte-bac-2026'
@@ -157,6 +158,7 @@ import { Route as ScanerLacuneIndexRouteImport } from './routes/scaner-lacune.in
 import { Route as ScanerLacuneMaterieRouteImport } from './routes/scaner-lacune.$materie'
 import { Route as SimulareBacMaterieRouteImport } from './routes/simulare-bac.$materie'
 import { Route as SubiecteAdmitereIndexRouteImport } from './routes/subiecte-admitere.index'
+import { Route as SubiecteBacMatematicaRouteImport } from './routes/subiecte-bac.matematica'
 import { Route as BacMaterieIndexRouteImport } from './routes/bac.$materie.index'
 import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
 import { Route as HartaBlocajelorMaterieIndexRouteImport } from './routes/harta-blocajelor.$materie.index'
@@ -165,6 +167,9 @@ import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/em
 import { Route as MeditatiiMaterieOrasRouteImport } from './routes/meditatii.$materie.$oras'
 import { Route as SubiecteAdmitereUniversitateIndexRouteImport } from './routes/subiecte-admitere.$universitate.index'
 import { Route as SubiecteAdmitereMaterieMaterieRouteImport } from './routes/subiecte-admitere.materie.$materie'
+import { Route as SubiecteBacAnAnRouteImport } from './routes/subiecte-bac.an.$an'
+import { Route as SubiecteBacLucrareSlugRouteImport } from './routes/subiecte-bac.lucrare.$slug'
+import { Route as SubiecteBacMaterieMaterieRouteImport } from './routes/subiecte-bac.materie.$materie'
 import { Route as ApiPublicHooksAutoBlogPostRouteImport } from './routes/api/public/hooks/auto-blog-post'
 import { Route as ApiPublicHooksBacCrawlTickRouteImport } from './routes/api/public/hooks/bac-crawl-tick'
 import { Route as ApiPublicHooksInboundEmailRouteImport } from './routes/api/public/hooks/inbound-email'
@@ -183,6 +188,8 @@ import { Route as RezolvariAdmitereUniversitateMaterieAnRouteImport } from './ro
 import { Route as RezolvariMaterieAnSesiuneRouteImport } from './routes/rezolvari.$materie.$an.$sesiune'
 import { Route as SubiecteAdmitereUniversitateMaterieIndexRouteImport } from './routes/subiecte-admitere.$universitate.$materie.index'
 import { Route as SubiecteAdmitereUniversitateMaterieAnRouteImport } from './routes/subiecte-admitere.$universitate.$materie.$an'
+import { Route as SubiecteBacAnMaterieLucrareIndexRouteImport } from './routes/subiecte-bac.$an.$materie.$lucrare.index'
+import { Route as SubiecteBacAnMaterieLucrareRezolvareRouteImport } from './routes/subiecte-bac.$an.$materie.$lucrare.rezolvare'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -733,6 +740,12 @@ const SimulariBacalaureat2026Route = SimulariBacalaureat2026RouteImport.update({
   path: '/simulari-bacalaureat-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapSubiecteBacDotxmlRoute =
+  SitemapSubiecteBacDotxmlRouteImport.update({
+    id: '/sitemap-subiecte-bac.xml',
+    path: '/sitemap-subiecte-bac.xml',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -933,6 +946,11 @@ const SubiecteAdmitereIndexRoute = SubiecteAdmitereIndexRouteImport.update({
   path: '/subiecte-admitere/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubiecteBacMatematicaRoute = SubiecteBacMatematicaRouteImport.update({
+  id: '/matematica',
+  path: '/matematica',
+  getParentRoute: () => SubiecteBacRoute,
+} as any)
 const BacMaterieIndexRoute = BacMaterieIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -976,6 +994,22 @@ const SubiecteAdmitereMaterieMaterieRoute =
     id: '/subiecte-admitere/materie/$materie',
     path: '/subiecte-admitere/materie/$materie',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const SubiecteBacAnAnRoute = SubiecteBacAnAnRouteImport.update({
+  id: '/an/$an',
+  path: '/an/$an',
+  getParentRoute: () => SubiecteBacRoute,
+} as any)
+const SubiecteBacLucrareSlugRoute = SubiecteBacLucrareSlugRouteImport.update({
+  id: '/lucrare/$slug',
+  path: '/lucrare/$slug',
+  getParentRoute: () => SubiecteBacRoute,
+} as any)
+const SubiecteBacMaterieMaterieRoute =
+  SubiecteBacMaterieMaterieRouteImport.update({
+    id: '/materie/$materie',
+    path: '/materie/$materie',
+    getParentRoute: () => SubiecteBacRoute,
   } as any)
 const ApiPublicHooksAutoBlogPostRoute =
   ApiPublicHooksAutoBlogPostRouteImport.update({
@@ -1079,6 +1113,18 @@ const SubiecteAdmitereUniversitateMaterieAnRoute =
     id: '/subiecte-admitere/$universitate/$materie/$an',
     path: '/subiecte-admitere/$universitate/$materie/$an',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const SubiecteBacAnMaterieLucrareIndexRoute =
+  SubiecteBacAnMaterieLucrareIndexRouteImport.update({
+    id: '/$an/$materie/$lucrare/',
+    path: '/$an/$materie/$lucrare/',
+    getParentRoute: () => SubiecteBacRoute,
+  } as any)
+const SubiecteBacAnMaterieLucrareRezolvareRoute =
+  SubiecteBacAnMaterieLucrareRezolvareRouteImport.update({
+    id: '/$an/$materie/$lucrare/rezolvare',
+    path: '/$an/$materie/$lucrare/rezolvare',
+    getParentRoute: () => SubiecteBacRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -1190,8 +1236,9 @@ export interface FileRoutesByFullPath {
   '/simulare-drept-2026': typeof SimulareDrept2026Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
+  '/sitemap-subiecte-bac.xml': typeof SitemapSubiecteBacDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/subiecte-bac': typeof SubiecteBacRoute
+  '/subiecte-bac': typeof SubiecteBacRouteWithChildren
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
@@ -1218,6 +1265,7 @@ export interface FileRoutesByFullPath {
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
+  '/subiecte-bac/matematica': typeof SubiecteBacMatematicaRoute
   '/bac/': typeof BacIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/harta-blocajelor/': typeof HartaBlocajelorIndexRoute
@@ -1235,6 +1283,9 @@ export interface FileRoutesByFullPath {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
+  '/subiecte-bac/an/$an': typeof SubiecteBacAnAnRoute
+  '/subiecte-bac/lucrare/$slug': typeof SubiecteBacLucrareSlugRoute
+  '/subiecte-bac/materie/$materie': typeof SubiecteBacMaterieMaterieRoute
   '/bac/$materie/': typeof BacMaterieIndexRoute
   '/harta-blocajelor/$materie/': typeof HartaBlocajelorMaterieIndexRoute
   '/subiecte-admitere/$universitate/': typeof SubiecteAdmitereUniversitateIndexRoute
@@ -1256,6 +1307,8 @@ export interface FileRoutesByFullPath {
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
   '/bac/$materie/$an/': typeof BacMaterieAnIndexRoute
   '/subiecte-admitere/$universitate/$materie/': typeof SubiecteAdmitereUniversitateMaterieIndexRoute
+  '/subiecte-bac/$an/$materie/$lucrare/rezolvare': typeof SubiecteBacAnMaterieLucrareRezolvareRoute
+  '/subiecte-bac/$an/$materie/$lucrare/': typeof SubiecteBacAnMaterieLucrareIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -1366,8 +1419,9 @@ export interface FileRoutesByTo {
   '/simulare-drept-2026': typeof SimulareDrept2026Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
+  '/sitemap-subiecte-bac.xml': typeof SitemapSubiecteBacDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/subiecte-bac': typeof SubiecteBacRoute
+  '/subiecte-bac': typeof SubiecteBacRouteWithChildren
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
@@ -1393,6 +1447,7 @@ export interface FileRoutesByTo {
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
+  '/subiecte-bac/matematica': typeof SubiecteBacMatematicaRoute
   '/bac': typeof BacIndexRoute
   '/blog': typeof BlogIndexRoute
   '/harta-blocajelor': typeof HartaBlocajelorIndexRoute
@@ -1409,6 +1464,9 @@ export interface FileRoutesByTo {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
+  '/subiecte-bac/an/$an': typeof SubiecteBacAnAnRoute
+  '/subiecte-bac/lucrare/$slug': typeof SubiecteBacLucrareSlugRoute
+  '/subiecte-bac/materie/$materie': typeof SubiecteBacMaterieMaterieRoute
   '/bac/$materie': typeof BacMaterieIndexRoute
   '/harta-blocajelor/$materie': typeof HartaBlocajelorMaterieIndexRoute
   '/subiecte-admitere/$universitate': typeof SubiecteAdmitereUniversitateIndexRoute
@@ -1430,6 +1488,8 @@ export interface FileRoutesByTo {
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
   '/bac/$materie/$an': typeof BacMaterieAnIndexRoute
   '/subiecte-admitere/$universitate/$materie': typeof SubiecteAdmitereUniversitateMaterieIndexRoute
+  '/subiecte-bac/$an/$materie/$lucrare/rezolvare': typeof SubiecteBacAnMaterieLucrareRezolvareRoute
+  '/subiecte-bac/$an/$materie/$lucrare': typeof SubiecteBacAnMaterieLucrareIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1541,8 +1601,9 @@ export interface FileRoutesById {
   '/simulare-drept-2026': typeof SimulareDrept2026Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
+  '/sitemap-subiecte-bac.xml': typeof SitemapSubiecteBacDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/subiecte-bac': typeof SubiecteBacRoute
+  '/subiecte-bac': typeof SubiecteBacRouteWithChildren
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
   '/tutoriale': typeof TutorialeRoute
@@ -1569,6 +1630,7 @@ export interface FileRoutesById {
   '/profesori/$oras': typeof ProfesoriOrasRoute
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
+  '/subiecte-bac/matematica': typeof SubiecteBacMatematicaRoute
   '/bac/': typeof BacIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/harta-blocajelor/': typeof HartaBlocajelorIndexRoute
@@ -1586,6 +1648,9 @@ export interface FileRoutesById {
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
   '/subiecte-admitere/materie/$materie': typeof SubiecteAdmitereMaterieMaterieRoute
+  '/subiecte-bac/an/$an': typeof SubiecteBacAnAnRoute
+  '/subiecte-bac/lucrare/$slug': typeof SubiecteBacLucrareSlugRoute
+  '/subiecte-bac/materie/$materie': typeof SubiecteBacMaterieMaterieRoute
   '/bac/$materie/': typeof BacMaterieIndexRoute
   '/harta-blocajelor/$materie/': typeof HartaBlocajelorMaterieIndexRoute
   '/subiecte-admitere/$universitate/': typeof SubiecteAdmitereUniversitateIndexRoute
@@ -1607,6 +1672,8 @@ export interface FileRoutesById {
   '/subiecte-admitere/$universitate/$materie/$an': typeof SubiecteAdmitereUniversitateMaterieAnRoute
   '/bac/$materie/$an/': typeof BacMaterieAnIndexRoute
   '/subiecte-admitere/$universitate/$materie/': typeof SubiecteAdmitereUniversitateMaterieIndexRoute
+  '/subiecte-bac/$an/$materie/$lucrare/rezolvare': typeof SubiecteBacAnMaterieLucrareRezolvareRoute
+  '/subiecte-bac/$an/$materie/$lucrare/': typeof SubiecteBacAnMaterieLucrareIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1719,6 +1786,7 @@ export interface FileRouteTypes {
     | '/simulare-drept-2026'
     | '/simulare-utcn-2026'
     | '/simulari-bacalaureat-2026'
+    | '/sitemap-subiecte-bac.xml'
     | '/sitemap.xml'
     | '/subiecte-bac'
     | '/subiecte-bac-2026'
@@ -1747,6 +1815,7 @@ export interface FileRouteTypes {
     | '/profesori/$oras'
     | '/scaner-lacune/$materie'
     | '/simulare-bac/$materie'
+    | '/subiecte-bac/matematica'
     | '/bac/'
     | '/blog/'
     | '/harta-blocajelor/'
@@ -1764,6 +1833,9 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/materie/$materie'
+    | '/subiecte-bac/an/$an'
+    | '/subiecte-bac/lucrare/$slug'
+    | '/subiecte-bac/materie/$materie'
     | '/bac/$materie/'
     | '/harta-blocajelor/$materie/'
     | '/subiecte-admitere/$universitate/'
@@ -1785,6 +1857,8 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie/$an'
     | '/bac/$materie/$an/'
     | '/subiecte-admitere/$universitate/$materie/'
+    | '/subiecte-bac/$an/$materie/$lucrare/rezolvare'
+    | '/subiecte-bac/$an/$materie/$lucrare/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1895,6 +1969,7 @@ export interface FileRouteTypes {
     | '/simulare-drept-2026'
     | '/simulare-utcn-2026'
     | '/simulari-bacalaureat-2026'
+    | '/sitemap-subiecte-bac.xml'
     | '/sitemap.xml'
     | '/subiecte-bac'
     | '/subiecte-bac-2026'
@@ -1922,6 +1997,7 @@ export interface FileRouteTypes {
     | '/profesori/$oras'
     | '/scaner-lacune/$materie'
     | '/simulare-bac/$materie'
+    | '/subiecte-bac/matematica'
     | '/bac'
     | '/blog'
     | '/harta-blocajelor'
@@ -1938,6 +2014,9 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/materie/$materie'
+    | '/subiecte-bac/an/$an'
+    | '/subiecte-bac/lucrare/$slug'
+    | '/subiecte-bac/materie/$materie'
     | '/bac/$materie'
     | '/harta-blocajelor/$materie'
     | '/subiecte-admitere/$universitate'
@@ -1959,6 +2038,8 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie/$an'
     | '/bac/$materie/$an'
     | '/subiecte-admitere/$universitate/$materie'
+    | '/subiecte-bac/$an/$materie/$lucrare/rezolvare'
+    | '/subiecte-bac/$an/$materie/$lucrare'
   id:
     | '__root__'
     | '/'
@@ -2069,6 +2150,7 @@ export interface FileRouteTypes {
     | '/simulare-drept-2026'
     | '/simulare-utcn-2026'
     | '/simulari-bacalaureat-2026'
+    | '/sitemap-subiecte-bac.xml'
     | '/sitemap.xml'
     | '/subiecte-bac'
     | '/subiecte-bac-2026'
@@ -2097,6 +2179,7 @@ export interface FileRouteTypes {
     | '/profesori/$oras'
     | '/scaner-lacune/$materie'
     | '/simulare-bac/$materie'
+    | '/subiecte-bac/matematica'
     | '/bac/'
     | '/blog/'
     | '/harta-blocajelor/'
@@ -2114,6 +2197,9 @@ export interface FileRouteTypes {
     | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
     | '/subiecte-admitere/materie/$materie'
+    | '/subiecte-bac/an/$an'
+    | '/subiecte-bac/lucrare/$slug'
+    | '/subiecte-bac/materie/$materie'
     | '/bac/$materie/'
     | '/harta-blocajelor/$materie/'
     | '/subiecte-admitere/$universitate/'
@@ -2135,6 +2221,8 @@ export interface FileRouteTypes {
     | '/subiecte-admitere/$universitate/$materie/$an'
     | '/bac/$materie/$an/'
     | '/subiecte-admitere/$universitate/$materie/'
+    | '/subiecte-bac/$an/$materie/$lucrare/rezolvare'
+    | '/subiecte-bac/$an/$materie/$lucrare/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -2246,8 +2334,9 @@ export interface RootRouteChildren {
   SimulareDrept2026Route: typeof SimulareDrept2026Route
   SimulareUtcn2026Route: typeof SimulareUtcn2026Route
   SimulariBacalaureat2026Route: typeof SimulariBacalaureat2026Route
+  SitemapSubiecteBacDotxmlRoute: typeof SitemapSubiecteBacDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  SubiecteBacRoute: typeof SubiecteBacRoute
+  SubiecteBacRoute: typeof SubiecteBacRouteWithChildren
   SubiecteBac2026Route: typeof SubiecteBac2026Route
   TermeniRoute: typeof TermeniRoute
   TutorialeRoute: typeof TutorialeRoute
@@ -3068,6 +3157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SimulariBacalaureat2026RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap-subiecte-bac.xml': {
+      id: '/sitemap-subiecte-bac.xml'
+      path: '/sitemap-subiecte-bac.xml'
+      fullPath: '/sitemap-subiecte-bac.xml'
+      preLoaderRoute: typeof SitemapSubiecteBacDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -3348,6 +3444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubiecteAdmitereIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subiecte-bac/matematica': {
+      id: '/subiecte-bac/matematica'
+      path: '/matematica'
+      fullPath: '/subiecte-bac/matematica'
+      preLoaderRoute: typeof SubiecteBacMatematicaRouteImport
+      parentRoute: typeof SubiecteBacRoute
+    }
     '/bac/$materie/': {
       id: '/bac/$materie/'
       path: '/'
@@ -3403,6 +3506,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/subiecte-admitere/materie/$materie'
       preLoaderRoute: typeof SubiecteAdmitereMaterieMaterieRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/subiecte-bac/an/$an': {
+      id: '/subiecte-bac/an/$an'
+      path: '/an/$an'
+      fullPath: '/subiecte-bac/an/$an'
+      preLoaderRoute: typeof SubiecteBacAnAnRouteImport
+      parentRoute: typeof SubiecteBacRoute
+    }
+    '/subiecte-bac/lucrare/$slug': {
+      id: '/subiecte-bac/lucrare/$slug'
+      path: '/lucrare/$slug'
+      fullPath: '/subiecte-bac/lucrare/$slug'
+      preLoaderRoute: typeof SubiecteBacLucrareSlugRouteImport
+      parentRoute: typeof SubiecteBacRoute
+    }
+    '/subiecte-bac/materie/$materie': {
+      id: '/subiecte-bac/materie/$materie'
+      path: '/materie/$materie'
+      fullPath: '/subiecte-bac/materie/$materie'
+      preLoaderRoute: typeof SubiecteBacMaterieMaterieRouteImport
+      parentRoute: typeof SubiecteBacRoute
     }
     '/api/public/hooks/auto-blog-post': {
       id: '/api/public/hooks/auto-blog-post'
@@ -3530,8 +3654,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubiecteAdmitereUniversitateMaterieAnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subiecte-bac/$an/$materie/$lucrare/': {
+      id: '/subiecte-bac/$an/$materie/$lucrare/'
+      path: '/$an/$materie/$lucrare'
+      fullPath: '/subiecte-bac/$an/$materie/$lucrare/'
+      preLoaderRoute: typeof SubiecteBacAnMaterieLucrareIndexRouteImport
+      parentRoute: typeof SubiecteBacRoute
+    }
+    '/subiecte-bac/$an/$materie/$lucrare/rezolvare': {
+      id: '/subiecte-bac/$an/$materie/$lucrare/rezolvare'
+      path: '/$an/$materie/$lucrare/rezolvare'
+      fullPath: '/subiecte-bac/$an/$materie/$lucrare/rezolvare'
+      preLoaderRoute: typeof SubiecteBacAnMaterieLucrareRezolvareRouteImport
+      parentRoute: typeof SubiecteBacRoute
+    }
   }
 }
+
+interface SubiecteBacRouteChildren {
+  SubiecteBacMatematicaRoute: typeof SubiecteBacMatematicaRoute
+  SubiecteBacAnAnRoute: typeof SubiecteBacAnAnRoute
+  SubiecteBacLucrareSlugRoute: typeof SubiecteBacLucrareSlugRoute
+  SubiecteBacMaterieMaterieRoute: typeof SubiecteBacMaterieMaterieRoute
+  SubiecteBacAnMaterieLucrareRezolvareRoute: typeof SubiecteBacAnMaterieLucrareRezolvareRoute
+  SubiecteBacAnMaterieLucrareIndexRoute: typeof SubiecteBacAnMaterieLucrareIndexRoute
+}
+
+const SubiecteBacRouteChildren: SubiecteBacRouteChildren = {
+  SubiecteBacMatematicaRoute: SubiecteBacMatematicaRoute,
+  SubiecteBacAnAnRoute: SubiecteBacAnAnRoute,
+  SubiecteBacLucrareSlugRoute: SubiecteBacLucrareSlugRoute,
+  SubiecteBacMaterieMaterieRoute: SubiecteBacMaterieMaterieRoute,
+  SubiecteBacAnMaterieLucrareRezolvareRoute:
+    SubiecteBacAnMaterieLucrareRezolvareRoute,
+  SubiecteBacAnMaterieLucrareIndexRoute: SubiecteBacAnMaterieLucrareIndexRoute,
+}
+
+const SubiecteBacRouteWithChildren = SubiecteBacRoute._addFileChildren(
+  SubiecteBacRouteChildren,
+)
 
 interface BacMaterieAnRouteChildren {
   BacMaterieAnSesiuneRoute: typeof BacMaterieAnSesiuneRoute
@@ -3670,8 +3831,9 @@ const rootRouteChildren: RootRouteChildren = {
   SimulareDrept2026Route: SimulareDrept2026Route,
   SimulareUtcn2026Route: SimulareUtcn2026Route,
   SimulariBacalaureat2026Route: SimulariBacalaureat2026Route,
+  SitemapSubiecteBacDotxmlRoute: SitemapSubiecteBacDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  SubiecteBacRoute: SubiecteBacRoute,
+  SubiecteBacRoute: SubiecteBacRouteWithChildren,
   SubiecteBac2026Route: SubiecteBac2026Route,
   TermeniRoute: TermeniRoute,
   TutorialeRoute: TutorialeRoute,
