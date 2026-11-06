@@ -6,8 +6,6 @@ import { VerificareTelefon } from "./verificare-telefon";
 import { profesorAiAcces, profesorAiPorneste } from "@/lib/profesor-ai.functions";
 import {
   PA_DURATE,
-  PA_MATERII,
-  PA_NIVELURI,
   PA_OBIECTIVE,
   type PaConfig,
   type PaDurata,
@@ -31,8 +29,8 @@ export function ConfiguratorProfesorAi() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [cfg, setCfg] = useState<PaConfig>({
-    materie: "matematica",
-    nivel: "gimnaziu",
+    materie: "orice",
+    nivel: "orice",
     durata: DURATA_GRATUITA,
     obiectiv: "lectie",
     limba: "ro",
@@ -63,7 +61,8 @@ export function ConfiguratorProfesorAi() {
   const premium = cfg.durata !== DURATA_GRATUITA;
   const blocatPremium = !!user && !acces?.gratuit && premium && acces?.premiumActiv === false;
   const faraLectii = !!user && !acces?.gratuit && !premium && !!acces?.lectiaGratuitaFolosita;
-  const trebuieVerificat = !!user && !!acces && !acces.gratuit && !premium && !acces.telefonVerificat;
+  const trebuieVerificat =
+    !!user && !!acces && !acces.gratuit && !premium && !acces.telefonVerificat;
   const set = <K extends keyof PaConfig>(k: K, v: PaConfig[K]) => setCfg((c) => ({ ...c, [k]: v }));
 
   const porneste = async () => {
@@ -103,42 +102,12 @@ export function ConfiguratorProfesorAi() {
 
   return (
     <div className="card-soft p-5 sm:p-7">
-      <div className="grid gap-5 sm:grid-cols-3">
-        <div>
-          <label htmlFor="pa-materie" className="text-sm font-bold">
-            Materia
-          </label>
-          <select
-            id="pa-materie"
-            value={cfg.materie}
-            onChange={(e) => set("materie", e.target.value as PaConfig["materie"])}
-            className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm"
-          >
-            {PA_MATERII.map((m) => (
-              <option key={m.slug} value={m.slug}>
-                {m.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="pa-nivel" className="text-sm font-bold">
-            Nivelul de studiu
-          </label>
-          <select
-            id="pa-nivel"
-            value={cfg.nivel}
-            onChange={(e) => set("nivel", e.target.value as PaConfig["nivel"])}
-            className="mt-2 h-12 w-full rounded-xl border border-border bg-background px-3 text-sm"
-          >
-            {PA_NIVELURI.map((m) => (
-              <option key={m.slug} value={m.slug}>
-                {m.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <p className="text-sm text-muted-foreground">
+        Profesorul AI știe{" "}
+        <strong className="text-foreground">toate materiile, la orice nivel</strong> — de la primar
+        la BAC și facultate. Îi spui la începutul lecției ce vrei să înveți sau îi încarci tema
+        (poze, PDF, un subiect BAC întreg).
+      </p>
 
       <fieldset className="mt-5">
         <legend className="text-sm font-bold">Durata ședinței</legend>
@@ -221,7 +190,13 @@ export function ConfiguratorProfesorAi() {
           <button
             type="button"
             onClick={porneste}
-            disabled={pending || acces?.aiDisponibil === false || blocatPremium || faraLectii || trebuieVerificat}
+            disabled={
+              pending ||
+              acces?.aiDisponibil === false ||
+              blocatPremium ||
+              faraLectii ||
+              trebuieVerificat
+            }
             className="btn-primary h-12 px-6 disabled:opacity-60"
           >
             {pending ? (

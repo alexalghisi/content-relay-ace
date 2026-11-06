@@ -216,6 +216,12 @@ export class LiveLesson {
     this.send({ clientContent: { turns: [{ role: "user", parts: [{ text }] }], turnComplete: true } });
   }
 
+  /** Homework pages (JPEG) plus the instruction text, as one user turn. */
+  sendImages(images: { data: string; mimeType: string }[], text: string) {
+    const parts = [...images.map((i) => ({ inlineData: { mimeType: i.mimeType, data: i.data } })), { text }];
+    this.send({ clientContent: { turns: [{ role: "user", parts }], turnComplete: true } });
+  }
+
   private async startMic() {
     const stream = await micStream();
     if (this.closed) { stream.getTracks().forEach((t) => t.stop()); return; }
@@ -431,6 +437,15 @@ export class OpenAiLesson {
 
   sendText(text: string) {
     this.send({ type: "conversation.item.create", item: { type: "message", role: "user", content: [{ type: "input_text", text }] } });
+    this.send({ type: "response.create" });
+  }
+
+  sendImages(images: { data: string; mimeType: string }[], text: string) {
+    const content = [
+      ...images.map((i) => ({ type: "input_image", image_url: `data:${i.mimeType};base64,${i.data}` })),
+      { type: "input_text", text },
+    ];
+    this.send({ type: "conversation.item.create", item: { type: "message", role: "user", content } });
     this.send({ type: "response.create" });
   }
 

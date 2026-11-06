@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Clock, Loader2, Mic, MicOff } from "lucide-react";
+import { Clock, Loader2, Mic, MicOff, Paperclip } from "lucide-react";
 import hannah from "@/assets/profesoara-hannah.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import { profesorAiLive } from "@/lib/profesor-ai.functions";
@@ -8,6 +8,7 @@ import { paMaterieName, paNivelName, paObiectivName, PA_START, PA_TACERE, PA_TAC
 import { SesiuneProfesorAi } from "./sesiune";
 import { deblocheazaAudioMicrofon } from "@/lib/profesor-ai-live";
 import { FiguraSvg } from "./tabla-render";
+import { pregatesteTeme, TEME_ACCEPT, TEME_MAX_PAGINI } from "@/lib/profesor-ai-teme";
 const TablaRender = lazy(() => import("./tabla-render"));
 
 type Props = { token: string; config: PaConfig; exp: number; gratuit: boolean };
@@ -65,6 +66,9 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
   const [scris, setScris] = useState("");
   const [eroare, setEroare] = useState("");
   const [mut, setMut] = useState(false);
+  const [incarc, setIncarc] = useState(false);
+  const [teme, setTeme] = useState<string[]>([]);
+  const fisier = useRef<HTMLInputElement>(null);
   const [ramas, setRamas] = useState(() => Math.max(0, exp - Date.now()));
   const videoEl = useRef<HTMLVideoElement>(null);
   const lesson = useRef<import("@/lib/profesor-ai-live").LiveLesson | import("@/lib/profesor-ai-live").OpenAiLesson | null>(null);
@@ -85,7 +89,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
         raporteaza("live timeout startup");
         onFallback();
       }
-    }, 20_000);
+    }, 35_000);
     curatenie.push(() => window.clearTimeout(deadline));
     (async () => {
       const r = await profesorAiLive({ data: { token, evita } }).catch(() => null);
@@ -107,7 +111,9 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
           const stop = () => { void s.stop().catch(() => {}); };
           curatenie.push(stop);
           await Promise.race([s.start(), new Promise<never>((_, reject) => {
-            const t = window.setTimeout(() => { stop(); reject(new Error("avatar timeout")); }, 5000);
+            // LiveKit join regularly needs 6–12 s; at 5 s the avatar was stopped and the lesson ran
+            // as voice over a still photo (no lip movement).
+            const t = window.setTimeout(() => { stop(); reject(new Error("avatar timeout")); }, 20_000);
             curatenie.push(() => window.clearTimeout(t));
           })]);
           if (anulat) { void s.stop(); return; }
@@ -129,6 +135,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
           window.addEventListener("pagehide", stop, { once: true });
           curatenie.push(() => window.removeEventListener("pagehide", stop));
         } catch (e) {
+          raporteaza(`avatar indisponibil: ${(e as Error)?.message}`);
           console.warn("[profesor-ai] avatar LITE indisponibil, continuăm doar cu voce", e);
         }
       }
@@ -217,7 +224,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
             </div>
           )}
           <div className="absolute left-3 top-3 flex flex-wrap gap-2 text-xs">
-            <span className="rounded-full bg-foreground/55 px-3 py-1 font-semibold text-background">Profesor AI · {paMaterieName(config.materie)}</span>
+            <span className="rounded-full bg-foreground/55 px-3 py-1 font-semibold text-background">Profesor AI{config.materie === "orice" ? "" : ` · ${paMaterieName(config.materie)}`}</span>
             {stare === "live" && <span className="rounded-full bg-red-600/90 px-3 py-1 font-semibold text-white">● LIVE</span>}
           </div>
           <div className="absolute right-3 top-3 flex items-center gap-2">
@@ -235,7 +242,7 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
           </div>
         </div>
         <div className="px-5 pt-3 text-xs text-muted-foreground">
-          {paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min · Română · vorbește liber, o poți întrerupe oricând
+          {config.nivel === "orice" ? "Toate materiile, orice nivel" : paNivelName(config.nivel)} · {paObiectivName(config.obiectiv)} · {config.durata} min · Română · vorbește liber, o poți întrerupe oricând
         </div>
         {(tabla || desen) && (
           <div className="mx-5 mt-3 rounded-2xl bg-muted px-4 py-3">
@@ -260,9 +267,55 @@ function SesiuneLive({ token, config, exp, gratuit, onFallback, evita }: Props &
               ultimaActivitate.current = Date.now();
             }}
           >
+            <input
+              ref={fisier}
+              type="file"
+              accept={TEME_ACCEPT}
+              multiple
+              hidden
+              onChange={async (e) => {
+                const files = [...(e.target.files ?? [])];
+                e.target.value = "";
+                if (!files.length || !lesson.current) return;
+                setIncarc(true);
+                setEroare("");
+                try {
+                  const { pagini, mesaj } = await pregatesteTeme(files);
+                  const L = lesson.current as { sendImages?: (i: { data: string; mimeType: string }[], t: string) => void } | null;
+                  if (!L?.sendImages) throw new Error("Lecția nu e încă pornită. Mai încearcă o dată.");
+                  L.sendImages(pagini, mesaj);
+                  setTeme((t) => [...t, ...files.map((f) => f.name)]);
+                  ultimaActivitate.current = Date.now();
+                } catch (err) {
+                  setEroare((err as Error).message || "Nu am putut încărca fișierul.");
+                } finally {
+                  setIncarc(false);
+                }
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              disabled={incarc}
+              onClick={() => fisier.current?.click()}
+              aria-label="Încarcă tema: poze sau PDF"
+              title={`Încarcă tema: poze sau PDF (max ${TEME_MAX_PAGINI} pagini)`}
+              className="h-11 shrink-0 px-3"
+            >
+              {incarc ? <Loader2 className="h-4 w-4 animate-spin" /> : <Paperclip className="h-4 w-4" />}
+              <span className="hidden sm:inline">Încarcă tema</span>
+            </Button>
             <input value={scris} onChange={(e) => setScris(e.target.value)} placeholder="Sau scrie aici întrebarea…" className="h-11 min-w-0 flex-1 rounded-xl border border-border bg-background px-3 text-base" />
             <Button type="submit" className="btn-primary h-11 px-4">Trimite</Button>
           </form>
+        )}
+        {teme.length > 0 && (
+          <p className="mx-5 mt-2 text-xs text-muted-foreground">Ai trimis profesoarei: {teme.join(", ")}</p>
+        )}
+        {stare === "live" && !terminat && teme.length === 0 && (
+          <p className="mx-5 mt-2 text-xs text-muted-foreground">
+            Poți încărca tema: poze, PDF sau un subiect BAC întreg — lucrați împreună pe el.
+          </p>
         )}
         <div className="space-y-3 px-5 py-3" aria-live="polite">
           {eroare && <div role="alert" className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">{eroare}</div>}
