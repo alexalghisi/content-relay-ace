@@ -28,3 +28,4 @@ Allow: /
 
 Host: meditatiidirect.ro
 Sitemap: https://meditatiidirect.ro/sitemap.xml
+Sitemap: https://meditatiidirect.ro/sitemap-subiecte-bac.xml
