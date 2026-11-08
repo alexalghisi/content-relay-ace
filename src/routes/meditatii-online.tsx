@@ -2,16 +2,35 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-online";
-const TITLE = "Meditații Online 2026 — Profesori Particulari Verificați pe Zoom & Meet";
-const DESCRIPTION = "★ Meditații online cu profesori verificați din toată România: matematică, română, engleză, fizică, informatică, BAC, admitere. Zoom/Meet, contact direct, fără comision.";
+const TITLE = "Meditatii online 2026 — platforma meditatii, fără comision";
+const DESCRIPTION =
+  "Platforma de meditatii online: profesori de matematică, română, engleză, fizică, informatică, BAC și admitere, pe Zoom sau Meet. Ceri gratuit oferte.";
 
 const FAQS: FaqItem[] = [
-  { q: "Cât costă o meditație online?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii și orașe, sunt pe pagina Prețuri meditații." },
-  { q: "Pe ce platformă se țin meditațiile online?", a: "Majoritatea profesorilor folosesc Zoom, Google Meet, Microsoft Teams sau Skype. Pentru materii care necesită scris (matematică, fizică, chimie), profesorii folosesc tabletă grafică sau aplicații de whiteboard precum Miro, Jamboard sau OpenBoard." },
-  { q: "Meditațiile online sunt la fel de eficiente ca cele față în față?", a: "Da. Studiile arată că meditațiile online 1-la-1 au aceeași eficiență ca cele față în față, cu avantajul că poți alege profesori din toată țara, economisești timpul de transport și înregistrezi lecția pentru recapitulare." },
-  { q: "Am nevoie de echipament special pentru o meditație online?", a: "Suficient un laptop sau tabletă, microfon (cel încorporat e ok) și conexiune stabilă la internet. Pentru matematică și științe e util un caiet și o cameră bună sau o tabletă grafică pentru a scrie." },
-  { q: "Cum aleg profesorul potrivit pentru meditații online?", a: "Pe MeditatiiDirect filtrezi după materie, experiență, recenzii și preț. Recomandăm o lecție de probă (15–30 minute) înainte de a începe pregătirea regulată — verifici stilul de predare și conexiunea." },
-  { q: "Există meditații online pentru BAC și admitere?", a: "Da, avem profesori specializați în pregătirea pentru BAC 2026 (matematică M1/M2, română, biologie, istorie, geografie, informatică) și admitere la Medicină, UPB, ASE, Drept, UMF, UTCN, ASE." },
+  {
+    q: "Cât costă o meditație online?",
+    a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii și orașe, sunt pe pagina Prețuri meditații.",
+  },
+  {
+    q: "Pe ce platformă se țin meditațiile online?",
+    a: "Majoritatea profesorilor folosesc Zoom, Google Meet, Microsoft Teams sau Skype. Pentru materii care necesită scris (matematică, fizică, chimie), profesorii folosesc tabletă grafică sau aplicații de whiteboard precum Miro, Jamboard sau OpenBoard.",
+  },
+  {
+    q: "Meditațiile online sunt la fel de eficiente ca cele față în față?",
+    a: "Da. Studiile arată că meditațiile online 1-la-1 au aceeași eficiență ca cele față în față, cu avantajul că poți alege profesori din toată țara, economisești timpul de transport și înregistrezi lecția pentru recapitulare.",
+  },
+  {
+    q: "Am nevoie de echipament special pentru o meditație online?",
+    a: "Suficient un laptop sau tabletă, microfon (cel încorporat e ok) și conexiune stabilă la internet. Pentru matematică și științe e util un caiet și o cameră bună sau o tabletă grafică pentru a scrie.",
+  },
+  {
+    q: "Cum aleg profesorul potrivit pentru meditații online?",
+    a: "Pe MeditatiiDirect filtrezi după materie, experiență, recenzii și preț. Recomandăm o lecție de probă (15–30 minute) înainte de a începe pregătirea regulată — verifici stilul de predare și conexiunea.",
+  },
+  {
+    q: "Există meditații online pentru BAC și admitere?",
+    a: "Da, avem profesori specializați în pregătirea pentru BAC 2026 (matematică M1/M2, română, biologie, istorie, geografie, informatică) și admitere la Medicină, UPB, ASE, Drept, UMF, UTCN, ASE.",
+  },
 ];
 
 export const Route = createFileRoute("/meditatii-online")({
@@ -19,7 +38,11 @@ export const Route = createFileRoute("/meditatii-online")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
-      { name: "keywords", content: "meditatii online, meditatii online romania, profesori online, meditatii online matematica, meditatii online romana, meditatii online engleza, meditatii online bac, meditatii online admitere, meditatii zoom, meditatii google meet, meditatii pe internet, ore online, lectii online, pregatire online bac, pregatire online admitere, profesor online" },
+      {
+        name: "keywords",
+        content:
+          "meditatii online, meditatii online romania, profesori online, meditatii online matematica, meditatii online romana, meditatii online engleza, meditatii online bac, meditatii online admitere, meditatii zoom, meditatii google meet, meditatii pe internet, ore online, lectii online, pregatire online bac, pregatire online admitere, profesor online",
+      },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: PAGE_URL },
@@ -41,7 +64,12 @@ export const Route = createFileRoute("/meditatii-online")({
           url: PAGE_URL,
           areaServed: { "@type": "Country", name: "România" },
           provider: { "@id": "https://meditatiidirect.ro/#org" },
-          offers: { "@type": "AggregateOffer", priceCurrency: "RON", lowPrice: "30", highPrice: "200" },
+          offers: {
+            "@type": "AggregateOffer",
+            priceCurrency: "RON",
+            lowPrice: "30",
+            highPrice: "200",
+          },
         }),
       },
     ],
@@ -71,8 +99,16 @@ function Page() {
           title: "De ce meditații online?",
           body: (
             <>
-              <p>Meditațiile online elimină barierele geografice: poți învăța cu cel mai bun profesor de matematică pentru admitere la Politehnică chiar dacă tu ești în Vaslui și el predă în Cluj.</p>
-              <p>Economisești 1–2 ore pe săptămână din transport, înregistrezi lecția pentru recapitulare și ai flexibilitate totală de program — perfect pentru elevi de liceu și studenți la facultate.</p>
+              <p>
+                Meditațiile online elimină barierele geografice: poți învăța cu cel mai bun profesor
+                de matematică pentru admitere la Politehnică chiar dacă tu ești în Vaslui și el
+                predă în Cluj.
+              </p>
+              <p>
+                Economisești 1–2 ore pe săptămână din transport, înregistrezi lecția pentru
+                recapitulare și ai flexibilitate totală de program — perfect pentru elevi de liceu
+                și studenți la facultate.
+              </p>
             </>
           ),
         },
@@ -95,7 +131,9 @@ function Page() {
             <ol className="list-decimal pl-5 space-y-1">
               <li>Cauți după materie și filtrezi „doar online".</li>
               <li>Citești recenzii, vezi tariful și trimiți mesaj direct profesorului.</li>
-              <li>Stabiliți ora, platforma (Zoom/Meet) și începeți. Plata direct, fără comision.</li>
+              <li>
+                Stabiliți ora, platforma (Zoom/Meet) și începeți. Plata direct, fără comision.
+              </li>
             </ol>
           ),
         },

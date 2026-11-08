@@ -30,6 +30,27 @@ async function fetchTeachersForCity(city: { matchLocation: string[] }): Promise<
   return (data ?? []) as LocalTeacher[];
 }
 
+function profesoriFaqs(name: string, county: string) {
+  return [
+    {
+      q: `Cum găsesc un profesor particular în ${name}?`,
+      a: `Pe MeditatiiDirect.ro filtrezi profesorii din ${name} (${county}) după materie și nivel, citești profilul și contactezi direct profesorul, fără intermediari.`,
+    },
+    {
+      q: `Cât costă un profesor particular în ${name}?`,
+      a: `Fiecare profesor își stabilește tariful și îl vezi în propunere înainte să accepți. Tarifele reale din anunțurile de pe site sunt pe pagina Prețuri meditații.`,
+    },
+    {
+      q: `Pot face meditații online cu un profesor din ${name}?`,
+      a: `Da. În cerere alegi online, față în față sau ambele; mulți profesori predau și online, prin Zoom sau Google Meet.`,
+    },
+    {
+      q: `Sunt profesorii din ${name} verificați?`,
+      a: `Fiecare profil de profesor se publică pe MeditatiiDirect.ro abia după ce este verificat de echipa noastră.`,
+    },
+  ];
+}
+
 export const Route = createFileRoute("/profesori/$oras")({
   loader: async ({ params }) => {
     const city = getCityBySlug(params.oras);
@@ -44,17 +65,16 @@ export const Route = createFileRoute("/profesori/$oras")({
     const count = teachers.length;
     const countLabel = "Profesori verificați";
     const title = `Profesori Particulari ${city.name} 2026 — ${countLabel} | MeditatiiDirect.ro`;
-    const desc = `Profesori particulari verificați în ${city.name} (${city.county}). Matematică, română, engleză, fizică, BAC, admitere. Recenzii reale, tarife de la 30 lei/oră, contact direct fără comision.`;
-    const faqs = [
-      { q: `Cum găsesc un profesor particular în ${city.name}?`, a: `Pe MeditatiiDirect.ro filtrezi profesorii din ${city.name} (${city.county}) după materie și nivel, vezi recenziile reale și contactezi direct profesorul, fără intermediari.` },
-      { q: `Cât costă un profesor particular în ${city.name}?`, a: `Fiecare profesor își stabilește tariful și îl vezi în propunere înainte să accepți. Tarifele reale din anunțurile de pe site sunt pe pagina Prețuri meditații.` },
-      { q: `Pot face meditații online cu un profesor din ${city.name}?`, a: `Da, majoritatea profesorilor noștri din ${city.name} oferă atât meditații față în față cât și online prin Zoom sau Google Meet.` },
-      { q: `Sunt profesorii din ${city.name} verificați?`, a: `Da. Fiecare profesor afișat pe MeditatiiDirect.ro are identitatea și diploma verificate manual de echipa noastră înainte de publicarea profilului.` },
-    ];
+    const desc = `Profesori particulari verificați în ${city.name} (${city.county}). Matematică, română, engleză, fizică, BAC, admitere. Profesorii își propun tariful, iar tu îi contactezi direct, fără comision.`;
+    const faqs = profesoriFaqs(city.name, city.county);
     return {
       meta: [
-        { title }, { name: "description", content: desc },
-        { name: "keywords", content: `profesori ${city.slug}, profesori particulari ${city.name}, meditatii ${city.name}, profesori meditatii ${city.name}, meditatori ${city.name}, ore particulare ${city.name}, profesor matematica ${city.name}, profesor romana ${city.name}, profesor engleza ${city.name}` },
+        { title },
+        { name: "description", content: desc },
+        {
+          name: "keywords",
+          content: `profesori ${city.slug}, profesori particulari ${city.name}, meditatii ${city.name}, profesori meditatii ${city.name}, meditatori ${city.name}, ore particulare ${city.name}, profesor matematica ${city.name}, profesor romana ${city.name}, profesor engleza ${city.name}`,
+        },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
@@ -65,29 +85,32 @@ export const Route = createFileRoute("/profesori/$oras")({
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
-        { type: "application/ld+json", children: JSON.stringify({
-          "@context": "https://schema.org", "@type": "LocalBusiness",
-          name: `Profesori particulari ${city.name} — MeditatiiDirect.ro`,
-          description: desc, url,
-          areaServed: { "@type": "City", name: city.name },
-          address: { "@type": "PostalAddress", addressLocality: city.name, addressRegion: city.county, addressCountry: "RO" },
-        }) },
+        // Fără LocalBusiness: MeditatiiDirect nu are un sediu în fiecare oraș.
         { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
-        { type: "application/ld+json", children: JSON.stringify({
-          "@context": "https://schema.org", "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Acasă", item: SITE + "/" },
-            { "@type": "ListItem", position: 2, name: "Profesori", item: SITE + "/profesori" },
-            { "@type": "ListItem", position: 3, name: city.name, item: url },
-          ],
-        }) },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Acasă", item: SITE + "/" },
+              { "@type": "ListItem", position: 2, name: "Profesori", item: SITE + "/profesori" },
+              { "@type": "ListItem", position: 3, name: city.name, item: url },
+            ],
+          }),
+        },
       ],
     };
   },
   notFoundComponent: () => (
     <div className="container-page py-20 text-center">
       <h1 className="text-2xl font-bold">Orașul nu e în lista noastră</h1>
-      <Link to="/profesori" className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground">Toți profesorii</Link>
+      <Link
+        to="/profesori"
+        className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground"
+      >
+        Toți profesorii
+      </Link>
     </div>
   ),
   component: ProfesoriOrasPage,
@@ -103,16 +126,17 @@ function ProfesoriOrasPage() {
         pageUrl={`${SITE}/profesori/${city.slug}`}
         breadcrumbParent={{ name: "Profesori", url: `${SITE}/profesori` }}
         h1={`Profesori particulari în ${city.name}`}
-        intro={`Profesori particulari verificați în ${city.name} (${city.county}, ${city.population} locuitori). Matematică, română, engleză, fizică, chimie, biologie, BAC, admitere. Contact direct, tarife transparente de la 30 lei/oră.`}
+        intro={`Profesori particulari verificați în ${city.name} (${city.county}, ${city.population} locuitori). Matematică, română, engleză, fizică, chimie, biologie, BAC, admitere. Contact direct, iar tariful îl vezi în propunere înainte să alegi.`}
         bullets={[
           `Profesori verificați manual în ${city.name}`,
           `Toate materiile importante: BAC, Evaluare Națională, admitere`,
           `Online (Zoom / Meet) sau față în față în ${city.name}`,
-          `Recenzii reale, neșterse, validate de echipa noastră`,
           `Fără comision din ședință — plătești direct profesorului`,
         ]}
         ctaPrimary={{ to: "/meditatii", label: `Vezi profesorii din ${city.name}` }}
         ctaSecondary={{ to: "/caut-profesor", label: "Postează cerere" }}
+        faqs={profesoriFaqs(city.name, city.county)}
+        linkContext={{ oras: city.slug }}
       />
 
       {teachers.length > 0 && (
@@ -123,20 +147,36 @@ function ProfesoriOrasPage() {
               <div key={t.id} className="card-soft p-5">
                 <div className="flex items-center gap-3">
                   {t.avatar_url ? (
-                    <img src={t.avatar_url} alt={t.full_name} loading="lazy" width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
+                    <img
+                      src={t.avatar_url}
+                      alt={t.full_name}
+                      loading="lazy"
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 rounded-full object-cover"
+                    />
                   ) : (
-                    <div className="grid h-12 w-12 place-items-center rounded-full bg-primary-soft text-primary font-semibold">{t.full_name.charAt(0)}</div>
+                    <div className="grid h-12 w-12 place-items-center rounded-full bg-primary-soft text-primary font-semibold">
+                      {t.full_name.charAt(0)}
+                    </div>
                   )}
                   <div className="min-w-0">
                     <p className="font-semibold truncate">{t.full_name}</p>
                     <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
                       <BadgeCheck className="h-3 w-3 text-primary" /> Verificat
-                      {t.location && <> · <MapPin className="h-3 w-3" /> {t.location}</>}
+                      {t.location && (
+                        <>
+                          {" "}
+                          · <MapPin className="h-3 w-3" /> {t.location}
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
                 {t.experience_years != null && t.experience_years > 0 && (
-                  <p className="mt-3 text-sm text-muted-foreground">{t.experience_years} ani experiență</p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {t.experience_years} ani experiență
+                  </p>
                 )}
               </div>
             ))}
@@ -151,8 +191,12 @@ function ProfesoriOrasPage() {
             <h2 className="text-lg font-semibold mb-3">Profesori pe materie în {city.name}</h2>
             <div className="flex flex-wrap gap-2">
               {SUBJECTS_SEO.map((s) => (
-                <Link key={s.slug} to="/meditatii/$materie/$oras" params={{ materie: s.slug, oras: city.slug }}
-                  className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary">
+                <Link
+                  key={s.slug}
+                  to="/meditatii/$materie/$oras"
+                  params={{ materie: s.slug, oras: city.slug }}
+                  className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary"
+                >
                   {s.name} {city.name}
                 </Link>
               ))}
@@ -162,8 +206,12 @@ function ProfesoriOrasPage() {
             <h2 className="text-lg font-semibold mb-3">Profesori în alte orașe</h2>
             <div className="flex flex-wrap gap-2">
               {otherCities.map((c) => (
-                <Link key={c.slug} to="/profesori/$oras" params={{ oras: c.slug }}
-                  className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary">
+                <Link
+                  key={c.slug}
+                  to="/profesori/$oras"
+                  params={{ oras: c.slug }}
+                  className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary"
+                >
                   Profesori {c.name}
                 </Link>
               ))}

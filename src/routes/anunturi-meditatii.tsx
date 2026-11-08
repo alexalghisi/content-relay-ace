@@ -2,15 +2,31 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/anunturi-meditatii";
-const TITLE = "Anunțuri Meditații 2026 — Profesori Particulari Verificați GRATIS | MeditatiiDirect.ro";
-const DESC = "★ Anunțuri meditații reale în toată România: matematică, română, engleză, BAC, admitere. Contactezi profesorul direct, fără comision.";
+const TITLE = "Anunturi meditatii 2026 — profesori reali, fără comision";
+const DESC =
+  "Anunturi meditatii publicate de profesori din toată România: matematică, română, engleză, BAC, admitere. Online sau acasă, contactezi direct, fără comision.";
 
 const faqs = [
-  { q: "Cum public un anunț de meditații?", a: "Creezi cont gratuit pe MeditatiiDirect.ro, completezi profilul de profesor (CV, materii, experiență) și publici primul anunț în mai puțin de 5 minute. Verificarea durează în medie 24 de ore." },
-  { q: "Ce informații conține un anunț de meditații?", a: "Materia, nivelul (gimnaziu, liceu, BAC, admitere), prețul pe oră, locația sau opțiunea online, durata ședinței și o descriere detaliată cu metoda profesorului. Vezi exemple concrete în pagina de anunțuri." },
-  { q: "Sunt profesorii verificați?", a: "Da. Echipa MeditatiiDirect verifică identitatea, diploma și experiența fiecărui profesor înainte ca anunțul să fie publicat. Profilurile au badge „Verificat\"." },
-  { q: "Cât costă o oră de meditații în România?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii și orașe, sunt pe pagina Prețuri meditații." },
-  { q: "Ia MeditatiiDirect comision din meditații?", a: "Nu. Contactul dintre elev și profesor este direct, iar plata se face între ei. Platforma nu percepe niciun comision din ședințe." },
+  {
+    q: "Cum public un anunț de meditații?",
+    a: "Creezi cont gratuit pe MeditatiiDirect.ro, completezi profilul de profesor (CV, materii, experiență) și publici primul anunț în mai puțin de 5 minute. Verificarea durează în medie 24 de ore.",
+  },
+  {
+    q: "Ce informații conține un anunț de meditații?",
+    a: "Materia, nivelul (gimnaziu, liceu, BAC, admitere), prețul pe oră, locația sau opțiunea online, durata ședinței și o descriere detaliată cu metoda profesorului. Vezi exemple concrete în pagina de anunțuri.",
+  },
+  {
+    q: "Sunt profesorii verificați?",
+    a: 'Da. Echipa MeditatiiDirect verifică identitatea, diploma și experiența fiecărui profesor înainte ca anunțul să fie publicat. Profilurile au badge „Verificat".',
+  },
+  {
+    q: "Cât costă o oră de meditații în România?",
+    a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii și orașe, sunt pe pagina Prețuri meditații.",
+  },
+  {
+    q: "Ia MeditatiiDirect comision din meditații?",
+    a: "Nu. Contactul dintre elev și profesor este direct, iar plata se face între ei. Platforma nu percepe niciun comision din ședințe.",
+  },
 ];
 
 export const Route = createFileRoute("/anunturi-meditatii")({
@@ -18,7 +34,11 @@ export const Route = createFileRoute("/anunturi-meditatii")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
-      { name: "keywords", content: "anunturi meditatii, anunturi de meditatii, anunturi meditatii bucuresti, anunturi meditatii cluj, anunturi meditatii iasi, anunturi meditatii online, anunturi profesori, anunturi meditatii matematica, anunturi meditatii romana, anunturi meditatii bac, anunturi meditatii 2026, meditatori, profesori particulari, ore particulare, meditatii ieftine" },
+      {
+        name: "keywords",
+        content:
+          "anunturi meditatii, anunturi de meditatii, anunturi meditatii bucuresti, anunturi meditatii cluj, anunturi meditatii iasi, anunturi meditatii online, anunturi profesori, anunturi meditatii matematica, anunturi meditatii romana, anunturi meditatii bac, anunturi meditatii 2026, meditatori, profesori particulari, ore particulare, meditatii ieftine",
+      },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
@@ -30,10 +50,16 @@ export const Route = createFileRoute("/anunturi-meditatii")({
     links: [{ rel: "canonical", href: URL }],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
-      { type: "application/ld+json", children: JSON.stringify({
-        "@context": "https://schema.org", "@type": "ItemList", name: "Anunțuri meditații România",
-        description: DESC, url: URL, 
-      }) },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Anunțuri meditații România",
+          description: DESC,
+          url: URL,
+        }),
+      },
     ],
   }),
   component: () => (
@@ -47,14 +73,40 @@ export const Route = createFileRoute("/anunturi-meditatii")({
         "Filtre după oraș, materie, online vs. la domiciliu",
         "Recenzii reale de la elevi și părinți",
         "Contact direct prin chat, telefon sau WhatsApp",
-        "Tarife transparente, de la 30 lei/oră",
+        "Tariful e scris în anunț sau în propunere",
       ]}
       ctaPrimary={{ to: "/meditatii", label: "Vezi toate anunțurile" }}
       ctaSecondary={{ to: "/pentru-profesori", label: "Publică un anunț" }}
       sections={[
-        { title: "Pentru elevi și părinți", body: <>Compară zeci de profesori la aceeași materie. Vezi prețul, experiența, recenziile și disponibilitatea înainte să trimiți primul mesaj. Toate anunțurile sunt gratuit de consultat.</> },
-        { title: "Pentru profesori", body: <>Publici gratuit primele anunțuri și primești cererile elevilor la materiile tale. Plătești doar dacă vrei să-ți promovezi anunțul în top.</> },
-        { title: "Materii populare", body: <>Matematică, limba română, limba engleză, biologie, fizică, chimie, informatică, istorie, germană, franceză, italiană, spaniolă, japoneză, economie, drept și 20+ alte discipline.</> },
+        {
+          title: "Pentru elevi și părinți",
+          body: (
+            <>
+              Compară zeci de profesori la aceeași materie. Vezi prețul, experiența, recenziile și
+              disponibilitatea înainte să trimiți primul mesaj. Toate anunțurile sunt gratuit de
+              consultat.
+            </>
+          ),
+        },
+        {
+          title: "Pentru profesori",
+          body: (
+            <>
+              Publici gratuit primele anunțuri și primești cererile elevilor la materiile tale.
+              Plătești doar dacă vrei să-ți promovezi anunțul în top.
+            </>
+          ),
+        },
+        {
+          title: "Materii populare",
+          body: (
+            <>
+              Matematică, limba română, limba engleză, biologie, fizică, chimie, informatică,
+              istorie, germană, franceză, italiană, spaniolă, japoneză, economie, drept și 20+ alte
+              discipline.
+            </>
+          ),
+        },
       ]}
       faqs={faqs}
       related={[

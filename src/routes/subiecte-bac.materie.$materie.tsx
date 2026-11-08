@@ -3,6 +3,9 @@ import { AdBanner, AdInArticle } from "@/components/ads/ad-slots";
 import { BacPaperCard, groupBacPapers, type BacPaper } from "@/components/bac-paper-card";
 import { getBacByMaterie } from "@/lib/subiecte-bac.functions";
 import { SITE_URL } from "@/lib/bac-originals";
+import { descriereMaterieBac, numeScurtBac, titluMaterieBac } from "@/lib/bac-materie-seo";
+import { areRezolvariMaterie } from "@/lib/bac-rezolvari-index";
+import { BAC_AGGREGATES } from "@/lib/bac-archive";
 
 export const Route = createFileRoute("/subiecte-bac/materie/$materie")({
   loader: async ({ params }) => {
@@ -14,17 +17,29 @@ export const Route = createFileRoute("/subiecte-bac/materie/$materie")({
     const name = loaderData?.name ?? params.materie;
     const url = `${SITE_URL}/subiecte-bac/materie/${params.materie}`;
     const years = (loaderData?.rows ?? []).map((r) => r.year);
-    const period = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : "2010–2026";
-    const title = `Subiecte BAC ${name} (toți anii) — variante, bareme și rezolvări | MeditatiiDirect.ro`;
-    const description = `Subiecte BAC ${name} ${period} cu barem oficial PDF: variante BAC pe ani, sesiuni și profiluri, cu sursa fiecărui document și rezolvări pas cu pas. Gratuit, fără cont.`;
-    const n = name.toLowerCase();
+    const title = titluMaterieBac(params.materie, name, years);
+    const prefix = BAC_AGGREGATES[params.materie]?.prefix ?? params.materie;
+    const description = descriereMaterieBac({
+      slug: params.materie,
+      name,
+      ani: years,
+      // Doar pagina cu toate profilurile le enumeră (ex. fizică: teoretic, tehnologic).
+      profiluri: BAC_AGGREGATES[params.materie]
+        ? (loaderData?.profiluri ?? [])
+            .map((p) => numeScurtBac(p.slug, p.name).split(" ").slice(1).join(" "))
+            .filter(Boolean)
+        : [],
+      areRezolvari: areRezolvariMaterie(prefix),
+    });
+    const n = numeScurtBac(params.materie, name);
     return {
       meta: [
         { title },
         { name: "description", content: description },
         {
           name: "keywords",
-          content: `subiecte bac ${n}, variante bac ${n}, barem bac ${n}, subiecte bacalaureat ${n}, simulare bac ${n}, subiecte bac ${n} 2026, subiecte bac ${n} 2025, barem bac ${n} 2026`,
+          content:
+            `subiecte bac ${n}, subiecte ${n} bac, variante bac ${n}, barem bac ${n}, subiecte bacalaureat ${n}, bac ${n} ${years.length ? Math.max(...years) : ""}`.trim(),
         },
         { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
         { httpEquiv: "Content-Language", content: "ro-RO" },
@@ -93,7 +108,7 @@ export const Route = createFileRoute("/subiecte-bac/materie/$materie")({
 type Row = Awaited<ReturnType<typeof getBacByMaterie>>["rows"][number];
 
 function Page() {
-  const { name, rows, slug } = Route.useLoaderData();
+  const { name, rows, slug, agregat, profiluri } = Route.useLoaderData();
   const byYear = new Map<number, Row[]>();
   rows.forEach((r: Row) => {
     const a = byYear.get(r.year) ?? [];
@@ -124,32 +139,29 @@ function Page() {
         variantele de rezervă și modelul oficial. Fiecare PDF are sursa și modul de verificare
         afișate; se deschide și se descarcă gratuit, fără cont.
       </p>
-      {slug.startsWith("matematica") && (
-        <nav aria-label="Profiluri matematică" className="mt-4 flex flex-wrap gap-4 text-sm">
-          {slug !== "matematica" && (
+      {profiluri.length > 1 && agregat && (
+        <nav aria-label={`Profiluri ${agregat.name}`} className="mt-4 flex flex-wrap gap-4 text-sm">
+          {slug !== agregat.slug && (
             <Link
               to="/subiecte-bac/materie/$materie"
-              params={{ materie: "matematica" }}
+              params={{ materie: agregat.slug }}
               className="text-primary underline"
             >
               Toate profilurile
             </Link>
           )}
-          {[
-            ["mate-info", "Mate-info"],
-            ["st-nat", "Științe ale naturii"],
-            ["tehnologic", "Tehnologic"],
-            ["pedagogic", "Pedagogic"],
-          ].map(([track, label]) => (
-            <Link
-              key={track}
-              to="/subiecte-bac/materie/$materie"
-              params={{ materie: `matematica-${track}` }}
-              className="text-primary underline"
-            >
-              {label}
-            </Link>
-          ))}
+          {profiluri
+            .filter((p: { slug: string }) => p.slug !== slug)
+            .map((p: { slug: string; name: string }) => (
+              <Link
+                key={p.slug}
+                to="/subiecte-bac/materie/$materie"
+                params={{ materie: p.slug }}
+                className="text-primary underline"
+              >
+                {p.name}
+              </Link>
+            ))}
         </nav>
       )}
       <nav aria-label="Ani BAC" className="mt-4 flex flex-wrap gap-4 text-sm">

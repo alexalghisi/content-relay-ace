@@ -57,62 +57,69 @@ const FAQS = [
 ];
 
 export const Route = createFileRoute("/subiecte-bac")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESC },
-      {
-        name: "keywords",
-        content:
-          "subiecte bac, bac 2026 subiecte, subiecte de bac, subiecte bac 2025, subiecte bac matematica, subiecte mate bac, subiecte bac tehnologic, subiecte bac romana, barem bac 2026, variante bac, rezolvare subiecte bac pas cu pas",
-      },
-      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
-      { httpEquiv: "Content-Language", content: "ro-RO" },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
-      { property: "og:url", content: URL },
-      { property: "og:type", content: "website" },
-      { property: "og:locale", content: "ro_RO" },
-      { property: "og:site_name", content: "MeditatiiDirect.ro" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESC },
-    ],
-    links: [{ rel: "canonical", href: URL }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Acasă", item: `${SITE_URL}/` },
-            { "@type": "ListItem", position: 2, name: "Subiecte BAC", item: URL },
+  // Ruta e și layout-ul paginilor-copil (an, materie, lucrare): canonical-ul și JSON-LD-ul hub-ului
+  // se emit doar pe hub, altfel fiecare pagină-copil ar avea două canonical-uri și un FAQPage invizibil.
+  head: ({ matches }) => {
+    const eHub = matches[matches.length - 1]?.routeId === "/subiecte-bac";
+    return {
+      meta: [
+        { title: TITLE },
+        { name: "description", content: DESC },
+        {
+          name: "keywords",
+          content:
+            "subiecte bac, bac 2026 subiecte, subiecte de bac, subiecte bac 2025, subiecte bac matematica, subiecte mate bac, subiecte bac tehnologic, subiecte bac romana, barem bac 2026, variante bac, rezolvare subiecte bac pas cu pas",
+        },
+        { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+        { httpEquiv: "Content-Language", content: "ro-RO" },
+        { property: "og:title", content: TITLE },
+        { property: "og:description", content: DESC },
+        { property: "og:url", content: URL },
+        { property: "og:type", content: "website" },
+        { property: "og:locale", content: "ro_RO" },
+        { property: "og:site_name", content: "MeditatiiDirect.ro" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: TITLE },
+        { name: "twitter:description", content: DESC },
+      ],
+      links: eHub ? [{ rel: "canonical", href: URL }] : [],
+      scripts: !eHub
+        ? []
+        : [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Acasă", item: `${SITE_URL}/` },
+                  { "@type": "ListItem", position: 2, name: "Subiecte BAC", item: URL },
+                ],
+              }),
+            },
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "CollectionPage",
+                name: TITLE,
+                description: DESC,
+                url: URL,
+                inLanguage: "ro-RO",
+                isPartOf: { "@type": "WebSite", name: "MeditatiiDirect.ro", url: SITE_URL },
+                about: [
+                  "Bacalaureat România",
+                  "Subiecte BAC",
+                  "Bareme BAC",
+                  "Simulare Bacalaureat",
+                  "Variante Bacalaureat",
+                ],
+              }),
+            },
+            { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
           ],
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          name: TITLE,
-          description: DESC,
-          url: URL,
-          inLanguage: "ro-RO",
-          isPartOf: { "@type": "WebSite", name: "MeditatiiDirect.ro", url: SITE_URL },
-          about: [
-            "Bacalaureat România",
-            "Subiecte BAC",
-            "Bareme BAC",
-            "Simulare Bacalaureat",
-            "Variante Bacalaureat",
-          ],
-        }),
-      },
-      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
-    ],
-  }),
+    };
+  },
   loader: async () => ({
     filters: await getSubiecteBacFilters(),
     matrix: await getBacMatrix(),

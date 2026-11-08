@@ -5,6 +5,7 @@ import { ORASE_HUB } from "@/data/orase-hub";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { consolidatedTarget } from "@/lib/seo-redirects";
 import { BLOCAJE, BLOCAJE_MATERII } from "@/data/blocaje";
+import { inLocalitate, paginaLocalaIndexabila, potrivesteMaterie } from "@/lib/pagina-locala";
 
 const BASE_URL = "https://meditatiidirect.ro";
 
@@ -113,6 +114,19 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/politica-cookies", priority: "0.2", changefreq: "yearly" },
 ];
 
+type CerereSitemap = { subject: string | null; city: string | null; is_online: boolean };
+
+/** Ultimele 1000 de cereri (aceeași fereastră ca statisticile paginilor) — doar câmpurile pentru reguli. */
+async function cereriRecente(): Promise<CerereSitemap[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("student_requests")
+    .select("subject,city,is_online")
+    .order("created_at", { ascending: false })
+    .limit(1000);
+  return (data ?? []) as CerereSitemap[];
+}
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
@@ -142,6 +156,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           );
         }
 
+        let dbPosts: { slug: string; updated_at: string | null }[] = [];
         try {
           // Query-string listings (/meditatii?materie=…) are canonicalised to /meditatii — not listed.
           // Per-ad pages — primary long-tail SEO surface
@@ -157,21 +172,23 @@ export const Route = createFileRoute("/sitemap.xml")({
             );
           }
           // Paginile „materie-online” sunt noindex (șabloane aproape identice) — nu se listează.
-          // Orașe: doar cele cu profesori locali reali (aceeași regulă ca pagina).
-          const { MIN_LISTINGS_FOR_INDEX: MIN_CITY } = await import("@/lib/market-stats.functions");
+          // Orașe: aceeași regulă ca pagina /meditatii-in/$oras (src/lib/pagina-locala.ts).
           const { data: locRows } = await supabaseAdmin
             .from("ads")
-            .select("location")
+            .select("location,is_online")
             .eq("status", "active")
             .limit(10000);
-          const locs = (locRows ?? []).map((r: { location: string | null }) =>
-            (r.location ?? "").toLowerCase(),
-          );
+          const adLocs = (locRows ?? []) as { location: string | null; is_online: boolean }[];
+          const cereri = await cereriRecente();
           for (const c of CITIES) {
-            if (
-              locs.filter((l) => c.matchLocation.some((m) => l.includes(m.toLowerCase()))).length <
-              MIN_CITY
-            )
+            const local = adLocs.filter((r) => inLocalitate(r.location, c.matchLocation)).length;
+            const online = adLocs.filter(
+              (r) => r.is_online && !inLocalitate(r.location, c.matchLocation),
+            ).length;
+            const cityRequests = cereri.filter(
+              (r) => !!r.subject && !r.is_online && inLocalitate(r.city, c.matchLocation),
+            ).length;
+            if (!paginaLocalaIndexabila({ localAds: local, onlineAds: online, cityRequests }))
               continue;
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,
@@ -191,19 +208,24 @@ export const Route = createFileRoute("/sitemap.xml")({
             );
           }
 
-          // Blog posts
+          // Blog posts (DB) — cele din repo se adaugă mai jos, independent de DB.
           const { data: posts } = await supabaseAdmin
             .from("blog_posts")
             .select("slug,updated_at")
             .eq("is_published", true);
-          for (const p of posts ?? []) {
-            const last = p.updated_at ? new Date(p.updated_at).toISOString().slice(0, 10) : null;
-            urls.push(
-              `  <url>\n    <loc>${BASE_URL}/blog/${p.slug}</loc>\n${last ? `    <lastmod>${last}</lastmod>\n` : ""}    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
-            );
-          }
+          dbPosts = (posts ?? []) as { slug: string; updated_at: string | null }[];
         } catch (err) {
           console.error("sitemap dynamic fetch failed", err);
+        }
+
+        // Blog: articolele din src/content/blog (fără DB) + cele din blog_posts, fără dubluri.
+        // Import dinamic: textul articolelor nu ajunge în bundle-ul din browser.
+        const { blogSitemapEntries } = await import("@/lib/blog-markdown");
+        const { postariMarkdown } = await import("@/lib/blog-fisiere");
+        for (const b of blogSitemapEntries(dbPosts, postariMarkdown())) {
+          urls.push(
+            `  <url>\n    <loc>${BASE_URL}${b.path}</loc>\n${b.lastmod ? `    <lastmod>${b.lastmod}</lastmod>\n` : ""}    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`,
+          );
         }
 
         // Pagini-resursă pentru fiecare PDF găzduit la noi (BAC + admitere)
@@ -243,14 +265,22 @@ export const Route = createFileRoute("/sitemap.xml")({
             location: string | null;
             is_online: boolean;
           }[];
-          const { MIN_LISTINGS_FOR_INDEX } = await import("@/lib/market-stats.functions");
-          const comboHasAds = (subs: string[], locs: string[]) =>
-            rows.filter(
+          // Aceeași regulă ca pagina materie × oraș (src/lib/pagina-locala.ts).
+          const cereri = await cereriRecente();
+          const comboIndexabil = (subs: string[], nume: string, locs: string[]) => {
+            const deMaterie = rows.filter((r) => r.subject_slug && subs.includes(r.subject_slug));
+            const local = deMaterie.filter((r) => inLocalitate(r.location, locs)).length;
+            const online = deMaterie.filter(
+              (r) => r.is_online && !inLocalitate(r.location, locs),
+            ).length;
+            const cityRequests = cereri.filter(
               (r) =>
-                r.subject_slug &&
-                subs.includes(r.subject_slug) &&
-                locs.some((m) => (r.location ?? "").toLowerCase().includes(m.toLowerCase())),
-            ).length >= MIN_LISTINGS_FOR_INDEX;
+                potrivesteMaterie(r.subject, nume, subs) &&
+                !r.is_online &&
+                inLocalitate(r.city, locs),
+            ).length;
+            return paginaLocalaIndexabila({ localAds: local, onlineAds: online, cityRequests });
+          };
           const { getGhidLocal } = await import("@/data/ghiduri-locale");
           for (const s of SUBJECTS_SEO) {
             urls.push(
@@ -258,7 +288,10 @@ export const Route = createFileRoute("/sitemap.xml")({
             );
             for (const c of CITIES) {
               // Combinațiile cu ghid local sunt indexabile și fără anunțuri (vezi ruta).
-              if (!getGhidLocal(s.slug, c.slug) && !comboHasAds(s.dbSlugs, c.matchLocation))
+              if (
+                !getGhidLocal(s.slug, c.slug) &&
+                !comboIndexabil(s.dbSlugs, s.nameLower, c.matchLocation)
+              )
                 continue;
               urls.push(
                 `  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,

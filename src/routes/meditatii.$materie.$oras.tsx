@@ -1,74 +1,44 @@
 // Combo dinamic materie × oraș: /meditatii/$materie/$oras
-// Pagina pull-uiește anunțuri reale + ItemList JSON-LD => conținut bogat + indexare puternică pentru long-tail.
+// Conținut real: anunțuri din oraș, profesori care predau online (din toată țara), cereri recente
+// anonimizate și tarife reale — locale sau, când orașul are prea puține date, naționale (marcate).
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
-import { getSubjectSeo, SUBJECTS_SEO } from "@/data/subjects-seo";
-import { getCityBySlug, CITIES } from "@/data/cities";
+import { getSubjectSeo, type SubjectSeo } from "@/data/subjects-seo";
+import { getCityBySlug, type CityInfo } from "@/data/cities";
 import { getGhidLocal } from "@/data/ghiduri-locale";
-import { supabase } from "@/integrations/supabase/client";
-import { EmptyResults } from "@/components/empty-results";
 import { AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { BadgeCheck, MapPin, Wifi } from "lucide-react";
-import { getComboStats, getTrustStats, MIN_LISTINGS_FOR_INDEX } from "@/lib/market-stats.functions";
 import { ComboDataBlock, TrustBlock, comboFaqs } from "@/components/market-data";
+import {
+  getComboPageData,
+  type AnuntCard,
+  type ComboPageData,
+} from "@/lib/pagina-locala.functions";
+import { descriereCombo, paginaLocalaIndexabila, titluCombo } from "@/lib/pagina-locala";
 
 const SITE = "https://meditatiidirect.ro";
+const ANUL = new Date().getFullYear();
 
-interface LocalAd {
-  id: string;
-  title: string;
-  seo_slug: string | null;
-  price_per_hour: number | null;
-  location: string | null;
-  is_online: boolean;
-  is_promoted: boolean;
-  teacher_name: string | null;
-  avatar_url: string | null;
+const seedFor = (subject: SubjectSeo, city: CityInfo) =>
+  (subject.slug + city.slug).split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 4;
+
+function h1For(subject: SubjectSeo, city: CityInfo) {
+  return [
+    `Meditații ${subject.name} în ${city.name}`,
+    `Profesori de ${subject.nameLower} în ${city.name}`,
+    `Meditații ${subject.nameLower} ${city.name} — ${city.county}`,
+    `${subject.name} particulară în ${city.name}: profesori și cereri reale`,
+  ][seedFor(subject, city)]!;
 }
 
-async function fetchAdsForCombo(
-  subjectSlugs: string[],
-  city: { name: string; matchLocation: string[] },
-): Promise<LocalAd[]> {
-  // Filtrăm pe materie + locație: orice anunț al cărui `location` conține una din variantele orașului
-  // sau e online. Limităm la 24 pentru indexare densă.
-  const orFilter = city.matchLocation
-    .map((m) => `location.ilike.%${m}%`)
-    .concat(["is_online.eq.true"])
-    .join(",");
-
-  const { data } = await supabase
-    .from("ads")
-    .select("id,title,seo_slug,price_per_hour,location,is_online,is_promoted,legacy_teachers(full_name,avatar_url)")
-    .eq("status", "active")
-    .in("subject_slug", subjectSlugs)
-    .or(orFilter)
-    .order("is_promoted", { ascending: false })
-    .order("views_count", { ascending: false })
-    .limit(24);
-
-  return (
-    (data ?? []) as unknown as Array<{
-      id: string;
-      title: string;
-      seo_slug: string | null;
-      price_per_hour: number | null;
-      location: string | null;
-      is_online: boolean;
-      is_promoted: boolean;
-      legacy_teachers: { full_name: string; avatar_url: string | null } | null;
-    }>
-  ).map((a) => ({
-    id: a.id,
-    title: a.title,
-    seo_slug: a.seo_slug,
-    price_per_hour: a.price_per_hour,
-    location: a.location,
-    is_online: a.is_online,
-    is_promoted: a.is_promoted,
-    teacher_name: a.legacy_teachers?.full_name ?? null,
-    avatar_url: a.legacy_teachers?.avatar_url ?? null,
-  }));
+function faqsFor(
+  subject: SubjectSeo,
+  city: CityInfo,
+  data: ComboPageData | null,
+  ghid: ReturnType<typeof getGhidLocal> | null,
+) {
+  const baza = data ? comboFaqs(data.stats, subject.nameLower, city.name, data.national) : [];
+  return ghid ? [...ghid.faq, ...baza.slice(0, 2)] : baza;
 }
 
 export const Route = createFileRoute("/meditatii/$materie/$oras")({
@@ -76,101 +46,65 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
     const subject = getSubjectSeo(params.materie);
     const city = getCityBySlug(params.oras);
     if (!subject || !city) throw notFound();
-    const [ads, stats, trust] = await Promise.all([
-      fetchAdsForCombo(subject.dbSlugs, city),
-      getComboStats({
-        data: {
-          subjectSlugs: subject.dbSlugs,
-          subjectName: subject.nameLower,
-          cityName: city.name,
-          cityMatch: city.matchLocation,
-        },
-      }),
-      getTrustStats(),
-    ]);
-    return {
-      subject,
-      city,
-      ads,
-      stats,
-      trust,
-      ghid: getGhidLocal(subject.slug, city.slug) ?? null,
-    };
+    let data: ComboPageData | null = null;
+    try {
+      data = await getComboPageData({ data: { materie: subject.slug, oras: city.slug } });
+    } catch (err) {
+      // Nu prezentăm o citire eșuată ca pe o pagină goală: afișăm explicit că datele lipsesc momentan.
+      console.error("combo page data failed", err);
+    }
+    return { subject, city, data, ghid: getGhidLocal(subject.slug, city.slug) ?? null };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return {};
-    const { subject, city, ads, stats, ghid } = loaderData;
+    const { subject, city, data, ghid } = loaderData;
     const url = `${SITE}/meditatii/${subject.slug}/${city.slug}`;
-    const count = ads.length;
-    // Preț local ajustat cu indicele orașului — face fiecare pagină unică (nu doar boilerplate)
-    // Only real prices from our own listings/offers/proposals — never estimates.
-    const pr = stats.price;
-    const priceTxt = pr ? `${pr.min}-${pr.max} lei/oră` : "tarife de la profesori";
-    // Rotăm 4 template-uri de titlu pe baza hash-ului deterministic (materie+oraș)
-    // ⇒ 34 orașe × 11 materii = 374 combinații, fiecare cu title/H1/desc unic.
-    const seed = (subject.slug + city.slug).split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-    const variant = seed % 4;
-    const countLbl = count >= 5 ? `${count} profesori` : "Profesori";
-    const titleTemplates = [
-      `Meditații ${subject.name} ${city.name} — ${countLbl}, ${priceTxt}`,
-      `Profesori ${subject.name} ${city.name}: online sau la domiciliu | MeditatiiDirect`,
-      `Meditații ${subject.nameLower} în ${city.name} — prețuri reale 2026`,
-      `${subject.name} ${city.name}: profesori particulari verificați`,
-    ];
-    const h1Templates = [
-      `Meditații ${subject.name} în ${city.name}`,
-      `Profesori de ${subject.nameLower} în ${city.name}`,
-      `Meditații ${subject.nameLower} ${city.name} — ${city.county}`,
-      `${subject.name} particulară în ${city.name}: profesori verificați`,
-    ];
-    const realBit = pr ? ` Tarif median real ${pr.median} lei/oră (${pr.min}–${pr.max}, din ${pr.n} oferte).` : "";
-    const descTemplates = [
-      `${count} anunțuri active de ${subject.nameLower} pentru ${city.name}.${realBit} Online sau la domiciliu, fără comision.`,
-      `Cauți meditații ${subject.nameLower} în ${city.name}? Postezi cererea gratuit și profesorii îți trimit propuneri cu dată și tarif.${realBit}`,
-      `Meditații ${subject.name} ${city.name}: date reale despre profesori, prețuri și cereri, actualizate zilnic.${realBit}`,
-      `Profesori de ${subject.nameLower} în ${city.name}, online sau față în față.${realBit} Contact prin platformă, fără comision.`,
-    ];
-    // Combinațiile cu ghid local scris de mână primesc titlul formulat ca în căutările reale.
-    const title = ghid ? ghid.title : titleTemplates[variant];
-    const desc = ghid ? ghid.description : descTemplates[variant];
-    const h1 = ghid ? ghid.h1 : h1Templates[variant];
-    const faqs = ghid
-      ? [...ghid.faq, ...comboFaqs(stats, subject.nameLower, city.name).slice(0, 2)]
-      : comboFaqs(stats, subject.nameLower, city.name);
+    const pretLocal = data?.stats.price ?? null;
+    const pret = pretLocal ?? data?.national?.price ?? null;
+    const title = ghid ? ghid.title : titluCombo(subject.nameLower, city.name, ANUL);
+    const desc = ghid
+      ? ghid.description
+      : descriereCombo({
+          materie: subject.nameLower,
+          oras: city.name,
+          pret,
+          pretNational: !pretLocal && !!pret,
+          profesoriLocali: (data?.local.length ?? 0) > 0,
+        });
+    const h1 = ghid ? ghid.h1 : h1For(subject, city);
+    const faqs = faqsFor(subject, city, data, ghid);
+    const indexabil = data
+      ? paginaLocalaIndexabila({
+          localAds: data.local.length,
+          onlineAds: data.online.length,
+          cityRequests: data.stats.cityRequests,
+          ghid: !!ghid,
+        })
+      : !!ghid;
 
-    const itemListLd =
-      count > 0
-        ? {
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            name: `Meditații ${subject.name} în ${city.name}`,
-            numberOfItems: count,
-            itemListElement: ads.slice(0, 20).map((a, i) => ({
-              "@type": "ListItem",
-              position: i + 1,
-              url: `${SITE}/anunt/${a.seo_slug || a.id}`,
-              name: a.title,
-            })),
-          }
-        : null;
+    const anunturi = data ? [...data.local, ...data.online] : [];
+    const itemListLd = anunturi.length
+      ? {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: `Profesori de ${subject.nameLower} pentru elevii din ${city.name}`,
+          numberOfItems: Math.min(anunturi.length, 20),
+          itemListElement: anunturi.slice(0, 20).map((a, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            url: `${SITE}/anunt/${a.seo_slug || a.id}`,
+            name: a.title,
+          })),
+        }
+      : null;
 
     return {
       meta: [
         { title },
         { name: "description", content: desc },
-        // Thin content guard: fără profesori listați și fără ghid local, pagina nu intră în index
-        // (dar linkurile sunt urmate). Un ghid scris de mână face pagina utilă și fără anunțuri.
-        // Doar anunțurile cu locație reală în oraș contează: anunțurile online apar în toate
-        // combinațiile și ar face sute de pagini aproape identice (conținut slab pentru AdSense).
-        ...(ads.filter((a) =>
-          city.matchLocation.some((m) => (a.location ?? "").toLowerCase().includes(m.toLowerCase())),
-        ).length < MIN_LISTINGS_FOR_INDEX && !ghid
-          ? [{ name: "robots", content: "noindex, follow" }]
-          : []),
-        {
-          name: "keywords",
-          content: `meditatii ${subject.slug} ${city.slug}, meditatii ${subject.nameLower} ${city.name}, profesor ${subject.nameLower} ${city.name}, pret meditatii ${subject.nameLower} ${city.name}, meditatii ${subject.nameLower} ${city.name} online, anunturi meditatii ${city.name}, profesori ${subject.nameLower} ${city.county.toLowerCase()}`,
-        },
+        // Pagina intră în index doar cu conținut real și specific orașului (src/lib/pagina-locala.ts);
+        // sitemap-ul folosește aceeași regulă.
+        ...(indexabil ? [] : [{ name: "robots", content: "noindex, follow" }]),
         { name: "geo.region", content: "RO" },
         { name: "geo.placename", content: city.name },
         { property: "og:title", content: title },
@@ -200,66 +134,122 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
             url,
             areaServed: { "@type": "City", name: city.name },
             provider: { "@type": "Organization", name: "MeditatiiDirect", url: SITE },
-            ...(pr
+            // Doar tarifele care acoperă orașul — nu cele naționale.
+            ...(pretLocal
               ? {
                   offers: {
                     "@type": "AggregateOffer",
                     priceCurrency: "RON",
-                    lowPrice: pr.min,
-                    highPrice: pr.max,
-                    offerCount: pr.n,
+                    lowPrice: pretLocal.min,
+                    highPrice: pretLocal.max,
+                    offerCount: pretLocal.n,
                   },
                 }
               : {}),
           }),
         },
-        ...(itemListLd ? [{ type: "application/ld+json", children: JSON.stringify(itemListLd) }] : []),
-        { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
+        ...(itemListLd
+          ? [{ type: "application/ld+json", children: JSON.stringify(itemListLd) }]
+          : []),
+        ...(faqs.length
+          ? [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }]
+          : []),
       ],
     };
   },
   component: ComboPage,
 });
 
+function AnuntCardView({ a }: { a: AnuntCard }) {
+  return (
+    <Link
+      to="/anunt/$slug"
+      params={{ slug: a.seo_slug || a.id }}
+      className="card-soft flex flex-col p-5 transition hover:border-primary/40 hover:shadow-[var(--shadow-pop)]"
+    >
+      <div className="flex items-center gap-3">
+        {a.avatar_url ? (
+          <img
+            src={a.avatar_url}
+            alt={a.teacher_name ?? "Profesor"}
+            loading="lazy"
+            width={44}
+            height={44}
+            className="h-11 w-11 rounded-full object-cover"
+          />
+        ) : (
+          <div className="grid h-11 w-11 place-items-center rounded-full bg-primary-soft font-semibold text-primary">
+            {(a.teacher_name ?? "P").charAt(0)}
+          </div>
+        )}
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold">{a.teacher_name ?? "Profesor"}</p>
+          <p className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+            <BadgeCheck className="h-3 w-3 text-primary" /> Anunț activ
+          </p>
+        </div>
+        {a.is_promoted && (
+          <span className="ml-auto rounded-full bg-primary-soft px-2 py-0.5 text-[10px] font-medium text-primary">
+            Promovat
+          </span>
+        )}
+      </div>
+      <p className="mt-3 line-clamp-2 text-sm font-medium">{a.title}</p>
+      <div className="mt-4 flex items-end justify-between text-xs text-muted-foreground">
+        <span className="inline-flex items-center gap-2">
+          {a.location && (
+            <span className="inline-flex items-center gap-1">
+              <MapPin className="h-3 w-3" /> {a.location}
+            </span>
+          )}
+          {a.is_online && (
+            <span className="inline-flex items-center gap-1 text-primary">
+              <Wifi className="h-3 w-3" /> Online
+            </span>
+          )}
+        </span>
+        {a.price_per_hour ? (
+          <span className="text-base font-bold text-foreground">{a.price_per_hour} lei/h</span>
+        ) : null}
+      </div>
+    </Link>
+  );
+}
+
 function ComboPage() {
-  const { subject, city, ads, stats, trust, ghid } = Route.useLoaderData();
+  const { subject, city, data, ghid } = Route.useLoaderData();
   const url = `${SITE}/meditatii/${subject.slug}/${city.slug}`;
-
-  // Cross-link silos: aceeași materie în alte orașe + alte materii în același oraș
-  const otherCities = CITIES.filter((c) => c.slug !== city.slug).slice(0, 8);
-  const otherSubjects = SUBJECTS_SEO.filter((s) => s.slug !== subject.slug).slice(0, 8);
-
-  const seed = (subject.slug + city.slug).split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
-  const variant = seed % 4;
-  const pr = stats.price;
-  const h1Options = [
-    `Meditații ${subject.name} în ${city.name}`,
-    `Profesori de ${subject.nameLower} în ${city.name}`,
-    `Meditații ${subject.nameLower} ${city.name} — ${city.county}`,
-    `${subject.name} particulară în ${city.name}: profesori verificați`,
-  ];
+  const pretLocal = data?.stats.price ?? null;
+  const pretNational = !pretLocal ? (data?.national?.price ?? null) : null;
+  const faqs = faqsFor(subject, city, data, ghid);
+  const fara = !!data && !data.local.length && !data.online.length;
 
   return (
     <>
       <SeoLanding
         pageUrl={url}
         breadcrumbParent={{ name: "Meditații", url: `${SITE}/meditatii` }}
-        h1={ghid ? ghid.h1 : h1Options[variant]}
+        linkContext={{ materie: subject.slug, oras: city.slug }}
+        h1={ghid ? ghid.h1 : h1For(subject, city)}
         intro={
           ghid
             ? ghid.intro
-            : `Cauți meditații la ${subject.nameLower} în ${city.name} (${city.county}, ${city.population} locuitori — reper ${city.landmark})? Descrie o singură dată ce ai nevoie, iar profesorii verificați îți trimit propuneri cu dată, oră și tarif. ${pr ? `Tarifele reale de pe platformă: ${pr.min}–${pr.max} lei/oră (median ${pr.median} lei). ` : ""}Online sau la domiciliu. Gratuit, fără comision.`
+            : `Cauți meditații la ${subject.nameLower} în ${city.name} (${city.county})? Descrie o singură dată ce ai nevoie, iar profesorii îți trimit propuneri cu dată, oră și tarif. ${
+                pretLocal
+                  ? `Tarifele reale de pe platformă pentru ${city.name}: ${pretLocal.min}–${pretLocal.max} lei/oră (median ${pretLocal.median} lei). `
+                  : pretNational
+                    ? `La ${subject.nameLower}, tarifele reale de pe platformă din toată țara sunt ${pretNational.min}–${pretNational.max} lei/oră (median ${pretNational.median} lei). `
+                    : ""
+              }Online sau la domiciliu. Gratuit, fără comision.`
         }
-        faqs={
-          ghid
-            ? [...ghid.faq, ...comboFaqs(stats, subject.nameLower, city.name).slice(0, 2)]
-            : comboFaqs(stats, subject.nameLower, city.name)
-        }
+        faqs={faqs}
         bullets={[
-          `${subject.name} pentru toate nivelurile: clasele V–XII, BAC 2026, admitere`,
-          `Pentru elevii din ${city.name} și din liceele din ${city.county}`,
+          `${subject.name} pentru clasele V–XII, Evaluarea Națională, BAC și admitere`,
+          `Pentru elevii din ${city.name} și din ${city.county}`,
           `Online (Zoom / Google Meet) sau la domiciliu în ${city.name}`,
-          pr ? `Tarif median real ${pr.median} lei/oră, din ${pr.n} oferte` : `Tariful îl propune profesorul, tu alegi`,
+          pretLocal
+            ? `Tarif median real ${pretLocal.median} lei/oră, din ${pretLocal.n} tarife`
+            : `Tariful îl propune profesorul, tu alegi`,
         ]}
         ctaPrimary={{
           to: "/meditatii",
@@ -268,108 +258,110 @@ function ComboPage() {
         }}
         ctaSecondary={{ to: "/pentru-profesori", label: "Sunt profesor — vreau cererile" }}
         ctaFooter={{
-          title: `Primește propuneri de la profesori de ${subject.nameLower} din ${city.name}`,
+          title: `Primește propuneri de la profesori de ${subject.nameLower} pentru ${city.name}`,
           body: "Completezi cererea în 2 minute și primești propuneri cu dată, oră și tarif. Gratuit, fără comision.",
           to: "/meditatii",
           label: "Cere ofertă gratuit",
           search: { materie: subject.slug, oras: city.slug },
         }}
-      />
+      >
+        {!data && (
+          <section className="mt-10 rounded-2xl border border-border bg-muted/30 p-6" role="status">
+            <h2 className="text-lg font-semibold">Anunțurile nu pot fi încărcate momentan</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Reîncarcă pagina în câteva minute. Între timp poți posta cererea: ajunge la profesorii
+              de {subject.nameLower} de pe platformă, inclusiv la cei care predau online.
+            </p>
+          </section>
+        )}
 
-      {ghid && (
-        <section className="container-page py-8" aria-labelledby="ghid-local">
-          <h2 id="ghid-local" className="text-2xl font-bold">
-            Ghid: meditații {subject.nameLower} în {city.name}
-          </h2>
-          <div className="mt-4 grid gap-6 lg:grid-cols-3">
-            {ghid.sectiuni.map((sec) => (
-              <article key={sec.titlu} className="card-soft p-5">
-                <h3 className="font-bold">{sec.titlu}</h3>
-                {sec.paragrafe.map((par, i) => (
-                  <p key={i} className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {par}
-                  </p>
-                ))}
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
+        {data && data.local.length > 0 && (
+          <section
+            className="mt-10"
+            aria-labelledby="profesori-locali"
+            data-testid="profesori-locali"
+          >
+            <h2 id="profesori-locali" className="mb-6 text-2xl font-bold">
+              Profesori de {subject.nameLower} din {city.name}
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {data.local.map((a) => (
+                <AnuntCardView key={a.id} a={a} />
+              ))}
+            </div>
+          </section>
+        )}
 
-      <ComboDataBlock s={stats} subject={subject.nameLower} city={city.name} />
+        {data && data.online.length > 0 && (
+          <section
+            className="mt-10"
+            aria-labelledby="profesori-online"
+            data-testid="profesori-online"
+          >
+            <h2 id="profesori-online" className="text-2xl font-bold">
+              Profesori care predau online — disponibili și pentru elevii din {city.name}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Anunțuri active de {subject.nameLower} cu ședințe online, publicate de profesori din
+              toată țara.
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {data.online.map((a) => (
+                <AnuntCardView key={a.id} a={a} />
+              ))}
+            </div>
+            <Link
+              to="/meditatii-online"
+              className="mt-4 inline-block text-sm text-primary underline"
+            >
+              Toți profesorii care predau online
+            </Link>
+          </section>
+        )}
 
-      {/* Anunțuri reale — conținut indexabil bogat */}
-      {ads.length > 0 && (
-        <section className="container-page py-8">
-          <h2 className="text-2xl font-bold mb-6">
-            Profesori de {subject.nameLower} disponibili în {city.name}
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {ads.map((a: LocalAd) => (
-              <Link
-                key={a.id}
-                to="/anunt/$slug"
-                params={{ slug: a.seo_slug || a.id }}
-                className="card-soft p-5 hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition flex flex-col"
-              >
-                <div className="flex items-center gap-3">
-                  {a.avatar_url ? (
-                    <img
-                      src={a.avatar_url}
-                      alt={a.teacher_name ?? "Profesor"}
-                      loading="lazy"
-                      width={44}
-                      height={44}
-                      className="h-11 w-11 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="grid h-11 w-11 place-items-center rounded-full bg-primary-soft text-primary font-semibold">
-                      {(a.teacher_name ?? "P").charAt(0)}
-                    </div>
-                  )}
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold truncate">{a.teacher_name ?? "Profesor verificat"}</p>
-                    <p className="text-xs text-muted-foreground inline-flex items-center gap-1">
-                      <BadgeCheck className="h-3 w-3 text-primary" /> Verificat
+        {ghid && (
+          <section className="mt-10" aria-labelledby="ghid-local">
+            <h2 id="ghid-local" className="text-2xl font-bold">
+              Ghid: meditații {subject.nameLower} în {city.name}
+            </h2>
+            <div className="mt-4 grid gap-6 lg:grid-cols-3">
+              {ghid.sectiuni.map((sec) => (
+                <article key={sec.titlu} className="card-soft p-5">
+                  <h3 className="font-bold">{sec.titlu}</h3>
+                  {sec.paragrafe.map((par, i) => (
+                    <p key={i} className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      {par}
                     </p>
-                  </div>
-                  {a.is_promoted && (
-                    <span className="ml-auto rounded-full bg-primary-soft px-2 py-0.5 text-[10px] font-medium text-primary">
-                      Top
-                    </span>
-                  )}
-                </div>
-                <p className="mt-3 text-sm font-medium line-clamp-2">{a.title}</p>
-                <div className="mt-4 flex items-end justify-between text-xs text-muted-foreground">
-                  <span className="inline-flex items-center gap-1">
-                    {a.is_online ? (
-                      <>
-                        <Wifi className="h-3 w-3" /> Online
-                      </>
-                    ) : (
-                      <>
-                        <MapPin className="h-3 w-3" /> {a.location}
-                      </>
-                    )}
-                  </span>
-                  {a.price_per_hour && (
-                    <span className="text-base font-bold text-foreground">{a.price_per_hour} lei/h</span>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
+                  ))}
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
 
-      {ads.length === 0 && (
-        <div className="container-page">
-          <EmptyResults
-            title={`Încă nu avem anunțuri de ${subject.nameLower} în ${city.name}`}
-            description={`Profesorii de ${subject.nameLower} din ${city.name} (${city.county}) își publică anunțurile continuu, iar lista se actualizează zilnic. Până atunci ai două soluții rapide: alege meditații online la ${subject.nameLower} — profesorii predau din toată țara, la aceleași tarife sau mai mici — ori postează o cerere și te contactează profesorii interesați. Găsești mai jos și resursele gratuite de pregătire (variante de BAC, subiecte de admitere, ghiduri) pe care le poți folosi imediat.`}
+        {data && (
+          <ComboDataBlock
+            s={data.stats}
+            subject={subject.nameLower}
+            city={city.name}
+            national={data.national}
+            embedded
           />
-        </div>
-      )}
+        )}
+
+        {fara && (
+          <section className="mt-10 card-soft p-6">
+            <h2 className="text-lg font-semibold">
+              Cum găsești un profesor de {subject.nameLower} pentru {city.name}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Postezi cererea cu clasa, obiectivul (de exemplu Evaluarea Națională sau BAC) și
+              bugetul. Cererea ajunge la profesorii de {subject.nameLower} de pe platformă, inclusiv
+              la cei care predau online, iar ei îți trimit propuneri cu dată, oră și tarif.
+            </p>
+          </section>
+        )}
+      </SeoLanding>
 
       {/* Banda pentru profesori — cererile din acest oraș ajung în panoul lor */}
       <section className="container-page py-8">
@@ -379,8 +371,8 @@ function ComboPage() {
               Predai {subject.nameLower} în {city.name}?
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Creezi cont gratuit, completezi profilul și vezi cererile elevilor din {city.county}. Fără comision — tu
-              stabilești tariful.
+              Creezi cont gratuit, completezi profilul și vezi cererile elevilor din {city.county}.
+              Fără comision — tu stabilești tariful.
             </p>
           </div>
           <div className="flex gap-3">
@@ -394,47 +386,11 @@ function ComboPage() {
         </div>
       </section>
 
-      <TrustBlock t={trust} />
+      {data && <TrustBlock t={data.trust} />}
 
       <div className="container-page">
         <AdsterraNativeBanner />
       </div>
-
-      {/* Silos: link intern bidirecțional pentru autoritate */}
-      <section className="container-page py-10 border-t border-border mt-6">
-        <div className="grid gap-8 md:grid-cols-2">
-          <div>
-            <h2 className="text-lg font-semibold mb-3">Meditații {subject.name} în alte orașe</h2>
-            <div className="flex flex-wrap gap-2">
-              {otherCities.map((c) => (
-                <Link
-                  key={c.slug}
-                  to="/meditatii/$materie/$oras"
-                  params={{ materie: subject.slug, oras: c.slug }}
-                  className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary"
-                >
-                  {subject.name} {c.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold mb-3">Alte materii în {city.name}</h2>
-            <div className="flex flex-wrap gap-2">
-              {otherSubjects.map((s) => (
-                <Link
-                  key={s.slug}
-                  to="/meditatii/$materie/$oras"
-                  params={{ materie: s.slug, oras: city.slug }}
-                  className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary"
-                >
-                  {s.name} {city.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

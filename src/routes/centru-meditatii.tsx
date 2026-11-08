@@ -2,13 +2,23 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/centru-meditatii";
-const TITLE = "Centru meditatii București, Cluj și online — profesori verificați | MeditatiiDirect.ro";
-const DESC = "Cauți un centru de meditatii in Bucuresti, Cluj sau online? Postezi gratuit cererea și primești oferte de la profesori verificați: matematica, romana, engleza, BAC. Fără comision.";
+const TITLE = "Centru de meditatii Bucuresti, Cluj sau online | gratuit";
+const DESC =
+  "Cauți un centru de meditatii în București, Cluj sau online? Postezi gratuit cererea și primești oferte de la profesori: matematică, română, engleză, BAC.";
 
 const faqs = [
-  { q: "Care este diferența față de un centru de meditații clasic?", a: "La un centru de meditații alegi din profesorii acelui centru. Aici descrii o singură dată ce ai nevoie și primești propuneri de la mai mulți profesori verificați, cu tarif și program, apoi alegi direct, fără comision." },
-  { q: "Găsesc meditații în București pe sectoare?", a: "Da. Menționezi în cerere sectorul sau zona și dacă vrei lecții la profesor, la domiciliu sau online, iar profesorii din apropiere îți trimit propuneri." },
-  { q: "Ce materii sunt disponibile?", a: "Matematică, română, engleză, germană, franceză, fizică, chimie, biologie, informatică, istorie și geografie, de la gimnaziu la BAC și admitere." },
+  {
+    q: "Care este diferența față de un centru de meditații clasic?",
+    a: "La un centru de meditații alegi din profesorii acelui centru. Aici descrii o singură dată ce ai nevoie și primești propuneri de la mai mulți profesori verificați, cu tarif și program, apoi alegi direct, fără comision.",
+  },
+  {
+    q: "Găsesc meditații în București pe sectoare?",
+    a: "Da. Menționezi în cerere sectorul sau zona și dacă vrei lecții la profesor, la domiciliu sau online, iar profesorii din apropiere îți trimit propuneri.",
+  },
+  {
+    q: "Ce materii sunt disponibile?",
+    a: "Matematică, română, engleză, germană, franceză, fizică, chimie, biologie, informatică, istorie și geografie, de la gimnaziu la BAC și admitere.",
+  },
 ];
 
 export const Route = createFileRoute("/centru-meditatii")({
