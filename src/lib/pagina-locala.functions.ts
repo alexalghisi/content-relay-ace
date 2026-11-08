@@ -4,6 +4,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCityBySlug } from "@/data/cities";
 import { getSubjectSeo } from "@/data/subjects-seo";
+import { filtruContineOricare } from "@/lib/filtru-postgrest";
 import type { ComboStats, TrustStats } from "@/lib/market-stats.functions";
 
 export interface AnuntCard {
@@ -65,7 +66,7 @@ export const getComboPageData = createServerFn({ method: "GET" })
     const { computeComboStats, computeTrustStats } = await import("@/lib/market-stats.server");
     const { necesitaDateNationale } = await import("@/lib/pagina-locala");
 
-    const locFilter = city.matchLocation.map((m) => `location.ilike.%${m}%`).join(",");
+    const locFilter = filtruContineOricare("location", city.matchLocation);
     const [localR, onlineR, stats, trust] = await Promise.all([
       supabaseAdmin
         .from("ads")
