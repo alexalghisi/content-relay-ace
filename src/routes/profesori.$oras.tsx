@@ -5,6 +5,7 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 import { getCityBySlug, CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { supabase } from "@/integrations/supabase/client";
+import { filtruContineOricare } from "@/lib/filtru-postgrest";
 import { BadgeCheck, MapPin } from "lucide-react";
 
 const SITE = "https://meditatiidirect.ro";
@@ -18,7 +19,7 @@ interface LocalTeacher {
 }
 
 async function fetchTeachersForCity(city: { matchLocation: string[] }): Promise<LocalTeacher[]> {
-  const orFilter = city.matchLocation.map((m) => `location.ilike.%${m}%`).join(",");
+  const orFilter = filtruContineOricare("location", city.matchLocation);
   const { data } = await supabase
     .from("legacy_teachers")
     .select("id,full_name,avatar_url,location,experience_years")
