@@ -7,6 +7,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
@@ -15,7 +16,7 @@ import { GardaTelefon } from "@/components/garda-telefon";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
-import { ADSENSE_CLIENT } from "@/components/ads/adsense";
+import { ADSENSE_CLIENT, PageAds } from "@/components/ads/adsense";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
 import { I18nProvider, readLocale, useT } from "@/lib/i18n-context";
 
@@ -203,6 +204,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient, locale } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
   return (
     <I18nProvider value={locale}>
       <QueryClientProvider client={queryClient}>
@@ -213,6 +215,7 @@ function RootComponent() {
             <main className="flex-1">
               <Outlet />
             </main>
+            <PageAds pathname={pathname} />
             <SiteFooter />
           </div>
           <Toaster />
