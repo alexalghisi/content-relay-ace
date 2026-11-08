@@ -3,12 +3,22 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/ofer-meditatii";
 const TITLE = "Ofer meditații — Publică anunț gratuit | MeditatiiDirect.ro";
-const DESC = "Ești profesor și vrei să oferi meditații? Publică gratuit primul anunț, primești cererile elevilor din zona și materiile tale, încasezi direct, fără comision.";
+const DESC =
+  "Ești profesor și vrei să oferi meditații? Publică gratuit primul anunț, primești cererile elevilor din zona și materiile tale, încasezi direct, fără comision.";
 
 const faqs = [
-  { q: "Cât costă să public un anunț de meditații?", a: "Publicarea anunțurilor de bază este gratuită. Plătești doar dacă vrei să-ți promovezi anunțul în primele rezultate." },
-  { q: "Trebuie să fiu profesor titular ca să ofer meditații?", a: "Nu, dar trebuie să demonstrezi competența: studii relevante, experiență sau rezultate (olimpiade, lucrări publicate, ani de predare)." },
-  { q: "Cum încasez banii pentru meditații?", a: "Direct de la elev/părinte. Tu negociezi prețul și forma de plată — cash, transfer bancar, Revolut. Platforma nu intermediază plățile." },
+  {
+    q: "Cât costă să public un anunț de meditații?",
+    a: "Publicarea anunțurilor de bază este gratuită. Plătești doar dacă vrei să-ți promovezi anunțul în primele rezultate.",
+  },
+  {
+    q: "Trebuie să fiu profesor titular ca să ofer meditații?",
+    a: "Nu, dar trebuie să demonstrezi competența: studii relevante, experiență sau rezultate (olimpiade, lucrări publicate, ani de predare).",
+  },
+  {
+    q: "Cum încasez banii pentru meditații?",
+    a: "Direct de la elev/părinte. Tu negociezi prețul și forma de plată — cash, transfer bancar, Revolut. Platforma nu intermediază plățile.",
+  },
 ];
 
 export const Route = createFileRoute("/ofer-meditatii")({
@@ -40,7 +50,7 @@ export const Route = createFileRoute("/ofer-meditatii")({
       faqs={faqs}
       related={[
         { to: "/pentru-profesori", label: "Pentru profesori" },
-        { to: "/preturi-meditatii", label: "Tarife orientative" },
+        { to: "/preturi-meditatii", label: "Tarife reale pe materii" },
         { to: "/meditatori", label: "Catalog profesori" },
       ]}
     />

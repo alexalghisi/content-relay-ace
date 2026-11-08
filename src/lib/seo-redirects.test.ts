@@ -9,5 +9,11 @@ describe("duplicate consolidation", () => {
   });
   it("sends /profesori/{oras} to /meditatii-in/{oras}", () =>
     expect(consolidatedTarget("/profesori/cluj-napoca")).toBe("/meditatii-in/cluj-napoca"));
-  it("sends ore-online to meditatii-online", () => expect(consolidatedTarget("/ore-online")).toBe("/meditatii-online"));
+  it("sends the old city landing pages to /meditatii-in/{oras}", () => {
+    expect(consolidatedTarget("/meditatii-cluj")).toBe("/meditatii-in/cluj-napoca");
+    expect(consolidatedTarget("/meditatii-bacau")).toBe("/meditatii-in/bacau");
+    expect(consolidatedTarget("/meditatii-bac")).toBeNull();
+  });
+  it("sends ore-online to meditatii-online", () =>
+    expect(consolidatedTarget("/ore-online")).toBe("/meditatii-online"));
 });

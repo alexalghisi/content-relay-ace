@@ -1,6 +1,11 @@
 // Server-only: calculează agregatele reale pentru paginile SEO (apelat din createServerFn).
 // Doar agregate și câmpuri anonimizate pleacă de aici — niciodată nume, e-mailuri, telefoane sau text liber.
-import type { ComboInput, ComboStats, TrustStats } from "@/lib/market-stats.functions";
+import type {
+  ComboInput,
+  ComboStats,
+  SubjectPriceTable,
+  TrustStats,
+} from "@/lib/market-stats.functions";
 import { CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { inLocalitate, potrivesteMaterie } from "@/lib/pagina-locala";
@@ -149,6 +154,63 @@ export async function computeComboStats(data: ComboInput): Promise<ComboStats> {
           count: ratings.length,
         }
       : null,
+    updatedAt: new Date().toISOString().slice(0, 10),
+  };
+}
+
+/** Aceleași surse ca computeComboStats (național), calculate o dată pentru toate materiile. */
+export async function computeSubjectPriceTable(): Promise<SubjectPriceTable> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const allSlugs = [...new Set(SUBJECTS_SEO.flatMap((s) => s.dbSlugs))];
+  const [adsR, offR, reqR] = await Promise.all([
+    supabaseAdmin
+      .from("ads")
+      .select("price_per_hour,subject_slug")
+      .eq("status", "active")
+      .in("subject_slug", allSlugs),
+    supabaseAdmin.from("teacher_offers").select("subject,price_per_hour").eq("status", "published"),
+    supabaseAdmin
+      .from("student_requests")
+      .select("id,subject")
+      .order("created_at", { ascending: false })
+      .limit(1000),
+  ]);
+  const ads = adsR.data ?? [];
+  const offers = offR.data ?? [];
+  const reqs = reqR.data ?? [];
+  const props: { request_id: string; price_per_hour: number | null }[] = [];
+  const ids = reqs.map((r) => r.id);
+  for (let i = 0; i < ids.length; i += 200) {
+    const { data } = await supabaseAdmin
+      .from("teacher_proposals")
+      .select("request_id,price_per_hour")
+      .in("request_id", ids.slice(i, i + 200));
+    props.push(...(data ?? []));
+  }
+  const subjectOfReq = new Map(reqs.map((r) => [r.id, r.subject]));
+
+  const subjects = SUBJECTS_SEO.map((s) => {
+    const match = (t: string | null) => potrivesteMaterie(t, s.nameLower, s.dbSlugs);
+    return {
+      slug: s.slug,
+      price: quantiles([
+        ...ads
+          .filter((a) => !!a.subject_slug && s.dbSlugs.includes(a.subject_slug))
+          .map((a) => a.price_per_hour ?? 0),
+        ...offers.filter((o) => match(o.subject)).map((o) => o.price_per_hour ?? 0),
+        ...props
+          .filter((p) => match(subjectOfReq.get(p.request_id) ?? null))
+          .map((p) => p.price_per_hour ?? 0),
+      ]),
+    };
+  });
+  return {
+    subjects,
+    overall: quantiles([
+      ...ads.map((a) => a.price_per_hour ?? 0),
+      ...offers.map((o) => o.price_per_hour ?? 0),
+      ...props.map((p) => p.price_per_hour ?? 0),
+    ]),
     updatedAt: new Date().toISOString().slice(0, 10),
   };
 }

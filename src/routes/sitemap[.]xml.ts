@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { CITIES } from "@/data/cities";
-import { ORASE_HUB } from "@/data/orase-hub";
+import { hubPentruOras } from "@/data/orase-hub";
+import { ghiduriPentruOras } from "@/data/ghiduri-locale";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { consolidatedTarget } from "@/lib/seo-redirects";
 import { BLOCAJE, BLOCAJE_MATERII } from "@/data/blocaje";
@@ -93,12 +94,6 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/evaluare-nationala", priority: "0.95", changefreq: "weekly" },
   { path: "/calculator-media-evaluare-nationala", priority: "0.9", changefreq: "monthly" },
   { path: "/evaluare-nationala-cluj", priority: "0.85", changefreq: "weekly" },
-  { path: "/meditatii-cluj", priority: "0.9", changefreq: "weekly" },
-  ...ORASE_HUB.map((o) => ({
-    path: `/meditatii-${o.path}`,
-    priority: "0.85",
-    changefreq: "weekly",
-  })),
   { path: "/harta-blocajelor", priority: "0.9", changefreq: "weekly" },
   { path: "/profesor-ai", priority: "0.9", changefreq: "weekly" },
   { path: "/scaner-lacune", priority: "0.9", changefreq: "weekly" },
@@ -188,7 +183,8 @@ export const Route = createFileRoute("/sitemap.xml")({
             const cityRequests = cereri.filter(
               (r) => !!r.subject && !r.is_online && inLocalitate(r.city, c.matchLocation),
             ).length;
-            if (!paginaLocalaIndexabila({ localAds: local, onlineAds: online, cityRequests }))
+            const ghid = !!hubPentruOras(c.slug) || ghiduriPentruOras(c.slug).length > 0;
+            if (!paginaLocalaIndexabila({ localAds: local, onlineAds: online, cityRequests, ghid }))
               continue;
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/meditatii-in/${c.slug}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>`,

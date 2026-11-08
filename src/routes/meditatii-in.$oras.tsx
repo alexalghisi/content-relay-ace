@@ -3,7 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Wifi, BadgeCheck, Star } from "lucide-react";
 import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { CITIES, getCityBySlug, citiesInCounty, type CityInfo } from "@/data/cities";
-import { SUBJECTS_SEO } from "@/data/subjects-seo";
+import { SUBJECTS_SEO, getSubjectSeo } from "@/data/subjects-seo";
+import { hubPentruOras, type OrasHub } from "@/data/orase-hub";
+import { ghiduriPentruOras } from "@/data/ghiduri-locale";
 import { faqJsonLd } from "@/components/seo-landing";
 import {
   getComboStats,
@@ -14,7 +16,6 @@ import {
 import { CereriRecente, TrustBlock } from "@/components/market-data";
 import {
   descriereOras,
-  faraDiacritice,
   necesitaDateNationale,
   paginaLocalaIndexabila,
   titluOras,
@@ -74,44 +75,67 @@ export const Route = createFileRoute("/meditatii-in/$oras")({
   loader: async ({ params }) => {
     const city = getCityBySlug(params.oras);
     if (!city) throw notFound();
-    const [ads, stats, trust] = await Promise.all([
-      fetchCityData(city),
-      getComboStats({
-        data: {
-          subjectSlugs: ALL_SUBJECT_SLUGS,
-          subjectName: "",
-          cityName: city.name,
-          cityMatch: city.matchLocation,
-        },
-      }),
-      getTrustStats(),
-    ]);
-    // Puține date locale → completăm cu agregatele naționale (marcate ca atare pe pagină).
-    const national = necesitaDateNationale(stats)
-      ? await getComboStats({
+    try {
+      const [ads, stats, trust] = await Promise.all([
+        fetchCityData(city),
+        getComboStats({
           data: {
             subjectSlugs: ALL_SUBJECT_SLUGS,
             subjectName: "",
-            cityName: "România",
-            cityMatch: [],
+            cityName: city.name,
+            cityMatch: city.matchLocation,
           },
-        })
-      : null;
-    return { ads, stats, trust, national };
+        }),
+        getTrustStats(),
+      ]);
+      // Puține date locale → completăm cu agregatele naționale (marcate ca atare pe pagină).
+      const national = necesitaDateNationale(stats)
+        ? await getComboStats({
+            data: {
+              subjectSlugs: ALL_SUBJECT_SLUGS,
+              subjectName: "",
+              cityName: "România",
+              cityMatch: [],
+            },
+          })
+        : null;
+      return { data: { ads, stats, trust, national } };
+    } catch (err) {
+      // Nu prezentăm o citire eșuată ca pe o pagină goală: pagina spune explicit că datele lipsesc.
+      console.error("city page data failed", err);
+      return { data: null };
+    }
   },
   head: ({ params, loaderData }) => {
     const city = getCityBySlug(params.oras);
     if (!city || !loaderData) return { meta: [] };
-    const { ads, stats } = loaderData;
     const url = `${SITE}/meditatii-in/${params.oras}`;
+    if (!loaderData.data) {
+      const hubLocal = hubPentruOras(city.slug);
+      const title = titluOras(city.name, anul());
+      const desc = descriereOras({ oras: city.name, pret: null, profesoriLocali: false });
+      return {
+        meta: [
+          ...(hubLocal || ghiduriPentruOras(city.slug).length
+            ? []
+            : [{ name: "robots", content: "noindex, follow" }]),
+          { title },
+          { name: "description", content: desc },
+          { property: "og:title", content: title },
+          { property: "og:description", content: desc },
+          { property: "og:url", content: url },
+        ],
+        links: [{ rel: "canonical", href: url }],
+      };
+    }
+    const { ads, stats } = loaderData.data;
     const pr = stats.price;
     const n = ads.localTotal;
-    const isCluj = city.slug === "cluj-napoca";
-    const title = isCluj
-      ? `Anunturi meditatii ${faraDiacritice(city.name)} ${anul()} — online sau acasă`
-      : titluOras(city.name, anul());
+    // Pagina canonică pentru „meditatii {oraș}” (vechiul /meditatii-{oras} face 301 aici).
+    const title = titluOras(city.name, anul());
     const desc = descriereOras({ oras: city.name, pret: pr, profesoriLocali: n > 0 });
-    const faqs = cityFaqs(city, stats, n, loaderData.national);
+    const faqs = cityFaqs(city, stats, n, loaderData.data.national);
+    const hub = hubPentruOras(city.slug);
     const faqLd = faqJsonLd(faqs);
     const breadcrumbLd = {
       "@context": "https://schema.org",
@@ -172,6 +196,8 @@ export const Route = createFileRoute("/meditatii-in/$oras")({
           localAds: n,
           onlineAds: ads.online.length,
           cityRequests: stats.cityRequests,
+          // Conținut local scris de mână (repere, licee, ghiduri pe materii) → pagină unică.
+          ghid: !!hub || ghiduriPentruOras(city.slug).length > 0,
         })
           ? []
           : [{ name: "robots", content: "noindex, follow" }]),
@@ -211,6 +237,7 @@ const fmtDate = (d: string) =>
 
 function cityFaqs(city: CityInfo, s: ComboStats, localTotal: number, national?: ComboStats | null) {
   const nearby = citiesInCounty(city).map((c) => c.name);
+  const hub = hubPentruOras(city.slug);
   return [
     {
       q: `Cât costă meditațiile în ${city.name}?`,
@@ -242,7 +269,76 @@ function cityFaqs(city: CityInfo, s: ComboStats, localTotal: number, national?: 
           },
         ]
       : []),
+    ...(hub?.faqs ?? []),
   ];
+}
+
+/** Conținutul local scris de mână (mutat de pe vechea pagină /meditatii-{oras}). */
+function ContinutLocal({ city, hub }: { city: CityInfo; hub: OrasHub }) {
+  const ghiduri = ghiduriPentruOras(city.slug);
+  return (
+    <section className="mt-10 max-w-3xl" id="ghid-local" data-testid="continut-local">
+      <h2 className="text-2xl font-bold">Ghid local: meditații în {city.name}</h2>
+      <p className="mt-3 text-muted-foreground leading-relaxed">{hub.context}</p>
+      <h3 className="mt-6 text-lg font-semibold">Zone acoperite</h3>
+      <p className="mt-2 text-muted-foreground">
+        Poți cere meditații la domiciliu în cartiere ca {hub.zone.join(", ")}, sau{" "}
+        <Link to="/meditatii-online" className="text-primary underline">
+          meditații online
+        </Link>
+        , oriunde în oraș. Scrie zona în cerere, ca profesorii care se pot deplasa să te găsească.
+      </p>
+      <h3 className="mt-6 text-lg font-semibold">Licee și universități din {city.name}</h3>
+      <p className="mt-2 text-muted-foreground">
+        Elevii din {city.name} se pregătesc des pentru licee precum:
+      </p>
+      <ul className="mt-2 grid gap-1 text-muted-foreground sm:grid-cols-2">
+        {hub.licee.map((l) => (
+          <li key={l}>• {l}</li>
+        ))}
+      </ul>
+      <p className="mt-3 text-muted-foreground">
+        și pentru admiterea la: {hub.universitati.join(", ")}. Mediile de admitere se verifică pe
+        site-ul oficial al {city.name === "București" ? "ISMB" : "ISJ"} sau al universității.
+      </p>
+      {ghiduri.length > 0 && (
+        <>
+          <h3 className="mt-6 text-lg font-semibold">Ghiduri pe materii pentru {city.name}</h3>
+          <p className="mt-2 text-muted-foreground">
+            Pentru fiecare materie avem o pagină cu profesorii din {city.name}, tarifele reale de pe
+            platformă și un ghid despre ce să ceri (examen, admitere, cartier, online):
+          </p>
+          <ul className="mt-2 grid gap-1 sm:grid-cols-2">
+            {ghiduri.map((g) => (
+              <li key={g.materie}>
+                •{" "}
+                <Link
+                  to="/meditatii/$materie/$oras"
+                  params={{ materie: g.materie, oras: city.slug }}
+                  className="text-primary underline"
+                >
+                  Meditații {getSubjectSeo(g.materie)?.nameLower ?? g.materie} în {city.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {hub.linkuri && hub.linkuri.length > 0 && (
+        <p className="mt-4 flex flex-wrap gap-2">
+          {hub.linkuri.map((l) => (
+            <a
+              key={l.to}
+              href={l.to}
+              className="rounded-full border border-border bg-card px-3 py-1.5 text-sm hover:border-primary/40 hover:text-primary"
+            >
+              {l.label}
+            </a>
+          ))}
+        </p>
+      )}
+    </section>
+  );
 }
 
 function AdCard({ ad }: { ad: Ad }) {
@@ -308,11 +404,41 @@ function AdCard({ ad }: { ad: Ad }) {
   );
 }
 
+/** Pagina fără datele din baza de date (citire eșuată): conținutul local rămâne, fără cifre. */
+function CityFallback({ city }: { city: CityInfo }) {
+  const hub = hubPentruOras(city.slug);
+  return (
+    <article className="container-page py-8">
+      <header className="max-w-3xl">
+        <h1 className="text-3xl font-bold sm:text-4xl lg:text-5xl">Meditații {city.name}</h1>
+        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+          Postezi o singură dată ce ai nevoie — materia, clasa, online sau față în față și bugetul —
+          iar profesorii îți trimit propuneri cu dată, oră și tarif. Gratuit, fără comision.
+        </p>
+        <Link to="/meditatii" search={{ oras: city.slug }} className="btn-primary mt-5">
+          Postează cererea în {city.name}
+        </Link>
+      </header>
+      <section className="mt-10 rounded-2xl border border-border bg-muted/30 p-6" role="status">
+        <h2 className="text-lg font-semibold">Anunțurile nu pot fi încărcate momentan</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Reîncarcă pagina în câteva minute. Între timp poți posta cererea: ajunge la profesorii de
+          pe platformă, inclusiv la cei care predau online.
+        </p>
+      </section>
+      {hub && <ContinutLocal city={city} hub={hub} />}
+    </article>
+  );
+}
+
 function CityPage() {
   const { oras } = Route.useParams();
   const city = getCityBySlug(oras)!;
-  const { ads, stats, trust, national } = Route.useLoaderData();
+  const { data } = Route.useLoaderData();
+  if (!data) return <CityFallback city={city} />;
+  const { ads, stats, trust, national } = data;
   const faqs = cityFaqs(city, stats, ads.localTotal, national);
+  const hub = hubPentruOras(city.slug);
   const cereriNationale =
     !!national && stats.recentRequests.length < national.recentRequests.length;
   const sameCounty = citiesInCounty(city);
@@ -344,11 +470,7 @@ function CityPage() {
           <p className="inline-flex items-center gap-1 text-xs font-medium text-primary">
             <BadgeCheck className="h-4 w-4" /> Cerere gratuită • Fără comision
           </p>
-          <h1 className="mt-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
-            {city.slug === "cluj-napoca"
-              ? "Anunțuri meditații Cluj-Napoca"
-              : `Meditații ${city.name}`}
-          </h1>
+          <h1 className="mt-2 text-3xl font-bold sm:text-4xl lg:text-5xl">Meditații {city.name}</h1>
           <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
             Cauți un profesor de meditații în <strong>{city.name}</strong> ({city.county})? Postezi
             o singură dată ce ai nevoie — materia, clasa, online sau față în față și bugetul — iar
@@ -368,10 +490,10 @@ function CityPage() {
             <Link to="/meditatii" search={{ oras: city.slug }} className="btn-primary">
               Postează cererea în {city.name}
             </Link>
-            {city.slug === "cluj-napoca" && (
-              <Link to="/meditatii-cluj" className="btn-outline">
-                Ghid meditații Cluj
-              </Link>
+            {hub && (
+              <a href="#ghid-local" className="btn-outline">
+                Ghid local {city.name}
+              </a>
             )}
             <Link to="/meditatii-online" className="btn-outline">
               Meditații online
@@ -510,6 +632,8 @@ function CityPage() {
             </Link>
           </section>
         )}
+
+        {hub && <ContinutLocal city={city} hub={hub} />}
 
         <div className="my-10">
           <AdsterraNativeBanner />

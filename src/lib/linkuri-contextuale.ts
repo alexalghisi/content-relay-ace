@@ -68,13 +68,6 @@ export const MATERII_TOP = [
   "germana",
 ];
 
-/** Hub-ul static /meditatii-{oras} (dacă există) pentru un slug din CITIES. */
-export function hubOras(citySlug: string): string | null {
-  if (citySlug === "cluj-napoca") return "/meditatii-cluj";
-  const h = ORASE_HUB.find((o) => o.citySlug === citySlug);
-  return h ? `/meditatii-${h.path}` : null;
-}
-
 /** Deduce materia și orașul dintr-o cale de pagină SEO. */
 export function contextDinCale(pathname: string): ContextPagina {
   const p = pathname.replace(/\/+$/, "") || "/";
@@ -91,7 +84,7 @@ export function contextDinCale(pathname: string): ContextPagina {
   m = /^\/meditatii-([a-z-]+)$/.exec(p);
   if (m) {
     const rest = m[1]!;
-    if (rest === "cluj") return { oras: "cluj-napoca" };
+    // Vechile pagini /meditatii-{oras} (acum 301 → /meditatii-in/{oras}); „bacau” e orașul, nu BAC.
     const hub = ORASE_HUB.find((o) => o.path === rest);
     if (hub) return { oras: hub.citySlug };
     // /meditatii-matematica, /meditatii-matematica-bac, /meditatii-engleza-online …
@@ -155,8 +148,6 @@ function linkuriPentru(ctx: ContextPagina): LinkContextual[] {
     out.push(ai);
   } else if (city) {
     out.push({ to: `/meditatii-in/${city.slug}`, label: `Profesori și cereri din ${city.name}` });
-    const hub = hubOras(city.slug);
-    if (hub) out.push({ to: hub, label: `Ghid meditații ${city.name}` });
     for (const s of MATERII_TOP.slice(0, 4))
       out.push({ to: `/meditatii/${s}/${city.slug}`, label: comboLabel(s, city.slug) });
     for (const c of oraseApropiate(city.slug, 2))

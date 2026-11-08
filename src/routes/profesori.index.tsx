@@ -8,14 +8,30 @@ import { BadgeCheck, Star } from "lucide-react";
 
 const URL_ = "https://meditatiidirect.ro/profesori";
 const TITLE = "Profesori Particulari Verificați — Meditații în România | MeditatiiDirect";
-const DESC = "Profesori particulari verificați pentru meditații: profesori de matematică, română, engleză, fizică, informatică, BAC și admitere. Contact direct cu profesorul, recenzii reale, fără comision.";
+const DESC =
+  "Profesori particulari verificați pentru meditații: profesori de matematică, română, engleză, fizică, informatică, BAC și admitere. Contact direct cu profesorul, recenzii reale, fără comision.";
 
 const faqs = [
-  { q: "Sunt profesorii verificați?", a: "Da. Verificăm manual identitatea, diploma și experiența fiecărui profesor înainte ca profilul să fie publicat. Profesorii validați au badge „Verificat\" pe pagină." },
-  { q: "Cât costă o oră cu un profesor particular?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunere înainte să accepți. Tarifele reale din anunțurile de pe site sunt pe pagina Prețuri meditații, pe materii și orașe." },
-  { q: "Pot lucra cu un profesor doar online?", a: "Da. Filtrul „Online\" îți arată toți profesorii care fac meditații pe Zoom, Google Meet sau platforme similare, indiferent de oraș." },
-  { q: "Cum aleg cel mai bun profesor?", a: "Compară experiența, recenziile, prețul și disponibilitatea. Fă o oră de probă cu 2–3 candidați înainte să te decizi pe termen lung." },
-  { q: "Plătesc vreun comision platformei?", a: "Nu. Contactul și plata se fac direct cu profesorul. MeditatiiDirect.ro nu percepe comision din ședință." },
+  {
+    q: "Sunt profesorii verificați?",
+    a: 'Da. Verificăm manual identitatea, diploma și experiența fiecărui profesor înainte ca profilul să fie publicat. Profesorii validați au badge „Verificat" pe pagină.',
+  },
+  {
+    q: "Cât costă o oră cu un profesor particular?",
+    a: "Fiecare profesor își stabilește tariful și îl vezi în propunere înainte să accepți. Tarifele reale din anunțurile de pe site sunt pe pagina Prețuri meditații, pe materii și orașe.",
+  },
+  {
+    q: "Pot lucra cu un profesor doar online?",
+    a: 'Da. Filtrul „Online" îți arată toți profesorii care fac meditații pe Zoom, Google Meet sau platforme similare, indiferent de oraș.',
+  },
+  {
+    q: "Cum aleg cel mai bun profesor?",
+    a: "Compară experiența, recenziile, prețul și disponibilitatea. Fă o oră de probă cu 2–3 candidați înainte să te decizi pe termen lung.",
+  },
+  {
+    q: "Plătesc vreun comision platformei?",
+    a: "Nu. Contactul și plata se fac direct cu profesorul. MeditatiiDirect.ro nu percepe comision din ședință.",
+  },
 ];
 
 interface TopTeacher {
@@ -26,13 +42,16 @@ interface TopTeacher {
   location: string | null;
 }
 
-
 export const Route = createFileRoute("/profesori/")({
   head: () => ({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
-      { name: "keywords", content: "profesori, profesor particular, meditatori, profesori meditatii, profesori verificati, profesori matematica, profesori romana, profesori engleza, profesori bac, profesori online, profesori bucuresti, profesori cluj, ore particulare" },
+      {
+        name: "keywords",
+        content:
+          "profesori, profesor particular, meditatori, profesori meditatii, profesori verificati, profesori matematica, profesori romana, profesori engleza, profesori bac, profesori online, profesori bucuresti, profesori cluj, ore particulare",
+      },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL_ },
@@ -44,11 +63,16 @@ export const Route = createFileRoute("/profesori/")({
     links: [{ rel: "canonical", href: URL_ }],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
-      { type: "application/ld+json", children: JSON.stringify({
-        "@context": "https://schema.org", "@type": "ItemList",
-        name: "Profesori particulari verificați România",
-        description: DESC, url: URL_, 
-      }) },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Profesori particulari verificați România",
+          description: DESC,
+          url: URL_,
+        }),
+      },
     ],
   }),
   component: ProfesoriPage,
@@ -68,7 +92,6 @@ function ProfesoriPage() {
       .then(({ data }) => setTeachers((data ?? []) as TopTeacher[]));
   }, []);
 
-
   return (
     <>
       <SeoLanding
@@ -80,7 +103,7 @@ function ProfesoriPage() {
           "Recenzii reale de la elevi și părinți care au făcut meditații cu profesorul",
           "Profesori pentru 20+ materii: matematică, română, engleză, fizică, BAC, admitere",
           "Meditații online (Zoom / Google Meet) sau față în față cu profesorul în orașul tău",
-          "Tarife transparente pentru meditații, de la 30 lei/oră",
+          "Tariful fiecărui profesor, afișat înainte să accepți",
         ]}
         ctaPrimary={{ to: "/meditatii", label: "Vezi toți profesorii" }}
         ctaSecondary={{ to: "/caut-profesor", label: "Postează cerere" }}
@@ -96,7 +119,14 @@ function ProfesoriPage() {
               <div key={t.id} className="card-soft p-5">
                 <div className="flex items-center gap-3">
                   {t.avatar_url ? (
-                    <img src={t.avatar_url} alt={t.full_name} loading="lazy" width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
+                    <img
+                      src={t.avatar_url}
+                      alt={t.full_name}
+                      loading="lazy"
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 rounded-full object-cover"
+                    />
                   ) : (
                     <div className="grid h-12 w-12 place-items-center rounded-full bg-primary-soft text-primary font-semibold">
                       {t.full_name.charAt(0)}
@@ -113,12 +143,13 @@ function ProfesoriPage() {
                 {t.experience_years !== null && t.experience_years > 0 && (
                   <p className="mt-3 text-sm inline-flex items-center gap-1">
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-muted-foreground">{t.experience_years} ani experiență</span>
+                    <span className="text-muted-foreground">
+                      {t.experience_years} ani experiență
+                    </span>
                   </p>
                 )}
               </div>
             ))}
-
           </div>
         </section>
       )}

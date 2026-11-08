@@ -5,6 +5,20 @@ import { createServerFn } from "@tanstack/react-start";
 /** A materie × oraș page is indexable only with at least this many real listings. */
 export const MIN_LISTINGS_FOR_INDEX = 3;
 
+/** Sub acest număr de tarife reale nu afișăm un interval/median pe paginile de prețuri. */
+export const MIN_PRICE_SAMPLES = 3;
+
+export interface PriceSummary {
+  min: number;
+  median: number;
+  max: number;
+  n: number;
+}
+
+/** Un rezumat de preț se afișează doar dacă vine din destule tarife reale. */
+export const pretAfisabil = (p: PriceSummary | null | undefined): PriceSummary | null =>
+  p && p.n >= MIN_PRICE_SAMPLES ? p : null;
+
 export interface ComboStats {
   listings: number;
   localListings: number;
@@ -46,6 +60,22 @@ export const getComboStats = createServerFn({ method: "GET" })
     const { computeComboStats } = await import("@/lib/market-stats.server");
     return computeComboStats(data);
   });
+
+export interface SubjectPriceTable {
+  /** Tarife reale pe materie (anunțuri active, oferte publicate și propuneri trimise elevilor). */
+  subjects: { slug: string; price: PriceSummary | null }[];
+  /** Toate tarifele reale de pe platformă, fiecare numărat o singură dată. */
+  overall: PriceSummary | null;
+  updatedAt: string;
+}
+
+/** Tabelul de prețuri pentru /preturi-meditatii: o singură trecere prin baza de date pentru toate materiile. */
+export const getSubjectPriceTable = createServerFn({ method: "GET" }).handler(
+  async (): Promise<SubjectPriceTable> => {
+    const { computeSubjectPriceTable } = await import("@/lib/market-stats.server");
+    return computeSubjectPriceTable();
+  },
+);
 
 export interface TrustStats {
   teachers: number;

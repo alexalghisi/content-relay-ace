@@ -505,7 +505,7 @@ function HomePage() {
             >
               <h3 className="font-bold">Prețuri meditații</h3>
               <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                Compară tarifele orientative înainte să postezi cererea.
+                Vezi tarifele reale de pe platformă înainte să postezi cererea.
               </p>
             </Link>
             <Link

@@ -55,7 +55,7 @@ export const Route = createFileRoute("/meditatii-bucuresti-sectoare")(
       },
       {
         q: "Cât costă meditațiile în București?",
-        a: "Prețul îl propune fiecare profesor în ofertă și depinde de materie, nivel și durată. Vezi intervalele orientative pe pagina de prețuri.",
+        a: "Prețul îl propune fiecare profesor în ofertă și depinde de materie, nivel și durată. Tarifele reale de pe platformă, pe materii, sunt pe pagina de prețuri.",
       },
     ],
     related: [
