@@ -10,7 +10,8 @@ import { HUB_MATERIE, ORASE_MARI } from "@/lib/linkuri-contextuale";
 import { getCityBySlug } from "@/data/cities";
 
 const SITE = "https://meditatiidirect.ro";
-const ANUL = new Date().getFullYear();
+// Cloudflare Workers freeze the clock at 0 in module scope: read the year per request.
+const anul = () => Math.max(2026, new Date().getFullYear());
 
 const fmtDate = (d: string) =>
   new Date(d).toLocaleDateString("ro-RO", { day: "numeric", month: "long", year: "numeric" });
@@ -67,10 +68,10 @@ export const Route = createFileRoute("/preturi-meditatii/$materie")({
     const url = `${SITE}/preturi-meditatii/${subject.slug}`;
     const plain = faraDiacritice(subject.nameLower).toLowerCase();
     const p = stats?.price;
-    const title = `Pret meditatii ${plain} ${ANUL} — tarife reale pe oră`;
+    const title = `Pret meditatii ${plain} ${anul()} — tarife reale pe oră`;
     const desc = p
       ? `Cât costă meditațiile la ${subject.nameLower}: mediana reală e ${p.median} lei/oră, din ${p.n} tarife de pe MeditatiiDirect (${p.min}–${p.max} lei). Online vs. acasă și ce influențează prețul.`
-      : `Cât costă meditațiile la ${subject.nameLower} în ${ANUL}: de ce depinde tariful, cum compari ofertele online și acasă și ce întrebi profesorul înainte de prima ședință.`;
+      : `Cât costă meditațiile la ${subject.nameLower} în ${anul()}: de ce depinde tariful, cum compari ofertele online și acasă și ce întrebi profesorul înainte de prima ședință.`;
     const faqs = faqsPret(subject.nameLower, stats);
     return {
       meta: [
@@ -155,7 +156,7 @@ function PricePage() {
       </nav>
       <header className="mt-4 max-w-3xl">
         <h1 className="text-3xl font-bold sm:text-4xl">
-          Preț meditații {subject.nameLower} în {ANUL}
+          Preț meditații {subject.nameLower} în {anul()}
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">
           {p ? (
