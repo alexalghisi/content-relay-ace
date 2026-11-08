@@ -1,7 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Wifi, BadgeCheck, Star } from "lucide-react";
-import { AdsterraNativeBanner, AdsterraBannerResponsive } from "@/components/ads/adsterra";
 import { CITIES, getCityBySlug, citiesInCounty, type CityInfo } from "@/data/cities";
 import { SUBJECTS_SEO, getSubjectSeo } from "@/data/subjects-seo";
 import { hubPentruOras, type OrasHub } from "@/data/orase-hub";
@@ -449,9 +448,7 @@ function CityPage() {
 
   return (
     <>
-      <div className="container-page pt-4">
-        <AdsterraBannerResponsive />
-      </div>
+      <div className="container-page pt-4"></div>
 
       <article className="container-page py-8">
         <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
@@ -635,9 +632,7 @@ function CityPage() {
 
         {hub && <ContinutLocal city={city} hub={hub} />}
 
-        <div className="my-10">
-          <AdsterraNativeBanner />
-        </div>
+        <div className="my-10"></div>
 
         <section className="mt-10 max-w-3xl">
           <h2 className="text-2xl font-bold">Cum găsești profesorul potrivit în {city.name}</h2>

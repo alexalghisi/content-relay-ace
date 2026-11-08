@@ -17,7 +17,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import { ADSENSE_CLIENT } from "@/components/ads/adsense";
 import { AD_SERVING_ENABLED } from "@/lib/ads-policy";
-import { AdsterraMonetization } from "@/components/ads/adsterra";
 import { I18nProvider, readLocale, useT } from "@/lib/i18n-context";
 
 function NotFoundComponent() {
@@ -214,7 +213,6 @@ function RootComponent() {
             <main className="flex-1">
               <Outlet />
             </main>
-            <AdsterraMonetization />
             <SiteFooter />
           </div>
           <Toaster />
