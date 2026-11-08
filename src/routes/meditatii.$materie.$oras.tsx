@@ -17,7 +17,8 @@ import {
 import { descriereCombo, paginaLocalaIndexabila, titluCombo } from "@/lib/pagina-locala";
 
 const SITE = "https://meditatiidirect.ro";
-const ANUL = new Date().getFullYear();
+// Cloudflare Workers freeze the clock at 0 in module scope: read the year per request.
+const anul = () => Math.max(2026, new Date().getFullYear());
 
 const seedFor = (subject: SubjectSeo, city: CityInfo) =>
   (subject.slug + city.slug).split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 4;
@@ -61,7 +62,7 @@ export const Route = createFileRoute("/meditatii/$materie/$oras")({
     const url = `${SITE}/meditatii/${subject.slug}/${city.slug}`;
     const pretLocal = data?.stats.price ?? null;
     const pret = pretLocal ?? data?.national?.price ?? null;
-    const title = ghid ? ghid.title : titluCombo(subject.nameLower, city.name, ANUL);
+    const title = ghid ? ghid.title : titluCombo(subject.nameLower, city.name, anul());
     const desc = ghid
       ? ghid.description
       : descriereCombo({

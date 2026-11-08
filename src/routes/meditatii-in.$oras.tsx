@@ -35,7 +35,8 @@ interface Ad {
 }
 
 const SITE = "https://meditatiidirect.ro";
-const ANUL = new Date().getFullYear();
+// Cloudflare Workers freeze the clock at 0 in module scope: read the year per request.
+const anul = () => Math.max(2026, new Date().getFullYear());
 const ALL_SUBJECT_SLUGS = [...new Set(SUBJECTS_SEO.flatMap((s) => s.dbSlugs))];
 
 async function fetchCityData(city: CityInfo) {
@@ -107,8 +108,8 @@ export const Route = createFileRoute("/meditatii-in/$oras")({
     const n = ads.localTotal;
     const isCluj = city.slug === "cluj-napoca";
     const title = isCluj
-      ? `Anunturi meditatii ${faraDiacritice(city.name)} ${ANUL} — online sau acasă`
-      : titluOras(city.name, ANUL);
+      ? `Anunturi meditatii ${faraDiacritice(city.name)} ${anul()} — online sau acasă`
+      : titluOras(city.name, anul());
     const desc = descriereOras({ oras: city.name, pret: pr, profesoriLocali: n > 0 });
     const faqs = cityFaqs(city, stats, n, loaderData.national);
     const faqLd = faqJsonLd(faqs);
