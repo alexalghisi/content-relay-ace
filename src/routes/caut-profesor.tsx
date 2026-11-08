@@ -3,15 +3,34 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/caut-profesor";
 const TITLE = "Caut profesor 2026 — Găsește profesorul potrivit în 2 minute | MeditatiiDirect.ro";
-const DESC = "Caut profesor de meditații? profesori particulari verificați: matematică, română, engleză, fizică, informatică. Online sau acasă, contact direct, fără comision. De la 30 lei/oră.";
+const DESC =
+  "Caut profesor de meditații? profesori particulari verificați: matematică, română, engleză, fizică, informatică. Online sau acasă, contact direct, fără comision. Tariful îl propune profesorul.";
 
 const faqs = [
-  { q: "Cum caut un profesor bun de meditații?", a: "Pe MeditatiiDirect.ro filtrezi după materie, oraș, online/la domiciliu și buget. Vezi profil complet, recenzii reale de la elevi anteriori, experiență (ani de predare) și rezultate (BAC, olimpiade, admitere). Contact direct prin chat — gratuit, fără intermediari." },
-  { q: "Caut profesor de matematică — unde găsesc?", a: "Avem sute de profesori de matematică pentru toate nivelurile: gimnaziu, liceu, BAC, admitere la UPB, ASE, Politehnică sau Medicină. Filtrează direct pe pagina /meditatii-matematica." },
-  { q: "Caut profesor particular online — funcționează?", a: "Da, peste 60% din meditațiile actuale se fac online (Zoom, Google Meet). Calitatea pregătirii este aceeași ca față în față, dar economisești timp de drum și ai acces la profesori din toată țara." },
-  { q: "Cât costă un profesor particular?", a: "Tarife între 30-200 lei/oră. Profesori titulari cu mulți ani de experiență costă 80-150 lei/oră, studenți olimpici 30-60 lei/oră, iar pregătirea pentru admitere la Medicină/UPB poate ajunge la 200 lei/oră." },
-  { q: "Cum verific dacă profesorul este serios?", a: "Verifică: badge-ul de profesor verificat (identitate confirmată manual), recenziile reale de la elevi, anii de experiență, rezultatele concrete (medii BAC, admiteri reușite, olimpici pregătiți)." },
-  { q: "Pot vorbi cu profesorul înainte să rezerv?", a: "Da. Contactarea profesorilor este 100% gratuită prin chatul integrat. Discuți programul, prețul și forma (online/acasă) direct cu el, fără să plătești nimic platformei." },
+  {
+    q: "Cum caut un profesor bun de meditații?",
+    a: "Pe MeditatiiDirect.ro filtrezi după materie, oraș, online/la domiciliu și buget. Vezi profil complet, recenzii reale de la elevi anteriori, experiență (ani de predare) și rezultate (BAC, olimpiade, admitere). Contact direct prin chat — gratuit, fără intermediari.",
+  },
+  {
+    q: "Caut profesor de matematică — unde găsesc?",
+    a: "Avem sute de profesori de matematică pentru toate nivelurile: gimnaziu, liceu, BAC, admitere la UPB, ASE, Politehnică sau Medicină. Filtrează direct pe pagina /meditatii-matematica.",
+  },
+  {
+    q: "Caut profesor particular online — funcționează?",
+    a: "Da, peste 60% din meditațiile actuale se fac online (Zoom, Google Meet). Calitatea pregătirii este aceeași ca față în față, dar economisești timp de drum și ai acces la profesori din toată țara.",
+  },
+  {
+    q: "Cât costă un profesor particular?",
+    a: "Tariful îl stabilește fiecare profesor în oferta lui, înainte să accepți; depinde de materie, nivel, format și experiență. Postezi gratuit o cerere și compari propunerile primite.",
+  },
+  {
+    q: "Cum verific dacă profesorul este serios?",
+    a: "Verifică: badge-ul de profesor verificat (identitate confirmată manual), recenziile reale de la elevi, anii de experiență, rezultatele concrete (medii BAC, admiteri reușite, olimpici pregătiți).",
+  },
+  {
+    q: "Pot vorbi cu profesorul înainte să rezerv?",
+    a: "Da. Contactarea profesorilor este 100% gratuită prin chatul integrat. Discuți programul, prețul și forma (online/acasă) direct cu el, fără să plătești nimic platformei.",
+  },
 ];
 
 export const Route = createFileRoute("/caut-profesor")({
@@ -19,7 +38,11 @@ export const Route = createFileRoute("/caut-profesor")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESC },
-      { name: "keywords", content: "caut profesor, caut profesor meditatii, caut profesor matematica, caut profesor romana, caut profesor engleza, caut meditator, gasire profesor, profesor particular, profesor bun, profesor verificat, caut profesor bucuresti, caut profesor cluj, caut profesor online" },
+      {
+        name: "keywords",
+        content:
+          "caut profesor, caut profesor meditatii, caut profesor matematica, caut profesor romana, caut profesor engleza, caut meditator, gasire profesor, profesor particular, profesor bun, profesor verificat, caut profesor bucuresti, caut profesor cluj, caut profesor online",
+      },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:url", content: URL },
@@ -39,8 +62,11 @@ export const Route = createFileRoute("/caut-profesor")({
           name: "Caut profesor de meditații",
           serviceType: "Servicii de căutare profesori particulari",
           areaServed: { "@type": "Country", name: "România" },
-          provider: { "@type": "Organization", name: "MeditatiiDirect.ro", url: "https://meditatiidirect.ro/" },
-          offers: { "@type": "AggregateOffer", priceCurrency: "RON", lowPrice: "30", highPrice: "200", offerCount: "1000" },
+          provider: {
+            "@type": "Organization",
+            name: "MeditatiiDirect.ro",
+            url: "https://meditatiidirect.ro/",
+          },
         }),
       },
     ],
@@ -66,14 +92,30 @@ export const Route = createFileRoute("/caut-profesor")({
           title: "Caut profesor de... (cele mai cerute)",
           body: (
             <ul className="list-disc pl-5 space-y-1">
-              <li><strong>matematică</strong> — gimnaziu, liceu, BAC, admitere UPB/ASE/Medicină</li>
-              <li><strong>limba română</strong> — Evaluare Națională, BAC</li>
-              <li><strong>limba engleză</strong> — Cambridge, IELTS, BAC, conversație</li>
-              <li><strong>fizică</strong> — BAC, admitere Politehnică & Medicină</li>
-              <li><strong>chimie</strong> — BAC, admitere Medicină</li>
-              <li><strong>informatică</strong> — algoritmi, C++, BAC info</li>
-              <li><strong>biologie</strong> — admitere Medicină</li>
-              <li><strong>franceză, germană, spaniolă</strong> — toate nivelurile</li>
+              <li>
+                <strong>matematică</strong> — gimnaziu, liceu, BAC, admitere UPB/ASE/Medicină
+              </li>
+              <li>
+                <strong>limba română</strong> — Evaluare Națională, BAC
+              </li>
+              <li>
+                <strong>limba engleză</strong> — Cambridge, IELTS, BAC, conversație
+              </li>
+              <li>
+                <strong>fizică</strong> — BAC, admitere Politehnică & Medicină
+              </li>
+              <li>
+                <strong>chimie</strong> — BAC, admitere Medicină
+              </li>
+              <li>
+                <strong>informatică</strong> — algoritmi, C++, BAC info
+              </li>
+              <li>
+                <strong>biologie</strong> — admitere Medicină
+              </li>
+              <li>
+                <strong>franceză, germană, spaniolă</strong> — toate nivelurile
+              </li>
             </ul>
           ),
         },

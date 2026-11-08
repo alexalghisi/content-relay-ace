@@ -4,7 +4,6 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { CITIES } from "@/data/cities";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
-import { ORASE_HUB } from "@/data/orase-hub";
 import { SCURTATURI_ACASA } from "@/data/cautari-populare";
 import {
   HUB_MATERIE,
@@ -32,6 +31,7 @@ describe("contextDinCale", () => {
     expect(contextDinCale("/meditatii-engleza-online")).toEqual({ materie: "engleza" });
     expect(contextDinCale("/meditatii-timisoara")).toEqual({ oras: "timisoara" });
     expect(contextDinCale("/meditatii-cluj")).toEqual({ oras: "cluj-napoca" });
+    expect(contextDinCale("/meditatii-bacau")).toEqual({ oras: "bacau" });
     expect(contextDinCale("/preturi-meditatii/chimie")).toEqual({ materie: "chimie" });
     expect(contextDinCale("/meditatii-bac")).toEqual({});
     expect(contextDinCale("/meditatii/inexistent/timisoara")).toEqual({
@@ -48,7 +48,6 @@ describe("linkuriContextuale", () => {
     "/meditatii-online",
     "/anunturi-meditatii",
     ...Object.values(HUB_MATERIE),
-    ...ORASE_HUB.map((o) => `/meditatii-${o.path}`),
     ...CITIES.map((c) => `/meditatii-in/${c.slug}`),
     ...SUBJECTS_SEO.flatMap((s) => CITIES.map((c) => `/meditatii/${s.slug}/${c.slug}`)),
   ];

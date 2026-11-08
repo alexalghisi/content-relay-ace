@@ -172,3 +172,97 @@ test("articol de blog din Markdown: conținut, Article JSON-LD, linkuri alese ș
   const sm = await page.request.get("/sitemap.xml");
   expect(await sm.text()).toContain(`<loc>https://meditatiidirect.ro${url}</loc>`);
 });
+
+test("paginile vechi /meditatii-{oras} fac 301 către /meditatii-in/{oras}, cu conținutul local mutat", async ({
+  page,
+}) => {
+  for (const [vechi, nou] of [
+    ["/meditatii-cluj", "/meditatii-in/cluj-napoca"],
+    ["/meditatii-bucuresti", "/meditatii-in/bucuresti"],
+    ["/meditatii-timisoara", "/meditatii-in/timisoara"],
+    ["/meditatii-bacau", "/meditatii-in/bacau"],
+  ] as const) {
+    const r = await page.request.get(vechi, { maxRedirects: 0 });
+    expect(r.status(), vechi).toBe(301);
+    expect(new URL(r.headers()["location"]!, "http://localhost").pathname).toBe(nou);
+  }
+  // /meditatii-bac e pagina BAC, nu orașul Bacău.
+  expect((await page.request.get("/meditatii-bac", { maxRedirects: 0 })).status()).toBe(200);
+
+  await mockSupabase(page);
+  await page.route("**/_serverFn/**", (r) => r.abort());
+  await page.goto("/meditatii-cluj");
+  await expect(page).toHaveURL(/\/meditatii-in\/cluj-napoca$/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "https://meditatiidirect.ro/meditatii-in/cluj-napoca",
+  );
+  const local = page.getByTestId("continut-local");
+  await expect(local).toBeVisible();
+  await expect(local.getByText("Liceul de Informatică „Tiberiu Popoviciu”")).toBeVisible();
+
+  const sm = await (await page.request.get("/sitemap.xml")).text();
+  for (const p of ["/meditatii-cluj", "/meditatii-bucuresti", "/meditatii-bacau"])
+    expect(sm).not.toContain(`<loc>https://meditatiidirect.ro${p}</loc>`);
+});
+
+test("/preturi-meditatii: fără prețuri scrise de mână, doar tarife reale din statistici", async ({
+  page,
+}) => {
+  // HTML-ul SSR nu mai conține tabelul vechi cu valori inventate.
+  const ssr = await page.request.get("/preturi-meditatii");
+  expect(ssr.status()).toBe(200);
+  const html = await ssr.text();
+  for (const vechi of [
+    "30–200 lei",
+    "Media națională",
+    "Tarif estimat",
+    "Tarif mediu matematică",
+    "Pentru orașele mari adaugă",
+  ])
+    expect(html).not.toContain(vechi);
+  expect(html).not.toMatch(/Încă nu avem|Poți fi primul/);
+
+  await mockSupabase(page);
+  await page.route("**/_serverFn/**", (route) => {
+    if (numeServerFn(route.request().url()).includes("getSubjectPriceTable")) {
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          result: {
+            subjects: [
+              { slug: "matematica", price: { min: 50, median: 85, max: 140, n: 7 } },
+              { slug: "romana", price: { min: 60, median: 60, max: 60, n: 1 } },
+            ],
+            overall: { min: 50, median: 80, max: 140, n: 9 },
+            updatedAt: zi,
+          },
+        }),
+      });
+    }
+    return route.abort();
+  });
+
+  // Fără date (SSR fără bază de date): niciun număr în tabel, doar textul neutru.
+  await page.goto("/preturi-meditatii/matematica");
+  await page.waitForLoadState("networkidle");
+  const ssrTabel = await page.request.get("/preturi-meditatii");
+  expect(await ssrTabel.text()).toContain("Tariful îl propune profesorul în ofertă");
+
+  // Navigare din browser: tabelul vine din getSubjectPriceTable.
+  await page
+    .getByRole("navigation", { name: "breadcrumb" })
+    .getByRole("link", { name: "Prețuri meditații" })
+    .click();
+  await expect(page).toHaveURL(/\/preturi-meditatii$/);
+  const tabel = page.getByTestId("tabel-preturi");
+  const mate = tabel.getByRole("row", { name: /Preț meditații matematică/ });
+  await expect(mate).toContainText("85 lei/oră");
+  await expect(mate).toContainText("50–140 lei/oră");
+  // Sub pragul de tarife reale: niciun număr.
+  const romana = tabel.getByRole("row", { name: /Preț meditații română/ });
+  await expect(romana).toContainText("Tariful îl propune profesorul în ofertă");
+  await expect(romana).not.toContainText(/\d\s*lei/);
+  await expect(page.getByTestId("pret-intro")).toContainText("mediana de 80 lei/oră");
+});

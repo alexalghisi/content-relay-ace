@@ -64,12 +64,6 @@ export const Route = createFileRoute("/meditatii-online")({
           url: PAGE_URL,
           areaServed: { "@type": "Country", name: "România" },
           provider: { "@id": "https://meditatiidirect.ro/#org" },
-          offers: {
-            "@type": "AggregateOffer",
-            priceCurrency: "RON",
-            lowPrice: "30",
-            highPrice: "200",
-          },
         }),
       },
     ],

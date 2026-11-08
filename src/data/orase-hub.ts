@@ -1,21 +1,60 @@
-// Landing pages /meditatii-<oras>: conținut static, scris manual, unic pe oraș.
-// Fără profesori, recenzii sau statistici inventate — doar repere publice (universități,
-// cartiere, licee cunoscute) și explicația platformei. Datele reale apar pe /meditatii-in/<slug>.
+// Conținut local scris de mână, unic pe oraș (fost pe paginile /meditatii-<oras>).
+// Fără profesori, recenzii, prețuri sau statistici inventate — doar repere publice (universități,
+// cartiere, licee cunoscute). Se afișează pe pagina canonică /meditatii-in/<citySlug>, alături de
+// datele reale; vechiul URL /meditatii-<path> face 301 acolo (src/lib/seo-redirects.ts).
 export interface OrasHub {
-  /** Slug-ul paginii: /meditatii-<path> (fără diacritice). */
+  /** Slug-ul vechii pagini: /meditatii-<path> (fără diacritice) — acum doar redirect 301. */
   path: string;
-  /** Slug-ul din src/data/cities.ts, folosit pentru /meditatii-in/<slug> și filtrul /meditatii. */
+  /** Slug-ul din src/data/cities.ts: pagina canonică /meditatii-in/<citySlug>. */
   citySlug: string;
-  /** Numele fără diacritice pentru title (cuvânt-cheie). */
+  /** Numele fără diacritice (cuvânt-cheie). */
   plain: string;
   name: string;
   zone: string[];
   universitati: string[];
   licee: string[];
   context: string;
+  /** Întrebări frecvente specifice orașului, scrise de mână. */
+  faqs?: { q: string; a: string }[];
+  /** Pagini locale suplimentare (ex. ghidul Evaluării Naționale din oraș). */
+  linkuri?: { to: string; label: string }[];
 }
 
 export const ORASE_HUB: OrasHub[] = [
+  {
+    path: "cluj",
+    citySlug: "cluj-napoca",
+    plain: "Cluj",
+    name: "Cluj-Napoca",
+    zone: ["Mănăștur", "Gheorgheni", "Mărăști", "Zorilor", "Florești", "Centru"],
+    universitati: [
+      "Universitatea Babeș-Bolyai (UBB)",
+      "UMF „Iuliu Hațieganu”",
+      "Universitatea Tehnică (UTCN)",
+    ],
+    licee: [
+      "Colegiul Național „Emil Racoviță”",
+      "Colegiul Național „George Coșbuc”",
+      "Colegiul Național „Gheorghe Șincai”",
+      "Liceul de Informatică „Tiberiu Popoviciu”",
+      "Liceul Teoretic „Avram Iancu”",
+      "Colegiul Național Pedagogic „Gheorghe Lazăr”",
+      "Liceul Teoretic „Onisifor Ghibu”",
+      "Liceul Teoretic „Nicolae Bălcescu”",
+    ],
+    context:
+      "Elevi din Mănăștur, Gheorgheni, Mărăști, Zorilor, Florești sau centru caută cel mai des pregătire pentru clasa a VIII-a și Evaluarea Națională, BAC și admiterea la UBB, UMF și UTCN, la domiciliu în Cluj sau online.",
+    faqs: [
+      {
+        q: "Ce medie îmi trebuie pentru un liceu bun din Cluj?",
+        a: "Media de admitere este media aritmetică a notelor de la Evaluarea Națională, cu două zecimale, fără rotunjire. Verifică ultimele medii pe site-ul ISJ Cluj și calculează-ți media cu calculatorul nostru.",
+      },
+    ],
+    linkuri: [
+      { to: "/evaluare-nationala-cluj", label: "Evaluarea Națională în Cluj" },
+      { to: "/calculator-media-evaluare-nationala", label: "Calculator medie EN" },
+    ],
+  },
   {
     path: "bucuresti",
     citySlug: "bucuresti",
@@ -289,3 +328,6 @@ export const ORASE_HUB: OrasHub[] = [
       "În Suceava, pe lângă Evaluarea Națională și BAC, elevii se pregătesc pentru admiterea la USV sau la facultățile din Iași.",
   },
 ];
+
+/** Conținutul local scris de mână pentru un oraș din CITIES (dacă există). */
+export const hubPentruOras = (citySlug: string) => ORASE_HUB.find((o) => o.citySlug === citySlug);
