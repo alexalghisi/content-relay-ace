@@ -2,13 +2,23 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-bac";
-const TITLE = "Meditații BAC 2027 — profesori verificați la toate materiile, online sau acasă";
-const DESC = "Meditații pentru BAC 2027 la română, matematică, biologie, chimie, fizică, informatică, istorie, geografie. Postezi gratuit cererea și primești propuneri de la profesori verificați.";
+const TITLE = "Meditatii BAC 2027 la toate materiile, online sau acasă";
+const DESC =
+  "Meditatii BAC 2027 la română, matematică, biologie, chimie, fizică, informatică, istorie și geografie. Postezi gratuit cererea și primești oferte.";
 
 const faqs = [
-  { q: "Cât costă o oră de meditații BAC?", a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii, sunt pe pagina Prețuri meditații." },
-  { q: "Câte ore de meditații BAC sunt necesare?", a: "Depinde de nivelul de pornire și de nota țintă. De obicei se lucrează una-două ședințe pe săptămână la materia de examen, plus variante rezolvate singur între ședințe. Profesorul îți propune ritmul după prima ședință." },
-  { q: "Pot face meditații BAC online?", a: "Da. Ședința se ține pe Zoom sau Google Meet, cu tablă comună pentru exerciții, și nu pierzi timp pe drum. Spune în cerere că vrei online și primești propuneri din toată țara." },
+  {
+    q: "Cât costă o oră de meditații BAC?",
+    a: "Fiecare profesor își stabilește tariful și îl vezi în propunerea lui înainte să accepți. Tarifele reale din anunțurile de pe site, pe materii, sunt pe pagina Prețuri meditații.",
+  },
+  {
+    q: "Câte ore de meditații BAC sunt necesare?",
+    a: "Depinde de nivelul de pornire și de nota țintă. De obicei se lucrează una-două ședințe pe săptămână la materia de examen, plus variante rezolvate singur între ședințe. Profesorul îți propune ritmul după prima ședință.",
+  },
+  {
+    q: "Pot face meditații BAC online?",
+    a: "Da. Ședința se ține pe Zoom sau Google Meet, cu tablă comună pentru exerciții, și nu pierzi timp pe drum. Spune în cerere că vrei online și primești propuneri din toată țara.",
+  },
 ];
 
 export const Route = createFileRoute("/meditatii-bac")({

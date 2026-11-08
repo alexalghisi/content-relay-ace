@@ -1,22 +1,40 @@
-import { Link, useLoaderData } from "@tanstack/react-router";
+import { Link, useLoaderData, useLocation } from "@tanstack/react-router";
 import { ComboDataBlock } from "@/components/market-data";
 import type { ComboStats } from "@/lib/market-stats.functions";
 import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
-import { CautariPopulare } from "@/components/cautari-populare";
+import { linkuriContextuale, type ContextPagina } from "@/lib/linkuri-contextuale";
 import { AdSenseSlot } from "@/components/ads/adsense";
 import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 
-export interface FaqItem { q: string; a: string; }
-export interface PdfItem { href: string; title: string; meta?: string; }
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+export interface PdfItem {
+  href: string;
+  title: string;
+  meta?: string;
+}
 export interface SeoLandingProps {
   h1: string;
   intro: string;
   bullets?: string[];
-  ctaPrimary?: { to: string; label: string; params?: Record<string, string>; search?: Record<string, string | undefined> };
+  ctaPrimary?: {
+    to: string;
+    label: string;
+    params?: Record<string, string>;
+    search?: Record<string, string | undefined>;
+  };
   ctaSecondary?: { to: string; label: string; search?: Record<string, string | undefined> };
   /** Optional CTA block at the end of the page; defaults to the student request CTA. */
-  ctaFooter?: { title: string; body: string; to: string; label: string; search?: Record<string, string | undefined> };
+  ctaFooter?: {
+    title: string;
+    body: string;
+    to: string;
+    label: string;
+    search?: Record<string, string | undefined>;
+  };
   sections?: { title: string; body: ReactNode }[];
   pdfs?: PdfItem[];
   faqs?: FaqItem[];
@@ -25,10 +43,20 @@ export interface SeoLandingProps {
   pageUrl?: string;
   /** Optional intermediate breadcrumb between Acasă and the current page (e.g. { name: "Meditații", url: "https://meditatiidirect.ro/meditatii" }). */
   breadcrumbParent?: { name: string; url: string };
+  /** Materia/orașul paginii pentru linkurile contextuale; implicit se deduc din URL. */
+  linkContext?: ContextPagina;
+  /** Conținut specific paginii (anunțuri, cereri, date reale), afișat imediat după antet. */
+  children?: ReactNode;
 }
 
 export function SeoLanding(p: SeoLandingProps) {
-  const ld = useLoaderData({ strict: false }) as { subjectStats?: ComboStats | null; subjectName?: string } | undefined;
+  const ld = useLoaderData({ strict: false }) as
+    | { subjectStats?: ComboStats | null; subjectName?: string }
+    | undefined;
+  const { pathname } = useLocation();
+  const cale = p.pageUrl ? new URL(p.pageUrl).pathname : pathname;
+  // 6–10 linkuri legate de pagina curentă (nu o listă sitewide de cuvinte-cheie).
+  const linkuri = linkuriContextuale({ cale, context: p.linkContext, related: p.related });
   const breadcrumbLd = p.pageUrl
     ? {
         "@context": "https://schema.org",
@@ -36,21 +64,40 @@ export function SeoLanding(p: SeoLandingProps) {
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Acasă", item: "https://meditatiidirect.ro/" },
           ...(p.breadcrumbParent
-            ? [{ "@type": "ListItem", position: 2, name: p.breadcrumbParent.name, item: p.breadcrumbParent.url }]
+            ? [
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: p.breadcrumbParent.name,
+                  item: p.breadcrumbParent.url,
+                },
+              ]
             : []),
-          { "@type": "ListItem", position: p.breadcrumbParent ? 3 : 2, name: p.h1, item: p.pageUrl },
+          {
+            "@type": "ListItem",
+            position: p.breadcrumbParent ? 3 : 2,
+            name: p.h1,
+            item: p.pageUrl,
+          },
         ],
       }
     : null;
   return (
     <article className="container-page py-10 lg:py-14">
       {breadcrumbLd && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+        />
       )}
       {p.pageUrl && (
         <nav aria-label="Breadcrumb" className="mb-5 text-xs text-muted-foreground">
           <ol className="flex flex-wrap items-center gap-1.5">
-            <li><a href="/" className="hover:text-primary">Acasă</a></li>
+            <li>
+              <a href="/" className="hover:text-primary">
+                Acasă
+              </a>
+            </li>
             <li aria-hidden="true">/</li>
             {p.breadcrumbParent && (
               <>
@@ -62,7 +109,9 @@ export function SeoLanding(p: SeoLandingProps) {
                 <li aria-hidden="true">/</li>
               </>
             )}
-            <li aria-current="page" className="text-foreground/80">{p.h1}</li>
+            <li aria-current="page" className="text-foreground/80">
+              {p.h1}
+            </li>
           </ol>
         </nav>
       )}
@@ -86,12 +135,20 @@ export function SeoLanding(p: SeoLandingProps) {
 
         <div className="mt-7 flex flex-wrap gap-3">
           {p.ctaPrimary && (
-            <Link to={p.ctaPrimary.to} search={p.ctaPrimary.search as never} className="btn-primary h-11 px-5 inline-flex items-center gap-2">
+            <Link
+              to={p.ctaPrimary.to}
+              search={p.ctaPrimary.search as never}
+              className="btn-primary h-11 px-5 inline-flex items-center gap-2"
+            >
               {p.ctaPrimary.label} <ArrowRight className="h-4 w-4" />
             </Link>
           )}
           {p.ctaSecondary && (
-            <Link to={p.ctaSecondary.to} search={p.ctaSecondary.search as never} className="btn-outline h-11 px-5">
+            <Link
+              to={p.ctaSecondary.to}
+              search={p.ctaSecondary.search as never}
+              className="btn-outline h-11 px-5"
+            >
               {p.ctaSecondary.label}
             </Link>
           )}
@@ -102,12 +159,16 @@ export function SeoLanding(p: SeoLandingProps) {
       <AdsterraBanner728 className="mt-6" />
       <AdsterraNativeBanner className="mt-6" />
 
+      {p.children}
+
       {p.sections && (
         <div className="mt-12 grid gap-10 lg:grid-cols-3">
           {p.sections.map((s) => (
             <section key={s.title} className="card-soft p-6">
               <h2 className="text-lg font-semibold">{s.title}</h2>
-              <div className="mt-3 text-sm text-muted-foreground leading-relaxed space-y-3">{s.body}</div>
+              <div className="mt-3 text-sm text-muted-foreground leading-relaxed space-y-3">
+                {s.body}
+              </div>
             </section>
           ))}
         </div>
@@ -117,12 +178,17 @@ export function SeoLanding(p: SeoLandingProps) {
         <section className="mt-12">
           <h2 className="text-2xl font-bold">Materiale gratuite (PDF)</h2>
           <p className="mt-2 text-muted-foreground">
-            Subiecte și bareme — găzduite direct pe MeditatiiDirect.ro, descarci instant fără să părăsești platforma.
+            Subiecte și bareme — găzduite direct pe MeditatiiDirect.ro, descarci instant fără să
+            părăsești platforma.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {p.pdfs.map((d) => (
-              <a key={d.href + d.title} href={d.href} rel="noopener"
-                 className="card-soft p-4 flex items-start gap-3 hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition">
+              <a
+                key={d.href + d.title}
+                href={d.href}
+                rel="noopener"
+                className="card-soft p-4 flex items-start gap-3 hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition"
+              >
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary">
                   <FileText className="h-5 w-5" />
                 </span>
@@ -139,7 +205,9 @@ export function SeoLanding(p: SeoLandingProps) {
         </section>
       )}
 
-      {ld?.subjectStats && ld.subjectName && <ComboDataBlock s={ld.subjectStats} subject={ld.subjectName} city="România" />}
+      {ld?.subjectStats && ld.subjectName && (
+        <ComboDataBlock s={ld.subjectStats} subject={ld.subjectName} city="România" />
+      )}
       {p.faqs && p.faqs.length > 0 && (
         <section className="mt-14 max-w-3xl">
           <h2 className="text-2xl font-bold">Întrebări frecvente</h2>
@@ -157,28 +225,45 @@ export function SeoLanding(p: SeoLandingProps) {
         </section>
       )}
 
-      {p.related && p.related.length > 0 && (
-        <section className="mt-14">
-          <h2 className="text-lg font-semibold">Vezi și</h2>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {p.related.map((r) => (
-              <Link key={r.to} to={r.to} className="rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground hover:border-primary/40 hover:text-primary">
-                {r.label}
-              </Link>
+      {linkuri.length > 0 && (
+        <nav className="mt-14" aria-labelledby="vezi-si" data-testid="linkuri-contextuale">
+          <h2 id="vezi-si" className="text-lg font-semibold">
+            Vezi și
+          </h2>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {linkuri.map((r) => (
+              <li key={r.to}>
+                <Link
+                  to={r.to}
+                  className="inline-block rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground hover:border-primary/40 hover:text-primary"
+                >
+                  {r.label}
+                </Link>
+              </li>
             ))}
-          </div>
-        </section>
+          </ul>
+        </nav>
       )}
-
-      <CautariPopulare className="mt-14" />
 
       <section className="mt-14 card-soft p-8 bg-gradient-to-br from-primary-soft to-card">
         <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-bold inline-flex items-center gap-2"><GraduationCap className="h-5 w-5 text-primary" /> {p.ctaFooter?.title ?? "Spune-ne ce profesor cauți"}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">{p.ctaFooter?.body ?? "Descrii o singură dată ce ai nevoie și profesorii interesați îți trimit propuneri. Gratuit, fără comision."}</p>
+            <h2 className="text-xl font-bold inline-flex items-center gap-2">
+              <GraduationCap className="h-5 w-5 text-primary" />{" "}
+              {p.ctaFooter?.title ?? "Spune-ne ce profesor cauți"}
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {p.ctaFooter?.body ??
+                "Descrii o singură dată ce ai nevoie și profesorii interesați îți trimit propuneri. Gratuit, fără comision."}
+            </p>
           </div>
-          <Link to={p.ctaFooter?.to ?? "/meditatii"} search={(p.ctaFooter?.search ?? undefined) as never} className="btn-primary h-11 px-5">{p.ctaFooter?.label ?? "Cere ofertă"}</Link>
+          <Link
+            to={p.ctaFooter?.to ?? "/meditatii"}
+            search={(p.ctaFooter?.search ?? undefined) as never}
+            className="btn-primary h-11 px-5"
+          >
+            {p.ctaFooter?.label ?? "Cere ofertă"}
+          </Link>
         </div>
       </section>
     </article>

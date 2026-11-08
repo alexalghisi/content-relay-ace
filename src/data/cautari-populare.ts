@@ -1,60 +1,44 @@
-// Căutări reale din Google Search Console (ultimele 90 de zile) + tendințe sezoniere (calendar 2027), scrise exact cum le tastează
-// oamenii: fără diacritice. Le afișăm ca linkuri ca Google să lege paginile de aceste formulări.
-export const CAUTARI_POPULARE: { q: string; href: string }[] = [
-  { q: "calendar bac 2027", href: "/calendar-bac-2027" },
-  { q: "simulare evaluare nationala 2027", href: "/calendar-evaluare-nationala-2027" },
-  { q: "admitere liceu 2027", href: "/admitere-liceu-2027" },
-  { q: "pregatire evaluare nationala", href: "/meditatii-evaluare-nationala" },
-  { q: "meditatii", href: "/meditatii" },
-  { q: "meditatii online", href: "/meditatii-online" },
-  { q: "platforma meditatii online", href: "/platforma-meditatii-online" },
-  { q: "site meditatii online", href: "/platforma-meditatii-online" },
-  { q: "anunturi meditatii", href: "/anunturi-meditatii" },
-  { q: "profesori meditatii", href: "/profesori-meditatii" },
-  { q: "centru meditatii", href: "/centru-meditatii" },
-  { q: "centru de meditatii bucuresti", href: "/centru-meditatii" },
-  { q: "meditatii matematica", href: "/meditatii-matematica" },
-  { q: "meditatii matematica online", href: "/meditatii-matematica" },
-  { q: "meditator matematica", href: "/meditatii-matematica" },
-  { q: "meditatii mate", href: "/meditatii-matematica" },
-  { q: "meditatii romana", href: "/meditatii-romana" },
-  { q: "meditatii limba romana", href: "/meditatii-romana" },
-  { q: "meditatii romana bac", href: "/meditatii-romana-bac" },
-  { q: "meditatii romana online", href: "/meditatii-romana-online" },
-  { q: "meditatii engleza", href: "/meditatii-engleza" },
-  { q: "meditatii limba engleza", href: "/meditatii-engleza" },
-  { q: "meditatii engleza online", href: "/meditatii-engleza-online" },
-  { q: "meditatii engleza adulti", href: "/meditatii-engleza-adulti" },
-  { q: "meditatii engleza copii", href: "/meditatii-engleza" },
-  { q: "meditator engleza", href: "/meditatii-engleza" },
-  { q: "meditatii germana", href: "/meditatii-germana" },
-  { q: "meditatii chimie", href: "/meditatii-chimie" },
-  { q: "meditatii fizica", href: "/meditatii-fizica" },
-  { q: "meditatii biologie", href: "/meditatii-biologie" },
-  { q: "meditatii informatica", href: "/meditatii-informatica" },
-  { q: "meditatii bac", href: "/meditatii-bac" },
-  { q: "meditatii bacalaureat", href: "/meditatii-bac" },
-  { q: "meditatii bac matematica", href: "/meditatii-matematica-bac" },
-  { q: "pret meditatii", href: "/preturi-meditatii" },
-  { q: "meditatii bucuresti", href: "/meditatii-in/bucuresti" },
-  { q: "meditatii cluj", href: "/meditatii-in/cluj-napoca" },
-  { q: "meditatii timisoara", href: "/meditatii-in/timisoara" },
-  { q: "meditatii iasi", href: "/meditatii-in/iasi" },
-  { q: "meditatii brasov", href: "/meditatii-in/brasov" },
-  { q: "meditatii constanta", href: "/meditatii-in/constanta" },
-  { q: "meditatii sibiu", href: "/meditatii-in/sibiu" },
-  // Google Trends RO (nov 2026, ultimele 12 luni): top și în creștere.
-  { q: "meditatii matematica iasi", href: "/meditatii/matematica/iasi" },
-  { q: "meditatii matematica bucuresti", href: "/meditatii/matematica/bucuresti" },
-  { q: "meditatii matematica cluj", href: "/meditatii/matematica/cluj-napoca" },
-  { q: "meditatii matematica brasov", href: "/meditatii/matematica/brasov" },
-  { q: "meditatii matematica constanta", href: "/meditatii/matematica/constanta" },
-  { q: "meditatii matematica timisoara", href: "/meditatii/matematica/timisoara" },
-  { q: "meditatii matematica sector 6", href: "/meditatii-bucuresti-sectoare" },
-  { q: "meditatii matematica sector 3", href: "/meditatii-bucuresti-sectoare" },
-  { q: "meditatii matematica sector 4", href: "/meditatii-bucuresti-sectoare" },
-  { q: "meditatii germana bucuresti", href: "/meditatii/germana/bucuresti" },
-  { q: "meditatii medicina", href: "/meditatii-admitere-medicina" },
-  { q: "meditatii istorie", href: "/meditatii-istorie" },
-  { q: "pfa meditatii", href: "/pfa-meditatii" },
+// Scurtături organizate, afișate DOAR pe pagina principală (nu sitewide): câte un link pe pagină,
+// cu etichete firești, grupate pe intenție. Orașele au deja secțiunea lor pe pagina principală.
+// Paginile interioare primesc linkuri contextuale din src/lib/linkuri-contextuale.ts.
+export interface GrupScurtaturi {
+  titlu: string;
+  linkuri: { label: string; href: string }[];
+}
+
+export const SCURTATURI_ACASA: GrupScurtaturi[] = [
+  {
+    titlu: "Meditații pe materii",
+    linkuri: [
+      { label: "Matematică", href: "/meditatii-matematica" },
+      { label: "Română", href: "/meditatii-romana" },
+      { label: "Engleză", href: "/meditatii-engleza" },
+      { label: "Germană", href: "/meditatii-germana" },
+      { label: "Fizică", href: "/meditatii-fizica" },
+      { label: "Chimie", href: "/meditatii-chimie" },
+      { label: "Biologie", href: "/meditatii-biologie" },
+      { label: "Informatică", href: "/meditatii-informatica" },
+    ],
+  },
+  {
+    titlu: "Pregătire pentru examene",
+    linkuri: [
+      { label: "Meditații BAC", href: "/meditatii-bac" },
+      { label: "Matematică pentru BAC", href: "/meditatii-matematica-bac" },
+      { label: "Evaluarea Națională", href: "/meditatii-evaluare-nationala" },
+      { label: "Admitere medicină", href: "/meditatii-admitere-medicina" },
+      { label: "Calendar BAC 2027", href: "/calendar-bac-2027" },
+      { label: "Admitere liceu 2027", href: "/admitere-liceu-2027" },
+    ],
+  },
+  {
+    titlu: "Resurse gratuite",
+    linkuri: [
+      { label: "Subiecte BAC cu barem", href: "/subiecte-bac" },
+      { label: "Subiecte BAC fizică", href: "/subiecte-bac/materie/fizica" },
+      { label: "Prețuri meditații matematică", href: "/preturi-meditatii/matematica" },
+      { label: "Profesorul AI", href: "/profesor-ai" },
+      { label: "Blog", href: "/blog" },
+    ],
+  },
 ];

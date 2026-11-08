@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { BAC_AGGREGATES } from "@/lib/bac-archive";
+import { agregatBac } from "@/lib/bac-materie-seo";
 import { BAC_ORIGINALS, compareBacRows, originalBySlug, originalsFor } from "@/lib/bac-originals";
 
 /**
@@ -66,7 +67,28 @@ export const getBacByMaterie = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const list = rows(originalsFor({ materie: data.slug }));
     const name = BAC_AGGREGATES[data.slug]?.name ?? list[0]?.subject_name ?? data.slug;
-    return { name, slug: data.slug, rows: list };
+    // Profilurile aceleiași materii (ex. fizică teoretic / tehnologic), pentru navigare între ele.
+    const agregat = agregatBac(data.slug);
+    const profiluri = agregat
+      ? Array.from(
+          new Map(
+            BAC_ORIGINALS.filter(
+              (r) =>
+                r.subject_slug !== agregat &&
+                r.subject_slug.startsWith(BAC_AGGREGATES[agregat]!.prefix),
+            ).map((r) => [r.subject_slug, r.subject_name] as const),
+          ),
+        )
+          .map(([slug, nume]) => ({ slug, name: nume }))
+          .sort((a, b) => a.slug.localeCompare(b.slug))
+      : [];
+    return {
+      name,
+      slug: data.slug,
+      rows: list,
+      agregat: agregat ? { slug: agregat, name: BAC_AGGREGATES[agregat]!.name } : null,
+      profiluri,
+    };
   });
 
 export const getBacByYear = createServerFn({ method: "GET" })

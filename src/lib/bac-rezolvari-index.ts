@@ -12,3 +12,8 @@ const KEYS = new Set(
 export function hasRezolvareKey(key: string) {
   return KEYS.has(key);
 }
+
+/** Există cel puțin o rezolvare scrisă pentru o materie (sau pentru un prefix de profiluri, ex. "fizica")? */
+export function areRezolvariMaterie(prefix: string) {
+  return [...KEYS].some((k) => k.slice(5).startsWith(prefix));
+}

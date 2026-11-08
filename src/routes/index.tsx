@@ -1,6 +1,18 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, BadgeCheck, BookOpen, Check, Megaphone, MessageSquareText, ScanSearch, Search, ShieldCheck, Star, UserRound } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  BookOpen,
+  Check,
+  Megaphone,
+  MessageSquareText,
+  ScanSearch,
+  Search,
+  ShieldCheck,
+  Star,
+  UserRound,
+} from "lucide-react";
 import heroImg from "@/assets/hero-tutoring.jpg";
 import heroWebp from "@/assets/hero-tutoring.webp";
 import { useNearViewport } from "@/hooks/use-after-load";
@@ -9,22 +21,42 @@ import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 import { faqJsonLd } from "@/lib/seo";
-import { CautariPopulare } from "@/components/cautari-populare";
+import { ScurtaturiAcasa } from "@/components/cautari-populare";
 import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
-import { DemoProfesorAiRotativ, TextRotativ, TITLURI_PROFESOR_AI, TEXTE_PROFESOR_AI } from "@/components/profesor-ai/demo-rotativ";
+import {
+  DemoProfesorAiRotativ,
+  TextRotativ,
+  TITLURI_PROFESOR_AI,
+  TEXTE_PROFESOR_AI,
+} from "@/components/profesor-ai/demo-rotativ";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meditații cu profesori verificați — online și în orașul tău | MeditatiiDirect.ro" },
-      { name: "description", content: "Spui în 2 minute ce meditații cauți, iar profesorii îți trimit oferte cu preț și program. Gratuit pentru elevi, fără comision, online sau în orașul tău. Plus profesor individual cu AI, 24/7." },
-      { property: "og:title", content: "Meditații Direct — primești oferte de la profesori, gratuit" },
-      { property: "og:description", content: "Spui ce meditații cauți, profesorii îți trimit oferte cu preț și program. Gratuit, fără comision, online sau în orașul tău." },
+      { title: "Meditatii online sau acasă, fără comision | MeditatiiDirect" },
+      {
+        name: "description",
+        content:
+          "Meditatii la matematică, română, engleză și orice materie, online sau acasă. Postezi gratuit cererea, iar profesorii îți trimit oferte cu preț și program.",
+      },
+      {
+        property: "og:title",
+        content: "Meditații Direct — primești oferte de la profesori, gratuit",
+      },
+      {
+        property: "og:description",
+        content:
+          "Spui ce meditații cauți, profesorii îți trimit oferte cu preț și program. Gratuit, fără comision, online sau în orașul tău.",
+      },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://meditatiidirect.ro/" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Meditații online și în orașul tău — MeditatiiDirect.ro" },
-      { name: "twitter:description", content: "Postezi gratuit cererea, primești propuneri cu tarif și program, discuți direct și evaluezi cu stele." },
+      {
+        name: "twitter:description",
+        content:
+          "Postezi gratuit cererea, primești propuneri cu tarif și program, discuți direct și evaluezi cu stele.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://meditatiidirect.ro/" }],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(HOME_FAQ)) }],
@@ -33,11 +65,26 @@ export const Route = createFileRoute("/")({
 });
 
 const HOME_FAQ = [
-  { q: "Cât costă meditațiile?", a: "Tariful îl stabilește fiecare profesor și îl vezi scris în propunere înainte să alegi. Prețul depinde de materie, nivel, oraș și experiența profesorului. Pentru elevi, platforma este gratuită." },
-  { q: "Cum găsesc un profesor de meditații pe MeditatiiDirect?", a: "Descrii în 2 minute materia, nivelul, orașul sau varianta online și bugetul. Profesorii interesați îți trimit propuneri cu tarif și program, iar tu discuți direct cu ei și îl alegi pe cel potrivit." },
-  { q: "Meditațiile se pot face online?", a: "Da. Poți cere meditații online de oriunde din România sau meditații față în față, la profesor ori la domiciliu, în orașul tău." },
-  { q: "Pentru ce materii și examene găsesc meditații?", a: "Matematică, română, engleză, fizică, chimie, biologie, informatică și alte materii, de la gimnaziu la liceu, pentru Evaluarea Națională, Bacalaureat și admiterea la facultate." },
-  { q: "Plătesc comision platformei?", a: "Nu. Elevii nu plătesc nimic platformei, iar plata lecțiilor se face direct profesorului, fără intermediari." },
+  {
+    q: "Cât costă meditațiile?",
+    a: "Tariful îl stabilește fiecare profesor și îl vezi scris în propunere înainte să alegi. Prețul depinde de materie, nivel, oraș și experiența profesorului. Pentru elevi, platforma este gratuită.",
+  },
+  {
+    q: "Cum găsesc un profesor de meditații pe MeditatiiDirect?",
+    a: "Descrii în 2 minute materia, nivelul, orașul sau varianta online și bugetul. Profesorii interesați îți trimit propuneri cu tarif și program, iar tu discuți direct cu ei și îl alegi pe cel potrivit.",
+  },
+  {
+    q: "Meditațiile se pot face online?",
+    a: "Da. Poți cere meditații online de oriunde din România sau meditații față în față, la profesor ori la domiciliu, în orașul tău.",
+  },
+  {
+    q: "Pentru ce materii și examene găsesc meditații?",
+    a: "Matematică, română, engleză, fizică, chimie, biologie, informatică și alte materii, de la gimnaziu la liceu, pentru Evaluarea Națională, Bacalaureat și admiterea la facultate.",
+  },
+  {
+    q: "Plătesc comision platformei?",
+    a: "Nu. Elevii nu plătesc nimic platformei, iar plata lecțiilor se face direct profesorului, fără intermediari.",
+  },
 ];
 
 const LEVELS = ["Gimnaziu", "Evaluare Națională", "Liceu", "Bacalaureat", "Admitere facultate"];
@@ -64,143 +111,503 @@ function HomePage() {
     });
   };
 
-  return <>
-    <section className="relative overflow-hidden border-b border-border bg-primary-soft/45">
-      <div className="container-page grid min-h-[620px] items-center gap-10 py-12 lg:grid-cols-[1.05fr_.95fr] lg:py-18">
-        <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-background px-3 py-1.5 text-xs font-semibold text-primary shadow-sm"><ShieldCheck className="h-4 w-4" /> Chat direct · evaluare în stele · fără comision</div>
-          <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">Meditații cu profesori verificați, <span className="text-primary">online și în orașul tău</span></h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">Cauți meditații la matematică, română, engleză sau pregătire pentru BAC? Descrii o singură dată ce ai nevoie, profesorii îți trimit propuneri cu tarif și program, discutați direct în chat, iar la final evaluezi colaborarea cu stele.</p>
-          <form onSubmit={submit} className="mt-8 grid gap-2 rounded-2xl border border-border bg-background p-2 shadow-[var(--shadow-card)] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]">
-            <select aria-label="Materie" value={subject} onChange={(e) => setSubject(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Materie</option>{POPULAR_SUBJECTS.map((item) => <option value={item.slug} key={item.slug}>{item.name}</option>)}</select>
-            <select aria-label="Nivel" value={level} onChange={(e) => setLevel(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Nivel</option>{LEVELS.map((item) => <option key={item}>{item}</option>)}</select>
-            <select aria-label="Locație" value={location} onChange={(e) => setLocation(e.target.value)} className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"><option value="">Locație</option>{LOCATIONS.map((item) => <option key={item.slug} value={item.slug}>{item.name}</option>)}</select>
-            <button className="btn-primary h-13 px-6" type="submit"><Search className="mr-2 h-4 w-4" /> Cere ofertă</button>
-          </form>
-          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Gratuit pentru elevi</span><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Propuneri clare, în scris</span><span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-success" /> Contact direct, fără intermediari</span></div>
-        </div>
-        <div className="relative hidden lg:block">
-          {/* Hidden below lg: the mobile source is an empty pixel so phones never download the hero. */}
-          <picture>
-            <source media="(max-width: 1023.98px)" srcSet="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" />
-            <source type="image/webp" srcSet={heroWebp} />
-            <img src={heroImg} alt="Elevă învață alături de un profesor la o ședință de meditații" width="960" height="720" className="aspect-[4/3] w-full rounded-2xl object-cover shadow-[var(--shadow-card)]" fetchPriority="high" decoding="async" />
-          </picture>
-           <div className="absolute -bottom-5 -left-5 flex items-center gap-3 rounded-xl border border-border bg-background p-4 shadow-[var(--shadow-card)]"><span className="grid h-10 w-10 place-items-center rounded-full bg-accent text-success"><BadgeCheck className="h-5 w-5" /></span><div><p className="text-sm font-bold">Alegi informat</p><p className="text-xs text-muted-foreground">Tarif, program și mesaj în propunere</p></div></div>
-        </div>
-      </div>
-    </section>
-
-    <section className="container-page py-12 sm:py-16">
-      <div className="grid items-center gap-8 rounded-3xl border border-primary/15 bg-gradient-to-br from-primary-soft/70 to-card p-6 sm:p-10 lg:grid-cols-[1fr_1.15fr]">
-        <div>
-          <p className="inline-flex items-center gap-2 rounded-full bg-[#facc15] px-3 py-1 text-xs font-bold text-[#1e1b4b]">NOU · 15 MINUTE GRATUIT</p>
-          <TextRotativ as="h2" cheie="profesor-ai-titlu" variante={TITLURI_PROFESOR_AI} className="mt-4 text-3xl font-bold sm:text-4xl" />
-          <TextRotativ cheie="profesor-ai-text" variante={TEXTE_PROFESOR_AI} className="mt-3 leading-7 text-muted-foreground" />
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link to="/profesor-ai" className="btn-primary h-12 px-6">Începe lecția gratuită de 15 minute <ArrowRight className="ml-2 h-4 w-4" /></Link>
+  return (
+    <>
+      <section className="relative overflow-hidden border-b border-border bg-primary-soft/45">
+        <div className="container-page grid min-h-[620px] items-center gap-10 py-12 lg:grid-cols-[1.05fr_.95fr] lg:py-18">
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-background px-3 py-1.5 text-xs font-semibold text-primary shadow-sm">
+              <ShieldCheck className="h-4 w-4" /> Chat direct · evaluare în stele · fără comision
+            </div>
+            <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">
+              Meditații cu profesori verificați,{" "}
+              <span className="text-primary">online și în orașul tău</span>
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+              Cauți meditații la matematică, română, engleză sau pregătire pentru BAC? Descrii o
+              singură dată ce ai nevoie, profesorii îți trimit propuneri cu tarif și program,
+              discutați direct în chat, iar la final evaluezi colaborarea cu stele.
+            </p>
+            <form
+              onSubmit={submit}
+              className="mt-8 grid gap-2 rounded-2xl border border-border bg-background p-2 shadow-[var(--shadow-card)] sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto]"
+            >
+              <select
+                aria-label="Materie"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"
+              >
+                <option value="">Materie</option>
+                {POPULAR_SUBJECTS.map((item) => (
+                  <option value={item.slug} key={item.slug}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+              <select
+                aria-label="Nivel"
+                value={level}
+                onChange={(e) => setLevel(e.target.value)}
+                className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"
+              >
+                <option value="">Nivel</option>
+                {LEVELS.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+              <select
+                aria-label="Locație"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                className="h-13 rounded-xl border-0 bg-muted px-4 text-sm outline-hidden focus:ring-2 focus:ring-ring"
+              >
+                <option value="">Locație</option>
+                {LOCATIONS.map((item) => (
+                  <option key={item.slug} value={item.slug}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+              <button className="btn-primary h-13 px-6" type="submit">
+                <Search className="mr-2 h-4 w-4" /> Cere ofertă
+              </button>
+            </form>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <Check className="h-4 w-4 text-success" /> Gratuit pentru elevi
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Check className="h-4 w-4 text-success" /> Propuneri clare, în scris
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Check className="h-4 w-4 text-success" /> Contact direct, fără intermediari
+              </span>
+            </div>
+          </div>
+          <div className="relative hidden lg:block">
+            {/* Hidden below lg: the mobile source is an empty pixel so phones never download the hero. */}
+            <picture>
+              <source
+                media="(max-width: 1023.98px)"
+                srcSet="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+              />
+              <source type="image/webp" srcSet={heroWebp} />
+              <img
+                src={heroImg}
+                alt="Elevă învață alături de un profesor la o ședință de meditații"
+                width="960"
+                height="720"
+                className="aspect-[4/3] w-full rounded-2xl object-cover shadow-[var(--shadow-card)]"
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
+            <div className="absolute -bottom-5 -left-5 flex items-center gap-3 rounded-xl border border-border bg-background p-4 shadow-[var(--shadow-card)]">
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-accent text-success">
+                <BadgeCheck className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-sm font-bold">Alegi informat</p>
+                <p className="text-xs text-muted-foreground">
+                  Tarif, program și mesaj în propunere
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-        <DemoProfesorAiRotativ />
-      </div>
-    </section>
+      </section>
 
-    <AdsterraBannerResponsive className="container-page py-6" />
+      <section className="container-page py-12 sm:py-16">
+        <div className="grid items-center gap-8 rounded-3xl border border-primary/15 bg-gradient-to-br from-primary-soft/70 to-card p-6 sm:p-10 lg:grid-cols-[1fr_1.15fr]">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full bg-[#facc15] px-3 py-1 text-xs font-bold text-[#1e1b4b]">
+              NOU · 15 MINUTE GRATUIT
+            </p>
+            <TextRotativ
+              as="h2"
+              cheie="profesor-ai-titlu"
+              variante={TITLURI_PROFESOR_AI}
+              className="mt-4 text-3xl font-bold sm:text-4xl"
+            />
+            <TextRotativ
+              cheie="profesor-ai-text"
+              variante={TEXTE_PROFESOR_AI}
+              className="mt-3 leading-7 text-muted-foreground"
+            />
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link to="/profesor-ai" className="btn-primary h-12 px-6">
+                Începe lecția gratuită de 15 minute <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+          <DemoProfesorAiRotativ />
+        </div>
+      </section>
 
-    <section className="container-page pt-12">
-      <div className="grid items-center gap-8 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary-soft to-card p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr]">
-        <div>
-          <p className="inline-flex items-center gap-2 text-sm font-semibold text-primary"><ScanSearch className="h-5 w-5" /> Nou: Scanerul de lacune</p>
-          <h2 className="mt-3 text-3xl font-bold leading-tight">Nu îți iese un capitol? Află în câteva minute de unde vine problema.</h2>
-          <p className="mt-3 leading-7 text-muted-foreground">Pornești de la capitolul la care te-ai blocat, iar scanerul coboară întrebare cu întrebare pe noțiunile de bază până găsește rădăcina. Primești traseul de recuperare, în ordine, și îl poți trimite profesorilor într-o cerere. Gratuit, fără cont.</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link to="/scaner-lacune/$materie" params={{ materie: "matematica" }} className="btn-primary h-12 px-6">Scanează la matematică <ArrowRight className="ml-2 h-4 w-4" /></Link>
-            <Link to="/scaner-lacune" className="btn-outline h-12 px-5">Alte materii</Link>
+      <AdsterraBannerResponsive className="container-page py-6" />
+
+      <section className="container-page pt-12">
+        <div className="grid items-center gap-8 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary-soft to-card p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <p className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+              <ScanSearch className="h-5 w-5" /> Nou: Scanerul de lacune
+            </p>
+            <h2 className="mt-3 text-3xl font-bold leading-tight">
+              Nu îți iese un capitol? Află în câteva minute de unde vine problema.
+            </h2>
+            <p className="mt-3 leading-7 text-muted-foreground">
+              Pornești de la capitolul la care te-ai blocat, iar scanerul coboară întrebare cu
+              întrebare pe noțiunile de bază până găsește rădăcina. Primești traseul de recuperare,
+              în ordine, și îl poți trimite profesorilor într-o cerere. Gratuit, fără cont.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                to="/scaner-lacune/$materie"
+                params={{ materie: "matematica" }}
+                className="btn-primary h-12 px-6"
+              >
+                Scanează la matematică <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+              <Link to="/scaner-lacune" className="btn-outline h-12 px-5">
+                Alte materii
+              </Link>
+            </div>
+          </div>
+          <div
+            className="rounded-xl border border-border bg-card p-5"
+            aria-label="Exemplu de diagnostic"
+          >
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+              Exemplu de lanț verificat
+            </p>
+            <ol className="mt-4 space-y-2 text-sm">
+              <li className="flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2 text-destructive">
+                ✗ Derivate <span className="ml-auto text-xs">aici te-ai blocat</span>
+              </li>
+              <li className="ml-4 flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2 text-destructive">
+                ✗ Limite de funcții
+              </li>
+              <li className="ml-8 flex items-center gap-2 rounded-lg bg-accent px-3 py-2">
+                ✓ Funcții: domeniu, monotonie, grafic
+              </li>
+              <li className="ml-8 flex items-center gap-2 rounded-lg border border-primary/50 bg-primary-soft px-3 py-2 font-semibold text-primary">
+                ✗ Formule de calcul prescurtat{" "}
+                <span className="ml-auto text-xs font-normal">rădăcina</span>
+              </li>
+            </ol>
           </div>
         </div>
-        <div className="rounded-xl border border-border bg-card p-5" aria-label="Exemplu de diagnostic">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Exemplu de lanț verificat</p>
-          <ol className="mt-4 space-y-2 text-sm">
-            <li className="flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2 text-destructive">✗ Derivate <span className="ml-auto text-xs">aici te-ai blocat</span></li>
-            <li className="ml-4 flex items-center gap-2 rounded-lg bg-destructive/10 px-3 py-2 text-destructive">✗ Limite de funcții</li>
-            <li className="ml-8 flex items-center gap-2 rounded-lg bg-accent px-3 py-2">✓ Funcții: domeniu, monotonie, grafic</li>
-            <li className="ml-8 flex items-center gap-2 rounded-lg border border-primary/50 bg-primary-soft px-3 py-2 font-semibold text-primary">✗ Formule de calcul prescurtat <span className="ml-auto text-xs font-normal">rădăcina</span></li>
-          </ol>
+      </section>
+
+      <section className="container-page py-16">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-primary">Începe cu materia potrivită</p>
+            <h2 className="mt-2 text-3xl font-bold">Categorii populare</h2>
+          </div>
+          <Link
+            to="/materii"
+            className="hidden items-center gap-1 text-sm font-semibold text-primary sm:flex"
+          >
+            Toate materiile <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
-      </div>
-    </section>
-
-    <section className="container-page py-16"><div className="flex items-end justify-between gap-4"><div><p className="text-sm font-semibold text-primary">Începe cu materia potrivită</p><h2 className="mt-2 text-3xl font-bold">Categorii populare</h2></div><Link to="/materii" className="hidden items-center gap-1 text-sm font-semibold text-primary sm:flex">Toate materiile <ArrowRight className="h-4 w-4" /></Link></div><div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">{POPULAR_SUBJECTS.map((item) => <Link key={item.slug} to="/meditatii" search={{ materie: item.slug }} className="group rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-card)]"><span className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-sm font-bold text-primary">{item.icon}</span><h3 className="mt-4 text-sm font-bold">{item.name}</h3><p className="mt-1 text-xs leading-5 text-muted-foreground">{item.description}</p><p className="mt-3 text-xs font-medium text-primary">Cere ofertă →</p></Link>)}</div></section>
-
-    <section className="border-y border-border bg-muted/40"><div className="container-page py-18"><div className="text-center"><p className="text-sm font-semibold text-primary">Simplu și transparent</p><h2 className="mt-2 text-3xl font-bold">Cum funcționează</h2><p className="mx-auto mt-3 max-w-xl text-muted-foreground">Elevii vin cu cererea, profesorii cu propunerea, discuția e directă, iar procesul primește stele.</p></div><div className="relative mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">{[
-      { icon: Megaphone, title: "Descrii cererea", text: "Spui materia, nivelul, orașul sau online și bugetul. Durează 2 minute și e gratuit." },
-      { icon: MessageSquareText, title: "Primești propuneri", text: "Profesorii verificați interesați te contactează direct cu tariful și programul lor." },
-      { icon: BookOpen, title: "Alegi și înveți", text: "Compari propunerile, discuți direct cu profesorul potrivit și începi lecțiile." },
-      { icon: Star, title: "Evaluezi cu stele", text: "După discuție, acorzi de la 1 la 5 stele colaborării. Evaluări din interacțiuni reale, nu recenzii inventate." },
-    ].map((item, index) => <div key={item.title} className="relative rounded-xl border border-border bg-card p-7 text-center"><span className="absolute right-4 top-4 text-4xl font-bold text-primary-soft">0{index + 1}</span><span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary"><item.icon className="h-5 w-5" /></span><h3 className="mt-5 text-lg font-bold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{item.text}</p></div>)}</div><div className="mt-9 text-center"><Link to="/meditatii" className="btn-primary h-12 px-7">Postează cererea ta <ArrowRight className="ml-2 h-4 w-4" /></Link> <Link to="/cum-functioneaza" className="btn-outline h-12 px-7">Cum funcționează</Link></div></div></section>
-
-    <AdsterraNativeBanner className="container-page py-6" />
-
-
-    <section className="container-page py-16">
-      <div className="rounded-2xl border border-primary/15 bg-primary-soft/40 p-8 md:p-10">
-        <p className="text-sm font-semibold text-primary">Un mod nou de a găsi meditații</p>
-        <h2 className="mt-2 text-3xl font-bold">Interacțiune directă elev–profesor: chat și evaluare în stele</h2>
-        <p className="mt-3 max-w-3xl text-muted-foreground">Fără intermediari și fără comision. Profesorul îți scrie direct, discutați în chat, iar la final tu evaluezi cu stele cum a decurs tot procesul — de la răspuns până la prima lecție.</p>
-        <div className="mt-7 grid gap-5 md:grid-cols-3">
-          <div className="rounded-xl border border-border bg-card p-6"><MessageSquareText className="h-6 w-6 text-primary" /><h3 className="mt-3 font-bold">Chat direct</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Vorbești cu profesorul în chatul platformei sau pe contactul din propunere. Fără call center.</p></div>
-          <div className="rounded-xl border border-border bg-card p-6"><Star className="h-6 w-6 text-primary" /><h3 className="mt-3 font-bold">Stele pentru proces</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">De la 1 la 5 stele pentru promptitudine, claritatea propunerii și discuție. Doar elevii cu cerere reală pot evalua.</p></div>
-          <div className="rounded-xl border border-border bg-card p-6"><ShieldCheck className="h-6 w-6 text-primary" /><h3 className="mt-3 font-bold">Transparent</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Tarif, dată și oră scrise în propunere de la început. Plătești direct profesorului, integral.</p></div>
+        <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+          {POPULAR_SUBJECTS.map((item) => (
+            <Link
+              key={item.slug}
+              to="/meditatii"
+              search={{ materie: item.slug }}
+              className="group rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-card)]"
+            >
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-sm font-bold text-primary">
+                {item.icon}
+              </span>
+              <h3 className="mt-4 text-sm font-bold">{item.name}</h3>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">{item.description}</p>
+              <p className="mt-3 text-xs font-medium text-primary">Cere ofertă →</p>
+            </Link>
+          ))}
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section className="border-y border-border bg-foreground py-14 text-background sm:py-18">
-      <div className="container-page grid items-center gap-8 lg:grid-cols-[.7fr_1.3fr]">
-        <div>
-          <p className="text-sm font-semibold text-primary-soft">O lecție, văzută de aproape</p>
-          <h2 className="mt-2 text-3xl font-bold">Meditații acasă, cu explicații pe înțelesul elevului</h2>
-          <p className="mt-4 leading-7 text-background/75">Profesorul potrivit adaptează ritmul, explică pas cu pas și lasă elevului timp să înțeleagă. Tu postezi cererea, iar profesorii disponibili îți trimit propuneri clare.</p>
-          <Link to="/meditatii" className="btn-primary mt-6 h-12 px-6">Cere o ofertă <ArrowRight className="ml-2 h-4 w-4" /></Link>
+      <section className="border-y border-border bg-muted/40">
+        <div className="container-page py-18">
+          <div className="text-center">
+            <p className="text-sm font-semibold text-primary">Simplu și transparent</p>
+            <h2 className="mt-2 text-3xl font-bold">Cum funcționează</h2>
+            <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+              Elevii vin cu cererea, profesorii cu propunerea, discuția e directă, iar procesul
+              primește stele.
+            </p>
+          </div>
+          <div className="relative mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                icon: Megaphone,
+                title: "Descrii cererea",
+                text: "Spui materia, nivelul, orașul sau online și bugetul. Durează 2 minute și e gratuit.",
+              },
+              {
+                icon: MessageSquareText,
+                title: "Primești propuneri",
+                text: "Profesorii verificați interesați te contactează direct cu tariful și programul lor.",
+              },
+              {
+                icon: BookOpen,
+                title: "Alegi și înveți",
+                text: "Compari propunerile, discuți direct cu profesorul potrivit și începi lecțiile.",
+              },
+              {
+                icon: Star,
+                title: "Evaluezi cu stele",
+                text: "După discuție, acorzi de la 1 la 5 stele colaborării. Evaluări din interacțiuni reale, nu recenzii inventate.",
+              },
+            ].map((item, index) => (
+              <div
+                key={item.title}
+                className="relative rounded-xl border border-border bg-card p-7 text-center"
+              >
+                <span className="absolute right-4 top-4 text-4xl font-bold text-primary-soft">
+                  0{index + 1}
+                </span>
+                <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-primary-soft text-primary">
+                  <item.icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 text-lg font-bold">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-9 text-center">
+            <Link to="/meditatii" className="btn-primary h-12 px-7">
+              Postează cererea ta <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>{" "}
+            <Link to="/cum-functioneaza" className="btn-outline h-12 px-7">
+              Cum funcționează
+            </Link>
+          </div>
         </div>
-        <TutoringVideo />
-      </div>
-    </section>
+      </section>
 
-    <section className="border-y border-border bg-muted/35">
-      <div className="container-page py-14">
-        <p className="text-sm font-semibold text-primary">Cele mai căutate direcții</p>
-        <h2 className="mt-2 text-3xl font-bold">Meditații pentru materia, examenul și orașul tău</h2>
-        <p className="mt-3 max-w-3xl leading-7 text-muted-foreground">Pornește de la o nevoie concretă: postează un anunț de meditații, compară prețurile sau exersează cu subiecte BAC. Fiecare pagină te conduce către aceeași cerere gratuită.</p>
-        <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <Link to="/anunturi-meditatii" className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"><h3 className="font-bold">Anunțuri de meditații</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Publică ce cauți și primește propuneri direct de la profesori.</p></Link>
-          <Link to="/meditatii-matematica" className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"><h3 className="font-bold">Meditații matematică</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Gimnaziu, liceu, Evaluare Națională, BAC și admitere.</p></Link>
-          <Link to="/meditatii-online" className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"><h3 className="font-bold">Meditații online</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Cere o ofertă de oriunde din România, pentru materia ta.</p></Link>
-          <Link to="/bac" className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"><h3 className="font-bold">Subiecte și bareme BAC</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Arhivă pe materii, ani și sesiuni, plus simulări și rezolvări.</p></Link>
-          <Link to="/preturi-meditatii" className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"><h3 className="font-bold">Prețuri meditații</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Compară tarifele orientative înainte să postezi cererea.</p></Link>
-          <Link to="/simulare-ai" className="rounded-lg border border-primary/40 bg-primary-soft p-5 hover:border-primary"><h3 className="font-bold">Simulare test cu AI</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Alegi materia, clasa și durata; primești nota și explicația fiecărei greșeli: unde, ce și de ce.</p></Link>
-          <Link to="/meditator-ai" className="rounded-lg border border-primary/40 bg-primary-soft p-5 hover:border-primary"><h3 className="font-bold">Meditatorul AI</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Întreabă orice de la școală, la orice oră. Îți explică pas cu pas, pe programa din România.</p></Link>
-          <Link to="/harta-blocajelor" className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"><h3 className="font-bold">Harta Blocajelor</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Te-ai blocat la un capitol? Află ce noțiune îți lipsește, cu explicație și exemplu rezolvat.</p></Link>
-          <Link to="/materii" className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"><h3 className="font-bold">Toate materiile</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">Găsește rapid pagina dedicată materiei pe care o înveți.</p></Link>
+      <AdsterraNativeBanner className="container-page py-6" />
+
+      <section className="container-page py-16">
+        <div className="rounded-2xl border border-primary/15 bg-primary-soft/40 p-8 md:p-10">
+          <p className="text-sm font-semibold text-primary">Un mod nou de a găsi meditații</p>
+          <h2 className="mt-2 text-3xl font-bold">
+            Interacțiune directă elev–profesor: chat și evaluare în stele
+          </h2>
+          <p className="mt-3 max-w-3xl text-muted-foreground">
+            Fără intermediari și fără comision. Profesorul îți scrie direct, discutați în chat, iar
+            la final tu evaluezi cu stele cum a decurs tot procesul — de la răspuns până la prima
+            lecție.
+          </p>
+          <div className="mt-7 grid gap-5 md:grid-cols-3">
+            <div className="rounded-xl border border-border bg-card p-6">
+              <MessageSquareText className="h-6 w-6 text-primary" />
+              <h3 className="mt-3 font-bold">Chat direct</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Vorbești cu profesorul în chatul platformei sau pe contactul din propunere. Fără
+                call center.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6">
+              <Star className="h-6 w-6 text-primary" />
+              <h3 className="mt-3 font-bold">Stele pentru proces</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                De la 1 la 5 stele pentru promptitudine, claritatea propunerii și discuție. Doar
+                elevii cu cerere reală pot evalua.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6">
+              <ShieldCheck className="h-6 w-6 text-primary" />
+              <h3 className="mt-3 font-bold">Transparent</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Tarif, dată și oră scrise în propunere de la început. Plătești direct profesorului,
+                integral.
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section className="container-page py-14">
-      <p className="text-sm font-semibold text-primary">Meditații în toată România</p>
-      <h2 className="mt-2 text-3xl font-bold">Meditații în orașul tău</h2>
-      <div className="mt-6 flex flex-wrap gap-2">{CITIES.slice(0, 24).map((c) => <Link key={c.slug} to="/meditatii-in/$oras" params={{ oras: c.slug }} className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary/40 hover:text-primary">Meditații {c.name}</Link>)}<Link to="/meditatii-online" className="rounded-full border border-primary/40 bg-primary-soft px-4 py-2 text-sm font-semibold text-primary">Meditații online</Link></div>
-    </section>
+      <section className="border-y border-border bg-foreground py-14 text-background sm:py-18">
+        <div className="container-page grid items-center gap-8 lg:grid-cols-[.7fr_1.3fr]">
+          <div>
+            <p className="text-sm font-semibold text-primary-soft">O lecție, văzută de aproape</p>
+            <h2 className="mt-2 text-3xl font-bold">
+              Meditații acasă, cu explicații pe înțelesul elevului
+            </h2>
+            <p className="mt-4 leading-7 text-background/75">
+              Profesorul potrivit adaptează ritmul, explică pas cu pas și lasă elevului timp să
+              înțeleagă. Tu postezi cererea, iar profesorii disponibili îți trimit propuneri clare.
+            </p>
+            <Link to="/meditatii" className="btn-primary mt-6 h-12 px-6">
+              Cere o ofertă <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </div>
+          <TutoringVideo />
+        </div>
+      </section>
 
-    <CautariPopulare className="container-page pb-10" />
+      <section className="border-y border-border bg-muted/35">
+        <div className="container-page py-14">
+          <p className="text-sm font-semibold text-primary">Cele mai căutate direcții</p>
+          <h2 className="mt-2 text-3xl font-bold">
+            Meditații pentru materia, examenul și orașul tău
+          </h2>
+          <p className="mt-3 max-w-3xl leading-7 text-muted-foreground">
+            Pornește de la o nevoie concretă: postează un anunț de meditații, compară prețurile sau
+            exersează cu subiecte BAC. Fiecare pagină te conduce către aceeași cerere gratuită.
+          </p>
+          <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Link
+              to="/anunturi-meditatii"
+              className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"
+            >
+              <h3 className="font-bold">Anunțuri de meditații</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Publică ce cauți și primește propuneri direct de la profesori.
+              </p>
+            </Link>
+            <Link
+              to="/meditatii-matematica"
+              className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"
+            >
+              <h3 className="font-bold">Meditații matematică</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Gimnaziu, liceu, Evaluare Națională, BAC și admitere.
+              </p>
+            </Link>
+            <Link
+              to="/meditatii-online"
+              className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"
+            >
+              <h3 className="font-bold">Meditații online</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Cere o ofertă de oriunde din România, pentru materia ta.
+              </p>
+            </Link>
+            <Link
+              to="/bac"
+              className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"
+            >
+              <h3 className="font-bold">Subiecte și bareme BAC</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Arhivă pe materii, ani și sesiuni, plus simulări și rezolvări.
+              </p>
+            </Link>
+            <Link
+              to="/preturi-meditatii"
+              className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"
+            >
+              <h3 className="font-bold">Prețuri meditații</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Compară tarifele orientative înainte să postezi cererea.
+              </p>
+            </Link>
+            <Link
+              to="/simulare-ai"
+              className="rounded-lg border border-primary/40 bg-primary-soft p-5 hover:border-primary"
+            >
+              <h3 className="font-bold">Simulare test cu AI</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Alegi materia, clasa și durata; primești nota și explicația fiecărei greșeli: unde,
+                ce și de ce.
+              </p>
+            </Link>
+            <Link
+              to="/meditator-ai"
+              className="rounded-lg border border-primary/40 bg-primary-soft p-5 hover:border-primary"
+            >
+              <h3 className="font-bold">Meditatorul AI</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Întreabă orice de la școală, la orice oră. Îți explică pas cu pas, pe programa din
+                România.
+              </p>
+            </Link>
+            <Link
+              to="/harta-blocajelor"
+              className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"
+            >
+              <h3 className="font-bold">Harta Blocajelor</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Te-ai blocat la un capitol? Află ce noțiune îți lipsește, cu explicație și exemplu
+                rezolvat.
+              </p>
+            </Link>
+            <Link
+              to="/materii"
+              className="rounded-lg border border-border bg-card p-5 hover:border-primary/40"
+            >
+              <h3 className="font-bold">Toate materiile</h3>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                Găsește rapid pagina dedicată materiei pe care o înveți.
+              </p>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-    <section className="container-page pb-6">
-      <h2 className="text-3xl font-bold">Întrebări frecvente despre meditații</h2>
-      <div className="mt-6 grid gap-3">{HOME_FAQ.map((f) => <details key={f.q} className="rounded-lg border border-border bg-card p-5"><summary className="cursor-pointer font-semibold">{f.q}</summary><p className="mt-2 text-sm leading-6 text-muted-foreground">{f.a}</p></details>)}</div>
-    </section>
+      <section className="container-page py-14">
+        <p className="text-sm font-semibold text-primary">Meditații în toată România</p>
+        <h2 className="mt-2 text-3xl font-bold">Meditații în orașul tău</h2>
+        <div className="mt-6 flex flex-wrap gap-2">
+          {CITIES.slice(0, 24).map((c) => (
+            <Link
+              key={c.slug}
+              to="/meditatii-in/$oras"
+              params={{ oras: c.slug }}
+              className="rounded-full border border-border bg-card px-4 py-2 text-sm hover:border-primary/40 hover:text-primary"
+            >
+              Meditații {c.name}
+            </Link>
+          ))}
+          <Link
+            to="/meditatii-online"
+            className="rounded-full border border-primary/40 bg-primary-soft px-4 py-2 text-sm font-semibold text-primary"
+          >
+            Meditații online
+          </Link>
+        </div>
+      </section>
 
-    <section className="container-page py-16"><div className="grid items-center gap-7 rounded-2xl border border-border bg-accent p-8 md:grid-cols-[1fr_auto] md:p-10"><div><div className="flex items-center gap-2 text-success"><UserRound className="h-5 w-5" /><span className="text-sm font-bold">Pentru profesori</span></div><h2 className="mt-3 text-3xl font-bold">Elevii vin cu cererea, tu vii cu propunerea</h2><p className="mt-3 max-w-2xl text-muted-foreground">Vezi cererile recente de la elevi și părinți, contactează-i direct și îți umpli programul fără intermediari.</p></div><Link to="/pentru-profesori" className="btn-primary h-12 px-7">Devino profesor <ArrowRight className="ml-2 h-4 w-4" /></Link></div></section>
-  </>;
+      <ScurtaturiAcasa className="container-page pb-10" />
+
+      <section className="container-page pb-6">
+        <h2 className="text-3xl font-bold">Întrebări frecvente despre meditații</h2>
+        <div className="mt-6 grid gap-3">
+          {HOME_FAQ.map((f) => (
+            <details key={f.q} className="rounded-lg border border-border bg-card p-5">
+              <summary className="cursor-pointer font-semibold">{f.q}</summary>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section className="container-page py-16">
+        <div className="grid items-center gap-7 rounded-2xl border border-border bg-accent p-8 md:grid-cols-[1fr_auto] md:p-10">
+          <div>
+            <div className="flex items-center gap-2 text-success">
+              <UserRound className="h-5 w-5" />
+              <span className="text-sm font-bold">Pentru profesori</span>
+            </div>
+            <h2 className="mt-3 text-3xl font-bold">Elevii vin cu cererea, tu vii cu propunerea</h2>
+            <p className="mt-3 max-w-2xl text-muted-foreground">
+              Vezi cererile recente de la elevi și părinți, contactează-i direct și îți umpli
+              programul fără intermediari.
+            </p>
+          </div>
+          <Link to="/pentru-profesori" className="btn-primary h-12 px-7">
+            Devino profesor <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+    </>
+  );
 }
 
 /**
