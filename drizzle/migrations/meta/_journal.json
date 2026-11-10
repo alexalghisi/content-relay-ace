@@ -183,6 +183,13 @@
       "when": 1793830000000,
       "tag": "0025_second_test_phone",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1794274967966,
+      "tag": "0026_verified_phone_unique_without_test_exceptions",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX profesor_ai_phone_verificat_strict ON public.profesor_ai_utilizatori (phone) WHERE phone_verified_at IS NOT NULL;
+COMMENT ON INDEX public.profesor_ai_phone_verificat_strict IS 'Each verified phone belongs to one account, including former SMS test numbers.';

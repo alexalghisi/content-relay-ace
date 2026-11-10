@@ -34,7 +34,7 @@ const query = {
 mock.module("@/integrations/supabase/client.server", () => ({ supabaseAdmin: { from: () => query } }));
 
 describe("Phone ownership when SMS fails", () => {
-  it("numărul de test primește SMS de câte ori e cerut: fără limita de un minut, și pe cont deja verificat", async () => {
+  it("numerele foste de test respectă verificarea și limita de retrimitere", async () => {
     const realFetch = globalThis.fetch;
     const realToken = process.env["GATEWAYAPI_TOKEN"];
     process.env["GATEWAYAPI_TOKEN"] = "test-token";
@@ -49,17 +49,15 @@ describe("Phone ownership when SMS fails", () => {
       for (const phone of ["0770763175", "+40770763175", "0770763175"]) {
         const r = await send({ data: { phone }, context: { userId: "u" } });
         expect(r.ok).toBe(true);
-        expect(r.verificat).not.toBe(true);
-        expect(r.dejaTrimis).not.toBe(true);
-        expect(r.retrimitereIn).toBe(0);
+        expect(r.verificat).toBe(true);
       }
-      expect(sends).toBe(3);
+      expect(sends).toBe(0);
       // Orice alt număr păstrează regulile: cont verificat → fără SMS; cod recent → fără SMS nou.
       ownRow = { ...recent, phone: "40712345678" };
       expect((await send({ data: { phone: "0712345678" }, context: { userId: "u" } })).verificat).toBe(true);
       ownRow = { ...recent, phone: "40712345678", phone_verified_at: null };
       expect((await send({ data: { phone: "0712345678" }, context: { userId: "u" } })).dejaTrimis).toBe(true);
-      expect(sends).toBe(3);
+      expect(sends).toBe(0);
     } finally {
       ownRow = null;
       writes.length = 0;
@@ -68,7 +66,7 @@ describe("Phone ownership when SMS fails", () => {
       else process.env["GATEWAYAPI_TOKEN"] = realToken;
     }
   });
-  it("the reusable test number still sends a code and requires valid confirmation", async () => {
+  it("former test phone owned by another account is rejected without SMS", async () => {
     const realFetch = globalThis.fetch;
     const realToken = process.env["GATEWAYAPI_TOKEN"];
     process.env["GATEWAYAPI_TOKEN"] = "test-token";
@@ -82,10 +80,10 @@ describe("Phone ownership when SMS fails", () => {
         data: { phone: string }; context: { userId: string };
       }) => Promise<{ ok: boolean; verificat?: boolean }>;
       const result = await handler({ data: { phone: "0770763175" }, context: { userId: "test-user" } });
-      expect(result.ok).toBe(true);
+      expect(result.ok).toBe(false);
       expect(result.verificat).not.toBe(true);
-      expect(sends).toBe(1);
-      expect(writes[0]?.phone).toBe("40770763175");
+      expect(sends).toBe(0);
+      expect(writes).toHaveLength(0);
       expect(writes.some((write) => "phone_verified_at" in write)).toBe(false);
       const confirm = confirmaCodTelefon as unknown as (input: {
         data: { cod: string }; context: { userId: string };

@@ -56,10 +56,11 @@ async function conflictCont(email: string, telefon: string) {
       });
     if (data.users.length < 1000) break;
   }
-  const { data: verificate } = await supabaseAdmin
+  const { data: verificate, error: verificareError } = await supabaseAdmin
     .from("profesor_ai_utilizatori")
     .select("phone")
     .not("phone_verified_at", "is", null);
+  if (verificareError) throw new Error("verifiedPhones");
   const telefoane = (verificate ?? []).map((r) => r.phone).filter((p): p is string => !!p);
   const exact = conturi.find((c) => (c.email ?? "").trim().toLowerCase() === email);
   return {

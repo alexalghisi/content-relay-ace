@@ -9,13 +9,13 @@ import {
 } from "./inregistrare";
 
 describe("unicitate — reguli pure", () => {
-  it("numărul proprietarului poate fi reutilizat în toate formatele românești", () => {
+  it("nici numărul proprietarului nu poate fi reutilizat în alt cont", () => {
     const conturi = [{ email: "primul@example.ro", metadataPhone: "40770763175" }];
     for (const phone of ["0770763175", "+40770763175", "40770763175", "0770 763 175"]) {
-      expect(gasesteConflict(conturi, "nou@example.ro", phone, ["40770763175"])).toBeNull();
+      expect(gasesteConflict(conturi, "nou@example.ro", phone, ["40770763175"])).toBe("telefon");
     }
   });
-  it("excepția telefonului nu permite dublarea emailului Gmail", () => {
+  it("telefonul duplicat are prioritate chiar și pentru o variantă Gmail", () => {
     expect(
       gasesteConflict(
         [{ email: "ana.pop@gmail.com", metadataPhone: "40770763175" }],
@@ -23,7 +23,7 @@ describe("unicitate — reguli pure", () => {
         "0770763175",
         ["40770763175"],
       ),
-    ).toBe("email");
+    ).toBe("telefon");
   });
   it("emailCanonic: litere mici, iar la Gmail fără puncte și fără +eticheta", () => {
     expect(emailCanonic("  Ana.Pop@Example.ro ")).toBe("ana.pop@example.ro");
@@ -237,13 +237,13 @@ describe("creeazaCont — un email și un telefon per cont", () => {
     expect(r.stare).toBe("telefon");
   });
 
-  it("numărul de test deja verificat permite crearea contului și trimite confirmarea email", async () => {
+  it("numărul de test deja verificat nu permite alt cont", async () => {
     st.conturi = [{ email: "primul@example.ro", user_metadata: { phone: "40770763175" } }];
     st.verificate = ["40770763175"];
     const r = await inregistreaza(unic("test-proprietar"), "0770763175");
-    expect(r).toEqual({ ok: true, stare: "trimis" });
-    expect(st.apeluri).toContain("generateLink:signup");
-    expect(st.apeluri).toContain("email");
+    expect(r).toEqual({ ok: false, stare: "telefon", error: MESAJ_TELEFON_FOLOSIT });
+    expect(st.apeluri).not.toContain("generateLink:signup");
+    expect(st.apeluri).not.toContain("email");
   });
 
   it("variantă Gmail a unui cont existent → „există deja”", async () => {
@@ -290,18 +290,6 @@ describe("creeazaCont — un email și un telefon per cont", () => {
   });
 });
 
-import { telefonTestReutilizabil as t2 } from "./conturi-unice";
-import { test as t, expect as e } from "bun:test";
-t("al doilea număr de test e nelimitat", () => {
-  e(t2("+40 744 340 622")).toBe(true);
-  e(t2("0744340622")).toBe(true);
-  e(t2("0744340623")).toBe(false);
-});
-
-t("indexul unic din DB exceptează ambele numere de test", () => {
-  const sql = readFileSync(
-    new URL("../../drizzle/migrations/0025_second_test_phone.sql", import.meta.url),
-    "utf8",
-  );
-  for (const n of ["40770763175", "40744340622"]) e(sql).toContain(`'${n}'`);
+it("al doilea fost număr de test este de asemenea unic", () => {
+  expect(gasesteConflict([{ email: "primul@example.ro", metadataPhone: "40744340622" }], "nou@example.ro", "0744340622")).toBe("telefon");
 });

@@ -18,7 +18,7 @@ async function laPasulTelefon(page: import("@playwright/test").Page, raspunsuri:
   const cereri: string[] = [];
   await page.route("**/_serverFn/**", (route) => {
     cereri.push(route.request().postData() ?? "");
-    return route.fulfill(serverFnResult(raspunsuri[Math.min(i++, raspunsuri.length - 1)]!));
+    return route.fulfill(serverFnResult(raspunsuri[Math.min(i++, raspunsuri.length - 1)] ?? { ok: false }));
   });
   await page.goto("/confirmare-cont?token_hash=abc&type=signup");
   // Dev serverul rece poate hidrata pagina în peste 15 s.
@@ -27,8 +27,22 @@ async function laPasulTelefon(page: import("@playwright/test").Page, raspunsuri:
 }
 
 test.describe("Cod SMS la înscriere", () => {
-  // Pasul SMS e oprit temporar la înscriere (TELEFON_LA_INREGISTRARE=false).
-  test.skip(!TELEFON_LA_INREGISTRARE, "verificarea SMS la înscriere e oprită temporar");
+  test.skip(!TELEFON_LA_INREGISTRARE, "verificarea SMS la înscriere este dezactivată");
+  test("cod greșit nu activează contul; confirmarea reușită îl activează", async ({ page }) => {
+    await laPasulTelefon(page, [
+      { ok: true, retrimitereIn: 60 },
+      { ok: false, error: "Cod greșit. Mai ai 4 încercări." },
+      { ok: true },
+    ]);
+    await page.getByRole("button", { name: "Continuă" }).click();
+    await page.getByLabel("Codul primit prin SMS").fill("111111");
+    await page.getByRole("button", { name: "Confirmă codul" }).click();
+    await expect(page.getByText("Cod greșit. Mai ai 4 încercări.")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Contul este gata" })).toHaveCount(0);
+    await page.getByLabel("Codul primit prin SMS").fill("222222");
+    await page.getByRole("button", { name: "Confirmă codul" }).click();
+    await expect(page.getByRole("heading", { name: "Contul este gata" })).toBeVisible();
+  });
   test("după trimitere: unde vine SMS-ul + retrimitere cu numărătoare, fără eroare „Așteaptă un minut”", async ({ page }) => {
     const cereri = await laPasulTelefon(page, [{ ok: true, retrimitereIn: 3 }, { ok: true, retrimitereIn: 60 }]);
     await page.getByRole("button", { name: "Continuă" }).click();

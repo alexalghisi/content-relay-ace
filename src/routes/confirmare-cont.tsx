@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { VerificareTelefon } from "@/components/profesor-ai/verificare-telefon";
 import { TELEFON_LA_INREGISTRARE } from "@/lib/telefon-inregistrare";
 
-// Fără telefon obligatoriu, contul e gata imediat după confirmarea emailului.
+// Confirmarea e-mailului este urmată de verificarea telefonului când regula este activă.
 const DUPA_EMAIL = TELEFON_LA_INREGISTRARE ? "telefon" : "gata";
 
 export const Route = createFileRoute("/confirmare-cont")({
@@ -17,6 +17,11 @@ export const Route = createFileRoute("/confirmare-cont")({
   head: () => ({
     meta: [
       { title: "Confirmare cont — MeditatiiDirect.ro" },
+      { name: "description", content: "Confirmă e-mailul și numărul de telefon prin SMS pentru contul tău MeditatiiDirect.ro." },
+      { property: "og:title", content: "Confirmare cont — MeditatiiDirect.ro" },
+      { property: "og:description", content: "Confirmarea e-mailului și verificarea telefonului pentru activarea contului." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

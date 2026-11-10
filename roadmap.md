@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] 10 noiembrie: telefon obligatoriu inclusiv pe server, confirmare SMS după e-mail, fără excepții pentru numerele de test; index unic strict aplicat și confirmat. 39 teste de reguli/funcții și 8 teste browser simulate desktop/telefon trec; formular real respinge numărul existent fără creare cont/SMS. Primirea efectivă a unui SMS și confirmarea unui cont nou nu au fost retestate; codul nu este publicat.
+
 - [ ] 4 noiembrie: investighează cele 84 SMS-uri nelivrate din captura GatewayAPI; verifică cele trei corecții monitoring cu teste unitare/funcționale/e2e.
 - [ ] 4 noiembrie: sincronizare/push/merge GitHub dacă există acces și fără conflicte, apoi publicare Lovable; raportează separat limitările furnizorilor și testelor reale.
 

@@ -17,6 +17,6 @@ export function telefonSchema(obligatoriu: boolean) {
 export const signupSchema = z.object({
   name: z.string().trim().min(2, "Nume prea scurt").max(100),
   email: z.string().trim().email("Email invalid").max(255),
-  phone: telefonSchema(TELEFON_LA_INREGISTRARE).optional().default(""),
+  phone: telefonSchema(TELEFON_LA_INREGISTRARE),
   password: z.string().min(6, "Parola minim 6 caractere").max(72),
 });

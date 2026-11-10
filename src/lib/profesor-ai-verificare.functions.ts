@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { telefonTestReutilizabil } from "./conturi-unice";
 import {
   COD_INCERCARI_MAX,
   COD_VALABIL_MIN,
@@ -38,26 +37,24 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
       .select("phone, phone_verified_at, code_sent_at, code_expires_at")
       .eq("user_id", context.userId)
       .maybeSingle();
-    // Numărul de test al proprietarului: SMS de câte ori vrea (fără limita de un minut, și pe conturi deja
-    // verificate). Nu acordă acces: fiecare cont tot trebuie să introducă propriul cod primit.
-    const test = telefonTestReutilizabil(phone);
-    if (rand?.phone_verified_at && !test) return { ok: true, verificat: true };
+    if (rand?.phone_verified_at) return { ok: true, verificat: true };
     const trecut = rand?.code_sent_at ? Date.now() - Date.parse(rand.code_sent_at) : Infinity;
-    if (!test && trecut < RETRIMITERE_SEC * 1000) {
+    if (trecut < RETRIMITERE_SEC * 1000) {
       const retrimitereIn = Math.ceil((RETRIMITERE_SEC * 1000 - trecut) / 1000);
       // Codul trimis acum câteva secunde e încă valabil: utilizatorul îl introduce, nu primește o eroare.
       const valabil = rand?.code_expires_at ? Date.parse(rand.code_expires_at) > Date.now() : false;
       if (rand?.phone === phone && valabil) return { ok: true, dejaTrimis: true, retrimitereIn };
       return { ok: false, error: `Poți cere un cod nou în ${retrimitereIn} secunde.` };
     }
-    const { data: ocupat } = await supabaseAdmin
+    const { data: ocupat, error: conflictError } = await supabaseAdmin
       .from("profesor_ai_utilizatori")
       .select("user_id")
       .eq("phone", phone)
       .not("phone_verified_at", "is", null)
       .neq("user_id", context.userId)
       .maybeSingle();
-    if (ocupat && !telefonTestReutilizabil(phone))
+    if (conflictError) return { ok: false, error: "Nu putem verifica disponibilitatea numărului. Încearcă din nou." };
+    if (ocupat)
       return { ok: false, error: "Acest număr este deja folosit de alt cont." };
     const cod = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, "0");
     const { error } = await supabaseAdmin.from("profesor_ai_utilizatori").upsert({
@@ -87,7 +84,7 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
         error: "SMS-ul nu a putut fi trimis. Verifică numărul și încearcă din nou.",
       };
     }
-    return { ok: true, retrimitereIn: test ? 0 : RETRIMITERE_SEC };
+    return { ok: true, retrimitereIn: RETRIMITERE_SEC };
   });
 
 export const confirmaCodTelefon = createServerFn({ method: "POST" })
@@ -124,33 +121,19 @@ export const confirmaCodTelefon = createServerFn({ method: "POST" })
           code_expires_at: null,
         })
         .eq("user_id", context.userId);
-    const elibereaza = () =>
-      supabaseAdmin
-        .from("profesor_ai_utilizatori")
-        .update({ phone_verified_at: null })
-        .eq("phone", s.phone ?? "")
-        .neq("user_id", context.userId);
     return confirmaVerificarea(
-      s.phone ?? "",
       async () => (await marcheaza()).error,
-      async () => (await elibereaza()).error,
     );
   });
 
 type Eroare = { code?: string; message?: string } | null;
 
-/**
- * Numerele de test ale proprietarului pot fi verificate pe oricâte conturi: dacă indexul unic din DB
- * încă refuză, eliberăm verificarea celorlalte conturi cu același număr și reîncercăm.
- * Numerele reale rămân strict un singur cont.
- */
+/** Indexul unic arbitrează și confirmările simultane; nu modificăm niciodată alt cont. */
 export async function confirmaVerificarea(
-  phone: string,
   marcheaza: () => Promise<Eroare>,
-  elibereaza: () => Promise<Eroare>,
 ): Promise<R> {
-  let error = await marcheaza();
-  if (error && telefonTestReutilizabil(phone) && !(await elibereaza())) error = await marcheaza();
-  if (error) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+  const error = await marcheaza();
+  if (error?.code === "23505") return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+  if (error) return { ok: false, error: "Nu am putut confirma telefonul. Încearcă din nou." };
   return { ok: true };
 }
