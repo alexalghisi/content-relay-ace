@@ -115,16 +115,16 @@ function HomePage() {
   return (
     <>
       <section className="relative overflow-hidden border-b border-border bg-primary-soft/45">
-        <div className="container-page grid min-h-[620px] items-center gap-10 py-12 lg:grid-cols-[1.05fr_.95fr] lg:py-18">
+        <div className="container-page grid items-center gap-8 py-8 sm:min-h-[620px] sm:gap-10 sm:py-12 lg:grid-cols-[1.05fr_.95fr] lg:py-18">
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-background px-3 py-1.5 text-xs font-semibold text-primary shadow-sm">
               <ShieldCheck className="h-4 w-4" /> Chat direct · evaluare în stele · fără comision
             </div>
-            <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 max-w-3xl text-[2rem] font-bold sm:mt-6 leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">
               Meditații cu profesori verificați,{" "}
               <span className="text-primary">online și în orașul tău</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+            <p className="mt-4 max-w-2xl text-base leading-7 sm:mt-5 text-muted-foreground sm:text-lg">
               Cauți meditații la matematică, română, engleză sau pregătire pentru BAC? Descrii o
               singură dată ce ai nevoie, profesorii îți trimit propuneri cu tarif și program,
               discutați direct în chat, iar la final evaluezi colaborarea cu stele.
@@ -326,7 +326,9 @@ function HomePage() {
               </span>
               <h3 className="mt-4 text-sm font-bold">{item.name}</h3>
               <p className="mt-1 text-xs leading-5 text-muted-foreground">{item.description}</p>
-              <p className="mt-3 text-xs font-medium text-primary">Meditații {item.name.toLowerCase()} →</p>
+              <p className="mt-3 text-xs font-medium text-primary">
+                Meditații {item.name.toLowerCase()} →
+              </p>
             </Link>
           ))}
         </div>

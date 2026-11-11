@@ -235,7 +235,7 @@ function ComboPage() {
         intro={
           ghid
             ? ghid.intro
-            : `Cauți meditații la ${subject.nameLower} în ${city.name} (${city.county})? Descrie o singură dată ce ai nevoie, iar profesorii îți trimit propuneri cu dată, oră și tarif. ${
+            : `Cauți meditații la ${subject.nameLower} în ${city.name}${city.slug !== "bucuresti" ? ` (județul ${city.county})` : ""}? Descrie o singură dată ce ai nevoie, iar profesorii îți trimit propuneri cu dată, oră și tarif. ${
                 pretLocal
                   ? `Tarifele reale de pe platformă pentru ${city.name}: ${pretLocal.min}–${pretLocal.max} lei/oră (median ${pretLocal.median} lei). `
                   : pretNational
@@ -246,7 +246,9 @@ function ComboPage() {
         faqs={faqs}
         bullets={[
           `${subject.name} pentru clasele V–XII, Evaluarea Națională, BAC și admitere`,
-          `Pentru elevii din ${city.name} și din ${city.county}`,
+          city.slug !== "bucuresti"
+            ? `Pentru elevii din ${city.name} și din județul ${city.county}`
+            : `Pentru elevii din toate sectoarele din ${city.name}`,
           `Online (Zoom / Google Meet) sau la domiciliu în ${city.name}`,
           pretLocal
             ? `Tarif median real ${pretLocal.median} lei/oră, din ${pretLocal.n} tarife`

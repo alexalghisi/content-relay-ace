@@ -2,7 +2,7 @@ import { Link, useLoaderData, useLocation } from "@tanstack/react-router";
 import { ComboDataBlock } from "@/components/market-data";
 import type { ComboStats } from "@/lib/market-stats.functions";
 import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { linkuriContextuale, type ContextPagina } from "@/lib/linkuri-contextuale";
 import { AdSenseSlot } from "@/components/ads/adsense";
 import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
@@ -57,6 +57,17 @@ export function SeoLanding(p: SeoLandingProps) {
   const cale = p.pageUrl ? new URL(p.pageUrl).pathname : pathname;
   // 6–10 linkuri legate de pagina curentă (nu o listă sitewide de cuvinte-cheie).
   const linkuri = linkuriContextuale({ cale, context: p.linkContext, related: p.related });
+  // Pe telefon, butonul principal din antet ajunge sub ecran după intro; bara fixă apare doar
+  // cât timp el nu e vizibil, ca vizitatorul să aibă mereu un singur pas până la cerere.
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const [ctaAscuns, setCtaAscuns] = useState(false);
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const obs = new IntersectionObserver(([e]) => setCtaAscuns(!e!.isIntersecting));
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
   const breadcrumbLd = p.pageUrl
     ? {
         "@context": "https://schema.org",
@@ -120,7 +131,7 @@ export function SeoLanding(p: SeoLandingProps) {
           <BadgeCheck className="h-4 w-4" /> Chat direct elev–profesor • Fără comision
         </p>
         <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">{p.h1}</h1>
-        <p className="mt-4 text-lg text-muted-foreground leading-relaxed">{p.intro}</p>
+        <p className="mt-4 text-base text-muted-foreground leading-relaxed sm:text-lg">{p.intro}</p>
 
         {p.bullets && (
           <ul className="mt-5 grid gap-2 text-sm text-foreground/90 sm:grid-cols-2">
@@ -133,7 +144,7 @@ export function SeoLanding(p: SeoLandingProps) {
           </ul>
         )}
 
-        <div className="mt-7 flex flex-wrap gap-3">
+        <div ref={ctaRef} className="mt-7 flex flex-wrap gap-3">
           {p.ctaPrimary && (
             <Link
               to={p.ctaPrimary.to}
@@ -266,6 +277,28 @@ export function SeoLanding(p: SeoLandingProps) {
           </Link>
         </div>
       </section>
+      {p.ctaPrimary && (
+        <>
+          <div aria-hidden="true" className="h-20 md:hidden" />
+          <div
+            data-testid="cta-mobil"
+            className={`fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 pb-[calc(env(safe-area-inset-bottom)+10px)] pt-2.5 shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.25)] backdrop-blur transition-transform md:hidden ${
+              ctaAscuns ? "translate-y-0" : "pointer-events-none translate-y-full"
+            }`}
+            aria-hidden={!ctaAscuns}
+          >
+            <Link
+              to={p.ctaPrimary.to}
+              search={p.ctaPrimary.search as never}
+              tabIndex={ctaAscuns ? 0 : -1}
+              className="btn-primary flex h-11 w-full items-center justify-center gap-2 px-4 text-sm"
+            >
+              <span className="truncate">{p.ctaPrimary.label}</span>
+              <ArrowRight className="h-4 w-4 shrink-0" />
+            </Link>
+          </div>
+        </>
+      )}
     </article>
   );
 }

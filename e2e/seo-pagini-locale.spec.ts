@@ -266,3 +266,26 @@ test("/preturi-meditatii: fără prețuri scrise de mână, doar tarife reale di
   await expect(romana).not.toContainText(/\d\s*lei/);
   await expect(page.getByTestId("pret-intro")).toContainText("mediana de 80 lei/oră");
 });
+
+test("ghid local nou (Iași): indexabil, cu județul corect și bară de cerere pe telefon", async ({
+  page,
+}, info) => {
+  const r = await page.request.get("/meditatii/matematica/iasi");
+  expect(r.status()).toBe(200);
+  const html = await r.text();
+  expect(html).toContain("Meditații matematică Iași: Evaluare Națională, BAC și admitere");
+  expect(html).not.toContain("noindex");
+  expect(html).not.toContain("toate sectoarele din Iași");
+
+  await page.goto("/meditatii/matematica/iasi");
+  await page.waitForLoadState("networkidle");
+  const bara = page.getByTestId("cta-mobil");
+  if (info.project.name !== "iphone") {
+    await expect(bara).toBeHidden();
+    return;
+  }
+  // Butonul din antet e sub ecran pe telefon, deci bara fixă trebuie să fie activă.
+  await expect(bara).toHaveAttribute("aria-hidden", "false");
+  await bara.getByRole("link").click();
+  await expect(page).toHaveURL(/\/meditatii\?.*materie=matematica.*oras=iasi/);
+});

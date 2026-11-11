@@ -34,6 +34,29 @@ const faqComune = (materie: string): { q: string; a: string }[] => [
   },
 ];
 
+const IASI_CARTIERE =
+  "Copou, Tătărași, Nicolina, Păcurari, Alexandru cel Bun, Dacia, Podu Roș, Galata, CUG, Bucium, Canta sau Tudor Vladimirescu";
+const TIMISOARA_ZONE =
+  "Complexul Studențesc, Fabric, Iosefin, Elisabetin, Circumvalațiunii, Calea Lipovei, Calea Girocului, Soarelui, Dâmbovița, Dumbrăvița sau Giroc";
+const BRASOV_CARTIERE =
+  "Centru, Șchei, Răcădău, Astra, Tractorul, Noua, Bartolomeu, Florilor, Triaj sau Săcele";
+
+/** Întrebări comune pentru ghidurile din alte orașe decât Clujul (fără date de piață). */
+const faqOras = (materie: string, oras: string, cartiere: string): { q: string; a: string }[] => [
+  {
+    q: `Găsesc meditații la ${materie} la domiciliu în ${oras}?`,
+    a: `Da. Scrie în cerere cartierul (${cartiere}) și intervalul orar. Profesorii care se deplasează acolo îți trimit propuneri; dacă bifezi „online”, primești propuneri și de la profesori din alte orașe.`,
+  },
+  {
+    q: `Cum aleg profesorul de ${materie} potrivit în ${oras}?`,
+    a: "Compară propunerile după experiența cu nivelul tău (clasa, examenul, facultatea), după cum explică la prima ședință și după cât de clar îți spune ce veți lucra în următoarele săptămâni. Pe platformă vorbești direct cu fiecare profesor înainte să alegi.",
+  },
+  {
+    q: "Plătesc ceva pentru a posta o cerere de meditații?",
+    a: "Nu. Cererea este gratuită, platforma nu ia comision, iar tariful îl propune fiecare profesor.",
+  },
+];
+
 export const GHIDURI_LOCALE: GhidLocal[] = [
   {
     materie: "matematica",
@@ -386,6 +409,241 @@ export const GHIDURI_LOCALE: GhidLocal[] = [
       },
     ],
     faq: [...faqComune("istorie")],
+  },
+  // ——— Iași, Timișoara, Brașov ———
+  {
+    materie: "matematica",
+    oras: "iasi",
+    title: "Meditații matematică Iași: Evaluare Națională, BAC și admitere",
+    description:
+      "Meditații matematică în Iași, la domiciliu sau online: clasele V–XII, Evaluarea Națională, BAC M1/M2 și admitere la Politehnica „Gheorghe Asachi” sau UAIC. Cerere gratuită, fără comision.",
+    h1: "Meditații matematică în Iași",
+    intro:
+      "În Iași, meditațiile la matematică se cer pentru trei momente: Evaluarea Națională din clasa a VIII-a, BAC-ul și admiterea la facultăți unde matematica contează, cum sunt Universitatea Tehnică „Gheorghe Asachi” sau Facultatea de Informatică a Universității „Alexandru Ioan Cuza”. Aici găsești profesori din Iași care predau acasă sau online și un ghid scurt despre ce să ceri.",
+    sectiuni: [
+      {
+        titlu: "Ce pregătesc elevii din Iași la matematică",
+        paragrafe: [
+          "Gimnaziu: recuperarea bazelor (fracții, ecuații, geometrie plană) și pregătirea pentru Evaluarea Națională pe subiecte în stilul examenului. Media de la EN decide liceul, iar la colegiile căutate din Iași, precum Colegiul Național „Costache Negruzzi”, Colegiul Național Iași sau Colegiul Național „Emil Racoviță”, concurența pe locuri este mare.",
+          "Liceu și BAC: programa M1 (mate-info) și programa M2 (științe ale naturii, tehnologic) diferă, așa că spune-i profesorului de la început pe care o urmezi. Pregătirea cea mai eficientă se face pe variantele oficiale din anii trecuți, corectate pe barem.",
+          "Admitere: la facultățile tehnice și la informatică, cerințele de admitere se publică pe site-ul fiecărei facultăți. Cere profesorului să lucreze pe subiectele ei din anii anteriori, nu pe o culegere generală.",
+        ],
+      },
+      {
+        titlu: "Acasă sau online, în Iași",
+        paragrafe: [
+          `Pentru elevii mici, ședințele față în față funcționează de obicei mai bine. Scrie în cerere cartierul (${IASI_CARTIERE}) ca să primești propuneri de la profesorii care ajung ușor la tine.`,
+          "Pentru liceu și admitere, online cu tablă virtuală merge la fel de bine și îți deschide accesul la profesori din tot orașul și din țară, fără drumuri prin trafic.",
+        ],
+      },
+      {
+        titlu: "Ce să scrii în cerere",
+        paragrafe: [
+          "Clasa și programa, examenul vizat și termenul, capitolele care te blochează (de exemplu: funcții, probabilități, geometrie în spațiu), cartierul sau „online”, zilele libere și un buget orientativ. Cu aceste detalii, profesorii îți răspund cu un plan concret, nu cu o ofertă generală.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Când e bine să încep meditațiile pentru Evaluarea Națională la matematică?",
+        a: "Ideal din toamna clasei a VIII-a, iar dacă există goluri din clasele V–VII, chiar mai devreme. Prima ședință ar trebui să fie un diagnostic pe o variantă de examen, ca să se vadă unde se pierd punctele.",
+      },
+      ...faqOras("matematică", "Iași", IASI_CARTIERE),
+    ],
+  },
+  {
+    materie: "romana",
+    oras: "iasi",
+    title: "Meditații română Iași: BAC, Evaluare Națională, clasele V–XII",
+    description:
+      "Meditații limba română în Iași, acasă sau online: eseul și textul argumentativ pentru BAC, gramatică și redactare pentru Evaluarea Națională. Cerere gratuită, tariful îl propune profesorul.",
+    h1: "Meditații limba română în Iași",
+    intro:
+      "La română, punctele vin din structură și exercițiu: eseul pe operele studiate, textul argumentativ, cerințele de gramatică de la Evaluarea Națională. Găsești aici profesori de română din Iași, pentru ședințe acasă sau online, și ce să ceri ca pregătirea să fie pe măsura examenului tău.",
+    sectiuni: [
+      {
+        titlu: "Ce se lucrează la meditațiile de română",
+        paragrafe: [
+          "Evaluarea Națională: înțelegerea textului, morfologie și sintaxă, redactarea unui text după cerință. Contează mult să lucrezi pe modele oficiale și să compari răspunsul cu baremul.",
+          "BAC: textul la prima vedere, textul argumentativ și eseul pe operele din programă, diferite pentru profilul real și pentru cel uman. Un profesor bun te pune să scrii în fiecare săptămână și îți corectează lucrarea pe criteriile baremului.",
+          "Proba orală de la BAC: discuția pe un text la prima vedere se exersează cu voce tare, nu doar în scris; cere și câteva ședințe pentru asta în primăvară.",
+        ],
+      },
+      {
+        titlu: "Acasă sau online, în Iași",
+        paragrafe: [
+          `Româna se potrivește bine cu ședințele online: lucrările se trimit în scris și se corectează direct pe text. Pentru gimnaziu, mulți părinți preferă ședințele acasă, în cartiere precum ${IASI_CARTIERE}.`,
+        ],
+      },
+      {
+        titlu: "Ce să scrii în cerere",
+        paragrafe: [
+          "Clasa, examenul și profilul, ce cerințe îți dau bătăi de cap (eseul, gramatica, argumentarea), cât timp mai ai până la examen, cartierul sau „online” și un buget orientativ.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Merită meditații la română pentru BAC dacă iau note bune la școală?",
+        a: "Notele de la clasă nu măsoară întotdeauna ce cere baremul de BAC. Lucrează câteva variante oficiale cronometrat: dacă pierzi puncte constant la aceeași cerință, câteva ședințe țintite rezolvă de obicei problema.",
+      },
+      ...faqOras("română", "Iași", IASI_CARTIERE),
+    ],
+  },
+  {
+    materie: "engleza",
+    oras: "iasi",
+    title: "Meditații engleză Iași: elevi, adulți, Cambridge și conversație",
+    description:
+      "Meditații engleză în Iași, acasă sau online: școală și BAC, certificate Cambridge sau IELTS, engleză pentru job și conversație pentru adulți. Cerere gratuită, propuneri direct de la profesori.",
+    h1: "Meditații engleză în Iași",
+    intro:
+      "Engleza se caută în Iași pentru școală și BAC, pentru certificate (Cambridge, IELTS) și pentru job, mai ales în companiile de IT și servicii din oraș, unde engleza se folosește zilnic. Spune în cerere care e scopul tău și primești propuneri de la profesori potriviți.",
+    sectiuni: [
+      {
+        titlu: "Pentru cine sunt meditațiile la engleză",
+        paragrafe: [
+          "Elevi: gramatică, vocabular, teme și pregătirea probei de competență lingvistică de la BAC.",
+          "Certificate: Cambridge (B1 Preliminary, B2 First, C1 Advanced), IELTS sau TOEFL pentru studii în străinătate; pregătirea se face pe formatul exact al examenului ales.",
+          "Adulți: conversație, interviuri, e-mailuri și prezentări în engleză pentru job.",
+        ],
+      },
+      {
+        titlu: "Online sau față în față",
+        paragrafe: [
+          `Pentru conversație și certificate, online este varianta cea mai folosită. Pentru copii, ședințele acasă sunt la fel de posibile; scrie cartierul în cerere (${IASI_CARTIERE}).`,
+        ],
+      },
+      {
+        titlu: "Ce să scrii în cerere",
+        paragrafe: [
+          "Nivelul actual (A1–C1, dacă îl știi), scopul (școală, certificat, conversație, job), termenul, câte ședințe pe săptămână vrei, cartierul sau „online” și un buget orientativ.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Cum aflu ce nivel de engleză am înainte de meditații?",
+        a: "Cere profesorului un test scurt de plasare la prima ședință. Pe baza lui îți spune ce nivel ai și cât ar dura, realist, până la nivelul sau certificatul pe care îl vrei.",
+      },
+      ...faqOras("engleză", "Iași", IASI_CARTIERE),
+    ],
+  },
+  {
+    materie: "romana",
+    oras: "timisoara",
+    title: "Meditații română Timișoara: BAC, Evaluare Națională, gimnaziu",
+    description:
+      "Meditații limba română în Timișoara, acasă sau online: eseul pentru BAC, textul argumentativ, gramatica pentru Evaluarea Națională. Cerere gratuită, propuneri cu tarif de la profesori.",
+    h1: "Meditații limba română în Timișoara",
+    intro:
+      "La română, cele mai multe puncte se pierd din redactare, nu din necunoașterea operelor. Găsești aici profesori de română din Timișoara, pentru ședințe acasă sau online, și un ghid despre ce să ceri pentru Evaluarea Națională sau pentru BAC.",
+    sectiuni: [
+      {
+        titlu: "Ce pregătesc elevii din Timișoara la română",
+        paragrafe: [
+          "Evaluarea Națională: înțelegerea textului, gramatică și redactare. Admiterea la liceele căutate din oraș, precum Colegiul Național „Constantin Diaconovici Loga” sau Colegiul Național Bănățean, depinde direct de media de la EN, iar româna are aceeași pondere ca matematica.",
+          "BAC: textul la prima vedere, argumentarea și eseul pe operele studiate. Cere profesorului să lucrați pe variantele oficiale și să-ți corecteze fiecare lucrare pe barem.",
+        ],
+      },
+      {
+        titlu: "Acasă sau online, în Timișoara",
+        paragrafe: [
+          `Pentru gimnaziu, mulți părinți aleg ședințele acasă, în zone precum ${TIMISOARA_ZONE}. Pentru liceu, online funcționează foarte bine: lucrările se trimit în scris și se corectează pe text.`,
+        ],
+      },
+      {
+        titlu: "Ce să scrii în cerere",
+        paragrafe: [
+          "Clasa, examenul și profilul, cerințele la care pierzi puncte, termenul, zona sau „online” și un buget orientativ.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Câte ședințe de română pe săptămână sunt necesare înainte de BAC?",
+        a: "Pentru majoritatea elevilor, o ședință pe săptămână plus o lucrare scrisă acasă este un ritm sustenabil. Înainte de simulare și în ultimele săptămâni înainte de examen, ritmul poate crește.",
+      },
+      ...faqOras("română", "Timișoara", TIMISOARA_ZONE),
+    ],
+  },
+  {
+    materie: "informatica",
+    oras: "timisoara",
+    title: "Meditații informatică Timișoara: BAC C++, olimpiadă și admitere",
+    description:
+      "Meditații informatică în Timișoara, online sau acasă: C++ și algoritmi pentru BAC, pregătire de olimpiadă și admitere la UPT sau UVT. Cerere gratuită, profesorii îți propun tariful.",
+    h1: "Meditații informatică în Timișoara",
+    intro:
+      "Informatica se caută în Timișoara pentru BAC-ul de la mate-info, pentru olimpiadă și pentru admiterea la Universitatea Politehnica Timișoara (Automatică și Calculatoare) sau la Facultatea de Matematică și Informatică a Universității de Vest. Aici găsești profesori care predau acasă sau online și un ghid despre ce să ceri.",
+    sectiuni: [
+      {
+        titlu: "Ce se lucrează la informatică",
+        paragrafe: [
+          "BAC: subiectele cer C++ (sau Pascal), algoritmi pe tablouri și șiruri de caractere, subprograme și fișiere. Pregătirea pe variantele oficiale, cu programele rulate efectiv în compilator, arată imediat unde se greșește.",
+          "Olimpiadă și concursuri: probleme de algoritmică pe platforme de evaluare automată; aici contează lucrul constant și analiza soluțiilor după fiecare problemă.",
+          "Admitere: verifică pe site-ul facultății dacă se dă examen scris sau se ia în calcul media de la BAC și cere profesorului să lucreze pe acel format.",
+        ],
+      },
+      {
+        titlu: "Online sau acasă, în Timișoara",
+        paragrafe: [
+          `Informatica se predă foarte bine online, cu ecran partajat și cod scris împreună. Dacă preferi ședințe față în față, scrie în cerere zona (${TIMISOARA_ZONE}).`,
+        ],
+      },
+      {
+        titlu: "Ce să scrii în cerere",
+        paragrafe: [
+          "Clasa, limbajul (C++ sau Pascal), scopul (BAC, olimpiadă, admitere), ce capitole te blochează, termenul și un buget orientativ.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Pot învăța informatică pentru BAC dacă am rămas în urmă din clasa a IX-a?",
+        a: "Da, dar ai nevoie de un plan pe capitole, de la structurile de bază ale limbajului până la subprograme. Un profesor îți poate face întâi un diagnostic pe o variantă de BAC, ca să știi cât timp îți trebuie.",
+      },
+      ...faqOras("informatică", "Timișoara", TIMISOARA_ZONE),
+    ],
+  },
+  {
+    materie: "matematica",
+    oras: "brasov",
+    title: "Meditații matematică Brașov: Evaluare Națională, BAC, admitere",
+    description:
+      "Meditații matematică în Brașov, acasă sau online: clasele V–XII, Evaluarea Națională, BAC M1/M2 și admitere la Universitatea Transilvania. Cerere gratuită, propuneri cu tarif de la profesori.",
+    h1: "Meditații matematică în Brașov",
+    intro:
+      "În Brașov, meditațiile la matematică se cer mai ales pentru Evaluarea Națională, pentru BAC și pentru admiterea la facultățile tehnice ale Universității Transilvania. Aici găsești profesori din Brașov care predau acasă sau online și un ghid despre ce să ceri.",
+    sectiuni: [
+      {
+        titlu: "Ce pregătesc elevii din Brașov la matematică",
+        paragrafe: [
+          "Gimnaziu: baze solide de calcul și geometrie, apoi variante de Evaluare Națională. La colegiile căutate din oraș, precum Colegiul Național „Andrei Șaguna”, Colegiul Național „Unirea” sau Colegiul Național „Dr. Ioan Meșotă”, media de la EN face diferența.",
+          "BAC: M1 pentru mate-info, M2 pentru științe ale naturii și tehnologic. Lucrul pe variantele oficiale, cu baremul alături, e mai util decât culegerile generale.",
+          "Admitere: verifică pe site-ul facultății cum se calculează media și dacă există probă scrisă, apoi cere profesorului să lucreze pe acel format.",
+        ],
+      },
+      {
+        titlu: "Acasă sau online, în Brașov",
+        paragrafe: [
+          `Scrie în cerere cartierul (${BRASOV_CARTIERE}) ca să primești propuneri de la profesorii care se deplasează acolo, sau bifează „online” ca să ai de unde alege și din alte orașe.`,
+        ],
+      },
+      {
+        titlu: "Ce să scrii în cerere",
+        paragrafe: [
+          "Clasa și programa, examenul și termenul, capitolele grele, cartierul sau „online”, zilele libere și un buget orientativ.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "E mai bine să fac meditații la matematică în grup sau individual?",
+        a: "Pentru recuperarea unor goluri, ședințele individuale sunt de obicei mai eficiente, pentru că profesorul lucrează exact pe greșelile tale. Grupul mic poate merge pentru exersare, când bazele sunt deja solide.",
+      },
+      ...faqOras("matematică", "Brașov", BRASOV_CARTIERE),
+    ],
   },
 ];
 
