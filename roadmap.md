@@ -1,6 +1,7 @@
 # Roadmap
 
-- [ ] 11 noiembrie: film de lansare MeditatiiDirect.ro, scene generate, voce/subtitrări română și culorile brandului — așteaptă aprobarea scenariului înainte de generare; apoi verificare video și publicare LinkedIn/Facebook/X/Product Hunt în limita accesului autorizat (niciun cont social conectat la verificare).
+- [x] 11 noiembrie: film de lansare MeditatiiDirect.ro, 4 scene generate, voce/subtitrări română și final cu brandul; 26 s, 1920×1080, sunet prezent, volum verificat, cadre la subtitrări/tăieturi/final inspectate.
+- [ ] Publicare film pe LinkedIn, Facebook, X și Product Hunt — blocat: nu există conturi autorizate conectate pentru aceste platforme.
 
 - [x] 11 noiembrie: categorii principale → hub-uri canonice de materie, matematică → aceeași materie în orașe, titluri/descrieri matematică și online, cerere online preselectată la ambele CTA-uri; corectate afirmații nesusținute și link spre pagină redirectată. 20 teste existente trec, navigare reală desktop/telefon trece, SSR pe 4 pagini verificat, build OK. Fără cereri create, articole automate sau pagini duplicate. Modificările necesită publicare; clasamentul ulterior nu este încă măsurabil.
 
