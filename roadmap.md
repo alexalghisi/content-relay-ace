@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] 11 noiembrie: categorii principale → hub-uri canonice de materie, matematică → aceeași materie în orașe, titluri/descrieri matematică și online, cerere online preselectată la ambele CTA-uri; corectate afirmații nesusținute și link spre pagină redirectată. 20 teste existente trec, navigare reală desktop/telefon trece, SSR pe 4 pagini verificat, build OK. Fără cereri create, articole automate sau pagini duplicate. Modificările necesită publicare; clasamentul ulterior nu este încă măsurabil.
+
 - [x] 10 noiembrie: telefon obligatoriu inclusiv pe server, confirmare SMS după e-mail, fără excepții pentru numerele de test; index unic strict aplicat și confirmat. 39 teste de reguli/funcții și 8 teste browser simulate desktop/telefon trec; formular real respinge numărul existent fără creare cont/SMS. Primirea efectivă a unui SMS și confirmarea unui cont nou nu au fost retestate; codul nu este publicat.
 
 - [ ] 4 noiembrie: investighează cele 84 SMS-uri nelivrate din captura GatewayAPI; verifică cele trei corecții monitoring cu teste unitare/funcționale/e2e.

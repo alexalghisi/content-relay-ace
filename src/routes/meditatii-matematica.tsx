@@ -4,9 +4,9 @@ import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-matematica";
 
-const TITLE = "Meditatii matematica online sau acasă | BAC, EN, gimnaziu";
+const TITLE = "Meditații matematică: BAC, EN, online | MeditatiiDirect";
 const DESCRIPTION =
-  "Meditatii matematica pentru gimnaziu, Evaluarea Națională și BAC, online sau acasă. Ceri gratuit oferte de la profesori, cu preț și program, fără comision.";
+  "Cauți meditații la matematică pentru BAC, Evaluarea Națională sau gimnaziu? Cere gratuit propuneri cu tarif și program, online sau în orașul tău.";
 
 const FAQS: FaqItem[] = [
   {
@@ -157,32 +157,32 @@ function Page() {
                 </Link>
                 , cât și acasă, în orașe ca{" "}
                 <Link
-                  to="/meditatii-in/$oras"
-                  params={{ oras: "bucuresti" }}
+                  to="/meditatii/$materie/$oras"
+                  params={{ materie: "matematica", oras: "bucuresti" }}
                   className="text-primary underline"
                 >
                   București
                 </Link>
                 ,{" "}
                 <Link
-                  to="/meditatii-in/$oras"
-                  params={{ oras: "cluj-napoca" }}
+                  to="/meditatii/$materie/$oras"
+                  params={{ materie: "matematica", oras: "cluj-napoca" }}
                   className="text-primary underline"
                 >
                   Cluj
                 </Link>
                 ,{" "}
                 <Link
-                  to="/meditatii-in/$oras"
-                  params={{ oras: "iasi" }}
+                  to="/meditatii/$materie/$oras"
+                  params={{ materie: "matematica", oras: "iasi" }}
                   className="text-primary underline"
                 >
                   Iași
                 </Link>
                 ,{" "}
                 <Link
-                  to="/meditatii-in/$oras"
-                  params={{ oras: "timisoara" }}
+                  to="/meditatii/$materie/$oras"
+                  params={{ materie: "matematica", oras: "timisoara" }}
                   className="text-primary underline"
                 >
                   Timișoara

@@ -21,6 +21,7 @@ import tutoringVideoWebm from "@/assets/tutoring-home-web.webm.asset.json";
 import { POPULAR_SUBJECTS } from "@/data/marketplace-mock";
 import { CITIES } from "@/data/cities";
 import { faqJsonLd } from "@/lib/seo";
+import { HUB_MATERIE } from "@/lib/linkuri-contextuale";
 import { ScurtaturiAcasa } from "@/components/cautari-populare";
 import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import {
@@ -317,8 +318,7 @@ function HomePage() {
           {POPULAR_SUBJECTS.map((item) => (
             <Link
               key={item.slug}
-              to="/meditatii"
-              search={{ materie: item.slug }}
+              to={HUB_MATERIE[item.slug] ?? "/meditatii"}
               className="group rounded-xl border border-border bg-card p-5 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-[var(--shadow-card)]"
             >
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-sm font-bold text-primary">
@@ -326,7 +326,7 @@ function HomePage() {
               </span>
               <h3 className="mt-4 text-sm font-bold">{item.name}</h3>
               <p className="mt-1 text-xs leading-5 text-muted-foreground">{item.description}</p>
-              <p className="mt-3 text-xs font-medium text-primary">Cere ofertă →</p>
+              <p className="mt-3 text-xs font-medium text-primary">Meditații {item.name.toLowerCase()} →</p>
             </Link>
           ))}
         </div>

@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-online";
-const TITLE = "Meditatii online 2026 — platforma meditatii, fără comision";
+const TITLE = "Meditații online: cere oferte gratuit | MeditatiiDirect";
 const DESCRIPTION =
-  "Platforma de meditatii online: profesori de matematică, română, engleză, fizică, informatică, BAC și admitere, pe Zoom sau Meet. Ceri gratuit oferte.";
+  "Meditații online la matematică, română, engleză și alte materii. Postează gratuit cererea, compară propunerile cu tarif și program și discută direct cu profesorul.";
 
 const FAQS: FaqItem[] = [
   {
@@ -13,11 +13,11 @@ const FAQS: FaqItem[] = [
   },
   {
     q: "Pe ce platformă se țin meditațiile online?",
-    a: "Majoritatea profesorilor folosesc Zoom, Google Meet, Microsoft Teams sau Skype. Pentru materii care necesită scris (matematică, fizică, chimie), profesorii folosesc tabletă grafică sau aplicații de whiteboard precum Miro, Jamboard sau OpenBoard.",
+    a: "Stabilești platforma împreună cu profesorul, de exemplu Zoom, Google Meet sau Microsoft Teams. Pentru matematică și științe, întreabă cum veți scrie și corecta exercițiile: pe tablă digitală, tabletă grafică sau fotografii ale caietului.",
   },
   {
     q: "Meditațiile online sunt la fel de eficiente ca cele față în față?",
-    a: "Da. Studiile arată că meditațiile online 1-la-1 au aceeași eficiență ca cele față în față, cu avantajul că poți alege profesori din toată țara, economisești timpul de transport și înregistrezi lecția pentru recapitulare.",
+    a: "Formatul potrivit depinde de elev, materie, conexiune și felul în care profesorul explică și verifică rezolvările. Discută metoda de lucru înainte de a accepta propunerea; platforma nu garantează rezultate la examene.",
   },
   {
     q: "Am nevoie de echipament special pentru o meditație online?",
@@ -25,11 +25,11 @@ const FAQS: FaqItem[] = [
   },
   {
     q: "Cum aleg profesorul potrivit pentru meditații online?",
-    a: "Pe MeditatiiDirect filtrezi după materie, experiență, recenzii și preț. Recomandăm o lecție de probă (15–30 minute) înainte de a începe pregătirea regulată — verifici stilul de predare și conexiunea.",
+    a: "Postezi cererea cu materia, nivelul, bugetul și opțiunea online. Compari propunerile primite după tarif, program și metodă, apoi discuți direct în chat. Condițiile unei eventuale lecții de probă le stabilești cu profesorul.",
   },
   {
     q: "Există meditații online pentru BAC și admitere?",
-    a: "Da, avem profesori specializați în pregătirea pentru BAC 2026 (matematică M1/M2, română, biologie, istorie, geografie, informatică) și admitere la Medicină, UPB, ASE, Drept, UMF, UTCN, ASE.",
+    a: "Poți cere pregătire online pentru BAC, Evaluarea Națională și admitere. Precizează materia, profilul sau facultatea și capitolele dificile, astfel încât profesorii să îți trimită propuneri potrivite.",
   },
 ];
 
@@ -47,6 +47,7 @@ export const Route = createFileRoute("/meditatii-online")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:url", content: PAGE_URL },
       { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
     ],
@@ -76,17 +77,17 @@ function Page() {
     <SeoLanding
       pageUrl={PAGE_URL}
       breadcrumbParent={{ name: "Meditații", url: "https://meditatiidirect.ro/meditatii" }}
-      h1="Meditații online cu profesori verificați — toată România"
-      intro="MeditatiiDirect.ro te pune în legătură cu profesori verificați care țin meditații online prin Zoom sau Google Meet. Indiferent că ești în București, Cluj, Iași sau într-o comună mică, primești propuneri de la profesori din toată țara. Contact direct, fără comision."
+      h1="Meditații online — primește propuneri de la profesori"
+      intro="Descrii materia, nivelul și programul dorit, alegi online și primești propuneri cu tarif. Compari ofertele și discuți direct cu profesorul despre platforma video și metoda de lucru, indiferent de orașul în care locuiești. Cererea este gratuită, fără comision."
       bullets={[
-        "Profesori verificați manual, cu recenzii reale de la elevi",
-        "Lecții 1-la-1 pe Zoom, Google Meet, Teams sau Skype",
+        "Propuneri cu tarif și program înainte să alegi",
+        "Platforma video și formatul lecției se stabilesc cu profesorul",
         "Materii: matematică, română, engleză, fizică, informatică, chimie, biologie",
-        "Pregătire pentru BAC 2026, Evaluare Națională și admitere facultate",
+        "Cereri pentru BAC, Evaluare Națională și admitere facultate",
         "Chat direct cu profesorul — fără intermediari și fără comision",
-        "Posibilitate lecție de probă înainte de pachet lunar",
+        "Evaluarea propunerii din pagina privată a cererii",
       ]}
-      ctaPrimary={{ to: "/meditatii", label: "Vezi profesori online" }}
+      ctaPrimary={{ to: "/meditatii", search: { online: "1" }, label: "Cere meditații online" }}
       ctaSecondary={{ to: "/pentru-profesori", label: "Sunt profesor — vreau să predau online" }}
       sections={[
         {
@@ -94,14 +95,14 @@ function Page() {
           body: (
             <>
               <p>
-                Meditațiile online elimină barierele geografice: poți învăța cu cel mai bun profesor
-                de matematică pentru admitere la Politehnică chiar dacă tu ești în Vaslui și el
-                predă în Cluj.
+                Meditațiile online îți permit să primești propuneri și de la profesori din alte
+                orașe. În cerere precizează obiectivul: recapitulare, un capitol dificil sau
+                pregătirea pentru un examen.
               </p>
               <p>
-                Economisești 1–2 ore pe săptămână din transport, înregistrezi lecția pentru
-                recapitulare și ai flexibilitate totală de program — perfect pentru elevi de liceu
-                și studenți la facultate.
+                Nu te deplasezi la lecție. Verifică împreună cu profesorul conexiunea, sunetul și
+                modul de trimitere a rezolvărilor. Orice înregistrare a lecției se discută și se
+                acceptă în prealabil de către participanți.
               </p>
             </>
           ),
@@ -110,9 +111,9 @@ function Page() {
           title: "Materii populare online",
           body: (
             <ul className="list-disc pl-5 space-y-1">
-              <li>Meditații matematică online (gimnaziu, liceu, BAC, admitere UPB & Medicină)</li>
-              <li>Meditații română online (BAC, Evaluare Națională, gramatică, literatură)</li>
-              <li>Meditații engleză online (conversație, Cambridge, IELTS, BAC)</li>
+              <li><Link to="/meditatii-matematica" className="text-primary underline">Meditații matematică</Link> online: gimnaziu, liceu, BAC și admitere cu probă de matematică</li>
+              <li><Link to="/meditatii-romana-online" className="text-primary underline">Meditații română online</Link>: BAC, Evaluare Națională, gramatică și literatură</li>
+              <li><Link to="/meditatii-engleza-online" className="text-primary underline">Meditații engleză online</Link>: conversație și pregătire pentru examene</li>
               <li>Meditații informatică online (C++, Python, algoritmi, BAC info)</li>
               <li>Meditații fizică, chimie, biologie online — pregătire Medicină</li>
               <li>Meditații franceză, germană, spaniolă, italiană online</li>
@@ -123,8 +124,8 @@ function Page() {
           title: "Cum funcționează?",
           body: (
             <ol className="list-decimal pl-5 space-y-1">
-              <li>Cauți după materie și filtrezi „doar online".</li>
-              <li>Citești recenzii, vezi tariful și trimiți mesaj direct profesorului.</li>
+              <li>Postezi gratuit cererea cu materia, nivelul, bugetul și opțiunea online.</li>
+              <li>Primești propuneri cu tarif și program, apoi discuți direct în chat.</li>
               <li>
                 Stabiliți ora, platforma (Zoom/Meet) și începeți. Plata direct, fără comision.
               </li>
@@ -132,6 +133,7 @@ function Page() {
           ),
         },
       ]}
+      ctaFooter={{ title: "Cauți meditații online?", body: "Spune materia și obiectivul. Profesorii interesați îți trimit propuneri cu tarif și program.", to: "/meditatii", label: "Trimite cererea gratuită", search: { online: "1" } }}
       faqs={FAQS}
       related={[
         { to: "/meditatii-engleza-online", label: "Engleză online" },
@@ -140,9 +142,9 @@ function Page() {
         { to: "/meditatii-romana", label: "Meditații română" },
         { to: "/meditatii-engleza", label: "Meditații engleză" },
         { to: "/meditatii-informatica", label: "Meditații informatică" },
-        { to: "/meditatii-bac", label: "Pregătire BAC 2026" },
+        { to: "/meditatii-bac", label: "Pregătire BAC" },
         { to: "/admitere", label: "Admitere facultate" },
-        { to: "/platforma-meditatii-online", label: "Despre platformă" },
+        { to: "/preturi-meditatii", label: "Prețuri meditații din tarife reale" },
       ]}
     />
   );
