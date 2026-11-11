@@ -250,8 +250,8 @@ function cityFaqs(city: CityInfo, s: ComboStats, localTotal: number, national?: 
     {
       q: `Câți profesori de meditații sunt în ${city.name}?`,
       a: localTotal
-        ? `În acest moment sunt ${localTotal} ${localTotal === 1 ? "anunț activ publicat" : "anunțuri active publicate"} de profesori din ${city.name}, plus ${s.onlineListings} anunțuri cu meditații online, disponibile oricărui elev din ${city.county}.`
-        : `Pe MeditatiiDirect sunt ${s.onlineListings} anunțuri active cu meditații online, deschise și elevilor din ${city.name} și din ${city.county}. Când postezi o cerere, ea ajunge și la profesorii care se deplasează în ${city.name}.`,
+        ? `În acest moment sunt ${localTotal} ${localTotal === 1 ? "anunț activ publicat" : "anunțuri active publicate"} de profesori din ${city.name}, plus ${s.onlineListings} anunțuri cu meditații online, disponibile oricărui elev din ${city.slug === "bucuresti" ? city.name : `județul ${city.county}`}.`
+        : `Pe MeditatiiDirect sunt ${s.onlineListings} anunțuri active cu meditații online, deschise și elevilor din ${city.name}${city.slug !== "bucuresti" ? ` și din județul ${city.county}` : ""}. Când postezi o cerere, ea ajunge și la profesorii care se deplasează în ${city.name}.`,
     },
     {
       q: `Pot face meditații online dacă locuiesc în ${city.name}?`,
