@@ -5,7 +5,6 @@ import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucid
 import type { ReactNode } from "react";
 import { linkuriContextuale, type ContextPagina } from "@/lib/linkuri-contextuale";
 import { AdSenseSlot } from "@/components/ads/adsense";
-import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 
 export interface FaqItem {
   q: string;
@@ -156,8 +155,6 @@ export function SeoLanding(p: SeoLandingProps) {
       </header>
 
       <AdSenseSlot format="auto" className="mt-10" />
-      <AdsterraBanner728 className="mt-6" />
-      <AdsterraNativeBanner className="mt-6" />
 
       {p.children}
 
