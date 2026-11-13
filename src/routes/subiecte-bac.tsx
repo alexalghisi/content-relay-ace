@@ -361,7 +361,7 @@ function Page() {
               ["/rezolvari", "Rezolvări verificate BAC"],
               ["/variante-bacalaureat", "Variante BAC"],
               ["/simulare-bacalaureat", "Simulare BAC"],
-              ["/simulari-bacalaureat-2026", "Simulări BAC 2026"],
+              ["/simulare-bacalaureat", "Simulare BAC 2027"],
               ["/calculator-medie-bac", "Calculator medie BAC"],
               ["/meditatii-bac", "Meditații BAC"],
               ["/meditatii-matematica-bac", "Meditații matematică BAC"],

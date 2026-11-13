@@ -78,6 +78,8 @@ import { Route as MeditatiiScoalaRouteImport } from './routes/meditatii-scoala'
 import { Route as MeditatiiTitularizareRouteImport } from './routes/meditatii-titularizare'
 import { Route as MeditatorAiRouteImport } from './routes/meditator-ai'
 import { Route as MeditatoriRouteImport } from './routes/meditatori'
+import { Route as ModeleSubiecteBac2027RouteImport } from './routes/modele-subiecte-bac-2027'
+import { Route as ModeleSubiecteEvaluareNationala2027RouteImport } from './routes/modele-subiecte-evaluare-nationala-2027'
 import { Route as OferMeditatiiRouteImport } from './routes/ofer-meditatii'
 import { Route as OreOnlineRouteImport } from './routes/ore-online'
 import { Route as ParolaUitataRouteImport } from './routes/parola-uitata'
@@ -98,10 +100,12 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SimulareAiRouteImport } from './routes/simulare-ai'
 import { Route as SimulareBacalaureatRouteImport } from './routes/simulare-bacalaureat'
 import { Route as SimulareDrept2026RouteImport } from './routes/simulare-drept-2026'
+import { Route as SimulareEvaluareNationala2027RouteImport } from './routes/simulare-evaluare-nationala-2027'
 import { Route as SimulareUtcn2026RouteImport } from './routes/simulare-utcn-2026'
 import { Route as SimulariBacalaureat2026RouteImport } from './routes/simulari-bacalaureat-2026'
 import { Route as SitemapSubiecteBacDotxmlRouteImport } from './routes/sitemap-subiecte-bac[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as StructuraAnScolar20262027RouteImport } from './routes/structura-an-scolar-2026-2027'
 import { Route as SubiecteBacRouteImport } from './routes/subiecte-bac'
 import { Route as SubiecteBac2026RouteImport } from './routes/subiecte-bac-2026'
 import { Route as TermeniRouteImport } from './routes/termeni'
@@ -526,6 +530,17 @@ const MeditatoriRoute = MeditatoriRouteImport.update({
   path: '/meditatori',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModeleSubiecteBac2027Route = ModeleSubiecteBac2027RouteImport.update({
+  id: '/modele-subiecte-bac-2027',
+  path: '/modele-subiecte-bac-2027',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModeleSubiecteEvaluareNationala2027Route =
+  ModeleSubiecteEvaluareNationala2027RouteImport.update({
+    id: '/modele-subiecte-evaluare-nationala-2027',
+    path: '/modele-subiecte-evaluare-nationala-2027',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const OferMeditatiiRoute = OferMeditatiiRouteImport.update({
   id: '/ofer-meditatii',
   path: '/ofer-meditatii',
@@ -628,6 +643,12 @@ const SimulareDrept2026Route = SimulareDrept2026RouteImport.update({
   path: '/simulare-drept-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SimulareEvaluareNationala2027Route =
+  SimulareEvaluareNationala2027RouteImport.update({
+    id: '/simulare-evaluare-nationala-2027',
+    path: '/simulare-evaluare-nationala-2027',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SimulareUtcn2026Route = SimulareUtcn2026RouteImport.update({
   id: '/simulare-utcn-2026',
   path: '/simulare-utcn-2026',
@@ -649,6 +670,12 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StructuraAnScolar20262027Route =
+  StructuraAnScolar20262027RouteImport.update({
+    id: '/structura-an-scolar-2026-2027',
+    path: '/structura-an-scolar-2026-2027',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SubiecteBacRoute = SubiecteBacRouteImport.update({
   id: '/subiecte-bac',
   path: '/subiecte-bac',
@@ -1095,6 +1122,8 @@ export interface FileRoutesByFullPath {
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
   '/meditator-ai': typeof MeditatorAiRoute
   '/meditatori': typeof MeditatoriRoute
+  '/modele-subiecte-bac-2027': typeof ModeleSubiecteBac2027Route
+  '/modele-subiecte-evaluare-nationala-2027': typeof ModeleSubiecteEvaluareNationala2027Route
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
   '/parola-uitata': typeof ParolaUitataRoute
@@ -1115,10 +1144,12 @@ export interface FileRoutesByFullPath {
   '/simulare-ai': typeof SimulareAiRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
+  '/simulare-evaluare-nationala-2027': typeof SimulareEvaluareNationala2027Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
   '/sitemap-subiecte-bac.xml': typeof SitemapSubiecteBacDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/structura-an-scolar-2026-2027': typeof StructuraAnScolar20262027Route
   '/subiecte-bac': typeof SubiecteBacRouteWithChildren
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
@@ -1261,6 +1292,8 @@ export interface FileRoutesByTo {
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
   '/meditator-ai': typeof MeditatorAiRoute
   '/meditatori': typeof MeditatoriRoute
+  '/modele-subiecte-bac-2027': typeof ModeleSubiecteBac2027Route
+  '/modele-subiecte-evaluare-nationala-2027': typeof ModeleSubiecteEvaluareNationala2027Route
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
   '/parola-uitata': typeof ParolaUitataRoute
@@ -1281,10 +1314,12 @@ export interface FileRoutesByTo {
   '/simulare-ai': typeof SimulareAiRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
+  '/simulare-evaluare-nationala-2027': typeof SimulareEvaluareNationala2027Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
   '/sitemap-subiecte-bac.xml': typeof SitemapSubiecteBacDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/structura-an-scolar-2026-2027': typeof StructuraAnScolar20262027Route
   '/subiecte-bac': typeof SubiecteBacRouteWithChildren
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
@@ -1426,6 +1461,8 @@ export interface FileRoutesById {
   '/meditatii-titularizare': typeof MeditatiiTitularizareRoute
   '/meditator-ai': typeof MeditatorAiRoute
   '/meditatori': typeof MeditatoriRoute
+  '/modele-subiecte-bac-2027': typeof ModeleSubiecteBac2027Route
+  '/modele-subiecte-evaluare-nationala-2027': typeof ModeleSubiecteEvaluareNationala2027Route
   '/ofer-meditatii': typeof OferMeditatiiRoute
   '/ore-online': typeof OreOnlineRoute
   '/parola-uitata': typeof ParolaUitataRoute
@@ -1446,10 +1483,12 @@ export interface FileRoutesById {
   '/simulare-ai': typeof SimulareAiRoute
   '/simulare-bacalaureat': typeof SimulareBacalaureatRoute
   '/simulare-drept-2026': typeof SimulareDrept2026Route
+  '/simulare-evaluare-nationala-2027': typeof SimulareEvaluareNationala2027Route
   '/simulare-utcn-2026': typeof SimulareUtcn2026Route
   '/simulari-bacalaureat-2026': typeof SimulariBacalaureat2026Route
   '/sitemap-subiecte-bac.xml': typeof SitemapSubiecteBacDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/structura-an-scolar-2026-2027': typeof StructuraAnScolar20262027Route
   '/subiecte-bac': typeof SubiecteBacRouteWithChildren
   '/subiecte-bac-2026': typeof SubiecteBac2026Route
   '/termeni': typeof TermeniRoute
@@ -1594,6 +1633,8 @@ export interface FileRouteTypes {
     | '/meditatii-titularizare'
     | '/meditator-ai'
     | '/meditatori'
+    | '/modele-subiecte-bac-2027'
+    | '/modele-subiecte-evaluare-nationala-2027'
     | '/ofer-meditatii'
     | '/ore-online'
     | '/parola-uitata'
@@ -1614,10 +1655,12 @@ export interface FileRouteTypes {
     | '/simulare-ai'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
+    | '/simulare-evaluare-nationala-2027'
     | '/simulare-utcn-2026'
     | '/simulari-bacalaureat-2026'
     | '/sitemap-subiecte-bac.xml'
     | '/sitemap.xml'
+    | '/structura-an-scolar-2026-2027'
     | '/subiecte-bac'
     | '/subiecte-bac-2026'
     | '/termeni'
@@ -1760,6 +1803,8 @@ export interface FileRouteTypes {
     | '/meditatii-titularizare'
     | '/meditator-ai'
     | '/meditatori'
+    | '/modele-subiecte-bac-2027'
+    | '/modele-subiecte-evaluare-nationala-2027'
     | '/ofer-meditatii'
     | '/ore-online'
     | '/parola-uitata'
@@ -1780,10 +1825,12 @@ export interface FileRouteTypes {
     | '/simulare-ai'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
+    | '/simulare-evaluare-nationala-2027'
     | '/simulare-utcn-2026'
     | '/simulari-bacalaureat-2026'
     | '/sitemap-subiecte-bac.xml'
     | '/sitemap.xml'
+    | '/structura-an-scolar-2026-2027'
     | '/subiecte-bac'
     | '/subiecte-bac-2026'
     | '/termeni'
@@ -1924,6 +1971,8 @@ export interface FileRouteTypes {
     | '/meditatii-titularizare'
     | '/meditator-ai'
     | '/meditatori'
+    | '/modele-subiecte-bac-2027'
+    | '/modele-subiecte-evaluare-nationala-2027'
     | '/ofer-meditatii'
     | '/ore-online'
     | '/parola-uitata'
@@ -1944,10 +1993,12 @@ export interface FileRouteTypes {
     | '/simulare-ai'
     | '/simulare-bacalaureat'
     | '/simulare-drept-2026'
+    | '/simulare-evaluare-nationala-2027'
     | '/simulare-utcn-2026'
     | '/simulari-bacalaureat-2026'
     | '/sitemap-subiecte-bac.xml'
     | '/sitemap.xml'
+    | '/structura-an-scolar-2026-2027'
     | '/subiecte-bac'
     | '/subiecte-bac-2026'
     | '/termeni'
@@ -2091,6 +2142,8 @@ export interface RootRouteChildren {
   MeditatiiTitularizareRoute: typeof MeditatiiTitularizareRoute
   MeditatorAiRoute: typeof MeditatorAiRoute
   MeditatoriRoute: typeof MeditatoriRoute
+  ModeleSubiecteBac2027Route: typeof ModeleSubiecteBac2027Route
+  ModeleSubiecteEvaluareNationala2027Route: typeof ModeleSubiecteEvaluareNationala2027Route
   OferMeditatiiRoute: typeof OferMeditatiiRoute
   OreOnlineRoute: typeof OreOnlineRoute
   ParolaUitataRoute: typeof ParolaUitataRoute
@@ -2111,10 +2164,12 @@ export interface RootRouteChildren {
   SimulareAiRoute: typeof SimulareAiRoute
   SimulareBacalaureatRoute: typeof SimulareBacalaureatRoute
   SimulareDrept2026Route: typeof SimulareDrept2026Route
+  SimulareEvaluareNationala2027Route: typeof SimulareEvaluareNationala2027Route
   SimulareUtcn2026Route: typeof SimulareUtcn2026Route
   SimulariBacalaureat2026Route: typeof SimulariBacalaureat2026Route
   SitemapSubiecteBacDotxmlRoute: typeof SitemapSubiecteBacDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StructuraAnScolar20262027Route: typeof StructuraAnScolar20262027Route
   SubiecteBacRoute: typeof SubiecteBacRouteWithChildren
   SubiecteBac2026Route: typeof SubiecteBac2026Route
   TermeniRoute: typeof TermeniRoute
@@ -2663,6 +2718,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeditatoriRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modele-subiecte-bac-2027': {
+      id: '/modele-subiecte-bac-2027'
+      path: '/modele-subiecte-bac-2027'
+      fullPath: '/modele-subiecte-bac-2027'
+      preLoaderRoute: typeof ModeleSubiecteBac2027RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modele-subiecte-evaluare-nationala-2027': {
+      id: '/modele-subiecte-evaluare-nationala-2027'
+      path: '/modele-subiecte-evaluare-nationala-2027'
+      fullPath: '/modele-subiecte-evaluare-nationala-2027'
+      preLoaderRoute: typeof ModeleSubiecteEvaluareNationala2027RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ofer-meditatii': {
       id: '/ofer-meditatii'
       path: '/ofer-meditatii'
@@ -2803,6 +2872,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SimulareDrept2026RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/simulare-evaluare-nationala-2027': {
+      id: '/simulare-evaluare-nationala-2027'
+      path: '/simulare-evaluare-nationala-2027'
+      fullPath: '/simulare-evaluare-nationala-2027'
+      preLoaderRoute: typeof SimulareEvaluareNationala2027RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/simulare-utcn-2026': {
       id: '/simulare-utcn-2026'
       path: '/simulare-utcn-2026'
@@ -2829,6 +2905,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/structura-an-scolar-2026-2027': {
+      id: '/structura-an-scolar-2026-2027'
+      path: '/structura-an-scolar-2026-2027'
+      fullPath: '/structura-an-scolar-2026-2027'
+      preLoaderRoute: typeof StructuraAnScolar20262027RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subiecte-bac': {
@@ -3452,6 +3535,9 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiTitularizareRoute: MeditatiiTitularizareRoute,
   MeditatorAiRoute: MeditatorAiRoute,
   MeditatoriRoute: MeditatoriRoute,
+  ModeleSubiecteBac2027Route: ModeleSubiecteBac2027Route,
+  ModeleSubiecteEvaluareNationala2027Route:
+    ModeleSubiecteEvaluareNationala2027Route,
   OferMeditatiiRoute: OferMeditatiiRoute,
   OreOnlineRoute: OreOnlineRoute,
   ParolaUitataRoute: ParolaUitataRoute,
@@ -3472,10 +3558,12 @@ const rootRouteChildren: RootRouteChildren = {
   SimulareAiRoute: SimulareAiRoute,
   SimulareBacalaureatRoute: SimulareBacalaureatRoute,
   SimulareDrept2026Route: SimulareDrept2026Route,
+  SimulareEvaluareNationala2027Route: SimulareEvaluareNationala2027Route,
   SimulareUtcn2026Route: SimulareUtcn2026Route,
   SimulariBacalaureat2026Route: SimulariBacalaureat2026Route,
   SitemapSubiecteBacDotxmlRoute: SitemapSubiecteBacDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StructuraAnScolar20262027Route: StructuraAnScolar20262027Route,
   SubiecteBacRoute: SubiecteBacRouteWithChildren,
   SubiecteBac2026Route: SubiecteBac2026Route,
   TermeniRoute: TermeniRoute,

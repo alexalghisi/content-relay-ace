@@ -234,10 +234,10 @@ function ResursaBacPage() {
                   Pregătire BAC completă
                 </Link>
                 <Link
-                  to="/simulari-bacalaureat-2026"
+                  to="/simulare-bacalaureat"
                   className="inline-flex items-center rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40"
                 >
-                  Simulări BAC 2026
+                  Simulare BAC 2027
                 </Link>
               </div>
             </div>
