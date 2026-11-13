@@ -82,7 +82,8 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
       const { error: removeError } = await supabaseAdmin.storage.from("avatars").remove(objects.map((o) => `${uid}/${o.name}`));
       if (removeError) throw new Error("Nu am putut șterge fotografiile contului.");
     }
-    for (const table of ["profile_photos", "profesor_ai_reviews", "profesor_ai_review_eligibility"] as const) {
+    // profesor_ai_utilizatori ține telefonul verificat: fără ștergere, numărul rămâne blocat după ștergerea contului.
+    for (const table of ["profile_photos", "profesor_ai_reviews", "profesor_ai_review_eligibility", "profesor_ai_utilizatori"] as const) {
       const { error: cleanupError } = await supabaseAdmin.from(table).delete().eq("user_id", uid);
       if (cleanupError) throw new Error("Nu am putut șterge datele contului.");
     }

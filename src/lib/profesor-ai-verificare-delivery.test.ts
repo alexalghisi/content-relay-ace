@@ -20,6 +20,8 @@ const writes: Record<string, unknown>[] = [];
 let occupied = false;
 let selected = "";
 let ownRow: Record<string, unknown> | null = null;
+let occupantDeleted = false;
+const deletes: string[] = [];
 const query = {
   select: (columns: string) => { selected = columns; return query; },
   eq: () => query,
@@ -30,8 +32,17 @@ const query = {
   }),
   upsert: async (value: Record<string, unknown>) => { writes.push(value); return { error: null }; },
   update: (value: Record<string, unknown>) => { writes.push(value); return query; },
+  delete: () => ({ eq: async (_c: string, id: string) => { deletes.push(id); return { error: null }; } }),
 };
-mock.module("@/integrations/supabase/client.server", () => ({ supabaseAdmin: { from: () => query } }));
+const auth = {
+  admin: {
+    getUserById: async (id: string) =>
+      occupantDeleted
+        ? { data: { user: null }, error: { message: "User not found" } }
+        : { data: { user: { id } }, error: null },
+  },
+};
+mock.module("@/integrations/supabase/client.server", () => ({ supabaseAdmin: { from: () => query, auth } }));
 
 describe("Phone ownership when SMS fails", () => {
   it("numerele foste de test respectă verificarea și limita de retrimitere", async () => {
@@ -92,6 +103,36 @@ describe("Phone ownership when SMS fails", () => {
     } finally {
       occupied = false;
       writes.length = 0;
+      globalThis.fetch = realFetch;
+      if (realToken === undefined) delete process.env["GATEWAYAPI_TOKEN"];
+      else process.env["GATEWAYAPI_TOKEN"] = realToken;
+    }
+  });
+  it("numărul rămas pe un cont șters se eliberează: rândul orfan e șters și codul pleacă", async () => {
+    const realFetch = globalThis.fetch;
+    const realToken = process.env["GATEWAYAPI_TOKEN"];
+    process.env["GATEWAYAPI_TOKEN"] = "test-token";
+    occupied = true;
+    occupantDeleted = true;
+    writes.length = 0;
+    deletes.length = 0;
+    let sends = 0;
+    globalThis.fetch = (async () => { sends++; return new Response('{"ids":[7]}', { status: 200 }); }) as unknown as typeof fetch;
+    try {
+      const { trimiteCodTelefon } = await import("./profesor-ai-verificare.functions");
+      const handler = trimiteCodTelefon as unknown as (input: {
+        data: { phone: string }; context: { userId: string };
+      }) => Promise<{ ok: boolean }>;
+      const r = await handler({ data: { phone: "0712345678" }, context: { userId: "nou" } });
+      expect(r.ok).toBe(true);
+      expect(deletes).toEqual(["other-user"]);
+      expect(sends).toBe(1);
+      expect(writes.some((w) => "phone_verified_at" in w)).toBe(false);
+    } finally {
+      occupied = false;
+      occupantDeleted = false;
+      writes.length = 0;
+      deletes.length = 0;
       globalThis.fetch = realFetch;
       if (realToken === undefined) delete process.env["GATEWAYAPI_TOKEN"];
       else process.env["GATEWAYAPI_TOKEN"] = realToken;
