@@ -1,6 +1,6 @@
 import { describe, expect, it, mock, beforeEach, afterEach } from "bun:test";
 import { readFileSync } from "node:fs";
-import { gasesteConflict } from "./conturi-unice";
+import { gasesteConflict, telefoaneConturiExistente } from "./conturi-unice";
 import {
   emailCanonic,
   esteEmailDuplicat,
@@ -84,6 +84,8 @@ const st = {
     phone?: string;
   }[],
   verificate: [] as string[],
+  // Telefoane verificate rămase de la conturi șterse (fără cont în auth.users).
+  verificateSterse: [] as string[],
   generateError: null as null | { message: string; code?: string },
   existentConfirmat: false,
   apeluri: [] as string[],
@@ -100,7 +102,13 @@ const query: Record<string, unknown> = {
   upsert: async () => ({ error: null }),
   update: () => query,
   then: (res: (v: unknown) => unknown) =>
-    res({ data: st.verificate.map((phone) => ({ phone })), error: null }),
+    res({
+      data: [
+        ...st.verificate.map((phone) => ({ user_id: "proprietar-verificat", phone })),
+        ...st.verificateSterse.map((phone) => ({ user_id: "cont-sters", phone })),
+      ],
+      error: null,
+    }),
 };
 mock.module("@/integrations/supabase/client.server", () => ({
   supabaseAdmin: {
@@ -109,7 +117,11 @@ mock.module("@/integrations/supabase/client.server", () => ({
       admin: {
         listUsers: async () => {
           st.apeluri.push("listUsers");
-          return { data: { users: st.conturi }, error: null };
+          const users = [
+            ...st.conturi.map((c, i) => ({ id: `cont-${i}`, ...c })),
+            { id: "proprietar-verificat", email: "proprietar@verificat.test", user_metadata: {} },
+          ];
+          return { data: { users }, error: null };
         },
         generateLink: async ({ type }: { type: string }) => {
           st.apeluri.push(`generateLink:${type}`);
@@ -231,6 +243,13 @@ describe("creeazaCont — un email și un telefon per cont", () => {
     expect(st.apeluri.some((a) => a.startsWith("generateLink"))).toBe(false);
   });
 
+  it("telefon verificat al unui cont șters → înscrierea merge mai departe", async () => {
+    st.verificateSterse = ["40722123456"];
+    const r = await inregistreaza(unic("ana"));
+    st.verificateSterse = [];
+    expect(r.stare).not.toBe("telefon");
+  });
+
   it("telefon verificat prin SMS pe alt cont → refuzat", async () => {
     st.verificate = ["40722123456"];
     const r = await inregistreaza(unic("ana"));
@@ -292,4 +311,15 @@ describe("creeazaCont — un email și un telefon per cont", () => {
 
 it("al doilea fost număr de test este de asemenea unic", () => {
   expect(gasesteConflict([{ email: "primul@example.ro", metadataPhone: "40744340622" }], "nou@example.ro", "0744340622")).toBe("telefon");
+});
+
+
+it("telefonul verificat al unui cont șters nu mai blochează înscrierea", () => {
+  const randuri = [
+    { user_id: "sters", phone: "40711111111" },
+    { user_id: "activ", phone: "40722222222" },
+    { user_id: "activ2", phone: null },
+  ];
+  const tel = telefoaneConturiExistente(randuri, new Set(["activ", "activ2"]));
+  expect(tel).toEqual(["40722222222"]);
 });

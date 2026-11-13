@@ -54,8 +54,18 @@ export const trimiteCodTelefon = createServerFn({ method: "POST" })
       .neq("user_id", context.userId)
       .maybeSingle();
     if (conflictError) return { ok: false, error: "Nu putem verifica disponibilitatea numărului. Încearcă din nou." };
-    if (ocupat)
-      return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+    if (ocupat) {
+      // Rândul poate fi rămas de la un cont șters: atunci numărul e liber și ștergem rândul orfan.
+      const { data: cont, error: contError } = await supabaseAdmin.auth.admin.getUserById(ocupat.user_id);
+      const contSters = !cont?.user && /not.?found/i.test(contError?.message ?? "");
+      if (!contSters) return { ok: false, error: "Acest număr este deja folosit de alt cont." };
+      const { error: orfanError } = await supabaseAdmin
+        .from("profesor_ai_utilizatori")
+        .delete()
+        .eq("user_id", ocupat.user_id);
+      if (orfanError)
+        return { ok: false, error: "Nu putem verifica disponibilitatea numărului. Încearcă din nou." };
+    }
     const cod = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, "0");
     const { error } = await supabaseAdmin.from("profesor_ai_utilizatori").upsert({
       user_id: context.userId,

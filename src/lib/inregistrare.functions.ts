@@ -33,7 +33,8 @@ async function claimFereastra(key: string, sec = 60): Promise<boolean> {
 /** Citește conturile existente (API admin) și telefoanele verificate prin SMS. */
 async function conflictCont(email: string, telefon: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { gasesteConflict } = await import("./conturi-unice");
+  const { gasesteConflict, telefoaneConturiExistente } = await import("./conturi-unice");
+  const idConturi = new Set<string>();
   const conturi: {
     email?: string | null;
     phone?: string | null;
@@ -47,6 +48,7 @@ async function conflictCont(email: string, telefon: string) {
       // Fără lista conturilor nu putem garanta unicitatea: nu creăm nimic.
       throw new Error("listUsers");
     }
+    for (const u of data.users) idConturi.add(u.id);
     for (const u of data.users)
       conturi.push({
         email: u.email,
@@ -58,10 +60,11 @@ async function conflictCont(email: string, telefon: string) {
   }
   const { data: verificate, error: verificareError } = await supabaseAdmin
     .from("profesor_ai_utilizatori")
-    .select("phone")
+    .select("user_id, phone")
     .not("phone_verified_at", "is", null);
   if (verificareError) throw new Error("verifiedPhones");
-  const telefoane = (verificate ?? []).map((r) => r.phone).filter((p): p is string => !!p);
+  // Numerele rămase de la conturi șterse nu mai contează.
+  const telefoane = telefoaneConturiExistente(verificate ?? [], idConturi);
   const exact = conturi.find((c) => (c.email ?? "").trim().toLowerCase() === email);
   return {
     conflict: gasesteConflict(conturi, email, telefon, telefoane),
