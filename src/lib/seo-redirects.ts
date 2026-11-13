@@ -13,6 +13,8 @@ export const LANDING_REDIRECTS: Record<string, string> = {
   "/ore-online": "/meditatii-online",
   "/platforma-meditatii-online": "/meditatii-online",
   "/anunturi-meditatii-bac": "/anunturi-meditatii",
+  // Same intent „simulare bac”; the 2026 page was outdated once the 2027 calendar was published.
+  "/simulari-bacalaureat-2026": "/simulare-bacalaureat",
 };
 
 /**

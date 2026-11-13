@@ -59,7 +59,7 @@ export const Route = createFileRoute("/meditatii-bac")({
         { to: "/calendar-bac-2027", label: "Calendar BAC 2027" },
         { to: "/meditatii-matematica-bac", label: "Meditații matematică BAC" },
         { to: "/meditatii-romana-bac", label: "Meditații română BAC" },
-        { to: "/simulari-bacalaureat-2026", label: "Simulări BAC 2026" },
+        { to: "/simulare-bacalaureat", label: "Simulare BAC 2027" },
         { to: "/variante-bacalaureat", label: "Variante BAC" },
         { to: "/subiecte-bac", label: "Subiecte BAC" },
         { to: "/meditatii-matematica", label: "Meditații matematică" },

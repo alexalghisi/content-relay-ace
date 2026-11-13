@@ -29,6 +29,10 @@ export const SCURTATURI_ACASA: GrupScurtaturi[] = [
       { label: "Admitere medicină", href: "/meditatii-admitere-medicina" },
       { label: "Calendar BAC 2027", href: "/calendar-bac-2027" },
       { label: "Admitere liceu 2027", href: "/admitere-liceu-2027" },
+      { label: "Simulare BAC 2027", href: "/simulare-bacalaureat" },
+      { label: "Modele subiecte BAC 2027", href: "/modele-subiecte-bac-2027" },
+      { label: "Modele Evaluarea Națională 2027", href: "/modele-subiecte-evaluare-nationala-2027" },
+      { label: "Vacanțe școlare 2026-2027", href: "/structura-an-scolar-2026-2027" },
     ],
   },
   {
