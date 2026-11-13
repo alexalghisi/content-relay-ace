@@ -178,10 +178,18 @@ describe("creeazaCont — un email și un telefon per cont", () => {
       apeluri: [],
       emailSent: true,
     });
+    // Verificarea parolelor compromise (HIBP) ar ieși în rețea la fiecare înscriere (până la 3 s):
+    // în teste răspundem local, cu o listă care nu conține parola.
+    globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) =>
+      String(input).startsWith("https://api.pwnedpasswords.com/")
+        ? new Response("0000000000000000000000000000000000A:0\n", { status: 200 })
+        : realFetch(input, init)) as typeof fetch;
   });
+  const realFetch = globalThis.fetch;
 
   const originalCaches = Object.getOwnPropertyDescriptor(globalThis, "caches");
   afterEach(() => {
+    globalThis.fetch = realFetch;
     if (originalCaches) Object.defineProperty(globalThis, "caches", originalCaches);
     else Reflect.deleteProperty(globalThis, "caches");
   });
