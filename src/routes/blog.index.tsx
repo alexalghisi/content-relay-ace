@@ -14,7 +14,7 @@ export const Route = createFileRoute("/blog/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery),
   head: () => ({
     meta: [
-      { title: "Blog Meditații — Ghiduri BAC, Admitere și Sfaturi 2026 | MeditatiiDirect.ro" },
+      { title: "Blog Meditații — Ghiduri BAC, Admitere și Sfaturi 2026–2027 | MeditatiiDirect.ro" },
       {
         name: "description",
         content:

@@ -65,7 +65,7 @@ export const Route = createFileRoute("/profesori/$oras")({
     const url = `${SITE}/profesori/${city.slug}`;
     const count = teachers.length;
     const countLabel = "Profesori verificați";
-    const title = `Profesori Particulari ${city.name} 2026 — ${countLabel} | MeditatiiDirect.ro`;
+    const title = `Profesori particulari ${city.name} 2026–2027 — ${countLabel} | MeditatiiDirect.ro`;
     const desc = `Profesori particulari verificați în ${city.name} (${city.county}). Matematică, română, engleză, fizică, BAC, admitere. Profesorii își propun tariful, iar tu îi contactezi direct, fără comision.`;
     const faqs = profesoriFaqs(city.name, city.county);
     return {

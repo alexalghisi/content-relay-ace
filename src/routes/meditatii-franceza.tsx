@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-franceza";
-const TITLE = "Meditații Franceză 2026 — Online & Acasă | A1-C2, DELF, BAC";
+const TITLE = "Meditații franceză 2026–2027 — Online & Acasă | A1-C2, DELF, BAC";
 const DESC = "★ Meditații limba franceză online sau la domiciliu: A1–C2, DELF, DALF, BAC, conversație. Profesori nativi și români verificați, contact direct, FĂRĂ comision.";
 
 const faqs = [

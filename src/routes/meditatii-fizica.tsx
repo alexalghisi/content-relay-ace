@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-fizica";
-const TITLE = "Meditații Fizică 2026 — Online | BAC, Admitere UPB, UMF | București, Cluj, Iași";
+const TITLE = "Meditații fizică online și acasă — BAC 2027, admitere UPB și UMF";
 const DESC = "★ Meditații fizică online sau acasă: BAC, admitere Politehnică (UPB, UTCN) și Medicină. Mecanică, electricitate, optică. Profesori verificați în București, Cluj, Iași, Timișoara.";
 
 const faqs = [

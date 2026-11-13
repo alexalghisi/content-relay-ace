@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-la-domiciliu";
-const TITLE = "Meditații la domiciliu 2026 — Profesori care vin acasă | MeditatiiDirect.ro";
+const TITLE = "Meditații la domiciliu 2026–2027 — Profesori care vin acasă | MeditatiiDirect.ro";
 const DESC =
   "Meditații la domiciliu cu profesori verificați care vin acasă la tine: matematică, română, engleză, fizică. București, Cluj, Iași, Timișoara. Contact direct, fără comision.";
 

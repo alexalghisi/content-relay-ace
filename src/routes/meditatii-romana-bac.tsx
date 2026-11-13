@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-romana-bac";
-const TITLE = "Meditații română BAC 2026 — pregătire bacalaureat limba română, real și uman";
+const TITLE = "Meditații română BAC 2027 — pregătire bacalaureat limba română, real și uman";
 const DESC = "Meditatii romana BAC 2026: pregătire bacalaureat la limba română cu profesori verificați, eseuri corectate după barem, online sau acasă. Ceri gratuit oferte.";
 
 const faqs = [
