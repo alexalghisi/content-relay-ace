@@ -142,6 +142,8 @@ import { Route as ScanerLacuneMaterieRouteImport } from './routes/scaner-lacune.
 import { Route as SimulareBacMaterieRouteImport } from './routes/simulare-bac.$materie'
 import { Route as SubiecteAdmitereIndexRouteImport } from './routes/subiecte-admitere.index'
 import { Route as SubiecteBacMatematicaRouteImport } from './routes/subiecte-bac.matematica'
+import { Route as SubiecteEvaluareNationalaIndexRouteImport } from './routes/subiecte-evaluare-nationala.index'
+import { Route as SubiecteEvaluareNationalaSlugRouteImport } from './routes/subiecte-evaluare-nationala.$slug'
 import { Route as BacMaterieIndexRouteImport } from './routes/bac.$materie.index'
 import { Route as BacMaterieAnRouteImport } from './routes/bac.$materie.$an'
 import { Route as HartaBlocajelorMaterieIndexRouteImport } from './routes/harta-blocajelor.$materie.index'
@@ -849,6 +851,18 @@ const SubiecteBacMatematicaRoute = SubiecteBacMatematicaRouteImport.update({
   path: '/matematica',
   getParentRoute: () => SubiecteBacRoute,
 } as any)
+const SubiecteEvaluareNationalaIndexRoute =
+  SubiecteEvaluareNationalaIndexRouteImport.update({
+    id: '/subiecte-evaluare-nationala/',
+    path: '/subiecte-evaluare-nationala/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SubiecteEvaluareNationalaSlugRoute =
+  SubiecteEvaluareNationalaSlugRouteImport.update({
+    id: '/subiecte-evaluare-nationala/$slug',
+    path: '/subiecte-evaluare-nationala/$slug',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BacMaterieIndexRoute = BacMaterieIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -1147,6 +1161,7 @@ export interface FileRoutesByFullPath {
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
   '/subiecte-bac/matematica': typeof SubiecteBacMatematicaRoute
+  '/subiecte-evaluare-nationala/$slug': typeof SubiecteEvaluareNationalaSlugRoute
   '/bac/': typeof BacIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/harta-blocajelor/': typeof HartaBlocajelorIndexRoute
@@ -1159,6 +1174,7 @@ export interface FileRoutesByFullPath {
   '/rezolvari/': typeof RezolvariIndexRoute
   '/scaner-lacune/': typeof ScanerLacuneIndexRoute
   '/subiecte-admitere/': typeof SubiecteAdmitereIndexRoute
+  '/subiecte-evaluare-nationala/': typeof SubiecteEvaluareNationalaIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
   '/harta-blocajelor/$materie/$blocaj': typeof HartaBlocajelorMaterieBlocajRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -1312,6 +1328,7 @@ export interface FileRoutesByTo {
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
   '/subiecte-bac/matematica': typeof SubiecteBacMatematicaRoute
+  '/subiecte-evaluare-nationala/$slug': typeof SubiecteEvaluareNationalaSlugRoute
   '/bac': typeof BacIndexRoute
   '/blog': typeof BlogIndexRoute
   '/harta-blocajelor': typeof HartaBlocajelorIndexRoute
@@ -1324,6 +1341,7 @@ export interface FileRoutesByTo {
   '/rezolvari': typeof RezolvariIndexRoute
   '/scaner-lacune': typeof ScanerLacuneIndexRoute
   '/subiecte-admitere': typeof SubiecteAdmitereIndexRoute
+  '/subiecte-evaluare-nationala': typeof SubiecteEvaluareNationalaIndexRoute
   '/harta-blocajelor/$materie/$blocaj': typeof HartaBlocajelorMaterieBlocajRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/meditatii/$materie/$oras': typeof MeditatiiMaterieOrasRoute
@@ -1478,6 +1496,7 @@ export interface FileRoutesById {
   '/scaner-lacune/$materie': typeof ScanerLacuneMaterieRoute
   '/simulare-bac/$materie': typeof SimulareBacMaterieRoute
   '/subiecte-bac/matematica': typeof SubiecteBacMatematicaRoute
+  '/subiecte-evaluare-nationala/$slug': typeof SubiecteEvaluareNationalaSlugRoute
   '/bac/': typeof BacIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/harta-blocajelor/': typeof HartaBlocajelorIndexRoute
@@ -1490,6 +1509,7 @@ export interface FileRoutesById {
   '/rezolvari/': typeof RezolvariIndexRoute
   '/scaner-lacune/': typeof ScanerLacuneIndexRoute
   '/subiecte-admitere/': typeof SubiecteAdmitereIndexRoute
+  '/subiecte-evaluare-nationala/': typeof SubiecteEvaluareNationalaIndexRoute
   '/bac/$materie/$an': typeof BacMaterieAnRouteWithChildren
   '/harta-blocajelor/$materie/$blocaj': typeof HartaBlocajelorMaterieBlocajRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
@@ -1646,6 +1666,7 @@ export interface FileRouteTypes {
     | '/scaner-lacune/$materie'
     | '/simulare-bac/$materie'
     | '/subiecte-bac/matematica'
+    | '/subiecte-evaluare-nationala/$slug'
     | '/bac/'
     | '/blog/'
     | '/harta-blocajelor/'
@@ -1658,6 +1679,7 @@ export interface FileRouteTypes {
     | '/rezolvari/'
     | '/scaner-lacune/'
     | '/subiecte-admitere/'
+    | '/subiecte-evaluare-nationala/'
     | '/bac/$materie/$an'
     | '/harta-blocajelor/$materie/$blocaj'
     | '/lovable/email/suppression'
@@ -1811,6 +1833,7 @@ export interface FileRouteTypes {
     | '/scaner-lacune/$materie'
     | '/simulare-bac/$materie'
     | '/subiecte-bac/matematica'
+    | '/subiecte-evaluare-nationala/$slug'
     | '/bac'
     | '/blog'
     | '/harta-blocajelor'
@@ -1823,6 +1846,7 @@ export interface FileRouteTypes {
     | '/rezolvari'
     | '/scaner-lacune'
     | '/subiecte-admitere'
+    | '/subiecte-evaluare-nationala'
     | '/harta-blocajelor/$materie/$blocaj'
     | '/lovable/email/suppression'
     | '/meditatii/$materie/$oras'
@@ -1976,6 +2000,7 @@ export interface FileRouteTypes {
     | '/scaner-lacune/$materie'
     | '/simulare-bac/$materie'
     | '/subiecte-bac/matematica'
+    | '/subiecte-evaluare-nationala/$slug'
     | '/bac/'
     | '/blog/'
     | '/harta-blocajelor/'
@@ -1988,6 +2013,7 @@ export interface FileRouteTypes {
     | '/rezolvari/'
     | '/scaner-lacune/'
     | '/subiecte-admitere/'
+    | '/subiecte-evaluare-nationala/'
     | '/bac/$materie/$an'
     | '/harta-blocajelor/$materie/$blocaj'
     | '/lovable/email/suppression'
@@ -2142,6 +2168,7 @@ export interface RootRouteChildren {
   ProfesoriOrasRoute: typeof ProfesoriOrasRoute
   ScanerLacuneMaterieRoute: typeof ScanerLacuneMaterieRoute
   SimulareBacMaterieRoute: typeof SimulareBacMaterieRoute
+  SubiecteEvaluareNationalaSlugRoute: typeof SubiecteEvaluareNationalaSlugRoute
   BacIndexRoute: typeof BacIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   HartaBlocajelorIndexRoute: typeof HartaBlocajelorIndexRoute
@@ -2154,6 +2181,7 @@ export interface RootRouteChildren {
   RezolvariIndexRoute: typeof RezolvariIndexRoute
   ScanerLacuneIndexRoute: typeof ScanerLacuneIndexRoute
   SubiecteAdmitereIndexRoute: typeof SubiecteAdmitereIndexRoute
+  SubiecteEvaluareNationalaIndexRoute: typeof SubiecteEvaluareNationalaIndexRoute
   HartaBlocajelorMaterieBlocajRoute: typeof HartaBlocajelorMaterieBlocajRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   MeditatiiMaterieOrasRoute: typeof MeditatiiMaterieOrasRoute
@@ -3111,6 +3139,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SubiecteBacMatematicaRouteImport
       parentRoute: typeof SubiecteBacRoute
     }
+    '/subiecte-evaluare-nationala/': {
+      id: '/subiecte-evaluare-nationala/'
+      path: '/subiecte-evaluare-nationala'
+      fullPath: '/subiecte-evaluare-nationala/'
+      preLoaderRoute: typeof SubiecteEvaluareNationalaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subiecte-evaluare-nationala/$slug': {
+      id: '/subiecte-evaluare-nationala/$slug'
+      path: '/subiecte-evaluare-nationala/$slug'
+      fullPath: '/subiecte-evaluare-nationala/$slug'
+      preLoaderRoute: typeof SubiecteEvaluareNationalaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bac/$materie/': {
       id: '/bac/$materie/'
       path: '/'
@@ -3503,6 +3545,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfesoriOrasRoute: ProfesoriOrasRoute,
   ScanerLacuneMaterieRoute: ScanerLacuneMaterieRoute,
   SimulareBacMaterieRoute: SimulareBacMaterieRoute,
+  SubiecteEvaluareNationalaSlugRoute: SubiecteEvaluareNationalaSlugRoute,
   BacIndexRoute: BacIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   HartaBlocajelorIndexRoute: HartaBlocajelorIndexRoute,
@@ -3515,6 +3558,7 @@ const rootRouteChildren: RootRouteChildren = {
   RezolvariIndexRoute: RezolvariIndexRoute,
   ScanerLacuneIndexRoute: ScanerLacuneIndexRoute,
   SubiecteAdmitereIndexRoute: SubiecteAdmitereIndexRoute,
+  SubiecteEvaluareNationalaIndexRoute: SubiecteEvaluareNationalaIndexRoute,
   HartaBlocajelorMaterieBlocajRoute: HartaBlocajelorMaterieBlocajRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   MeditatiiMaterieOrasRoute: MeditatiiMaterieOrasRoute,

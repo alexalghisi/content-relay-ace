@@ -55,6 +55,7 @@ export function SiteFooter() {
           <ul className="space-y-2 text-muted-foreground">
             <li><Link to="/subiecte-bac" className="hover:text-foreground">{t("footer.subiecteBac")}</Link></li>
             <li><Link to="/variante-bacalaureat" className="hover:text-foreground">{t("footer.bac")}</Link></li>
+            <li><Link to="/subiecte-evaluare-nationala" className="hover:text-foreground">{t("footer.subiecteEn")}</Link></li>
             <li><Link to="/evaluare-nationala" className="hover:text-foreground">{t("footer.en")}</Link></li>
             <li><Link to="/calculator-media-evaluare-nationala" className="hover:text-foreground">{t("footer.enCalc")}</Link></li>
             <li><Link to="/admitere" className="hover:text-foreground">{t("footer.admission")}</Link></li>
