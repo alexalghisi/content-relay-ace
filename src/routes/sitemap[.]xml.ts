@@ -35,6 +35,7 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/meditatii-engleza-adulti", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-engleza-online", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-romana-online", priority: "0.85", changefreq: "weekly" },
+  { path: "/meditatii-matematica-online", priority: "0.9", changefreq: "weekly" },
   { path: "/meditatii-romana-bac", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-matematica-bac", priority: "0.85", changefreq: "weekly" },
   { path: "/ofer-meditatii", priority: "0.8", changefreq: "weekly" },
