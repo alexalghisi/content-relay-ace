@@ -5,18 +5,19 @@ export const Route = createFileRoute("/evaluare-nationala-cluj")(
   seoPage({
     path: "/evaluare-nationala-cluj",
     title:
-      "Evaluarea Națională 2026 Cluj — calendar, medie, licee și meditații | MeditatiiDirect.ro",
+      "Evaluarea Națională 2027 Cluj — calendar, model oficial, medie și meditații",
     description:
-      "Evaluarea Națională 2026 în Cluj: calendarul oficial, cum se calculează media de admitere la liceu, liceele căutate din Cluj-Napoca și meditații pentru clasa a VIII-a.",
+      "Evaluarea Națională 2027 în Cluj: calendarul oficial, modelele de subiecte rezolvate, cum se calculează media de admitere la liceu, liceele căutate din Cluj-Napoca și meditații pentru clasa a VIII-a.",
     image: "https://meditatiidirect.ro/og/meditatii/cluj.jpg",
-    h1: "Evaluarea Națională 2026 în Cluj",
+    h1: "Evaluarea Națională 2027 în Cluj",
     intro:
       "Tot ce îi trebuie unui elev de clasa a VIII-a din Cluj: datele probelor, formula oficială a mediei, liceele țintă și pregătire cu profesori din Cluj sau online.",
     bullets: [
-      "Română: 22 iunie 2026",
-      "Matematică: 24 iunie 2026",
-      "Limba maternă: 26 iunie 2026",
-      "Rezultate: 30 iunie (inițiale), 8 iulie (finale)",
+      "Simulare: 16–18 martie 2027",
+      "Română: 22 iunie 2027",
+      "Matematică: 24 iunie 2027",
+      "Limba maternă: 25 iunie 2027",
+      "Rezultate: 30 iunie (inițiale), 7 iulie (finale)",
       "Fiecare probă scrisă: 120 de minute",
     ],
     ctaPrimary: {
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/evaluare-nationala-cluj")(
         title: "Cum se calculează media de admitere",
         body: (
           <p>
-            Pentru admiterea în liceu 2026–2027, media este media aritmetică a notelor obținute la
+            Pentru admiterea în liceu din 2027, media este media aritmetică a notelor obținute la
             probele Evaluării Naționale, calculată cu două zecimale, fără rotunjire. Media claselor
             V–VIII se folosește doar la departajare. Detalii în{" "}
             <Link to="/evaluare-nationala" className="text-primary underline">
@@ -75,8 +76,8 @@ export const Route = createFileRoute("/evaluare-nationala-cluj")(
     ],
     faqs: [
       {
-        q: "Când are loc Evaluarea Națională 2026?",
-        a: "Română pe 22 iunie, matematică pe 24 iunie și limba maternă pe 26 iunie 2026. Rezultatele inițiale apar pe 30 iunie, iar cele finale pe 8 iulie.",
+        q: "Când are loc Evaluarea Națională 2027?",
+        a: "Română pe 22 iunie, matematică pe 24 iunie și limba maternă pe 25 iunie 2027. Rezultatele inițiale apar pe 30 iunie, iar cele finale pe 7 iulie. Simularea e pe 16–18 martie 2027.",
       },
       {
         q: "Se rotunjește media de la Evaluarea Națională?",
@@ -88,7 +89,8 @@ export const Route = createFileRoute("/evaluare-nationala-cluj")(
       },
     ],
     related: [
-      { to: "/evaluare-nationala", label: "Evaluarea Națională 2026" },
+      { to: "/evaluare-nationala", label: "Evaluarea Națională 2027" },
+      { to: "/subiecte-evaluare-nationala", label: "Subiecte EN rezolvate" },
       { to: "/calculator-media-evaluare-nationala", label: "Calculator medie EN" },
       { to: "/meditatii-in/cluj-napoca", label: "Meditații Cluj-Napoca" },
       { to: "/meditatii-evaluare-nationala", label: "Meditații Evaluare Națională" },
