@@ -68,6 +68,7 @@ import { Route as MeditatiiLaDomiciliuRouteImport } from './routes/meditatii-la-
 import { Route as MeditatiiLiceuRouteImport } from './routes/meditatii-liceu'
 import { Route as MeditatiiMatematicaRouteImport } from './routes/meditatii-matematica'
 import { Route as MeditatiiMatematicaBacRouteImport } from './routes/meditatii-matematica-bac'
+import { Route as MeditatiiMatematicaOnlineRouteImport } from './routes/meditatii-matematica-online'
 import { Route as MeditatiiOnlineRouteImport } from './routes/meditatii-online'
 import { Route as MeditatiiParticulareRouteImport } from './routes/meditatii-particulare'
 import { Route as MeditatiiPrivateRouteImport } from './routes/meditatii-private'
@@ -478,6 +479,12 @@ const MeditatiiMatematicaBacRoute = MeditatiiMatematicaBacRouteImport.update({
   path: '/meditatii-matematica-bac',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeditatiiMatematicaOnlineRoute =
+  MeditatiiMatematicaOnlineRouteImport.update({
+    id: '/meditatii-matematica-online',
+    path: '/meditatii-matematica-online',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MeditatiiOnlineRoute = MeditatiiOnlineRouteImport.update({
   id: '/meditatii-online',
   path: '/meditatii-online',
@@ -1099,6 +1106,7 @@ export interface FileRoutesByFullPath {
   '/meditatii-liceu': typeof MeditatiiLiceuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-matematica-bac': typeof MeditatiiMatematicaBacRoute
+  '/meditatii-matematica-online': typeof MeditatiiMatematicaOnlineRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
   '/meditatii-particulare': typeof MeditatiiParticulareRoute
   '/meditatii-private': typeof MeditatiiPrivateRoute
@@ -1267,6 +1275,7 @@ export interface FileRoutesByTo {
   '/meditatii-liceu': typeof MeditatiiLiceuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-matematica-bac': typeof MeditatiiMatematicaBacRoute
+  '/meditatii-matematica-online': typeof MeditatiiMatematicaOnlineRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
   '/meditatii-particulare': typeof MeditatiiParticulareRoute
   '/meditatii-private': typeof MeditatiiPrivateRoute
@@ -1434,6 +1443,7 @@ export interface FileRoutesById {
   '/meditatii-liceu': typeof MeditatiiLiceuRoute
   '/meditatii-matematica': typeof MeditatiiMatematicaRoute
   '/meditatii-matematica-bac': typeof MeditatiiMatematicaBacRoute
+  '/meditatii-matematica-online': typeof MeditatiiMatematicaOnlineRoute
   '/meditatii-online': typeof MeditatiiOnlineRoute
   '/meditatii-particulare': typeof MeditatiiParticulareRoute
   '/meditatii-private': typeof MeditatiiPrivateRoute
@@ -1604,6 +1614,7 @@ export interface FileRouteTypes {
     | '/meditatii-liceu'
     | '/meditatii-matematica'
     | '/meditatii-matematica-bac'
+    | '/meditatii-matematica-online'
     | '/meditatii-online'
     | '/meditatii-particulare'
     | '/meditatii-private'
@@ -1772,6 +1783,7 @@ export interface FileRouteTypes {
     | '/meditatii-liceu'
     | '/meditatii-matematica'
     | '/meditatii-matematica-bac'
+    | '/meditatii-matematica-online'
     | '/meditatii-online'
     | '/meditatii-particulare'
     | '/meditatii-private'
@@ -1938,6 +1950,7 @@ export interface FileRouteTypes {
     | '/meditatii-liceu'
     | '/meditatii-matematica'
     | '/meditatii-matematica-bac'
+    | '/meditatii-matematica-online'
     | '/meditatii-online'
     | '/meditatii-particulare'
     | '/meditatii-private'
@@ -2107,6 +2120,7 @@ export interface RootRouteChildren {
   MeditatiiLiceuRoute: typeof MeditatiiLiceuRoute
   MeditatiiMatematicaRoute: typeof MeditatiiMatematicaRoute
   MeditatiiMatematicaBacRoute: typeof MeditatiiMatematicaBacRoute
+  MeditatiiMatematicaOnlineRoute: typeof MeditatiiMatematicaOnlineRoute
   MeditatiiOnlineRoute: typeof MeditatiiOnlineRoute
   MeditatiiParticulareRoute: typeof MeditatiiParticulareRoute
   MeditatiiPrivateRoute: typeof MeditatiiPrivateRoute
@@ -2619,6 +2633,13 @@ declare module '@tanstack/react-router' {
       path: '/meditatii-matematica-bac'
       fullPath: '/meditatii-matematica-bac'
       preLoaderRoute: typeof MeditatiiMatematicaBacRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-matematica-online': {
+      id: '/meditatii-matematica-online'
+      path: '/meditatii-matematica-online'
+      fullPath: '/meditatii-matematica-online'
+      preLoaderRoute: typeof MeditatiiMatematicaOnlineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-online': {
@@ -3484,6 +3505,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiLiceuRoute: MeditatiiLiceuRoute,
   MeditatiiMatematicaRoute: MeditatiiMatematicaRoute,
   MeditatiiMatematicaBacRoute: MeditatiiMatematicaBacRoute,
+  MeditatiiMatematicaOnlineRoute: MeditatiiMatematicaOnlineRoute,
   MeditatiiOnlineRoute: MeditatiiOnlineRoute,
   MeditatiiParticulareRoute: MeditatiiParticulareRoute,
   MeditatiiPrivateRoute: MeditatiiPrivateRoute,

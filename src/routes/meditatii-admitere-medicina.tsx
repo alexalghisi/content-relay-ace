@@ -3,7 +3,7 @@ import { seoPage } from "@/lib/seo-page";
 
 export const Route = createFileRoute("/meditatii-admitere-medicina")(seoPage({
   path: "/meditatii-admitere-medicina",
-  title: "Meditații Admitere Medicină 2026 — UMF București, Cluj, Iași | MeditatiiDirect.ro",
+  title: "Meditații Admitere Medicină 2027 — UMF București, Cluj, Iași | MeditatiiDirect.ro",
   description: "Pregătire admitere UMF 2026: biologie + chimie. Profesori verificați și medici rezidenți. Grile rezolvate gratuit.",
   h1: "Meditații admitere medicină 2026",
   intro: "Pregătire pentru admitere la UMF Carol Davila, UMF Cluj, UMF Iași, UMF Timișoara. Biologie + chimie organică/anorganică cu grile-test săptămânale.",

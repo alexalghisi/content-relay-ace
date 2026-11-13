@@ -6,7 +6,7 @@ import { ghiduriPentruOras } from "@/data/ghiduri-locale";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { consolidatedTarget } from "@/lib/seo-redirects";
 import { BLOCAJE, BLOCAJE_MATERII } from "@/data/blocaje";
-import { inLocalitate, paginaLocalaIndexabila, potrivesteMaterie } from "@/lib/pagina-locala";
+import { comboIndexabil, inLocalitate, paginaLocalaIndexabila } from "@/lib/pagina-locala";
 
 const BASE_URL = "https://meditatiidirect.ro";
 
@@ -35,6 +35,7 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/meditatii-engleza-adulti", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-engleza-online", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-romana-online", priority: "0.85", changefreq: "weekly" },
+  { path: "/meditatii-matematica-online", priority: "0.9", changefreq: "weekly" },
   { path: "/meditatii-romana-bac", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-matematica-bac", priority: "0.85", changefreq: "weekly" },
   { path: "/ofer-meditatii", priority: "0.8", changefreq: "weekly" },
@@ -268,20 +269,6 @@ export const Route = createFileRoute("/sitemap.xml")({
           }[];
           // Aceeași regulă ca pagina materie × oraș (src/lib/pagina-locala.ts).
           const cereri = await cereriRecente();
-          const comboIndexabil = (subs: string[], nume: string, locs: string[]) => {
-            const deMaterie = rows.filter((r) => r.subject_slug && subs.includes(r.subject_slug));
-            const local = deMaterie.filter((r) => inLocalitate(r.location, locs)).length;
-            const online = deMaterie.filter(
-              (r) => r.is_online && !inLocalitate(r.location, locs),
-            ).length;
-            const cityRequests = cereri.filter(
-              (r) =>
-                potrivesteMaterie(r.subject, nume, subs) &&
-                !r.is_online &&
-                inLocalitate(r.city, locs),
-            ).length;
-            return paginaLocalaIndexabila({ localAds: local, onlineAds: online, cityRequests });
-          };
           const { getGhidLocal } = await import("@/data/ghiduri-locale");
           for (const s of SUBJECTS_SEO) {
             urls.push(
@@ -289,11 +276,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             );
             for (const c of CITIES) {
               // Combinațiile cu ghid local sunt indexabile și fără anunțuri (vezi ruta).
-              if (
-                !getGhidLocal(s.slug, c.slug) &&
-                !comboIndexabil(s.dbSlugs, s.nameLower, c.matchLocation)
-              )
-                continue;
+              if (!comboIndexabil(s, c, rows, cereri, !!getGhidLocal(s.slug, c.slug))) continue;
               urls.push(
                 `  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
               );

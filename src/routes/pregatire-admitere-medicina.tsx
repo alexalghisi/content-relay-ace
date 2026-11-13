@@ -4,7 +4,7 @@ import { seoPage } from "@/lib/seo-page";
 export const Route = createFileRoute("/pregatire-admitere-medicina")(
   seoPage({
     path: "/pregatire-admitere-medicina",
-    title: "Pregătire admitere Medicină 2026 — profesori UMF",
+    title: "Pregătire admitere Medicină 2027 — profesori UMF",
     description:
       "Pregătire admitere Medicină 2026: biologie și chimie pe bibliografia UMF, grile oficiale, simulări săptămânale. Tariful îl propune profesorul, fără comision.",
     h1: "Pregătire admitere Medicină 2026 (UMF)",

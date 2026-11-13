@@ -81,6 +81,55 @@ export const GHIDURI_LOCALE: GhidLocal[] = [
     ],
   },
   {
+    // „meditatii matematica brasov”: creștere masivă în Google Trends (nov. 2026).
+    materie: "matematica",
+    oras: "brasov",
+    title: "Meditații matematică Brașov: Evaluare Națională, BAC și admitere, online sau acasă",
+    description:
+      "Meditații matematică în Brașov, la domiciliu sau online: clasele V–XII, Evaluarea Națională 2027, BAC M1/M2 și admitere. Cerere gratuită, propuneri cu tarif de la profesori, fără comision.",
+    h1: "Meditații matematică în Brașov",
+    intro:
+      "În Brașov, meditațiile la matematică se caută mai ales pentru Evaluarea Națională, unde media decide liceul, și pentru BAC. Aici găsești profesori care predau la domiciliu în Brașov sau online, plus un ghid scurt despre ce să ceri și cum să alegi.",
+    sectiuni: [
+      {
+        titlu: "Pentru ce se caută meditații la matematică în Brașov",
+        paragrafe: [
+          "Clasele V–VIII: recuperarea bazelor (fracții, ecuații, geometrie plană) și pregătirea pentru Evaluarea Națională. Admiterea la liceele căutate din Brașov, precum Colegiul Național „Andrei Șaguna”, Colegiul Național „Dr. Ioan Meșotă” sau Colegiul Național de Informatică „Grigore Moisil”, se face după media de la Evaluare, așa că fiecare sutime la matematică contează.",
+          "Liceu și BAC: programa M1 (mate-info) și programa M2 (științele naturii, tehnologic) cer pregătire diferită. Un profesor bun lucrează pe programa ta și pe subiectele din anii trecuți, nu pe o culegere generală.",
+          "Admitere la facultate: pentru facultățile tehnice și de informatică, verifică în metodologia universității (de exemplu Universitatea Transilvania) dacă se ține cont de nota la matematică sau există probă scrisă, apoi cere profesorului să lucreze exact pe acel format.",
+        ],
+      },
+      {
+        titlu: "La domiciliu sau online, în Brașov",
+        paragrafe: [
+          "Pentru clasele mici, ședințele față în față funcționează de obicei mai bine. Scrie în cerere cartierul (Centru, Răcădău, Tractorul, Astra, Noua, Bartolomeu, Schei, Florilor) sau localitatea din apropiere (Săcele, Ghimbav, Codlea, Râșnov, Sânpetru, Hărman), ca să primești propuneri de la profesorii care ajung ușor la tine.",
+          "Pentru liceu și admitere, online, cu tablă digitală, e la fel de eficient și îți deschide accesul la profesori din tot județul și din țară, fără timp pierdut în trafic.",
+        ],
+      },
+      {
+        titlu: "Ce să scrii în cerere ca să primești propuneri bune",
+        paragrafe: [
+          "Clasa și programa (M1/M2), examenul și termenul, ultimele note sau capitolele care te blochează (de exemplu: funcții, ecuații, geometrie în spațiu), cartierul sau „online”, zilele libere și bugetul orientativ. Cu aceste detalii, propunerile sunt concrete: profesorul îți spune de câte ședințe e nevoie și cum va lucra.",
+          "Pentru clasa a VIII-a, lucrează întâi modelul oficial pentru Evaluarea Națională 2027 rezolvat pe site și notează itemii greșiți. Le trimiți profesorului din prima zi, iar ședințele pornesc exact de acolo.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        q: "Găsesc meditații la matematică la domiciliu în cartierul meu din Brașov?",
+        a: "Da. Scrie cartierul sau localitatea în cerere, iar profesorii care se deplasează acolo îți trimit propuneri. Dacă bifezi și „online”, primești propuneri și de la profesori din alte orașe.",
+      },
+      {
+        q: "Când ar trebui să încep meditațiile pentru Evaluarea Națională 2027?",
+        a: "Cât mai devreme în clasa a VIII-a. Simularea e între 16 și 18 martie 2027, iar proba de matematică pe 24 iunie. Pornind din toamnă ai timp să recuperezi lacunele înainte de simulare.",
+      },
+      {
+        q: "Cât costă meditațiile la matematică în Brașov?",
+        a: "Tariful îl stabilește fiecare profesor în propunerea lui și îl vezi înainte să accepți. Postarea cererii e gratuită și platforma nu ia comision.",
+      },
+    ],
+  },
+  {
     materie: "romana",
     oras: "cluj-napoca",
     title: "Meditații română Cluj-Napoca: BAC, Evaluare Națională, clasele V–XII",

@@ -30,7 +30,7 @@ export const Route = createFileRoute("/meditatii/")({
   }),
   head: () => ({
     meta: [
-      { title: "Meditatii 2026 la orice materie — cere oferte gratuit" },
+      { title: "Meditații la orice materie 2026–2027 — cere oferte gratuit" },
       {
         name: "description",
         content:

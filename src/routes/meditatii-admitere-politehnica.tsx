@@ -3,7 +3,7 @@ import { seoPage } from "@/lib/seo-page";
 
 export const Route = createFileRoute("/meditatii-admitere-politehnica")(seoPage({
   path: "/meditatii-admitere-politehnica",
-  title: "Meditații Admitere Politehnică 2026 — UPB, UTCN, UPT | MeditatiiDirect.ro",
+  title: "Meditații Admitere Politehnică 2027 — UPB, UTCN, UPT | MeditatiiDirect.ro",
   description: "Pregătire admitere UPB, UTCN, UPT, Politehnica Iași. Matematică + fizică/informatică cu profesori verificați. Grile gratuite.",
   h1: "Meditații admitere Politehnică 2026",
   intro: "Pregătire pentru admitere la UPB, UTCN, UPT, TUIASI. Matematică algebră + analiză, fizică sau informatică, pe subiectele de admitere din anii anteriori.",
