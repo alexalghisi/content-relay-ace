@@ -19,7 +19,7 @@ export const posterLectie = (cheie: string) => `/demo-video/lectii/${cheie}.jpg`
 /**
  * Voiced demo lesson that rotates through the whole deck: every visit starts with a different subject,
  * and lessons never repeat before the deck is exhausted.
- * Sound starts unmuted when the browser allows it, otherwise at the visitor's first tap/click/key.
+ * It always starts muted; sound comes on only when the visitor presses the speaker button.
  */
 export function DemoVideoProfesoara({ className = "" }: { className?: string }) {
   const video = useRef<HTMLVideoElement>(null);
@@ -29,13 +29,11 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
 
   const ordine = useRef<number[]>([]);
   const precedenta = useRef<number | null>(null);
-  const opritManual = useRef(false);
-  const gataSunet = useRef(false);
+  // The visitor's choice from the speaker button; false until they press it.
+  const cuSunet = useRef(false);
   // The lesson video (2–3 MB) starts downloading only after the page has loaded and the player
   // is near the viewport; it then starts on its own, exactly as before.
   const [cadru, activ] = useNearViewport<HTMLDivElement>("200px");
-  const activRef = useRef(false);
-  activRef.current = activ;
 
   const urmatoarea = useCallback(() => {
     if (!LECTII_VIDEO.length) return;
@@ -60,45 +58,20 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
   const cheie = lectie ? cheieLectie(lectie) : "";
   const timpi = VIDEO_DEMO[cheie];
 
-  // Start each lesson from the beginning, with sound if it is already allowed.
+  // Start each lesson from the beginning, muted. Sound comes on only from the speaker button
+  // (owner's decision); once switched on, it stays on for the next lessons.
   useEffect(() => {
     const v = video.current;
     if (!v || !lectie || !activ) return;
     v.currentTime = 0;
-    // Always try with sound first (allowed on return visits / after any click on the site);
-    // if the browser blocks it, play muted and unmute at the first tap, click or key anywhere.
-    v.muted = opritManual.current;
-    v.play().then(() => {
-      if (!v.muted) { gataSunet.current = true; setSunet(true); }
-    }).catch(() => {
+    v.muted = !cuSunet.current;
+    v.play().catch(() => {
       v.muted = true;
+      cuSunet.current = false;
+      setSunet(false);
       v.play().catch(() => {});
     });
   }, [cheie, lectie, activ]);
-
-  // Unmuted autoplay is often blocked: switch the voice on at the first interaction anywhere.
-  useEffect(() => {
-    const evs = ["pointerdown", "touchend", "click", "keydown"] as const;
-    const scoate = () => evs.forEach((e) => window.removeEventListener(e, cuSunet, true));
-    async function cuSunet() {
-      const v = video.current;
-      if (!v || !activRef.current || gataSunet.current || opritManual.current) return;
-      v.muted = false;
-      v.volume = 1;
-      try {
-        await v.play();
-        gataSunet.current = true;
-        setSunet(true);
-        scoate();
-      } catch {
-        v.muted = true;
-        v.play().catch(() => {});
-      }
-    }
-    evs.forEach((e) => window.addEventListener(e, cuSunet, true));
-    void cuSunet();
-    return scoate;
-  }, []);
 
   // Captions follow the video clock.
   const laTimp = () => {
@@ -114,12 +87,11 @@ export function DemoVideoProfesoara({ className = "" }: { className?: string }) 
     const v = video.current;
     if (!v) return;
     if (sunet) {
-      opritManual.current = true;
+      cuSunet.current = false;
       v.muted = true;
       setSunet(false);
     } else {
-      opritManual.current = false;
-      gataSunet.current = true;
+      cuSunet.current = true;
       v.muted = false;
       v.play().catch(() => {});
       setSunet(true);
