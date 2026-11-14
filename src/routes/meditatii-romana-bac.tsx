@@ -3,7 +3,7 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-romana-bac";
 const TITLE = "Meditații română BAC 2027 — pregătire bacalaureat limba română, real și uman";
-const DESC = "Meditatii romana BAC 2026: pregătire bacalaureat la limba română cu profesori verificați, eseuri corectate după barem, online sau acasă. Ceri gratuit oferte.";
+const DESC = "Meditatii romana BAC 2027: pregătire bacalaureat la limba română cu profesori verificați, eseuri corectate după barem, online sau acasă. Ceri gratuit oferte.";
 
 const faqs = [
   { q: "Când să încep meditațiile la română pentru BAC?", a: "Ideal din clasa a XI-a sau de la începutul clasei a XII-a; cu 3–4 luni de lucru constant se pot recupera multe puncte." },
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/meditatii-romana-bac")({
   component: () => (
     <SeoLanding
       pageUrl={URL}
-      h1="Meditații română BAC 2026"
+      h1="Meditații română BAC 2027"
       intro="Proba scrisă la română (Proba E.a) se câștigă prin eseuri bine structurate și exersate pe subiecte reale. Un profesor te ajută să înveți ce cere baremul și să scrii sigur în timpul de examen."
       bullets={["Profil real și profil uman", "Eseul de 400+ cuvinte: operele din programă", "Text argumentativ și comentariu de text", "Simulări cu timp și corectare după barem"]}
       ctaPrimary={{ to: "/meditatii", label: "Cere oferte gratuite", search: { materie: "romana" } }}
