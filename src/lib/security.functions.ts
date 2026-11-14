@@ -61,39 +61,8 @@ export const deleteMyAccount = createServerFn({ method: "POST" })
   )
   .handler(async ({ context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const uid = context.userId;
-
-    // Conversații + mesaje
-    const { data: convs } = await supabaseAdmin
-      .from("conversations")
-      .select("id")
-      .or(`student_id.eq.${uid},teacher_id.eq.${uid}`);
-    const convIds = (convs ?? []).map((c) => c.id);
-    if (convIds.length > 0) {
-      await supabaseAdmin.from("messages").delete().in("conversation_id", convIds);
-      await supabaseAdmin.from("conversations").delete().in("id", convIds);
-    }
-
-    // User-owned galleries and reviews use plain UUIDs, so clean them explicitly.
-    for (;;) {
-      const { data: objects, error: listError } = await supabaseAdmin.storage.from("avatars").list(uid, { limit: 100 });
-      if (listError) throw new Error("Nu am putut verifica fotografiile contului.");
-      if (!objects?.length) break;
-      const { error: removeError } = await supabaseAdmin.storage.from("avatars").remove(objects.map((o) => `${uid}/${o.name}`));
-      if (removeError) throw new Error("Nu am putut șterge fotografiile contului.");
-    }
-    // profesor_ai_utilizatori ține telefonul verificat: fără ștergere, numărul rămâne blocat după ștergerea contului.
-    for (const table of ["profile_photos", "profesor_ai_reviews", "profesor_ai_review_eligibility", "profesor_ai_utilizatori"] as const) {
-      const { error: cleanupError } = await supabaseAdmin.from(table).delete().eq("user_id", uid);
-      if (cleanupError) throw new Error("Nu am putut șterge datele contului.");
-    }
-    // Profil
-    await supabaseAdmin.from("profiles").delete().eq("user_id", uid);
-    await supabaseAdmin.from("user_roles").delete().eq("user_id", uid);
-
-    // Contul de autentificare
-    const { error } = await supabaseAdmin.auth.admin.deleteUser(uid);
-    if (error) throw new Error("Nu am putut șterge contul. Scrie-ne la alexalghisi@gmail.com.");
-
+    const { stergeContComplet } = await import("@/lib/stergere-cont.server");
+    // Contul, profilul public de profesor, ofertele, fotografiile și mesajele.
+    await stergeContComplet(supabaseAdmin, context.userId);
     return { ok: true };
   });

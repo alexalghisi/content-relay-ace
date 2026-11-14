@@ -113,6 +113,7 @@ import { Route as VreauSaDauMeditatiiRouteImport } from './routes/vreau-sa-dau-m
 import { Route as AdminBacCrawlerRouteImport } from './routes/admin.bac-crawler'
 import { Route as AdminMesajeRouteImport } from './routes/admin.mesaje'
 import { Route as AdminStatisticiRouteImport } from './routes/admin.statistici'
+import { Route as AdminStergereContRouteImport } from './routes/admin.stergere-cont'
 import { Route as AnuntSlugRouteImport } from './routes/anunt.$slug'
 import { Route as ApiProfesorAiLogRouteImport } from './routes/api/profesor-ai-log'
 import { Route as ApiProfesorAiStreamRouteImport } from './routes/api/profesor-ai-stream'
@@ -708,6 +709,11 @@ const AdminStatisticiRoute = AdminStatisticiRouteImport.update({
   path: '/admin/statistici',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminStergereContRoute = AdminStergereContRouteImport.update({
+  id: '/admin/stergere-cont',
+  path: '/admin/stergere-cont',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AnuntSlugRoute = AnuntSlugRouteImport.update({
   id: '/anunt/$slug',
   path: '/anunt/$slug',
@@ -1151,6 +1157,7 @@ export interface FileRoutesByFullPath {
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
   '/admin/statistici': typeof AdminStatisticiRoute
+  '/admin/stergere-cont': typeof AdminStergereContRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/api/profesor-ai-log': typeof ApiProfesorAiLogRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
@@ -1320,6 +1327,7 @@ export interface FileRoutesByTo {
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
   '/admin/statistici': typeof AdminStatisticiRoute
+  '/admin/stergere-cont': typeof AdminStergereContRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/api/profesor-ai-log': typeof ApiProfesorAiLogRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
@@ -1488,6 +1496,7 @@ export interface FileRoutesById {
   '/admin/bac-crawler': typeof AdminBacCrawlerRoute
   '/admin/mesaje': typeof AdminMesajeRoute
   '/admin/statistici': typeof AdminStatisticiRoute
+  '/admin/stergere-cont': typeof AdminStergereContRoute
   '/anunt/$slug': typeof AnuntSlugRoute
   '/api/profesor-ai-log': typeof ApiProfesorAiLogRoute
   '/api/profesor-ai-stream': typeof ApiProfesorAiStreamRoute
@@ -1659,6 +1668,7 @@ export interface FileRouteTypes {
     | '/admin/bac-crawler'
     | '/admin/mesaje'
     | '/admin/statistici'
+    | '/admin/stergere-cont'
     | '/anunt/$slug'
     | '/api/profesor-ai-log'
     | '/api/profesor-ai-stream'
@@ -1828,6 +1838,7 @@ export interface FileRouteTypes {
     | '/admin/bac-crawler'
     | '/admin/mesaje'
     | '/admin/statistici'
+    | '/admin/stergere-cont'
     | '/anunt/$slug'
     | '/api/profesor-ai-log'
     | '/api/profesor-ai-stream'
@@ -1995,6 +2006,7 @@ export interface FileRouteTypes {
     | '/admin/bac-crawler'
     | '/admin/mesaje'
     | '/admin/statistici'
+    | '/admin/stergere-cont'
     | '/anunt/$slug'
     | '/api/profesor-ai-log'
     | '/api/profesor-ai-stream'
@@ -2165,6 +2177,7 @@ export interface RootRouteChildren {
   AdminBacCrawlerRoute: typeof AdminBacCrawlerRoute
   AdminMesajeRoute: typeof AdminMesajeRoute
   AdminStatisticiRoute: typeof AdminStatisticiRoute
+  AdminStergereContRoute: typeof AdminStergereContRoute
   AnuntSlugRoute: typeof AnuntSlugRoute
   ApiProfesorAiLogRoute: typeof ApiProfesorAiLogRoute
   ApiProfesorAiStreamRoute: typeof ApiProfesorAiStreamRoute
@@ -2950,6 +2963,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStatisticiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/stergere-cont': {
+      id: '/admin/stergere-cont'
+      path: '/admin/stergere-cont'
+      fullPath: '/admin/stergere-cont'
+      preLoaderRoute: typeof AdminStergereContRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/anunt/$slug': {
       id: '/anunt/$slug'
       path: '/anunt/$slug'
@@ -3550,6 +3570,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminBacCrawlerRoute: AdminBacCrawlerRoute,
   AdminMesajeRoute: AdminMesajeRoute,
   AdminStatisticiRoute: AdminStatisticiRoute,
+  AdminStergereContRoute: AdminStergereContRoute,
   AnuntSlugRoute: AnuntSlugRoute,
   ApiProfesorAiLogRoute: ApiProfesorAiLogRoute,
   ApiProfesorAiStreamRoute: ApiProfesorAiStreamRoute,
