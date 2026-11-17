@@ -11,7 +11,7 @@ export const Route = createFileRoute("/anunturi-meditatii-bac")(seoPage({
   ctaPrimary: { to: "/anunturi-meditatii", label: "Vezi toate anunțurile" },
   related: [
     { to: "/meditatii-bac", label: "Meditații BAC" },
-    { to: "/simulari-bacalaureat-2026", label: "Simulări BAC 2026" },
+    { to: "/simulare-bacalaureat", label: "Simulare BAC 2027" },
     { to: "/anunturi-meditatii", label: "Toate anunțurile" },
   ],
 }));

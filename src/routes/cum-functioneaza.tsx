@@ -132,7 +132,7 @@ function HowItWorksPage() {
 
       <h2 className="mt-12 text-2xl font-bold">Resurse gratuite pentru elevi</h2>
       <p className="mt-3 text-foreground/90 leading-relaxed">
-        Pe lângă cereri și propuneri, oferim gratuit o arhivă completă de <Link to="/subiecte-bac" className="text-primary underline">subiecte oficiale BAC</Link> (2001–2026), <Link to="/simulari-bacalaureat-2026" className="text-primary underline">simulări</Link>, materiale pentru <Link to="/meditatii-evaluare-nationala" className="text-primary underline">Evaluarea Națională</Link> și un <Link to="/blog" className="text-primary underline">blog</Link> cu ghiduri și strategii de învățare.
+        Pe lângă cereri și propuneri, oferim gratuit o arhivă completă de <Link to="/subiecte-bac" className="text-primary underline">subiecte oficiale BAC</Link> (2001–2026), <Link to="/simulare-bacalaureat" className="text-primary underline">simulări</Link>, materiale pentru <Link to="/meditatii-evaluare-nationala" className="text-primary underline">Evaluarea Națională</Link> și un <Link to="/blog" className="text-primary underline">blog</Link> cu ghiduri și strategii de învățare.
       </p>
 
       <h2 className="mt-12 text-2xl font-bold">Sfaturi de siguranță</h2>

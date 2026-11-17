@@ -48,7 +48,7 @@ function Page() {
         related={[
           { to: "/simulare-bacalaureat", label: "Simulare BAC" },
           { to: "/subiecte-bac", label: "Subiecte BAC" },
-          { to: "/simulari-bacalaureat-2026", label: "Simulări BAC 2026" },
+          { to: "/simulare-bacalaureat", label: "Simulare BAC 2027" },
           { to: "/meditatii-matematica", label: "Meditații matematică" },
           { to: "/meditatii-romana", label: "Meditații română" },
         ]}
