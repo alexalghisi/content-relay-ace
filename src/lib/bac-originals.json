@@ -199,14 +199,14 @@
     "profil": "mate-info",
     "paper_type": "barem",
     "title": "BAC 2026 Informatică (C/C++) — Simulare națională · profil mate-info (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2026/E_d_Informatica_2026_sp_MI_bar_simulare_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2026.edu.ro/2026/simulare/simulare_bac_XII/E_d_2026_Simulare.zip",
     "variant": null,
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2026.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2026.edu.ro/2026/simulare/simulare_bac_XII/E_d_2026_Simulare.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2026.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2026_sp_MI_bar_simulare_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2026-informatica-mate-info-simulare-subiect",
@@ -218,14 +218,14 @@
     "profil": "mate-info",
     "paper_type": "subiect",
     "title": "BAC 2026 Informatică (C/C++) — Simulare națională · profil mate-info (subiect)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2026/E_d_Informatica_2026_sp_MI_C_var_simulare_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2026.edu.ro/2026/simulare/simulare_bac_XII/E_d_2026_Simulare.zip",
     "variant": null,
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2026.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2026.edu.ro/2026/simulare/simulare_bac_XII/E_d_2026_Simulare.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2026.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2026_sp_MI_C_var_simulare_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2026-informatica-st-nat-august-septembrie-barem-v01",
@@ -389,14 +389,14 @@
     "profil": "științe ale naturii",
     "paper_type": "barem",
     "title": "BAC 2026 Informatică (C/C++) — Simulare națională · profil științe ale naturii (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2026/E_d_Informatica_2026_sp_SN_bar_simulare_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2026.edu.ro/2026/simulare/simulare_bac_XII/E_d_2026_Simulare.zip",
     "variant": null,
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2026.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2026.edu.ro/2026/simulare/simulare_bac_XII/E_d_2026_Simulare.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2026.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2026_sp_SN_bar_simulare_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2026-informatica-st-nat-simulare-subiect",
@@ -408,14 +408,14 @@
     "profil": "științe ale naturii",
     "paper_type": "subiect",
     "title": "BAC 2026 Informatică (C/C++) — Simulare națională · profil științe ale naturii (subiect)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2026/E_d_Informatica_2026_sp_SN_C_var_simulare_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2026.edu.ro/2026/simulare/simulare_bac_XII/E_d_2026_Simulare.zip",
     "variant": null,
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2026.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2026.edu.ro/2026/simulare/simulare_bac_XII/E_d_2026_Simulare.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2026.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2026_sp_SN_C_var_simulare_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2026-matematica-mate-info-august-septembrie-barem-v04",
@@ -1339,14 +1339,14 @@
     "profil": "mate-info",
     "paper_type": "barem",
     "title": "BAC 2025 Informatică (C/C++) — August–Septembrie · profil mate-info · varianta 4 (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_informatica_2025_sp_MI_bar_04_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_sesiune_august.zip",
     "variant": "4",
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_sesiune_august.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_informatica_2025_sp_MI_bar_04_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-mate-info-august-septembrie-subiect-v04",
@@ -1358,14 +1358,14 @@
     "profil": "mate-info",
     "paper_type": "subiect",
     "title": "BAC 2025 Informatică (C/C++) — August–Septembrie · profil mate-info · varianta 4 (subiect)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_Informatica_2025_sp_MI_C_var_04_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_sesiune_august.zip",
     "variant": "4",
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_sesiune_august.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2025_sp_MI_C_var_04_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-mate-info-iunie-iulie-barem-v01",
@@ -1377,14 +1377,14 @@
     "profil": "mate-info",
     "paper_type": "barem",
     "title": "BAC 2025 Informatică (C/C++) — Iunie–Iulie · profil mate-info · varianta 1 (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_informatica_2025_sp_MI_bar_01_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_ses_iunie.zip",
     "variant": "1",
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_ses_iunie.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_informatica_2025_sp_MI_bar_01_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-mate-info-iunie-iulie-subiect-v01",
@@ -1453,14 +1453,14 @@
     "profil": "mate-info",
     "paper_type": "barem",
     "title": "BAC 2025 Informatică (C/C++) — Rezervă (Iunie–Iulie) · profil mate-info · varianta 7 (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_informatica_2025_sp_MI_bar_07_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_ses_iunie_REZERVA.zip",
     "variant": "7",
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_ses_iunie_REZERVA.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_informatica_2025_sp_MI_bar_07_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-mate-info-rezerva-iunie-iulie-subiect-v07",
@@ -1491,14 +1491,14 @@
     "profil": "mate-info",
     "paper_type": "barem",
     "title": "BAC 2025 Informatică (C/C++) — Sesiunea specială · profil mate-info · varianta 6 (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_informatica_2025_sp_MI_bar_06_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_ses_speciala.zip",
     "variant": "6",
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_ses_speciala.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_informatica_2025_sp_MI_bar_06_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-mate-info-sesiune-speciala-subiect-v06",
@@ -1529,14 +1529,14 @@
     "profil": "mate-info",
     "paper_type": "barem",
     "title": "BAC 2025 Informatică (C/C++) — Simulare națională · profil mate-info (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_Informatica_2025_sp_MI_bar_Simulare_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/simulare/simulare_bac_XII/E_d_2025_simulare.zip",
     "variant": null,
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/simulare/simulare_bac_XII/E_d_2025_simulare.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2025_sp_MI_bar_Simulare_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-mate-info-simulare-subiect",
@@ -1548,14 +1548,14 @@
     "profil": "mate-info",
     "paper_type": "subiect",
     "title": "BAC 2025 Informatică (C/C++) — Simulare națională · profil mate-info (subiect)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_Informatica_2025_sp_MI_C_var_Simulare_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/simulare/simulare_bac_XII/E_d_2025_simulare.zip",
     "variant": null,
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/simulare/simulare_bac_XII/E_d_2025_simulare.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2025_sp_MI_C_var_Simulare_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-st-nat-august-septembrie-barem-v04",
@@ -1567,14 +1567,14 @@
     "profil": "științe ale naturii",
     "paper_type": "barem",
     "title": "BAC 2025 Informatică (C/C++) — August–Septembrie · profil științe ale naturii · varianta 4 (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_informatica_2025_sp_SN_bar_04_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_sesiune_august.zip",
     "variant": "4",
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_sesiune_august.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_informatica_2025_sp_SN_bar_04_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-st-nat-august-septembrie-subiect-v04",
@@ -1586,14 +1586,14 @@
     "profil": "științe ale naturii",
     "paper_type": "subiect",
     "title": "BAC 2025 Informatică (C/C++) — August–Septembrie · profil științe ale naturii · varianta 4 (subiect)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_Informatica_2025_sp_SN_C_var_04_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_sesiune_august.zip",
     "variant": "4",
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/bacalaureat/Subiecte_si_bareme/E_d_2025_sesiune_august.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2025_sp_SN_C_var_04_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-st-nat-iunie-iulie-barem-v01",
@@ -1681,14 +1681,14 @@
     "profil": "științe ale naturii",
     "paper_type": "barem",
     "title": "BAC 2025 Informatică (C/C++) — Simulare națională · profil științe ale naturii (barem)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_Informatica_2025_sp_SN_bar_Simulare_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/simulare/simulare_bac_XII/E_d_2025_simulare.zip",
     "variant": null,
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/simulare/simulare_bac_XII/E_d_2025_simulare.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2025_sp_SN_bar_Simulare_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-informatica-st-nat-simulare-subiect",
@@ -1700,14 +1700,14 @@
     "profil": "științe ale naturii",
     "paper_type": "subiect",
     "title": "BAC 2025 Informatică (C/C++) — Simulare națională · profil științe ale naturii (subiect)",
-    "pdf_url": null,
+    "pdf_url": "/bac/2025/E_d_Informatica_2025_sp_SN_C_var_Simulare_LRO.pdf",
     "storage_path": null,
     "source_url": "http://subiecte2025.edu.ro/2025/simulare/simulare_bac_XII/E_d_2025_simulare.zip",
     "variant": null,
-    "description": "Document oficial disponibil doar în arhiva ZIP publicată de Ministerul Educației pe subiecte2025.edu.ro (PDF-ul separat nu a putut fi verificat).",
-    "archive_url": "http://subiecte2025.edu.ro/2025/simulare/simulare_bac_XII/E_d_2025_simulare.zip",
+    "description": "PDF oficial publicat de Ministerul Educației (CNPEE). Fișier identic, byte cu byte, cu cel din arhiva oficială subiecte2025.edu.ro.",
+    "archive_url": null,
     "original_filename": "E_d_Informatica_2025_sp_SN_C_var_Simulare_LRO.pdf",
-    "verification": "official-zip"
+    "verification": "official-hash"
   },
   {
     "id": "orig-bac-2025-matematica-mate-info-august-septembrie-barem-v09",
