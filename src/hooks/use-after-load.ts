@@ -11,7 +11,8 @@ export function onPageIdle(cb: () => void, maxWait = 2500): () => void {
       requestIdleCallback?: (fn: () => void, opts?: { timeout: number }) => number;
       cancelIdleCallback?: (id: number) => void;
     };
-    if (w.requestIdleCallback) idleId = w.requestIdleCallback(() => !cancelled && cb(), { timeout: maxWait });
+    if (w.requestIdleCallback)
+      idleId = w.requestIdleCallback(() => !cancelled && cb(), { timeout: maxWait });
     else timer = setTimeout(() => !cancelled && cb(), 200);
   };
   if (document.readyState === "complete") run();
@@ -36,7 +37,9 @@ export function useAfterLoad(maxWait = 2500): boolean {
  * True once the element is near the viewport AND the page has finished loading,
  * so heavy media never competes with the first render. Stays true afterwards.
  */
-export function useNearViewport<T extends Element>(rootMargin = "300px"): [RefObject<T | null>, boolean] {
+export function useNearViewport<T extends Element>(
+  rootMargin = "300px",
+): [RefObject<T | null>, boolean] {
   const ref = useRef<T>(null);
   const loaded = useAfterLoad();
   const [near, setNear] = useState(false);
@@ -63,13 +66,19 @@ export function useNearViewport<T extends Element>(rootMargin = "300px"): [RefOb
 }
 
 /**
- * Reclamele (AdSense + Adsterra) pornesc la prima interacțiune (atingere, scroll, tastă) sau, pentru
+ * Reclamele (AdSense) pornesc la prima interacțiune (atingere, scroll, tastă) sau, pentru
  * vizitatorii care doar citesc, la ADS_FALLBACK_MS după încărcare. Scripturile de reclame costau ~1,5 s
  * de procesor pe telefon exact în secundele în care pagina trebuie să răspundă; așa rămân afișate
  * tuturor vizitatorilor (fără banner de consimțământ), dar nu mai concurează cu prima afișare.
  */
 export const ADS_FALLBACK_MS = 12_000;
-const EVENIMENTE_INTERACTIUNE = ["pointerdown", "touchstart", "keydown", "scroll", "wheel"] as const;
+const EVENIMENTE_INTERACTIUNE = [
+  "pointerdown",
+  "touchstart",
+  "keydown",
+  "scroll",
+  "wheel",
+] as const;
 let reclamePornite = false;
 const asteptari = new Set<() => void>();
 
@@ -87,7 +96,8 @@ let initializat = false;
 function initReclame() {
   if (initializat || typeof window === "undefined") return;
   initializat = true;
-  for (const ev of EVENIMENTE_INTERACTIUNE) window.addEventListener(ev, pornesteReclame, { once: true, passive: true });
+  for (const ev of EVENIMENTE_INTERACTIUNE)
+    window.addEventListener(ev, pornesteReclame, { once: true, passive: true });
   const laIncarcare = () => setTimeout(pornesteReclame, ADS_FALLBACK_MS);
   if (document.readyState === "complete") laIncarcare();
   else window.addEventListener("load", laIncarcare, { once: true });
@@ -99,7 +109,9 @@ export function onAdsReady(cb: () => void): () => void {
   initReclame();
   if (reclamePornite) return onPageIdle(cb, 1000);
   asteptari.add(cb);
-  return () => { asteptari.delete(cb); };
+  return () => {
+    asteptari.delete(cb);
+  };
 }
 
 /** Varianta hook: false până când reclamele au voie să pornească (și în SSR). */

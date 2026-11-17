@@ -13,7 +13,8 @@ import { isAdProductionHost } from "@/lib/ad-host";
  *
  * Dacă nu e configurat, componenta nu randează nimic — sigur pentru AdSense review.
  */
-const CLIENT = (import.meta.env.VITE_ADSENSE_CLIENT as string | undefined) || "ca-pub-4079300108937036";
+const CLIENT =
+  (import.meta.env.VITE_ADSENSE_CLIENT as string | undefined) || "ca-pub-4079300108937036";
 const DEFAULT_SLOT = import.meta.env.VITE_ADSENSE_SLOT_DEFAULT as string | undefined;
 
 interface Props {
@@ -52,7 +53,9 @@ export function AdSenseSlot({
 
   return (
     <div className={`my-8 flex flex-col items-center ${className}`}>
-      <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">Publicitate</div>
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">
+        Publicitate
+      </div>
       <ins
         ref={ref}
         className="adsbygoogle"
@@ -78,4 +81,21 @@ function loadAdsenseScript() {
   s.crossOrigin = "anonymous";
   s.dataset.adsbygoogleLib = "1";
   document.head.appendChild(s);
+}
+
+/** AdSense auto ads: page-level library, injected once the page is idle (first interaction). */
+export function AdSenseAutoAds() {
+  useEffect(() => onAdsReady(loadAdsenseScript), []);
+  return null;
+}
+
+/** Page-level ads mounted once in the root layout. Hidden on account/AI pages. */
+export function PageAds({ pathname }: { pathname: string }) {
+  if (
+    /^\/(admin|profesor|profesor-ai|cont|chat|autentificare|inregistrare|cererea-mea)(\/|$)/.test(
+      pathname,
+    )
+  )
+    return null;
+  return <AdSenseAutoAds />;
 }

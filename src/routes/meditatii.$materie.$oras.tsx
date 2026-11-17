@@ -6,7 +6,6 @@ import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 import { getSubjectSeo, type SubjectSeo } from "@/data/subjects-seo";
 import { getCityBySlug, type CityInfo } from "@/data/cities";
 import { getGhidLocal } from "@/data/ghiduri-locale";
-import { AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { BadgeCheck, MapPin, Wifi } from "lucide-react";
 import { AnuntCardView } from "@/components/anunt-card";
 import { ComboDataBlock, TrustBlock, comboFaqs } from "@/components/market-data";
@@ -334,9 +333,7 @@ function ComboPage() {
 
       {data && <TrustBlock t={data.trust} />}
 
-      <div className="container-page">
-        <AdsterraNativeBanner />
-      </div>
+      <div className="container-page"></div>
     </>
   );
 }

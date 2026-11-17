@@ -23,7 +23,6 @@ import { CITIES } from "@/data/cities";
 import { faqJsonLd } from "@/lib/seo";
 import { HUB_MATERIE } from "@/lib/linkuri-contextuale";
 import { ScurtaturiAcasa } from "@/components/cautari-populare";
-import { AdsterraBannerResponsive, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import {
   DemoProfesorAiRotativ,
   TextRotativ,
@@ -246,8 +245,6 @@ function HomePage() {
         </div>
       </section>
 
-      <AdsterraBannerResponsive className="container-page py-6" />
-
       <section className="container-page pt-12">
         <div className="grid items-center gap-8 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary-soft to-card p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr]">
           <div>
@@ -390,8 +387,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
-      <AdsterraNativeBanner className="container-page py-6" />
 
       <section className="container-page py-16">
         <div className="rounded-2xl border border-primary/15 bg-primary-soft/40 p-8 md:p-10">
