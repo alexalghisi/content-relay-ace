@@ -40,13 +40,13 @@ function parseNota(v: string): number | null {
 export const Route = createFileRoute("/calculator-media-evaluare-nationala")({
   head: () => {
     const url = `${SITE}/calculator-media-evaluare-nationala`;
-    const title = "Calculator medie Evaluarea Națională 2026 — două zecimale, fără rotunjire | MeditatiiDirect.ro";
+    const title = "Calculator medie Evaluarea Națională 2027 — două zecimale, fără rotunjire";
     const desc =
       "Introdu notele de la română, matematică și limba maternă și vezi media Evaluării Naționale cu două zecimale, fără rotunjire, și dacă ai media de promovare (5,00).";
     return {
       meta: [
         { title }, { name: "description", content: desc },
-        { name: "keywords", content: "calculator medie evaluare nationala, media evaluare nationala, cum se calculeaza media evaluare nationala, evaluare nationala 2026" },
+        { name: "keywords", content: "calculator medie evaluare nationala, media evaluare nationala, cum se calculeaza media evaluare nationala, evaluare nationala 2027" },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },

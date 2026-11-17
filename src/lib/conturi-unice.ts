@@ -43,3 +43,17 @@ function telefonCont(c: ContExistent): string | null {
   const meta = typeof c.metadataPhone === "string" ? c.metadataPhone : null;
   return normalizeRoPhone(meta) ?? normalizeRoPhone(c.phone ?? null);
 }
+
+/**
+ * Telefoanele verificate care aparțin unor conturi încă existente. Un rând rămas de la un cont șters
+ * (profesor_ai_utilizatori nu avea cheie străină spre auth.users) nu mai blochează numărul.
+ */
+export function telefoaneConturiExistente(
+  randuri: { user_id: string; phone: string | null }[],
+  idConturi: Set<string>,
+): string[] {
+  return randuri
+    .filter((r) => idConturi.has(r.user_id))
+    .map((r) => r.phone)
+    .filter((p): p is string => !!p);
+}

@@ -5,7 +5,6 @@ const u = { email_confirmed_at: "2026-11-05" };
 
 describe("trebuieVerificatTelefon", () => {
   it("cont confirmat fără telefon verificat → spre verificare SMS", () => {
-    expect(trebuieVerificatTelefon("/meditatii", u, false)).toBe(true);
     expect(trebuieVerificatTelefon("/meditatii", u, false, true)).toBe(true);
     expect(trebuieVerificatTelefon("/", u, false, true)).toBe(true);
   });
@@ -25,5 +24,6 @@ describe("trebuieVerificatTelefon", () => {
   });
   it("cât timp telefonul nu se cere la înscriere, nu redirecționează niciodată", () => {
     expect(trebuieVerificatTelefon("/meditatii", u, false, false)).toBe(false);
+    expect(trebuieVerificatTelefon("/meditatii", u, false)).toBe(false); // comutatorul e oprit
   });
 });

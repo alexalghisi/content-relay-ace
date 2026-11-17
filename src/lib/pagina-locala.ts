@@ -171,3 +171,40 @@ export function potrivesteMaterie(
 export function inLocalitate(loc: string | null, match: string[]): boolean {
   return match.length === 0 || match.some((m) => normText(loc).includes(normText(m)));
 }
+
+/** Rând minim de anunț / cerere pentru calculul combinațiilor indexabile. */
+export interface AnuntIndex {
+  subject_slug: string | null;
+  location: string | null;
+  is_online: boolean;
+}
+export interface CerereIndex {
+  subject: string | null;
+  city: string | null;
+  is_online: boolean;
+}
+
+/**
+ * Pagina materie × oraș e indexabilă? Aceeași regulă pentru sitemap și pentru linkurile interne,
+ * ca Google să nu primească linkuri spre pagini noindex.
+ */
+export function comboIndexabil(
+  materie: { dbSlugs: string[]; nameLower: string },
+  oras: { matchLocation: string[] },
+  anunturi: AnuntIndex[],
+  cereri: CerereIndex[],
+  ghid = false,
+): boolean {
+  const deMaterie = anunturi.filter((r) => r.subject_slug && materie.dbSlugs.includes(r.subject_slug));
+  const localAds = deMaterie.filter((r) => inLocalitate(r.location, oras.matchLocation)).length;
+  const onlineAds = deMaterie.filter(
+    (r) => r.is_online && !inLocalitate(r.location, oras.matchLocation),
+  ).length;
+  const cityRequests = cereri.filter(
+    (r) =>
+      potrivesteMaterie(r.subject, materie.nameLower, materie.dbSlugs) &&
+      !r.is_online &&
+      inLocalitate(r.city, oras.matchLocation),
+  ).length;
+  return paginaLocalaIndexabila({ localAds, onlineAds, cityRequests, ghid });
+}

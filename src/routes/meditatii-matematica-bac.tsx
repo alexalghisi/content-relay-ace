@@ -46,7 +46,7 @@ export const Route = createFileRoute("/meditatii-matematica-bac")({
   component: () => (
     <SeoLanding
       pageUrl={URL}
-      h1="Meditații matematică BAC 2026"
+      h1="Meditații matematică BAC 2027"
       intro="La matematică, nota la BAC vine din exercițiu pe variante oficiale și din corectarea greșelilor tipice. Un profesor te duce pe programa profilului tău, capitol cu capitol, până rezolvi singur o variantă întreagă în 3 ore."
       bullets={[
         "M_mate-info (M1), M_șt-nat (M2), tehnologic, pedagogic",

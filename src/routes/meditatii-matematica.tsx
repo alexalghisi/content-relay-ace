@@ -4,7 +4,7 @@ import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-matematica";
 
-const TITLE = "Meditații matematică: BAC, EN, online | MeditatiiDirect";
+const TITLE = "Meditații matematică online sau acasă — gimnaziu, Evaluare Națională, liceu | MeditatiiDirect";
 const DESCRIPTION =
   "Cauți meditații la matematică pentru BAC, Evaluarea Națională sau gimnaziu? Cere gratuit propuneri cu tarif și program, online sau în orașul tău.";
 

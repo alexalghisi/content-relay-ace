@@ -3,7 +3,7 @@ import { seoPage } from "@/lib/seo-page";
 
 export const Route = createFileRoute("/meditatii-admitere-drept")(seoPage({
   path: "/meditatii-admitere-drept",
-  title: "Meditații Admitere Drept 2026 — Facultatea de Drept | MeditatiiDirect.ro",
+  title: "Meditații Admitere Drept 2027 — Facultatea de Drept | MeditatiiDirect.ro",
   description: "Pregătire admitere Drept: română, istorie, logică. Profesori verificați și absolvenți de top. Simulări și subiecte rezolvate.",
   h1: "Meditații admitere Drept 2026",
   intro: "Pregătire structurată pentru admiterea la Facultatea de Drept (București, Cluj, Iași). Limba română, logică argumentativă, istorie.",

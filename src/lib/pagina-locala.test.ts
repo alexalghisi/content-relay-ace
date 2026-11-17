@@ -36,7 +36,9 @@ describe("paginaLocalaIndexabila", () => {
   });
   it("sitemap-ul folosește aceeași regulă ca paginile", () => {
     const sm = readFileSync("src/routes/sitemap[.]xml.ts", "utf8");
-    expect(sm.match(/paginaLocalaIndexabila\(/g)?.length).toBeGreaterThanOrEqual(2);
+    // /meditatii-in/{oras} direct, iar materie × oraș prin comboIndexabil (care o folosește).
+    expect(sm).toContain("paginaLocalaIndexabila(");
+    expect(sm).toContain("comboIndexabil(");
     expect(readFileSync("src/routes/meditatii.$materie.$oras.tsx", "utf8")).toContain(
       "paginaLocalaIndexabila(",
     );

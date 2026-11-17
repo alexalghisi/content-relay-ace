@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/caut-profesor";
-const TITLE = "Caut profesor 2026 — Găsește profesorul potrivit în 2 minute | MeditatiiDirect.ro";
+const TITLE = "Caut profesor 2026–2027 — Găsește profesorul potrivit în 2 minute | MeditatiiDirect.ro";
 const DESC =
   "Caut profesor de meditații? profesori particulari verificați: matematică, română, engleză, fizică, informatică. Online sau acasă, contact direct, fără comision. Tariful îl propune profesorul.";
 

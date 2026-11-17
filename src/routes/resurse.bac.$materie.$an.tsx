@@ -10,7 +10,6 @@ import {
 import { BAC_SUBJECTS, BAC_YEARS, BAC_AVAILABLE_YEARS } from "@/data/bac-archive";
 import { resolveBacPdfs } from "@/lib/bac-pdf-resolver.functions";
 import { faqJsonLd } from "@/components/seo-landing";
-import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 import { AdSenseSlot } from "@/components/ads/adsense";
 
 const ogImageForBac = (slug: string) => `https://meditatiidirect.ro/og/bac/${slug}.jpg`;
@@ -234,10 +233,10 @@ function ResursaBacPage() {
                   Pregătire BAC completă
                 </Link>
                 <Link
-                  to="/simulari-bacalaureat-2026"
+                  to="/simulare-bacalaureat"
                   className="inline-flex items-center rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40"
                 >
-                  Simulări BAC 2026
+                  Simulare BAC 2027
                 </Link>
               </div>
             </div>
@@ -454,9 +453,6 @@ function ResursaBacPage() {
           </div>
         </div>
       </section>
-
-      <AdsterraBanner728 className="mt-10" />
-      <AdsterraNativeBanner className="mt-4" />
 
       <section className="mt-12">
         <h2 className="text-2xl font-semibold">Subiecte {subject.name} de la alți ani</h2>

@@ -6,7 +6,7 @@ import { ghiduriPentruOras } from "@/data/ghiduri-locale";
 import { SUBJECTS_SEO } from "@/data/subjects-seo";
 import { consolidatedTarget } from "@/lib/seo-redirects";
 import { BLOCAJE, BLOCAJE_MATERII } from "@/data/blocaje";
-import { inLocalitate, paginaLocalaIndexabila, potrivesteMaterie } from "@/lib/pagina-locala";
+import { comboIndexabil, inLocalitate, paginaLocalaIndexabila } from "@/lib/pagina-locala";
 
 const BASE_URL = "https://meditatiidirect.ro";
 
@@ -25,7 +25,6 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/subiecte-bac", priority: "0.8", changefreq: "weekly" },
   { path: "/subiecte-admitere", priority: "0.8", changefreq: "weekly" },
   { path: "/variante-bacalaureat", priority: "0.7", changefreq: "weekly" },
-  { path: "/simulare-bacalaureat", priority: "0.7", changefreq: "weekly" },
   { path: "/grile-medicina", priority: "0.7", changefreq: "weekly" },
   { path: "/grile-upb", priority: "0.7", changefreq: "weekly" },
   { path: "/anunturi-meditatii", priority: "0.95", changefreq: "daily" },
@@ -35,6 +34,7 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/meditatii-engleza-adulti", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-engleza-online", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-romana-online", priority: "0.85", changefreq: "weekly" },
+  { path: "/meditatii-matematica-online", priority: "0.9", changefreq: "weekly" },
   { path: "/meditatii-romana-bac", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-matematica-bac", priority: "0.85", changefreq: "weekly" },
   { path: "/ofer-meditatii", priority: "0.8", changefreq: "weekly" },
@@ -70,13 +70,17 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/meditatii-particulare", priority: "0.95", changefreq: "weekly" },
   { path: "/anunturi-meditatii-bac", priority: "0.9", changefreq: "daily" },
 
-  { path: "/simulari-bacalaureat-2026", priority: "0.85", changefreq: "weekly" },
   { path: "/grile-admitere-medicina-2026", priority: "0.85", changefreq: "weekly" },
   { path: "/simulare-utcn-2026", priority: "0.8", changefreq: "weekly" },
   { path: "/simulare-drept-2026", priority: "0.8", changefreq: "weekly" },
   { path: "/calendar-bac-2027", priority: "0.99", changefreq: "weekly" },
   { path: "/calendar-evaluare-nationala-2027", priority: "0.99", changefreq: "weekly" },
   { path: "/admitere-liceu-2027", priority: "0.95", changefreq: "weekly" },
+  { path: "/simulare-bacalaureat", priority: "0.97", changefreq: "weekly" },
+  { path: "/simulare-evaluare-nationala-2027", priority: "0.97", changefreq: "weekly" },
+  { path: "/modele-subiecte-bac-2027", priority: "0.97", changefreq: "weekly" },
+  { path: "/modele-subiecte-evaluare-nationala-2027", priority: "0.97", changefreq: "weekly" },
+  { path: "/structura-an-scolar-2026-2027", priority: "0.95", changefreq: "weekly" },
   { path: "/rezultate-bac-2026", priority: "0.98", changefreq: "daily" },
   { path: "/subiecte-bac-2026", priority: "0.98", changefreq: "daily" },
   { path: "/admitere-facultate-2026", priority: "0.95", changefreq: "daily" },
@@ -92,6 +96,11 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/calculator-medie-bac", priority: "0.9", changefreq: "monthly" },
   { path: "/calculator-nota-admitere", priority: "0.85", changefreq: "monthly" },
   { path: "/evaluare-nationala", priority: "0.95", changefreq: "weekly" },
+  { path: "/subiecte-evaluare-nationala", priority: "0.95", changefreq: "weekly" },
+  { path: "/subiecte-evaluare-nationala/model-2027-matematica", priority: "0.9", changefreq: "monthly" },
+  { path: "/subiecte-evaluare-nationala/model-2027-romana", priority: "0.9", changefreq: "monthly" },
+  { path: "/subiecte-evaluare-nationala/2026-matematica", priority: "0.85", changefreq: "monthly" },
+  { path: "/subiecte-evaluare-nationala/2026-romana", priority: "0.85", changefreq: "monthly" },
   { path: "/calculator-media-evaluare-nationala", priority: "0.9", changefreq: "monthly" },
   { path: "/evaluare-nationala-cluj", priority: "0.85", changefreq: "weekly" },
   { path: "/harta-blocajelor", priority: "0.9", changefreq: "weekly" },
@@ -263,20 +272,6 @@ export const Route = createFileRoute("/sitemap.xml")({
           }[];
           // Aceeași regulă ca pagina materie × oraș (src/lib/pagina-locala.ts).
           const cereri = await cereriRecente();
-          const comboIndexabil = (subs: string[], nume: string, locs: string[]) => {
-            const deMaterie = rows.filter((r) => r.subject_slug && subs.includes(r.subject_slug));
-            const local = deMaterie.filter((r) => inLocalitate(r.location, locs)).length;
-            const online = deMaterie.filter(
-              (r) => r.is_online && !inLocalitate(r.location, locs),
-            ).length;
-            const cityRequests = cereri.filter(
-              (r) =>
-                potrivesteMaterie(r.subject, nume, subs) &&
-                !r.is_online &&
-                inLocalitate(r.city, locs),
-            ).length;
-            return paginaLocalaIndexabila({ localAds: local, onlineAds: online, cityRequests });
-          };
           const { getGhidLocal } = await import("@/data/ghiduri-locale");
           for (const s of SUBJECTS_SEO) {
             urls.push(
@@ -284,11 +279,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             );
             for (const c of CITIES) {
               // Combinațiile cu ghid local sunt indexabile și fără anunțuri (vezi ruta).
-              if (
-                !getGhidLocal(s.slug, c.slug) &&
-                !comboIndexabil(s.dbSlugs, s.nameLower, c.matchLocation)
-              )
-                continue;
+              if (!comboIndexabil(s, c, rows, cereri, !!getGhidLocal(s.slug, c.slug))) continue;
               urls.push(
                 `  <url>\n    <loc>${BASE_URL}/meditatii/${s.slug}/${c.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
               );

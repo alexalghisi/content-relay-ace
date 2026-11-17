@@ -1,3 +1,5 @@
+import { PaginaMaterieBlock } from "@/components/pagina-materie";
+import type { PaginaMaterieData } from "@/lib/pagina-materie.functions";
 import { Link, useLoaderData, useLocation } from "@tanstack/react-router";
 import { ComboDataBlock } from "@/components/market-data";
 import type { ComboStats } from "@/lib/market-stats.functions";
@@ -5,7 +7,6 @@ import { Download, FileText, GraduationCap, BadgeCheck, ArrowRight } from "lucid
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { linkuriContextuale, type ContextPagina } from "@/lib/linkuri-contextuale";
 import { AdSenseSlot } from "@/components/ads/adsense";
-import { AdsterraBanner728, AdsterraNativeBanner } from "@/components/ads/adsterra";
 
 export interface FaqItem {
   q: string;
@@ -51,7 +52,12 @@ export interface SeoLandingProps {
 
 export function SeoLanding(p: SeoLandingProps) {
   const ld = useLoaderData({ strict: false }) as
-    | { subjectStats?: ComboStats | null; subjectName?: string }
+    | {
+        subjectStats?: ComboStats | null;
+        subjectName?: string;
+        subjectSlug?: string;
+        paginaMaterie?: PaginaMaterieData | null;
+      }
     | undefined;
   const { pathname } = useLocation();
   const cale = p.pageUrl ? new URL(p.pageUrl).pathname : pathname;
@@ -167,10 +173,11 @@ export function SeoLanding(p: SeoLandingProps) {
       </header>
 
       <AdSenseSlot format="auto" className="mt-10" />
-      <AdsterraBanner728 className="mt-6" />
-      <AdsterraNativeBanner className="mt-6" />
 
       {p.children}
+      {ld?.paginaMaterie && ld.subjectSlug && ld.subjectName && (
+        <PaginaMaterieBlock d={ld.paginaMaterie} slug={ld.subjectSlug} nume={ld.subjectName} />
+      )}
 
       {p.sections && (
         <div className="mt-12 grid gap-10 lg:grid-cols-3">

@@ -6,16 +6,19 @@ import { faqJsonLd } from "@/components/seo-landing";
 const SITE = "https://meditatiidirect.ro";
 
 const CALENDAR = [
-  { proba: "Proba scrisă la Limba și literatura română", data: "22 iunie 2026" },
-  { proba: "Proba scrisă la Matematică", data: "24 iunie 2026" },
-  { proba: "Proba scrisă la Limba maternă (minorități)", data: "26 iunie 2026" },
-  { proba: "Afișarea rezultatelor inițiale", data: "30 iunie 2026" },
-  { proba: "Afișarea rezultatelor finale (după contestații)", data: "8 iulie 2026" },
+  { proba: "Simularea Evaluării Naționale", data: "16–18 martie 2027" },
+  { proba: "Înscrierea la Evaluarea Națională", data: "7–11 iunie 2027" },
+  { proba: "Proba scrisă la Limba și literatura română", data: "22 iunie 2027" },
+  { proba: "Proba scrisă la Matematică", data: "24 iunie 2027" },
+  { proba: "Proba scrisă la Limba maternă (minorități)", data: "25 iunie 2027" },
+  { proba: "Afișarea rezultatelor inițiale", data: "30 iunie 2027" },
+  { proba: "Contestații (depunere și soluționare)", data: "30 iunie – 6 iulie 2027" },
+  { proba: "Afișarea rezultatelor finale", data: "7 iulie 2027" },
 ];
 
 const FAQ = [
   {
-    q: "Cum se calculează media la Evaluarea Națională 2026?",
+    q: "Cum se calculează media la Evaluarea Națională 2027?",
     a: "Media generală de evaluare finală este media aritmetică a notelor de la probele scrise, calculată cu două zecimale, fără rotunjire. La cel puțin 5,00 promovai evaluarea națională.",
   },
   {
@@ -35,13 +38,13 @@ const FAQ = [
 export const Route = createFileRoute("/evaluare-nationala")({
   head: () => {
     const url = `${SITE}/evaluare-nationala`;
-    const title = "Evaluarea Națională 2026 — calendar, reguli și calculator de medie | MeditatiiDirect.ro";
+    const title = "Evaluarea Națională 2027 — calendar, model oficial, reguli și calculator de medie";
     const desc =
-      "Calendarul oficial al Evaluării Naționale 2026, cum se calculează media cu două zecimale fără rotunjire, cine promovează și cum te pregătești. Calculator gratuit de medie.";
+      "Evaluarea Națională 2027: calendarul oficial (22–25 iunie), modelele de subiecte publicate pe 1 noiembrie 2026 cu rezolvări, cum se calculează media și calculator gratuit.";
     return {
       meta: [
         { title }, { name: "description", content: desc },
-        { name: "keywords", content: "evaluare nationala 2026, subiecte evaluare nationala, medie evaluare nationala, calculator medie Evaluarea Nationala, admitere liceu 2026" },
+        { name: "keywords", content: "evaluare nationala 2027, model evaluare nationala 2027, subiecte evaluare nationala, medie evaluare nationala, calculator medie Evaluarea Nationala, admitere liceu 2027" },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
@@ -77,7 +80,7 @@ function EvaluareNationalaHub() {
       </nav>
 
       <header className="mt-4 max-w-3xl">
-        <h1 className="text-3xl font-bold sm:text-4xl">Evaluarea Națională 2026 — ce contează de fapt</h1>
+        <h1 className="text-3xl font-bold sm:text-4xl">Evaluarea Națională 2027 — ce contează de fapt</h1>
         <p className="mt-3 text-lg text-muted-foreground">
           Calendarul probelor, cum se calculează media și ce se întâmplă la admiterea la liceu.
           Fără formuli vechi: admiterea se face pe baza mediei de la Evaluarea Națională, nu pe 80% + 20%.
@@ -92,13 +95,29 @@ function EvaluareNationalaHub() {
         <Link to="/meditatii-evaluare-nationala" className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">
           <FileText className="h-4 w-4" /> Profesori pentru Evaluarea Națională
         </Link>
+        <Link to="/subiecte-evaluare-nationala" className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">
+          Subiecte și model 2027 rezolvat
+        </Link>
       </nav>
+
+      <section className="mt-8 max-w-3xl rounded-xl border border-primary/30 bg-primary/5 p-5">
+        <h2 className="text-lg font-semibold">Nou: modelele oficiale pentru Evaluarea Națională 2027</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Ministerul a publicat pe 1 noiembrie 2026 modelele de subiecte la română și matematică. Le găsești în PDF,
+          cu baremul și cu rezolvarea explicată item cu item.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2 text-sm">
+          <Link to="/subiecte-evaluare-nationala/$slug" params={{ slug: "model-2027-matematica" }} className="inline-flex rounded-lg bg-primary px-3 py-1.5 font-medium text-primary-foreground hover:opacity-90">Model 2027 matematică</Link>
+          <Link to="/subiecte-evaluare-nationala/$slug" params={{ slug: "model-2027-romana" }} className="inline-flex rounded-lg border bg-card px-3 py-1.5 hover:border-primary/40">Model 2027 română</Link>
+          <Link to="/subiecte-evaluare-nationala" className="inline-flex rounded-lg border bg-card px-3 py-1.5 hover:border-primary/40">Subiectele din 2026</Link>
+        </div>
+      </section>
 
       <section className="mt-10">
         <h2 className="flex items-center gap-2 text-xl font-semibold"><CalendarDays className="h-5 w-5 text-primary" /> Calendarul probelor</h2>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
-          Date conform metodologiei pentru anul școlar 2025–2026 (Ordinul 6.058/29.08.2025). Calendarul se poate modifica prin
-          ordin ulterioară — verifică pe <a className="text-primary hover:underline" href="https://www.edu.ro/evaluare_nationala_ENVIII" rel="noopener noreferrer" target="_blank">edu.ro</a>.
+          Calendarul oficial pentru anul școlar 2026–2027. Se poate modifica prin ordin ulterior, așa că
+          verifică și pe <a className="text-primary hover:underline" href="https://www.edu.ro/evaluare_nationala_ENVIII" rel="noopener noreferrer" target="_blank">edu.ro</a>.
         </p>
         <ul className="mt-4 max-w-2xl divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
           {CALENDAR.map((c) => (

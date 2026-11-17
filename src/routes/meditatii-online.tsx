@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-online";
-const TITLE = "Meditații online: cere oferte gratuit | MeditatiiDirect";
+const TITLE = "Meditații online — platformă de meditații cu profesori verificați, oferte gratuite";
 const DESCRIPTION =
   "Meditații online la matematică, română, engleză și alte materii. Postează gratuit cererea, compară propunerile cu tarif și program și discută direct cu profesorul.";
 

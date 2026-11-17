@@ -2,10 +2,10 @@ import { describe, expect, it } from "bun:test";
 import { signupSchema, telefonSchema } from "./signup-validation";
 
 const account = { name: "Elev Test", email: "elev@example.com", password: "parola-test" };
-describe("Înscriere cu telefon obligatoriu", () => {
-  it("respinge telefonul gol și câmpul absent", () => {
-    expect(signupSchema.safeParse({ ...account, phone: "" }).success).toBe(false);
-    expect(signupSchema.safeParse({ ...account }).success).toBe(false);
+describe("Înscriere fără telefon (comutator oprit)", () => {
+  it("acceptă telefonul gol și câmpul absent", () => {
+    expect(signupSchema.safeParse({ ...account, phone: "" }).success).toBe(true);
+    expect(signupSchema.safeParse({ ...account }).success).toBe(true);
   });
   it("dacă e completat, salvează mobilul în format internațional", () => {
     expect(signupSchema.parse({ ...account, phone: "0712 345 678" }).phone).toBe("40712345678");

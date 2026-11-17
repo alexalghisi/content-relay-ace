@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-romana";
-const TITLE = "Meditatii romana online sau acasă | BAC și EN 2027";
+const TITLE = "Meditații română — profesori de limba română online sau acasă | MeditatiiDirect";
 const DESC =
   "Meditatii romana pentru BAC, Evaluarea Națională și gramatică, online sau acasă. Postezi gratuit cererea, compari ofertele și vorbești direct cu profesorul.";
 

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/profesori-meditatii";
-const TITLE = "Profesori meditații 2026 — Meditatori Verificați | MeditatiiDirect.ro";
+const TITLE = "Profesori meditații 2026–2027 — Meditatori Verificați | MeditatiiDirect.ro";
 const DESC =
   "Catalog profesori meditații verificați din România: matematică, română, engleză, fizică, informatică. Contact direct cu profesorul, recenzii reale, fără comision.";
 

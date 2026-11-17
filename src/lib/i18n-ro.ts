@@ -37,6 +37,7 @@ export const ro = {
   "footer.exams": "Examene",
   "footer.bac": "Variante BAC (subiecte + bareme)",
   "footer.subiecteBac": "Subiecte BAC cu rezolvări",
+  "footer.subiecteEn": "Subiecte Evaluare Națională rezolvate",
   "footer.en": "Evaluarea Națională — calendar și reguli",
   "footer.enCalc": "Calculator medie Evaluarea Națională",
   "footer.admission": "Admitere facultate",
