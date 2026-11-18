@@ -1,4 +1,5 @@
 import { notifyTeachersOfRequest } from "@/lib/notify-teachers.functions";
+import { titluAnunt } from "@/lib/anunt-titlu";
 import { validateRequest, clip } from "@/lib/request-validation";
 import { createFileRoute, Link, useNavigate, notFound, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -73,7 +74,7 @@ export const Route = createFileRoute("/anunt/$slug")({
   head: ({ params, loaderData }) => {
     const isUuid = UUID_RE.test(params.slug);
     const ad = loaderData?.ad;
-    const human = ad?.title ?? decodeURIComponent(params.slug).replace(/-/g, " ");
+    const human = ad ? titluAnunt(ad) : decodeURIComponent(params.slug).replace(/-/g, " ");
     const where = ad?.location ? ` ${ad.location}` : ad?.is_online ? " online" : "";
     const desc = ad
       ? `Meditații ${ad.subject_name ?? ""}${where} cu ${ad.legacy_teachers?.full_name ?? "profesor"}${ad.price_per_hour ? `, ${ad.price_per_hour} lei/oră` : ""}. Contact direct pe MeditatiiDirect.ro, fără comision.`.replace(

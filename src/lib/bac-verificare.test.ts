@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import audit from "@/data/bac-verificare.generated.json";
 import {
   esteDocumentVerificat,
+  materieAreSubiecteVerificate,
   motiveFisier,
   motivePereche,
   statisticiAudit,
@@ -102,5 +103,20 @@ describe("date reale din audit", () => {
     expect(st.total).toBe(nume.size);
     expect(st.verificate + st.respinse).toBe(st.total);
     expect(s.size).toBeGreaterThan(0);
+  });
+
+  test("materieAreSubiecteVerificate: hub indexabil doar cu cel puțin un subiect verificat", () => {
+    const s = subiecteVerificate(nume);
+    const set = new Set(["informatica/2026/iunie-subiect.pdf", "informatica/2026/iunie-barem.pdf"]);
+    expect(materieAreSubiecteVerificate(set, "informatica")).toBe(true);
+    // un barem singur nu face materia indexabilă
+    expect(materieAreSubiecteVerificate(new Set(["engleza/2024/iunie-barem.pdf"]), "engleza")).toBe(
+      false,
+    );
+    // prefixul trebuie să fie materia exactă, nu doar începutul numelui
+    expect(materieAreSubiecteVerificate(set, "info")).toBe(false);
+    expect(materieAreSubiecteVerificate(new Set(), "matematica")).toBe(false);
+    // datele reale: orice materie cu subiecte verificate e recunoscută
+    for (const p of s) expect(materieAreSubiecteVerificate(s, p.split("/")[0])).toBe(true);
   });
 });

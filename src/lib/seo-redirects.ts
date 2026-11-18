@@ -88,6 +88,17 @@ export const BLOG_REDIRECTS: Record<string, string> = {
   ...cluster("tehnica-pomodoro-invatare-eficienta-2026", [
     "tehnica-pomodoro-liceeni-invatare-2026",
   ]),
+  // Auto-blog duplicate (same title, Sept 18) → the Sept 6 original.
+  ...cluster("meditatii-chimie-organica-bac-explicatii-simple-2026", [
+    "chimie-organica-bac-2026-alcooli-acizi-esteri-explicati",
+  ]),
+  // Auto-blog duplicate (Sept 24, same biologie/chimie/fizica strategy) → the Sept 7 original.
+  ...cluster("admitere-medicina-2026-strategie-materii", [
+    "admitere-medicina-2026-strategie-completa-materii",
+  ]),
+  // Thin (~240 words) restatements of the full guides on the same intent.
+  ...cluster("admitere-medicina-2026-ghid-complet", ["admitere-medicina-2026-strategie-completa"]),
+  ...cluster("evaluare-nationala-2026-strategie", ["evaluare-nationala-2026-ghid"]),
 };
 
 /** Returns the 301 target for a path, or null. */

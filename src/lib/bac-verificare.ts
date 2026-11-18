@@ -128,6 +128,19 @@ export function subiecteVerificate(names: Iterable<string>): Set<string> {
   return out;
 }
 
+/**
+ * O materie are hub indexabil (/bac/{materie}, /simulare-bac/{materie}) doar dacă are
+ * cel puțin un subiect verificat. Aceeași regulă ca noindex-ul paginilor, folosită și de sitemap.
+ */
+export function materieAreSubiecteVerificate(
+  verificate: Iterable<string>,
+  materie: string,
+): boolean {
+  for (const n of verificate)
+    if (n.startsWith(`${materie}/`) && n.endsWith("-subiect.pdf")) return true;
+  return false;
+}
+
 /** Statistici de transparență pentru raport/admin. */
 export function statisticiAudit() {
   const pe: Record<string, number> = {};

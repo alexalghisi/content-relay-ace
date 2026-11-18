@@ -97,8 +97,16 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/calculator-nota-admitere", priority: "0.85", changefreq: "monthly" },
   { path: "/evaluare-nationala", priority: "0.95", changefreq: "weekly" },
   { path: "/subiecte-evaluare-nationala", priority: "0.95", changefreq: "weekly" },
-  { path: "/subiecte-evaluare-nationala/model-2027-matematica", priority: "0.9", changefreq: "monthly" },
-  { path: "/subiecte-evaluare-nationala/model-2027-romana", priority: "0.9", changefreq: "monthly" },
+  {
+    path: "/subiecte-evaluare-nationala/model-2027-matematica",
+    priority: "0.9",
+    changefreq: "monthly",
+  },
+  {
+    path: "/subiecte-evaluare-nationala/model-2027-romana",
+    priority: "0.9",
+    changefreq: "monthly",
+  },
   { path: "/subiecte-evaluare-nationala/2026-matematica", priority: "0.85", changefreq: "monthly" },
   { path: "/subiecte-evaluare-nationala/2026-romana", priority: "0.85", changefreq: "monthly" },
   { path: "/calculator-media-evaluare-nationala", priority: "0.9", changefreq: "monthly" },
@@ -296,12 +304,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           // Doar sesiunile care au efectiv subiectul verificat în arhivă (restul sunt noindex).
           const { data: pdfNames } = await supabaseAdmin.rpc("bac_pdf_names", { _prefix: "" });
           // Aceeași regulă ca pagina: doar subiectele care trec auditul de conținut (src/lib/bac-verificare.ts).
-          const { subiecteVerificate } = await import("@/lib/bac-verificare");
+          const { subiecteVerificate, materieAreSubiecteVerificate } =
+            await import("@/lib/bac-verificare");
           const pdfSet = subiecteVerificate((pdfNames ?? []) as string[]);
           urls.push(
             `  <url>\n    <loc>${BASE_URL}/bac</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>`,
           );
           for (const s of BAC_SUBJECTS) {
+            // Fără niciun subiect verificat, /bac/{materie} și /simulare-bac/{materie} sunt noindex.
+            if (!materieAreSubiecteVerificate(pdfSet, s.slug)) continue;
             urls.push(
               `  <url>\n    <loc>${BASE_URL}/bac/${s.slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>`,
             );
