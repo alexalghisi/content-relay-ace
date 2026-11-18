@@ -38,8 +38,8 @@ const PORTED_FILES = [
 ];
 
 describe("/subiecte-bac archive", () => {
-  test("ships 532 written solutions, each matching a bundled paper", () => {
-    expect(REZ_KEYS.size).toBe(532);
+  test("ships 545 written solutions, each matching a bundled paper", () => {
+    expect(REZ_KEYS.size).toBe(545);
     const paperKeys = new Set(BAC_ORIGINALS.map((r) => bacPaperKey(r)));
     for (const k of REZ_KEYS) expect(paperKeys.has(k)).toBe(true);
   });
