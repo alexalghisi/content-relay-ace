@@ -51,7 +51,7 @@ export const Route = createFileRoute("/ofer-meditatii")({
       related={[
         { to: "/pentru-profesori", label: "Pentru profesori" },
         { to: "/preturi-meditatii", label: "Tarife reale pe materii" },
-        { to: "/meditatori", label: "Catalog profesori" },
+        { to: "/profesor-particular", label: "Catalog profesori" },
       ]}
     />
   ),

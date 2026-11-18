@@ -1,4 +1,5 @@
 import { subjectLoader } from "@/lib/subject-stats";
+import { snippetMaterie } from "@/lib/snippet-materie";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
@@ -43,45 +44,51 @@ const CITIES = [
 
 export const Route = createFileRoute("/meditatii-engleza")({
   loader: subjectLoader("engleza"),
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESC },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
-      { property: "og:url", content: URL },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/engleza.jpg" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:image", content: "https://meditatiidirect.ro/og/meditatii/engleza.jpg" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESC },
-    ],
-    links: [{ rel: "canonical", href: URL }],
-    scripts: [
-      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Service",
-          serviceType: "Meditații limba engleză",
-          name: "Meditații engleză — MeditatiiDirect.ro",
-          description: DESC,
-          url: URL,
-          provider: {
-            "@type": "Organization",
-            name: "MeditatiiDirect",
-            url: "https://meditatiidirect.ro",
-          },
-          areaServed: { "@type": "Country", name: "România" },
-          availableLanguage: ["ro", "en"],
-        }),
-      },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const s = snippetMaterie(loaderData?.subjectName ?? "engleza", loaderData?.subjectStats, {
+      title: TITLE,
+      description: DESC,
+    });
+    return {
+      meta: [
+        { title: s.title },
+        { name: "description", content: s.description },
+        { property: "og:title", content: s.title },
+        { property: "og:description", content: s.description },
+        { property: "og:url", content: URL },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/engleza.jpg" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:image", content: "https://meditatiidirect.ro/og/meditatii/engleza.jpg" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: s.title },
+        { name: "twitter:description", content: s.description },
+      ],
+      links: [{ rel: "canonical", href: URL }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            serviceType: "Meditații limba engleză",
+            name: "Meditații engleză — MeditatiiDirect.ro",
+            description: s.description,
+            url: URL,
+            provider: {
+              "@type": "Organization",
+              name: "MeditatiiDirect",
+              url: "https://meditatiidirect.ro",
+            },
+            areaServed: { "@type": "Country", name: "România" },
+            availableLanguage: ["ro", "en"],
+          }),
+        },
+      ],
+    };
+  },
   component: Page,
 });
 
@@ -184,6 +191,7 @@ function Page() {
       ]}
       faqs={faqs}
       related={[
+        { to: "/meditatii-copii", label: "Meditații engleză pentru copii" },
         { to: "/meditatii-engleza-online", label: "Meditații engleză online" },
         { to: "/meditatii-engleza-adulti", label: "Meditații engleză adulți" },
         { to: "/harta-blocajelor/engleza", label: "Harta Blocajelor engleză" },

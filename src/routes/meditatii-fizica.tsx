@@ -1,37 +1,55 @@
 import { subjectLoader } from "@/lib/subject-stats";
+import { snippetMaterie } from "@/lib/snippet-materie";
 import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
 const URL = "https://meditatiidirect.ro/meditatii-fizica";
 const TITLE = "Meditații fizică online și acasă — BAC 2027, admitere UPB și UMF";
-const DESC = "★ Meditații fizică online sau acasă: BAC, admitere Politehnică (UPB, UTCN) și Medicină. Mecanică, electricitate, optică. Profesori verificați în București, Cluj, Iași, Timișoara.";
+const DESC =
+  "★ Meditații fizică online sau acasă: BAC, admitere Politehnică (UPB, UTCN) și Medicină. Mecanică, electricitate, optică. Profesori verificați în București, Cluj, Iași, Timișoara.";
 
 const faqs = [
-  { q: "Ce capitole de fizică sunt acoperite?", a: "Toate capitolele din programa școlară: mecanică, termodinamică, electricitate și magnetism, optică, fizică modernă (atomică și nucleară)." },
-  { q: "Sunt utile meditațiile de fizică pentru admitere?", a: "Da. Fizica este probă de admitere la majoritatea facultăților Politehnice și la unele facultăți de Medicină. Avem profesori specializați pe ambele profile." },
+  {
+    q: "Ce capitole de fizică sunt acoperite?",
+    a: "Toate capitolele din programa școlară: mecanică, termodinamică, electricitate și magnetism, optică, fizică modernă (atomică și nucleară).",
+  },
+  {
+    q: "Sunt utile meditațiile de fizică pentru admitere?",
+    a: "Da. Fizica este probă de admitere la majoritatea facultăților Politehnice și la unele facultăți de Medicină. Avem profesori specializați pe ambele profile.",
+  },
 ];
 
 export const Route = createFileRoute("/meditatii-fizica")({
   loader: subjectLoader("fizica"),
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESC },
-      { name: "keywords", content: "meditatii fizica, meditatii fizica online, meditatii fizica cluj, meditatii fizica bucuresti, meditatii fizica iasi, meditatii fizica bac, meditatii fizica admitere, meditatii fizica UPB, profesor fizica, meditatii mecanica, meditatii electricitate, meditatii fizica liceu" },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
-      { property: "og:url", content: URL },
-      { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/fizica.jpg" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:image", content: "https://meditatiidirect.ro/og/meditatii/fizica.jpg" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESC },
-    ],
-    links: [{ rel: "canonical", href: URL }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
-  }),
+  head: ({ loaderData }) => {
+    const s = snippetMaterie(loaderData?.subjectName ?? "fizica", loaderData?.subjectStats, {
+      title: TITLE,
+      description: DESC,
+    });
+    return {
+      meta: [
+        { title: s.title },
+        { name: "description", content: s.description },
+        {
+          name: "keywords",
+          content:
+            "meditatii fizica, meditatii fizica online, meditatii fizica cluj, meditatii fizica bucuresti, meditatii fizica iasi, meditatii fizica bac, meditatii fizica admitere, meditatii fizica UPB, profesor fizica, meditatii mecanica, meditatii electricitate, meditatii fizica liceu",
+        },
+        { property: "og:title", content: s.title },
+        { property: "og:description", content: s.description },
+        { property: "og:url", content: URL },
+        { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/fizica.jpg" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:image", content: "https://meditatiidirect.ro/og/meditatii/fizica.jpg" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: s.title },
+        { name: "twitter:description", content: s.description },
+      ],
+      links: [{ rel: "canonical", href: URL }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
+    };
+  },
   component: () => (
     <SeoLanding
       pageUrl={URL}
@@ -45,8 +63,16 @@ export const Route = createFileRoute("/meditatii-fizica")({
       ]}
       ctaPrimary={{ to: "/meditatii", label: "Vezi profesori fizică" }}
       pdfs={[
-        { href: "/resurse/bac/fizica/2025", title: "Simulare BAC 2026 — Fizică", meta: "Mecanică, electricitate, exemple rezolvate" },
-        { href: "/resurse/admitere/upb-inginerie/2026", title: "Admitere UPB 2026 — Matematică și Fizică", meta: "Grile model" },
+        {
+          href: "/resurse/bac/fizica/2025",
+          title: "Simulare BAC 2026 — Fizică",
+          meta: "Mecanică, electricitate, exemple rezolvate",
+        },
+        {
+          href: "/resurse/admitere/upb-inginerie/2026",
+          title: "Admitere UPB 2026 — Matematică și Fizică",
+          meta: "Grile model",
+        },
       ]}
       faqs={faqs}
       related={[

@@ -64,6 +64,7 @@ const STATIC_PATHS: { path: string; priority: string; changefreq: string }[] = [
   { path: "/profesor-particular", priority: "0.9", changefreq: "weekly" },
   { path: "/profesor-meditatii", priority: "0.9", changefreq: "weekly" },
   { path: "/meditatii-scoala", priority: "0.95", changefreq: "weekly" },
+  { path: "/meditatii-copii", priority: "0.85", changefreq: "weekly" },
   { path: "/meditatii-gimnaziu", priority: "0.9", changefreq: "weekly" },
   { path: "/meditatii-liceu", priority: "0.9", changefreq: "weekly" },
   { path: "/meditatii-private", priority: "0.9", changefreq: "weekly" },

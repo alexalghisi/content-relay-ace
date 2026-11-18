@@ -86,7 +86,7 @@ export const Route = createFileRoute("/meditatii-la-domiciliu")({
         "Tu negociezi prețul direct cu profesorul",
       ]}
       ctaPrimary={{ to: "/meditatii", label: "Vezi profesorii disponibili" }}
-      ctaSecondary={{ to: "/meditatori", label: "Catalog meditatori" }}
+      ctaSecondary={{ to: "/profesor-particular", label: "Catalog meditatori" }}
       sections={[
         {
           title: "De ce meditații la domiciliu?",
@@ -147,7 +147,7 @@ export const Route = createFileRoute("/meditatii-la-domiciliu")({
         { to: "/meditatii-romana", label: "Meditații română" },
         { to: "/meditatii-engleza", label: "Meditații engleză" },
         { to: "/meditatii-bac", label: "Meditații BAC" },
-        { to: "/meditatori", label: "Profesori meditatori" },
+        { to: "/profesor-particular", label: "Profesori meditatori" },
       ]}
     />
   ),

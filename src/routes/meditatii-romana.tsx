@@ -1,4 +1,5 @@
 import { subjectLoader } from "@/lib/subject-stats";
+import { snippetMaterie } from "@/lib/snippet-materie";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
@@ -32,44 +33,50 @@ const faqs = [
 
 export const Route = createFileRoute("/meditatii-romana")({
   loader: subjectLoader("romana"),
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESC },
-      {
-        name: "keywords",
-        content:
-          "meditatii romana, meditatii limba romana, meditatii romana online, meditatii romana bac, meditatii romana evaluare nationala, meditatii romana bucuresti, meditatii romana cluj, meditatii romana iasi, profesor romana, meditatii gramatica, meditatii eseu romana, comentariu literar bac, meditatii romana admitere",
-      },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
-      { property: "og:url", content: URL },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/romana.jpg" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:image", content: "https://meditatiidirect.ro/og/meditatii/romana.jpg" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESC },
-    ],
-    links: [{ rel: "canonical", href: URL }],
-    scripts: [
-      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Service",
-          serviceType: "Meditații limba română",
-          name: "Meditații română — MeditatiiDirect.ro",
-          description: DESC,
-          url: URL,
-          areaServed: { "@type": "Country", name: "România" },
-        }),
-      },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const s = snippetMaterie(loaderData?.subjectName ?? "romana", loaderData?.subjectStats, {
+      title: TITLE,
+      description: DESC,
+    });
+    return {
+      meta: [
+        { title: s.title },
+        { name: "description", content: s.description },
+        {
+          name: "keywords",
+          content:
+            "meditatii romana, meditatii limba romana, meditatii romana online, meditatii romana bac, meditatii romana evaluare nationala, meditatii romana bucuresti, meditatii romana cluj, meditatii romana iasi, profesor romana, meditatii gramatica, meditatii eseu romana, comentariu literar bac, meditatii romana admitere",
+        },
+        { property: "og:title", content: s.title },
+        { property: "og:description", content: s.description },
+        { property: "og:url", content: URL },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/romana.jpg" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:image", content: "https://meditatiidirect.ro/og/meditatii/romana.jpg" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: s.title },
+        { name: "twitter:description", content: s.description },
+      ],
+      links: [{ rel: "canonical", href: URL }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            serviceType: "Meditații limba română",
+            name: "Meditații română — MeditatiiDirect.ro",
+            description: s.description,
+            url: URL,
+            areaServed: { "@type": "Country", name: "România" },
+          }),
+        },
+      ],
+    };
+  },
   component: () => (
     <SeoLanding
       pageUrl={URL}

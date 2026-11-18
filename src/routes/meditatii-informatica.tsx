@@ -1,4 +1,5 @@
 import { subjectLoader } from "@/lib/subject-stats";
+import { snippetMaterie } from "@/lib/snippet-materie";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
 
@@ -36,29 +37,41 @@ const faqs = [
 
 export const Route = createFileRoute("/meditatii-informatica")({
   loader: subjectLoader("informatica"),
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESC },
-      {
-        name: "keywords",
-        content:
-          "meditatii informatica, meditatii informatica online, profesor informatica, meditatii c++, meditatii python, meditatii programare, meditatii informatica bac, meditatii informatica admitere, meditatii algoritmi, meditatii informatica bucuresti, meditatii informatica cluj, meditatii informatica iasi, meditatii UPB, meditatii UTCN, subiecte bac informatica, bac informatica 2026",
-      },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
-      { property: "og:url", content: URL },
-      { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/informatica.jpg" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:image", content: "https://meditatiidirect.ro/og/meditatii/informatica.jpg" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESC },
-    ],
-    links: [{ rel: "canonical", href: URL }],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
-  }),
+  head: ({ loaderData }) => {
+    const s = snippetMaterie(loaderData?.subjectName ?? "informatica", loaderData?.subjectStats, {
+      title: TITLE,
+      description: DESC,
+    });
+    return {
+      meta: [
+        { title: s.title },
+        { name: "description", content: s.description },
+        {
+          name: "keywords",
+          content:
+            "meditatii informatica, meditatii informatica online, profesor informatica, meditatii c++, meditatii python, meditatii programare, meditatii informatica bac, meditatii informatica admitere, meditatii algoritmi, meditatii informatica bucuresti, meditatii informatica cluj, meditatii informatica iasi, meditatii UPB, meditatii UTCN, subiecte bac informatica, bac informatica 2026",
+        },
+        { property: "og:title", content: s.title },
+        { property: "og:description", content: s.description },
+        { property: "og:url", content: URL },
+        {
+          property: "og:image",
+          content: "https://meditatiidirect.ro/og/meditatii/informatica.jpg",
+        },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        {
+          name: "twitter:image",
+          content: "https://meditatiidirect.ro/og/meditatii/informatica.jpg",
+        },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: s.title },
+        { name: "twitter:description", content: s.description },
+      ],
+      links: [{ rel: "canonical", href: URL }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(faqs)) }],
+    };
+  },
   component: Page,
 });
 

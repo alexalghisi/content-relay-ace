@@ -51,6 +51,7 @@ import { Route as MeditatiiBucurestiSectoareRouteImport } from './routes/meditat
 import { Route as MeditatiiChimieRouteImport } from './routes/meditatii-chimie'
 import { Route as MeditatiiClasa12RouteImport } from './routes/meditatii-clasa-12'
 import { Route as MeditatiiClasa8RouteImport } from './routes/meditatii-clasa-8'
+import { Route as MeditatiiCopiiRouteImport } from './routes/meditatii-copii'
 import { Route as MeditatiiDefinitivatRouteImport } from './routes/meditatii-definitivat'
 import { Route as MeditatiiEnglezaRouteImport } from './routes/meditatii-engleza'
 import { Route as MeditatiiEnglezaAdultiRouteImport } from './routes/meditatii-engleza-adulti'
@@ -396,6 +397,11 @@ const MeditatiiClasa12Route = MeditatiiClasa12RouteImport.update({
 const MeditatiiClasa8Route = MeditatiiClasa8RouteImport.update({
   id: '/meditatii-clasa-8',
   path: '/meditatii-clasa-8',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeditatiiCopiiRoute = MeditatiiCopiiRouteImport.update({
+  id: '/meditatii-copii',
+  path: '/meditatii-copii',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeditatiiDefinitivatRoute = MeditatiiDefinitivatRouteImport.update({
@@ -1122,6 +1128,7 @@ export interface FileRoutesByFullPath {
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
+  '/meditatii-copii': typeof MeditatiiCopiiRoute
   '/meditatii-definitivat': typeof MeditatiiDefinitivatRoute
   '/meditatii-engleza': typeof MeditatiiEnglezaRoute
   '/meditatii-engleza-adulti': typeof MeditatiiEnglezaAdultiRoute
@@ -1296,6 +1303,7 @@ export interface FileRoutesByTo {
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
+  '/meditatii-copii': typeof MeditatiiCopiiRoute
   '/meditatii-definitivat': typeof MeditatiiDefinitivatRoute
   '/meditatii-engleza': typeof MeditatiiEnglezaRoute
   '/meditatii-engleza-adulti': typeof MeditatiiEnglezaAdultiRoute
@@ -1469,6 +1477,7 @@ export interface FileRoutesById {
   '/meditatii-chimie': typeof MeditatiiChimieRoute
   '/meditatii-clasa-12': typeof MeditatiiClasa12Route
   '/meditatii-clasa-8': typeof MeditatiiClasa8Route
+  '/meditatii-copii': typeof MeditatiiCopiiRoute
   '/meditatii-definitivat': typeof MeditatiiDefinitivatRoute
   '/meditatii-engleza': typeof MeditatiiEnglezaRoute
   '/meditatii-engleza-adulti': typeof MeditatiiEnglezaAdultiRoute
@@ -1645,6 +1654,7 @@ export interface FileRouteTypes {
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
+    | '/meditatii-copii'
     | '/meditatii-definitivat'
     | '/meditatii-engleza'
     | '/meditatii-engleza-adulti'
@@ -1819,6 +1829,7 @@ export interface FileRouteTypes {
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
+    | '/meditatii-copii'
     | '/meditatii-definitivat'
     | '/meditatii-engleza'
     | '/meditatii-engleza-adulti'
@@ -1991,6 +2002,7 @@ export interface FileRouteTypes {
     | '/meditatii-chimie'
     | '/meditatii-clasa-12'
     | '/meditatii-clasa-8'
+    | '/meditatii-copii'
     | '/meditatii-definitivat'
     | '/meditatii-engleza'
     | '/meditatii-engleza-adulti'
@@ -2166,6 +2178,7 @@ export interface RootRouteChildren {
   MeditatiiChimieRoute: typeof MeditatiiChimieRoute
   MeditatiiClasa12Route: typeof MeditatiiClasa12Route
   MeditatiiClasa8Route: typeof MeditatiiClasa8Route
+  MeditatiiCopiiRoute: typeof MeditatiiCopiiRoute
   MeditatiiDefinitivatRoute: typeof MeditatiiDefinitivatRoute
   MeditatiiEnglezaRoute: typeof MeditatiiEnglezaRoute
   MeditatiiEnglezaAdultiRoute: typeof MeditatiiEnglezaAdultiRoute
@@ -2582,6 +2595,13 @@ declare module '@tanstack/react-router' {
       path: '/meditatii-clasa-8'
       fullPath: '/meditatii-clasa-8'
       preLoaderRoute: typeof MeditatiiClasa8RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meditatii-copii': {
+      id: '/meditatii-copii'
+      path: '/meditatii-copii'
+      fullPath: '/meditatii-copii'
+      preLoaderRoute: typeof MeditatiiCopiiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meditatii-definitivat': {
@@ -3591,6 +3611,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeditatiiChimieRoute: MeditatiiChimieRoute,
   MeditatiiClasa12Route: MeditatiiClasa12Route,
   MeditatiiClasa8Route: MeditatiiClasa8Route,
+  MeditatiiCopiiRoute: MeditatiiCopiiRoute,
   MeditatiiDefinitivatRoute: MeditatiiDefinitivatRoute,
   MeditatiiEnglezaRoute: MeditatiiEnglezaRoute,
   MeditatiiEnglezaAdultiRoute: MeditatiiEnglezaAdultiRoute,

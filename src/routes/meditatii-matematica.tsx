@@ -1,10 +1,12 @@
 import { subjectLoader } from "@/lib/subject-stats";
+import { snippetMaterie } from "@/lib/snippet-materie";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd, type FaqItem } from "@/components/seo-landing";
 
 const PAGE_URL = "https://meditatiidirect.ro/meditatii-matematica";
 
-const TITLE = "Meditații matematică online sau acasă — gimnaziu, Evaluare Națională, liceu | MeditatiiDirect";
+const TITLE =
+  "Meditații matematică online sau acasă — gimnaziu, Evaluare Națională, liceu | MeditatiiDirect";
 const DESCRIPTION =
   "Cauți meditații la matematică pentru BAC, Evaluarea Națională sau gimnaziu? Cere gratuit propuneri cu tarif și program, online sau în orașul tău.";
 
@@ -33,45 +35,54 @@ const FAQS: FaqItem[] = [
 
 export const Route = createFileRoute("/meditatii-matematica")({
   loader: subjectLoader("matematica"),
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      {
-        name: "keywords",
-        content:
-          "meditatii matematica, meditatii matematica online, profesor matematica, meditatii matematica bac, meditatii matematica admitere, meditatii matematica gimnaziu, meditatii matematica liceu, meditatii matematica bucuresti, meditatii matematica cluj, meditatii matematica evaluare nationala, pregatire admitere matematica, meditatii algebra, meditatii analiza matematica, meditatii geometrie",
-      },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:url", content: PAGE_URL },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/matematica.jpg" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { name: "twitter:image", content: "https://meditatiidirect.ro/og/meditatii/matematica.jpg" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
-    ],
-    links: [{ rel: "canonical", href: PAGE_URL }],
-    scripts: [
-      { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Service",
-          serviceType: "Meditații matematică",
-          name: "Meditații matematică — MeditatiiDirect.ro",
-          description: DESCRIPTION,
-          url: PAGE_URL,
-          areaServed: { "@type": "Country", name: "România" },
-          provider: { "@id": "https://meditatiidirect.ro/#org" },
-        }),
-      },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const s = snippetMaterie(loaderData?.subjectName ?? "matematica", loaderData?.subjectStats, {
+      title: TITLE,
+      description: DESCRIPTION,
+    });
+    return {
+      meta: [
+        { title: s.title },
+        { name: "description", content: s.description },
+        {
+          name: "keywords",
+          content:
+            "meditatii matematica, meditatii matematica online, profesor matematica, meditatii matematica bac, meditatii matematica admitere, meditatii matematica gimnaziu, meditatii matematica liceu, meditatii matematica bucuresti, meditatii matematica cluj, meditatii matematica evaluare nationala, pregatire admitere matematica, meditatii algebra, meditatii analiza matematica, meditatii geometrie",
+        },
+        { property: "og:title", content: s.title },
+        { property: "og:description", content: s.description },
+        { property: "og:url", content: PAGE_URL },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: "https://meditatiidirect.ro/og/meditatii/matematica.jpg" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        {
+          name: "twitter:image",
+          content: "https://meditatiidirect.ro/og/meditatii/matematica.jpg",
+        },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: s.title },
+        { name: "twitter:description", content: s.description },
+      ],
+      links: [{ rel: "canonical", href: PAGE_URL }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(faqJsonLd(FAQS)) },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            serviceType: "Meditații matematică",
+            name: "Meditații matematică — MeditatiiDirect.ro",
+            description: s.description,
+            url: PAGE_URL,
+            areaServed: { "@type": "Country", name: "România" },
+            provider: { "@id": "https://meditatiidirect.ro/#org" },
+          }),
+        },
+      ],
+    };
+  },
   component: Page,
 });
 

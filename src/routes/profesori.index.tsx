@@ -106,7 +106,7 @@ function ProfesoriPage() {
           "Tariful fiecărui profesor, afișat înainte să accepți",
         ]}
         ctaPrimary={{ to: "/meditatii", label: "Vezi toți profesorii" }}
-        ctaSecondary={{ to: "/caut-profesor", label: "Postează cerere" }}
+        ctaSecondary={{ to: "/meditatii", label: "Postează cerere" }}
         faqs={faqs}
       />
 

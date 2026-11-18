@@ -8,6 +8,8 @@ import {
 } from "@/components/seo-landing";
 
 import { subjectLoader } from "@/lib/subject-stats";
+import { snippetMaterie } from "@/lib/snippet-materie";
+import type { ComboStats } from "@/lib/market-stats.functions";
 
 const SITE = "https://meditatiidirect.ro";
 
@@ -52,32 +54,44 @@ export function seoPage(c: SeoPageConfig) {
   const sm = /^\/meditatii-([a-z]+)$/.exec(c.path);
   return {
     ...(sm && SUBJECT_OG.includes(sm[1]) ? { loader: subjectLoader(sm[1]) } : {}),
-    head: () => ({
-      meta: [
-        { title: c.title },
-        { name: "description", content: c.description },
-        { property: "og:title", content: c.title },
-        { property: "og:description", content: c.description },
-        { property: "og:url", content: url },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: c.title },
-        { name: "twitter:description", content: c.description },
-        ...(image
-          ? [
-              { property: "og:image", content: image },
-              { property: "og:image:width", content: "1200" },
-              { property: "og:image:height", content: "630" },
-              { name: "twitter:image", content: image },
-            ]
-          : []),
-      ],
-      links: [{ rel: "canonical", href: url }],
-      scripts: [...(c.faqs ? [faqJsonLd(c.faqs)] : []), ...(c.jsonLd ?? [])].map((d) => ({
-        type: "application/ld+json",
-        children: JSON.stringify(d),
-      })),
-    }),
+    head: ({ loaderData }: { loaderData?: unknown }) => {
+      // Pe paginile de materie titlul/descrierea folosesc cifrele reale din loader (snippet-materie.ts).
+      const fromLoader = loaderData as
+        { subjectStats?: ComboStats | null; subjectName?: string } | undefined;
+      const { title, description } =
+        sm && SUBJECT_OG.includes(sm[1]) && fromLoader?.subjectName
+          ? snippetMaterie(fromLoader.subjectName, fromLoader.subjectStats, {
+              title: c.title,
+              description: c.description,
+            })
+          : { title: c.title, description: c.description };
+      return {
+        meta: [
+          { title },
+          { name: "description", content: description },
+          { property: "og:title", content: title },
+          { property: "og:description", content: description },
+          { property: "og:url", content: url },
+          { property: "og:type", content: "website" },
+          { name: "twitter:card", content: "summary_large_image" },
+          { name: "twitter:title", content: title },
+          { name: "twitter:description", content: description },
+          ...(image
+            ? [
+                { property: "og:image", content: image },
+                { property: "og:image:width", content: "1200" },
+                { property: "og:image:height", content: "630" },
+                { name: "twitter:image", content: image },
+              ]
+            : []),
+        ],
+        links: [{ rel: "canonical", href: url }],
+        scripts: [...(c.faqs ? [faqJsonLd(c.faqs)] : []), ...(c.jsonLd ?? [])].map((d) => ({
+          type: "application/ld+json",
+          children: JSON.stringify(d),
+        })),
+      };
+    },
     component: () => (
       <SeoLanding
         pageUrl={url}
