@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" width="800" height="320" role="img" aria-labelledby="t d">
+  <title id="t">Cum se împart cele 100 de puncte la Evaluarea Națională</title>
+  <desc id="d">Română: Subiectul I 70 de puncte, Subiectul al II-lea 20 de puncte, 10 din oficiu. Matematică: trei subiecte de câte 30 de puncte și 10 din oficiu.</desc>
+  <style>
+    .bg{fill:#f5fbff}.hd{font:700 20px system-ui,Segoe UI,Arial,sans-serif;fill:#14324a}
+    .lbl{font:600 15px system-ui,Segoe UI,Arial,sans-serif;fill:#14324a}
+    .in{font:600 14px system-ui,Segoe UI,Arial,sans-serif;fill:#fff}
+    .sm{font:13px system-ui,Segoe UI,Arial,sans-serif;fill:#4d6476}
+    .b{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);animation:g 5s ease-out infinite}
+    .b2{animation-delay:.4s}.b3{animation-delay:.8s}.b4{animation-delay:1.2s}
+    @keyframes g{0%{transform:scaleX(0)}25%,90%{transform:scaleX(1)}100%{transform:scaleX(1)}}
+  </style>
+  <rect class="bg" width="800" height="320" rx="18"/>
+  <text class="hd" x="40" y="48">Unde sunt punctele (din 100)</text>
+  <text class="lbl" x="40" y="98">Română</text>
+  <g class="b"><rect x="150" y="76" width="420" height="36" rx="6" fill="#2f7fd1"/><text class="in" x="162" y="99">Subiectul I · 70 p (texte + limbă)</text></g>
+  <g class="b b2"><rect x="572" y="76" width="120" height="36" rx="6" fill="#f08a24"/><text class="in" x="582" y="99">S. II · 20 p</text></g>
+  <g class="b b3"><rect x="694" y="76" width="60" height="36" rx="6" fill="#9aa9b6"/><text class="in" x="702" y="99">10 of.</text></g>
+  <text class="lbl" x="40" y="178">Matematică</text>
+  <g class="b"><rect x="150" y="156" width="178" height="36" rx="6" fill="#2f7fd1"/><text class="in" x="162" y="179">S. I · 30 p</text></g>
+  <g class="b b2"><rect x="330" y="156" width="178" height="36" rx="6" fill="#1f9d77"/><text class="in" x="342" y="179">S. II · 30 p</text></g>
+  <g class="b b3"><rect x="510" y="156" width="182" height="36" rx="6" fill="#f08a24"/><text class="in" x="522" y="179">S. III · 30 p</text></g>
+  <g class="b b4"><rect x="694" y="156" width="60" height="36" rx="6" fill="#9aa9b6"/><text class="in" x="702" y="179">10 of.</text></g>
+  <text class="sm" x="40" y="238">La matematică, Subiectele I și II: 5 sau 0 puncte pe item, doar rezultatul contează.</text>
+  <text class="sm" x="40" y="260">Subiectul al III-lea: se dau puncte și pentru rezolvări parțiale.</text>
+  <text class="sm" x="40" y="290">Sursa: subiectele și baremele oficiale din iunie 2026, aceeași structură ca modelele 2027.</text>
+</svg>
