@@ -4,6 +4,8 @@ description: "Vacanța de iarnă ține din 23 decembrie 2026 până pe 10 ianuar
 date: 2026-11-14
 category: Examene
 tags: [vacanta de iarna 2026, vacante scolare 2026-2027, pregatire bac 2027, evaluare nationala 2027, plan de recapitulare]
+image: /blog-media/vacanta-de-iarna-2026-plan-recapitulare-bac-evaluare-nationala/coperta.jpg
+imageAlt: "Coperta planului de recapitulare în vacanța de iarnă pentru BAC și Evaluarea Națională 2027"
 related:
   - /structura-an-scolar-2026-2027 | Vacanțe școlare 2026-2027
   - /calendar-bac-2027 | Calendar BAC 2027
@@ -34,6 +36,8 @@ Concluzia practică: tot ce rămâne nerecapitulat în vacanță se mută în ia
 
 Un plan de vacanță făcut „din memorie” iese prost, fiindcă fiecare crede că stă mai bine decât stă. Până la ultima zi de școală, fă un singur lucru: lucrează modelul oficial de subiect pentru 2027, cronometrat, și corectează-l cu baremul.
 
+![Animație: o pagină din modelul de matematică pentru Evaluarea Națională 2027, apoi baremul oficial](/blog-media/vacanta-de-iarna-2026-plan-recapitulare-bac-evaluare-nationala/model-en-2027-subiect-si-barem.mp4 "Lucrezi modelul, apoi te corectezi cu baremul")
+
 - Pentru clasa a XII-a: [modelele de subiecte BAC 2027](/modele-subiecte-bac-2027), la română, la proba obligatorie a profilului și la proba la alegere.
 - Pentru clasa a VIII-a: [modelele pentru Evaluarea Națională 2027](/modele-subiecte-evaluare-nationala-2027), la română și la matematică.
 
@@ -44,6 +48,8 @@ Dacă nu îți dai seama de la ce capitol vine o greșeală, [Scanerul de lacune
 ## Planul pe zile
 
 ### 23–27 decembrie: pauză adevărată
+
+![Cronologie animată a vacanței: 23–27 decembrie pauză, 28–31 decembrie capitolele slabe, 1–2 ianuarie liber, 3–8 ianuarie variante complete, 9–10 ianuarie bilanț, 11 ianuarie modulul 3](/blog-media/vacanta-de-iarna-2026-plan-recapitulare-bac-evaluare-nationala/plan-vacanta.svg "Vacanța, pe zile")
 
 Primele cinci zile sunt libere. Sună a timp pierdut, dar un elev care a tras din septembrie până în decembrie învață mai bine după câteva zile de somn și de stat cu familia. Singura sarcină: pune lista de capitole la vedere, ca să știi cu ce începi.
 
@@ -80,6 +86,8 @@ Duminică seara pregătești ghiozdanul. Luni, 11 ianuarie, începe modulul 3.
 ## Diferențe între clasa a VIII-a și a XII-a
 
 **Clasa a VIII-a.** Două materii, deci planul e mai simplu: o sesiune de matematică și una de română pe zi. La matematică, greșelile vin des din materia claselor V–VII (fracții, procente, ecuații), nu din ce s-a predat în a VIII-a. La română, câștigul rapid este la cerințele de gramatică și la redactare. Un părinte poate ajuta fără să știe materia: ține cronometrul și verifică, cu baremul în mână, dacă răspunsul există și e complet.
+
+![Infografic: o sesiune de lucru înseamnă un capitol, în trei pași: teoria, exerciții de bază, cerința din subiecte reale](/blog-media/vacanta-de-iarna-2026-plan-recapitulare-bac-evaluare-nationala/o-sesiune-de-lucru.webp "O sesiune = un capitol, în trei pași")
 
 **Clasa a XII-a.** Trei probe scrise, deci o rotație: română, proba obligatorie, proba la alegere, apoi din nou. Nu lăsa proba la alegere pe ultimul loc; la biologie, geografie sau informatică materia e multă și se uită ușor. Dacă ai capitole din semestrul al doilea pe care nu le-ați predat încă, vacanța e un moment bun să le citești o dată, ca să nu le vezi pentru prima oară la simulare. Mai multe despre asta în [planul pentru simularea BAC 2027](/blog/simulare-bac-2027-plan-de-pregatire).
 

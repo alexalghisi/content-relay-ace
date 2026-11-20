@@ -4,6 +4,8 @@ description: "Subiectele BAC la chimie organică din iunie 2026, luate pe rând:
 date: 2026-11-13
 category: BAC
 tags: [subiecte bac chimie, subiecte bac chimie organica, barem bac chimie, bac 2027, probleme chimie organica]
+image: /blog-media/subiecte-bac-chimie-organica-cum-le-lucrezi-cu-baremul/coperta.jpg
+imageAlt: "Coperta articolului despre subiectele BAC la chimie organică, cu prima pagină a subiectului oficial din 2026"
 related:
   - /subiecte-bac/materie/chimie | Subiecte BAC chimie cu barem
   - /subiecte-bac/2026/chimie-organica/iunie-iulie-varianta-3 | Chimie organică, iunie 2026, varianta 3
@@ -21,6 +23,8 @@ La chimie organică, mulți elevi învață reacțiile pe de rost și speră să
 
 Proba E.d) la chimie durează trei ore și primești zece puncte din oficiu. Toate subiectele sunt obligatorii, deci nu ai de ales nimic în sală. Punctajul se împarte așa:
 
+![Infografic cu punctajul probei de chimie organică: Subiectul I 40 de puncte, al II-lea 25, al III-lea 25, plus 10 puncte din oficiu](/blog-media/subiecte-bac-chimie-organica-cum-le-lucrezi-cu-baremul/punctaj-pe-subiecte.webp "Unde sunt punctele, după subiectele și baremele oficiale din 2026")
+
 - **Subiectul I (40 de puncte):** zece întrebări cu un singur răspuns corect, câte 3 puncte, plus cinci enunțuri adevărat/fals, câte 2 puncte;
 - **Subiectul al II-lea (25 de puncte):** în principal hidrocarburi: alcani, alchene, alchine, arene;
 - **Subiectul al III-lea (25 de puncte):** în principal compuși cu grupe funcționale: alcooli, acizi carboxilici, aminoacizi și peptide, zaharide.
@@ -30,6 +34,8 @@ Primul lucru pe care îl spune baremul la Subiectul I merită ținut minte: dac�
 ## Subiectul I: grila e de fapt un mic set de probleme
 
 La varianta 3 din iunie 2026, cele zece întrebări se referă toate la șase compuși dați la început, notați de la (A) la (F): printre ei propena, 2-butena, etanolul și serina. Asta schimbă complet strategia. Nu citești fiecare întrebare izolat, ci petreci primele trei-patru minute identificând fiecare compus: ce clasă e, ce formulă moleculară are, câți atomi de carbon asimetric are.
+
+![Prima pagină a subiectului oficial de chimie organică, BAC 2026, varianta 3, iunie](/blog-media/subiecte-bac-chimie-organica-cum-le-lucrezi-cu-baremul/subiect-oficial-2026.webp "Subiectul oficial, varianta 3, iunie, exact cum îl primești în sală")
 
 Odată făcută această fișă pe ciornă, jumătate din itemi se rezolvă aproape singuri. Itemul 3 întreabă care compuși au carbon asimetric. Itemul 4 cere compușii cu același număr de legături C–H. Itemul 6 verifică dacă știi că serina e un hidroxiaminoacid. Toate folosesc aceleași informații pe care le-ai scos deja.
 
@@ -48,6 +54,8 @@ Mai e un detaliu pe care enunțul îl repetă des: „utilizați formule de stru
 ## Problemele de calcul: raționamentul valorează dublu
 
 Fiecare problemă din barem are aceeași formulă: „raționament corect (2p), calcule (1p)” sau, la cele mai lungi, 3p pentru raționament și 1p pentru calcule. Rezultatul final e scris, dar punctele vin în primul rând din drumul până la el.
+
+![Animație: prima pagină a subiectului de chimie organică, apoi baremul oficial al aceleiași variante](/blog-media/subiecte-bac-chimie-organica-cum-le-lucrezi-cu-baremul/subiect-si-barem.mp4 "Subiectul și baremul, unul după altul: așa le lucrezi acasă")
 
 Ia problema cu carbidul. Se tratează 160 g de carbid impur cu apă și se obțin 44,8 L de acetilenă, în condiții normale. Raționamentul are trei pași: 44,8 L înseamnă 2 mol de acetilenă; din ecuație, 2 mol de acetilenă vin din 2 mol de CaC₂, adică 128 g; puritatea e 128 din 160, adică 80%. Dacă scrii acești pași, dar greșești o împărțire, păstrezi cele 2 puncte pe raționament.
 

@@ -19,6 +19,9 @@ export interface PostMarkdown {
   category: string | null;
   tags: string[];
   related: LinkArticol[];
+  /** Imaginea de copertă (cale din public/, ex. /blog-media/{slug}/coperta.jpg) și textul ei alternativ. */
+  image: string | null;
+  imageAlt: string | null;
   content: string;
 }
 
@@ -30,6 +33,8 @@ export interface ArticolLista {
   category: string | null;
   published_at: string | null;
   tags: string[] | null;
+  /** Imaginea de copertă (cale locală sau URL), dacă există. */
+  image?: string | null;
 }
 
 export const NUME_FISIER = /^(\d{4}-\d{2}-\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/;
@@ -108,6 +113,11 @@ export function postDinFisier(numeFisier: string, raw: string): PostMarkdown {
       throw new Error(`${nume}: related „${r}” trebuie să fie „/cale | Etichetă”`);
     return { to: to.trim(), label };
   });
+  const image = text(data.image) || null;
+  const imageAlt = text(data.imageAlt) || null;
+  if (image && !image.startsWith("/"))
+    throw new Error(`${nume}: image trebuie să fie o cale din public/, ex. /blog-media/${slug}/coperta.jpg`);
+  if (image && !imageAlt) throw new Error(`${nume}: image are nevoie de imageAlt`);
   return {
     slug,
     title,
@@ -117,6 +127,8 @@ export function postDinFisier(numeFisier: string, raw: string): PostMarkdown {
     category: text(data.category) || null,
     tags: lista(data.tags),
     related,
+    image,
+    imageAlt,
     content: body,
   };
 }
@@ -156,6 +168,7 @@ export const caArticolLista = (p: PostMarkdown): ArticolLista => ({
   category: p.category,
   published_at: p.date,
   tags: p.tags,
+  image: p.image,
 });
 
 /** Lista blogului: articolele din fișiere + cele din DB, fără dubluri (fișierul câștigă), cele mai noi primele. */

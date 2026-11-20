@@ -41,12 +41,12 @@ export const listPublicBlogPosts = createServerFn({ method: "GET" }).handler(asy
 async function citesteDb() {
   const { data, error } = await publicBlogClient()
     .from("blog_posts")
-    .select("slug,title,excerpt,category,published_at,tags")
+    .select("slug,title,excerpt,category,published_at,tags,featured_image")
     .eq("is_published", true)
     .order("published_at", { ascending: false })
     .limit(100);
   if (error) throw new Error("Articolele nu pot fi încărcate momentan.");
-  return data ?? [];
+  return (data ?? []).map(({ featured_image, ...p }) => ({ ...p, image: featured_image }));
 }
 
 export const getPublicBlogPost = createServerFn({ method: "GET" })
@@ -65,7 +65,8 @@ export const getPublicBlogPost = createServerFn({ method: "GET" })
           category: md.category,
           published_at: md.date,
           tags: md.tags,
-          featured_image: null,
+          featured_image: md.image,
+          featured_image_alt: md.imageAlt,
           updated_at: md.updated ?? md.date,
           related: md.related,
         },

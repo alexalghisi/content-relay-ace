@@ -4,6 +4,8 @@ description: "Ce conțin modelele oficiale pentru Evaluarea Națională 2027 la 
 date: 2026-11-13
 category: Evaluare Națională
 tags: [model evaluare nationala 2027, subiecte evaluare nationala 2027, evaluare nationala matematica, evaluare nationala romana, clasa a 8-a]
+image: /blog-media/model-evaluare-nationala-2027-ce-arata-si-cum-il-lucrezi/coperta.jpg
+imageAlt: "Coperta articolului despre modelul Evaluării Naționale 2027, cu o pagină din modelul la matematică"
 related:
   - /subiecte-evaluare-nationala | Subiecte Evaluare Națională rezolvate
   - /subiecte-evaluare-nationala/model-2027-matematica | Model EN 2027 matematică, rezolvat
@@ -27,6 +29,8 @@ Pentru admiterea la liceu contează media aritmetică a notelor de la Evaluarea 
 
 Modelul are trei subiecte de câte 30 de puncte.
 
+![Infografic: la modelul de matematică, trei subiecte de câte 30 de puncte și 10 din oficiu](/blog-media/model-evaluare-nationala-2027-ce-arata-si-cum-il-lucrezi/punctaj-model-matematica.webp "Modelul la matematică, pe subiecte (după baremul oficial)")
+
 **Subiectul I** e calcul: ordinea operațiilor, regula de trei simplă, o ecuație, compararea unor fracții periodice, o medie geometrică și citirea unei diagrame. Nimic greu, dar la grilă nu există punctaj parțial. Un 5 + 6 · 2 calculat de la stânga la dreapta înseamnă 5 puncte pierdute, adică jumătate de punct din notă.
 
 **Subiectul al II-lea** e geometrie de recunoaștere: simetricul unui punct, unghiuri cu drepte paralele, aria unui paralelogram cu sinusul, un unghi înscris în cerc, perpendicularitatea în cub. Aici elevii pierd puncte pentru că nu desenează. Figura e dată, dar e bine să notezi pe ea fiecare mărime calculată.
@@ -42,6 +46,8 @@ Ambele sunt explicate pas cu pas în [rezolvarea modelului la matematică](/subi
 
 La română, Subiectul I are 70 de puncte și pornește de la două texte, unul literar și unul nonliterar. Mulți părinți cred că proba depinde de cât de bine scrie copilul. În realitate, o bună parte din punctaj vine din reguli care se învață.
 
+![Pagina cu Subiectul I din modelul de română pentru Evaluarea Națională 2027](/blog-media/model-evaluare-nationala-2027-ce-arata-si-cum-il-lucrezi/model-romana-2027.webp "Modelul la română: Subiectul I pornește de la două texte")
+
 - **Itemii de înțelegere** (completarea spațiilor, grila, adevărat/fals) cer doar citire atentă. În model, un enunț fals pune papagalul pe pălărie, deși în text pe pălărie se așază altă pasăre. Exact pe astfel de detalii se pierd punctele.
 - **Itemii cu limită de cuvinte** (minimum 30, apoi 50–100) au câte un punct doar pentru încadrare. Un răspuns bun, dar de 45 de cuvinte, pierde un punct sigur.
 - **Gramatica** din Partea a II-a cere precizie: la valoarea morfologică nu se punctează „verb”, ci „verb predicativ”, „copulativ” sau „auxiliar”.
@@ -55,6 +61,8 @@ La română, Subiectul I are 70 de puncte și pornește de la două texte, unul 
 2. **Corectat cu baremul oficial.** Elevul se corectează singur, item cu item, și notează punctajul. E un exercițiu util în sine: așa înțelege cum gândește un evaluator.
 3. **Lista punctelor pierdute.** Pentru fiecare item greșit notează de ce: neatenție, capitol neînvățat sau timp insuficient. Cele trei cauze cer soluții diferite.
 4. **Abia apoi rezolvarea explicată.** Citită după corectare, nu înainte, rezolvarea arată drumul corect exact acolo unde a apărut blocajul.
+
+![Animație: o pagină din modelul de matematică 2027, apoi baremul oficial](/blog-media/model-evaluare-nationala-2027-ce-arata-si-cum-il-lucrezi/model-matematica-subiect-si-barem.mp4 "Subiectul și baremul modelului, unul după altul")
 
 După model, cel mai bun antrenament e subiectul real din iunie 2026. Are același format și l-am rezolvat la fel: [matematică 2026](/subiecte-evaluare-nationala/2026-matematica) și [română 2026](/subiecte-evaluare-nationala/2026-romana).
 

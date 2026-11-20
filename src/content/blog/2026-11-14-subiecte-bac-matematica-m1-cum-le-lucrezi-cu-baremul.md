@@ -4,6 +4,8 @@ description: "Subiectele BAC la matematică M_mate-info din iunie 2026, luate it
 date: 2026-11-14
 category: BAC
 tags: [subiecte bac matematica, subiecte bac matematica m1, barem bac matematica, bac 2027, matematica mate-info]
+image: /blog-media/subiecte-bac-matematica-m1-cum-le-lucrezi-cu-baremul/coperta.jpg
+imageAlt: "Coperta articolului despre subiectele BAC la matematică M1, cu prima pagină a subiectului oficial din 2026"
 related:
   - /subiecte-bac/materie/matematica | Subiecte BAC matematică cu barem
   - /subiecte-bac/2026/matematica-mate-info/iunie-iulie-varianta-3 | Matematică M1, iunie 2026, varianta 3
@@ -21,6 +23,8 @@ De aceea, cel mai util exercițiu din clasa a XII-a e să lucrezi subiecte reale
 
 Ai trei ore, toate subiectele sunt obligatorii și primești zece puncte din oficiu. Fiecare subiect valorează 30 de puncte, iar fiecare item are 5 puncte:
 
+![Infografic cu punctajul probei de matematică M1: trei subiecte de câte 30 de puncte, câte 5 puncte pe item, plus 10 puncte din oficiu](/blog-media/subiecte-bac-matematica-m1-cum-le-lucrezi-cu-baremul/punctaj-pe-subiecte.webp "Unde sunt punctele, după subiectele și baremele oficiale din 2026")
+
 - **Subiectul I:** șase exerciții scurte din materia de clasa a IX-a și a X-a (numere complexe, funcții, ecuații, combinatorică, geometrie analitică, trigonometrie);
 - **Subiectul al II-lea:** algebra de clasa a XI-a și a XII-a, de regulă o problemă cu matrice și sisteme și una cu o lege de compoziție;
 - **Subiectul al III-lea:** analiză, adică o funcție de studiat cu derivate și una cu integrale.
@@ -30,6 +34,8 @@ Două fraze din antetul baremului merită citite de fiecare elev. Prima: orice s
 ## Subiectul I: puncte sigure, dacă scrii pașii
 
 La primul item ai numărul complex z = 3 − i și trebuie să arăți că z(z̄ + 2i) = 10. Baremul împarte cele 5 puncte așa: 2 puncte pentru (3 − i)(3 + i) = 9 − i², apoi 3 puncte pentru 9 − (−1) = 10. Dacă scrii direct „= 10”, riști să pierzi punctele intermediare.
+
+![Prima pagină a subiectului oficial de matematică M1, BAC 2026, varianta 3, iunie–iulie](/blog-media/subiecte-bac-matematica-m1-cum-le-lucrezi-cu-baremul/subiect-oficial-2026.webp "Subiectul oficial, varianta 3, iunie–iulie, exact cum îl primești în sală")
 
 Itemul 3 e o capcană clasică: ecuația √(x² + 7) = 2√(x + 1). Ridici la pătrat, obții x² − 4x + 3 = 0, deci x = 1 sau x = 3. Baremul scrie explicit „care convin”. Verificarea soluțiilor face parte din rezolvare. Dacă o sari, pierzi puncte pe o ecuație pe care, de fapt, ai rezolvat-o.
 
@@ -58,6 +64,8 @@ Al doilea exercițiu e despre integrale, cu f(x) = (x² − 4)/(x ln x). Punctul
 ## Cum te corectezi singur cu baremul
 
 Metoda pe care o recomand elevilor mei e simplă, dar cere disciplină:
+
+![Animație: prima pagină a subiectului de matematică M1, apoi baremul oficial al aceleiași variante](/blog-media/subiecte-bac-matematica-m1-cum-le-lucrezi-cu-baremul/subiect-si-barem.mp4 "Subiectul și baremul, unul după altul: așa le lucrezi acasă")
 
 1. Lucrezi varianta în trei ore, cu ceas, fără să te uiți la barem.
 2. Corectezi cu pixul de altă culoare, pas cu pas. Pui punctele doar dacă pasul din barem apare scris la tine, nu doar „gândit”.

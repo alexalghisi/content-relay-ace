@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" width="1000" height="340" role="img" aria-labelledby="t">
+  <title id="t">Simularea BAC 2027, zi cu zi</title>
+  <style>
+    .lbl{font:700 19px 'Fira Sans',system-ui,Segoe UI,Arial,sans-serif;fill:#12306b}
+    .kl{fill:#d9531e}
+    .sm{font:16px 'Fira Sans',system-ui,Segoe UI,Arial,sans-serif;fill:#4a5878}
+    .hd{font:800 26px 'Fira Sans',system-ui,Segoe UI,Arial,sans-serif;fill:#12306b}
+    .br{font:700 15px 'Fira Sans',system-ui,Segoe UI,Arial,sans-serif;fill:#8a96b3}
+    .ax{stroke:#cfd9ee;stroke-width:8;stroke-linecap:round}
+    .done{stroke:#1d4fa3;stroke-width:8;stroke-linecap:round;stroke-dasharray:860;stroke-dashoffset:860;animation:fill 7s ease-in-out infinite}
+    .pt{fill:#fff;stroke:#1d4fa3;stroke-width:5}
+    .key{fill:#ff7a45;stroke:#fff;stroke-width:4}
+    .pulse{fill:none;stroke:#ff7a45;stroke-width:4;transform-box:fill-box;transform-origin:center;animation:p 1.6s ease-out infinite}
+    @keyframes fill{0%{stroke-dashoffset:860}60%,100%{stroke-dashoffset:0}}
+    @keyframes p{0%{transform:scale(.7);opacity:1}100%{transform:scale(2.4);opacity:0}}
+  </style>
+  <rect width="1000" height="340" rx="20" fill="#f3f6fc"/>
+  <text class="hd" x="40" y="52">Simularea BAC 2027, zi cu zi</text>
+  <line class="ax" x1="70" y1="190" x2="930" y2="190"/>
+  <line class="done" x1="70" y1="190" x2="930" y2="190"/>
+  <circle class="pulse" cx="70" cy="190" r="13"/><circle class="key" cx="70" cy="190" r="13"/><text class="lbl kl" x="70" y="236" text-anchor="start">22 martie</text><text class="sm" x="70" y="258" text-anchor="start">română (E.a)</text><circle class="pt" cx="242" cy="190" r="10" style="animation-delay:0.35s"/><text class="lbl" x="242" y="142" text-anchor="middle">23 martie</text><text class="sm" x="242" y="118" text-anchor="middle">proba E.c)</text><circle class="pt" cx="414" cy="190" r="10" style="animation-delay:0.70s"/><text class="lbl" x="414" y="236" text-anchor="middle">24 martie</text><text class="sm" x="414" y="258" text-anchor="middle">proba E.d)</text><circle class="pt" cx="586" cy="190" r="10" style="animation-delay:1.05s"/><text class="lbl" x="586" y="142" text-anchor="middle">25 martie</text><text class="sm" x="586" y="118" text-anchor="middle">maternă (E.b)</text><circle class="pt" cx="758" cy="190" r="10" style="animation-delay:1.40s"/><text class="lbl" x="758" y="236" text-anchor="middle">9 aprilie</text><text class="sm" x="758" y="258" text-anchor="middle">rezultatele</text><circle class="pt" cx="930" cy="190" r="10" style="animation-delay:1.75s"/><text class="lbl" x="930" y="142" text-anchor="end">14 iunie</text><text class="sm" x="930" y="118" text-anchor="end">BAC: română</text>
+  <text class="br" x="960" y="322" text-anchor="end">Date: calendarul oficial BAC 2027 · MeditatiiDirect.ro</text>
+</svg>

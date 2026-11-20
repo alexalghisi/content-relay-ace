@@ -4,6 +4,8 @@ description: "Simularea Evaluării Naționale 2027 e pe 16–18 martie. Ce poate
 date: 2026-11-20
 category: Evaluare Națională
 tags: [simulare evaluare nationala 2027, evaluare nationala 2027, clasa a 8-a, sfaturi pentru parinti, admitere liceu]
+image: /blog-media/simulare-evaluare-nationala-2027-ghid-pentru-parinti/coperta.jpg
+imageAlt: "Coperta ghidului pentru părinți despre simularea Evaluării Naționale 2027, cu o pagină din subiectul de română"
 related:
   - /simulare-evaluare-nationala-2027 | Simulare Evaluare Națională 2027
   - /calendar-evaluare-nationala-2027 | Calendar Evaluarea Națională 2027
@@ -19,7 +21,7 @@ related:
 
 Simularea Evaluării Naționale 2027 are loc astfel: limba și literatura română marți, 16 martie, matematică miercuri, 17 martie, iar limba și literatura maternă joi, 18 martie. Rezultatele se comunică elevilor pe 30 martie. Examenul propriu-zis începe pe 22 iunie cu româna, iar matematica e pe 24 iunie. Toate datele, cu sursele oficiale, sunt în [calendarul Evaluării Naționale 2027](/calendar-evaluare-nationala-2027).
 
-![Cronologie animată: de pe 20 noiembrie până la simularea din 16–18 martie, trecând prin vacanța de iarnă și vacanța mobilă, apoi rezultatele pe 30 martie și examenul pe 22 iunie](https://meditatiidirect.ro/blog-media/simulare-en-2027-cronologie.svg)
+![Cronologie animată: de pe 20 noiembrie până la simularea din 16–18 martie, trecând prin vacanța de iarnă și vacanța mobilă, apoi rezultatele pe 30 martie și examenul pe 22 iunie](/blog-media/simulare-en-2027-cronologie.svg)
 
 Între azi și simulare mai sunt două vacanțe. Cea de iarnă ține de pe 23 decembrie până pe 10 ianuarie. Vacanța mobilă e o săptămână între 15 februarie și 7 martie, aleasă de inspectoratul fiecărui județ, așa că verificați pe [structura anului școlar 2026-2027](/structura-an-scolar-2026-2027) ce săptămână are școala voastră. Contează: dacă vacanța cade în prima săptămână din martie, copilul intră la simulare aproape direct din ea, și e păcat să o piardă.
 
@@ -29,7 +31,7 @@ Un lucru care liniștește multă lume: nota de la simulare nu intră în media 
 
 Mulți părinți nu au văzut niciodată un subiect de Evaluare Națională. Merită să vă uitați măcar o dată, pentru că altfel e greu să înțelegeți ce vă spune profesorul după simulare. Ambele probe durează două ore și au 10 puncte din oficiu.
 
-![Grafic animat: la română, Subiectul I are 70 de puncte, Subiectul al II-lea 20 și 10 din oficiu; la matematică, trei subiecte de câte 30 de puncte și 10 din oficiu](https://meditatiidirect.ro/blog-media/en-2027-punctaj-probe.svg)
+![Grafic animat: la română, Subiectul I are 70 de puncte, Subiectul al II-lea 20 și 10 din oficiu; la matematică, trei subiecte de câte 30 de puncte și 10 din oficiu](/blog-media/en-2027-punctaj-probe.svg)
 
 La matematică, Subiectele I și II au câte șase itemi, punctați cu 5 sau 0. Contează doar rezultatul. Un copil care știe metoda, dar greșește un semn la final, ia zero la item. Subiectul al III-lea e cel cu rezolvări complete, unde se dau puncte și pentru o rezolvare începută corect. De aici vine primul sfat pentru acasă: la primele două subiecte, verificarea calculului e o deprindere care se exersează, nu un detaliu.
 
@@ -38,6 +40,8 @@ La română, Subiectul I pornește de la două texte, unul literar și unul nonl
 ## Patru lucruri pe care le poate face un părinte până în martie
 
 Nu trebuie să știți matematică de clasa a VIII-a ca să ajutați. Trebuie să organizați timpul și să citiți baremul.
+
+![Pagina cu Subiectul I din proba de română a Evaluării Naționale din iunie 2026](/blog-media/simulare-evaluare-nationala-2027-ghid-pentru-parinti/subiect-romana-2026.webp "Așa arată Subiectul I la română: două texte și cerințe pe ele (EN, iunie 2026)")
 
 **1. Un test complet pe săptămână, cronometrat.** Nu bucăți de exerciții, ci două ore pe ceas, cu telefonul în altă cameră. Începeți cu [modelele oficiale pentru 2027](/modele-subiecte-evaluare-nationala-2027), apoi treceți la subiectele din anii trecuți. Copilul obosește în a doua oră, și asta se vede doar dacă lucrează testul întreg.
 

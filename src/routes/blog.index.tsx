@@ -83,8 +83,20 @@ function BlogIndex() {
               key={p.slug}
               to="/blog/$slug"
               params={{ slug: p.slug }}
-              className="card-soft p-5 hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition flex flex-col"
+              className="card-soft overflow-hidden hover:border-primary/40 hover:shadow-[var(--shadow-pop)] transition flex flex-col"
             >
+              {p.image && (
+                <img
+                  src={p.image}
+                  alt=""
+                  width={1200}
+                  height={630}
+                  loading="lazy"
+                  decoding="async"
+                  className="aspect-[1200/630] w-full object-cover border-b border-border"
+                />
+              )}
+              <div className="p-5 flex flex-1 flex-col">
               {p.category && (
                 <span className="self-start inline-flex items-center gap-1 text-xs text-primary">
                   <Tag className="h-3 w-3" />
@@ -99,6 +111,7 @@ function BlogIndex() {
                   {new Date(p.published_at).toLocaleDateString("ro-RO")}
                 </p>
               )}
+              </div>
             </Link>
           ))}
         </div>

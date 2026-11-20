@@ -1,6 +1,6 @@
 /// <reference types="bun" />
 import { describe, expect, it } from "bun:test";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import {
   blogSitemapEntries,
@@ -145,7 +145,7 @@ describe("articolele din src/content/blog", () => {
     const cliseu =
       /în era digitală|în concluzie|nu în ultimul rând|în ziua de azi|călători[ae] (ta|spre)|lumea modernă|joacă un rol crucial/i;
     for (const p of postari) {
-      const cuvinte = p.content.split(/\s+/).filter(Boolean).length;
+      const cuvinte = p.content.replace(/!\[[^\]]*\]\([^)]*\)/g, " ").split(/\s+/).filter(Boolean).length;
       expect({ slug: p.slug, ok: cuvinte >= 900 && cuvinte <= 1400 }).toEqual({
         slug: p.slug,
         ok: true,
@@ -159,7 +159,7 @@ describe("articolele din src/content/blog", () => {
   it("linkurile interne (din text și din related) duc la rute existente, nu la pagini redirecționate", () => {
     const gresite: string[] = [];
     for (const p of postari) {
-      const linkuri = [...p.content.matchAll(/\]\((\/[^)\s]*)\)/g)]
+      const linkuri = [...p.content.matchAll(/(?<!!)\[[^\]]*\]\((\/[^)\s]*)\)/g)]
         .map((m) => m[1]!)
         .concat(p.related.map((r) => r.to));
       for (const l of linkuri)
@@ -170,5 +170,36 @@ describe("articolele din src/content/blog", () => {
 
   it("nu citează prețuri în lei (prețurile reale sunt pe /preturi-meditatii/{materie})", () => {
     for (const p of postari) expect(p.content).not.toMatch(/\d+\s*(?:–|-)?\s*\d*\s*(?:de )?lei/);
+  });
+
+  it("au copertă și cel puțin trei imagini sau animații în text, cu fișierele în public/", () => {
+    const probleme: string[] = [];
+    const fisier = (src: string) =>
+      join("public", src.replace(/^https:\/\/meditatiidirect\.ro/, "").split("?")[0]!);
+    for (const p of postari) {
+      if (!p.image) probleme.push(`${p.slug}: lipsește image (coperta)`);
+      else if (!existsSync(fisier(p.image))) probleme.push(`${p.slug}: nu există ${p.image}`);
+      const media = [...p.content.matchAll(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g)];
+      if (media.length < 3) probleme.push(`${p.slug}: are ${media.length} imagini în text (minimum 3)`);
+      let animate = 0;
+      for (const [, alt, src] of media) {
+        if ((alt ?? "").trim().length < 15) probleme.push(`${p.slug}: alt prea scurt la ${src}`);
+        if (!/^(\/|https:\/\/meditatiidirect\.ro\/)blog-media\//.test(src!))
+          probleme.push(`${p.slug}: ${src} trebuie pus în public/blog-media/`);
+        const f = fisier(src!);
+        if (!existsSync(f)) {
+          probleme.push(`${p.slug}: nu există ${f}`);
+          continue;
+        }
+        if (statSync(f).size > 1_500_000) probleme.push(`${p.slug}: ${f} are peste 1,5 MB`);
+        if (/\.(mp4|webm|gif)$/i.test(f) || (/\.svg$/i.test(f) && /@keyframes|<animate/.test(readFileSync(f, "utf8"))))
+          animate++;
+      }
+      if (!animate) probleme.push(`${p.slug}: niciun video/GIF/SVG animat în text`);
+      for (const linie of p.content.split("\n"))
+        if (/!\[/.test(linie) && !/^!\[[^\]]*\]\([^)\s]+(?:\s+"[^"]*")?\)\s*$/.test(linie.trim()))
+          probleme.push(`${p.slug}: imaginea trebuie să stea singură pe rând: ${linie.slice(0, 60)}`);
+    }
+    expect(probleme).toEqual([]);
   });
 });

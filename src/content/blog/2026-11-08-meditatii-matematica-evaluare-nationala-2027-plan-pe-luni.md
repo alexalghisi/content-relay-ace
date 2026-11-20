@@ -4,6 +4,8 @@ description: "Plan lună cu lună, din noiembrie până în iunie, pentru matema
 date: 2026-11-08
 category: Evaluare Națională
 tags: [evaluare nationala 2027, meditatii matematica, pregatire evaluare nationala, clasa a 8-a]
+image: /blog-media/meditatii-matematica-evaluare-nationala-2027-plan-pe-luni/coperta.jpg
+imageAlt: "Coperta planului lunar de pregătire la matematică pentru Evaluarea Națională 2027"
 related:
   - /calendar-evaluare-nationala-2027 | Calendar Evaluarea Națională 2027
   - /meditatii-evaluare-nationala | Meditații pentru Evaluarea Națională
@@ -21,6 +23,8 @@ Planul de mai jos e gândit pentru un elev de clasa a VIII-a care face o ședin�
 
 Prima ședință nu ar trebui să fie o lecție. Ar trebui să fie un diagnostic: o variantă de examen din anii trecuți, lucrată în două ore, fără ajutor. Contează mai puțin nota și mai mult *unde* s-au pierdut punctele.
 
+![Cronologie animată a planului: noiembrie aritmetică, decembrie algebră, ianuarie funcții și geometrie plană, februarie geometrie în spațiu, simularea pe 17 martie, examenul pe 24 iunie](/blog-media/meditatii-matematica-evaluare-nationala-2027-plan-pe-luni/plan-pe-luni.svg "Planul, lună cu lună, cu datele din calendarul oficial")
+
 Golurile de la matematică se leagă între ele. Un elev care greșește la ecuații poate avea, de fapt, o problemă cu fracțiile sau cu ordinea operațiilor. [Harta Blocajelor](/harta-blocajelor/matematica) arată exact aceste legături, de la noțiunile de bază până la cele de clasa a VIII-a, iar [Scanerul de lacune](/scaner-lacune/matematica) te ajută să găsești prima verigă lipsă în câteva minute.
 
 Notează rezultatul diagnosticului pe o foaie. O vei compara cu simularea din martie.
@@ -28,6 +32,8 @@ Notează rezultatul diagnosticului pe o foaie. O vei compara cu simularea din ma
 ## Noiembrie: aritmetică și calcul fără greșeli
 
 Subiectul I verifică rapid calculul și noțiunile de bază. Aici se pierd cele mai „ieftine” puncte: din grabă, nu din neștiință.
+
+![Primele exerciții din Subiectul I la matematică, Evaluarea Națională din iunie 2026](/blog-media/meditatii-matematica-evaluare-nationala-2027-plan-pe-luni/subiect-matematica-2026.webp "Subiectul I din iunie 2026: aici se pierd punctele de calcul")
 
 - ordinea operațiilor, fracții ordinare și zecimale, procente;
 - puteri și radicali, cu reguli scrise pe o fișă proprie;
@@ -58,6 +64,8 @@ La geometrie, cere-i copilului să facă desenul mare și curat. Un desen mic, s
 - corpuri geometrice: prismă, piramidă, cilindru, con, sferă;
 - distanțe și unghiuri în spațiu, pe desen;
 - la sfârșitul lunii, **prima variantă completă** cronometrată la două ore.
+
+![Derulare prin pagina Harta Blocajelor la matematică de pe MeditatiiDirect.ro](/blog-media/meditatii-matematica-evaluare-nationala-2027-plan-pe-luni/harta-blocajelor-matematica.mp4 "Harta Blocajelor: de la ce noțiune pornește fiecare greșeală")
 
 Corectați varianta după barem, rând cu rând. Fiecare punct pierdut intră într-una din trei categorii: *nu știam*, *am greșit calculul*, *nu am scris raționamentul*. Lista asta e planul pentru martie.
 

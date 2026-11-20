@@ -4,6 +4,8 @@ description: "Cum folosești subiectele BAC la fizică din 2024–2026 și barem
 date: 2026-11-08
 category: BAC
 tags: [subiecte bac fizica, barem bac fizica, bac 2027, fizica teoretic, fizica tehnologic]
+image: /blog-media/subiecte-bac-fizica-cum-le-folosesti-cu-barem/coperta.jpg
+imageAlt: "Coperta articolului despre subiectele BAC la fizică, cu prima pagină a subiectului oficial din 2026"
 related:
   - /subiecte-bac/materie/fizica | Subiecte BAC fizică, toate profilurile
   - /subiecte-bac/materie/fizica-teoretic | Fizică — filiera teoretică
@@ -21,6 +23,8 @@ Toate documentele despre care vorbim sunt în arhiva noastră, cu subiectul și 
 
 Înainte de orice exercițiu, citește antetul. La sesiunea din iunie–iulie 2026, ca și în anii dinainte, el spune trei lucruri:
 
+![Infografic cu punctajul probei de fizică: două arii tematice alese, de câte 45 de puncte, plus 10 puncte din oficiu](/blog-media/subiecte-bac-fizica-cum-le-folosesti-cu-barem/punctaj-pe-subiecte.webp "Unde sunt punctele, după subiectele și baremele oficiale din 2026")
+
 - rezolvi toate subiectele din **două arii tematice**, alese de tine, din cele patru: A. Mecanică, B. Elemente de termodinamică, C. Producerea și utilizarea curentului continuu, D. Optică;
 - dacă abordezi mai mult de două arii, se iau în calcul **primele două** pe care le-ai început;
 - ai **trei ore** de lucru efectiv și primești zece puncte din oficiu.
@@ -33,11 +37,15 @@ Fiecare arie valorează 45 de puncte și are aceeași structură: Subiectul I cu
 
 Proba E.d) la fizică are subiecte diferite pentru filiera teoretică (profil real, plus profilul militar de la vocațional) și pentru filiera tehnologică. Structura e aceeași, dar programa și dificultatea diferă. Pare evident, totuși vedem des elevi de la real care se antrenează pe variante tehnologice pentru că „se termină mai repede”. Te liniștesc o lună și te încurcă în iunie.
 
+![Prima pagină a subiectului oficial de fizică, BAC 2026, filiera teoretică, varianta 3](/blog-media/subiecte-bac-fizica-cum-le-folosesti-cu-barem/subiect-oficial-2026.webp "Subiectul oficial, filiera teoretică, varianta 3, exact cum îl primești în sală")
+
 În arhivă, fiecare document are profilul scris în titlu. Pentru 2024–2026 ai la ambele filiere modelul oficial, simularea și sesiunile din iunie–iulie și august–septembrie; la filiera teoretică există și sesiunea specială.
 
 ## Baremul se citește pe pași, nu pe rezultat
 
 Ia un exemplu concret: varianta 3 din iunie 2026, filiera teoretică, Mecanică, Subiectul al II-lea. Un corp de 6 kg coboară, legat printr-un fir trecut peste un scripete de o găleată cu nisip, iar punctul b. cere tensiunea din fir. Baremul împarte cele 3 puncte așa:
+
+![Animație: prima pagină a subiectului de fizică, apoi baremul oficial al aceleiași variante](/blog-media/subiecte-bac-fizica-cum-le-folosesti-cu-barem/subiect-si-barem.mp4 "Subiectul și baremul, unul după altul: așa le lucrezi acasă")
 
 - 2 puncte pentru ecuația m₁g − T₁ = m₁a;
 - 1 punct pentru rezultatul final, T₁ = 48 N.
