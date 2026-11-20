@@ -158,6 +158,25 @@ test("articol de blog din Markdown: conținut, Article JSON-LD, linkuri alese ș
     page.getByRole("heading", { level: 2, name: "Baremul se citește pe pași, nu pe rezultat" }),
   ).toBeVisible();
   await expect(page.locator("table").first()).toBeVisible();
+
+  // Coperta (și og:image) + imaginile și animația din text, toate servite din public/blog-media.
+  const coperta = "/blog-media/subiecte-bac-fizica-cum-le-folosesti-cu-barem/coperta.jpg";
+  expect(html).toContain(`<meta property="og:image" content="https://meditatiidirect.ro${coperta}"`);
+  await expect(page.locator(`article img[src="${coperta}"]`)).toBeVisible();
+  const figuri = page.locator("article figure");
+  expect(await figuri.count()).toBeGreaterThanOrEqual(3);
+  await expect(figuri.locator("figcaption").first()).toBeVisible();
+  const video = page.locator("article figure video");
+  await expect(video).toHaveAttribute("src", /subiect-si-barem\.mp4$/);
+  await expect(video).toHaveJSProperty("muted", true);
+  for (const src of await page.locator("article figure img, article figure video").evaluateAll((els) =>
+    els.map((e) => e.getAttribute("src")!),
+  )) {
+    const r = await page.request.get(src);
+    expect({ src, status: r.status() }).toEqual({ src, status: 200 });
+  }
+  expect(await page.locator("article p figure").count()).toBe(0);
+
   await expect(
     page
       .locator("section", { has: page.getByRole("heading", { name: "Continuă cu" }) })
@@ -167,7 +186,9 @@ test("articol de blog din Markdown: conținut, Article JSON-LD, linkuri alese ș
   // Lista blogului include articolele din repo chiar dacă baza de date nu răspunde.
   const lista = await page.request.get("/blog");
   expect(lista.status()).toBe(200);
-  expect(await lista.text()).toContain(`href="${url}"`);
+  const listaHtml = await lista.text();
+  expect(listaHtml).toContain(`href="${url}"`);
+  expect(listaHtml).toContain('src="/blog-media/subiecte-bac-fizica-cum-le-folosesti-cu-barem/coperta.jpg"');
 
   const sm = await page.request.get("/sitemap.xml");
   expect(await sm.text()).toContain(`<loc>https://meditatiidirect.ro${url}</loc>`);

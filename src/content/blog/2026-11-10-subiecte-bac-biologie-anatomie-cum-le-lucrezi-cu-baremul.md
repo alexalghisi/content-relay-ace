@@ -4,6 +4,8 @@ description: "Subiectele BAC la biologie anatomie din 2024–2026, explicate: pr
 date: 2026-11-10
 category: BAC
 tags: [subiecte bac biologie, barem bac biologie, bac anatomie, bac 2027, genetica bac]
+image: /blog-media/subiecte-bac-biologie-anatomie-cum-le-lucrezi-cu-baremul/coperta.jpg
+imageAlt: "Coperta articolului despre subiectele BAC la anatomie, cu prima pagină a subiectului oficial din 2026"
 related:
   - /subiecte-bac/materie/biologie | Subiecte BAC biologie cu barem
   - /subiecte-bac/2026/biologie-anatomie/iunie-iulie-varianta-3 | Anatomie, iunie 2026, varianta 3
@@ -21,6 +23,8 @@ Mulți elevi care aleg biologia la BAC învață anatomia capitol cu capitol, di
 
 Anatomia se dă la proba E.d), pentru filiera teoretică, profilul real, pentru profilurile tehnic și resurse naturale și protecția mediului din filiera tehnologică și pentru profilul militar. Aceleași profiluri pot alege, în locul ei, biologia vegetală și animală, care are aceeași structură, dar altă materie.
 
+![Infografic cu punctajul probei de anatomie: trei subiecte de câte 30 de puncte, plus 10 puncte din oficiu](/blog-media/subiecte-bac-biologie-anatomie-cum-le-lucrezi-cu-baremul/punctaj-pe-subiecte.webp "Unde sunt punctele, după subiectele și baremele oficiale din 2026")
+
 Ai trei ore, toate subiectele sunt obligatorii și primești zece puncte din oficiu. Fiecare subiect valorează 30 de puncte:
 
 | Subiect | Ce conține | Puncte |
@@ -34,6 +38,8 @@ Baremul începe cu o frază pe care merită s-o citești de două ori: nu se aco
 ## Subiectul I: punctele care se pierd din grabă
 
 Cerințele de aici par ușoare și, de cele mai multe ori, chiar sunt. Grila are cinci întrebări de câte 2 puncte, iar în 2026 a întrebat, de exemplu, unde sunt localizați receptorii analizatorului auditiv (în urechea internă). La cerința B numești două afecțiuni ale sistemului muscular și asociezi fiecăreia o caracteristică; numele aduce 1 punct, caracteristica 2.
+
+![Prima pagină a subiectului oficial de anatomie, BAC 2026, varianta 3, iunie](/blog-media/subiecte-bac-biologie-anatomie-cum-le-lucrezi-cu-baremul/subiect-oficial-2026.webp "Subiectul oficial, varianta 3, iunie, exact cum îl primești în sală")
 
 Cerința D are capcana ei. Dacă o afirmație e falsă, scrii F și o modifici parțial ca să devină adevărată, iar negația nu e acceptată. Să luăm prima afirmație din 2026: „Prin contracția ventriculului stâng, sângele oxigenat este propulsat în venele pulmonare.” E falsă. „...nu este propulsat în venele pulmonare” nu primește nimic. Corectura bună schimbă cuvântul greșit: „...este propulsat în artera aortă.” Pentru fiecare afirmație falsă, litera aduce 2 puncte și modificarea încă 2.
 
@@ -69,6 +75,8 @@ Cerința B, de 12 puncte, pornește mereu de la un pacient care are nevoie de o 
 ## Subiectul al III-lea: enunțuri și minieseu
 
 Ultimul subiect are două teme. În 2026, prima a fost respirația și circulația: trei caracteristici ale inspirației, o explicație despre creșterea frecvenței cardiace în timpul unei curse și patru enunțuri afirmative pe două conținuturi date. Enunțurile valorează 8 puncte, câte 2 fiecare, deci merită să fie propoziții complete, cu termenii corecți.
+
+![Animație: prima pagină a subiectului de anatomie, apoi baremul oficial al aceleiași variante](/blog-media/subiecte-bac-biologie-anatomie-cum-le-lucrezi-cu-baremul/subiect-si-barem.mp4 "Subiectul și baremul, unul după altul: așa le lucrezi acasă")
 
 A doua temă a fost sistemul endocrin, cu un minieseu despre variațiile secreției de hormoni tiroidieni. Baremul îl împarte așa: 6 puncte pentru cele șase noțiuni enumerate, 2 pentru coerența textului, 2 pentru lungime. Lungimea înseamnă maximum trei-patru fraze. Un elev care scrie o jumătate de pagină pierde puncte pe care le avea deja.
 

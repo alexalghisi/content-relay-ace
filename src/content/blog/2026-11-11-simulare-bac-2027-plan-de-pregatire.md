@@ -4,6 +4,8 @@ description: "Simularea BAC 2027 începe pe 22 martie. Un plan realist din noiem
 date: 2026-11-11
 category: BAC
 tags: [simulare bac 2027, simulare bacalaureat, calendar bac 2027, pregatire bac, bac 2027]
+image: /blog-media/simulare-bac-2027-plan-de-pregatire/coperta.jpg
+imageAlt: "Coperta planului de pregătire pentru simularea BAC 2027, cu o pagină din simularea 2026 la matematică"
 related:
   - /calendar-bac-2027 | Calendar BAC 2027
   - /simulare-bacalaureat | Simulare bacalaureat online
@@ -18,6 +20,8 @@ Simularea BAC 2027 pare departe. De azi până la prima probă sunt cam 19 săpt
 ## Datele simulării BAC 2027
 
 Conform [calendarului BAC 2027](/calendar-bac-2027), anunțat de Ministerul Educației, probele scrise ale simulării au loc așa:
+
+![Cronologie animată: simularea BAC 2027 pe 22, 23, 24 și 25 martie, rezultatele pe 9 aprilie, apoi BAC-ul din 14 iunie](/blog-media/simulare-bac-2027-plan-de-pregatire/calendar-simulare.svg "Simularea BAC 2027, zi cu zi (calendarul oficial)")
 
 | Ziua | Proba |
 | --- | --- |
@@ -34,6 +38,8 @@ Ce înseamnă asta practic: simularea e ultima repetiție serioasă înainte de 
 
 Mulți elevi presupun că simularea din martie verifică doar ce s-a predat până atunci. Uită-te la [subiectul de la simularea din 2026 la matematică M_mate-info](/subiecte-bac/2026/matematica-mate-info/simulare) și vei vedea altceva. Subiectul I are numere complexe, o ecuație cu logaritmi, probabilități și geometrie analitică. Subiectul al II-lea combină un sistem cu parametru și o lege de compoziție la care se cere asociativitatea. Subiectul al III-lea are derivate, o limită, numărul de soluții ale unei ecuații și, la final, o integrală definită.
 
+![Prima pagină a subiectului de matematică M_mate-info de la simularea BAC 2026](/blog-media/simulare-bac-2027-plan-de-pregatire/simulare-2026-matematica-m1.webp "Simularea din 2026 la M1: tot programul, nu doar materia predată până în martie")
+
 Integralele se fac, de obicei, în semestrul al doilea din clasa a XII-a. Dacă le lași „pentru când le facem la școală”, în martie le vei vedea pentru prima dată în condiții de examen. De aceea planul de mai jos pune capitolele noi devreme, nu la final.
 
 La istorie, [simularea din 2026](/subiecte-bac/2026/istorie/simulare) a avut la primul subiect surse despre instaurarea comunismului în 1948 și apariția Securității, la al doilea o sursă despre domniile fanariote, iar la al treilea un eseu despre statul român între 1860 și 1927, de la reformele lui Cuza până la politica internă de după Marea Unire. Practic, tot programul, nu un capitol ales.
@@ -41,6 +47,8 @@ La istorie, [simularea din 2026](/subiecte-bac/2026/istorie/simulare) a avut la 
 ## Planul, pe etape
 
 ### Noiembrie – mijlocul lui decembrie: inventarul
+
+![Animație: subiectul de istorie de la simularea BAC 2026, apoi baremul lui](/blog-media/simulare-bac-2027-plan-de-pregatire/simulare-2026-istorie-subiect-si-barem.mp4 "Simularea 2026 la istorie: subiectul și baremul")
 
 Primele trei săptămâni nu sunt pentru învățat capitole noi, ci pentru a afla unde ești. Ia un subiect oficial complet la fiecare probă scrisă și lucrează-l în trei ore, fără telefon, fără manual. Corectează-l apoi strict după barem. Nu te uita doar la nota finală, ci la fiecare punctaj pierdut, și scrie-l într-un caiet separat: „III.1.c, n-am știut să studiez numărul de soluții”, „eseu română, n-am încadrat textul în curent”.
 

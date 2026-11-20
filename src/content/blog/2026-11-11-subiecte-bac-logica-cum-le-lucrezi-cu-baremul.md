@@ -4,6 +4,8 @@ description: "Subiectele BAC la logică din 2024–2026, explicate pe barem: gri
 date: 2026-11-11
 category: BAC
 tags: [subiecte bac logica, barem bac logica, bac 2027, logica argumentare si comunicare]
+image: /blog-media/subiecte-bac-logica-cum-le-lucrezi-cu-baremul/coperta.jpg
+imageAlt: "Coperta articolului despre subiectele BAC la logică, cu prima pagină a subiectului oficial din 2026"
 related:
   - /subiecte-bac/materie/logica | Subiecte BAC logică cu barem
   - /subiecte-bac/2026/logica/iunie-iulie-varianta-3 | Logică, iunie 2026, varianta 3
@@ -21,6 +23,8 @@ Logica are o reputație ciudată la BAC. Unii elevi o aleg pentru că „e doar 
 
 Logica, argumentarea și comunicarea se dă la proba E.d), pentru profilul umanist, profilul servicii din filiera tehnologică și profilurile vocaționale, cu excepția celui militar. Ai trei ore, toate subiectele sunt obligatorii și primești zece puncte din oficiu.
 
+![Infografic cu punctajul probei de logică: trei subiecte de câte 30 de puncte, plus 10 puncte din oficiu](/blog-media/subiecte-bac-logica-cum-le-lucrezi-cu-baremul/punctaj-pe-subiecte.webp "Unde sunt punctele, după subiectele și baremele oficiale din 2026")
+
 | Subiect | Ce conține | Puncte |
 | --- | --- | --- |
 | I | zece itemi de tip grilă, apoi o diagramă Euler cu cinci termeni | 20 + 10 |
@@ -32,6 +36,8 @@ Comparând sesiunile din iunie 2024, 2025 și 2026, structura e identică, cerin
 ## Subiectul I: grila și diagrama Euler
 
 Grila are zece întrebări de câte 2 puncte. Unele sunt de definiție, altele cer un mic raționament. În 2026, de exemplu, a apărut întrebarea despre ce se întâmplă când termenului „carte de bucate” i se înlătură proprietatea „de bucate”. Răspunsul corect: extensiunea crește, intensiunea scade. Mai puține note definitorii înseamnă mai multe obiecte care intră sub termen.
+
+![Prima pagină a subiectului oficial de logică, BAC 2026, varianta 3, iunie](/blog-media/subiecte-bac-logica-cum-le-lucrezi-cu-baremul/subiect-oficial-2026.webp "Subiectul oficial, varianta 3, iunie, exact cum îl primești în sală")
 
 O altă întrebare-capcană: care e predicatul logic al conversei propoziției „Unele tablouri celebre sunt cu lalele negre”? La conversiune, subiectul și predicatul își schimbă locul, deci predicatul conversei devine „tablouri celebre”. Mulți elevi aleg „lalele negre” pentru că e ultimul cuvânt din propoziție. Baremul spune clar: varianta b.
 
@@ -59,6 +65,8 @@ Cerința D prezintă doi elevi care argumentează ceva. Le scrii raționamentele
 ## Subiectul al III-lea: silogismele
 
 Partea A îți dă două moduri silogistice. În 2026 au fost iai-4 și iao-3. Primul pas e să scrii schemele: literele îți spun tipul propozițiilor, iar cifra, figura, adică locul termenului mediu. Pentru iai-4, schema e PiM, MaS, deci SiP. Pentru iao-3: MiP, MaS, deci SoP.
+
+![Animație: prima pagină a subiectului de logică, apoi baremul oficial al aceleiași variante](/blog-media/subiecte-bac-logica-cum-le-lucrezi-cu-baremul/subiect-si-barem.mp4 "Subiectul și baremul, unul după altul: așa le lucrezi acasă")
 
 Urmează verificarea prin diagrame Venn, care valorează 8 puncte: câte 3 pentru reprezentare și câte 1 pentru decizie. Iar aici baremul are o regulă dură. Punctul pentru „valid” sau „nevalid” se acordă doar dacă decizia rezultă din desen. Dacă știi pe de rost că iai-4 e valid, dar diagrama ta arată altceva, pierzi și punctul. În 2026, iai-4 era valid, iar iao-3 nevalid.
 

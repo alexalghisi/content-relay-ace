@@ -4,6 +4,8 @@ description: "Subiecte BAC istorie din iunie 2026, cerință cu cerință: ce pu
 date: 2026-11-15
 category: BAC
 tags: [subiecte bac istorie, barem bac istorie, eseu bac istorie, bac 2027, profil umanist]
+image: /blog-media/subiecte-bac-istorie-cum-le-lucrezi-cu-baremul/coperta.jpg
+imageAlt: "Coperta articolului despre subiectele BAC la istorie, cu prima pagină a subiectului oficial din 2026"
 related:
   - /subiecte-bac/materie/istorie | Subiecte BAC istorie cu barem
   - /subiecte-bac/2026/istorie/iunie-iulie-varianta-3 | Istorie, iunie 2026, varianta 3
@@ -21,11 +23,15 @@ La istorie, mulți elevi de la uman pleacă de la ideea greșită că nota vine 
 
 Proba durează trei ore, toate subiectele sunt obligatorii și primești zece puncte din oficiu. Sunt trei subiecte de câte 30 de puncte. Primele două pornesc de la surse istorice, adică fragmente din lucrări ale istoricilor, iar al treilea e un eseu de aproximativ două pagini.
 
+![Infografic cu punctajul probei de istorie: trei subiecte de câte 30 de puncte, plus 10 puncte din oficiu](/blog-media/subiecte-bac-istorie-cum-le-lucrezi-cu-baremul/punctaj-pe-subiecte.webp "Unde sunt punctele, după subiectele și baremele oficiale din 2026")
+
 Înainte de orice, citește antetul baremului. Acolo scrie că se punctează orice rezolvare corectă, dar și că nu se acordă punctaje intermediare, altele decât cele precizate explicit, și nici fracțiuni de punct. Nu există „aproape bine”.
 
 ## Subiectul I: două surse și cerințe scurte
 
 În varianta 3, sursa A vorbește despre Convenția de la Paris din 1858, iar sursa B despre începutul domniei lui Al. I. Cuza. Primele cerințe verifică dacă știi să citești atent.
+
+![Prima pagină a subiectului oficial de istorie, BAC 2026, varianta 3, iunie–iulie](/blog-media/subiecte-bac-istorie-cum-le-lucrezi-cu-baremul/subiect-oficial-2026.webp "Subiectul oficial, varianta 3, iunie–iulie, exact cum îl primești în sală")
 
 Prima cere constituția numită în sursa B. Răspunsul, pentru 2 puncte, e Statutul Dezvoltător. A doua cere o informație din sursa A despre domn, de exemplu că era ales pe viață. Baremul acceptă și citatul, și reformularea.
 
@@ -71,6 +77,8 @@ Sfatul meu pentru eseu: înainte să scrii, notează pe ciornă cele patru reper
 2. Corectezi cu baremul, cerință cu cerință, și pui punctele doar dacă ai scris exact ce se cere, nu ceva apropiat.
 3. Notezi separat punctele pierdute din neatenție (sursa greșită, conector lipsă) și cele pierdute pentru că nu știai materia.
 4. Pentru materia lipsă, faci o fișă scurtă pe perioada respectivă și refaci cerința după câteva zile.
+
+![Animație: prima pagină a subiectului de istorie, apoi baremul oficial al aceleiași variante](/blog-media/subiecte-bac-istorie-cum-le-lucrezi-cu-baremul/subiect-si-barem.mp4 "Subiectul și baremul, unul după altul: așa le lucrezi acasă")
 
 Pentru variație, lucrează și [simularea din 2026 la istorie](/subiecte-bac/2026/istorie/simulare). Eseul de acolo e despre statul român între a doua jumătate a secolului al XIX-lea și primele trei decenii ale secolului al XX-lea, deci acoperă altă perioadă decât varianta 3.
 

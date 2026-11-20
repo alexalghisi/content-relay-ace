@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" width="1000" height="340" role="img" aria-labelledby="t">
+  <title id="t">Matematica la EN 2027, lună cu lună</title>
+  <style>
+    .lbl{font:700 19px 'Fira Sans',system-ui,Segoe UI,Arial,sans-serif;fill:#12306b}
+    .kl{fill:#d9531e}
+    .sm{font:16px 'Fira Sans',system-ui,Segoe UI,Arial,sans-serif;fill:#4a5878}
+    .hd{font:800 26px 'Fira Sans',system-ui,Segoe UI,Arial,sans-serif;fill:#12306b}
+    .br{font:700 15px 'Fira Sans',system-ui,Segoe UI,Arial,sans-serif;fill:#8a96b3}
+    .ax{stroke:#cfd9ee;stroke-width:8;stroke-linecap:round}
+    .done{stroke:#1d4fa3;stroke-width:8;stroke-linecap:round;stroke-dasharray:860;stroke-dashoffset:860;animation:fill 7s ease-in-out infinite}
+    .pt{fill:#fff;stroke:#1d4fa3;stroke-width:5}
+    .key{fill:#ff7a45;stroke:#fff;stroke-width:4}
+    .pulse{fill:none;stroke:#ff7a45;stroke-width:4;transform-box:fill-box;transform-origin:center;animation:p 1.6s ease-out infinite}
+    @keyframes fill{0%{stroke-dashoffset:860}60%,100%{stroke-dashoffset:0}}
+    @keyframes p{0%{transform:scale(.7);opacity:1}100%{transform:scale(2.4);opacity:0}}
+  </style>
+  <rect width="1000" height="340" rx="20" fill="#f3f6fc"/>
+  <text class="hd" x="40" y="52">Matematica la EN 2027, lună cu lună</text>
+  <line class="ax" x1="70" y1="190" x2="930" y2="190"/>
+  <line class="done" x1="70" y1="190" x2="930" y2="190"/>
+  <circle class="pt" cx="70" cy="190" r="10" style="animation-delay:0.00s"/><text class="lbl" x="70" y="236" text-anchor="start">Noiembrie</text><text class="sm" x="70" y="258" text-anchor="start">aritmetică, calcul</text><circle class="pt" cx="213" cy="190" r="10" style="animation-delay:0.35s"/><text class="lbl" x="213" y="142" text-anchor="middle">Decembrie</text><text class="sm" x="213" y="118" text-anchor="middle">algebră, ecuații</text><circle class="pt" cx="357" cy="190" r="10" style="animation-delay:0.70s"/><text class="lbl" x="357" y="236" text-anchor="middle">Ianuarie</text><text class="sm" x="357" y="258" text-anchor="middle">funcții, geometrie plană</text><circle class="pt" cx="500" cy="190" r="10" style="animation-delay:1.05s"/><text class="lbl" x="500" y="142" text-anchor="middle">Februarie</text><text class="sm" x="500" y="118" text-anchor="middle">geometrie în spațiu</text><circle class="pulse" cx="643" cy="190" r="13"/><circle class="key" cx="643" cy="190" r="13"/><text class="lbl kl" x="643" y="236" text-anchor="middle">17 martie</text><text class="sm" x="643" y="258" text-anchor="middle">SIMULAREA</text><circle class="pt" cx="787" cy="190" r="10" style="animation-delay:1.75s"/><text class="lbl" x="787" y="142" text-anchor="middle">Aprilie–mai</text><text class="sm" x="787" y="118" text-anchor="middle">lucru țintit</text><circle class="pt" cx="930" cy="190" r="10" style="animation-delay:2.10s"/><text class="lbl" x="930" y="236" text-anchor="end">24 iunie</text><text class="sm" x="930" y="258" text-anchor="end">examenul</text>
+  <text class="br" x="960" y="322" text-anchor="end">Date: calendarul oficial EN 2027 · MeditatiiDirect.ro</text>
+</svg>

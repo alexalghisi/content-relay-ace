@@ -1,0 +1,843 @@
+{
+ "subiecte-bac-istorie-cum-le-lucrezi-cu-baremul": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · proba E.c)",
+   "titlu": "Subiecte BAC <em>istorie</em> cu barem",
+   "pdf": "/bac/2026/E_c_istorie_2026_var_03_LRO.pdf",
+   "chips": [
+    [
+     "3 ore",
+     "toate subiectele obligatorii"
+    ],
+    [
+     "3 × 30 p",
+     "+ 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Istorie, proba E.c): unde sunt punctele",
+   "sub": "3 ore · toate subiectele obligatorii",
+   "parti": [
+    [
+     "Subiectul I",
+     30,
+     "două surse istorice, cerințe scurte"
+    ],
+    [
+     "Subiectul al II-lea",
+     30,
+     "o sursă și punctul de vedere"
+    ],
+    [
+     "Subiectul al III-lea",
+     30,
+     "eseul, cu barem pe criterii"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_c_istorie_2026_var_03_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_c_istorie_2026_var_03_LRO.pdf",
+   "barem": "/bac/2026/E_c_istorie_2026_bar_03_LRO.pdf"
+  }
+ ],
+ "subiecte-bac-matematica-m1-cum-le-lucrezi-cu-baremul": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · M_mate-info",
+   "titlu": "Subiecte BAC <em>matematică M1</em> cu barem",
+   "pdf": "/bac/2026/E_c_matematica_M_mate-info_2026_var_03_LRO.pdf",
+   "chips": [
+    [
+     "3 ore",
+     "toate subiectele obligatorii"
+    ],
+    [
+     "5 p / item",
+     "3 × 30 p + 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Matematică M1: unde sunt punctele",
+   "sub": "3 ore · fiecare item are 5 puncte",
+   "parti": [
+    [
+     "Subiectul I",
+     30,
+     "șase exerciții din clasele IX–X"
+    ],
+    [
+     "Subiectul al II-lea",
+     30,
+     "algebră XI–XII: matrice, legi de compoziție"
+    ],
+    [
+     "Subiectul al III-lea",
+     30,
+     "analiză: derivate și integrale"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_c_matematica_M_mate-info_2026_var_03_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_c_matematica_M_mate-info_2026_var_03_LRO.pdf",
+   "barem": "/bac/2026/E_c_matematica_M_mate-info_2026_bar_03_LRO.pdf"
+  }
+ ],
+ "subiecte-bac-chimie-organica-cum-le-lucrezi-cu-baremul": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · proba E.d)",
+   "titlu": "Subiecte BAC <em>chimie organică</em>",
+   "pdf": "/bac/2026/E_d_chimie_organica_2026_var_03_LRO.pdf",
+   "chips": [
+    [
+     "3 ore",
+     "toate subiectele obligatorii"
+    ],
+    [
+     "40 + 25 + 25",
+     "+ 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Chimie organică: unde sunt punctele",
+   "sub": "3 ore · toate subiectele obligatorii",
+   "parti": [
+    [
+     "Subiectul I",
+     40,
+     "10 grile × 3 p și 5 enunțuri A/F × 2 p"
+    ],
+    [
+     "Subiectul al II-lea",
+     25,
+     "hidrocarburi: alcani, alchene, alchine, arene"
+    ],
+    [
+     "Subiectul al III-lea",
+     25,
+     "alcooli, acizi, aminoacizi, zaharide"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_d_chimie_organica_2026_var_03_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_d_chimie_organica_2026_var_03_LRO.pdf",
+   "barem": "/bac/2026/E_d_chimie_organica_2026_bar_03_LRO.pdf"
+  }
+ ],
+ "subiecte-bac-romana-ce-cere-baremul": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · proba E.a)",
+   "titlu": "Subiecte BAC <em>română</em>: ce cere baremul",
+   "pdf": "/bac/2026/E_a_romana_real_tehn_2026_var_iunie-iulie_06.pdf",
+   "chips": [
+    [
+     "3 ore",
+     "toate subiectele obligatorii"
+    ],
+    [
+     "I · II · III",
+     "50 + 10 + 30 + 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Română, proba E.a): unde sunt punctele",
+   "sub": "3 ore · toate subiectele obligatorii",
+   "parti": [
+    [
+     "Subiectul I.A",
+     30,
+     "cinci întrebări pe un text la prima vedere"
+    ],
+    [
+     "Subiectul I.B",
+     20,
+     "text argumentativ, minimum 150 de cuvinte"
+    ],
+    [
+     "Subiectul al II-lea",
+     10,
+     "cerință pe un fragment, minimum 50 de cuvinte"
+    ],
+    [
+     "Subiectul al III-lea",
+     30,
+     "eseu de minimum 400 de cuvinte"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_a_romana_real_tehn_2026_var_iunie-iulie_06.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_a_romana_real_tehn_2026_var_iunie-iulie_06.pdf",
+   "barem": "/bac/2026/E_a_romana_real_tehn_2026_bar_iunie-iulie_06.pdf"
+  }
+ ],
+ "subiecte-bac-logica-cum-le-lucrezi-cu-baremul": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · proba E.d)",
+   "titlu": "Subiecte BAC <em>logică</em> cu barem",
+   "pdf": "/bac/2026/E_d_logica_2026_var_03_LRO.pdf",
+   "chips": [
+    [
+     "3 ore",
+     "toate subiectele obligatorii"
+    ],
+    [
+     "3 × 30 p",
+     "+ 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Logică: unde sunt punctele",
+   "sub": "3 ore · structura identică în 2024, 2025 și 2026",
+   "parti": [
+    [
+     "Subiectul I",
+     30,
+     "10 itemi grilă (20 p) și diagrama Euler (10 p)"
+    ],
+    [
+     "Subiectul al II-lea",
+     30,
+     "raporturi, conversiune, obversiune, raționamente"
+    ],
+    [
+     "Subiectul al III-lea",
+     30,
+     "moduri silogistice, silogisme, definiția"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_d_logica_2026_var_03_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_d_logica_2026_var_03_LRO.pdf",
+   "barem": "/bac/2026/E_d_logica_2026_bar_03_LRO.pdf"
+  }
+ ],
+ "subiecte-bac-biologie-anatomie-cum-le-lucrezi-cu-baremul": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · proba E.d)",
+   "titlu": "Subiecte BAC <em>anatomie</em> cu barem",
+   "pdf": "/bac/2026/E_d_anat_fiz_gen_ec_um_2026_var_03_LRO.pdf",
+   "chips": [
+    [
+     "3 ore",
+     "toate subiectele obligatorii"
+    ],
+    [
+     "3 × 30 p",
+     "+ 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Anatomie: unde sunt punctele",
+   "sub": "3 ore · toate subiectele obligatorii",
+   "parti": [
+    [
+     "Subiectul I",
+     30,
+     "completare, afecțiuni, grilă, adevărat/fals"
+    ],
+    [
+     "Subiectul al II-lea",
+     30,
+     "genetică moleculară (18 p) și grupe de sânge (12 p)"
+    ],
+    [
+     "Subiectul al III-lea",
+     30,
+     "două teme de fiziologie (14 p + 16 p)"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_d_anat_fiz_gen_ec_um_2026_var_03_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_d_anat_fiz_gen_ec_um_2026_var_03_LRO.pdf",
+   "barem": "/bac/2026/E_d_anat_fiz_gen_ec_um_2026_bar_03_LRO.pdf"
+  }
+ ],
+ "subiecte-bac-geografie-cum-le-lucrezi-cu-baremul": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · proba E.d)",
+   "titlu": "Subiecte BAC <em>geografie</em> cu barem",
+   "pdf": "/bac/2026/E_d_geografie_2026_var_03_LRO.pdf",
+   "chips": [
+    [
+     "3 ore",
+     "toate subiectele obligatorii"
+    ],
+    [
+     "3 × 30 p",
+     "+ 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Geografie: unde sunt punctele",
+   "sub": "3 ore · două subiecte pornesc de la hartă",
+   "parti": [
+    [
+     "Subiectul I",
+     30,
+     "Europa, pe hartă; o comparație climatică"
+    ],
+    [
+     "Subiectul al II-lea",
+     30,
+     "România, pe hartă; o comparație de relief"
+    ],
+    [
+     "Subiectul al III-lea",
+     30,
+     "grafic, tabel, un stat"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_d_geografie_2026_var_03_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_d_geografie_2026_var_03_LRO.pdf",
+   "barem": "/bac/2026/E_d_geografie_2026_bar_03_LRO.pdf"
+  }
+ ],
+ "subiecte-bac-fizica-cum-le-folosesti-cu-barem": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · proba E.d)",
+   "titlu": "Subiecte BAC <em>fizică</em> cu barem",
+   "pdf": "/bac/2026/E_d_fizica_teoretic_vocational_2026_var_03_LRO.pdf",
+   "chips": [
+    [
+     "2 arii din 4",
+     "alese de tine, acasă"
+    ],
+    [
+     "2 × 45 p",
+     "+ 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Fizică: două arii, câte 45 de puncte",
+   "sub": "3 ore · se notează primele două arii începute",
+   "parti": [
+    [
+     "Prima arie aleasă",
+     45,
+     "Subiectul I: 5 grile × 3 p; II și III: probleme de 15 p"
+    ],
+    [
+     "A doua arie aleasă",
+     45,
+     "aceeași structură: 15 + 15 + 15"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_d_fizica_teoretic_vocational_2026_var_03_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_d_fizica_teoretic_vocational_2026_var_03_LRO.pdf",
+   "barem": "/bac/2026/E_d_fizica_teoretic_vocational_2026_bar_03_LRO.pdf"
+  }
+ ],
+ "simulare-evaluare-nationala-2027-ghid-pentru-parinti": [
+  {
+   "tip": "coperta",
+   "kicker": "Clasa a VIII-a · ghid pentru părinți",
+   "titlu": "Simularea <em>Evaluării Naționale</em> 2027",
+   "pdf": "/evaluare-nationala/2026/romana-subiect.pdf",
+   "chips": [
+    [
+     "16–18 martie",
+     "simularea"
+    ],
+    [
+     "30 martie",
+     "rezultatele"
+    ]
+   ],
+   "pagina": 2,
+   "sus": 0.36
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-romana-2026.webp",
+   "pdf": "/evaluare-nationala/2026/romana-subiect.pdf",
+   "jos": 0.78,
+   "pagina": 2,
+   "sus": 0.36,
+   "margine": 0.04
+  }
+ ],
+ "model-evaluare-nationala-2027-ce-arata-si-cum-il-lucrezi": [
+  {
+   "tip": "coperta",
+   "kicker": "Clasa a VIII-a · modele oficiale",
+   "titlu": "Model <em>Evaluare Națională</em> 2027",
+   "pdf": "/evaluare-nationala/2027/model-matematica-subiect.pdf",
+   "chips": [
+    [
+     "2 ore",
+     "pentru fiecare probă"
+    ],
+    [
+     "3 × 30 p",
+     "+ 10 din oficiu"
+    ]
+   ],
+   "pagina": 3,
+   "sus": 0.03
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-model-matematica.webp",
+   "titlu": "Modelul la matematică: unde sunt punctele",
+   "sub": "2 ore · nota = punctajul împărțit la 10",
+   "parti": [
+    [
+     "Subiectul I",
+     30,
+     "itemi cu alegere multiplă"
+    ],
+    [
+     "Subiectul al II-lea",
+     30,
+     "itemi cu alegere multiplă"
+    ],
+    [
+     "Subiectul al III-lea",
+     30,
+     "probleme cu rezolvare completă"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "model-romana-2027.webp",
+   "pdf": "/evaluare-nationala/2027/model-romana-subiect.pdf",
+   "jos": 0.8,
+   "pagina": 2,
+   "sus": 0.36,
+   "margine": 0.04
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "model-matematica-subiect-si-barem.mp4",
+   "subiect": "/evaluare-nationala/2027/model-matematica-subiect.pdf",
+   "barem": "/evaluare-nationala/2027/model-matematica-barem.pdf",
+   "subiect_pagina": 3,
+   "subiect_sus": 0.03,
+   "subiect_jos": 0.55
+  }
+ ],
+ "meditatii-matematica-evaluare-nationala-2027-plan-pe-luni": [
+  {
+   "tip": "coperta",
+   "kicker": "Evaluarea Națională 2027 · matematică",
+   "titlu": "Plan de pregătire, <em>lună cu lună</em>",
+   "pdf": "/evaluare-nationala/2026/matematica-subiect.pdf",
+   "chips": [
+    [
+     "17 martie",
+     "simularea la matematică"
+    ],
+    [
+     "24 iunie",
+     "examenul la matematică"
+    ]
+   ],
+   "pagina": 3,
+   "sus": 0.03
+  },
+  {
+   "tip": "cronologie",
+   "fisier": "plan-pe-luni.svg",
+   "titlu": "Matematica la EN 2027, lună cu lună",
+   "sursa": "Date: calendarul oficial EN 2027 · MeditatiiDirect.ro",
+   "puncte": [
+    [
+     "Noiembrie",
+     "aritmetică, calcul"
+    ],
+    [
+     "Decembrie",
+     "algebră, ecuații"
+    ],
+    [
+     "Ianuarie",
+     "funcții, geometrie plană"
+    ],
+    [
+     "Februarie",
+     "geometrie în spațiu"
+    ],
+    [
+     "17 martie",
+     "SIMULAREA",
+     true
+    ],
+    [
+     "Aprilie–mai",
+     "lucru țintit"
+    ],
+    [
+     "24 iunie",
+     "examenul"
+    ]
+   ]
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-matematica-2026.webp",
+   "pdf": "/evaluare-nationala/2026/matematica-subiect.pdf",
+   "jos": 0.92,
+   "pagina": 2,
+   "sus": 0.38,
+   "margine": 0.04
+  },
+  {
+   "tip": "scroll_site",
+   "fisier": "harta-blocajelor-matematica.mp4",
+   "cale": "/harta-blocajelor/matematica",
+   "inaltime": 2600
+  }
+ ],
+ "simulare-bac-2027-plan-de-pregatire": [
+  {
+   "tip": "coperta",
+   "kicker": "Clasa a XII-a · plan de pregătire",
+   "titlu": "Simulare <em>BAC 2027</em>",
+   "pdf": "/bac/2026/E_c_matematica_M_mate-info_2026_var_simulare_LRO.pdf",
+   "chips": [
+    [
+     "22–25 martie",
+     "probele scrise"
+    ],
+    [
+     "9 aprilie",
+     "rezultatele"
+    ]
+   ]
+  },
+  {
+   "tip": "cronologie",
+   "fisier": "calendar-simulare.svg",
+   "titlu": "Simularea BAC 2027, zi cu zi",
+   "sursa": "Date: calendarul oficial BAC 2027 · MeditatiiDirect.ro",
+   "puncte": [
+    [
+     "22 martie",
+     "română (E.a)",
+     true
+    ],
+    [
+     "23 martie",
+     "proba E.c)"
+    ],
+    [
+     "24 martie",
+     "proba E.d)"
+    ],
+    [
+     "25 martie",
+     "maternă (E.b)"
+    ],
+    [
+     "9 aprilie",
+     "rezultatele"
+    ],
+    [
+     "14 iunie",
+     "BAC: română"
+    ]
+   ]
+  },
+  {
+   "tip": "pagina",
+   "fisier": "simulare-2026-matematica-m1.webp",
+   "pdf": "/bac/2026/E_c_matematica_M_mate-info_2026_var_simulare_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "simulare-2026-istorie-subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_c_istorie_2026_var_simulare_LRO.pdf",
+   "barem": "/bac/2026/E_c_istorie_2026_bar_simulare_LRO.pdf"
+  }
+ ],
+ "vacanta-de-iarna-2026-plan-recapitulare-bac-evaluare-nationala": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC și Evaluarea Națională 2027",
+   "titlu": "Vacanța de iarnă: <em>plan de recapitulare</em>",
+   "chips": [
+    [
+     "23 dec. – 10 ian.",
+     "vacanța de iarnă"
+    ],
+    [
+     "11 ianuarie",
+     "începe modulul 3"
+    ]
+   ],
+   "marime": 60,
+   "pdf": "/evaluare-nationala/2027/model-romana-subiect.pdf",
+   "pagina": 2,
+   "sus": 0.36
+  },
+  {
+   "tip": "cronologie",
+   "fisier": "plan-vacanta.svg",
+   "titlu": "Vacanța de iarnă, pe zile",
+   "sursa": "Date: structura anului școlar 2026–2027 · MeditatiiDirect.ro",
+   "puncte": [
+    [
+     "23–27 dec.",
+     "pauză adevărată"
+    ],
+    [
+     "28–31 dec.",
+     "capitolele slabe"
+    ],
+    [
+     "1–2 ian.",
+     "liber"
+    ],
+    [
+     "3–8 ian.",
+     "variante complete",
+     true
+    ],
+    [
+     "9–10 ian.",
+     "corectare, bilanț"
+    ],
+    [
+     "11 ian.",
+     "modulul 3"
+    ]
+   ]
+  },
+  {
+   "tip": "pasi",
+   "fisier": "o-sesiune-de-lucru.webp",
+   "titlu": "O sesiune de lucru = un capitol",
+   "sub": "Câte două sesiuni pe zi, dimineața, cât ești odihnit",
+   "pasi": [
+    [
+     "Recitești teoria",
+     "din caiet sau din manual, fără să copiezi nimic"
+    ],
+    [
+     "Rezolvi 3–4 exerciții de bază",
+     "până merg fără să te uiți la model"
+    ],
+    [
+     "Cauți cerința în două subiecte reale",
+     "și o rezolvi, apoi o corectezi cu baremul"
+    ]
+   ]
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "model-en-2027-subiect-si-barem.mp4",
+   "subiect": "/evaluare-nationala/2027/model-matematica-subiect.pdf",
+   "barem": "/evaluare-nationala/2027/model-matematica-barem.pdf",
+   "subiect_pagina": 3,
+   "subiect_sus": 0.03,
+   "subiect_jos": 0.55
+  }
+ ],
+ "cat-costa-meditatiile-2026-cum-alegi-profesorul": [
+  {
+   "tip": "coperta",
+   "kicker": "Ghid pentru părinți și elevi",
+   "titlu": "Cât costă meditațiile și <em>cum alegi profesorul</em>",
+   "imagine": "src/assets/hero-tutoring.jpg",
+   "chips": [
+    [
+     "Tarife reale",
+     "calculate din datele platformei"
+    ]
+   ],
+   "marime": 58
+  },
+  {
+   "tip": "pasi",
+   "fisier": "cinci-intrebari.webp",
+   "titlu": "Cinci întrebări pentru primul contact",
+   "sub": "Înainte să plătești prima oră",
+   "pasi": [
+    [
+     "Cum arată prima ședință?",
+     "ideal, un mic test de diagnostic"
+    ],
+    [
+     "Pe ce materiale lucrați?",
+     "pentru examene: subiecte oficiale, cu barem"
+    ],
+    [
+     "Cât lucrează elevul singur?",
+     "și cine corectează temele între ședințe"
+    ],
+    [
+     "Cum aflu dacă merge?",
+     "un reper măsurabil: o variantă cronometrată după o lună"
+    ],
+    [
+     "Ce se întâmplă dacă anulăm?",
+     "reguli clare de la început"
+    ]
+   ]
+  },
+  {
+   "tip": "pagina_site",
+   "fisier": "preturi-matematica.webp",
+   "cale": "/preturi-meditatii/matematica",
+   "inaltime": 820
+  },
+  {
+   "tip": "scroll_site",
+   "fisier": "cum-ceri-oferte.mp4",
+   "cale": "/meditatii",
+   "inaltime": 2400
+  }
+ ]
+}

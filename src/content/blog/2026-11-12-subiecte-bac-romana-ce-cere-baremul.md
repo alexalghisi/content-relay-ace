@@ -4,6 +4,8 @@ description: "Subiectele BAC la română din iunie 2026, luate cerință cu ceri
 date: 2026-11-12
 category: BAC
 tags: [subiecte bac romana, barem bac romana, eseu bac romana, bac 2027, text argumentativ bac]
+image: /blog-media/subiecte-bac-romana-ce-cere-baremul/coperta.jpg
+imageAlt: "Coperta articolului despre subiectele BAC la română, cu prima pagină a subiectului oficial din 2026"
 related:
   - /subiecte-bac/materie/romana | Subiecte BAC română cu barem
   - /subiecte-bac/2026/romana-real/iunie-iulie-varianta-6 | Română real, iunie 2026, varianta 6
@@ -21,6 +23,8 @@ Cel mai bun mod de a învăța baremul e să-l citești lângă subiect. În arh
 
 Toate subiectele sunt obligatorii, timpul de lucru efectiv este de trei ore și primești zece puncte din oficiu. Nota se obține împărțind punctajul total la zece.
 
+![Infografic cu punctajul probei de română: I.A 30 de puncte, I.B 20, al II-lea 10, al III-lea 30, plus 10 puncte din oficiu](/blog-media/subiecte-bac-romana-ce-cere-baremul/punctaj-pe-subiecte.webp "Unde sunt punctele, după subiectele și baremele oficiale din 2026")
+
 | Subiect | Ce conține | Puncte |
 | --- | --- | --- |
 | I.A | cinci întrebări despre un text la prima vedere | 30 |
@@ -33,6 +37,8 @@ La profilul real și la cel uman, primele două subiecte au fost identice în iu
 ## Subiectul I.A: întrebări scurte, puncte pierdute din neatenție
 
 Textul din 2026 a fost o scrisoare a lui Dinu Pillat către sora lui, Pia, din martie 1965. Cele cinci cerințe valorează câte 6 puncte și verifică dacă știi să citești atent.
+
+![Prima pagină a subiectului oficial de română, BAC 2026, varianta 6, iunie, profilul real](/blog-media/subiecte-bac-romana-ce-cere-baremul/subiect-oficial-2026.webp "Subiectul oficial, varianta 6, iunie, profilul real, exact cum îl primești în sală")
 
 Uită-te la cum e împărțit punctajul la prima cerință, unde trebuia să dai sensul cuvântului „bineînțeles” și al secvenței „îmi dau seama”. Baremul dă 2 puncte pentru fiecare sens (de exemplu „desigur” și „constat”), 1 punct pentru formularea răspunsului în enunț și 1 punct pentru exprimare, ortografie și punctuație. Asta înseamnă că un elev care scrie doar „desigur, constat” a pierdut deja două puncte, deși a știut răspunsul.
 
@@ -66,6 +72,8 @@ Restul de 4 puncte sunt pentru redactare și se acordă doar dacă ai minimum 50
 ## Subiectul al III-lea: eseul
 
 La profilul real s-a cerut un eseu despre un text poetic studiat, aparținând lui George Bacovia. Reperele au fost cele clasice pentru poezie: două trăsături care încadrează textul într-o perioadă, un curent sau o orientare tematică, două imagini sau idei poetice comentate în legătură cu tema și două elemente de compoziție sau de limbaj.
+
+![Animație: prima pagină a subiectului de română, apoi baremul oficial al aceleiași variante](/blog-media/subiecte-bac-romana-ce-cere-baremul/subiect-si-barem.mp4 "Subiectul și baremul, unul după altul: așa le lucrezi acasă")
 
 Conținutul aduce 18 puncte, câte 6 pentru fiecare reper, iar baremul le împarte foarte precis. La primul reper, de exemplu, numirea curentului aduce 2 puncte, numirea celor două trăsături încă 2, iar evidențierea lor în text ultimele 2. Dacă scrii „Plumb este o poezie simbolistă, are muzicalitate și corespondențe” și nu arăți unde apar acestea în poezie, ai rămas la 4 din 6.
 

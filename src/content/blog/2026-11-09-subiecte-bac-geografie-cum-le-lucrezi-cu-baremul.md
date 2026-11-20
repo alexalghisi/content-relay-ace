@@ -4,6 +4,8 @@ description: "Cum folosești subiectele BAC la geografie din 2024–2026: ce cer
 date: 2026-11-09
 category: BAC
 tags: [subiecte bac geografie, barem bac geografie, bac 2027, geografie europa romania]
+image: /blog-media/subiecte-bac-geografie-cum-le-lucrezi-cu-baremul/coperta.jpg
+imageAlt: "Coperta articolului despre subiectele BAC la geografie, cu prima pagină a subiectului oficial din 2026"
 related:
   - /subiecte-bac/materie/geografie | Subiecte BAC geografie cu barem
   - /subiecte-bac/2026/geografie/iunie-iulie-varianta-3 | Geografie, iunie 2026, varianta 3
@@ -21,6 +23,8 @@ La geografie, un elev poate ști că Munții Retezat sunt mai înalți decât C�
 
 Geografia se dă la proba E.d) și e aceeași variantă pentru profilul umanist, profilul servicii din filiera tehnologică și toate profilurile vocaționale, cu excepția celui militar. Scrie asta în antetul fiecărui subiect.
 
+![Infografic cu punctajul probei de geografie: trei subiecte de câte 30 de puncte, plus 10 puncte din oficiu](/blog-media/subiecte-bac-geografie-cum-le-lucrezi-cu-baremul/punctaj-pe-subiecte.webp "Unde sunt punctele, după subiectele și baremele oficiale din 2026")
+
 Toate cele trei subiecte sunt obligatorii, ai trei ore și zece puncte din oficiu. Fiecare subiect valorează 30 de puncte:
 
 | Subiect | Tema | Ce conține |
@@ -34,6 +38,8 @@ Toate cele trei subiecte sunt obligatorii, ai trei ore și zece puncte din ofici
 ## Harta aduce cele mai multe puncte
 
 În varianta din iunie 2026, cerințele A, B și C valorează împreună 20 de puncte la Subiectul I și tot 20 la Subiectul al II-lea. Sunt 40 de puncte din 90, iar majoritatea cer să recunoști ceva pe hartă: un stat, o capitală, un râu, o subunitate de relief. Restul leagă harta de o informație, cum ar fi statul cu producție mare de ulei de măsline sau subunitatea cu sare, petrol și gaze în subsol.
+
+![Prima pagină a subiectului oficial de geografie, BAC 2026, varianta 3, iunie](/blog-media/subiecte-bac-geografie-cum-le-lucrezi-cu-baremul/subiect-oficial-2026.webp "Subiectul oficial, varianta 3, iunie, exact cum îl primești în sală")
 
 Consecința practică e simplă. Exersează pe hărți mute, fără denumiri, nu pe hărțile colorate din manual. Tipărește conturul Europei și al României și completează-le din memorie, câte o categorie pe rând: capitalele într-o seară, fluviile în alta. Scrie denumirile corect de fiecare dată, pentru că pe foaia de examen trebuie să apară exact numele cerut.
 
@@ -56,6 +62,8 @@ Nota din subiect îți oferă și lista criteriilor acceptate: la relief, mod de
 ## Subiectul al III-lea cere atenție, nu memorie
 
 Aici primești un grafic și un tabel cu date Eurostat. În iunie 2026, graficul arăta energia electrică produsă din diverse surse în Finlanda, Franța și Luxemburg. Baremul acceptă intervale pentru valorile citite de pe grafic, de exemplu între 64% și 66% pentru energia nucleară din Franța. Nu te stresa pentru o unitate în plus sau în minus, dar nu uita să scrii și numele statului: fiecare element are punctul lui.
+
+![Animație: prima pagină a subiectului de geografie, apoi baremul oficial al aceleiași variante](/blog-media/subiecte-bac-geografie-cum-le-lucrezi-cu-baremul/subiect-si-barem.mp4 "Subiectul și baremul, unul după altul: așa le lucrezi acasă")
 
 Calculele sunt de nivel gimnazial, însă se greșește ușor din grabă. La tabel, scăderea procentului copiilor din Portugalia, de la 15,4% la 13,7%, dă 1,7%, pentru 2 puncte. Fă calculul pe ciornă și verifică-l invers.
 

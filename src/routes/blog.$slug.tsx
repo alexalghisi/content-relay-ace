@@ -13,6 +13,7 @@ interface Post {
   published_at: string | null;
   tags: string[] | null;
   featured_image: string | null;
+  featured_image_alt?: string | null;
   updated_at?: string | null;
   /** Linkuri alese de autor (articolele din src/content/blog). */
   related?: { to: string; label: string }[] | null;
@@ -46,10 +47,14 @@ export const Route = createFileRoute("/blog/$slug")({
         ],
       };
     const url = `https://meditatiidirect.ro/blog/${params.slug}`;
+    const imagine = post.featured_image
+      ? new URL(post.featured_image, "https://meditatiidirect.ro").href
+      : null;
     const articleLd = {
       "@context": "https://schema.org",
       "@type": "Article",
       headline: post.title,
+      image: imagine ? [imagine] : undefined,
       description: post.excerpt ?? undefined,
       datePublished: post.published_at ?? undefined,
       dateModified: post.updated_at ?? post.published_at ?? undefined,
@@ -119,6 +124,13 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:url", content: url },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
+        ...(imagine
+          ? [
+              { property: "og:image", content: imagine },
+              { property: "og:image:alt", content: post.featured_image_alt ?? post.title },
+              { name: "twitter:image", content: imagine },
+            ]
+          : []),
         ...(post.published_at
           ? [{ property: "article:published_time", content: post.published_at }]
           : []),
@@ -217,6 +229,17 @@ function PostPage() {
           <span>{readingMinutes} min citire</span>
         </div>
       </header>
+
+      {post.featured_image && (
+        <img
+          src={post.featured_image}
+          alt={post.featured_image_alt ?? post.title}
+          width={1200}
+          height={630}
+          fetchPriority="high"
+          className="mt-6 h-auto w-full rounded-2xl border border-border"
+        />
+      )}
 
       {headings.length >= 3 && (
         <nav aria-label="Cuprins" className="mt-6 card-soft p-5">

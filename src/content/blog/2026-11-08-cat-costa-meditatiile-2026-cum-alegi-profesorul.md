@@ -4,6 +4,8 @@ description: "De ce depinde prețul unei meditații, unde vezi tarife reale pe m
 date: 2026-11-08
 category: Sfaturi
 tags: [pret meditatii, cat costa meditatiile, cum alegi un profesor, meditatii 2026]
+image: /blog-media/cat-costa-meditatiile-2026-cum-alegi-profesorul/coperta.jpg
+imageAlt: "Ilustrație cu o elevă și o profesoară care lucrează la laptop, coperta ghidului despre prețul meditațiilor"
 related:
   - /preturi-meditatii/matematica | Prețuri meditații matematică
   - /preturi-meditatii/engleza | Prețuri meditații engleză
@@ -32,6 +34,8 @@ Cele de mai sus explică de ce două oferte pot fi la distanță mare. Nu explic
 
 Pe MeditatiiDirect nu publicăm prețuri „orientative” inventate. Paginile de prețuri pe materii, de exemplu pentru [română](/preturi-meditatii/romana) sau [engleză](/preturi-meditatii/engleza), arată tarifele calculate din anunțurile active, din ofertele profesorilor și din propunerile trimise elevilor, cu valoarea mediană, minimul, maximul și numărul de tarife din care e calculată. Pe [prețuri meditații matematică](/preturi-meditatii/matematica) vezi cifrele actuale pentru matematică, iar când nu există destule tarife, pagina spune asta în loc să afișeze o estimare. Paginile pe oraș, de tipul „meditații matematică în Cluj-Napoca”, arată aceleași date pentru orașul respectiv, iar când un oraș are prea puține tarife spunem clar că valorile sunt din toată țara.
 
+![Captură din pagina cu prețurile meditațiilor la matematică de pe MeditatiiDirect.ro](/blog-media/cat-costa-meditatiile-2026-cum-alegi-profesorul/preturi-matematica.webp "Pagina de prețuri la matematică, cu tarifele calculate din anunțuri (captură din 20 noiembrie 2026)")
+
 Dacă un tarif ți se pare mult peste mediana materiei, întreabă ce include. Uneori include materiale scrise, corectarea temelor sau o variantă de BAC corectată săptămânal, iar diferența se justifică.
 
 ## Online sau acasă?
@@ -47,6 +51,8 @@ O variantă des folosită: prima lună față în față, ca să se lege relați
 ## Cinci întrebări pentru primul contact
 
 Înainte să plătești prima oră, cere răspuns la câteva lucruri concrete. Un profesor bun nu se supără.
+
+![Infografic cu cele cinci întrebări pentru primul contact cu un profesor de meditații](/blog-media/cat-costa-meditatiile-2026-cum-alegi-profesorul/cinci-intrebari.webp "De păstrat în telefon înainte de primul apel")
 
 1. **Cum arată prima ședință?** Ideal e un mic test de diagnostic, nu o lecție de la capătul manualului.
 2. **Pe ce materiale lucrați?** Pentru examene, răspunsul bun include subiectele oficiale din anii trecuți, cu barem.
@@ -78,6 +84,8 @@ Câteva variante care chiar funcționează:
 ## Cum ceri oferte fără să suni la zece profesori
 
 Pe MeditatiiDirect [postezi o singură cerere](/meditatii): materia, clasa, online sau acasă și bugetul tău. Profesorii interesați îți trimit propuneri cu dată, oră și tarif, iar tu compari și alegi. Pentru elevi e gratuit și nu există comision: plata se face direct profesorului.
+
+![Derulare prin formularul de cerere de meditații de pe MeditatiiDirect.ro](/blog-media/cat-costa-meditatiile-2026-cum-alegi-profesorul/cum-ceri-oferte.mp4 "Formularul de cerere: materia, nivelul, orașul, bugetul")
 
 ## Întrebări frecvente
 
