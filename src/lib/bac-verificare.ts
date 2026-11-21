@@ -6,7 +6,7 @@
 // Fișierele noi, neauditate încă, NU se publică până la rularea din nou a auditului.
 import audit from "@/data/bac-verificare.generated.json";
 
-export type Sesiune = "iunie" | "august" | "speciala" | "simulare";
+export type Sesiune = "iunie" | "august" | "speciala" | "simulare" | "model";
 
 export interface FisierAuditat {
   path: string;
@@ -31,6 +31,7 @@ export const MOTIVE = {
   an: "anul din document diferă de anul arhivei",
   tip: "documentul nu este de tipul declarat (subiect/barem)",
   model: "este un model de subiect, nu un subiect dat în sesiune",
+  nu_model: "documentul declarat model nu scrie „Model” în antet",
   sesiune: "documentul nu corespunde sesiunii declarate",
   specializare: "baremul este pentru altă specializare decât subiectul",
   varianta: "baremul este pentru altă variantă decât subiectul",
@@ -50,7 +51,10 @@ export function motiveFisier(f: FisierAuditat | undefined): Motiv[] {
   if (!f.emitent_oficial) m.push("emitent");
   if (f.an_document !== f.an) m.push("an");
   if (f.tip_document !== f.tip) m.push("tip");
-  if (f.model_document) m.push("model");
+  if (f.sesiune === "model") {
+    // Modelele oficiale se publică doar etichetate ca model; antetul trebuie să o confirme.
+    if (!f.model_document) m.push("nu_model");
+  } else if (f.model_document) m.push("model");
   if (f.sesiune === "simulare" ? !f.simulare_document : f.simulare_document) m.push("sesiune");
   return m;
 }
@@ -151,4 +155,39 @@ export function statisticiAudit() {
     for (const x of m) pe[x] = (pe[x] ?? 0) + 1;
   }
   return { total: FISIERE.length, verificate: ok, respinse: FISIERE.length - ok, motive: pe };
+}
+
+export interface ModelVerificat {
+  materie: string;
+  /** Profilul/varianta din numele fișierului (ex. "mate-info", "mi-c"); null când materia are un singur model. */
+  profil: string | null;
+  subiect: string;
+  /** Baremul se afișează doar dacă trece auditul; la informatică un barem e comun pentru C/C++ și Pascal. */
+  barem: string | null;
+}
+
+const MODEL_RE = /^([a-z][a-z0-9-]*)\/(\d{4})\/model(?:-([a-z0-9-]+?))?-(subiect|barem)\.pdf$/;
+
+/** Baremul corespunzător unui subiect model: același profil sau profilul fără sufixul de limbaj (-c/-pascal). */
+export function baremPentruModel(materie: string, an: number, profil: string | null): string[] {
+  const cand = [profil, profil?.replace(/-(c|pascal)$/, "") ?? null];
+  return [...new Set(cand)].map((p) => `${materie}/${an}/model${p ? `-${p}` : ""}-barem.pdf`);
+}
+
+/** Toate modelele oficiale ale unui an care trec auditul (subiect + barem potrivit, dacă există). */
+export function modeleVerificate(an: number, fisiere: FisierAuditat[] = FISIERE): ModelVerificat[] {
+  const dupa = new Map(fisiere.map((f) => [f.path, f]));
+  const out: ModelVerificat[] = [];
+  for (const f of fisiere) {
+    const m = MODEL_RE.exec(f.path);
+    if (!m || Number(m[2]) !== an || m[4] !== "subiect" || motiveFisier(f).length) continue;
+    const profil = m[3] ?? null;
+    const barem =
+      baremPentruModel(m[1], an, profil).find((p) => {
+        const b = dupa.get(p);
+        return b && motiveFisier(b).length === 0 && motivePereche(f, b).length === 0;
+      }) ?? null;
+    out.push({ materie: m[1], profil, subiect: f.path, barem });
+  }
+  return out.sort((a, b) => a.subiect.localeCompare(b.subiect));
 }

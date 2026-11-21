@@ -16,7 +16,7 @@ import json, os, re, subprocess, sys, tempfile, unicodedata, urllib.request
 SB = os.environ["SUPABASE_URL"].rstrip("/")
 KEY = os.environ["SUPABASE_PUBLISHABLE_KEY"]
 OUT = os.path.join(os.path.dirname(__file__), "..", "src", "data", "bac-verificare.generated.json")
-NAME = re.compile(r"^([a-z][a-z0-9-]*)/(\d{4})/(iunie|august|speciala|simulare)-(subiect|barem)\.pdf$")
+NAME = re.compile(r"^([a-z][a-z0-9-]*)/(\d{4})/(iunie|august|speciala|simulare|model)(?:-[a-z0-9-]+?)?-(subiect|barem)\.pdf$")
 
 
 def norm(s: str) -> str:
