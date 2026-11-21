@@ -8,9 +8,9 @@ const MODELE_2027 = modeleVerificate(2027);
 
 const URL = "https://meditatiidirect.ro/modele-subiecte-bac-2027";
 const IMAGE = "https://meditatiidirect.ro/og-bac.jpg";
-const TITLE = "Modele subiecte BAC 2027: lista pe materii și cum le lucrezi cu baremul";
+const TITLE = "Modele BAC 2027: subiecte PDF, bareme și rezolvări | MeditatiiDirect.ro";
 const DESC =
-  "Modelele oficiale de subiecte pentru Bacalaureat 2027, publicate de Ministerul Educației: română, matematică, istorie și probele la alegere. Unde le găsești și cum le folosești.";
+  "Descarcă modelele oficiale BAC 2027 și baremele PDF pe materii. Rezolvare informatică pas cu pas, cu editor și rulare online Python/C++.";
 const OFICIAL = "https://subiecte.edu.ro/2027/";
 
 const FAQS = [
@@ -118,7 +118,7 @@ export const Route = createFileRoute("/modele-subiecte-bac-2027")({
           description: DESC,
           image: [IMAGE],
           datePublished: "2026-11-13",
-          dateModified: "2026-11-13",
+          dateModified: "2026-11-21",
           inLanguage: "ro",
           mainEntityOfPage: URL,
           author: {

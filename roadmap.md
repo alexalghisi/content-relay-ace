@@ -97,5 +97,6 @@
 
 - [x] Limba site-ului (9 limbi): meniu de limbă în antet pe toate paginile; meniul, subsolul și paginile de eroare traduse; alegerea se păstrează. 4 teste trec. Numai previzualizare.
 - [ ] Traducerea conținutului paginilor principale (acasă, cereri, cere ofertă, înscriere/autentificare, profesori, Profesor AI) în cele 9 limbi, cu adrese proprii pe limbă (/en/...) și hreflang — următoarea etapă.
-- [ ] BAC 2027: editor + rulare cod Python/C++ ca în sistemul existent (collaborare.ro?)
+- [x] BAC 2027: editor + rulare cod Python/C++ ca în sistemul existent.
 - [x] BAC 2027: 50 PDF-uri model auditate (50/50), pagini /bac/{materie}/2027/model, rezolvare informatică verificată (22 teste), evaluator cod Judge0 (C++/Python, cont + cotă)
+- [x] SEO BAC 2027: cele 13 pagini modele auditate incluse în sitemap fără dubluri; metadate actualizate; 17 pagini verificate în HTML și 41 teste trecute. Publicarea rămâne necesară pentru domeniul live.

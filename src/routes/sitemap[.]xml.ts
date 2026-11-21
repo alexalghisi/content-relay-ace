@@ -343,6 +343,18 @@ export const Route = createFileRoute("/sitemap.xml")({
         }
 
         // Rezolvări publicate — doar cele făcute pe subiectul oficial
+        // Profile model PDFs use model-{profil}-subiect.pdf, not model-subiect.pdf.
+        // Keep their audited pages discoverable even when the archive query is unavailable.
+        const { bacModelSitemapPaths } = await import("@/lib/bac-model-sitemap");
+        for (const path of bacModelSitemapPaths()) {
+          const loc = `<loc>${BASE_URL}${path}</loc>`;
+          if (urls.some((entry) => entry.includes(loc))) continue;
+          urls.push(
+            `  <url>\n    ${loc}\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>`,
+          );
+        }
+
+        // Rezolvări publicate — doar cele făcute pe subiectul oficial
         try {
           // Rezolvările verificate din repo (src/data/rezolvari-verificate) + cele din DB, fără dubluri.
           // Cele din repo apar chiar dacă citirea din DB eșuează.
