@@ -174,16 +174,16 @@ export function baremPentruModel(materie: string, an: number, profil: string | n
   return [...new Set(cand)].map((p) => `${materie}/${an}/model${p ? `-${p}` : ""}-barem.pdf`);
 }
 
-/** Toate modelele oficiale ale unui an care trec auditul (subiect + barem potrivit, dacă există). */
-export function modeleVerificate(an: number, fisiere: FisierAuditat[] = FISIERE): ModelVerificat[] {
+/** Toate modelele oficiale care trec auditul (subiect + barem potrivit, dacă există). Fără `an`: toți anii. */
+export function modeleVerificate(an?: number, fisiere: FisierAuditat[] = FISIERE): ModelVerificat[] {
   const dupa = new Map(fisiere.map((f) => [f.path, f]));
   const out: ModelVerificat[] = [];
   for (const f of fisiere) {
     const m = MODEL_RE.exec(f.path);
-    if (!m || Number(m[2]) !== an || m[4] !== "subiect" || motiveFisier(f).length) continue;
+    if (!m || (an !== undefined && Number(m[2]) !== an) || m[4] !== "subiect" || motiveFisier(f).length) continue;
     const profil = m[3] ?? null;
     const barem =
-      baremPentruModel(m[1], an, profil).find((p) => {
+      baremPentruModel(m[1], Number(m[2]), profil).find((p) => {
         const b = dupa.get(p);
         return b && motiveFisier(b).length === 0 && motivePereche(f, b).length === 0;
       }) ?? null;

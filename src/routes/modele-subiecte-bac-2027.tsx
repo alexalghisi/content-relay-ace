@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SeoLanding, faqJsonLd } from "@/components/seo-landing";
+import { modeleVerificate } from "@/lib/bac-verificare";
+import { getBacSubject } from "@/data/bac-catalog";
+
+const STORAGE = "https://gmgcufdfwwvfnnzfazae.supabase.co/storage/v1/object/public/bac-pdfs/";
+const MODELE_2027 = modeleVerificate(2027);
 
 const URL = "https://meditatiidirect.ro/modele-subiecte-bac-2027";
 const IMAGE = "https://meditatiidirect.ro/og-bac.jpg";
@@ -179,6 +184,45 @@ export const Route = createFileRoute("/modele-subiecte-bac-2027")({
                   ))}
                 </tbody>
               </table>
+              {MODELE_2027.length > 0 && (
+                <div className="mt-4">
+                  <h3 className="text-base font-semibold">
+                    Modelele oficiale, găzduite și verificate la noi ({MODELE_2027.length} de fișiere)
+                  </h3>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Fiecare PDF a fost citit și verificat după conținut (emitent, an, antet „Model”).
+                  </p>
+                  <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {MODELE_2027.map((m) => (
+                      <li key={m.subiect} className="rounded-lg border border-border bg-card p-3 text-sm">
+                        <p className="font-medium">
+                          {getBacSubject(m.materie)?.name ?? m.materie}
+                          {m.profil ? ` — ${m.profil}` : ""}
+                        </p>
+                        <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                          <a className="text-primary underline" href={STORAGE + m.subiect} target="_blank" rel="noopener">
+                            Subiect (PDF)
+                          </a>
+                          {m.barem && (
+                            <a className="text-primary underline" href={STORAGE + m.barem} target="_blank" rel="noopener">
+                              Barem (PDF)
+                            </a>
+                          )}
+                          <a className="text-primary underline" href={`/bac/${m.materie}/2027/model`}>
+                            Deschide în pagină
+                          </a>
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-sm">
+                    <a className="font-medium text-primary underline" href="/rezolvari/informatica/2027/model">
+                      Rezolvarea completă a modelului de informatică (mate-info, C/C++)
+                    </a>{" "}
+                    — explicată pas cu pas, cu codul testat pe care îl poți rula online pe platformă.
+                  </p>
+                </div>
+              )}
               <p className="mt-3 text-xs text-muted-foreground">
                 Modelele și baremele se descarcă de pe site-ul oficial al Ministerului Educației:{" "}
                 <a

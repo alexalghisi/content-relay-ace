@@ -25,7 +25,12 @@ describe("integritatea rezolvărilor verificate", () => {
     });
 
     test(`${nume}: lucrată pe un subiect oficial care trece auditul`, () => {
-      expect(r.documente.subiect).toBe(`${r.materie}/${r.an}/${r.sesiune}-subiect.pdf`);
+      // Modelele oficiale au profilul în numele fișierului (model-mi-c-subiect.pdf).
+      if (r.sesiune === "model")
+        expect(r.documente.subiect).toMatch(
+          new RegExp(`^${r.materie}/${r.an}/model(-[a-z0-9-]+)?-subiect\\.pdf$`),
+        );
+      else expect(r.documente.subiect).toBe(`${r.materie}/${r.an}/${r.sesiune}-subiect.pdf`);
       expect(esteDocumentVerificat(r.documente.subiect)).toBe(true);
     });
 
@@ -55,6 +60,12 @@ describe("integritatea rezolvărilor verificate", () => {
   }
 
   const SURSE_CPP: { an: number; sesiune: string; dir: string; fisiere: string[] }[] = [
+    {
+      an: 2027,
+      sesiune: "model",
+      dir: "scripts/verificare-rezolvari/informatica-2027-model",
+      fisiere: ["s2_1c.cpp", "s2_1d.cpp", "s2_3.cpp", "s3_1.cpp", "s3_2.cpp", "s3_3.cpp"],
+    },
     {
       an: 2026,
       sesiune: "iunie",

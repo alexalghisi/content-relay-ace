@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Bot, CheckCircle2, FileCheck2, Lightbulb, ShieldCheck, TriangleAlert } from "lucide-react";
 import { MEDITATOR_CONTEXT_KEY } from "@/components/ai/simulare-ai";
+import { CodeRunner } from "@/components/code-runner";
 import { idExercitiu, type ItemRezolvat, type OriceRezolvare } from "@/data/rezolvari-verificate";
 
 function Md({ text }: { text: string }) {
@@ -146,6 +147,7 @@ function Item({ rezolvare, item }: { rezolvare: OriceRezolvare; item: ItemRezolv
           <code data-lang={item.cod.limbaj}>{item.cod.sursa}</code>
         </pre>
       )}
+      {item.cod?.limbaj === "cpp" && <CodeRunner sursaInitiala={item.cod.sursa} />}
       {item.complexitate && (
         <p className="mt-2 text-sm text-muted-foreground">
           <span className="font-medium text-foreground">Complexitate: </span>

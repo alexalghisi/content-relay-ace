@@ -14,7 +14,7 @@ export const Route = createFileRoute("/bac/$materie/$an/$sesiune")({
   loader: async ({ params }) => {
     const subject = getBacSubject(params.materie);
     const year = Number(params.an);
-    if (!subject || !Number.isInteger(year) || year < 2010 || year > 2026) throw notFound();
+    if (!subject || !Number.isInteger(year) || year < 2010 || year > 2027) throw notFound();
     if (!SESSION_SLUGS.includes(params.sesiune)) throw notFound();
     const sesiune = params.sesiune as BacSessionSlug;
     const session = BAC_SESSIONS.find((s) => s.slug === sesiune)!;
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/bac/$materie/$an/$sesiune")({
       rezolvare: null,
       pdfs: { subiect: null, barem: null },
       verificare: { subiect: null, barem: null, specializare: null, varianta: null, subiectAscuns: [], baremAscuns: [] },
+      modele: [],
     };
     try {
       db = await getVariantaSesiune({ data: { materie: subject.slug, an: year, sesiune } });
@@ -35,13 +36,14 @@ export const Route = createFileRoute("/bac/$materie/$an/$sesiune")({
     if (!loaderData) return { meta: [{ title: "Variantă indisponibilă" }, { name: "robots", content: "noindex" }] };
     const { subject, year, sesiune, sessionLabel, db } = loaderData;
     const url = `${SITE}/bac/${subject.slug}/${year}/${sesiune}`;
+    const areDocument = Boolean(db.pdfs?.subiect) || (db.modele?.length ?? 0) > 0;
     const title = `Subiecte BAC ${subject.name} ${year} — ${sessionLabel} (subiect + barem PDF) | MeditatiiDirect.ro`;
     const desc = `Varianta de bacalaureat la ${subject.nameLower}, ${year}, ${sessionLabel.toLowerCase()}: subiectul oficial în PDF, direct în pagină, cu baremul când corespunde variantei. Gratuit, fără cont.`;
     return {
       meta: [
         { title },
         { name: "description", content: desc },
-        ...(db.pdfs?.subiect ? [] : [{ name: "robots", content: "noindex, follow" }]),
+        ...(areDocument ? [] : [{ name: "robots", content: "noindex, follow" }]),
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
@@ -106,6 +108,7 @@ function VariantaPage() {
   const base = `https://gmgcufdfwwvfnnzfazae.supabase.co/storage/v1/object/public/bac-pdfs/`;
   const subiect = db.pdfs?.subiect ? base + db.pdfs.subiect : null;
   const barem = db.pdfs?.barem ? base + db.pdfs.barem : null;
+  const areDocument = Boolean(subiect) || (db.modele?.length ?? 0) > 0;
   const prevYear = year > BAC_YEARS[0] ? year - 1 : null;
   const nextYear = year < BAC_YEARS[BAC_YEARS.length - 1] ? year + 1 : null;
 
@@ -130,7 +133,7 @@ function VariantaPage() {
           Subiecte BAC {subject.name} {year} — {sessionLabel}
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">
-          {subiect
+          {areDocument
             ? <>Subiectul și baremul de corectare la <strong>{subject.nameLower}</strong>, sesiunea {sessionLabel.toLowerCase()} {year}. Le poți citi direct aici sau le descarci în PDF — sunt găzduite pe MeditatiiDirect.ro.</>
             : <>Încă nu avem în arhivă documentul verificat pentru <strong>{subject.nameLower}</strong>, {sessionLabel.toLowerCase()} {year}. Publicăm doar fișiere verificate — până atunci, încearcă altă sesiune sau alt an.</>}
         </p>
@@ -148,6 +151,42 @@ function VariantaPage() {
           Baremul din arhiva noastră pentru această sesiune nu este afișat: {db.verificare.baremAscuns.map((m) => MOTIVE[m]).join("; ")}.
           Publicăm doar baremul care corespunde exact subiectului.
         </p>
+      )}
+
+      {(db.modele?.length ?? 0) > 0 && (
+        <section className="mt-8 space-y-10">
+          <p className="max-w-3xl rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+            Modelul oficial arată structura probei de la BAC {year}; subiectele de la examen sunt altele, dar respectă aceeași structură.
+            Fiecare PDF de mai jos a fost verificat după conținut (emitent, an, antet „Model”).
+          </p>
+          {db.modele!.map((m) => {
+            const subiectUrl = base + m.subiect;
+            const baremUrl = m.barem ? base + m.barem : null;
+            const titlu = m.profil ? `Varianta pentru ${m.profil}` : "Modelul oficial";
+            return (
+              <div key={m.subiect}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h2 className="text-2xl font-bold">{titlu}</h2>
+                  <div className="flex flex-wrap gap-2">
+                    <a href={subiectUrl} target="_blank" rel="noopener" download
+                       className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+                      <Download className="h-4 w-4" /> Subiect (PDF)
+                    </a>
+                    {baremUrl && (
+                      <a href={baremUrl} target="_blank" rel="noopener" download
+                         className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40">
+                        <FileText className="h-4 w-4 text-primary" /> Barem (PDF)
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <LazyPdfPreview src={subiectUrl} title={`Model BAC ${subject.nameLower} ${year}${m.profil ? ` ${m.profil}` : ""}`} />
+                </div>
+              </div>
+            );
+          })}
+        </section>
       )}
 
       {subiect && (

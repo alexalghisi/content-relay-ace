@@ -4,7 +4,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
-import { subiecteVerificate, verificaVarianta, type VariantaVerificata } from "@/lib/bac-verificare";
+import { subiecteVerificate, verificaVarianta, modeleVerificate, type VariantaVerificata } from "@/lib/bac-verificare";
 import { REZOLVARI_PUBLICATE, rezolvarePublicata } from "@/data/rezolvari-verificate";
 
 /** Doar rezolvările făcute pe subiectul oficial (PDF verificat) sunt publice și indexabile. */
@@ -21,7 +21,7 @@ function publicClient() {
 const ComboSchema = z.object({
   materie: z.string().min(1).max(40).regex(/^[a-z][a-z0-9-]*$/),
   an: z.coerce.number().int().min(2000).max(2035),
-  sesiune: z.enum(["iunie", "august", "speciala", "simulare"]),
+  sesiune: z.enum(["iunie", "august", "speciala", "simulare", "model"]),
 });
 
 export const getVariantaSesiune = createServerFn({ method: "GET" })
@@ -51,6 +51,11 @@ export const getVariantaSesiune = createServerFn({ method: "GET" })
     // Afișăm ca oficiale doar documentele care trec auditul de conținut (src/lib/bac-verificare.ts).
     const verificare: VariantaVerificata = verificaVarianta(data.materie, data.an, data.sesiune, files);
     const statica = rezolvarePublicata(data.materie, data.an, data.sesiune);
+    // Modelele oficiale au mai multe variante pe profiluri (model-{profil}-subiect.pdf).
+    const modele =
+      data.sesiune === "model"
+        ? modeleVerificate(data.an).filter((m) => m.materie === data.materie)
+        : [];
     return {
       varianta: varianta ?? null,
       rezolvare: statica
@@ -58,6 +63,7 @@ export const getVariantaSesiune = createServerFn({ method: "GET" })
         : (rezolvare ?? null),
       pdfs: { subiect: verificare.subiect, barem: verificare.barem },
       verificare,
+      modele,
     };
   });
 
@@ -106,7 +112,7 @@ const MaterieSchema = z.object({
 
 export interface VariantaDisponibila {
   an: number;
-  sesiune: "iunie" | "august" | "speciala" | "simulare";
+  sesiune: "iunie" | "august" | "speciala" | "simulare" | "model";
   subiect_path: string;
   are_barem: boolean;
 }
@@ -138,6 +144,18 @@ export const getVarianteMaterie = createServerFn({ method: "GET" })
     const variante = [...byCombo.values()]
       .filter((v) => v.subiect_path)
       .sort((a, b) => b.an - a.an || a.sesiune.localeCompare(b.sesiune));
+    // Modelele oficiale (ex. BAC 2027) nu sunt în tabel; vin din auditul de conținut.
+    const modele = modeleVerificate().filter((m) => m.materie === data.materie);
+    if (modele.length) {
+      const anModel = Math.max(...modele.map((m) => Number(m.subiect.split("/")[1])));
+      if (!variante.some((v) => v.an === anModel && v.sesiune === "model"))
+        variante.unshift({
+          an: anModel,
+          sesiune: "model",
+          subiect_path: modele[0]!.subiect,
+          are_barem: modele.some((m) => m.barem !== null),
+        });
+    }
     return { variante };
   });
 

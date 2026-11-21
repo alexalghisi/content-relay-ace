@@ -1,4 +1,5 @@
 import { INFORMATICA_2026_IUNIE } from "./informatica-2026-iunie";
+import { INFORMATICA_2027_MODEL } from "./informatica-2027-model";
 import { INFORMATICA_2025_SIMULARE } from "./informatica-2025-simulare";
 import { MATEMATICA_2024_AUGUST } from "./matematica-2024-august";
 import { MATEMATICA_2024_SIMULARE } from "./matematica-2024-simulare";
@@ -14,6 +15,7 @@ export type { ItemRezolvat, OriceRezolvare, RezolvareAdmitere, RezolvareVerifica
 
 /** Toate rezolvările din repo, indiferent de status (pentru teste și flux editorial). */
 export const TOATE_REZOLVARILE: RezolvareVerificata[] = [
+  INFORMATICA_2027_MODEL,
   INFORMATICA_2026_IUNIE,
   MATEMATICA_2024_AUGUST,
   INFORMATICA_2025_SIMULARE,
@@ -44,7 +46,7 @@ export const idExercitiu = (r: OriceRezolvare, item: ItemRezolvat) =>
     ? `admitere/${r.universitate}/${r.materie}/${r.an}#${item.id}`
     : `${cheieRezolvare(r.materie, r.an, r.sesiune)}#${item.id}`;
 export const ID_EXERCITIU_RE =
-  /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare)#([a-z0-9-]{1,20})$/;
+  /^([a-z][a-z0-9-]*)\/(\d{4})\/(iunie|august|speciala|simulare|model)#([a-z0-9-]{1,20})$/;
 const ID_ADMITERE_RE =
   /^admitere\/([a-z0-9-]{1,40})\/([a-z0-9-]{1,40})\/(\d{4})#([a-z0-9-]{1,20})$/;
 

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/bac/$materie/$an/")({
   loader: async ({ params }) => {
     const subject = getBacSubject(params.materie);
     const year = Number(params.an);
-    if (!subject || !Number.isInteger(year) || year < 2010 || year > 2026) throw notFound();
+    if (!subject || !Number.isInteger(year) || year < 2010 || year > 2027) throw notFound();
     let variante: VariantaDisponibila[] = [];
     try {
       const r = await getVarianteMaterie({ data: { materie: subject.slug } });
@@ -124,7 +124,7 @@ function BacPaperPage() {
           {varianteAn.map((v) => (
             <SessionCard key={v.sesiune} materie={subject.slug} an={year} sesiune={v.sesiune}
               label={BAC_SESSIONS.find((s) => s.slug === v.sesiune)?.label ?? v.sesiune}
-              subjectLower={subject.nameLower} areBarem={v.are_barem} />
+              subjectLower={subject.nameLower} areBarem={v.are_barem} subiectPath={v.subiect_path} />
           ))}
         </section>
       ) : (
@@ -193,11 +193,14 @@ function BacPaperPage() {
   );
 }
 
-function SessionCard({ materie, an, sesiune, label, subjectLower, areBarem }: {
-  materie: string; an: number; sesiune: BacSessionSlug; label: string; subjectLower: string; areBarem: boolean;
+const STORAGE_BASE = "https://gmgcufdfwwvfnnzfazae.supabase.co/storage/v1/object/public/bac-pdfs/";
+
+function SessionCard({ materie, an, sesiune, label, subjectLower, areBarem, subiectPath }: {
+  materie: string; an: number; sesiune: BacSessionSlug; label: string; subjectLower: string; areBarem: boolean; subiectPath: string;
 }) {
-  const subiect = bacPdfUrl(materie, an, sesiune, "subiect");
-  const barem = areBarem ? bacPdfUrl(materie, an, sesiune, "barem") : null;
+  // Modelele oficiale au profil în numele fișierului, deci URL-ul vine din calea reală, nu din convenție.
+  const subiect = sesiune === "model" ? STORAGE_BASE + subiectPath : bacPdfUrl(materie, an, sesiune, "subiect");
+  const barem = areBarem && sesiune !== "model" ? bacPdfUrl(materie, an, sesiune, "barem") : null;
   return (
     <div className="card-soft p-5">
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
@@ -217,9 +220,13 @@ function SessionCard({ materie, an, sesiune, label, subjectLower, areBarem }: {
         </a>
         {barem ? (
           <a href={barem} rel="nofollow noopener" target="_blank"
-             className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm hover:border-primary/40 hover:text-primary">
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm hover:border-primary/40 hover:text-primary">
             <FileText className="h-4 w-4 text-primary" /> Barem PDF <Download className="h-3 w-3 ml-auto" />
           </a>
+        ) : sesiune === "model" && areBarem ? (
+          <p className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-muted-foreground">
+            Baremele pe profiluri sunt în pagina variantei
+          </p>
         ) : (
           <p className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-muted-foreground">
             Baremul pentru această sesiune lipsește încă

@@ -40,3 +40,4 @@
 - Profile galleries use owner-scoped profile_photos rows and TUS transport; preserve accepted originals, convert unsupported formats losslessly, and explicitly clean storage and plain-UUID records on account deletion.
 - AI reviews require server-observed successful responses in profesor_ai_review_eligibility; direct browser voice sessions do not grant eligibility from client claims. Real-teacher reviews stay tied to private request proposals.
 - Daily repository health uses .github/workflows/daily-health.yml with read-only live SEO checks, regression tests and failure issues; mocked auth/storage tests are never proof of provider OAuth or real signup delivery, and repository scheduling must be verified separately.
+- Code runner (Judge0): server-only in src/lib/code-runner.server.ts behind ruleazaCod (requireSupabaseAuth + takeQuota "code-runner", 30/day); single-file submissions, never log student code. UI panel CodeRunner only on verified-solution pages.

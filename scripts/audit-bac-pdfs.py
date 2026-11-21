@@ -75,7 +75,7 @@ def meta(path: str, raw: str) -> dict:
     var = re.search(r"varianta\s*(?:nr\.?\s*)?(\d{1,3})", t)
     tip_doc = "barem" if re.search(r"barem", t[:1500]) else ("subiect" if t.strip() else None)
     simulare = bool(re.search(r"simulare", t[:600]))
-    model = bool(re.search(r"\bmodel\b", t[:500]))
+    model = bool(re.search(r"\bmodel\b", t[:1200]))
     oficial = bool(re.search(r"centrul national (de|pentru)|ministerul educatiei", t[:400]))
     return {
         "path": path,

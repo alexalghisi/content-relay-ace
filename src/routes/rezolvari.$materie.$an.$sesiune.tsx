@@ -16,7 +16,7 @@ export const Route = createFileRoute("/rezolvari/$materie/$an/$sesiune")({
   loader: async ({ params }) => {
     const subject = getBacSubject(params.materie);
     const year = Number(params.an);
-    if (!subject || !Number.isInteger(year) || year < 2010 || year > 2026) throw notFound();
+    if (!subject || !Number.isInteger(year) || year < 2010 || year > 2027) throw notFound();
     if (!SESSION_SLUGS.includes(params.sesiune)) throw notFound();
     const sesiune = params.sesiune as BacSessionSlug;
     const session = BAC_SESSIONS.find((s) => s.slug === sesiune)!;
@@ -173,7 +173,13 @@ function RezolvarePage() {
       <header className="mt-4 max-w-3xl">
         <h1 className="text-3xl font-bold sm:text-4xl">
           {verificata
-            ? `Rezolvare BAC ${subject.name} ${year} — ${sessionLabel}, Varianta ${verificata.varianta ?? "simulare"}`
+            ? `Rezolvare BAC ${subject.name} ${year} — ${sessionLabel}${
+                verificata.varianta != null
+                  ? `, Varianta ${verificata.varianta}`
+                  : sesiune === "simulare"
+                    ? ", Varianta simulare"
+                    : ""
+              }`
             : `Rezolvare BAC ${subject.name} ${year} — ${sessionLabel}`}
         </h1>
         {verificata && (

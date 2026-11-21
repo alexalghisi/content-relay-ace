@@ -29,14 +29,16 @@ export const BAC_SUBJECTS: BacSubject[] = [
   { slug: "filosofie",    name: "Filosofie",                  nameLower: "filosofie",   short: "alegere la proba E.d, profil uman" },
 ];
 
-export const BAC_YEARS: number[] = Array.from({ length: 2026 - 2010 + 1 }, (_, i) => 2010 + i);
+export const BAC_YEARS: number[] = Array.from({ length: 2027 - 2010 + 1 }, (_, i) => 2010 + i);
 
 // Sesiunile principale pe care le acoperim pe fiecare pagină.
+// „model” = modelul oficial de subiect publicat de Minister înainte de examen (există doar pentru 2027).
 export const BAC_SESSIONS = [
   { slug: "iunie",     label: "Sesiunea iunie–iulie" },
   { slug: "august",    label: "Sesiunea august–septembrie" },
   { slug: "speciala",  label: "Sesiunea specială" },
   { slug: "simulare",  label: "Simulare națională" },
+  { slug: "model",     label: "Model oficial" },
 ] as const;
 export type BacSessionSlug = (typeof BAC_SESSIONS)[number]["slug"];
 
