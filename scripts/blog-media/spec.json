@@ -1,4 +1,92 @@
 {
+ "subiecte-bac-matematica-m2-cum-le-lucrezi-cu-baremul": [
+  {
+   "tip": "coperta",
+   "kicker": "BAC 2027 · M_șt-nat",
+   "titlu": "Subiecte BAC <em>matematică M2</em> cu barem",
+   "pdf": "/bac/2026/E_c_matematica_M_st-nat_2026_var_03_LRO.pdf",
+   "chips": [
+    [
+     "3 ore",
+     "toate subiectele obligatorii"
+    ],
+    [
+     "5 p / item",
+     "3 × 30 p + 10 din oficiu"
+    ]
+   ]
+  },
+  {
+   "tip": "structura",
+   "fisier": "punctaj-pe-subiecte.webp",
+   "titlu": "Matematică M2 (șt-nat): unde sunt punctele",
+   "sub": "3 ore · fiecare item are 5 puncte",
+   "parti": [
+    [
+     "Subiectul I",
+     30,
+     "șase exerciții scurte din clasele IX–X"
+    ],
+    [
+     "Subiectul al II-lea",
+     30,
+     "algebră: matrice, apoi polinoame sau o lege de compoziție"
+    ],
+    [
+     "Subiectul al III-lea",
+     30,
+     "analiză: derivate și integrale"
+    ],
+    [
+     "Din oficiu",
+     10,
+     "se acordă oricui"
+    ]
+   ],
+   "nota": "Total 100 de puncte · nota = punctajul împărțit la 10"
+  },
+  {
+   "tip": "pagina",
+   "fisier": "subiect-oficial-2026.webp",
+   "pdf": "/bac/2026/E_c_matematica_M_st-nat_2026_var_03_LRO.pdf",
+   "jos": 0.6
+  },
+  {
+   "tip": "rasfoire",
+   "fisier": "subiect-si-barem.mp4",
+   "subiect": "/bac/2026/E_c_matematica_M_st-nat_2026_var_03_LRO.pdf",
+   "barem": "/bac/2026/E_c_matematica_M_st-nat_2026_bar_03_LRO.pdf"
+  },
+  {
+   "tip": "cronologie",
+   "fisier": "cronologie-bac-2027.svg",
+   "titlu": "Matematică M2: drumul până la BAC 2027",
+   "puncte": [
+    [
+     "21 nov.",
+     "prima variantă pe ceas"
+    ],
+    [
+     "23 dec.–10 ian.",
+     "vacanța de iarnă"
+    ],
+    [
+     "23 martie",
+     "simularea, proba E.c)",
+     true
+    ],
+    [
+     "9 aprilie",
+     "rezultatele simulării"
+    ],
+    [
+     "15 iunie",
+     "proba E.c), vara"
+    ]
+   ],
+   "sursa": "Calendar BAC 2027 · MeditatiiDirect.ro"
+  }
+ ],
  "subiecte-bac-istorie-cum-le-lucrezi-cu-baremul": [
   {
    "tip": "coperta",
